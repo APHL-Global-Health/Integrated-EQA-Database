@@ -1,0 +1,557 @@
+<?php
+
+//Zend_Debug::dump($this->result['summaryResult']);die;
+require_once('tcpdf/tcpdf.php');
+//require_once('libchart/classes/libchart.php');
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+if ($this->result != "") {
+    if ($this->result['scheme_type'] != 'eid') {
+        require_once('libchart/classes/libchart.php');
+        $chart = new VerticalBarChart(700, 400);
+       
+    }
+    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports') && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports')) {
+        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports');
+    }
+    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'])) {
+        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code']);
+    }
+
+// Extend the TCPDF class to create custom Header and Footer
+    class MYPDF extends TCPDF {
+
+        public function setSchemeName($header, $schemeName, $logo,$logoRight,$comingFrom) {
+            $this->scheme_name = $schemeName;
+            $this->header = $header;
+            $this->logo = $logo;
+            $this->logoRight = $logoRight;
+            $this->comingFrom = $comingFrom;
+        }
+
+        //Page header
+        public function Header() {
+            // Logo
+            //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+            if (trim($this->logo) != "") {
+                if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+                    $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+                    $this->Image($image_file, 10, 10, 25, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                }
+            }
+            if (trim($this->logoRight) != "") {
+                if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logoRight)) {
+                    $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logoRight;
+                    $this->Image($image_file, 180, 10, 20, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                }
+            }
+
+            // Set font
+            $this->SetFont('times', '', 12);
+
+            $this->header = str_replace("<div", "<span", trim($this->header));
+            $this->header = str_replace("</div>", "</span><br/>", $this->header);
+
+            //error_log($this->header);
+            //$y = $this->getY();
+            $html = $this->header;
+
+            $this->writeHTMLCell(0, 0, 25, 10, $html, 0, 0, 0, true, 'C', true);
+            //$this->writeHTML($html, true, false, true, true, 'L');
+
+            $html = '<p  style="font-weight: bold;text-align:center;">Proficiency Testing Program for Anti-HIV Antibodies Diagnostics using ' . $this->scheme_name . '</p>';
+            $this->writeHTMLCell(0, 0, 35, 30, $html, 0, 0, 0, true, 'J', true);
+            $html = '<hr/>';
+            $this->writeHTMLCell(0, 0, 10, 45, $html, 0, 0, 0, true, 'J', true);
+        }
+
+        // Page footer
+        public function Footer() {
+            $underReport="";
+            if(trim($this->comingFrom)!=""){
+               // $underReport='       (Under Review)';
+            }
+            // Position at 15 mm from bottom
+            $this->SetY(-15);
+            // Set font
+            $this->SetFont('helvetica', 'I', 8);
+            // Page number
+            $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages()." - Report generated at :".date("d-M-Y H:i:s").$underReport, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        }
+
+    }
+
+// create new PDF document
+    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set default header data
+    $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+    // set header and footer fonts
+    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // set margins
+
+    $pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // set image scale factor
+    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // set some language-dependent strings (optional)
+    if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+        require_once(dirname(__FILE__) . '/lang/eng.php');
+        $pdf->setLanguageArray($l);
+    }
+
+//$pdf->setSchemeName($this->result['scheme_name']);
+    $pdf->setSchemeName($this->header, $this->result['scheme_name'], $this->logo,$this->logoRight,$this->comingFrom);
+    //$pdf->checkComingFrom($this->comingFrom);
+// add a page
+//$pdf->AddPage();
+// ---------------------------------------------------------
+    if ($this->result['scheme_type'] == 'eid') {
+        $pdf->AddPage('P', 'A4');
+        if (isset($this->result['summaryResult']) && sizeof($this->result['summaryResult']) > 0) {
+            foreach ($this->result['summaryResult'] as $result) {
+
+                $maxScore = 0;
+                $belowScore = 0;
+                $partCount = count($result) - 1;
+                //Zend_Debug::dump($result['correctCount']);
+                for ($i = 0; $i < $partCount; $i++) {
+                    if ($this->result['max_score'] == $result[$i]['shipment_score']) {
+                        $maxScore++;
+                    } else {
+                        $belowScore++;
+                    }
+                }
+
+                $scoringPer = round(($maxScore / $partCount) * 100, 2);
+
+// set font
+                $pdf->SetFont('times', 'B', 12);
+                $sampleCode = '<div style="border: 2px solid #000000;">';
+
+                $sampleCode.='<table style="margin-left:5px;"><tr><td style="">Summary of All Laboratories using ' . $result[0]['eidExtracName'] . ' / ' . $result[0]['eidDetecName'] . '</td></tr>';
+                $sampleCode.='<tr><td style="">Extraction Assay - ' . $result[0]['eidExtracName'] . '</td></tr>';
+                $sampleCode.='<tr><td style="">Detection Assay - ' . $result[0]['eidDetecName'] . ' </td></tr></table>';
+
+//$pdf->writeHTML($html, true, false, true, false, '');
+//$y = $pdf->getY();
+// set some text to print
+
+                $sampleCode.='<table border="1" style="margin-left:5px;"><tr>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Total Number of Laboratories Performing Assay Pair </td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Total Number of Laboratories Scoring "' . $this->result['max_score'] . '"</td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Total Number of Laboratories Scoring Below "' . $this->result['max_score'] . '" </td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Percentage of Laboratories Scoring "' . $this->result['max_score'] . '"</td></tr>';
+
+                $sampleCode.='<tr>';
+                $sampleCode.='<td style="text-align:center;">' . $partCount . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . $maxScore . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . $belowScore . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . $scoringPer . '%</td>';
+                $sampleCode.='</tr>';
+
+                $sampleCode.='</table><br/><br/>';
+
+//$pdf->writeHTML($html, true, false, true, false, '');
+
+                $sampleCount = count($result['correctCount']);
+                $sampleCode.='<table border="1">';
+                $sampleCode.='<tr>';
+                $sampleCode.='<td rowspan="2"></td>';
+                $sampleCode.='<td colspan="' . $sampleCount . '" style="background-color:#dbe4ee;text-align:center;">Sample ID</td>';
+                $sampleCode.='<td></td>';
+                $sampleCode.='</tr>';
+
+                $sampleCode.='<tr>';
+
+                foreach ($result['correctCount'] as $sample) {
+                    $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">' . $sample['sample_label'] . '</td>';
+                }
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Average</td>';
+                $sampleCode.='</tr>';
+                $sampleCode.='<tr>';
+                $sampAvg = '0';
+                $sampPerAvg = '0';
+                $sampleCode.='<td rowspan="2" style="background-color:#dbe4ee;text-align:center;">Correctly Reported</td>';
+
+                foreach ($result['correctCount'] as $sample) {
+                    $sampAvg+=$sample["correctRes"];
+                    $sampleCode.='<td style="text-align:center;font-weight:normal;">' . $sample["correctRes"] . '</td>';
+                }
+
+                $sampleCode.='<td style="text-align:center;">' . round(($sampAvg / $sampleCount), 2) . '</td>';
+                $sampleCode.='</tr>';
+
+                $sampleCode.='<tr>';
+                foreach ($result['correctCount'] as $sample) {
+                    $sampPerAvg+=(($sample["correctRes"] / $partCount) * 100);
+                    $sampleCode.='<td style="text-align:center;">' . (($sample["correctRes"] / $partCount) * 100) . '%</td>';
+                }
+                $sampleCode.='<td style="text-align:center;">' . round(($sampPerAvg / $sampleCount), 2) . '%</td>';
+                $sampleCode.='</tr>';
+
+                $sampleCode.='</table>';
+                $sampleCode.='</div></br></br>';
+
+                //----------------Participant Performance Overview  start----------------
+                $sampleCode.='<span style="text-decoration: underline;">Participant Performance Overview</span><br/><table border="1" style="margin-left:5px;"><tr>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;"># of Shipments</td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;"># of Responses</td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;"># of Valid Responses</td>';
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Average Score</td></tr>';
+
+                $sampleCode.='<tr>';
+                $sampleCode.='<td style="text-align:center;">' . $this->participantPerformance['total_shipped'] . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . $this->participantPerformance['total_responses'] . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . $this->participantPerformance['valid_responses'] . '</td>';
+                $sampleCode.='<td style="text-align:center;">' . round($this->participantPerformance['average_score'], 2) . '</td>';
+                $sampleCode.='</tr>';
+
+                $sampleCode.='</table><br/>';
+                $pdf->writeHTML($sampleCode, true, false, true, false, '');
+                //----------------Participant Performance Overview  Ends----------------     
+                //----------------Participant Corrective Action Overview  start----------------
+                if(count($this->correctiveness) > 0){
+                    $correctiveOverview='<div><span style="text-decoration: underline;">Corrective Action Overview </span><br/>
+                            <table border="1" style="margin-left:5px;"><tr>';
+                    $correctiveOverview.='<td style="background-color:#dbe4ee;text-align:center;">Corrective Action</td>';
+                    $correctiveOverview.='<td style="background-color:#dbe4ee;text-align:center;">Responses having Corrective Action</td>';
+    
+                    $correctiveOverview.='</tr>';
+                    foreach ($this->correctiveness as $correctiveness) {
+                        $correctiveOverview.='<tr>';
+                        $correctiveOverview.='<td style="text-align:left;">' . $correctiveness['corrective_action'] . '</td>';
+                        $correctiveOverview.='<td style="text-align:center;">' . $correctiveness['total_corrective'] . '</td>';
+                        
+                        $correctiveOverview.='</tr>';
+                    }
+                    $correctiveOverview.='</table></div><br/><br/>';    
+                    //----------------Participant Corrective Action Overview  Ends----------------    
+                    $pdf->writeHTML($correctiveOverview, true, false, true, false, '');
+                }
+
+// ---------------------------------------------------------
+            }
+        }
+    } else {
+        $pdf->AddPage('P', 'A4');
+        $pdf->SetFont('times', 'B', 12);
+        if (count($this->result['referenceResult']) > 0) {
+
+            $referenceRes = '<table style="text-align:center;width:100%" align="left">';
+            $referenceRes.='<tr>';
+            $referenceRes.='<td style="font-weight:bold;width:20%;">PT Survey</td><td style="font-weight:normal;width:30%;">' . $this->result['distribution_code'] . '<br>(' . $this->dateFormat($this->result['shipment_date']) . ')</td>';
+            $referenceRes.='<td style="font-weight:bold;width:20%;">Shipment Code</td><td style="font-weight:normal;width:30%;">' . $this->result['shipment_code'] . '</td>';
+            $referenceRes.='</tr>';
+            $referenceRes.='</table>';
+
+            $pdf->writeHTML($referenceRes, true, false, true, false, '');
+            
+        }
+        if (count($this->result['summaryResult']) > 0) {
+            $labCounter = 1;
+            $pass = $config->evaluation->dts->passPercentage;
+            $barPoints["0 - 59"] = 0;
+            $barPoints["60 - 69"] = 0;
+            $barPoints["70 - $pass"] = 0;
+            $abovePass =sprintf("above $pass");
+            $barPoints[$abovePass] = 0;
+            foreach ($this->result['summaryResult'] as $result) {
+                $maxScore = 0;
+                $belowScore = 0;
+                $partCount = count($result) - 1;
+                //Zend_Debug::dump($result['correctCount']);
+                for ($i = 0; $i < $partCount; $i++) {
+                    if($result[$i]['is_excluded']=='yes'){
+                        continue;
+                    }
+                    $totalScore = $result[$i]['shipment_score'] + $result[$i]['documentation_score'];
+                    if ($totalScore >0 && $totalScore < 60){
+                        $barPoints["0 - 59"]++;
+                    }else if($totalScore > 59 && $totalScore < 70){
+                        $barPoints["60 - 69"]++;
+                    }else if($totalScore > 69 && $totalScore <= $pass){
+                        $barPoints["70 - $pass"]++;
+                    }
+                    else if ($totalScore > $config->evaluation->dts->passPercentage) {
+                        $barPoints[$abovePass]++;
+                    } else {
+                        
+                    }
+                    if (($totalScore) >= $config->evaluation->dts->passPercentage) {
+                        $maxScore++;
+                    } else {
+                        $belowScore++;
+                    }
+                    $labCounter++;
+                }
+
+                $scoringPer = round(($maxScore / $partCount) * 100, 2);
+            }
+            $dataSet = new XYSeriesDataSet();
+            
+            $chart->getPlot()->getPalette()->setBarColor(array(
+                new Color(128,0,0),
+                new Color(255,0,0),
+                new Color(255,255,0),
+                new Color(0,128,0)
+            ));
+            foreach($barPoints as $key=>$val){
+                $serie = new XYDataSet();
+                $serie->addPoint(new Point("", $val));
+                $dataSet->addSerie($key, $serie);
+            }
+
+            $chart->setDataSet($dataSet);
+
+            //Bound::setUpperBound(50);
+            $chart->getPlot()->setGraphCaptionRatio(0.5);
+            $chart->setTitle("Comparison of test performance between participating laboratories");
+            $chart->render(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'] . DIRECTORY_SEPARATOR . "bar_chart.png");
+
+            // set font
+            $pdf->SetFont('times', 'B', 12);
+
+            
+            $overview= '<table border="1" style="font-size:13px;"><tr>';
+            $overview.='<td style="background-color:#dbe4ee;text-align:center;"># of Responses </td>';
+            $overview.='<td style="background-color:#dbe4ee;text-align:center;"># of Participants Scoring >= "' . $config->evaluation->dts->passPercentage . '"</td>';
+            $overview.='<td style="background-color:#dbe4ee;text-align:center;"># of Participants Scoring < "' . $config->evaluation->dts->passPercentage . '" </td>';
+            $overview.='</tr>';
+            
+            
+            $overview.='<tr>';
+            $overview.='<td style="text-align:center;">' . $partCount . '</td>';
+            $overview.='<td style="text-align:center;">' . $maxScore .' ('.round(($maxScore/$partCount)*100,2). '%)</td>';
+            $overview.='<td style="text-align:center;">' . $belowScore .' ('.round(($belowScore/$partCount)*100,2). '%)</td>';
+            
+            $overview.='</tr>';
+
+            $overview.='</table><br/>';
+            $pdf->writeHTML($overview, true, false, true, false, '');            
+           
+
+            $sampleCount = count($result['correctCount']);
+
+            $sampleCode='<table border="1" style="font-size:13px;">';
+            $sampleCode.='<tr>';
+            $sampleCode.='<td rowspan="2"></td>';
+            $sampleCode.='<td colspan="' . $sampleCount . '" style="background-color:#dbe4ee;text-align:center;">Sample ID</td>';
+            $sampleCode.='<td></td>';
+            $sampleCode.='</tr>';
+
+            $sampleCode.='<tr>';
+
+            foreach ($result['correctCount'] as $sample) {
+                $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">' . $sample['sample_label'] . '</td>';
+            }
+            $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Average</td>';
+            $sampleCode.='</tr>';
+            $sampleCode.='<tr>';
+            $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Expected Result</td>';
+            
+            $nonMandatorySamples = array();
+
+            foreach ($this->result['referenceResult'] as $refRes) {
+
+                if($refRes['mandatory'] == 0){
+                    $nonMandatorySamples[] = $refRes['sample_label']; 
+                }
+                $sampleCode.='<td style="text-align:center;">' . ucfirst(strtolower($refRes['referenceResult'])) . '</td>';
+
+            }
+            
+            $sampleCode.='<td></td>';
+            $sampleCode.='</tr>';
+            $sampleCode.='<tr>';
+            $sampAvg = '0';
+            $sampPerAvg = '0';
+            $sampleCode.='<td style="background-color:#dbe4ee;text-align:center;">Correctly Reported</td>';
+
+            foreach ($result['correctCount'] as $sample) {
+                $sampAvg+=$sample["correctRes"];
+                $sampPerAvg+=(($sample["correctRes"] / $partCount) * 100);
+                $sampleCode.='<td style="text-align:center;font-weight:normal;">' . $sample["correctRes"] .' ('. round(($sample["correctRes"] / $partCount) * 100, 2) . '%)</td>';
+            }
+
+            $sampleCode.='<td style="text-align:center;font-weight:normal;">' . round(($sampAvg / $sampleCount), 2).' ('.round(($sampPerAvg / $sampleCount), 2) .'%)</td>';
+            $sampleCode.='</tr>';
+
+
+            $sampleCode.='</table></br>';
+            $pdf->writeHTML($sampleCode, true, false, true, false, '');
+            
+             if(count($nonMandatorySamples) > 0){
+                $nmsTable='<span style="font-size:13px;">';
+                $nmsTable.="The following samples have been excluded from this evaluation : ".implode(", ",$nonMandatorySamples);    
+                $nmsTable.="</span><br/>";
+                $pdf->writeHTML($nmsTable, true, false, true, false, '');
+            }   
+            
+            
+//----------------Participant Performance Overview  start----------------
+            $ppOverview='<span style="font-size:13px;">Participant Performance Overview</span><br/>';
+            $ppOverview.='<table border="1"  style="font-size:13px;"><tr>';
+            $ppOverview.='<td style="background-color:#dbe4ee;text-align:center;"># of Participants</td>';
+            $ppOverview.='<td style="background-color:#dbe4ee;text-align:center;"># of Responses</td>';
+            $ppOverview.='<td style="background-color:#dbe4ee;text-align:center;"># of Valid Responses</td>';
+            $ppOverview.='<td style="background-color:#dbe4ee;text-align:center;">Average Score</td></tr>';
+
+            $ppOverview.='<tr>';
+            $ppOverview.='<td style="text-align:center;">' . $this->participantPerformance['total_shipped'] . '</td>';
+            $ppOverview.='<td style="text-align:center;">' . $this->participantPerformance['total_responses'] . '</td>';
+            $ppOverview.='<td style="text-align:center;">' . $this->participantPerformance['valid_responses'] . '</td>';
+            $ppOverview.='<td style="text-align:center;">' . round($this->participantPerformance['average_score'], 2) . '</td>';
+            $ppOverview.='</tr>';
+
+            $ppOverview.='</table><br>';
+            //----------------Participant Performance Overview  Ends----------------
+                    
+            $pdf->writeHTML($ppOverview, true, false, true, false, '');
+        
+        if(count($this->correctiveness) > 0){
+            //----------------Participant Corrective Action Overview  start----------------
+            $correctiveActionStuff='<span style="font-size:13px;">Corrective Action Overview </span><br/>
+            <table border="1" style="font-weight:normal;font-size:13px;"><tr style="font-weight:bold;">';
+            $correctiveActionStuff.='<td style="background-color:#dbe4ee;text-align:center;width:75%;">Corrective Action</td>';
+            $correctiveActionStuff.='<td style="background-color:#dbe4ee;text-align:center;width:25%;">Responses having Corrective Action</td>';
+            
+            $correctiveActionStuff.='</tr>';
+            foreach ($this->correctiveness as $correctiveness) {
+                $correctiveActionStuff.='<tr>';
+                $correctiveActionStuff.='<td style="text-align:left;">' . $correctiveness['corrective_action'] . '</td>';
+                $correctiveActionStuff.='<td style="text-align:center;">' . $correctiveness['total_corrective'] . '</td>';
+                
+                $correctiveActionStuff.='</tr>';
+            }
+            $correctiveActionStuff.='</table><br/>';
+
+            //----------------Participant Corrective Action Overview  Ends----------------
+
+            $pdf->writeHTML($correctiveActionStuff, true, false, true, false, '');
+        }
+               
+            $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'] . DIRECTORY_SEPARATOR . 'bar_chart.png';
+            //$image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.'logo_example.jpg';
+            //$mask = $pdf->Image('images/alpha.png', 50, 140, 100, '', '', '', '', false, 300, '', true);
+            $y = $pdf->getY() + 5;
+            $pdf->Image($image_file, 5, $pdf->getY(), '', '', '', '', '', false, 300);
+            if (file_exists($image_file)) {
+                unlink($image_file);
+            }
+
+            //$pdf->Image($image_file, 10, 10, 25, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        }
+        
+        //$pdf->AddPage();
+
+        if ($this->result['scheme_type'] == 'dts') {
+            if (count($this->result['pieChart']) > 0) {
+                $chart = new PieChart(700, 400);
+                $dataSet = new XYDataSet();
+                foreach ($this->result['pieChart'] as $piechart) {
+                    $dataSet->addPoint(new Point($piechart['kit_name']." (N=".$piechart['count'].")", $piechart['count']));
+                }
+                $piechart = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'] . DIRECTORY_SEPARATOR . 'pieChart.png';
+                $chart->setDataSet($dataSet);
+
+                $chart->getPlot()->setGraphCaptionRatio(0.5);
+                $chart->setTitle("Test kits used for DTS-based PT survey " . $this->result['distribution_code']);
+                $chart->render($piechart);
+
+                $pdf->Image($piechart, 5, $y, '', '', '', '', '', false, 300);
+                if (file_exists($piechart)) {
+                    unlink($piechart);
+                }
+            }
+        }
+        if ($this->result['scheme_type'] == 'dbs') {
+            $chart = new PieChart(700, 400);
+
+            $dataSet = new XYDataSet();
+
+            if (trim($this->result['dbsPieChart']['EIA/EIA/EIA/WB']) != "") {
+                $dataSet->addPoint(new Point("EIA/EIA/EIA/WB", $this->result['dbsPieChart']['EIA/EIA/EIA/WB']));
+            }
+
+            if (trim($this->result['dbsPieChart']['EIA/EIA/EIA']) != "") {
+                $dataSet->addPoint(new Point("EIA/EIA/EIA", $this->result['dbsPieChart']['EIA/EIA/EIA']));
+            }
+            if (trim($this->result['dbsPieChart']['EIA/EIA/WB']) != "") {
+                $dataSet->addPoint(new Point("EIA/EIA/WB", $this->result['dbsPieChart']['EIA/EIA/WB']));
+            }
+            if (trim($this->result['dbsPieChart']['EIA/EIA']) != "") {
+                $dataSet->addPoint(new Point("EIA/EIA", $this->result['dbsPieChart']['EIA/EIA']));
+            }
+            if (trim($this->result['dbsPieChart']['EIA/WB']) != "") {
+                $dataSet->addPoint(new Point("EIA/WB", $this->result['dbsPieChart']['EIA/WB']));
+            }
+            if (trim($this->result['dbsPieChart']['EIA']) != "") {
+                $dataSet->addPoint(new Point("EIA", $this->result['dbsPieChart']['EIA']));
+            }
+
+            $piechart = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'] . DIRECTORY_SEPARATOR . 'pieChart.png';
+            $chart->setDataSet($dataSet);
+
+            $chart->setTitle("HIV Testing Algorithms used for DBS-based PT survey " . $this->result['distribution_code']);
+            $chart->render($piechart);
+
+            $pdf->Image($piechart, 5, $y, '', '', '', '', '', false, 300);
+            if (file_exists($piechart)) {
+                unlink($piechart);
+            }
+        }
+    }
+    
+    if(isset($this->responseResult) && count($this->responseResult)>0  && $this->responseResult!=''){
+        
+        $chart1 = new PieChart(700, 400);
+	$dataSet = new XYDataSet();
+        
+        $passed=$this->responseResult["number_passed"];
+        $failed=$this->responseResult["number_failed"];
+        $notResponded=$this->responseResult["others"];
+        $late=$this->responseResult["number_late"];
+        $excluded=$this->responseResult["excluded"];
+        
+        $dataSet->addPoint(new Point("Passed (N=$passed)", $passed));
+        $dataSet->addPoint(new Point("Failed (N=$failed)", $failed));
+        $dataSet->addPoint(new Point("Not Responded (N=$notResponded)", $notResponded));
+        $dataSet->addPoint(new Point("Late Response (N=$late)", $late));
+        $dataSet->addPoint(new Point("Excluded (N=$excluded)", $excluded));
+        
+        $performancePiechart = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->responseResult["shipment_code"] . DIRECTORY_SEPARATOR . 'performanceChart.png';
+        
+	$chart1->setDataSet($dataSet);
+	$chart1->setTitle("Shipment Participant Result Report");
+	$chart1->render($performancePiechart);
+        $pdf->Image($performancePiechart, 5, $y, '', '', '', '', '', false, 300);
+        if (file_exists($performancePiechart)) {
+            unlink($performancePiechart);
+        }
+        
+    }
+            
+            
+//Close and output PDF document
+    $fileName = $this->result['shipment_code']."-summary.pdf";
+    $filePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR . $this->result['shipment_code'] . DIRECTORY_SEPARATOR . $fileName;
+//$pdf->Output('example_003.pdf', 'I');
+    $pdf->Output($filePath, "F");
+
+//============================================================+
+// END OF FILE
+//============================================================+
+    echo "success";
+}

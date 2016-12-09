@@ -1,0 +1,110 @@
+<div class="well">
+    <form name="addSampleForm" id="addSampleForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "samples", "action" => "add"),'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Add New Sample</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Sample Name <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5"><input type="text" id="SampleCode" name="SampleCode" size="50" maxlength="45"
+                                             class="isRequired form-control" title="Please enter the sample name here"
+                                             placeholder="Please enter the sample name here"/></div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="ProviderID" id="ProviderID" title="Please choose the provider here">
+                        <option value=""></option>
+                        <?php foreach ($this->providerList as $prov) {
+                            ?>
+                            <option value="<?php echo $prov['ProviderName']; ?>"><?php echo $prov['ProviderName']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+	    <div class="form-group">
+                <label class="col-lg-3 control-label">Program <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="ProgramID" id="ProgramID" title="Please choose the program here">
+                        <option value=""></option>
+                        <?php foreach ($this->programList as $prog) {
+                            ?>
+                            <option value="<?php echo $prog['Description']; ?>"><?php echo $prog['Description']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+	    <div class="form-group">
+                <label class="col-lg-3 control-label">Period Description <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="PeriodID" id="ProviderID" title="Please choose the period here">
+                        <option value=""></option>
+                        <?php foreach ($this->periodList as $perio) {
+                            ?>
+                            <option value="<?php echo $perio['PeriodDescription']; ?>"><?php echo $perio['PeriodDescription']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+	    <div class="form-group">
+                <label class="col-lg-3 control-label">Lab Name <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="LabID" id="ProgramID" title="Please choose the lab here">
+                        <option value=""></option>
+                        <?php foreach ($this->labList as $lab) {
+                            ?>
+                            <option value="<?php echo $lab['LabName']; ?>"><?php echo $lab['LabName']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            </table>
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/samples';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+            function (data) {
+                if (data > 0) {
+                    alert(msg, "err");
+                    duplicated = true;
+		    $("#"+obj).focus();
+                }
+                else {
+                    duplicated = false;
+                }
+		return duplicated;
+            });
+    }
+
+    function validateNow() {
+        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
+	//if (!checkDduplicateId) {
+	    flag = deforayValidator.init({
+		formId: 'addSampleForm'
+	    });
+	    if (flag && !duplicated) {
+		$.blockUI();
+		document.getElementById('addSampleForm').submit();
+	    }
+	//}
+    }    
+    
+</script>
