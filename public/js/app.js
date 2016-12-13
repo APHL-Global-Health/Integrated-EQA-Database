@@ -5,14 +5,14 @@ var myapp = angular.module('ReportModule');
 myapp.controller('myctrl', function ($scope, $http, $timeout) {
 
     $scope.chartTypes = [
-//    {"id": "line", "title": "Line"},
-//    {"id": "spline", "title": "Smooth line"},
-//    {"id": "area", "title": "Area"},
-//    {"id": "areaspline", "title": "Smooth area"},
-//    {"id": "column", "title": "Column"},
-//    {"id": "bar", "title": "Bar"},
-//    {"id": "pie", "title": "Pie"},
-//    {"id": "scatter", "title": "Scatter"}
+    {"id": "line", "title": "Line"},
+    {"id": "spline", "title": "Smooth line"},
+    {"id": "area", "title": "Area"},
+    {"id": "areaspline", "title": "Smooth area"},
+    {"id": "column", "title": "Column"},
+    {"id": "bar", "title": "Bar"},
+    {"id": "pie", "title": "Pie"},
+    {"id": "scatter", "title": "Scatter"}
     ];
 
     $scope.dashStyles = [
@@ -92,60 +92,6 @@ myapp.controller('myctrl', function ($scope, $http, $timeout) {
 //    }
 
     $scope.showGraph = false;
-    $scope.graphData.getBackendJason = function (title) {
-        try {
-            
-           
-            $http.get("http://localhost:8082/reports/repository/results")
-                    .success(function (data) {
-                      $scope.showGraph = true;
-                        $timeout(function () {
-                            $scope.chartConfig = {
-                                options: {
-                                    chart: {
-                                        type: 'column'
-                                    },
-                                    plotOptions: {
-                                        series: {
-                                            stacking: ''
-                                        }
-                                    }
-                                },
-
-                                series: data,
-                                title: {
-                                    text: title
-                                },
-                                credits: {
-                                    enabled: true
-                                },
-                                xAxis: {
-                                    tickInterval: 1,
-                                    labels: {
-                                        enabled: true,
-                                        formatter: function () {
-                                            return data[this.value].title;
-                                        },
-                                    }
-                                },
-                                loading: false,
-                                size: {}
-                            };
-                            $scope.showGraph = false;
-
-                        }, 300)
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                    })
-
-        } catch (E) {
-
-        }
-
-
-    }
-
      // $scope.graphData.getBackendJason();
 
     $scope.reflow = function () {

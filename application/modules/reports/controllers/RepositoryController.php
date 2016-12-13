@@ -48,6 +48,23 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function getprogramsAction() {
+        if (!class_exists('database\core\mysql\DatabaseUtils')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+        }
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "Select*from rep_programs";
+        echo json_encode($databaseUtils->rawQuery($query));
+        exit();
+    }
+
     public function samplesAction() {
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
@@ -60,12 +77,18 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
-        $query = "select DISTINCT RoundID,count(SampleCode) as samples,count(DISTINCT SampleCode) as uniquecount  from rep_repository GROUP BY RoundID;";
+        $query = "select DISTINCT RoundID,count(SampleCode) as samples,count(DISTINCT SampleCode) "
+                . "as uniquecount  from rep_repository GROUP BY RoundID;";
         echo json_encode($databaseUtils->rawQuery($query));
         exit();
     }
 
     public function resultsAction() {
+
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+
+
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
         }
@@ -77,18 +100,26 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
-        $query = "select ProgramID as title,Grade as name, count(Grade) as data from rep_repository where programID ='malaria' GROUP BY ProgramID,Grade ";
+        $query = "select ProgramID as title,Grade as name, count(Grade) as data "
+                . "from rep_repository ";
+        if (isset($whereArray['programId'])) {
+            $query .= "where programID ='" . $whereArray['programId'] . "'";
+        }
+        if (isset($whereArray['providerID'])) {
+            $query .= "and ProviderId ='" . $whereArray['providerID'] . "'";
+        }
+        $query .= " GROUP BY ProgramID,Grade ";
 
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData,(int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
         }
-        
+
         echo json_encode($query);
         exit();
     }
