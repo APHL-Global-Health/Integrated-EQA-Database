@@ -31,40 +31,66 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
     }
 
-    public function testAction() {
-
-        $where['dateRange'] = $_POST['dateRange'];
-
-
-        $dates = explode(" - ", $_POST['dateRange']);
-        $columns = array();
-        $records = array();
-        if (!empty($_POST)) {
-
-            foreach ($_POST as $key => $value) {
-                if ($key == 'ProviderID') {
-                    array_push($columns, $key);
-                    array_push($records, $value);
-                }
-            }
-        }
-
-
+    public function programsAction() {
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
-        } if (!class_exists('database\crud\SystemAdmin')) {
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
         }
-        $table = 'rep_repository';
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
-        $jsonData = json_encode($databaseUtils->query($table, array(), array()));
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
 
-//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
-//
-//         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(),array())));
-//
-        echo $jsonData;
-        exit;
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select DISTINCT ProgramID,count(DISTINCT LabID) as labcount,count(*)  from rep_repository GROUP BY ProgramID;";
+        echo json_encode($databaseUtils->rawQuery($query));
+        exit();
+    }
+
+    public function samplesAction() {
+        if (!class_exists('database\core\mysql\DatabaseUtils')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+        }
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select DISTINCT RoundID,count(SampleCode) as samples,count(DISTINCT SampleCode) as uniquecount  from rep_repository GROUP BY RoundID;";
+        echo json_encode($databaseUtils->rawQuery($query));
+        exit();
+    }
+
+    public function resultsAction() {
+        if (!class_exists('database\core\mysql\DatabaseUtils')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+        }
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select ProgramID as title,Grade as name, count(Grade) as data from rep_repository where programID ='malaria' GROUP BY ProgramID,Grade ";
+
+        $query = ($databaseUtils->rawQuery($query));
+        if (count($query) > 0) {
+            for ($i = 0; $i < sizeof($query); $i++) {
+                $tempData = array();
+                array_push($tempData,(int)$query[$i]['data']);
+                $query[$i]['data'] = $tempData;
+                $tempData = array();
+            }
+        }
+        
+        echo json_encode($query);
+        exit();
     }
 
 }

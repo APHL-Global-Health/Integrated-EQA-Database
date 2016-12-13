@@ -1,7 +1,6 @@
 
 
-var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination']);
-
+var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination','highcharts-ng']);
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout) {
 
 
@@ -10,7 +9,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.repositoryData = {};
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
+    
+    
+    
     $scope.reports.doAjaxRequest = function () {
+    
+       
         $scope.reports.showLoader = true;
         $scope.reports.reportShowTable = false;
         var searchColumns = {};
@@ -50,20 +54,51 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
     $scope.reports.exportToPDF = function () {
         try {
-            $('#repoReport').tableExport(
-                    {type:'pdf',pdfFontSize:'7',escape:'false'}
-            );
+//
+//            var divContents = $("#repoReport").html();
+//            var printWindow = window.open('', '', 'height=400,width=800');
+//            printWindow.document.write('<html><head><title>DIV Contents</title>');
+//            printWindow.document.write('</head><body >');
+//            printWindow.document.write(divContents);
+//            printWindow.document.write('</body></html>');
+//            printWindow.document.close();
+//            printWindow.print();
+
+            var printDoc = new jsPDF();
+            printDoc.fromHTML($('#repoReport').get(0), 10, 10, {'width': 180});
+            printDoc.autoPrint();
+            printDoc.output("dataurlnewwindow");
+//            $('#repoReport').tableExport(
+//                    {
+//
+//                        type: 'pdf',
+//                        pdfFontSize: '10',
+//                        escape: 'false',
+//                        bootstrap: true,
+//                        tableName: 'repoReport',
+//                        pdfLeftMargin: 10,
+//                        htmlContent: 'true',
+//                        consoleLog: 'false'
+//                    }
+//            );
         } catch (E) {
             console.log(E)
         }
     }
+    $scope.reports.createGraphData = function () {
+
+
+    }
     $scope.reports.exportToCSV = function () {
         try {
             $('#repoReport').tableExport(
-                    {type: 'csv', escape: 'false'}
+                    {
+                        type: 'csv',
+                        escape: 'true'
+                    }
             );
         } catch (E) {
-
+            console.log(E)
         }
     }
 
@@ -80,7 +115,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         alert("called");
         $scope.reports.actionMenu = 0;
         var date = new Date();
-
         $timeout(function () {
 
 
