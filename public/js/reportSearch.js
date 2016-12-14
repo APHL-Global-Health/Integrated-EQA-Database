@@ -1,7 +1,8 @@
 
 
-var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination','highcharts-ng']);
-ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout) {
+var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng']);
+ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
+ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL) {
 
 
 
@@ -9,12 +10,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.repositoryData = {};
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
-    
-    
-    
+
+
+
     $scope.reports.doAjaxRequest = function () {
-    
-       
+
+
         $scope.reports.showLoader = true;
         $scope.reports.reportShowTable = false;
         var searchColumns = {};
@@ -111,6 +112,115 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         }
     }
+
+
+    $scope.reports.showGraph = false;
+    $scope.reports.graphType = 'column';
+    $scope.reports.allPrograms = {};
+    $scope.reports.getPrograms = function () {
+        try {
+            var url = serverURL + 'getprograms';
+            $http
+                    .get(url)
+                    .success(function (data) {
+                        console.log(data)
+                        if (data.length > 0) {
+                            $scope.reports.allPrograms = data;
+                        }
+                    })
+                    .error(function (error) {
+
+                    })
+        } catch (E) {
+            console.log(E)
+        }
+
+    }
+
+    $scope.reports.changeGraphType = function (graphType) {
+        $scope.reports.chartProgramResults.options.chart.type = graphType;
+        $scope.reports.graphType = graphType;
+    }
+    
+    $scope.reports.chartTypes = [
+    {"id": "line", "title": "Line"},
+    {"id": "spline", "title": "Smooth line"},
+    {"id": "area", "title": "Area"},
+    {"id": "areaspline", "title": "Smooth area"},
+    {"id": "column", "title": "Column"},
+    {"id": "bar", "title": "Bar"},
+    {"id": "pie", "title": "Pie"},
+    {"id": "scatter", "title": "Scatter"}
+    ];
+    $scope.reports.showGraphLoader = false;
+    $scope.reports.searchedReport = 'Repository Graphs';
+    $scope.reports.getBackendJason = function (reportFilter) {
+        try {
+            console.log(reportFilter);
+            var result = serverURL + 'results';
+            var filterData = {};
+            $scope.reports.showGraphLoader = true;
+            filterData.ProgramId = reportFilter.programId;
+            filterData.ProviderId = reportFilter.providerID;
+            filterData.dateRange = $("#dateRange").val();// reportFilter.dateRange;//$("#dateRange").val();
+
+            $http.post(result, reportFilter)
+                    .success(function (data) {
+                        $scope.reports.showGraphLoader = false;
+                        $scope.reports.showGraph = true;
+                        $scope.reports.searchedReport = filterData.ProgramId;
+
+
+                        $timeout(function () {
+                            $scope.reports.chartProgramResults = {
+                                options: {
+                                    chart: {
+                                        type: $scope.reports.graphType
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            stacking: ''
+                                        }
+                                    }
+                                },
+
+                                series: data,
+                                title: {
+                                    text: reportFilter.programId
+
+                                },
+                                credits: {
+                                    enabled: true
+                                },
+                                xAxis: {
+                                    tickInterval: 1,
+                                    labels: {
+                                        enabled: true,
+                                        formatter: function () {
+                                            return data[this.value].title;
+                                        },
+                                    }
+                                },
+                                loading: false,
+                                size: {}
+                            };
+                            $scope.showGraph = false;
+
+                        }, 30)
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                    })
+
+        } catch (E) {
+
+        }
+
+
+    }
+
+
+
     $scope.reports.exportToExcel = function (filename, id) {
         alert("called");
         $scope.reports.actionMenu = 0;
