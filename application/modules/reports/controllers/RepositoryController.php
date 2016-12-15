@@ -17,8 +17,8 @@ class Reports_RepositoryController extends Zend_Controller_Action
     {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-            $reportService = new Application_Service_Reports();
-            $response=$reportService->getParticipantDetailedReport($params);
+            $reportService = new Application_Service_Repository();
+            $response=$reportService->getAllProviderDetailedReport($params);
             $this->view->response = $response;
             $this->view->type= $params['reportType'];
         }
@@ -29,10 +29,13 @@ class Reports_RepositoryController extends Zend_Controller_Action
     public function reportAction()
     {
         if ($this->getRequest()->isPost()) {
-            $params = $this->_getAllParams();            
-            $reportService = new Application_Service_Importcsv();
+            $params = $this->_getAllParams();
+            print_r($params);
+            exit;
+            $reportService = new Application_Service_Repository();
             $reportService->getAllProviderDetailedReport($params);
         }
+        
     }
 
 
