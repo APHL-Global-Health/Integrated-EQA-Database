@@ -337,21 +337,21 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select * "
                 . "from rep_repository ";
 
-//        if (isset($whereArray['dateFrom'])) {
-//            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
-//        }
-//        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-//            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
-//        }
-//
-//        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-//            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
-//        }
-//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
-//
-//         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(),array())));
-//         
-//
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        }
+
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+
+         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(),array())));
+         
+
         $jsonData = ($databaseUtils->rawQuery($query));
         echo json_encode($jsonData);
         exit;
