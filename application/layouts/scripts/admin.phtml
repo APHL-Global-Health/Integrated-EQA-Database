@@ -1,5 +1,9 @@
 <?php
   $adminSession = new Zend_Session_Namespace('administrators');
+  $auth = Zend_Auth::getInstance();
+  if ($auth->hasIdentity()) {
+    $role = $auth->getIdentity()->IsProvider;
+  }
   $controllerName=Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
   $actionName=Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 ?>
@@ -54,6 +58,7 @@
           <a class="navbar-brand" href="/admin">ePT Admin</a>
         </div>
         <div class="navbar-collapse collapse">
+            <?php if($role==0){?>
           <ul class="nav navbar-nav">
             <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'index'),'default',true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -123,10 +128,8 @@
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'samples'),'default',true); ?>">Samples</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'resultcodes'),'default',true); ?>">Result Codes</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'failreasons'),'default',true); ?>">Fail Reasons</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'uploadreports'),'default',true); ?>">Upload Report</a></li>
-                <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'importcsv'),'default',true); ?>">Import Data</a></li>
-              </ul>
+                <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'repcustomfields'),'default',true); ?>">Custom Fields</a></li>
+               </ul>
             </li>
             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repositoryreports') ? "class='active dropdown'" : "class='dropdown'"; ?>>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i>&nbsp;&nbsp;Repository Reports <b class="caret"></b></a>
@@ -136,6 +139,12 @@
               </ul>
             </li>
           </ul>
+            <?php }else{?>
+            <ul class="nav navbar-nav">
+                <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'uploadreports'),'default',true); ?>"><i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a></li>
+            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'importcsv'),'default',true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data</a></li>
+            </ul>
+            <?php }?>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'login','action'=>'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
           </ul>

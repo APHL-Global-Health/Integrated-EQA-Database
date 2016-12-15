@@ -7,6 +7,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
 
     $scope.reports = {};
+    $scope.reports.itemsPerPage = 40;
     $scope.reports.repositoryData = {};
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
@@ -27,6 +28,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
+            $scope.reports.showLoader = false;
         } else {
             if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
 
@@ -42,11 +44,14 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
                         })
                         .error(function (error) {
+
+                            updateGraphMessages("Server error,please reload page", true, 'btn-warning');
                             $scope.reports.showLoader = false;
                         })
 
 
             } else {
+                $scope.reports.showLoader = false;
                 updateGraphMessages("Please choose a provider", true, 'btn-danger');
             }
 
@@ -141,7 +146,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         }
                     })
                     .error(function (error) {
-
+                        updateGraphMessages("Server error,please reload page", true, 'btn-warning');
                     })
         } catch (E) {
             console.log(E)
@@ -155,13 +160,13 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
 
     $scope.reports.chartTypes = [
-        {"id": "line", "title": "Line"},
+      //  {"id": "line", "title": "Line"},
         {"id": "spline", "title": "Smooth line"},
-        {"id": "area", "title": "Area"},
-        {"id": "areaspline", "title": "Smooth area"},
+       // {"id": "area", "title": "Area"},
+       // {"id": "areaspline", "title": "Smooth area"},
         {"id": "column", "title": "Column"},
         {"id": "bar", "title": "Bar"},
-        {"id": "pie", "title": "Pie"},
+       // {"id": "pie", "title": "Pie"},
         {"id": "scatter", "title": "Scatter"}
     ];
     $scope.reports.chartProgramResults = {};
@@ -264,13 +269,13 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .success(function (data) {
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Lab-samples Graph');
+                        $scope.reports.loadGraphParameters(data, 'Lab Against Sample Graph');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
                     })
                     .error(function (error) {
-
+                        updateGraphMessages("Server error,please reload page", true, 'btn-warning');
                     })
         } catch (e) {
             console.log(e)
@@ -287,13 +292,14 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .success(function (data) {
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Round-tests Graph');
+                        $scope.reports.loadGraphParameters(data, 'Round Against Test Count Graph');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
                     })
                     .error(function (error) {
-
+                        $scope.reports.showGraphLoader = false;
+                        updateGraphMessages("Server error,please reload page", true, 'btn-warning');
                     })
         } catch (e) {
             console.log(e)
@@ -313,12 +319,14 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(data)
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Provider-lab count Graph');
+                        $scope.reports.loadGraphParameters(data, 'Provider Against Lab Count Graph');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
                     })
                     .error(function (error) {
+                        $scope.reports.showGraphLoader = false;
+                        updateGraphMessages("Server error,please reload page", true, 'btn-warning');
 
                     })
         } catch (e) {
@@ -343,12 +351,14 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(data)
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Program-lab count Graph');
+                        $scope.reports.loadGraphParameters(data, 'Program Against Lab Count Graph');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
                     })
                     .error(function (error) {
+                        $scope.reports.showGraphLoader = false;
+                        updateGraphMessages("Server error,please reload page", true, 'btn-warning');
 
                     })
         } catch (e) {
@@ -435,7 +445,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $("#dateRange").click(function () {
         if ($("#dateRange").val() == '') {
-            updateGraphMessages("Date OK", true, "btn-info");
+            updateGraphMessages("Date OK", false, "btn-info");
         } else {
             updateGraphMessages("OK,proceed", true, "btn-info");
         }

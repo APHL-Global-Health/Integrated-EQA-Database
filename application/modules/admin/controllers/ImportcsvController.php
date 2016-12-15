@@ -16,10 +16,15 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $pname = $auth->getIdentity()->ProviderName;
+        }
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
+            
             $clientsServices = new Application_Service_Importcsv();
-            $clientsServices->getAllData($params);
+            $clientsServices->getAllData($params,$pname);
         }
     }
 
