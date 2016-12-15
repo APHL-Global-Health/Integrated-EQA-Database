@@ -16,31 +16,33 @@ class AuthController extends Zend_Controller_Action
 
     public function loginAction()
     {
-
-    // action body
+        // action body
     	if($this->getRequest()->isPost()){
-    		//die;
+                //die;
     		//echo "Post";
     		$params = $this->getRequest()->getPost();
     		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
     		$adapter = new Zend_Auth_Adapter_DbTable($db, "data_manager", "primary_email", "password");
     		$adapter->setIdentity($params['username']);
+                $adapter->setIdentity($params['IsProvider']);
     		$adapter->setCredential($params['password']);
 			
-            $select = $adapter->getDbSelect();
-            $select->where('status = "active"');			
+                $select = $adapter->getDbSelect();
+                $select->where('status = "active"');			
 			
     		// STEP 2 : Let's Authenticate
     		$auth = Zend_Auth::getInstance();
     		$res = $auth->authenticate($adapter); // -- METHOD 2 to authenticate , seems to work fine for me
-    		
-			//echo "hi";
+    		//$auth->getStorage()->write( $select );
+			
     		if($res->isValid()){
 				
-				Zend_Session::rememberMe(60 * 60 * 5); // asking the session to be active for 5 hours
+			Zend_Session::rememberMe(60 * 60 * 5); // asking the session to be active for 5 hours
 
     			$rs = $adapter->getResultRowObject();
-    			
+                        print_r($rs);
+                        exit;
+    			$auth->getStorage()->write( $rs );
     			$authNameSpace = new Zend_Session_Namespace('datamanagers');
     			$authNameSpace->UserID = $params['username'];
 	    		$authNameSpace->dm_id = $rs->dm_id;
@@ -51,6 +53,8 @@ class AuthController extends Zend_Controller_Action
 	    		$authNameSpace->qc_access = $rs->qc_access;
 	    		$authNameSpace->enable_adding_test_response_date = $rs->enable_adding_test_response_date;
 	    		$authNameSpace->force_password_reset = $rs->force_password_reset;
+                        $authNameSpace->IsProvider=$rs->IsProvider;
+                        
 	    		// PT Provider Dependent Configuration 
 	    		//$authNameSpace->UserFld1 = $rs->UserFld1;
 	    		//$authNameSpace->UserFld2 = $rs->UserFld2;
