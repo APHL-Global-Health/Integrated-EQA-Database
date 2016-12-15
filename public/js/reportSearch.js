@@ -21,37 +21,49 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var searchColumns = {};
         searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
         searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
-        searchColumns.provider = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
 //        console.log(searchColumns);
-        $.ajax({
-            url: "http://localhost:8082/reports/repository/test",
-            data: {
-                dateRange: $("#dateRange").val(),
-                reportType: $("#reportType").val(),
-                ProviderID: $("#provider").val()
-            },
-            type: "POST",
-            success: function (data) {
-                //              console.log(data);
-//                    var res = JSON.parse(data);
-//                    console.log(res);
-                $scope.reports.createDataTable(data)
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
 
-            },
-            error: function (error) {
-                $scope.reports.showLoader = false;
+                updateGraphMessages("No records found", false, 'btn-warning');
+                $scope.reports.showGraphLoader = true;
+                var url = serverURL + 'test';
+                $http
+                        .post(url, searchColumns)
+                        .success(function (data) {
+                            $scope.reports.createDataTable(data)
+
+                            console.log(data);
+
+                        })
+                        .error(function (error) {
+                            $scope.reports.showLoader = false;
+                        })
+
+
+            } else {
+                updateGraphMessages("Please choose a provider", true, 'btn-danger');
             }
-        });
+
+        }
     }
 
     $scope.reports.createDataTable = function (tableData) {
-        tableData = JSON.parse(tableData)
+
         $scope.reports.repositoryData = tableData;
         if ($scope.reports.repositoryData.length > 0) {
             $scope.reports.reportShowTable = true;
-            $scope.reports.showLoader = false;
+
+        } else {
+
         }
-        $scope.$apply();
+        $scope.reports.showLoader = false;
+        //$scope.$apply();
     }
     $scope.reports.exportToPDF = function () {
         try {
@@ -228,21 +240,21 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
                 $scope.reports.getRoundIdSample(filterData);
             }
-            if(graphType == 'Program-lab count Graph'){
-                $scope.reports.getProgramsAgainstLabCount (filterData);
+            if (graphType == 'Program-lab count Graph') {
+                $scope.reports.getProgramsAgainstLabCount(filterData);
             }
-            if(graphType == 'Provider-lab Graph'){
-                $scope.reports.getProviderAgainstLabCount(filterData); 
+            if (graphType == 'Provider-lab Graph') {
+                $scope.reports.getProviderAgainstLabCount(filterData);
             }
-            if(graphType == 'Lab-samples Graph'){
-                $scope.reports.getLabAgainstSample(filterData);  
+            if (graphType == 'Lab-samples Graph') {
+                $scope.reports.getLabAgainstSample(filterData);
             }
-            
+
         }
     }
     $scope.reports.reportFilter = {};
-    
-    
+
+
     $scope.reports.getLabAgainstSample = function (filterData) {
         try {
             $scope.reports.showGraphLoader = true;
@@ -264,8 +276,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             console.log(e)
         }
     }
-    
-    
+
+
     $scope.reports.getRoundIdSample = function (filterData) {
         try {
             $scope.reports.showGraphLoader = true;
@@ -287,10 +299,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             console.log(e)
         }
     }
-    
-    
-    
-      $scope.reports.getProviderAgainstLabCount = function (filterData) {
+
+
+
+    $scope.reports.getProviderAgainstLabCount = function (filterData) {
         try {
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'providervslabs';
@@ -313,13 +325,13 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             console.log(e)
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     $scope.reports.getProgramsAgainstLabCount = function (filterData) {
         try {
             $scope.reports.showGraphLoader = true;
@@ -343,9 +355,9 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             console.log(e)
         }
     }
-    
-    
-    
+
+
+
     $scope.reports.showGraphLoader = false;
     $scope.reports.searchedReport = 'Repository Graphs';
     $scope.reports.getBackendJason = function (reportFilter) {
@@ -365,7 +377,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                             $scope.reports.showGraphLoader = false;
                             $scope.reports.showGraph = true;
                             $scope.reports.searchedReport = filterData.ProgramId;
-                        console.log(data);
+                            console.log(data);
                             if (data.length > 0) {
 
                                 $timeout(function () {

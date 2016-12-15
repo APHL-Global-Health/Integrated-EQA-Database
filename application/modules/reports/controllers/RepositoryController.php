@@ -315,38 +315,45 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
     public function testAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
 
-        $where['dateRange'] = $_POST['dateRange'];
-
-
-        $dates = explode(" - ", $_POST['dateRange']);
-        $columns = array();
-        $records = array();
-        if (!empty($_POST)) {
-
-            foreach ($_POST as $key => $value) {
-                if ($key == 'ProviderID') {
-                    array_push($columns, $key);
-                    array_push($records, $value);
-                }
-            }
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
+            $whereArray['dateTo'] = substr($whereArray['dateRange'], 13);
         }
-
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
-        } if (!class_exists('database\crud\SystemAdmin')) {
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
             require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
         }
-        $table = 'rep_repository';
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
-        $jsonData = json_encode($databaseUtils->query($table, array(), array()));
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
 
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select * "
+                . "from rep_repository ";
+
+//        if (isset($whereArray['dateFrom'])) {
+//            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+//        }
+//        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+//            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+//        }
+//
+//        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+//            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+//        }
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 //
 //         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(),array())));
+//         
 //
-        echo $jsonData;
+        $jsonData = ($databaseUtils->rawQuery($query));
+        echo json_encode($jsonData);
         exit;
     }
 
