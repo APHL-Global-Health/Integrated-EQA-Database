@@ -28,7 +28,7 @@
                     <a href="" ng-click="clickedTab = 'graphs'" >Graphs</a>
                 </li>
                 <li class='pull-right'>
-                    <div class="btn btn-success btn-sm" ng-click="reports.exportToPDF()"> <i class="fa fa-pdf"></i> PDF</div>
+                   <!-- <div class="btn btn-success btn-sm" ng-click="reports.exportToPDF()"> <i class="fa fa-pdf"></i> PDF</div>-->
                     <div class="btn btn-primary btn-sm" ng-click="reports.exportToExcelFile()"> <i class="fa fa-excel"></i> Excel</div>
 
                     <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
@@ -77,13 +77,13 @@
                     <select class="form-control input-sm" ng-model="reports.reportType"
                             ng-change="reports.showGraphClicked(reports.reportType)"
                             ng-show="clickedTab == 'graphs'">
-                        <option value="Provider-lab Graph">Provider-lab Graph</option>
+                        <option value="Provider-lab Graph" >Provider-lab Graph</option>
                         <option value="Program-Results Graph">Program-Results Graph</option>
                         <option  value="Program-lab count Graph">Program-lab count Graph</option>
                         <option  value="Round-tests Graph">Round-tests Graph</option>
                         <option  value="Lab-samples Graph">Lab-samples Graph</option>
                     </select>
-                    <select id="program" ng-init="reports.getPrograms()" ng-show="reports.reportType == 'Program-Results Graph'"
+                    <select id="program" ng-init="reports.getPrograms()" ng-if="reports.reportType == 'Program-Results Graph' && clickedTab == 'graphs'"
                             name="reportType" ng-model="reports.reportFilter.programId"  class="form-control input-sm">
                         <option value=""> -- Select Program --</option>
                         <!--                <option value="network">Network Tier</option>
@@ -91,19 +91,19 @@
                         <option  ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">{{programs.Description}}</option>
 
                     </select>
-                    <select id="reportType" name="reportType" ng-show="clickedTab == 'reports'" class="form-control input-sm">
-                        <option value=""> -- Select Report Type --</option>
+                    <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports'"
+                            name="reportType" ng-model="reports.reportFilter.programId"  class="form-control input-sm">
+                        <option value=""> -- Select Program --</option>
                         <!--                <option value="network">Network Tier</option>
                                         <option value="affiliation">Affiliation</option>-->
-                        <option value="region">Region</option>
-                        <option value="enrolled-programs">Enrolled Programs</option>
+                        <option  ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">{{programs.Description}}</option>
 
                     </select>
                 </td>
                 <td class="dontPrint">
                     <button class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'" ng-click="reports.doAjaxRequest()"><span>Get Report</span></button> 
                     <button class="btn btn-success btn-sm"
-                            ng-show="clickedTab == 'graphs' &&reports.reportType == 'Program-Results Graph'" ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span></button> 
+                            ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'" ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span></button> 
                     <button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 
 
@@ -133,7 +133,7 @@
                             <th style="text-align: center;"> # </th>
                             <th style="text-align: center;">Provider Name</th>
                             <th style="text-align: center;">Program</th>
-                            <th style="text-align: center;" id="reportText">Report Type</th>
+                          <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
                             <th style="text-align: center;">PT Round Code</th>
                             <th style="text-align: center;">PT Date</th>
                             <th style="text-align: center;">Grade</th>
@@ -142,7 +142,7 @@
                         </tr>
                     </thead>
                     <tbody >
-                        <tr dir-paginate="record in reports.repositoryData| itemsPerPage: 10 | filter :reports.search"  
+                        <tr dir-paginate="record in reports.repositoryData| itemsPerPage: reports.itemsPerPage | filter :reports.search"  
                             current-page="currentPage" pagination-id="dataPagination">
                             <td>{{$index + 1}}</td>
                             <td>
@@ -152,9 +152,9 @@
                             <td>
                                 {{record.ProgramID}}
                             </td>
-                            <td>
+                            <!--<td>
                                 Inclassified
-                            </td>
+                            </td>-->
                             <td>
                                 {{record.RoundID}}
                             </td>
@@ -174,7 +174,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <pagination></pagination>
+                <pagination ng-if='reports.reportShowTable'></pagination>
             </div>
         </div>
         <div ng-show="clickedTab == 'graphs'">
