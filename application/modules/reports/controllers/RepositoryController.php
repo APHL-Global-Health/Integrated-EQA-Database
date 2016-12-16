@@ -2,6 +2,8 @@
 
 class Reports_RepositoryController extends Zend_Controller_Action {
 
+    protected $homeDir;
+
     public function init() {
         /* Initialize action controller here */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -9,6 +11,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 ->addActionContext('report', 'html')
                 ->initContext();
         $this->_helper->layout()->pageName = 'report';
+        $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
     }
 
     public function indexAction() {
@@ -43,13 +46,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -97,13 +100,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -143,7 +146,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
-
+        
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
             $whereArray['dateTo'] = substr($whereArray['dateRange'], 13);
@@ -151,13 +154,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -195,13 +198,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function getprogramsAction() {
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -222,13 +225,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -264,6 +267,11 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function testurlAction() {
+        echo dirname($_SERVER['DOCUMENT_ROOT']);
+        exit;
+    }
+
     public function resultsAction() {
 
         $whereArray = file_get_contents("php://input");
@@ -275,13 +283,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -324,13 +332,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\core-apis\DatabaseUtils.php';
         }
         if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\SystemAdmin.php';
         }
         if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+            require_once $this->homeDir.DIRECTORY_SEPARATOR.'database\crud\RepRepository.php';
         }
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
@@ -349,8 +357,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
         $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
-         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(),array())));
-         
+        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+
 
         $jsonData = ($databaseUtils->rawQuery($query));
         echo json_encode($jsonData);
@@ -358,4 +366,5 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
 }
+
 
