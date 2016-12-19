@@ -301,134 +301,29 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
 //            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
 //        }
-           $query .= " GROUP BY LabID,Grade ORDER BY title";
-
-     $query = ($databaseUtils->rawQuery($query));
-     
-     $victor = true;
-     $mike = true;
-     
-     if($victor){
-     $titles = array();
-     $labGrades = array();
-     for($i = 0; $i< count($query); $i++){
-         if(!in_array($query[$i]['title'], $titles)){
-             array_push($titles, $query[$i]['title']);
-         }
-         
-         $labName = $query[$i]['title'];
-         $gradeName = $query[$i]['name'];
-         $gradeCount =$query[$i]['data'];
-         
-         $labGrade = array(
-             "name"=>$labName.':'.$gradeName,
-             "data"=>array((int)$gradeCount));
-         
-         array_push($labGrades,$labGrade);
-     }
-     $labGradeResults = array("category"=>$titles, "data"=>$labGrades);
-     echo json_encode($labGradeResults);
-    
-     }
-     echo "<hr />";
-     if($mike){
-             if (count($query) > 0) {
-            $finalArray = array();
-            $holdAllData = array();
-            
-            $tempData = array();
-            $holdTempTitle = array();
-            for ($i = 0; $i < sizeof($query); $i++) {
-                $exist = false;
-
-                for ($j = 0; $j < sizeof($finalArray); $j++) {
-
-
-                    if ($finalArray[$j]['title'] == $query[$i]['title']) {
-                        $exist = true;
-
-
-                        array_push($tempData, array('name' => $query[$i]['title'].':'.$finalArray[$j]['name'], 'data' => (array) (int) $finalArray[$j]['data']));
-
-                        array_push($tempData, array('name' => $query[$i]['title'].':'.$query[$i]['name'], 'data' => (array) (int) $query[$i]['data']));
-
-                        
-
-                        array_push($holdTempTitle, $query[$i]['title']);
-                    }
-                }
-               
-                if (sizeof($finalArray) == 0 || !$exist) {
-                    array_push($finalArray, $query[$i]);
-                }
-               
-            }
-             
-                
-                $holdAllData['category'] = $holdTempTitle;
-                $holdAllData['data'] = $tempData;
-            if (count($finalArray) > 0) {
-                for ($i = 0; $i < sizeof($finalArray); $i++) {
-                    $tempData = array();
-                    array_push($tempData, $finalArray[$i]['data']);
-                    $finalArray[$i]['data'] = $tempData;
-                    $tempData = array();
-                }
-            }
-            echo json_encode($holdAllData);
-        }
-
-        //echo json_encode($query);
-     }       exit();
-    }
-
-    public function resultsAction() {
-
-        $whereArray = file_get_contents("php://input");
-        $whereArray = (array) json_decode($whereArray);
-
-        if (isset($whereArray['dateRange'])) {
-            $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
-            $whereArray['dateTo'] = substr($whereArray['dateRange'], 13);
-        }
-
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
-
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
-        $query = "select ProgramID as title,Grade as name, count(Grade) as data "
-                . "from rep_repository ";
-
-        if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
-        }
-        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
-        }
-
-        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
-        }
-        $query .= " GROUP BY ProgramID,Grade ";
+        $query .= " GROUP BY LabID,Grade ORDER BY title";
 
         $query = ($databaseUtils->rawQuery($query));
-        if (count($query) > 0) {
-            for ($i = 0; $i < sizeof($query); $i++) {
-                $tempData = array();
-                array_push($tempData, (int) $query[$i]['data']);
-                $query[$i]['data'] = $tempData;
-                $tempData = array();
-            }
-        }
 
-        echo json_encode($query);
+        $titles = array();
+        $labGrades = array();
+        for ($i = 0; $i < count($query); $i++) {
+            if (!in_array($query[$i]['title'], $titles)) {
+                array_push($titles, $query[$i]['title']);
+            }
+
+            $labName = $query[$i]['title'];
+            $gradeName = $query[$i]['name'];
+            $gradeCount = $query[$i]['data'];
+
+            $labGrade = array(
+                "name" => $labName . ':' . $gradeName,
+                "data" => array((int) $gradeCount));
+
+            array_push($labGrades, $labGrade);
+        }
+        $labGradeResults = array("category" => $titles, "data" => $labGrades);
+        echo json_encode($labGradeResults);
         exit();
     }
 
