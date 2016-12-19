@@ -301,10 +301,38 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
 //            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
 //        }
-        $query .= " GROUP BY LabID,Grade ";
+           $query .= " GROUP BY LabID,Grade ORDER BY title";
 
-        $query = ($databaseUtils->rawQuery($query));
-        if (count($query) > 0) {
+     $query = ($databaseUtils->rawQuery($query));
+     
+     $victor = true;
+     $mike = true;
+     
+     if($victor){
+     $titles = array();
+     $labGrades = array();
+     for($i = 0; $i< count($query); $i++){
+         if(!in_array($query[$i]['title'], $titles)){
+             array_push($titles, $query[$i]['title']);
+         }
+         
+         $labName = $query[$i]['title'];
+         $gradeName = $query[$i]['name'];
+         $gradeCount =$query[$i]['data'];
+         
+         $labGrade = array(
+             "name"=>$labName.':'.$gradeName,
+             "data"=>array((int)$gradeCount));
+         
+         array_push($labGrades,$labGrade);
+     }
+     $labGradeResults = array("category"=>$titles, "data"=>$labGrades);
+     echo json_encode($labGradeResults);
+    
+     }
+     echo "<hr />";
+     if($mike){
+             if (count($query) > 0) {
             $finalArray = array();
             $holdAllData = array();
             
@@ -339,19 +367,19 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 
                 $holdAllData['category'] = $holdTempTitle;
                 $holdAllData['data'] = $tempData;
-//            if (count($finalArray) > 0) {
-//                for ($i = 0; $i < sizeof($finalArray); $i++) {
-//                    $tempData = array();
-////                    array_push($tempData, $finalArray[$i]['data']);
-////                    $finalArray[$i]['data'] = $tempData;
-//                    $tempData = array();
-//                }
-//            }
+            if (count($finalArray) > 0) {
+                for ($i = 0; $i < sizeof($finalArray); $i++) {
+                    $tempData = array();
+                    array_push($tempData, $finalArray[$i]['data']);
+                    $finalArray[$i]['data'] = $tempData;
+                    $tempData = array();
+                }
+            }
             echo json_encode($holdAllData);
         }
 
         //echo json_encode($query);
-        exit();
+     }       exit();
     }
 
     public function resultsAction() {
