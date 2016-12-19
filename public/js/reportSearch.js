@@ -585,6 +585,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
                                 }, 30)
                             } else {
+                                $scope.reports.showGraphLoader = false;
+                                $scope.reports.showGraph = false;
                                 updateGraphMessages("No Records available", true, 'btn-warning');
                             }
                         })

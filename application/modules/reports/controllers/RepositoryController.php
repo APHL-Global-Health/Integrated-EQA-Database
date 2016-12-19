@@ -294,8 +294,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
-        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
+            $query .= "and ProgramID ='" . $whereArray['ProgramID'] . "'";
         }
 
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
@@ -356,8 +356,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
-        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
+            $query .= "and ProgramID ='" . $whereArray['ProgramID'] . "'";
         }
 
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
@@ -450,7 +450,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+            $query .= "and ProgramID ='" . $whereArray['ProgramId'] . "'";
         }
 
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
@@ -499,7 +499,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+            $query .= "and ProgramID ='" . $whereArray['ProgramId'] . "'";
         }
 
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
