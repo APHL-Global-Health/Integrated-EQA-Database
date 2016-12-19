@@ -205,8 +205,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         $scope.reports.graphTableHeaders.dataName = dataName;
     }
     $scope.reports.loadGraphParameters = function (data, title, titleName, dataName) {
-        
-        
+
+
         changeGraphTableHeaders(titleName, dataName);
         $scope.reports.chartProgramResults = {};
         if (data.length > 0) {
@@ -251,8 +251,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
 
     }
-$scope.reports.loadGraphLabsResults = function (data, title, titleName, dataName) {
-        
+    $scope.reports.loadGraphLabsResults = function (data, title, titleName, dataName) {
+
         console.log(data.category);
         changeGraphTableHeaders(titleName, dataName);
         $scope.reports.chartProgramResults = {};
@@ -280,10 +280,13 @@ $scope.reports.loadGraphLabsResults = function (data, title, titleName, dataName
                     },
                     xAxis: {
                         tickInterval: 1,
+                       
                         labels: {
-                            enabled: true
-                        },
-                        categories :data.categories
+                             enabled: true,
+                            formatter: function () {
+                                return data.data[this.value][0];
+                            }
+                        }
                     },
                     loading: false,
                     size: {}
