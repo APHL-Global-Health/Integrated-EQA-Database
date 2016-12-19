@@ -442,6 +442,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         //$scope.reports.dateRange = $("#dateRange").val();
     })
 
+
+
+
+
     $scope.reports.exportToExcel = function (filename, id) {
         alert("called");
         $scope.reports.actionMenu = 0;

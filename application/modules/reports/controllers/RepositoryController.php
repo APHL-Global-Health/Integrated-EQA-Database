@@ -355,6 +355,9 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
+        
+        
+        
         $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
