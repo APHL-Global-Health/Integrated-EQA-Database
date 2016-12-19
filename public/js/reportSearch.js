@@ -1,5 +1,6 @@
 
 
+
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng']);
 ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache, $filter, filterFilter) {
@@ -665,9 +666,3 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             return $cacheFactory('reportData');
 
         })
-
-
-
-
-
-

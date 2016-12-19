@@ -7,6 +7,7 @@
  */
 
 class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
+
     protected $_name = 'rep_providerfiles';
     protected $_primary = 'ID';
 
@@ -15,8 +16,12 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
-
-        $aColumns = array('ID','ProviderID','ProgramID','PeriodID','FileName', 'FileType','FileSize', 'Url');
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $pname = $auth->getIdentity()->ProviderName;
+        }
+        
+        $aColumns = array('ID', 'ProviderID', 'ProgramID', 'PeriodID', 'FileName', 'FileType', 'FileSize', 'Url');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -44,7 +49,6 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
             }
 
             $sOrder = substr_replace($sOrder, "", -2);
-            
         }
 
         /*
@@ -93,10 +97,12 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
          * SQL queries
          * Get data to display
          */
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name),array('ps.ProviderName','pr.ProgramCode','ro.PeriodDescription','a.FileName'))
-                ->joinLeft(array('ps'=>'rep_providers'), 'ps.ProviderID=a.ProviderID')
-                ->joinLeft(array('pr'=>'rep_programs'),  'pr.ProgramID=a.ProgramID')
-                ->joinLeft(array('ro'=>'rep_providerrounds'), 'ro.ID=a.PeriodID')
+        
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
+                ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
+                ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
+                ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
+                ->where("ps.ProviderName='$pname'")
                 ->group("a.ID");
         
         if (isset($sWhere) && $sWhere != "") {
@@ -115,7 +121,7 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
         
-        
+
         /* Data set length after filtering */
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
@@ -144,18 +150,18 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ProgramCode'];
             $row[] = $aRow['PeriodDescription'];
             $row[] = $aRow['FileName'];
-            $row[] = '<a href="/admin/uploadreports/download/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-download"></i> Download</a>';
+            $row[] = '<a href="/admin/uploadreports/download/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;" target="_blank"><i class="icon-download"></i> Download</a>';
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
 
-    public function addData($provider,$program,$period,$names,$size,$type,$url) {
+    public function addData($provider, $program, $period, $names, $size, $type, $url) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'ProviderID' => $provider,
-             'PeriodID' => $period,
+            'PeriodID' => $period,
             'ProgramID' => $program,
             'FileName' => $names,
             'FileSize' => $size,
@@ -166,7 +172,9 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
         );
         return $this->insert($data);
     }
-    public function getFileDetails($adminId){
-        return $this->fetchRow($this->select()->where("ID = ? ",$adminId));
+
+    public function getFileDetails($adminId) {
+        return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
     }
+
 }

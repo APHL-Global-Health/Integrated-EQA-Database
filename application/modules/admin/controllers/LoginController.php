@@ -20,6 +20,7 @@ class Admin_LoginController extends Zend_Controller_Action
             $select->where('status = "active"');
             
     		$adapter->setIdentity($params['username']);
+                //$adapter->setIdentity($params['IsProvider']);
     		$adapter->setCredential($params['password']);
     		
     		$auth = Zend_Auth::getInstance();
@@ -30,7 +31,8 @@ class Admin_LoginController extends Zend_Controller_Action
 				Zend_Session::rememberMe(36000); // keeping the session cookie active for 10 hours
 
     			$rs = $adapter->getResultRowObject();
-    			
+    			$auth->getStorage()->write($rs);
+                        
     			$authNameSpace = new Zend_Session_Namespace('administrators');
     			$authNameSpace->primary_email = $params['username'];
 	    		$authNameSpace->admin_id = $rs->admin_id;
@@ -47,8 +49,13 @@ class Admin_LoginController extends Zend_Controller_Action
 					$schemeList[] = $scheme->scheme_id;
 				}
 				$authNameSpace->activeSchemes = $schemeList;
-	    		
-    			$this->_redirect('/admin');
+                                
+                        if($auth->getIdentity()->IsProvider==0){
+                            $this->_redirect('/admin');
+                        }else{
+                            $this->_redirect('/admin/importcsv');
+                        }
+    			
     		
     		}else
     		{
