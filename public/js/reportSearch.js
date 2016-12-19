@@ -2,9 +2,19 @@
 
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng']);
 ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
-ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL) {
+ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache, $filter, filterFilter) {
 
+    function checkCacheMemory() {
+        var cache = reportCache.get('reportData');
+        if (cache) {
+            $scope.reports.repositoryData = reportCache.get('reportData');
+        } else {
 
+            $scope.reports.repositoryData = {};// reportCache.get('reportData');
+        }
+        var reportData = $scope.reports.repositoryData;
+        return reportData;
+    }
 
     $scope.reports = {};
     $scope.reports.repositoryData = {};
@@ -31,7 +41,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
 
                 updateGraphMessages("No records found", false, 'btn-warning');
-                $scope.reports.showGraphLoader = true;
+
                 var url = serverURL + 'test';
                 $http
                         .post(url, searchColumns)
@@ -52,15 +62,28 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         }
     }
+    $scope.reports.stringSearch = {}
+    $scope.reports.clearSearch = function () {
+        $scope.reports.stringSearch = {};
+        $scope.reports.repositoryData = checkCacheMemory();
+    }
+    $scope.reports.filterRepositoryData = function (filterstring) {
+
+        var reportData = checkCacheMemory();
+        console.log(filterstring);
+        $scope.reports.repositoryData = filterFilter(reportData, filterstring)
+
+    }
 
     $scope.reports.createDataTable = function (tableData) {
 
         $scope.reports.repositoryData = tableData;
         if ($scope.reports.repositoryData.length > 0) {
+            reportCache.put('reportData', $scope.reports.repositoryData);
             $scope.reports.reportShowTable = true;
 
         } else {
-
+            updateGraphMessages("No records found", true, 'btn-warning');
         }
         $scope.reports.showLoader = false;
         //$scope.$apply();
@@ -165,8 +188,26 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         {"id": "scatter", "title": "Scatter"}
     ];
     $scope.reports.chartProgramResults = {};
-    $scope.reports.loadGraphParameters = function (data, title) {
-        console.log(data)
+    $scope.reports.graphWidth = 7;
+    $scope.reports.graphTableHeaders = {};
+    $scope.reports.changeGraphWidth = function (value) {
+        if ($scope.reports.graphWidth >= 7 && $scope.reports.graphWidth < 12) {
+            if ($scope.reports.graphWidth == 7 && value == -1) {
+
+            } else {
+                $scope.reports.graphWidth += Number(value);
+            }
+        }
+
+    }
+    function changeGraphTableHeaders(title, dataName) {
+        $scope.reports.graphTableHeaders.title = title;
+        $scope.reports.graphTableHeaders.dataName = dataName;
+    }
+    $scope.reports.loadGraphParameters = function (data, title, titleName, dataName) {
+        
+        
+        changeGraphTableHeaders(titleName, dataName);
         $scope.reports.chartProgramResults = {};
         if (data.length > 0) {
             $timeout(function () {
@@ -210,6 +251,58 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
 
     }
+$scope.reports.loadGraphLabsResults = function (data, title, titleName, dataName) {
+        
+        console.log(data.category);
+        changeGraphTableHeaders(titleName, dataName);
+        $scope.reports.chartProgramResults = {};
+        if (data.category.length > 0) {
+            $timeout(function () {
+                $scope.reports.chartProgramResults = {
+                    options: {
+                        chart: {
+                            type: $scope.reports.graphType
+                        },
+                        plotOptions: {
+                            series: {
+                                stacking: ''
+                            }
+                        }
+                    },
+
+                    series: data.data,
+                    title: {
+                        text: title
+
+                    },
+                    credits: {
+                        enabled: true
+                    },
+                    xAxis: {
+                        tickInterval: 1,
+                        labels: {
+                            enabled: true
+                        },
+                        categories :data.categories
+                    },
+                    loading: false,
+                    size: {}
+                };
+                $scope.showGraph = false;
+
+            }, 30)
+        } else {
+            updateGraphMessages("No Lab records found", true, 'btn-warning');
+        }
+
+    }
+
+
+
+
+
+
+
 
     $scope.reports.reportType = '';
     $scope.reports.graphMessage = '';
@@ -249,10 +342,36 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             if (graphType == 'Lab-samples Graph') {
                 $scope.reports.getLabAgainstSample(filterData);
             }
+            if (graphType == 'Lab-results Graph') {
+                $scope.reports.getLabAgainstResults(filterData);
+            }
 
         }
     }
     $scope.reports.reportFilter = {};
+
+    $scope.reports.getLabAgainstResults = function (filterData) {
+        try {
+            $scope.reports.showGraphLoader = true;
+            var url = serverURL + 'labagainstresults';
+            $http
+                    .post(url, filterData)
+                    .success(function (data) {
+                        $scope.reports.showGraph = true;
+
+                        $scope.reports.loadGraphLabsResults(data, 'Lab vs Results Count', 'Lab Code', 'Labs vs Results');
+                        $scope.reports.showGraphLoader = false;
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+
+                    })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
 
     $scope.reports.getLabAgainstSample = function (filterData) {
@@ -264,7 +383,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .success(function (data) {
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Lab-samples Graph');
+                        $scope.reports.loadGraphParameters(data, 'Lab vs Samples Graph', 'Lab Code', 'Total Samples');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
@@ -287,7 +406,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .success(function (data) {
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Round-tests Graph');
+                        $scope.reports.loadGraphParameters(data, 'Round vs Test Count Graph', 'Round', 'Total Test');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
@@ -313,7 +432,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(data)
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Provider-lab count Graph');
+                        $scope.reports.loadGraphParameters(data, 'Provider-lab count Graph', 'Provider', 'Total Labs');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
@@ -343,7 +462,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(data)
                         $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Program-lab count Graph');
+                        $scope.reports.loadGraphParameters(data, 'Program-lab count Graph', 'Program', 'Total Labs');
                         $scope.reports.showGraphLoader = false;
                         console.log(data);
 
@@ -379,7 +498,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                             $scope.reports.searchedReport = filterData.ProgramId;
                             console.log(data);
                             if (data.length > 0) {
-
+                                changeGraphTableHeaders('Program', 'Result Count');
                                 $timeout(function () {
                                     $scope.reports.chartProgramResults = {
                                         options: {
@@ -435,7 +554,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $("#dateRange").click(function () {
         if ($("#dateRange").val() == '') {
-            updateGraphMessages("Date OK", true, "btn-info");
+            updateGraphMessages("Date OK", false, "btn-info");
         } else {
             updateGraphMessages("OK,proceed", true, "btn-info");
         }
@@ -491,6 +610,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
 
 })
+        .factory('reportCache', function ($cacheFactory) {
+            return $cacheFactory('reportData');
+
+        })
 
 
 
