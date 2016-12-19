@@ -90,8 +90,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function labagainstsamplesAction() {
 
-//        $whereArray = file_get_contents("php://input");
-//        $whereArray = (array) json_decode($whereArray);
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
 
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
@@ -125,8 +125,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         //if(isset())
-        $query .= " GROUP BY labID;";
-
+        $query .= " GROUP BY labID  order by data desc;";
+        
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -267,6 +267,68 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+        public function roundagainstresultsAction() {
+
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
+            $whereArray['dateTo'] = substr($whereArray['dateRange'], 13);
+        }
+
+        if (!class_exists('database\core\mysql\DatabaseUtils')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
+        }
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select RoundID as title,Grade as name, count(Grade) as data "
+                . "from rep_repository ";
+
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        }
+
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        $query .= " GROUP BY RoundID,Grade ORDER BY title";
+
+        $query = ($databaseUtils->rawQuery($query));
+
+        $titles = array();
+        $labGrades = array();
+        for ($i = 0; $i < count($query); $i++) {
+            if (!in_array($query[$i]['title'], $titles)) {
+                array_push($titles, $query[$i]['title']);
+            }
+
+            $labName = $query[$i]['title'];
+            $gradeName = $query[$i]['name'];
+            $gradeCount = $query[$i]['data'];
+
+            $labGrade = array(
+                "name" => $labName . ':' . $gradeName,
+                "data" => array((int) $gradeCount));
+
+            array_push($labGrades, $labGrade);
+        }
+        $labGradeResults = array("category" => $titles, "data" => $labGrades);
+        echo json_encode($labGradeResults);
+        exit();
+    }
+    
+    
+    
     public function labagainstresultsAction() {
 
         $whereArray = file_get_contents("php://input");
@@ -291,16 +353,16 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select LabID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
 
-//        if (isset($whereArray['dateFrom'])) {
-//            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
-//        }
-//        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-//            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
-//        }
-//
-//        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-//            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
-//        }
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        }
+
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
         $query .= " GROUP BY LabID,Grade ORDER BY title";
 
         $query = ($databaseUtils->rawQuery($query));
@@ -338,27 +400,79 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $repRepository = new database\crud\RepRepository($databaseUtils);
 
+        $tests = array('Malaria', 'HIV', 'Bacteriology', 'Bio-Chemisty');
         $providers = array('HuQas Provider', 'Hiv PT', 'Amref Provider');
         $labs = array('Lab-001', 'Lab-002', 'Lab-003', 'Lab-004', 'Lab-005',);
         $testEvents = array('1st Test Event 2016', '2nd Test Event 2016', '3rd Test Event 2016', '4th Test Event 2016',);
         $grades = array('A', 'B', 'C', 'D', 'E');
         $results = array('NOT ACCEPTABLE', 'ACCEPTABLE', 'NOT VALID', 'VALID', 'TAMPERED');
-        for ($i = 1; $i < 1439; $i++) {
+        for ($i = 1684; $i < 4001; $i++) {
+            $test = $tests[rand(0, count($tests) - 1)];
             $provider = $providers[rand(0, count($providers) - 1)];
             $lab = $labs[rand(0, count($labs) - 1)];
             $testEvent = $testEvents[rand(0, count($testEvents) - 1)];
             $grade = $grades[rand(0, count($grades) - 1)];
             $result = $results[rand(0, count($results) - 1)];
-     
-           echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `ReleaseDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', 'Malaria', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL);";
-           
+
+            echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `ReleaseDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', '$test', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL);";
+
             echo "<br /><br />";
-            }
-            echo "Done dumping";
-            exit();
+        }
+        echo "Done dumping";
+        exit();
     }
 
-    public function testAction() {
+    public function progranvsresultsAction() {
+
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = substr($whereArray['dateRange'], 0, 11);
+            $whereArray['dateTo'] = substr($whereArray['dateRange'], 13);
+        }
+
+        if (!class_exists('database\core\mysql\DatabaseUtils')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
+        }
+        if (!class_exists('database\crud\SystemAdmin')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
+        }
+        if (!class_exists('database\crud\RepRepository')) {
+            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select ProgramID as title,Grade as name, count(Grade) as data "
+                . "from rep_repository ";
+
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= "and ProgramId ='" . $whereArray['ProgramId'] . "'";
+        }
+
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        $query .= " GROUP BY ProgramID,Grade ";
+
+        $query = ($databaseUtils->rawQuery($query));
+        if (count($query) > 0) {
+            for ($i = 0; $i < sizeof($query); $i++) {
+                $tempData = array();
+                array_push($tempData, (int) $query[$i]['data']);
+                $query[$i]['data'] = $tempData;
+                $tempData = array();
+            }
+        }
+
+        echo json_encode($query);
+        exit();
+    }
+
+    public function resultsAction() {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
 

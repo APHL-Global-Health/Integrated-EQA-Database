@@ -81,10 +81,11 @@
                         <option value="Program-Results Graph">Program-Results Graph</option>
                         <option  value="Program-lab count Graph">Program-lab count Graph</option>
                         <option  value="Round-tests Graph">Round-tests Graph</option>
+                        <option  value="Round-results Graph">Round-results Graph</option>
                         <option  value="Lab-samples Graph">Lab-samples Graph</option>
                         <option  value="Lab-results Graph">Lab-results Graph</option>
                     </select>
-                    <select id="program" ng-init="reports.getPrograms()" ng-if="reports.reportType == 'Program-Results Graph' && clickedTab == 'graphs'"
+                    <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'graphs'"
                             name="reportType" ng-model="reports.reportFilter.programId"  class="form-control input-sm">
                         <option value=""> -- Select Program --</option>
                         <!--                <option value="network">Network Tier</option>
@@ -162,7 +163,7 @@
                             </th>
                             <th style="text-align: center;"> 
                                 <input class="form-control col-md-12 input-sm" 
-                                       ng-keyup="reports.filterRepositoryData(reports.DateSampleReceived)"
+                                       ng-keyup="reports.filterRepositoryData(reports.AnalyteID)"
                                        placeholder="Search Analyte" ng-model='reports.stringSearch.AnalyteID'>
                             </th>
                             <th style="text-align: center;"> 
@@ -186,7 +187,7 @@
                         </tr>
                     </thead>
                     <tbody >
-                        <tr dir-paginate="record in reports.repositoryData| itemsPerPage: 10 | filter :reports.search"  
+                        <tr dir-paginate="record in reports.repositoryData| itemsPerPage: reports.itemsPerPage | filter :reports.search"  
                             current-page="currentPage" pagination-id="dataPagination">
                             <td>{{$index + 1}}</td>
                             <td>
