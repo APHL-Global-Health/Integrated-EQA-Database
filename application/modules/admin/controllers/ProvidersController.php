@@ -26,15 +26,18 @@ class Admin_ProvidersController extends Zend_Controller_Action
     public function addAction()
     {
         $adminService = new Application_Service_Providers();
+        $programService = new Application_Service_Programs();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->addProviders($params);
             $this->_redirect("/admin/providers");
         }
+        $this->view->enrolledPrograms = $programService->getEnrolledProgramsList();
     }
     public function editAction()
     {
         $adminService = new Application_Service_Providers();
+        $programService = new Application_Service_Programs();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->updateProviders($params);
@@ -43,7 +46,9 @@ class Admin_ProvidersController extends Zend_Controller_Action
             if($this->_hasParam('id')){
                 $adminId = (int)$this->_getParam('id');
                 $this->view->admin = $adminService->getProviderDetails($adminId);
+                $this->view->enrolledPrograms = $programService->getEnrolledProgramsList();
             }
         }
     }
+    
 }

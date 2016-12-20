@@ -119,8 +119,8 @@
             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active dropdown'" : "class='dropdown'"; ?>>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-upload"></i>&nbsp;&nbsp;Repository <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'providers'),'default',true); ?>">PT Providers/Vendors</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'programs'),'default',true); ?>">PT Programs</a></li>
+                <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'providers'),'default',true); ?>">PT Providers</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'labs'),'default',true); ?>">Labs</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'periods'),'default',true); ?>">Periods</a></li>
                 <li><a href="<?php echo $this->url(array('module'=>'admin','controller'=>'grading'),'default',true); ?>">Grading</a></li>

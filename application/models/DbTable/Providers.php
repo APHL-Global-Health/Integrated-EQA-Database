@@ -158,9 +158,17 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
     public function getProviders() {
         return $this->fetchAll($this->select()->where("Status='active'")->order("ProviderName"));
     }
-
+    public function getProvider($partSysId) {
+        return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
+                                ->joinLeft(array('pr' => 'rep_providerprograms'), 'pr.ProviderID=p.ProviderID')
+                                ->joinLeft(array('rp' => 'rep_programs'), 'rp.ProgramID=pr.ProgramID', array('ProgramID' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT rp.Description SEPARATOR ', ')")))
+                                ->where("p.ProviderID = ?", $partSysId)
+                                ->group('p.ProviderID'));
+        
+    }
     public function addProviders($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
             'ProviderName' => $params['ProviderName'],
             'Email' => $params['Email'],
@@ -175,8 +183,13 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
             'CreatedDate' => new Zend_Db_Expr('now()')
         );
         $saved = $this->insert($data);
+        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
+            foreach ($params['enrolledProgram'] as $epId) {
+                $db->insert('rep_providerprograms', array('ProviderID' => $saved, 'ProgramID' => $epId,'CreatedBy'=>$authNameSpace->admin_id,'CreatedDate'=>new Zend_Db_Expr('now()')));
+            }
+        }
         if ($saved) {
-            $table=new Application_Model_DbTable_SystemAdmin();
+            $table = new Application_Model_DbTable_SystemAdmin();
             $datas = array(
                 'first_name' => $params['ContactName'],
                 'last_name' => $params['ContactName'],
@@ -186,8 +199,8 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
                 'password' => $params['password'],
                 'status' => $params['Status'],
                 'force_password_reset' => 0,
-                'IsProvider'=>1,
-                'ProviderName'=>$params['ProviderName'],
+                'IsProvider' => 1,
+                'ProviderName' => $params['ProviderName'],
                 'created_by' => $authNameSpace->admin_id,
                 'created_on' => new Zend_Db_Expr('now()')
             );
