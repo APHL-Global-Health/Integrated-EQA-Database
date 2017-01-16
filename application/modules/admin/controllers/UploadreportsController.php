@@ -16,8 +16,10 @@ class Admin_UploadreportsController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
+        
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
+            
             $clientsServices = new Application_Service_Uploadreports();
             $clientsServices->getAllData($params);
         }
@@ -77,13 +79,13 @@ class Admin_UploadreportsController extends Zend_Controller_Action {
                 $id = (int)$this->_getParam('id');
                 
             }
-            $details= $adminService->getFileDetails($id);
-        $filename=$details['FileName'];
-        $url=$details['Url'];
+        $details = $adminService->getFileDetails($id);
+        $filename = $details['FileName'];
+        $url = $details['Url'];
         
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'+$filename+'"');
-        readfile("'+$url+'");
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        readfile("'$url'");
         
         // disable layout and view
         $this->view->layout()->disableLayout();

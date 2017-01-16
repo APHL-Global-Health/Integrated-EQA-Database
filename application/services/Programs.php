@@ -23,5 +23,9 @@ class Application_Service_Programs {
 		$adminDb = new Application_Model_DbTable_Programs();
 		return $adminDb->getProgramDetails($adminId);		
 	}
+        public function getEnrolledProgramsList(){
+		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
+		return $db->fetchAll($db->select()->from(array('p'=>'rep_programs'),array('ProgramID','Description'))->order('ProgramID ASC'));
+	}
 
 }

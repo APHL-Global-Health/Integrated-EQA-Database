@@ -16,14 +16,20 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $pname = $auth->getIdentity()->ProviderName;
+        }
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
+            
             $clientsServices = new Application_Service_Importcsv();
-            $clientsServices->getAllData($params);
+            $clientsServices->getAllData($params,$pname);
         }
     }
 
     public function addAction() {
+        
         $program = $this->getRequest()->getPost('ProgramID');
         $provider = $this->getRequest()->getPost('ProviderID');
         $period = $this->getRequest()->getPost('RoundID');
@@ -35,7 +41,9 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $adapter = new Zend_File_Transfer();
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
-            $adapter->setDestination('C:\temp');
+            chdir(APPLICATION_PATH);
+            $dirpath= realpath("../public/files");
+            $adapter->setDestination("'$dirpath'");
             foreach ($files as $file => $info) {
                 // file uploaded ?
                 if (!$adapter->isUploaded($file)) {
@@ -101,11 +109,15 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $commonService = new Application_Service_Common();
         $request = $this->getRequest();
         $headers = [];
+        
         if ($request->isPost()) {
             $adapter = new Zend_File_Transfer();
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
-            $adapter->setDestination('C:\temp');
+            $names = $adapter->getFileName();
+            $newname= $provider.'-'.$program.'.'.end(explode('.',$names));
+            $adapter->addFilter('rename',$newname);
+            $adapter->setDestination('../public/files');
             foreach ($files as $file => $info) {
                 // file uploaded ?
                 if (!$adapter->isUploaded($file)) {
@@ -123,13 +135,15 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
                 $messages = $adapter->getMessages();
                 echo implode("\n", $messages);
             }
-            $names = $adapter->getFileName();
+            
             $file_handle = NULL;
             $data = NULL;
             $keys = NULL;
             $record = NULL;
             //Get the filename
-            $filename = $names;
+            $filename = '../public/files/'.$newname;
+            $filedetails = new Zend_Session_Namespace('filename');
+            $filedetails->filename=$filename;
             if (file_exists($filename)) {
                 $file_handle = fopen($filename, "r");
             } else {
@@ -161,7 +175,9 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     }
 
     public function getUploadedExcelFileHeaders() {
-        $filename = 'C:\\temp\\data upload.csv';
+        $filedetails = new Zend_Session_Namespace('filename');
+        $filename = $filedetails->filename;
+        //$filename = 'C:\\temp\\data upload.csv';
         if (file_exists($filename)) {
             $file_handle = fopen($filename, "r");
         } else {
@@ -187,7 +203,9 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     }
 
     public function getUploadedExcelFileData() {
-        $filename = 'C:\\temp\\data upload.csv';
+        $filedetails = new Zend_Session_Namespace('filename');
+        $filename = $filedetails->filename;
+        //$filename = 'C:\\temp\\data upload.csv';
         if (file_exists($filename)) {
             $file_handle = fopen($filename, "r");
         } else {
@@ -225,12 +243,12 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 //        $excelmapping = $this->getRequest()->getPost('excelMapping');
 //        $filetoupload = $this->getRequest()->getPost('fileToUpload');
         //$filename = strrpos($filetoupload, DIRECTORY_SEPARATOR);
-
+        
         $mappedColumn = array();
         $mappedColumnNames = array();
         $excelHeaders = $this->getUploadedExcelFileHeaders();
         $extraInfo = end($data);
-
+        //$name=  explode($delimiter, $string);
         foreach ($data as $item) {
             if (isset($item['value'])) {
                 $mappedColumn[count($mappedColumn)] = $item['key'];
@@ -248,6 +266,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
         $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo);
         $db->query($insertStatement);
+        $filedetails = new Zend_Session_Namespace('filename');
+        $filedetails->filename='';
         $this->view->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         return "yes";
