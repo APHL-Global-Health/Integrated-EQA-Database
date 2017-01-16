@@ -5,10 +5,17 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
     public function init() {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
+
+            ->addActionContext('view-participants', 'html')
+            ->addActionContext('get-datamanager', 'html')
+            ->addActionContext('get-participant', 'html')
+            ->initContext();
+
                 ->addActionContext('view-participants', 'html')
                 ->addActionContext('get-datamanager', 'html')
                 ->addActionContext('get-participant', 'html')
                 ->initContext();
+
         $this->_helper->layout()->pageName = 'configMenu';
     }
 
@@ -48,7 +55,11 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             $this->_redirect("/admin/participants");
         } else {
             if ($this->_hasParam('id')) {
+
+                $userId = (int)$this->_getParam('id');
+
                 $userId = (int) $this->_getParam('id');
+
                 $this->view->participant = $participantService->getParticipantDetails($userId);
             }
             $this->view->affiliates = $participantService->getAffiliateList();
@@ -68,6 +79,20 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         // action body
     }
 
+    public function viewParticipantsAction()
+    {
+        $this->_helper->layout()->setLayout('modal');
+        $participantService = new Application_Service_Participants();
+        if ($this->_hasParam('id')) {
+            $dmId = (int)$this->_getParam('id');
+            $this->view->participant = $participantService->getAllParticipantDetails($dmId);
+        }
+
+    }
+
+    public function participantManagerMapAction()
+    {
+
     public function viewParticipantsAction() {
         $this->_helper->layout()->setLayout('modal');
         $participantService = new Application_Service_Participants();
@@ -78,6 +103,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
     }
 
     public function participantManagerMapAction() {
+
         $participantService = new Application_Service_Participants();
         $dataManagerService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {
@@ -109,3 +135,4 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
     }
 
 }
+?>

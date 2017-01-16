@@ -33,3 +33,8 @@ $application = new Zend_Application(
 );
 $application->bootstrap()
             ->run();
+
+//require_once __DIR__.'/library/Zend/Loader/StandardAutoloader.php';
+//$loader = new Zend\Loader\StandardAutoloader();
+//$loader->registerNamespace('DBCI', realpath(__DIR__.'/library/bacteriology'));
+//$loader->register();
