@@ -53,12 +53,16 @@
             }
         }
         $scope.samples.linksObject = {
-            samplesLink: 'view'
+            samplesLink: 'viewsamples',
+            currentTemplate : '../partialHTMLS/viewsamples.html'
         }
         $scope.samples.samplesActivePage = function (link) {
 
+            var currentTemplate ="../partialHTMLS/"+link+".html";
+
             $scope.samples.linksObject = {
-                samplesLink: link
+                samplesLink: link,
+                currentTemplate : currentTemplate
             }
 
 
@@ -105,7 +109,11 @@
         }
 
 
-    })
+    }).filter('capitalizeLetter', function() {
+        return function(input) {
+            return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+        }
+    });
 
 
 })();
