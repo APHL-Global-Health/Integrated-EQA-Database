@@ -1,0 +1,12 @@
+.side-menu ul li {
+    background-color:#002a80 !important;
+    color: white;
+}
+
+.side-menu ul li:hover {
+    background-color: #0922DE;
+}
+.has-error{
+    border-color: red;
+    color:red;
+}

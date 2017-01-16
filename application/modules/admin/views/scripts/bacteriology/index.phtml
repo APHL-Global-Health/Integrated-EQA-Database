@@ -1,0 +1,170 @@
+
+
+<div id='ng-app' ng-app="ReportModule" ng-cloak="">
+    <div class="bacteriology" ng-controller="samplesController">
+
+        <div ng-controller="ReportController">
+            <div class="">
+                <ul class="nav nav-tabs" ng-init="clickedTab = 'reports'">
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'reports'}">
+                        <a href="" ng-click="clickedTab = 'reports'">Manage Samples</a>
+                    </li>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
+                        <a href="" ng-click="clickedTab = 'graphs'">Manage Panels</a>
+                    </li>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
+                        <a href="" ng-click="clickedTab = 'graphs'">Manage Shipments</a>
+                    </li>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
+                        <a href="" ng-click="clickedTab = 'graphs'">Manage Packages</a>
+                    </li>
+                    <li class='pull-right'>
+                        <div class="dropdown">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Samples
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+                                <li role="presentation">
+
+                                    Menu <a href="#" class="pull-right" ng-click="samples.toggleSamplesMenu()"><i
+                                                class="fa fa-list"></i></a>
+
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="samples.samplesActivePage('add')"><i class="fa fa-fw fa-save"></i> Add
+                                        Save</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="samples.samplesActivePage('view')"><i class="fa fa-fw fa-folder"></i> View
+                                        Samples</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="samples.samplesActivePage('nonnphls')"><i class="fa fa-fw fa-search-plus"></i>
+                                        Non-NPHLS </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
+                        -->
+
+                    </li>
+
+
+                </ul>
+            </div>
+
+
+        <div class="col-md-12"  ng-hide="samples.menuLength==2">
+            <a href="#" class="pull-right btn btn-primary btn-sm"
+               ng-click="samples.toggleSamplesMenu()"><i class="fa fa-list"></i></a>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+
+        <div class="col-md-{{12-samples.menuLength}}" ng-show="samples.linksObject.samplesLink=='view'">
+            <div class="main-div">
+
+                <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                </div>
+
+                <div class="">
+
+                        <h3> Created Samples
+                            <div class="pull-right">
+                              <small>  <a href="#" class="pull-right" ng-click="samples.getAllSamples()"><i
+                                            class="fa fa-refresh"></i></a>
+                                &nbsp;&nbsp;
+                              </small>
+                            </div>
+                        </h3>
+
+
+
+                    <div class="panel panel-body text-sm">
+
+                        <table class="table table-striped table-condensed table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Batch name</th>
+                                <th>Date prepared</th>
+                                <th>Lifespan</th>
+                                <th>Prepared By</th>
+
+                                <th>Expiry Date</th>
+                                <th>Material Type</th>
+                                <th>Material Origin</th>
+<!--                                <th>Date Saved</th>-->
+                                <th>Blood Pack no</th>
+                                <th>Collection Date</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="sample in samples.samplesData">
+                                <td>{{$index+1}}</td>
+                                <td>{{sample.batchName}}</td>
+                                <td>{{sample.datePrepared}}</td>
+                                <td>{{sample.lifespan}}</td>
+                                <td >{{sample.preparedBy}}</td>
+                                <td nowrap>{{sample.expiryDate}}</td>
+                                <td nowrap>{{sample.materialType}}</td>
+                                <td nowrap>{{sample.materialOrigin}}</td>
+<!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+                                <td nowrap>{{sample.bloodPackNo}}</td>
+                                <td nowrap>{{sample.collectionDate}}</td>
+                                <td nowrap>
+                                    <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
+                                    <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div ng-include="'<?php echo $this->baseUrl('partialHTMLS/addSample.html'); ?>'"
+             ng-show="samples.linksObject.samplesLink=='add'">
+
+        </div>
+        <div class="col-md-{{samples.menuLength}} side-menu">
+
+            <!-- Sidebar -->
+
+            <ul class="list-group" ng-hide="samples.menuLength==0">
+                <li class="list-group-item">
+
+                    Menu <a href="#" class="pull-right" ng-click="samples.toggleSamplesMenu()"><i
+                                class="fa fa-list"></i></a>
+
+                </li>
+                <li class="list-group-item">
+                    <a href="#" ng-click="samples.samplesActivePage('add')"><i class="fa fa-fw fa-save"></i> Add
+                        Save</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" ng-click="samples.samplesActivePage('view')"><i class="fa fa-fw fa-folder"></i> View
+                        Samples</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" ng-click="samples.samplesActivePage('nonnphls')"><i class="fa fa-fw fa-search-plus"></i>
+                        Non-NPHLS </a>
+                </li>
+            </ul>
+
+
+        </div>
+
+
+    </div>
+</div>
