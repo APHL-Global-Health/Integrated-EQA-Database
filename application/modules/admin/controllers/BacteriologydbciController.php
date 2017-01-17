@@ -41,19 +41,35 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     public function selectfromtableAction()
     {
+        try {
+            $postedData = file_get_contents('php://input');
+            $postedData = (array)(json_decode($postedData));
 
-        $where = file_get_contents('php://input');
-        $where = (array)(json_decode($where));
-        $where = sizeof($where) > 0 ? $where : "";
-        $connection = new Main();
-        $dataDB = $connection->selectFromTable('tbl_bac_samples', $where);
+            $tableName = $postedData['tableName'];
+            if (isset($postedData['where'])) {
+                $where = $postedData['where'];
+            } else {
+                $where = '';
+            }
 
-        if (sizeof($dataDB) > 0) {
-            $data['status'] = 1;
-            $data['data'] = $dataDB;
-            echo($this->returnJson($data));
-        } else {
-            echo($this->returnJson(json_encode(array('status' => 0))));
+
+            $where = sizeof($where) > 0 ? $where : "";
+
+
+            $connection = new Main();
+            $dataDB = $connection->selectFromTable($tableName, $where);
+
+            if (sizeof($dataDB) > 0) {
+                $data['status'] = 1;
+                $data['data'] = $dataDB;
+                echo($this->returnJson($data));
+            } else {
+                echo($this->returnJson(json_encode(array('status' => 0))));
+            }
+
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
         exit();
     }

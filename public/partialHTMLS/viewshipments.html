@@ -1,10 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<div class="col-md-12">
+    <div class="main-div">
+
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        </div>
+
+
+
+        <h3> Current Shipments <small>{{samples.shipmentsData.length}} records</small> <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            <div class="pull-right col-mod-12">
+                <div class="dropdown col-md-3 pull-right">
+
+                    <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
+                            id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div  class="col-md-8 pull-right">
+                    <input type="search" class="col-md-12" ng-model="samples.searchData">
+                </div>
+                <div class="col-md-1 pull-right">  <a href="#" class=" btn btn-default btn-sm" ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
+                        class="fa fa-refresh"></i></a>
+                    &nbsp;
+                </div>
+            </div>
+        </h3>
+
+
+
+        <div class="panel panel-body text-sm">
+
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>#.</th>
+                    <th>Shipment Name</th>
+                    <th>No Of Panels</th>
+                    <th>Courier</th>
+                    <th>ship't Desc</th>
+
+                    <th>Round ID</th>
+                    <th>Created By</th>
+                    <th>Prepared On</th>
+                    <!--                                <th>Date Saved</th>-->
+                    <th>Prepared By</th>
+                    <th>Ship't Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="sample in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData"   >
+                    <td>{{$index+1}}</td>
+                    <td>{{sample.shipmentName}}</td>
+                    <td>{{sample.numberOfPanels}}</td>
+                    <td>{{sample.courier}}</td>
+                    <td >{{sample.shipmentDsc}}</td>
+                    <td nowrap>{{sample.roundId}}</td>
+                    <td nowrap>{{sample.createdBy}}</td>
+
+                    <td nowrap>{{sample.datePrepared}}</td>
+                    <td nowrap>{{sample.preparedBy}}</td>
+                    <td nowrap>{{samples.returnShipmentStatus(sample.shipmentStatus)}}</td>
+                    <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+
+                    <td nowrap>
+                        <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
+                        <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+
+        </div>
+
+
+
+    </div>
+</div>

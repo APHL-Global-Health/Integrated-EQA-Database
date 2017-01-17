@@ -1,10 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div>
+    <div class="col-md-8 col-md-offset-2">
+        <h3 class="h3">Shipments Registration Form</h3>
+        <hr>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        </div>
+        <form class="form-horizontal " name="shipmentForm" novalidate>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.shipmentName.$invalid && !shipmentForm.shipmentName.$pristine }">
+                <label for="shipmentName" class="col-2 col-form-label">Shipment Name.</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="shipmentName" required name="shipmentName"
+                           ng-model="samples.shipmentFormData.shipmentName">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.shipmentName.$invalid && !shipmentForm.shipmentName.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.numberOfPanels.$invalid && !shipmentForm.numberOfPanels.$pristine }">
+                <label for="label" class="col-2 col-form-label">Number Of Panels </label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="label" required
+                           ng-model="samples.shipmentFormData.numberOfPanels" name="numberOfPanels">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.numberOfPanels.$invalid && !shipmentForm.numberOfPanels.$pristine">
+                    Error : Required & Only numbers.
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.courier.$invalid && !shipmentForm.courier.$pristine }">
+                <label for="type" class="col-2 col-form-label">Courier</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="type" required name="courier"
+                           ng-model="samples.shipmentFormData.courier">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.courier.$invalid && !shipmentForm.courier.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.preparedBy.$invalid && !shipmentForm.preparedBy.$pristine }">
+                <label for="type" class="col-2 col-form-label">Prepared By</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="type" required name="preparedBy"
+                           ng-model="samples.shipmentFormData.preparedBy">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.preparedBy.$invalid && !shipmentForm.preparedBy.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine }">
+                <label for="type" class="col-2 col-form-label">Date Prepared</label>
+                <div class="col-10">
+                    <input class="form-control" type="date" id="type" required name="datePrepared"
+                           ng-model="samples.shipmentFormData.datePrepared">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine }">
+                <label for="type" class="col-2 col-form-label">Round</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="type" required name="roundId"
+                           ng-model="samples.shipmentFormData.roundId">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.shipmentDsc.$invalid && !shipmentForm.shipmentDsc.$pristine }">
+                <label for="type" class="col-2 col-form-label">Shipment Description</label>
+                <div class="col-10">
+                    <textarea class="form-control" id="type" required name="shipmentDsc"
+                              ng-model="samples.shipmentFormData.shipmentDsc">
 
-</body>
-</html>
+                    </textarea>
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="shipmentForm.shipmentDsc.$invalid && !shipmentForm.shipmentDsc.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : shipmentForm.shipmentLabel.$invalid && !shipmentForm.shipmentLabel.$pristine }">
+                <label for="shipmentLabel" class="col-2 col-form-label">Shipment Label</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="shipmentLabel" name="shipmentLabel" required
+                           ng-model="samples.shipmentFormData.shipmentLabel">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group row">
+                <label for="" class="col-2 col-form-label">Panels</label>
+                <div class="col-10">
+                    <a class="link-black link">Click to add samples to panels or add later</a>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+
+                <button class="btn btn-success col-md-12 pull-right"
+                        ng-disabled="shipmentForm.$invalid || samples.savingInProgress"
+                        ng-click="samples.saveSampleFormData('tbl_bac_shipments',samples.shipmentFormData)"
+                >Save Shipment <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -7,8 +7,9 @@ var EptServices = angular.module('ReportModule');
 EptServices.service('EptServices', function () {
     this.EptServiceObject = {};
     this.EptServiceObject.loaderStatus = {};
-    var alphaNumHyDashRegExp=/^[a-zA-Z0-9\-\/]+$/;
-    var alphaNumHyDashSpaceRegExp=/^[a-zA-Z0-9\-\/]+$/;
+    var itemsPerPage = 5;
+    var alphaNumHyDashRegExp = /^[a-zA-Z0-9\-\/]+$/;
+    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9\-\/]+$/;
     this.EptServiceObject.loaderStatus = {
 
         fbMessage: '',
@@ -17,11 +18,11 @@ EptServices.service('EptServices', function () {
     }
 
 
-    this.EptServiceObject.returnAlphaNumHyDashSpaceRegExp =function(){
-        return  alphaNumHyDashSpaceRegExp;
+    this.EptServiceObject.returnAlphaNumHyDashSpaceRegExp = function () {
+        return alphaNumHyDashSpaceRegExp;
     }
-    this.EptServiceObject.returnAlphaNumHyDashRegExp =function(){
-        return  alphaNumHyDashRegExp;
+    this.EptServiceObject.returnAlphaNumHyDashRegExp = function () {
+        return alphaNumHyDashRegExp;
     }
     this.EptServiceObject.returnLoaderStatus = function (status) {
         var loaderStatus = {};
@@ -63,6 +64,19 @@ EptServices.service('EptServices', function () {
 
         return loaderStatus;
     }
+    this.EptServiceObject.returnItemsPerPage = function () {
+        return itemsPerPage;
+    }
+    this.EptServiceObject.returnServerUrl = function (table) {
+        var url = '';
+        if (table == 'tbl_bac_samples' || table == 'tbl_bac_panel_mst' || table=='tbl_bac_shipments') {
+            url = 'selectfromtable';
+        }
+        console.log(url)
+
+        return url;
+    }
+
 
     this.EptServiceObject.returnLoaderInfo = function () {
         return EptServiceObject.loaderStatus;

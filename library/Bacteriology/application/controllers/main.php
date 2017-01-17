@@ -70,7 +70,7 @@ Class Main
 
 
                             $error['status']=1;
-                            $error['message'] = 'Data inserted successfully';
+                            $error['message'] = $this->connect_db->insert_id;
 
 
                         } else {

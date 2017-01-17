@@ -1,10 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="col-md-12" ng-if="samples.linksObject.samplesLink=='viewpanels'">
+    <div class="main-div">
 
-</body>
-</html>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        </div>
+
+
+        <h3> Available Panels
+            <small>{{samples.panelsData.length}} records</small>
+            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            <div class="pull-right col-mod-12">
+                <div class="dropdown col-md-3 pull-right">
+
+                    <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
+                            id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-md-8 pull-right">
+                    <input type="search" class="col-md-12" ng-model="samples.searchData">
+                </div>
+                <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+                                                    ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
+                        class="fa fa-refresh"></i></a>
+                    &nbsp;
+                </div>
+            </div>
+        </h3>
+
+
+        <div class="panel panel-body text-sm">
+
+
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                <tr>
+                    <th>#.</th>
+                    <th>Panel Name</th>
+                    <th>Panel Type</th>
+                    <th>Panel Label</th>
+                    <th>Prepared on</th>
+
+                    <th>Delivered on</th>
+                    <th>Prepared By</th>
+                    <th>Status</th>
+                    <!--                                <th>Date Saved</th>-->
+                    <th>Ship't Number</th>
+                    <th>Created on</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                    <td>{{$index+1}}</td>
+                    <td>{{panel.panelName}}</td>
+                    <td>{{panel.panelType}}</td>
+                    <td>{{panel.panelLabel}}</td>
+                    <td>{{panel.panelDatePrepared}}</td>
+                    <td nowrap>{{panel.panelDateOfDelivery}}</td>
+                    <td nowrap>{{panel.preparedBy}}</td>
+                    <td nowrap>{{samples.returnPanelStatus(panel.panelStatus)}}</td>
+                    <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+                    <td nowrap>{{panel.shipmentNo}}</td>
+                    <td nowrap>{{panel.dateCreated}}</td>
+                    <td nowrap>
+                        <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></a>
+                        <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
+                        <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
+                           href="#addSamples" data-backdrop="false" data-toggle="modal"
+                        ><i class="fa fa-plus"></i></a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+
+        </div>
+
+
+    </div>
+
+
+    <!---------Modal---------->
+    <div id="addSamples" class="modal fade" draggable="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Sample To
+                        {{samples.currentPanel.panelName | capitalizeLetter}} :
+                        {{samples.currentPanel.panelLabel | capitalizeLetter}}
+                    </h4>
+
+                </div>
+                <div class="modal-body">
+                    <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
+                    <p class="pre-scrollable">
+
+                    <table class="table table-striped table-responsive">
+                        <tr ng-repeat="sample in samples.samplesData |filter : searchSample">
+                            <td>
+
+                                    <input id="checkbox" type="checkbox" checked>
+
+
+                            </td>
+                            <td>{{sample.batchName}}</td>
+                            <td>{{sample.datePrepared}}</td>
+                        </tr>
+                    </table>
+                    </p>
+                    <div class="btn btn-info col-md-12">
+                        Save Samples to {{samples.currentPanel.panelName | capitalizeLetter}}
+                    </div>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                <!--</div>-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--End of modal-->
+</div>

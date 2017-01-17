@@ -11,8 +11,8 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <script type="text/css">
-        *:{
-         border-radius: 0px !important;
+        body {
+            border-radius: 0px !important;
         }
     </script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -25,6 +25,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
+    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
     <!--[if IE 7]>
     <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
@@ -37,12 +38,14 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
 
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('css/font-awesome.css'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/samplesController.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
