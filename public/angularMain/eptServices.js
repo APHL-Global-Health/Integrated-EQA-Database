@@ -69,12 +69,33 @@ EptServices.service('EptServices', function () {
     }
     this.EptServiceObject.returnServerUrl = function (table) {
         var url = '';
-        if (table == 'tbl_bac_samples' || table == 'tbl_bac_panel_mst' || table=='tbl_bac_shipments') {
+        if (table == 'tbl_bac_samples' || table == 'tbl_bac_panel_mst' || table == 'tbl_bac_shipments') {
             url = 'selectfromtable';
         }
         console.log(url)
 
         return url;
+    }
+
+    this.EptServiceObject.returnIdArray = function(arrayData, id, checker) {
+        try {
+            if (angular.isNumber(Number(id))) {
+                if (checker) {
+
+                    arrayData.push(id);
+                } else {
+                    var indexOf = arrayData.indexOf(id);
+                    arrayData.splice(indexOf, 1);
+                }
+
+            } else {
+                console.log('id not a number');
+            }
+
+            return arrayData;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 

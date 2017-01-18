@@ -113,18 +113,34 @@
                     <h4 class="modal-title">Add Sample To
                         {{samples.currentPanel.panelName | capitalizeLetter}} :
                         {{samples.currentPanel.panelLabel | capitalizeLetter}}
+                        <small class="small">
+                            {{samples.samplePanelArray.length}} samples
+                        </small>
+                        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                        <small class="">
+                            <a href="#" class=" btn btn-default btn-sm"
+                               ng-click="samples.getAllSamples('tbl_bac_samples')">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                        </small>
                     </h4>
-
                 </div>
                 <div class="modal-body">
                     <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
                     <p class="pre-scrollable">
 
                     <table class="table table-striped table-responsive">
-                        <tr ng-repeat="sample in samples.samplesData |filter : searchSample">
+                        <tr>
+                            <td><input type="checkbox" ng-click="samples.checkAll(checkAll)" ng-model="checkAll"> <b>All</b></td>
+                            <td><b>Sample</b></td>
+                            <td><b>Date Prer'd</b></td>
+                            </t></tr>
+                        <tr ng-repeat="sample in samples.samplesData |filter : searchSample |limitTo : 8">
                             <td>
 
-                                    <input id="checkbox" type="checkbox" checked>
+                                <input id="checkbox" type="checkbox" ng-checked="checkAll"
+                                       ng-click="samples.addSampleToArray(sample.id,sampleCheck)"
+                                       ng-model="sampleCheck">
 
 
                             </td>
@@ -133,9 +149,11 @@
                         </tr>
                     </table>
                     </p>
-                    <div class="btn btn-info col-md-12">
+                    <button class="btn btn-info col-md-12" ng-disabled="samples.samplePanelArray.length==0"
+                    ng-click="samples.saveSamplesToPanel(samples.currentPanel)"
+                    >
                         Save Samples to {{samples.currentPanel.panelName | capitalizeLetter}}
-                    </div>
+                    </button>
                 </div>
                 <!--<div class="modal-footer">-->
                 <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->

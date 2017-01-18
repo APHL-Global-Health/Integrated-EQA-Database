@@ -10,7 +10,15 @@ require_once 'C:\xampp\htdocs\ePT-Repository\library\Bacteriology\application\co
 
 class Admin_BacteriologydbciController extends Zend_Controller_Action
 {
+    protected $homeDir;
+    protected $dbConnection;
 
+    public function init()
+    {
+
+        $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
+        $this->dbConnection = new Main();
+    }
 
     public function returnJson($dataArray)
     {
@@ -20,6 +28,34 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         } else {
             return (json_encode(array('status' => 0)));
         }
+    }
+
+    public function savesamplestopanelAction()
+    {
+        try {
+            $jsPostData = file_get_contents('php://input');
+
+            $jsPostData = (array)(json_decode($jsPostData));
+            $idArray = $jsPostData['sampleIds'];
+            //print_r($jsPostData);
+
+            if (is_array($jsPostData)) {
+                $response = [];
+                foreach ($idArray as $value) {
+                    $connection = new Main();
+                    $data['sampleId'] = $value;
+                    $data['panelId'] = $jsPostData['panelId'];
+                    $response = $connection->insertData('tbl_bac_sample_to_panel', $data);
+
+
+                }
+                echo $this->returnJson($response);
+            }
+            exit();
+        } catch (Exception $error) {
+            echo $error->getMessage();
+        }
+
     }
 
     public function insertAction()

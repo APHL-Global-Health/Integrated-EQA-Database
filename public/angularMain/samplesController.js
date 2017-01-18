@@ -143,7 +143,14 @@
         $scope.samples.savingSpinner = '';
         $scope.samples.savingInProgress = false;
         $scope.samples.addSamplesToPanel = function (panel) {
+
             $scope.samples.currentPanel = panel;
+            console.log($scope.samples.samplesData.length)
+            if (angular.isUndefined($scope.samples.samplesData.length0)) {
+
+                $scope.samples.getAllSamples('tbl_bac_samples');
+            }
+
         }
         function changeSavingSpinner(status) {
 
@@ -168,6 +175,46 @@
             }
         }
 
+        $scope.samples.checkerAll = '';
+        $scope.samples.checkAll = function (checker) {
+
+            $scope.samples.checkerAll = checker ? 'checked' : '';
+
+        }
+
+
+        $scope.samples.samplePanelArray = [];
+        $scope.samples.addSampleToArray = function (id, checker) {
+            try {
+                $scope.samples.samplePanelArray = EptServices.EptServiceObject.returnIdArray($scope.samples.samplePanelArray, id, checker);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        $scope.samples.saveSamplesToPanel = function (panel) {
+
+            try {
+                var url = serverSamplesURL + 'savesamplestopanel';
+                var postedData = {};
+                postedData = {
+                    panelId: panel.id,
+                    sampleIds : $scope.samples.samplePanelArray
+                };
+
+                $http
+                    .post(url, postedData)
+                    .success(function (response) {
+                        console.log(response)
+                    })
+                    .error(function (error) {
+console.log(error)
+                })
+            } catch (error) {
+
+            }
+
+        }
         $scope.samples.saveSampleFormData = function (tableName, data) {
 
             try {
