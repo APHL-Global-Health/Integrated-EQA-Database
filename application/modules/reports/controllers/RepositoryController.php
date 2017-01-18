@@ -72,7 +72,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         //if(isset())
         $query .= " GROUP BY ProgramID;";
-
+        
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -180,7 +180,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         //if(isset())
         $query .= " GROUP BY ProviderID;";
-
+//echo $query;
+//        exit;
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -505,9 +506,6 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
-        
-        
-        
         $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));

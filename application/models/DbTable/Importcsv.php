@@ -162,6 +162,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 
     public function addData($params, $provider, $program, $period) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        
         $labid = $this->getLabID($params[0]);
         $county = $this->getCountyID($params[1]);
         $country = $this->getCountryID($params[2]);

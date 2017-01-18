@@ -1,5 +1,6 @@
 
 
+
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng']);
 ReportModule.constant('serverURL', 'http://localhost:86/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache, $filter, filterFilter) {
@@ -78,7 +79,9 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.createDataTable = function (tableData) {
 
         $scope.reports.repositoryData = tableData;
+        
         if ($scope.reports.repositoryData.length > 0) {
+            
             reportCache.put('reportData', $scope.reports.repositoryData);
             $scope.reports.reportShowTable = true;
 

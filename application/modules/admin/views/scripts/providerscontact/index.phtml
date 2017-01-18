@@ -1,12 +1,14 @@
-<h4 style="width:100%;height:50px;border-bottom:1px solid #777;"><div style="font-size:22.5px;line-height:36px;color:#333;float:left;">List of All Test Events</div><div style="margin-top:10px;"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Add New Test Event</a></div></h4>
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;"><div style="font-size:22.5px;line-height:36px;color:#333;float:left;">List of All PT Providers Contacts</div><div style="margin-top:10px;"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'providerscontact', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Add New PT Provider Contact</a></div></h4>
 
 
-<table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover" id="periodsTable">
+<table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover" id="providersTable">
     <thead>
     <tr>
-        <th>Period Description</th>
-        <th>Provider</th>
-        <th>Enrolled Labs</th>
+        <th>Provider Name</th>
+        <th>Contact Name</th>
+        <th>Contact Email</th>
+        <th>Contact Phone</th>
+        <th>Status</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -21,7 +23,7 @@
     /* Table initialisation */
     var oTable = null;
     $(document).ready(function() {
-        oTable = $('#periodsTable').dataTable( {
+        oTable = $('#providersTable').dataTable( {
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -35,12 +37,14 @@
                 {"sClass":""},
                 {"sClass":""},
                 {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
                 {"sClass":"center","bSortable":false}
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods', 'action' => 'index', 'format' => 'html')); ?>",
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'admin', 'controller' => 'providerscontact', 'action' => 'index', 'format' => 'html')); ?>",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 $.ajax({
                     "dataType": 'json',
