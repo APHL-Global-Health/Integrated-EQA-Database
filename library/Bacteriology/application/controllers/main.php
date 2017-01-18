@@ -62,22 +62,21 @@ Class Main
             if (isset($tableName)) {
                 if (isset($dataArray) && is_array($dataArray)) {
 
-                   $queryStatement = $this->createInsertStatement($tableName, $dataArray);
+                    $queryStatement = $this->createInsertStatement($tableName, $dataArray);
 
                     if (is_string($queryStatement)) {
                         $queryStatus = $this->connect_db->query($queryStatement);
                         if ($queryStatus) {
 
 
-                            $error['status']=1;
-                            $error['message'] = 'Data inserted successfully';
+                            $error['status'] = 1;
+                            $error['message'] = $this->connect_db->insert_id;
 
 
                         } else {
                             $error['message'] = $this->connect_db->error;
                         }
                     }
-
 
 
                 } else {
@@ -92,13 +91,14 @@ Class Main
         return ($error);
     }
 
-    public function returnWhereStatement($array){
-        $where =' where ';
-        if(is_array($array)){
-            $counter=0;
+    public function returnWhereStatement($array)
+    {
+        $where = ' where ';
+        if (is_array($array)) {
+            $counter = 0;
             foreach ($array as $key => $value) {
 
-                $where .= $key ."="." '$value' ";
+                $where .= $key . "=" . " '$value' ";
 
                 $counter++;
                 if ($counter < sizeof($array)) {
@@ -113,16 +113,17 @@ Class Main
 
             }
             return $where;
-        }else{
+        } else {
             return '';
         }
     }
-    public function selectFromTable($tableName,$where="")
+
+    public function selectFromTable($tableName, $where = "")
     {
 
         $sql = "SELECT * FROM $tableName";
-        if(isset($where)) {
-            if(is_array($where)) {
+        if (isset($where)) {
+            if (is_array($where)) {
                 $sql .= $this->returnWhereStatement($where);
             }
         }
@@ -138,6 +139,63 @@ Class Main
             return $user_arr;
         } else {
             return false;
+        }
+
+    }
+
+    public function deleteFromWhere($tableName, $where)
+    {
+        $error['status'] = 0;
+        if (isset($tableName)) {
+            $sql = "delete from $tableName";
+            if (isset($where)) {
+                if (is_array($where)) {
+                    $sql .= $this->returnWhereStatement($where);
+                }
+            }
+            if (is_string($sql)) {
+                $result = $this->connect_db->query($sql);
+
+                if ($result) {
+                    $error['status'] = 1;
+                    $error['message'] = 'deleted successfully';
+
+                } else {
+                    $error['message'] = $this->connect_db->error;
+                }
+            }
+        }
+
+    }
+
+    public function updateTable($tableName, $where, $updateData)
+    {
+        try {
+            if (isset($tableName)) {
+                $sql = "update $tableName";
+                if (isset($updateData)) {
+                    $sql .= $this->returnUpdateStatement($updateData);
+                }
+                if (isset($where)) {
+                     $sql .=$this->returnWhereStatement($where);
+                }
+                if(is_string($$sql)){
+                    $result = $this->connect_db->query($sql);
+
+                    if ($result) {
+                        $error['status'] = 1;
+                        $error['message'] = 'deleted successfully';
+
+                    } else {
+                        $error['message'] = $this->connect_db->error;
+                    }
+                }
+
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+
+
         }
 
     }
