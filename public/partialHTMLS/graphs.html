@@ -1,0 +1,24 @@
+
+<metadata charset="utf-8">
+    <div ng-controller="ReportController" class="container">
+
+<div  ng-init="reports.pieChartFunction()">
+<nvd3-pie-chart
+        id="exampleId"
+        data="reports.pieChartData"
+        x="reports.xFunction()"
+        y="reports.yFunction()"
+        width="700"
+        height="500"
+
+        showLabels="true"
+
+        showValues="true"
+        showLegend="true"
+        tooltips="true"
+        labelType="percent">
+    <svg height="450"></svg>
+</nvd3-pie-chart>
+
+</div>
+</div>
