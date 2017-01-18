@@ -157,7 +157,7 @@ class Application_Service_Common {
 	return $countriesDb->getAllCounties();
     }
     public function getproviderList(){
-	$providerDb = new Application_Model_DbTable_Providers();
+        $providerDb = new Application_Model_DbTable_Providers();
 	return $providerDb->getProviders();
     }
     public function getprogramList(){

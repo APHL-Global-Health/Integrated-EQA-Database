@@ -23,6 +23,14 @@ class Admin_ProvidersController extends Zend_Controller_Action
             $clientsServices->getAllProviders($params);
         }
     }
+    public function listcontactsAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();      
+            $clientsServices = new Application_Service_Providers();
+            $clientsServices->getAllProviderscontacts($params);
+        }
+    }
     public function addAction()
     {
         $adminService = new Application_Service_Providers();

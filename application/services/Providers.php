@@ -11,6 +11,10 @@ class Application_Service_Providers {
 		$adminDb = new Application_Model_DbTable_Providers();
 		return $adminDb->getAllProviders($params);
 	}
+        public function getAllProviderscontacts($params){
+		$adminDb = new Application_Model_DbTable_Providers();
+		return $adminDb->getAllProviderscontacts($params);
+	}
 	public function addProviders($params){
 		$adminDb = new Application_Model_DbTable_Providers();
 		return $adminDb->addProviders($params);		
