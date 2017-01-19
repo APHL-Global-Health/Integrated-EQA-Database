@@ -1,4 +1,3 @@
-
 <div class="col-md-12">
     <div class="main-div">
 
@@ -8,8 +7,10 @@
         </div>
 
 
-
-        <h3> Current Shipments <small>{{samples.shipmentsData.length}} records</small> <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <h3> Current Shipments
+            <small>{{samples.shipmentsData.length}} records
+            </small>
+            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
                 <div class="dropdown col-md-3 pull-right">
 
@@ -35,10 +36,14 @@
                     </ul>
 
                 </div>
-                <div  class="col-md-8 pull-right">
+                <div class="pull-right" ng-init="expanded=true">
+                    <small><a href="#" ng-click="expanded=!expanded"><i class="fa fa-expand"></i> </a></small>
+                </div>
+                <div class="col-md-7 pull-right">
                     <input type="search" class="col-md-12" ng-model="samples.searchData">
                 </div>
-                <div class="col-md-1 pull-right">  <a href="#" class=" btn btn-default btn-sm" ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
+                <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+                                                    ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
                         class="fa fa-refresh"></i></a>
                     &nbsp;
                 </div>
@@ -46,60 +51,230 @@
         </h3>
 
 
+        <div class="panel panel-body text-sm bg-aqua" ng-show="!expanded">
+            <div class="fullInfoDiv">
+                <div class="clearfix">&nbsp;</div>
+                <h4 class="h4">Expanded Shipping Information</h4>
+                <hr>
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-primary " ng-repeat="shipment in samples.shipmentsData">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#{{shipment.id}}"
+                                   ng-click="samples.getPanelFromShipment(shipment.id,'tbl_bac_panels_shipments')"
+                                   data-parent="#accordion">{{$index+1}}.
+                                    {{shipment.shipmentName}}</a>
+                            </h4>
+                        </div>
+                        <div id="{{shipment.id}}" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p class="col-md-12">
 
-        <div class="panel panel-body text-sm">
+                                <div class="col-md-5 pull-left">
+                                    <h4 class="h4">Shipment Details</h4>
+                                    <hr>
+                                    Description :
+                                    <f>{{shipment.shipmentDsc}}</f>
+                                    <br>
+                                    Courier :
+                                    <td>{{shipment.courier}}</td>
+                                    , Number of samples
+                                    <f class="">{{shipment.numberOfPanels}}</f>
+                                    <br>
 
 
-            <table class="table table-striped table-condensed table-bordered">
-                <thead>
-                <tr>
-                    <th>#.</th>
-                    <th>Shipment Name</th>
-                    <th>No Of Panels</th>
-                    <th>Courier</th>
-                    <th>ship't Desc</th>
+                                    Round Id :
+                                    <td nowrap>{{shipment.roundId}}</td>
+                                    ,Created By
+                                    <td nowrap>{{shipment.createdBy}}</td>
+                                    <br>
+                                    Prepared By
+                                    <td nowrap>{{shipment.preparedBy}}</td>
+                                    on
+                                    <td nowrap>{{shipment.datePrepared}}</td>
+                                    <br>
 
-                    <th>Round ID</th>
-                    <th>Created By</th>
-                    <th>Prepared On</th>
-                    <!--                                <th>Date Saved</th>-->
-                    <th>Prepared By</th>
-                    <th>Ship't Status</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr dir-paginate="sample in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData"   >
-                    <td>{{$index+1}}</td>
-                    <td>{{sample.shipmentName}}</td>
-                    <td>{{sample.numberOfPanels}}</td>
-                    <td>{{sample.courier}}</td>
-                    <td >{{sample.shipmentDsc}}</td>
-                    <td nowrap>{{sample.roundId}}</td>
-                    <td nowrap>{{sample.createdBy}}</td>
+                                    Shipment Status :
+                                    <td nowrap>{{shipment.returnShipmentStatus(sample.shipmentStatus)}}</td>
 
-                    <td nowrap>{{sample.datePrepared}}</td>
-                    <td nowrap>{{sample.preparedBy}}</td>
-                    <td nowrap>{{samples.returnShipmentStatus(sample.shipmentStatus)}}</td>
-                    <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+                                    <div class="text-left ">
+                                        <small class="text-gray"><i>{{shipment.datePrepared}}</i></small>
+                                    </div>
+                                    <div class="clearfix ">&nbsp;</div>
+                                    <div class="divider"></div>
+                                    <div class="col-md-12 text-right btn-primary">
+                                        <div class="clearfix ">&nbsp;</div>
+                                        <a href="">
+                                            <i class="fa fa-remove"></i>
+                                        </a> &nbsp;
+                                        <a href="">
+                                            <i class="fa fa-edit"></i>
+                                        </a> &nbsp;
+                                        <a href="">
+                                            <i class="fa fa-plus-square"></i>
+                                        </a>
+                                        <div class="clearfix ">&nbsp;</div>
+                                    </div>
 
-                    <td nowrap>
-                        <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
-                        <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-
-            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
-                                     boundary-links="true">
-            </dir-pagination-controls>
-
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="h4">Panels</div>
+                                    <table class="table" ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
+                                        <tr>
+                                            <th></th>
+                                            <th>Panel Name</th>
+                                            <th>Date Prepared</th>
+                                            <th>Del'ry date</th>
+                                            <th>Del'ry status</th>
+                                        </tr>
+                                        <tr class="" ng-repeat="panels in samples.panelsToShipment">
+                                            <td>{{$index+1}}</td>
+                                            <td>{{panels.panelName}}</td>
+                                            <td>{{panels.panelDatePrepared}}</td>
+                                            <td>{{panels.panelName}}</td>
+                                            <td>{{panels.delveryStatus}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <table class="table table-striped table-condensed table-bordered" ng-show="expanded">
+            <thead>
+            <tr>
+                <th>#.</th>
+                <th>Shipment Name</th>
+                <th>No Of Panels</th>
+                <th>Courier</th>
+                <th>ship't Desc</th>
 
+                <th>Round ID</th>
+                <th>Created By</th>
+                <th>Prepared On</th>
+                <!--                                <th>Date Saved</th>-->
+                <th>Prepared By</th>
+                <th>Ship't Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                <td>{{$index+1}}</td>
+                <td>{{shipment.shipmentName}}</td>
+                <td>{{shipment.numberOfPanels}}</td>
+                <td>{{shipment.courier}}</td>
+                <td>{{shipment.shipmentDsc}}</td>
+                <td nowrap>{{shipment.roundId}}</td>
+                <td nowrap>{{shipment.createdBy}}</td>
 
+                <td nowrap>{{shipment.datePrepared}}</td>
+                <td nowrap>{{shipment.preparedBy}}</td>
+                <td nowrap>{{shipment.returnShipmentStatus(sample.shipmentStatus)}}</td>
+                <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+
+                <td nowrap>
+                    <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                    <a class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></a>
+                    <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
+                    <a class="btn btn-primary btn-sm" ng-click="samples.addPanelsToShipment(shipment)"
+                       href="#addPanels" data-backdrop="false" data-toggle="modal"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
 
     </div>
+    <div>
+        <div id="addPanels" class="modal fade" draggable="true" ng-if="samples.showShipmentModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header btn-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="samples.hideShipmentModal()">&times;</button>
+                        <h4 class="modal-title">Panel To
+                            {{samples.currentShipment.shipmentName | capitalizeLetter}} :
+                            {{samples.currentShipment.shipmentDsc | capitalizeLetter}}
+                            <small class="small">
+                                {{samples.panelsToShipmentArray.length}} Panels
+                            </small>
+                            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                            <small class="">
+                                <a href="#" class=" btn btn-default btn-sm"
+                                   ng-click="samples.getAllSamples('tbl_bac_panel_mst')">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                            </small>
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
+                        <p class="pre-scrollable">
+
+                        <table class="table table-striped table-responsive">
+                            <tr>
+                                <td></td>
+                                <td>Quantity</td>
+                                <td><b>Panel</b></td>
+                                <td><b>Date Prer'd</b></td>
+                            </tr>
+                            <tr ng-repeat="panel in samples.panelsData |filter : searchSample |limitTo : 8">
+                                <td>
+
+                                    <input type="checkbox"
+                                           ng-checked="samples.returnCheckedRow(panel.id,samples.panelsToShipmentArray)"
+                                           ng-click="samples.addPanelToShipment(panel.id,panelCheck)"
+                                           ng-model="panelCheck">
+
+
+                                </td>
+                                <td>
+                                    <form name="panelQuantityForm">
+                                        <input type="number" ng-disabled="!panelCheck" name="panelQuantity"
+                                               ng-model="panel.quantity" placeholder="quantity" required value="1"
+                                               ng-class="{'has-error' :panelQuantityForm.panelQuantity.$invalid && !panelQuantityForm.panelQuantity.$pristine }">
+                                    </form>
+                                </td>
+                                <td>{{panel.panelName}}</td>
+                                <td>{{panel.datePrepared}}</td>
+                            </tr>
+                        </table>
+                        </p>
+                        <div class="alert {{samples.feedbackObject.fbbgColor}}"
+                             ng-if="samples.feedbackObject.fbStatus">
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                        </div>
+                        <button class="btn btn-info col-md-12"
+                                ng-disabled="samples.panelsToShipmentArray.length==0 || samples.savingInProgress"
+                                ng-click="samples.savePanelsToShipments(samples.currentShipment)"
+                        >
+                            Save Panel to {{samples.currentShipment.shipmentName | capitalizeLetter}} <i
+                                class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                    </div>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                <!--</div>-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+</div>
 </div>

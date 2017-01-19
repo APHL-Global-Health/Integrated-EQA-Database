@@ -123,10 +123,12 @@ Class Main
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
+
             if (is_array($where)) {
                 $sql .= $this->returnWhereStatement($where);
             }
         }
+        //  echo $sql;exit;
         $result = $this->connect_db->query($sql);
 
 
@@ -177,9 +179,9 @@ Class Main
                     $sql .= $this->returnUpdateStatement($updateData);
                 }
                 if (isset($where)) {
-                     $sql .=$this->returnWhereStatement($where);
+                    $sql .= $this->returnWhereStatement($where);
                 }
-                if(is_string($$sql)){
+                if (is_string($$sql)) {
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {
@@ -194,7 +196,6 @@ Class Main
             }
         } catch (Exception $e) {
             echo $e->getMessage();
-            return $e->getMessage();
 
         }
 

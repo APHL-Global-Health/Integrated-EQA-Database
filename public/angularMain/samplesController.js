@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http, serverSamplesURL, EptServices) {
+    samplesModule.controller('samplesController', function ($scope, $http, serverSamplesURL, EptServices, $timeout) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -31,13 +31,14 @@
         }
         function changeFb(data) {
             $scope.samples.feedbackObject = data;
+            $('.alert').show('slow');
         }
 
         $scope.samples.samplesData = {};
         $scope.samples.feedbackObject = EptServices.EptServiceObject.loaderStatus;
 
         $scope.samples.loaderProgressSpinner = '';
-
+        $scope.samples.panelsToShipment = {};
         function assignHTTPResponse(data, tableName) {
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesData = data.data;
@@ -47,6 +48,9 @@
             }
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.shipmentsData = data.data;
+            }
+            if (tableName == 'tbl_bac_panels_shipments') {
+                $scope.samples.panelsToShipment = data.data
             }
 
         }
@@ -142,11 +146,17 @@
 
         $scope.samples.savingSpinner = '';
         $scope.samples.savingInProgress = false;
+        $scope.samples.showPanelModal = false;
+        $scope.samples.hidePanelModal = function () {
+            $scope.samples.showPanelModal = false;
+        }
         $scope.samples.addSamplesToPanel = function (panel) {
 
             $scope.samples.currentPanel = panel;
+            $scope.samples.showPanelModal = true;
             console.log($scope.samples.samplesData.length)
-            if (angular.isUndefined($scope.samples.samplesData.length0)) {
+            $scope.samples.samplePanelArray = [];
+            if ($scope.samples.samplesData.length == 0) {
 
                 $scope.samples.getAllSamples('tbl_bac_samples');
             }
@@ -173,7 +183,82 @@
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.shipmentFormData = {};
             }
+            if (tableName == 'tbl_bac_panels_shipments') {
+
+            }
         }
+
+        /*add panels to shipments*/
+        /*---------------------------------*/
+        $scope.samples.currentShipment = {}
+        $scope.samples.showShipmentModal = false;
+        $scope.samples.panelsToShipmentArray = [];
+        $scope.samples.addPanelsToShipment = function (shipment) {
+            $scope.samples.currentShipment = shipment;
+            $scope.samples.showShipmentModal = true;
+            $scope.samples.panelsToShipmentArray = [];
+
+
+        }
+        $scope.samples.hideShipmentModal = function () {
+            $scope.samples.showShipmentModal = false;
+        }
+        $scope.samples.savePanelsToShipments = function (shipment) {
+            try {
+                if (angular.isDefined(shipment)) {
+                    changeSavingSpinner(true);
+                    var postedData = {};
+                    postedData.shipmentId = shipment.id;
+                    postedData.panelId = $scope.samples.panelsToShipmentArray;
+                    var url = serverSamplesURL + 'savepaneltoshipment';
+                    $http
+                        .post(url, postedData)
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.panelsToShipmentArray = [];
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                            }
+
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
+
+                } else {
+                    changeSavingSpinner(false);
+                    console.log('error')
+                }
+            } catch (error) {
+                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, message));
+            }
+        }
+
+        $scope.samples.getPanelFromShipment = function (shipmentId) {
+            $scope.samples.clickedShipment = shipmentId;
+            if (isNumeric(shipmentId)) {
+                try {
+                    var where = {shipmentId: shipmentId};
+                    $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
+
+                } catch (Exc) {
+
+                }
+            }
+        }
+        $scope.samples.addPanelToShipment = function (id, checker) {
+            try {
+                $scope.samples.panelsToShipmentArray = EptServices.EptServiceObject.returnIdArray($scope.samples.panelsToShipmentArray, id, checker);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        /*---------------------------------*/
+
 
         $scope.samples.checkerAll = '';
         $scope.samples.checkAll = function (checker) {
@@ -191,27 +276,60 @@
                 console.log(error);
             }
         }
+        $scope.samples.returnCheckedRow = function (id, data) {
+            if (data.indexOf(id) > -1) {
+                return true;
+            } else {
+                return false;
+            }
 
+
+        }
+        $scope.$watch('samples.feedbackObject', function () {
+            console.log($scope.samples.feedbackObject);
+            if ($scope.samples.feedbackObject.fbStatus) {
+
+                $timeout(function () {
+                    $('.alert').hide('slow');
+                    $timeout(function () {
+                        $scope.samples.feedbackObject.fbStatus = false;
+                    }, 1000)
+
+                }, 3300)
+
+            }
+        })
         $scope.samples.saveSamplesToPanel = function (panel) {
 
             try {
+
                 var url = serverSamplesURL + 'savesamplestopanel';
                 var postedData = {};
                 postedData = {
                     panelId: panel.id,
-                    sampleIds : $scope.samples.samplePanelArray
+                    sampleIds: $scope.samples.samplePanelArray
                 };
-
+                console.log(panel);
+                changeSavingSpinner(true);
                 $http
                     .post(url, postedData)
                     .success(function (response) {
                         console.log(response)
+                        changeSavingSpinner(false);
+                        if (response.status == 1) {
+                            $scope.samples.samplePanelArray = [];
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                        } else {
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        }
                     })
                     .error(function (error) {
-console.log(error)
-                })
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        console.log(error)
+                    })
             } catch (error) {
-
+                console.log(error);
             }
 
         }
