@@ -24,7 +24,7 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject.returnAlphaNumHyDashRegExp = function () {
         return alphaNumHyDashRegExp;
     }
-    this.EptServiceObject.returnLoaderStatus = function (status) {
+    this.EptServiceObject.returnLoaderStatus = function (status, message) {
         var loaderStatus = {};
         if (status == 0 || status == 3) {
             loaderStatus = {
@@ -72,12 +72,15 @@ EptServices.service('EptServices', function () {
         if (table == 'tbl_bac_samples' || table == 'tbl_bac_panel_mst' || table == 'tbl_bac_shipments') {
             url = 'selectfromtable';
         }
+        if (table == 'tbl_bac_panels_shipments') {
+            url = 'selectfromtable';
+        }
         console.log(url)
 
         return url;
     }
 
-    this.EptServiceObject.returnIdArray = function(arrayData, id, checker) {
+    this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
         try {
             if (angular.isNumber(Number(id))) {
                 if (checker) {
