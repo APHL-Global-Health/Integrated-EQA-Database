@@ -127,13 +127,24 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         try {
 
             $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
-            if (sizeof($dataDB) > 0) {
+//            echo(size($dataDB));
+//            exit;
+            if ($dataDB != false) {
 
                 foreach ($dataDB as $key => $value) {
-
-                    $dataDB[$key]->panelName = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelName');
-                    $dataDB[$key]->panelDatePrepared = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelDatePrepared');
+                    if ($tableName == 'tbl_bac_panels_shipments') {
+                        $dataDB[$key]->panelName = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelName');
+                        $dataDB[$key]->panelDatePrepared = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelDatePrepared');
+                    } else if ($tableName == 'tbl_bac_sample_to_panel') {
+                        $dataDB[$key]->batchName = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'batchName');
+                        $dataDB[$key]->datePrepared = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'datePrepared');
+                        $dataDB[$key]->bloodPackNo = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'bloodPackNo');
+                        $dataDB[$key]->materialOrigin = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'materialOrigin');
+                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                    }
                 }
+
+
             }
             return $dataDB;
         } catch
@@ -161,8 +172,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $where = sizeof($where) > 0 ? $where : "";
 
 
-            //$connection = new Main();
             if ($tableName == 'tbl_bac_panels_shipments') {
+                $dataDB = $this->returnWithRefColNames($tableName, $where);
+            } else if ($tableName == 'tbl_bac_sample_to_panel') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
@@ -176,6 +188,26 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             }
 
 
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit();
+    }
+
+    public function customdeleteAction()
+    {
+        try {
+            $postedData = file_get_contents('php://input');
+            $postedData = (array)(json_decode($postedData));
+            print_r($postedData);
+
+            $where['id'] = $postedData['where'];
+            $tableName = $postedData['tableName'];
+            $status['status']=0;
+            if (isset($tableName)) {
+                $status = $this->dbConnection->deleteFromWhere($tableName, $where);
+            }
+            echo $this->returnJson($status);
         } catch (Exception $e) {
             echo $e->getMessage();
         }

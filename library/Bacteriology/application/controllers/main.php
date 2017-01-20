@@ -93,8 +93,12 @@ Class Main
 
     public function returnWhereStatement($array)
     {
+
         $where = ' where ';
         if (is_array($array)) {
+            $st=isset($array['status'])? '='.$array['status'] : '<'. '4 ';
+
+
             $counter = 0;
             foreach ($array as $key => $value) {
 
@@ -105,14 +109,14 @@ Class Main
                     $where .= ' and ';
 
 
-                } else {
-                    $where .= ' order by id desc';
-
                 }
 
 
             }
+            $where .= " and status ".$st.' ';
+            $where .= ' order by id desc';
             return $where;
+
         } else {
             return '';
         }
@@ -128,9 +132,8 @@ Class Main
                 $sql .= $this->returnWhereStatement($where);
             }
         }
-        //  echo $sql;exit;
+         // echo $sql;exit;
         $result = $this->connect_db->query($sql);
-
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -148,24 +151,33 @@ Class Main
     public function deleteFromWhere($tableName, $where)
     {
         $error['status'] = 0;
-        if (isset($tableName)) {
-            $sql = "delete from $tableName";
-            if (isset($where)) {
-                if (is_array($where)) {
-                    $sql .= $this->returnWhereStatement($where);
+        try {
+            if (isset($tableName)) {
+                $sql = "delete from $tableName";
+                if (isset($where)) {
+                    if (is_array($where)) {
+                        $sql .= $this->returnWhereStatement($where);
+                    } else {
+                        $error['status'] = 0;
+                        $error['message'] = 'No where clause found';
+                        return $error;
+                    }
+                }
+                if (is_string($sql)) {
+                    $result = $this->connect_db->query($sql);
+
+                    if ($result) {
+                        $error['status'] = 1;
+                        $error['message'] = 'deleted successfully';
+
+                    } else {
+                        $error['message'] = $this->connect_db->error;
+                    }
                 }
             }
-            if (is_string($sql)) {
-                $result = $this->connect_db->query($sql);
-
-                if ($result) {
-                    $error['status'] = 1;
-                    $error['message'] = 'deleted successfully';
-
-                } else {
-                    $error['message'] = $this->connect_db->error;
-                }
-            }
+            return $error;
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
 
     }
@@ -181,12 +193,12 @@ Class Main
                 if (isset($where)) {
                     $sql .= $this->returnWhereStatement($where);
                 }
-                if (is_string($$sql)) {
+                if (is_string($sql)) {
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {
                         $error['status'] = 1;
-                        $error['message'] = 'deleted successfully';
+                        $error['message'] = 'Row Update Successfully';
 
                     } else {
                         $error['message'] = $this->connect_db->error;
@@ -201,6 +213,31 @@ Class Main
 
     }
 
+    public function returnUpdateStatement($updateInfo)
+    {
+        try {
+            if (sizeof($updateInfo) > 0) {
+                $updateStatement = '';
+                $counter = 0;
+                foreach ($updateInfo as $key => $value) {
+
+                    $updateStatement .= $key . "=" . " '$value' ";
+
+                    $counter++;
+                    if ($counter < sizeof($updateInfo)) {
+                        $updateStatement .= ' , ';
+
+
+                    }
+
+
+                }
+            }
+        } catch (Exception $e) {
+
+        }
+
+    }
 
 }
 

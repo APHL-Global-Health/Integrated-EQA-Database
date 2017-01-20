@@ -107,39 +107,48 @@
                                             <small class="text-gray"><i>{{panel.panelDatePrepared}}</i></small>
                                         </div>
                                         <div class="clearfix ">&nbsp;</div>
-                                        <div class="divider"></div>
+
                                         <div class="col-md-12 text-right btn-primary">
-                                            <div class="clearfix ">&nbsp;</div>
+
+                                            <a href="#" ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
+                                                <i class="fa fa-remove fa-2x"></i></a> &nbsp;
                                             <a href="">
-                                                <i class="fa fa-remove"></i>
-                                            </a> &nbsp;
-                                            <a href="">
-                                                <i class="fa fa-edit"></i>
-                                            </a> &nbsp;
-                                            <a href="">
-                                                <i class="fa fa-plus-square"></i>
-                                            </a>
-                                            <div class="clearfix ">&nbsp;</div>
+                                                <i class="fa fa-edit fa-2x"></i></a> &nbsp;
+                                            <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                               href="#addSamples" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-plus-square fa-2x"></i></a>  &nbsp;
+                                            <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                               href="#addSamples" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-unlock fa-2x"></i></a>  &nbsp;
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="h4">Samples</div>
+                                    <div class="col-md-7">
+                                        <div class="h4">Samples In this panel <small>{{samples.sampleToPanel.length}} records</small></div>
                                         <table class="table"
-                                               ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
+                                               ng-if="samples.clickedPanel==panel.id && samples.loaderProgressSpinner!='fa-spinner'">
                                             <tr>
                                                 <th></th>
-                                                <th>Panel Name</th>
+                                                <th>Batch Name</th>
                                                 <th>Date Prepared</th>
-                                                <th>Del'ry date</th>
-                                                <th>Del'ry status</th>
+                                                <th>Blood Pack #</th>
+                                                <th>Material Origin</th>
+                                                <th>Date Created</th>
+                                                <th>Remove</th>
                                             </tr>
-                                            <tr class="" ng-repeat="panels in samples.panelsToShipment">
+                                            <tr class="" ng-repeat="sample in samples.sampleToPanel">
                                                 <td>{{$index+1}}</td>
-                                                <td>{{panels.panelName}}</td>
-                                                <td>{{panels.panelDatePrepared}}</td>
-                                                <td>{{panels.panelName}}</td>
-                                                <td>{{panels.delveryStatus}}</td>
+                                                <td>{{sample.batchName}}</td>
+                                                <td>{{sample.datePrepared}}</td>
+                                                <td>{{sample.bloodPackNo}}</td>
+                                                <td>{{sample.materialOrigin}}</td>
+                                                <td nowrap>{{sample.dateCreated}}</td>
+                                                <td>
+                                                    <a href="#" class=""
+                                                       ng-click="samples.deleteCustomRow(sample.id,'tbl_bac_sample_to_panel')">
+                                                        <i class="fa fa-remove"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
@@ -192,7 +201,7 @@
                         <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
                             <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></a>
+                            <a class="btn btn-danger btn-sm" ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i class="fa fa-remove"></i></a>
                             <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
                             <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"
