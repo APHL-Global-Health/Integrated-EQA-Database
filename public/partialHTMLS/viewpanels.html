@@ -53,7 +53,8 @@
         <div class="panel panel-body text-sm">
 
             <div class="panel panel-body text-sm bg-aqua" ng-if="!expand">
-                <small>Full panel Info</small>
+                <h4 class="h4">Expanded Panel Information</h4>
+
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
                     <div class="panel-group" id="accordion">
@@ -109,22 +110,26 @@
                                         <div class="clearfix ">&nbsp;</div>
 
                                         <div class="col-md-12 text-right btn-primary">
-
-                                            <a href="#" ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
-                                                <i class="fa fa-remove fa-2x"></i></a> &nbsp;
+                                            <div class="clearfix">&nbsp;</div>
+                                            <a href="#"
+                                               ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
+                                                <i class="fa fa-remove  "></i></a> &nbsp;
                                             <a href="">
-                                                <i class="fa fa-edit fa-2x"></i></a> &nbsp;
+                                                <i class="fa fa-edit  "></i></a> &nbsp;
                                             <a about="" ng-click="samples.addSamplesToPanel(panel)"
                                                href="#addSamples" data-backdrop="false" data-toggle="modal">
-                                                <i class="fa fa-plus-square fa-2x"></i></a>  &nbsp;
+                                                <i class="fa fa-plus-square  "></i></a> &nbsp;
                                             <a about="" ng-click="samples.addSamplesToPanel(panel)"
                                                href="#addSamples" data-backdrop="false" data-toggle="modal">
-                                                <i class="fa fa-unlock fa-2x"></i></a>  &nbsp;
+                                                <i class="fa fa-unlock  "></i></a> &nbsp;
+                                            <div class="clearfix">&nbsp;</div>
                                         </div>
 
                                     </div>
                                     <div class="col-md-7">
-                                        <div class="h4">Samples In this panel <small>{{samples.sampleToPanel.length}} records</small></div>
+                                        <div class="h4">Samples In this panel
+                                            <small>{{samples.sampleToPanel.length}} records</small>
+                                        </div>
                                         <table class="table"
                                                ng-if="samples.clickedPanel==panel.id && samples.loaderProgressSpinner!='fa-spinner'">
                                             <tr>
@@ -201,7 +206,9 @@
                         <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
                             <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm" ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i class="fa fa-remove"></i></a>
+                            <a class="btn btn-danger btn-sm"
+                               ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i
+                                    class="fa fa-remove"></i></a>
                             <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
                             <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"

@@ -105,10 +105,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     {
         $returnArray = '';
         $whereId['id'] = $id;
-//        $col ='shipmentName';
-//        $tableName='tbl_bac_shipments';
-        if (is_numeric($whereId['id'])) {
+       if (is_numeric($whereId['id'])) {
             $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
+//            print_r($dataDB);
+//            exit;
             if (sizeof($dataDB) > 0) {
                 foreach ($dataDB as $key => $value) {
                     // array_push($returnArray,$value);
@@ -199,7 +199,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         try {
             $postedData = file_get_contents('php://input');
             $postedData = (array)(json_decode($postedData));
-            print_r($postedData);
+
 
             $where['id'] = $postedData['where'];
             $tableName = $postedData['tableName'];

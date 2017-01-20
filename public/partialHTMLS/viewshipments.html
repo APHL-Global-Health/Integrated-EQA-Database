@@ -95,7 +95,7 @@
                                     <br>
 
                                     Shipment Status :
-                                    <td nowrap>{{shipment.returnShipmentStatus(sample.shipmentStatus)}}</td>
+                                    <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
 
                                     <div class="text-left ">
                                         <small class="text-gray"><i>{{shipment.datePrepared}}</i></small>
@@ -104,15 +104,22 @@
                                     <div class="divider"></div>
                                     <div class="col-md-12 text-right btn-primary">
                                         <div class="clearfix ">&nbsp;</div>
+                                        <a  ng-click="samples.addPanelsToShipment(shipment)"
+                                            href="#addPanels" data-backdrop="false" data-toggle="modal">
+                                            <i class="fa fa-upload"></i></a> &nbsp;
+
+
+                                        <a  ng-click="samples.receiveShipment(shipment,modal)"
+                                            href="#receiveShipment" data-backdrop="false" data-toggle="modal">
+                                            <i class="fa fa-download"></i></a> &nbsp;
+
+                                        <a href="" ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')">
+                                            <i class="fa fa-remove"></i></a> &nbsp;
                                         <a href="">
-                                            <i class="fa fa-remove"></i>
-                                        </a> &nbsp;
-                                        <a href="">
-                                            <i class="fa fa-edit"></i>
-                                        </a> &nbsp;
-                                        <a href="">
-                                            <i class="fa fa-plus-square"></i>
-                                        </a>
+                                            <i class="fa fa-edit"></i></a> &nbsp;
+                                        <a  ng-click="samples.addPanelsToShipment(shipment)"
+                                           href="#addPanels" data-backdrop="false" data-toggle="modal">
+                                            <i class="fa fa-plus-square"></i></a> &nbsp;
                                         <div class="clearfix ">&nbsp;</div>
                                     </div>
 
@@ -126,13 +133,20 @@
                                             <th>Date Prepared</th>
                                             <th>Del'ry date</th>
                                             <th>Del'ry status</th>
+                                            <th></th>
                                         </tr>
                                         <tr class="" ng-repeat="panels in samples.panelsToShipment">
                                             <td>{{$index+1}}</td>
                                             <td>{{panels.panelName}}</td>
                                             <td>{{panels.panelDatePrepared}}</td>
                                             <td>{{panels.panelName}}</td>
-                                            <td>{{panels.delveryStatus}}</td>
+                                            <td>{{panels.deliveryStatus}}</td>
+                                            <td>
+                                                <a href="#" class=""
+                                                   ng-click="samples.deleteCustomRow(panels.id,'tbl_bac_panels_shipments')">
+                                                    <i class="fa fa-remove"> </i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -172,12 +186,12 @@
 
                 <td nowrap>{{shipment.datePrepared}}</td>
                 <td nowrap>{{shipment.preparedBy}}</td>
-                <td nowrap>{{shipment.returnShipmentStatus(sample.shipmentStatus)}}</td>
+                <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
                 <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 
                 <td nowrap>
                     <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></a>
+                    <a class="btn btn-danger btn-sm" ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')"><i class="fa fa-remove"></i></a>
                     <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
                     <a class="btn btn-primary btn-sm" ng-click="samples.addPanelsToShipment(shipment)"
                        href="#addPanels" data-backdrop="false" data-toggle="modal"
@@ -225,7 +239,7 @@
                         <table class="table table-striped table-responsive">
                             <tr>
                                 <td></td>
-                                <td>Quantity</td>
+
                                 <td><b>Panel</b></td>
                                 <td><b>Date Prer'd</b></td>
                             </tr>
@@ -239,15 +253,10 @@
 
 
                                 </td>
-                                <td>
-                                    <form name="panelQuantityForm">
-                                        <input type="number" ng-disabled="!panelCheck" name="panelQuantity"
-                                               ng-model="panel.quantity" placeholder="quantity" required value="1"
-                                               ng-class="{'has-error' :panelQuantityForm.panelQuantity.$invalid && !panelQuantityForm.panelQuantity.$pristine }">
-                                    </form>
-                                </td>
+
                                 <td>{{panel.panelName}}</td>
                                 <td>{{panel.datePrepared}}</td>
+
                             </tr>
                         </table>
                         </p>
@@ -273,6 +282,10 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
+
+        <div ng-include="../partialHTMLS/modals/receiveShipment.html" id="receiveShipment" ng-show="samples.showClickedShipment=='receiveShipment'">
+
+        </div>
     </div>
 
 

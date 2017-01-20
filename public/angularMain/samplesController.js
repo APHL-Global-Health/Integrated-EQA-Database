@@ -112,6 +112,7 @@
             }
         }
         $scope.samples.returnShipmentStatus = function (shipmentStatus) {
+
             if (shipmentStatus == 1) {
                 return 'Dispatched';
             }
@@ -523,7 +524,15 @@
 
         /*--------------------------------------------------------------------end of custom data to delete from db--------------------------------*/
 
-        /*-------------------------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
+
+        /*-----------------------------------------------------------------------STart of mark as received shipment-----------------------*/
+        $scope.samples.showClickedShipment = '';
+        $scope.samples.receiveShipment = function (shipment, modal) {
+            $scope.samples.showClickedShipment = modal;
+
+        }
+        /*---------------------------------------------------------------------End of receiving function--------------------------------*/
+        /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
     }).filter('capitalizeLetter', function () {
         return function (input) {
