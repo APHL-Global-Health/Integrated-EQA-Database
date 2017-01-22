@@ -72,19 +72,35 @@ EptServices.service('EptServices', function () {
         if (table == 'tbl_bac_samples' || table == 'tbl_bac_panel_mst' || table == 'tbl_bac_shipments') {
             url = 'selectfromtable';
         }
-        if (table == 'tbl_bac_panels_shipments') {
+        if (table == 'tbl_bac_panels_shipments' || table == 'tbl_bac_sample_to_panel') {
+            url = 'selectfromtable';
+        } else {
             url = 'selectfromtable';
         }
         console.log(url)
 
         return url;
     }
+    this.EptServiceObject.sliceRowFromDData = function (id, data) {
+        if (isNumeric(Number(id))) {
+            if(angular.isArray(data)){
+               for(var i=0;i <data.length;i++){
+                   if(data[i]['id']==id){
+                       data.splice(i,1);
+                       break;
+                   }
+               }
+            }
 
+            return data;
+        }else{
+
+        }
+    }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
         try {
             if (angular.isNumber(Number(id))) {
                 if (checker) {
-
                     arrayData.push(id);
                 } else {
                     var indexOf = arrayData.indexOf(id);

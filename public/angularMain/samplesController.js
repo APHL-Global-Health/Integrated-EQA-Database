@@ -39,6 +39,7 @@
 
         $scope.samples.loaderProgressSpinner = '';
         $scope.samples.panelsToShipment = {};
+        $scope.samples.sampleToPanel = {};
         function assignHTTPResponse(data, tableName) {
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesData = data.data;
@@ -51,6 +52,9 @@
             }
             if (tableName == 'tbl_bac_panels_shipments') {
                 $scope.samples.panelsToShipment = data.data
+            }
+            if (tableName == 'tbl_bac_sample_to_panel') {
+                $scope.samples.sampleToPanel = data.data;
             }
 
         }
@@ -108,6 +112,7 @@
             }
         }
         $scope.samples.returnShipmentStatus = function (shipmentStatus) {
+
             if (shipmentStatus == 1) {
                 return 'Dispatched';
             }
@@ -188,8 +193,8 @@
             }
         }
 
-        /*add panels to shipments*/
-        /*---------------------------------*/
+
+        /*---------------------------------------------------------------------add panels to shipments-----------------------------------------------------------------------------*/
         $scope.samples.currentShipment = {}
         $scope.samples.showShipmentModal = false;
         $scope.samples.panelsToShipmentArray = [];
@@ -238,6 +243,11 @@
             }
         }
 
+        /*-------------------------------------------------------------------END savePanelsToShipments----------------------------------------------------------*/
+
+
+        /*-------------------------------------------------------------------Get panels from a specific shipment----------------------------------------------------------*/
+
         $scope.samples.getPanelFromShipment = function (shipmentId) {
             $scope.samples.clickedShipment = shipmentId;
             if (isNumeric(shipmentId)) {
@@ -246,10 +256,14 @@
                     $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
 
                 } catch (Exc) {
-
+                    console.log(Exc);
                 }
             }
         }
+        /*-------------------------------------------------------------------END get Panel From Shipment----------------------------------------------------------*/
+
+
+        /*-------------------------------------------------------------------End function to add Panel To Shipment------------------------------------------------------*/
         $scope.samples.addPanelToShipment = function (id, checker) {
             try {
                 $scope.samples.panelsToShipmentArray = EptServices.EptServiceObject.returnIdArray($scope.samples.panelsToShipmentArray, id, checker);
@@ -257,18 +271,48 @@
                 console.log(error);
             }
         }
-        /*---------------------------------*/
+
+        /*-------------------------------------------------------------------End function to add Panel To Shipment----------------------------------------------------------*/
+        /*---------------------------------------------------------------------END of add panels to shipments---------------------------------------------------------------*/
+
+        /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
 
+        $scope.samples.getSampleFromPanel = function (panelId, tableName) {
+            try {
+                $scope.samples.clickedPanel = panelId;
+                console.log(panelId);
+                if (isNumeric(panelId)) {
+                    try {
+                        var where = {panelId: panelId};
+                        $scope.samples.getAllSamples(tableName, where);
+
+                    } catch (Exc) {
+                        console.log(Exc);
+                    }
+                }
+
+            }
+            catch (error) {
+                console.log(error)
+            }
+
+        }
+
+        /*---------------------------------------------------------------------------END of samples from panels data--------------------------------------------------------------------------------*/
         $scope.samples.checkerAll = '';
+        /*-------------START  : check all rows ------*/
         $scope.samples.checkAll = function (checker) {
 
             $scope.samples.checkerAll = checker ? 'checked' : '';
 
         }
 
-
+        /*array to hold checked samples*/
         $scope.samples.samplePanelArray = [];
+
+        /*-------------------------------------------------------------------------START of functio for adding sample to a panel---------------------------------------------------------------------------------*/
+
         $scope.samples.addSampleToArray = function (id, checker) {
             try {
                 $scope.samples.samplePanelArray = EptServices.EptServiceObject.returnIdArray($scope.samples.samplePanelArray, id, checker);
@@ -276,6 +320,10 @@
                 console.log(error);
             }
         }
+        /*-------------------------------------------------------------------------END of adding a sample to array---------------------------------------------------------------------------------*/
+
+        /*-------------------------------------------------------------------------START of function to return row checked status---------------------------------------------------------------------------------*/
+
         $scope.samples.returnCheckedRow = function (id, data) {
             if (data.indexOf(id) > -1) {
                 return true;
@@ -285,6 +333,10 @@
 
 
         }
+        /*-------------------------------------------------------------------------END of function to return checked Status---------------------------------------------------------------------------------*/
+
+        /*-------------------------------------------------------------------------START watcher for slow feedback hiding---------------------------------------------------------------------------------*/
+
         $scope.$watch('samples.feedbackObject', function () {
             console.log($scope.samples.feedbackObject);
             if ($scope.samples.feedbackObject.fbStatus) {
@@ -298,7 +350,12 @@
                 }, 3300)
 
             }
-        })
+        });
+
+        /*-------------------------------------------------------------------------End of watcher for feedback slow hiding---------------------------------------------------------------------------------*/
+
+
+        /*-------------------------------------------------------------------------START of save samples to a selected Panel---------------------------------------------------------------------------------*/
         $scope.samples.saveSamplesToPanel = function (panel) {
 
             try {
@@ -333,6 +390,10 @@
             }
 
         }
+
+        /*--------------------------------------------------------------------End of saving function------------------------------------------------------------------------------------------*/
+
+        /*---------------------------------------------------------------------Save Data to DB generic function------------------------------------------------------------------------ */
         $scope.samples.saveSampleFormData = function (tableName, data) {
 
             try {
@@ -374,13 +435,112 @@
 
 
         }
+        /*-------------------------------------------------------------------------------END of saving generic function------------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------------return the correct sample data from table name---------------------------------*/
+        function sampleData(tableName, operation, changedData) {
+            try {
+                var data = {};
 
+                if (tableName == 'tbl_bac_samples') {
+
+                    data = $scope.samples.samplesData;
+                    if (operation == 1) {
+                        $scope.samples.samplesData = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_panel_mst') {
+                    data = $scope.samples.panelsData;
+                    if (operation == 1) {
+                        $scope.samples.panelsData = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_shipments') {
+                    data = $scope.samples.shipmentsData;
+                    if (operation == 1) {
+                        $scope.samples.shipmentsData = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_panels_shipments') {
+                    data = $scope.samples.panelsToShipment;
+                    if (operation == 1) {
+                        $scope.samples.panelsToShipment = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_sample_to_panel') {
+
+                    data = $scope.samples.sampleToPanel;
+                    if (operation == 1) {
+                        $scope.samples.sampleToPanel = changedData;
+                    }
+                }
+                if (operation != 1) {
+                    return data;
+                }
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+
+
+        /*-------------------------------------------------------------------------End of returing the correct data---------------------------------------------------------*/
+        /*---------------------------------------------------------------------------------------Start of custom delete function------------------------------------*/
+        $scope.samples.deleteCustomRow = function (id, tableName) {
+
+            try {
+                var data = sampleData(tableName, 0);
+                console.log(data)
+                data = EptServices.EptServiceObject.sliceRowFromDData(id, data);
+
+                if (data.length >= 0) {
+                    sampleData(tableName, 1, data);
+                    $scope.samples.deleteCustomeRowFromDb(tableName, id);
+                }
+            } catch (Exc) {
+                console.log(Exc);
+            }
+
+
+        }
+        /*---------------------------------------------------------------------------------------END of custom delte function-------------------*/
+        /*----------------------------------------------------------------------STart custome function to delete from db-------------------------*/
+        $scope.samples.deleteCustomeRowFromDb = function (tableName, id) {
+            try {
+                var postedData = {};
+                postedData.tableName = tableName;
+                postedData.where = id;
+                var url = serverSamplesURL + 'customdelete';
+                $http.post(url, postedData)
+                    .success(function (response) {
+                        console.log(response);
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                    })
+            } catch (Exc) {
+                console.log(Exc);
+            }
+        }
+
+
+        /*--------------------------------------------------------------------end of custom data to delete from db--------------------------------*/
+
+
+        /*-----------------------------------------------------------------------STart of mark as received shipment-----------------------*/
+        $scope.samples.showClickedShipment = '';
+        $scope.samples.receiveShipment = function (shipment, modal) {
+            $scope.samples.showClickedShipment = modal;
+
+        }
+        /*---------------------------------------------------------------------End of receiving function--------------------------------*/
+        /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
     }).filter('capitalizeLetter', function () {
         return function (input) {
             return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
         }
     });
+
+    /*-------------------------------------------------------------------END if of the capitalizing filter-------------------------------------------------------------------------------------*/
 
 
 })();
