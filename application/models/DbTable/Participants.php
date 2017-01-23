@@ -13,7 +13,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                                 ->group('p.participant_id'));
     }
 	
-	public function checkParticipantAccess($participantId){
+    public function checkParticipantAccess($participantId){
 		$authNameSpace =  new Zend_Session_Namespace('datamanagers');
 		$row = $this->getAdapter()->fetchRow($this->getAdapter()->select()
 								->from(array('pmm' => 'participant_manager_map'))
@@ -234,7 +234,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
 
-        $noOfRows = $this->update($data, "participant_id = " . $params['participantId']);
+                $noOfRows = $this->update($data, "participant_id = " . $params['participantId']);
 		$db = Zend_Db_Table_Abstract::getAdapter();
 		
 		if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {

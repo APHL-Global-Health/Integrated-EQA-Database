@@ -17,7 +17,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ProgramCode','Description','Status');
+        $aColumns = array('ProgramCode','Description','Comments','Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -140,6 +140,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
             $row = array();
             $row[] = $aRow['ProgramCode'];
             $row[] = $aRow['Description'];
+            $row[] = $aRow['Comments'];
             $row[] = $aRow['Status'];
             $row[] = '<a href="/admin/programs/edit/id/' . $aRow['ProgramID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
 
@@ -157,6 +158,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
         $data = array(
                       'ProgramCode'=>$params['ProgramCode'],
                       'Description'=>$params['Description'],
+                      'Comments'=>$params['Comments'],
                       'Status'=>$params['Status'],
 		      'CreatedBy' => $authNameSpace->admin_id,
                       'CreatedDate' => new Zend_Db_Expr('now()')
@@ -172,6 +174,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
         $data = array(
                       'ProgramCode'=>$params['ProgramCode'],
                       'Description'=>$params['Description'],
+                      'Comments'=>$params['Comments'],
                       'Status'=>$params['Status'],
 		      'CreatedBy' => $authNameSpace->admin_id,
                       'CreatedDate' => new Zend_Db_Expr('now()')

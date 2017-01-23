@@ -199,7 +199,7 @@
         for (var i = 0; i < tblColumns.length; i++) {
             dropDown += "<option value='" + tblColumns[i] + "' >" + tblComments[i] + "</option>";
         }
-        return  dropDown + "<option value='1'>Auto-Create Field If Missing</option></select>";
+        return  dropDown + "</select>";
     }
     var postParams = "";
     $('body').on('change', '.sel', function () {
@@ -243,7 +243,6 @@
 
                     }
 
-
                 }
                 if (indexPos >= 0) {
                     clickedLabel.splice(indexPos, 1);
@@ -257,8 +256,6 @@
                         clickedLabel.push(value);
                         arrayWithExcelLabelValue.push(singleArray);
                     }
-
-
 
                     if (postParams === "") {
                         postParams = key + "=" + value;
@@ -285,12 +282,7 @@
                 if (value != '0') {
                     arrayWithExcelLabelValue.push(singleArray);
                 }
-
-
             }
-
-
-
             // alert(postParams);
         }
     }
@@ -316,8 +308,8 @@
                 dataType: 'text',
                 data: convertArrayToString(arrayWithExcelLabelValue, model),
                 success: function (data) {
-                    //alert("yes");
-                    $('#loader').hide();
+                    alert(data);
+                    //.$('#loader').hide();
                     window.location='/admin/importcsv/index';
                     
                 },

@@ -108,6 +108,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         }
         //if(isset())
         $query .= " GROUP BY ProgramID;";
+
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -203,6 +204,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         }
         //if(isset())
         $query .= " GROUP BY ProviderID;";
+
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -511,9 +513,11 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
+
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
             $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
+
         $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
