@@ -96,7 +96,7 @@ Class Main
 
         $where = ' where ';
         if (is_array($array)) {
-            $st=isset($array['status'])? '='.$array['status'] : '<'. '4 ';
+            $st = isset($array['status']) ? '=' . $array['status'] : '<' . '4 ';
 
 
             $counter = 0;
@@ -113,7 +113,7 @@ Class Main
 
 
             }
-            $where .= " and status ".$st.' ';
+            $where .= " and status " . $st . ' ';
             $where .= ' order by id desc';
             return $where;
 
@@ -132,7 +132,7 @@ Class Main
                 $sql .= $this->returnWhereStatement($where);
             }
         }
-         // echo $sql;exit;
+        // echo $sql;exit;
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -185,15 +185,19 @@ Class Main
     public function updateTable($tableName, $where, $updateData)
     {
         try {
+            $error['status'] = 0;
             if (isset($tableName)) {
+
                 $sql = "update $tableName";
                 if (isset($updateData)) {
+
                     $sql .= $this->returnUpdateStatement($updateData);
                 }
                 if (isset($where)) {
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
+
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {
@@ -206,6 +210,7 @@ Class Main
                 }
 
             }
+            return $error;
         } catch (Exception $e) {
             echo $e->getMessage();
 
@@ -216,8 +221,9 @@ Class Main
     public function returnUpdateStatement($updateInfo)
     {
         try {
+            $updateStatement = ' ';
             if (sizeof($updateInfo) > 0) {
-                $updateStatement = '';
+                $updateStatement .= ' set ';
                 $counter = 0;
                 foreach ($updateInfo as $key => $value) {
 
@@ -233,6 +239,8 @@ Class Main
 
                 }
             }
+
+            return $updateStatement;
         } catch (Exception $e) {
 
         }

@@ -1,3 +1,15 @@
+
+* {
+    border-radius: 0 !important;
+}
+*,.btn{
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+.btn{
+    border-radius: 0 !important;
+}
 aside {
     position:  absolute;
     left: 0;
@@ -16,4 +28,15 @@ aside {
 .modal-dialog{
     margin-right: 0;
     margin-left: 0;
+}
+
+.full button span {
+    background-color: limegreen;
+    border-radius: 32px;
+    color: black;
+}
+.partially button span {
+    background-color: orange;
+    border-radius: 32px;
+    color: black;
 }
