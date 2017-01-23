@@ -105,14 +105,19 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     {
         $returnArray = '';
         $whereId['id'] = $id;
-       if (is_numeric($whereId['id'])) {
+        if (is_numeric($whereId['id'])) {
             $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
-//            print_r($dataDB);
+//            echo($dataDB);
 //            exit;
-            if (sizeof($dataDB) > 0) {
-                foreach ($dataDB as $key => $value) {
-                    // array_push($returnArray,$value);
-                    $returnArray = $value->$col;
+            if ($dataDB != false) {
+                try {
+
+                    foreach ($dataDB as $key => $value) {
+                        // array_push($returnArray,$value);
+                        $returnArray = $value->$col;
+                    }
+                } catch (Exception $e) {
+                    return '';
                 }
             } else {
 
@@ -194,6 +199,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
+    public function returnArrayFromInput()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+
+        return $postedData;
+    }
+
     public function customdeleteAction()
     {
         try {
@@ -203,7 +216,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             $where['id'] = $postedData['where'];
             $tableName = $postedData['tableName'];
-            $status['status']=0;
+            $status['status'] = 0;
             if (isset($tableName)) {
                 $status = $this->dbConnection->deleteFromWhere($tableName, $where);
             }
@@ -214,4 +227,21 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
+    public function updatetablewhereAction()
+    {
+        try {
+            $data['status'] = 0;
+            $dataArray = $this->returnArrayFromInput();
+
+            if (is_array($dataArray)) {
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+            } else {
+                $data['message'] = ('could not find your request');
+            }
+            echo $this->returnJson($data);
+        } catch (Exception $exc) {
+            $exc->getMessage();
+        }
+        exit();
+    }
 }

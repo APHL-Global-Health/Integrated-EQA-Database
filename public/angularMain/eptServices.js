@@ -83,19 +83,31 @@ EptServices.service('EptServices', function () {
     }
     this.EptServiceObject.sliceRowFromDData = function (id, data) {
         if (isNumeric(Number(id))) {
-            if(angular.isArray(data)){
-               for(var i=0;i <data.length;i++){
-                   if(data[i]['id']==id){
-                       data.splice(i,1);
-                       break;
-                   }
-               }
+            if (angular.isArray(data)) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i]['id'] == id) {
+                        data.splice(i, 1);
+                        break;
+                    }
+                }
             }
 
             return data;
-        }else{
+        } else {
 
         }
+    }
+    this.EptServiceObject.EptFormatDate = function (cDate) {
+        var dd = cDate.getDate();
+        var mm = cDate.getMonth() + 1; //January is 0!
+        var yyyy = cDate.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        return  dd + '/' + mm + '/' + yyyy;
     }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
         try {

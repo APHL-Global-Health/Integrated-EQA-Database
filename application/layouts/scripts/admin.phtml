@@ -10,11 +10,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <title>e-PT Admin</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <script type="text/css">
-        body {
-            border-radius: 0px !important;
-        }
-    </script>
+
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <!--s<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" type="text/css" media="all">-->
@@ -54,7 +50,9 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
-
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>

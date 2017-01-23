@@ -104,20 +104,20 @@
                                     <div class="divider"></div>
                                     <div class="col-md-12 text-right btn-primary">
                                         <div class="clearfix ">&nbsp;</div>
-                                        <a  ng-click="samples.addPanelsToShipment(shipment)"
-                                            href="#addPanels" data-backdrop="false" data-toggle="modal">
+                                        <a ng-click="samples.dispatchShipment(shipment,'dipatchSipments')"
+                                           href="#addPanels" data-backdrop="false" data-toggle="modal">
                                             <i class="fa fa-upload"></i></a> &nbsp;
 
 
-                                        <a  ng-click="samples.receiveShipment(shipment,modal)"
-                                            href="#receiveShipment" data-backdrop="false" data-toggle="modal">
+                                        <a ng-click="samples.receiveShipment(shipment,'receiveShipments')"
+                                           href="#receiveShipments" data-backdrop="false" data-toggle="modal">
                                             <i class="fa fa-download"></i></a> &nbsp;
 
                                         <a href="" ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')">
                                             <i class="fa fa-remove"></i></a> &nbsp;
                                         <a href="">
                                             <i class="fa fa-edit"></i></a> &nbsp;
-                                        <a  ng-click="samples.addPanelsToShipment(shipment)"
+                                        <a ng-click="samples.addPanelsToShipment(shipment)"
                                            href="#addPanels" data-backdrop="false" data-toggle="modal">
                                             <i class="fa fa-plus-square"></i></a> &nbsp;
                                         <div class="clearfix ">&nbsp;</div>
@@ -126,7 +126,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="h4">Panels</div>
-                                    <table class="table" ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
+                                    <table class="table"
+                                           ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
                                         <tr>
                                             <th></th>
                                             <th>Panel Name</th>
@@ -191,7 +192,8 @@
 
                 <td nowrap>
                     <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-danger btn-sm" ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')"><i class="fa fa-remove"></i></a>
+                    <a class="btn btn-danger btn-sm"
+                       ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')"><i class="fa fa-remove"></i></a>
                     <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
                     <a class="btn btn-primary btn-sm" ng-click="samples.addPanelsToShipment(shipment)"
                        href="#addPanels" data-backdrop="false" data-toggle="modal"
@@ -283,7 +285,8 @@
         </div>
         <!-- /.modal-dialog -->
 
-        <div ng-include="../partialHTMLS/modals/receiveShipment.html" id="receiveShipment" ng-show="samples.showClickedShipment=='receiveShipment'">
+        <div ng-include="'../partialHTMLS/modals/receiveShipment.html'"
+             id="">
 
         </div>
     </div>
