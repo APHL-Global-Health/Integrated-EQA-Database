@@ -50,6 +50,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/nanobar.js'); ?>"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
@@ -98,8 +99,12 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">PT
-                                Bacteriology</a>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">Micro-Biology
+                                </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'lab-samples-manage'), 'default', true); ?>">PT
+                                Labs & Samples Manager</a>
                         </li>
                         <li class="divider"></li>
                         <li>

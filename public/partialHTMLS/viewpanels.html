@@ -73,56 +73,62 @@
                                     <p class="col-md-12">
 
                                     <div class="col-md-5 pull-left">
-                                        <h4 class="h4">Panel Details</h4>
-                                        <hr>
-                                        Panel Name :
-                                        <f>{{panel.panelName}}</f>
-                                        <br>
-                                        Panel Type :
-                                        <td>{{panel.panelType}}</td>
-
-                                        <br>Number of samples
-                                        <f class="">{{panel.numberOfPanels}}</f>
-                                        <br>
-                                        Shipment Number :
-                                        <f class="">{{panel.shipmentNumber}}</f>
-                                        <br>
-
-                                        Panel Label :
-                                        <td nowrap>{{panel.panelLabel}}</td>
-
-                                        <br>
-                                        Prepared By
-                                        <td nowrap>{{panel.preparedBy}}</td>
-                                        on
-                                        <td nowrap>{{panel.datePrepared}}</td>
-                                        <br>
-                                        Date Created :
-                                        <td nowrap>{{panel.datePrepared}}</td>
-                                        <br>
-
-                                        Shipment Status :
-                                        <td nowrap>{{panel.returnShipmentStatus(panel.shipmentStatus)}}</td>
-
-                                        <div class="text-left ">
-                                            <small class="text-gray"><i>{{panel.panelDatePrepared}}</i></small>
+                                        <div class="col-md-12 btn-primary">
+                                            <div class="clearfix">&nbsp;</div>
+                                            <div class="col-md-7 pull-left">Panel Details</div>
+                                            <div class="col-md-5 pull-right">
+                                                <a href="#"
+                                                   ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
+                                                    <i class="fa fa-remove  "></i></a> &nbsp;
+                                                <a href="">
+                                                    <i class="fa fa-edit  "></i></a> &nbsp;
+                                                <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                   href="#addSamples" data-backdrop="false" data-toggle="modal">
+                                                    <i class="fa fa-plus-square  "></i></a> &nbsp;
+                                                <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                   href="#addSamples" data-backdrop="false" data-toggle="modal">
+                                                    <i class="fa fa-unlock  "></i></a>
+                                            </div>
+                                            <div class="clearfix">&nbsp;</div>
                                         </div>
-                                        <div class="clearfix ">&nbsp;</div>
+                                        <div>
+                                            <blockquote class="small">
+                                                <div>
+                                                    Panel Name :
+                                                    <i>{{panel.panelName}}</i>
+                                                    <br>
+                                                    Panel Type :
+                                                    <i>{{panel.panelType}}</i>
 
-                                        <div class="col-md-12 text-right btn-primary">
-                                            <div class="clearfix">&nbsp;</div>
-                                            <a href="#"
-                                               ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
-                                                <i class="fa fa-remove  "></i></a> &nbsp;
-                                            <a href="">
-                                                <i class="fa fa-edit  "></i></a> &nbsp;
-                                            <a about="" ng-click="samples.addSamplesToPanel(panel)"
-                                               href="#addSamples" data-backdrop="false" data-toggle="modal">
-                                                <i class="fa fa-plus-square  "></i></a> &nbsp;
-                                            <a about="" ng-click="samples.addSamplesToPanel(panel)"
-                                               href="#addSamples" data-backdrop="false" data-toggle="modal">
-                                                <i class="fa fa-unlock  "></i></a> &nbsp;
-                                            <div class="clearfix">&nbsp;</div>
+                                                    <br>Number of samples
+                                                    <i class="">{{panel.numberOfSamples}}</i>
+                                                    <br>
+                                                    Shipment Number :
+                                                    <i class="">{{panel.shipmentNumber}}</i>
+                                                    <br>
+
+                                                    Panel Label :
+                                                    <i nowrap>{{panel.panelLabel}}</i>
+
+                                                    <br>
+                                                    Prepared By
+                                                    <i nowrap>{{panel.preparedBy}}</i>
+                                                    on
+                                                    <i nowrap>{{panel.panelDatePrepared}}</i>
+                                                    <br>
+                                                    Date Created :
+                                                    <i nowrap>{{panel.dateCreated}}</i>
+                                                    <br>
+
+                                                    Shipment Status :
+                                                    <i nowrap>{{panel.returnShipmentStatus(panel.panelStatus)}}</i>
+
+                                                    <div class="text-left ">
+                                                        <small class="text-gray"><i>{{panel.panelDatePrepared}}</i>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
                                         </div>
 
                                     </div>

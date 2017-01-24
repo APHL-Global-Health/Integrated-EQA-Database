@@ -68,64 +68,119 @@
                         </div>
                         <div id="{{shipment.id}}" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <p class="col-md-12">
+
 
                                 <div class="col-md-5 pull-left">
-                                    <h4 class="h4">Shipment Details</h4>
-                                    <hr>
-                                    Description :
-                                    <f>{{shipment.shipmentDsc}}</f>
-                                    <br>
-                                    Courier :
-                                    <td>{{shipment.courier}}</td>
-                                    , Number of samples
-                                    <f class="">{{shipment.numberOfPanels}}</f>
-                                    <br>
+                                    <div class="col-md-12 btn-primary">
+                                        <div class="clearfix">&nbsp;</div>
+                                        <div class="pull-left col-md-7">Shipping Details</div>
+                                        <div class="pull-right col-md-5">
+                                            <a ng-click="samples.dispatchShipment(shipment,'dipatchSipments')"
+                                               href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-upload"></i></a> &nbsp;
 
 
-                                    Round Id :
-                                    <td nowrap>{{shipment.roundId}}</td>
-                                    ,Created By
-                                    <td nowrap>{{shipment.createdBy}}</td>
-                                    <br>
-                                    Prepared By
-                                    <td nowrap>{{shipment.preparedBy}}</td>
-                                    on
-                                    <td nowrap>{{shipment.datePrepared}}</td>
-                                    <br>
+                                            <a ng-click="samples.receiveShipment(shipment,'receiveShipments')"
+                                               ng-disabled="shipment.shippingStatus==0"
+                                               href="#receiveShipments" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-download"></i></a> &nbsp;
 
-                                    Shipment Status :
-                                    <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+                                            <a href=""
+                                               ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')">
+                                                <i class="fa fa-remove"></i></a> &nbsp;
+                                            <a href="">
+                                                <i class="fa fa-edit"></i></a> &nbsp;
+                                            <a ng-click="samples.addPanelsToShipment(shipment)"
+                                               href="#addPanels" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-plus-square"></i></a> &nbsp;
 
-                                    <div class="text-left ">
-                                        <small class="text-gray"><i>{{shipment.datePrepared}}</i></small>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
                                     </div>
-                                    <div class="clearfix ">&nbsp;</div>
-                                    <div class="divider"></div>
-                                    <div class="col-md-12 text-right btn-primary">
-                                        <div class="clearfix ">&nbsp;</div>
-                                        <a ng-click="samples.dispatchShipment(shipment,'dipatchSipments')"
-                                           href="#addPanels" data-backdrop="false" data-toggle="modal">
-                                            <i class="fa fa-upload"></i></a> &nbsp;
+                                    <div>
+                                        <blockquote class="small">
+                                            <div>
+                                                Description :
+                                                <i>{{shipment.shipmentDsc}}</i>
+                                                <br>
+                                                Courier :
+                                                <i>{{shipment.courier}}</i>
+                                                <br> Number of samples
+                                                <i class=""><kbd>{{shipment.numberOfPanels}}</kbd></i>
+                                                <br>
 
 
-                                        <a ng-click="samples.receiveShipment(shipment,'receiveShipments')"
-                                           href="#receiveShipments" data-backdrop="false" data-toggle="modal">
-                                            <i class="fa fa-download"></i></a> &nbsp;
+                                                Round Id :
+                                                <i nowrap>{{shipment.roundId}}</i>
+                                                ,Created By
+                                                <i nowrap>{{shipment.createdBy}}</i>
+                                                <br>
+                                                Prepared By
+                                                <i nowrap>{{shipment.preparedBy}}</i>
+                                                ,
+                                                <i nowrap>{{shipment.datePrepared}}</i>
+                                                <br>
 
-                                        <a href="" ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')">
-                                            <i class="fa fa-remove"></i></a> &nbsp;
-                                        <a href="">
-                                            <i class="fa fa-edit"></i></a> &nbsp;
-                                        <a ng-click="samples.addPanelsToShipment(shipment)"
-                                           href="#addPanels" data-backdrop="false" data-toggle="modal">
-                                            <i class="fa fa-plus-square"></i></a> &nbsp;
-                                        <div class="clearfix ">&nbsp;</div>
+                                                Shipment Status :
+                                                <i nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}
+                                                </i>
+
+                                                <footer>
+                                                    <i> Date Created : <small>{{shipment.dateCreated}} </small></i>
+                                                </footer>
+                                            </div>
+                                        </blockquote>
+                                    </div>
+                                    <div>
+                                        <div class="text-capitalize h5 btn-primary">
+                                            <div class="clearfix">&nbsp;</div>
+                                            <div class="col-md-12 pull-left"> Dispatch Details</div>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                        <div>
+                                            <blockquote class="small">
+                                                <div>
+                                                    Addressed To : <i>{{shipment.addressedTo}}</i><br>
+                                                    Date Dispatched : <i>{{shipment.dateDispatched}}</i> <br>
+                                                    Temperature : <i>{{shipment.temperature}} </i><br>
+                                                    Courier : <i>{{shipment.dispatchCourier}} </i><br>
+                                                    Shipping Method : <i>{{shipment.shippingMethod}} </i><br>
+                                                                    Comments : <i>{{shipment.shippingMethod}}</i> <br>
+                                                    <footer>
+                                                        <i> Date Dispatched : {{shipment.dateDispatched}} </i>
+                                                    </footer>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-capitalize h5 btn-primary">
+                                            <div class="clearfix">&nbsp;</div>
+                                            <div class="col-md-12 pull-left"> Receiving Details</div>
+                                            <div class="clearfix">&nbsp;</div>
+                                        </div>
+                                        <div>
+                                            <blockquote class="small">
+                                                <div>
+                                                    Received By : <i>{{shipment.receivedBy}}</i><br>
+                                                    Samples Received : <i><kbd>{{shipment.panelsReceived}}</i></kbd> <br>
+                                                    Temperature : <i>{{shipment.tempOfReceiving}} </i><br>
+                                                    Storage : <i>{{shipment.storage}}</i> <br>
+
+                                                    Comments : <i>{{shipment.receiveComments}} </i><br>
+                                                    <footer>
+                                                        <i> Date Received : {{shipment.dateReceived}} </i>
+                                                    </footer>
+                                                </div>
+                                            </blockquote>
+                                        </div>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="h4">Panels</div>
+                                    <div class="h4">Panels
+                                        <small>{{samples.panelsToShipment.length}} Records</small>
+                                    </div>
                                     <table class="table"
                                            ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
                                         <tr>
@@ -140,12 +195,18 @@
                                             <td>{{$index+1}}</td>
                                             <td>{{panels.panelName}}</td>
                                             <td>{{panels.panelDatePrepared}}</td>
-                                            <td>{{panels.panelName}}</td>
-                                            <td>{{panels.deliveryStatus}}</td>
+                                            <td>{{panels.dateReceived}}</td>
+                                            <td>{{samples.returnShipmentStatus(panels.deliveryStatus)}}</td>
                                             <td>
                                                 <a href="#" class=""
                                                    ng-click="samples.deleteCustomRow(panels.id,'tbl_bac_panels_shipments')">
                                                     <i class="fa fa-remove"> </i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class=""
+                                                   ng-click="samples.deleteCustomRow(panels.id,'tbl_bac_panels_shipments')">
+                                                    <i class="fa fa-check"> </i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -285,9 +346,9 @@
         </div>
         <!-- /.modal-dialog -->
 
-        <div ng-include="'../partialHTMLS/modals/receiveShipment.html'"
-             id="">
-
+        <div ng-include="'../partialHTMLS/modals/receiveShipment.html'" id="">
+        </div>
+        <div ng-include="'../partialHTMLS/modals/dispatchShipment.html'" id="">
         </div>
     </div>
 
