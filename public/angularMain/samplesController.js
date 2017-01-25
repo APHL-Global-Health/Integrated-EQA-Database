@@ -340,7 +340,7 @@
         /*array to hold checked samples*/
         $scope.samples.samplePanelArray = [];
 
-        /*-------------------------------------------------------------------------START of functio for adding sample to a panel---------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------START of function  for adding sample to a panel---------------------------------------------------------------------------------*/
 
         $scope.samples.addSampleToArray = function (id, checker) {
             try {
