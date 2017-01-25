@@ -234,7 +234,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $dataArray = $this->returnArrayFromInput();
 
             if (is_array($dataArray)) {
+
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+                if($dataArray['tableName']=='tbl_bac_shipments'){
+
+                }
+
             } else {
                 $data['message'] = ('could not find your request');
             }

@@ -2,7 +2,7 @@
     <div class="bacteriology" ng-controller="samplesController">
 
         <div ng-controller="ReportController" ng-init="clickedTab = 'inLab'">
-            <div class="" ng-click="samples.createNanobar(100)">
+            <div class="">
                 <ul class="nav nav-tabs" ng-init="clickedTab = 'inLab'">
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'inLab'}">
                         <a href="" ng-click="clickedTab = 'inLab'">In-Lab Samples</a>
@@ -59,7 +59,7 @@
             </div>
             <div class="clearfix">&nbsp;</div>
 
-            <ng-include src='samples.linksLabObject.currentTemplate' onload="samples.showLoadingFile()">
+            <ng-include src='samples.linksLabObject.currentTemplate' onload="samples.createNanobar(100)">
 
             </ng-include>
 

@@ -21,10 +21,11 @@
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
                             <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>
-                            <div class="col-10">
-                                <input class="form-control" type="text" id="addressedTo" required name="addressedTo"
-                                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                       ng-model="samples.dispatchShipmentFormData.addressedTo">
+                            <div class="col-10" ng-init="samples.getAllLabs()">
+                                <select class="form-control"  id="addressedTo" required name="addressedTo"   ng-model="samples.dispatchShipmentFormData.addressedTo">
+                                    <option>--Select Lab--</option>
+                                    <option ng-repeat="lab in samples.labs" value="{{lab.id}}">{{lab.first_name}}</option>
+                                </select>
                             </div>
                             <small class="text-danger col-md-12"
                                    ng-show="dispatchShipmentForm.panelName.$invalid && !dispatchShipmentForm.panelName.$pristine">

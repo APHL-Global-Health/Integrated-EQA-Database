@@ -37,10 +37,12 @@ aside {
 {
     /*overflow: hidden;*/
     border-radius:0px !important;
+
 }
 .modal-dialog{
-    margin-right: 0;
-    margin-left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    z-index: 10000;
 }
 
 .full button span {

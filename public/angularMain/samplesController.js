@@ -56,11 +56,23 @@
             if (tableName == 'tbl_bac_sample_to_panel') {
                 $scope.samples.sampleToPanel = data.data;
             }
+            if (tableName == 'participant') {
+                $scope.samples.labs = data.data;
+            }
 
         }
 
         $scope.samples.shipmentsData = {};
         $scope.samples.panelsData = {};
+        $scope.samples.labs = {}
+        $scope.samples.getAllLabs = function () {
+
+            var where = {status: 'active'};
+            console.log(where)
+            $scope.samples.getAllSamples('participant', where);
+            console.log($scope.samples.labs);
+        }
+
         $scope.samples.getAllSamples = function (tableName, where) {
 
             try {
@@ -141,7 +153,7 @@
         }
 
         $scope.samples.samplesActivePage = function (link, module) {
-            console.log(link)
+           $scope.samples.createNanobar(0)
             if (module == 1) {
                 var currentTemplate = "../partialHTMLS/labOperations/" + link + ".html";
 
@@ -149,7 +161,7 @@
                     samplesLink: link,
                     currentTemplate: currentTemplate
                 }
-                console.log( $scope.samples.linksLabObject);
+                console.log($scope.samples.linksLabObject);
             } else {
                 var currentTemplate = "../partialHTMLS/" + link + ".html";
 

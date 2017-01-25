@@ -108,13 +108,14 @@ Class Main
                 if ($counter < sizeof($array)) {
                     $where .= ' and ';
 
-
                 }
 
 
             }
-            $where .= " and status " . $st . ' ';
-            $where .= ' order by id desc';
+            if (!isset($array['status'])) {
+                $where .= " and status " . $st . ' ';
+            }
+            //$where .= ' order by id desc';
             return $where;
 
         } else {
@@ -132,7 +133,8 @@ Class Main
                 $sql .= $this->returnWhereStatement($where);
             }
         }
-        // echo $sql;exit;
+//        echo $sql;
+//        exit;
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
