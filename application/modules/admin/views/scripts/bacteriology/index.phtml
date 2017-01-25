@@ -13,8 +13,8 @@
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
                         <a href="" ng-click="clickedTab = 'shipments'">Manage Shipments</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'packages'}">
-                        <a href="" ng-click="clickedTab = 'packages'">Manage Packages</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'lab'}">
+                        <a href="" ng-click="clickedTab = 'lab'">Manage Lab</a>
                     </li>
                     <li class='pull-right'>
                         <div class="dropdown">
@@ -59,7 +59,7 @@
             </div>
             <div class="clearfix">&nbsp;</div>
 
-            <ng-include src='samples.linksObject.currentTemplate' onload="samples.showLoadingFile()">
+            <ng-include src='samples.linksObject.currentTemplate' onload="samples.createNanobar(100)">
 
             </ng-include>
 

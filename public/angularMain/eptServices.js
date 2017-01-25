@@ -7,7 +7,7 @@ var EptServices = angular.module('ReportModule');
 EptServices.service('EptServices', function () {
     this.EptServiceObject = {};
     this.EptServiceObject.loaderStatus = {};
-    var itemsPerPage = 5;
+    var itemsPerPage = 10;
     var alphaNumHyDashRegExp = /^[a-zA-Z0-9\-\/]+$/;
     var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9\-\/]+$/;
     this.EptServiceObject.loaderStatus = {
@@ -107,7 +107,7 @@ EptServices.service('EptServices', function () {
         if (mm < 10) {
             mm = '0' + mm
         }
-        return  dd + '/' + mm + '/' + yyyy;
+        return  yyyy + '-' + mm + '-' + dd;
     }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
         try {

@@ -1,0 +1,121 @@
+<div id="dispatchShipments" class="modal fade" draggable="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="samples.hideShipmentModal()">&times;</button>
+                <h4 class="modal-title">Dispatch Shipment
+                    {{samples.currentShipment.shipmentName | capitalizeLetter}} :
+                    {{samples.currentShipment.shipmentDsc | capitalizeLetter}}
+
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container">
+                    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                    </div>
+                    <form class="form-horizontal " name="dispatchShipmentForm" novalidate="">
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
+                            <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>
+                            <div class="col-10" ng-init="samples.getAllLabs()">
+                                <select class="form-control"  id="addressedTo" required name="addressedTo"   ng-model="samples.dispatchShipmentFormData.addressedTo">
+                                    <option>--Select Lab--</option>
+                                    <option ng-repeat="lab in samples.labs" value="{{lab.id}}">{{lab.first_name}}</option>
+                                </select>
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.panelName.$invalid && !dispatchShipmentForm.panelName.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.dateReceived.$invalid && !dispatchShipmentForm.dateDispatched.$pristine }">
+                            <label for="dateDispatched" class="col-2 col-form-label">Date Dispatched</label>
+                            <div class="col-10">
+
+                                <date-picker name="dateDispatched" id="dateDispatched">
+
+                                </date-picker>
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine">
+                                Error : Required & correct date format
+                            </small>
+                        </div>
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.shippingMethod.$invalid && !dispatchShipmentForm.shippingMethod.$pristine }">
+                            <label for="shippingMethod" class="col-2 col-form-label">Shipping Method</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" id="shippingMethod" required
+                                       name="shippingMethod"
+                                       ng-model="samples.dispatchShipmentFormData.shippingMethod">
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.shippingMethod.$invalid && !dispatchShipmentForm.shippingMethod.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.dispatchComments.$invalid && !dispatchShipmentForm.dispatchComments.$pristine }">
+                            <label for="dispatchComments" class="col-2 col-form-label">Dispatch Comments</label>
+                            <div class="col-10">
+                                <textarea class="form-control" id="dispatchComments"  name="dispatchComments"
+                                          ng-model="samples.dispatchShipmentFormData.dispatchComments">
+
+                                </textarea>
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.dispatchComments.$invalid && !dispatchShipmentForm.dispatchComments.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.dispatchCourier.$invalid && !dispatchShipmentForm.dispatchCourier.$pristine }">
+                            <label for="type" class="col-2 col-form-label">Courier</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" id="type" required name="dispatchCourier"
+                                       ng-model="samples.dispatchShipmentFormData.dispatchCourier">
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.dispatchCourier.$invalid && !dispatchShipmentForm.dispatchCourier.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
+
+                        <div class="form-group row"
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.temperature.$invalid && !dispatchShipmentForm.temperature.$pristine }">
+                            <label for="temperature" class="col-2 col-form-label">Temperature</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" id="temperature" required name="temperature"
+                                       ng-model="samples.dispatchShipmentFormData.temperature">
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="dispatchShipmentForm.temperature.$invalid && !dispatchShipmentForm.temperature.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <button class="btn btn-success col-md-12 pull-right"
+                                    ng-disabled="dispatchShipmentForm.$invalid || samples.savingInProgress"
+                                    ng-click="samples.saveDispatchShipmentForm(samples.dispatchShipmentFormData)"
+                            >Save Dispatch <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+        <!--</div>-->
+    </div>
+    <!-- /.modal-content -->
+</div>

@@ -56,11 +56,23 @@
             if (tableName == 'tbl_bac_sample_to_panel') {
                 $scope.samples.sampleToPanel = data.data;
             }
+            if (tableName == 'participant') {
+                $scope.samples.labs = data.data;
+            }
 
         }
 
         $scope.samples.shipmentsData = {};
         $scope.samples.panelsData = {};
+        $scope.samples.labs = {}
+        $scope.samples.getAllLabs = function () {
+
+            var where = {status: 'active'};
+            console.log(where)
+            $scope.samples.getAllSamples('participant', where);
+            console.log($scope.samples.labs);
+        }
+
         $scope.samples.getAllSamples = function (tableName, where) {
 
             try {
@@ -134,17 +146,34 @@
             samplesLink: 'viewsamples',
             currentTemplate: '../partialHTMLS/viewsamples.html'
         }
-        $scope.samples.samplesActivePage = function (link) {
 
-            var currentTemplate = "../partialHTMLS/" + link + ".html";
+        $scope.samples.linksLabObject = {
+            samplesLink: 'viewReceivedSamples',
+            currentTemplate: '../partialHTMLS/labOperations/viewReceivedSamples.html'
+        }
 
-            $scope.samples.linksObject = {
-                samplesLink: link,
-                currentTemplate: currentTemplate
+        $scope.samples.samplesActivePage = function (link, module) {
+           $scope.samples.createNanobar(0)
+            if (module == 1) {
+                var currentTemplate = "../partialHTMLS/labOperations/" + link + ".html";
+
+                $scope.samples.linksLabObject = {
+                    samplesLink: link,
+                    currentTemplate: currentTemplate
+                }
+                console.log($scope.samples.linksLabObject);
+            } else {
+                var currentTemplate = "../partialHTMLS/" + link + ".html";
+
+                $scope.samples.linksObject = {
+                    samplesLink: link,
+                    currentTemplate: currentTemplate
+                }
             }
 
 
         }
+
         $scope.samples.sampleFormData.materialOrigin = 'NPHL';
         $scope.samples.panelFormData = {};
 
@@ -554,8 +583,49 @@
             }
 
         }
-        $scope.samples.updateWhere = function () {
+        $scope.samples.updateWhere = function (postedData) {
+            try {
 
+                var url = serverSamplesURL + 'updatetablewhere';
+                changeSavingSpinner(true);
+                $http.post(url, postedData)
+                    .success(function (response) {
+                        console.log(response)
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+
+                        if (response.status == 1) {
+                            $scope.samples.receiveShipmentFormData = {};
+                        }
+                    })
+                    .error(function (error) {
+                        changeSavingSpinner(false);
+                        console.log(error);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                    })
+            } catch (Exc) {
+                changeSavingSpinner(true);
+                console.log(Exc)
+            }
+        }
+        $scope.samples.saveDispatchShipmentForm = function (dispatchShipmentData) {
+            try {
+                dispatchShipmentData.dateDispatched = $scope.samples.getClickedDate();
+                dispatchShipmentData.shipmentStatus = 2;
+                console.log(dispatchShipmentData);
+
+
+                var postedData = {};
+                postedData.tableName = 'tbl_bac_shipments';
+                postedData.updateData = dispatchShipmentData;
+                postedData.where = {id: $scope.samples.currentShipment.id};
+                if (angular.isDefined(postedData)) {
+                    $scope.samples.updateWhere(postedData);
+                }
+
+            } catch (Exc) {
+                console.log(Exc);
+            }
         }
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
@@ -563,19 +633,14 @@
                 receiveShipmentData.shipmentStatus = 2;
                 console.log(receiveShipmentData);
 
-                var url = serverSamplesURL + 'updatetablewhere'
 
                 var postedData = {};
                 postedData.tableName = 'tbl_bac_shipments';
                 postedData.updateData = receiveShipmentData;
                 postedData.where = {id: $scope.samples.currentShipment.id};
-                $http.post(url, postedData)
-                    .success(function (response) {
-                        console.log(response);
-                    })
-                    .error(function (error) {
-                        console.log(error);
-                    })
+                if (angular.isDefined(postedData)) {
+                    $scope.samples.updateWhere(postedData);
+                }
 
             } catch (Exc) {
                 console.log(Exc);
@@ -586,6 +651,16 @@
 
         $scope.samples.showLoadingFile = function () {
 
+
+        }
+        $scope.samples.setDatePrepared = function () {
+
+            $scope.samples.panelFormData.panelDatePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+
+        }
+        $scope.samples.setExpectedDeliveryDate = function () {
+
+            $scope.samples.panelFormData.panelDateOfDelivery = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
 
         }
         $scope.samples.currenctClickedDate = new Date();
@@ -599,7 +674,19 @@
         }
 
         $scope.samples.getClickedDate = function () {
-            return EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+
+            var cDate = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+            $scope.samples.currenctClickedDate = cDate;
+            return cDate;
+
+        }
+
+        $scope.samples.createNanobar = function (len) {
+
+            var options = {};
+            var simplebar = new Nanobar();
+            simplebar.go(len);
+
         }
         /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
@@ -716,7 +803,11 @@
             return function (input) {
                 return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
             }
-        });
+        }).filter('spaceCapitals', function () {
+        return function (input) {
+            return input.replace(/([A-Z])/g, ' $1').trim();
+        }
+    })
 
     /*-------------------------------------------------------------------END if of the capitalizing filter-------------------------------------------------------------------------------------*/
 
