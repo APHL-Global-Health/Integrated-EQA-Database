@@ -108,19 +108,44 @@
             }
 
         }
-
-        $scope.samples.returnPanelStatus = function (panelStatus) {
+        $scope.samples.returnSampleStatus = function (panelStatus) {
             if (panelStatus == 1) {
-                return 'Shipped';
+                return 'Dispatched';
             }
             if (panelStatus == 0) {
                 return 'Unshipped';
             }
             if (panelStatus == 2) {
-                return 'Delivered Ok';
+                return 'Delivered';
             }
             if (panelStatus == 3) {
                 return 'Delivered Broken';
+            }
+            if (panelStatus == 4) {
+                return 'Delivered & Checked Ok';
+            }
+            if (panelStatus == 5) {
+                return 'Delivered & Rejected';
+            }
+        }
+        $scope.samples.returnPanelStatus = function (panelStatus) {
+            if (panelStatus == 1) {
+                return 'Dispatched';
+            }
+           else if (panelStatus == 0) {
+                return 'Unshipped';
+            }
+           else if (panelStatus == 2) {
+                return 'Delivered';
+            }
+          else  if (panelStatus == 3) {
+                return 'Delivered Broken';
+            }
+         else   if (panelStatus == 4) {
+                return 'Delivered & Checked';
+            }
+            else{
+                return "Unknown status"
             }
         }
         $scope.samples.returnShipmentStatus = function (shipmentStatus) {
@@ -153,7 +178,7 @@
         }
 
         $scope.samples.samplesActivePage = function (link, module) {
-           $scope.samples.createNanobar(0)
+            $scope.samples.createNanobar(0)
             if (module == 1) {
                 var currentTemplate = "../partialHTMLS/labOperations/" + link + ".html";
 
@@ -170,9 +195,15 @@
                     currentTemplate: currentTemplate
                 }
             }
-
+            console.log($scope.samples.linksObject)
 
         }
+
+        $scope.samples.addSampleGrading = function (sample) {
+            $scope.samples.samplesActivePage('addsamplegrading', 0);
+            $scope.samples.clickedSample = sample;
+        }
+
 
         $scope.samples.sampleFormData.materialOrigin = 'NPHL';
         $scope.samples.panelFormData = {};
@@ -433,7 +464,7 @@
                     var url = serverSamplesURL + 'insert';
                     changeSavingSpinner(true);
                     try {
-                        console.log(url)
+                        console.log(data)
                         $http.post(url, postedData)
                             .success(function (response) {
 
@@ -627,6 +658,20 @@
                 console.log(Exc);
             }
         }
+        $scope.samples.updateStatus = function (tableName, status, id) {
+            var postedData = {};
+            try {
+                postedData.updateData = {deliveryStatus: status};
+                postedData.tableName = tableName;
+                postedData.where = {id: id}
+                $scope.samples.updateWhere(postedData);
+
+                $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.id, 'tbl_bac_sample_to_panel');
+
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
                 receiveShipmentData.dateReceived = $scope.samples.getClickedDate();
@@ -688,6 +733,22 @@
             simplebar.go(len);
 
         }
+        //===========================================================================================================================================================
+        //--------------------------------------------------------------RECEIVE PANELS AND SHIPMENT FUNCTIONS START HERE---------------------------------------------
+        //===========================================================================================================================================================
+
+        $scope.receive = {}
+        $scope.receive.showPanelFullDetails = function (panelInfo) {
+            console.log(panelInfo)
+            $scope.receive.clickedPanel = panelInfo;
+            $scope.samples.getSampleFromPanel(panelInfo.id, 'tbl_bac_sample_to_panel');
+            $scope.samples.samplesActivePage('panelFullDetails', 1);
+
+        }
+
+        /*===================================================================END OF RECEIVE FUNCTION==================================================================*/
+
+
         /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
     }).controller('DatepickerPopupCtrl', function ($scope) {

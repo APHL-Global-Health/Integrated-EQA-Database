@@ -64,6 +64,7 @@
                         <th>Material Origin</th>
                         <!--                                <th>Date Saved</th>-->
                         <th>Blood Pack no</th>
+
                         <th>Collection Date</th>
                         <th></th>
                     </tr>
@@ -80,10 +81,11 @@
                         <td nowrap>{{sample.materialOrigin}}</td>
                         <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
                         <td nowrap>{{sample.bloodPackNo}}</td>
-                        <td nowrap>{{sample.collectionDate}}</td>
+                        <td nowrap><a href="#/" target="_self" ng-click="samples.addSampleGrading(sample)">Add grading</a> </td>
                         <td nowrap>
                             <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
+                            <button class="btn btn-warning btn-sm"><i class="fa fa-map-marker"></i></button>
                             <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
                         </td>
                     </tr>

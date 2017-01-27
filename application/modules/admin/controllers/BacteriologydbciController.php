@@ -146,6 +146,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->bloodPackNo = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'bloodPackNo');
                         $dataDB[$key]->materialOrigin = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'materialOrigin');
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
                     }
                 }
 
