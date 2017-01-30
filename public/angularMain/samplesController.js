@@ -207,7 +207,7 @@
 
         $scope.samples.sampleFormData.materialOrigin = 'NPHL';
         $scope.samples.panelFormData = {};
-
+        $scope.samples.shipmentFormData = {};
 
         $scope.samples.savingSpinner = '';
         $scope.samples.savingInProgress = false;
@@ -777,17 +777,31 @@
 
 
         }
+
+        $scope.samples.currenctClickedDate = new Date();
+
+        $scope.samples.sampleFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.panelFormData.panelDatePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.panelFormData.panelDateOfDelivery = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.shipmentFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+
         $scope.samples.setDatePrepared = function () {
 
             $scope.samples.panelFormData.panelDatePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
 
+        }
+        $scope.samples.setShipmentDatePrepared = function () {
+            $scope.samples.shipmentFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        }
+        $scope.samples.setSampleDatePrepared = function () {
+            $scope.samples.sampleFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
         }
         $scope.samples.setExpectedDeliveryDate = function () {
 
             $scope.samples.panelFormData.panelDateOfDelivery = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
 
         }
-        $scope.samples.currenctClickedDate = new Date();
+
         $scope.samples.changeCurrentDate = function (cDate) {
             try {
                 $scope.samples.currenctClickedDate = cDate;

@@ -1,20 +1,20 @@
 <div id='ng-app' ng-app="ReportModule" ng-cloak="">
     <div class="bacteriology" ng-controller="samplesController">
 
-        <div ng-controller="ReportController" ng-init="clickedTab = 'inLab'">
+        <div ng-controller="ReportController" ng-init="clickedTab = 'ReceivedSamples'">
             <div class="">
-                <ul class="nav nav-tabs" ng-init="clickedTab = 'inLab'">
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'inLab'}">
-                        <a href="" ng-click="clickedTab = 'inLab'">In-Lab Samples</a>
+                <ul class="nav nav-tabs" ng-init="clickedTab = 'ReceivedSamples'">
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'ReceivedSamples'}">
+                        <a href="" ng-click="clickedTab = 'ReceivedSamples'">In-Lab Samples</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'userSamples'}">
-                        <a href="" ng-click="clickedTab = 'userSamples'">Users & Samples</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'samplesToUsers'}">
+                        <a href="" ng-click="clickedTab = 'samplesToUsers'">Users & Samples</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'userSampleReport'}">
                         <a href="" ng-click="clickedTab = 'userSampleReport'">Reports</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'notification'}">
-                        <a href="" ng-click="clickedTab = 'notification'">Notifications</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'notifications'}">
+                        <a href="" ng-click="clickedTab = 'notifications'">Notifications</a>
                     </li>
                     <li class='pull-right'>
                         <div class="dropdown">
@@ -22,9 +22,9 @@
                             <button class="text-capitalize btn btn-default btn-sm dropdown-toggle" type="button"
                                     id="menu1" data-toggle="dropdown">{{clickedTab|spaceCapitals|capitalizeLetter}} &nbsp;
                                 <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" >
 
-                                <li role="presentation">
+                                <li role="presentation" ng-show="clickedTab!='notifications'">
                                     <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab,1)"><i
                                             class="fa fa-fw fa-save"></i> Add {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
 
@@ -34,7 +34,7 @@
                                             class="fa fa-fw fa-folder"></i> View {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
 
                                 </li>
-                                <li role="presentation">
+                                <li role="presentation" ng-show="clickedTab!='notifications'">
                                     <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab,1)"><i
                                             class="fa fa-fw fa-search-plus"></i>
                                         {{clickedTab|spaceCapitals|capitalizeLetter}} Report </a>
