@@ -47,20 +47,27 @@
             <div class="form-group row"
                  ng-class="{ 'has-error'  : shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine }">
                 <label for="type" class="col-2 col-form-label">Date Prepared</label>
-                <div class="col-10">
-                    <input class="form-control" type="date" id="type" required name="datePrepared"
+                <div class="col-10" ng-click="samples.setShipmentDatePrepared()">
+
+
+                    <input class="form-control" type="text" ng-hide="true" id="" required name="datePrepared"
                            ng-model="samples.shipmentFormData.datePrepared">
+
+                    <date-picker name="" id="datePrepared">
+
+                    </date-picker>
+
+                    <small class="text-danger col-md-12"
+                           ng-show="shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
                 </div>
-                <small class="text-danger col-md-12"
-                       ng-show="shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine">
-                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                </small>
             </div>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine }">
-                <label for="type" class="col-2 col-form-label">Round</label>
+                <label for="round" class="col-2 col-form-label">Round</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="type" required name="roundId"
+                    <input class="form-control" type="text" id="round" required name="roundId"
                            ng-model="samples.shipmentFormData.roundId">
                 </div>
                 <small class="text-danger col-md-12"

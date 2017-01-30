@@ -16,7 +16,13 @@ EptServices.service('EptServices', function () {
         fbStatus: false,
         fbbgColor: 'alert-success'
     }
+    this.EptServiceObject.returnBarcode = function () {
+        var barcode = Math.random().toString();
 
+        barcode = barcode.substring(2)
+
+        return barcode;
+    }
 
     this.EptServiceObject.returnAlphaNumHyDashSpaceRegExp = function () {
         return alphaNumHyDashSpaceRegExp;
@@ -107,7 +113,7 @@ EptServices.service('EptServices', function () {
         if (mm < 10) {
             mm = '0' + mm
         }
-        return  yyyy + '-' + mm + '-' + dd;
+        return yyyy + '-' + mm + '-' + dd;
     }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
         try {

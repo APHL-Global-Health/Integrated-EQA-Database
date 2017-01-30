@@ -1,0 +1,19 @@
+<div id="barcodeModal" class="modal fade" draggable="true" >
+
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+               Barcode {{samples.currentBarcodeData.panelName}}
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="samples.hideShipmentModal()">&times;</button>
+
+            </div>
+            <div class="modal-body text-center">
+                <div id="demo" class="col-md-offset-2">
+
+                </div>
+                <a href="#"><i class="fa fa-print" ng-click="samples.printDiv('demo')"></i> </a>
+            </div>
+        </div>
+    </div>
+</div>

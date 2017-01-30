@@ -108,30 +108,55 @@
             }
 
         }
-
-        $scope.samples.returnPanelStatus = function (panelStatus) {
+        $scope.samples.returnSampleStatus = function (panelStatus) {
             if (panelStatus == 1) {
-                return 'Shipped';
+                return 'Delivered';
             }
             if (panelStatus == 0) {
                 return 'Unshipped';
             }
             if (panelStatus == 2) {
-                return 'Delivered Ok';
+                return 'Dispatched';
             }
             if (panelStatus == 3) {
                 return 'Delivered Broken';
             }
+            if (panelStatus == 4) {
+                return 'Delivered & Checked Ok';
+            }
+            if (panelStatus == 5) {
+                return 'Delivered & Rejected';
+            }
+        }
+        $scope.samples.returnPanelStatus = function (panelStatus) {
+            if (panelStatus == 2) {
+                return 'Dispatched';
+            }
+            else if (panelStatus == 0) {
+                return 'Unshipped';
+            }
+            else if (panelStatus == 1) {
+                return 'Delivered';
+            }
+            else if (panelStatus == 3) {
+                return 'Delivered Broken';
+            }
+            else if (panelStatus == 4) {
+                return 'Delivered & Checked';
+            }
+            else {
+                return "Unknown status"
+            }
         }
         $scope.samples.returnShipmentStatus = function (shipmentStatus) {
 
-            if (shipmentStatus == 1) {
+            if (shipmentStatus == 2) {
                 return 'Dispatched';
             }
             if (shipmentStatus == 0) {
                 return 'In Lab';
             }
-            if (shipmentStatus == 2) {
+            if (shipmentStatus == 1) {
                 return 'Delivered Ok';
             }
             if (shipmentStatus == 3) {
@@ -153,7 +178,7 @@
         }
 
         $scope.samples.samplesActivePage = function (link, module) {
-           $scope.samples.createNanobar(0)
+            $scope.samples.createNanobar(0)
             if (module == 1) {
                 var currentTemplate = "../partialHTMLS/labOperations/" + link + ".html";
 
@@ -170,13 +195,19 @@
                     currentTemplate: currentTemplate
                 }
             }
-
+            console.log($scope.samples.linksObject)
 
         }
 
+        $scope.samples.addSampleGrading = function (sample) {
+            $scope.samples.samplesActivePage('addsamplegrading', 0);
+            $scope.samples.clickedSample = sample;
+        }
+
+
         $scope.samples.sampleFormData.materialOrigin = 'NPHL';
         $scope.samples.panelFormData = {};
-
+        $scope.samples.shipmentFormData = {};
 
         $scope.samples.savingSpinner = '';
         $scope.samples.savingInProgress = false;
@@ -340,7 +371,7 @@
         /*array to hold checked samples*/
         $scope.samples.samplePanelArray = [];
 
-        /*-------------------------------------------------------------------------START of functio for adding sample to a panel---------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------START of function  for adding sample to a panel---------------------------------------------------------------------------------*/
 
         $scope.samples.addSampleToArray = function (id, checker) {
             try {
@@ -428,12 +459,19 @@
             try {
                 if (angular.isDefined(tableName) && angular.isDefined(data)) {
                     var postedData = {};
+
+
+                    if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
+                        data.barcode = EptServices.EptServiceObject.returnBarcode();
+                    }
                     postedData.data = data;
                     postedData.tableName = tableName;
+                    console.log(data);
+
                     var url = serverSamplesURL + 'insert';
                     changeSavingSpinner(true);
                     try {
-                        console.log(url)
+                        console.log(data)
                         $http.post(url, postedData)
                             .success(function (response) {
 
@@ -627,6 +665,92 @@
                 console.log(Exc);
             }
         }
+        $scope.samples.updateStatus = function (tableName, status, id) {
+            var postedData = {};
+            try {
+                postedData.updateData = {deliveryStatus: status};
+                postedData.tableName = tableName;
+                postedData.where = {id: id}
+                $scope.samples.updateWhere(postedData);
+
+                $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.id, 'tbl_bac_sample_to_panel');
+
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
+        $scope.samples.panelReceived = function (panelId, table, status) {
+            try {
+                if (angular.isDefined(panelId)) {
+                    var postedData = {
+                        where: {panelId: panelId},
+                        tableName: table,
+                        updateData: {deliveryStatus: status}
+                    }
+                    console.log(postedData)
+                    $scope.samples.updateWhere(postedData);
+
+                    $scope.samples.getAllSamples('tbl_bac_panel_mst');
+
+                }
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+        $scope.samples.currentBarcodeData = 'test code'
+
+        $scope.samples.showBarcode = function () {
+            // try {
+            //     $("#barcode").barcode("124512652", "ean13",
+            //         {barWidth: 2, barHeight: 50}
+            //     );
+            //     console.log($scope.samples.currentBarcodeData + ' works')
+            // } catch (Exc) {
+            //     console.log(Exc)
+            // }
+        }
+        $scope.samples.printDiv = function (div) {
+            // $("#demo").clone().printThis(
+            //     {
+            //         debug: true,        //     * show the iframe for debugging
+            //         importCSS: true,           // * import page CSS
+            //         importStyle: false,         //* import style tags
+            //         printContainer: true,       //* grab outer container as well as the contents of the selector
+            //         // loadCSS: "path/to/my.css",  //* path to additional css file - use an array [] for multiple
+            //         pageTitle: "",           //   * add title to print page
+            //         removeInline: false,       // * remove all inline styles from print elements
+            //         printDelay: 333,            //* variable print delay; depending on complexity a higher value may be necessary
+            //         header: null,               //* prefix to html
+            //         footer: null,               //* postfix to html
+            //         base: false,                //* preserve the BASE tag, or accept a string for the URL
+            //         formValues: true,           //* preserve input/form values
+            //         canvas: false,
+            //     }
+            // );
+            console.log('called hidden')
+            $scope.samples.showBarcode = false;
+            $("#demo").print();
+            console.log(div)
+        }
+        $scope.samples.showBarcode = false;
+        $scope.samples.generateBarcode = function (data) {
+            try {
+                $scope.samples.showBarcode = true;
+                $timeout(function () {
+                    $scope.samples.currentBarcodeData = data;
+
+                    var barcodeString = data.barcode;
+                    console.log(barcodeString)
+                    $("#demo").barcode(barcodeString, "ean13",
+                        {barWidth: 3, barHeight: 60}
+                    );
+                }, 300)
+
+
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
                 receiveShipmentData.dateReceived = $scope.samples.getClickedDate();
@@ -653,17 +777,31 @@
 
 
         }
+
+        $scope.samples.currenctClickedDate = new Date();
+
+        $scope.samples.sampleFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.panelFormData.panelDatePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.panelFormData.panelDateOfDelivery = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        $scope.samples.shipmentFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+
         $scope.samples.setDatePrepared = function () {
 
             $scope.samples.panelFormData.panelDatePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
 
+        }
+        $scope.samples.setShipmentDatePrepared = function () {
+            $scope.samples.shipmentFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
+        }
+        $scope.samples.setSampleDatePrepared = function () {
+            $scope.samples.sampleFormData.datePrepared = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
         }
         $scope.samples.setExpectedDeliveryDate = function () {
 
             $scope.samples.panelFormData.panelDateOfDelivery = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
 
         }
-        $scope.samples.currenctClickedDate = new Date();
+
         $scope.samples.changeCurrentDate = function (cDate) {
             try {
                 $scope.samples.currenctClickedDate = cDate;
@@ -688,6 +826,22 @@
             simplebar.go(len);
 
         }
+        //===========================================================================================================================================================
+        //--------------------------------------------------------------RECEIVE PANELS AND SHIPMENT FUNCTIONS START HERE---------------------------------------------
+        //===========================================================================================================================================================
+
+        $scope.receive = {}
+        $scope.receive.showPanelFullDetails = function (panelInfo) {
+            console.log(panelInfo)
+            $scope.receive.clickedPanel = panelInfo;
+            $scope.samples.getSampleFromPanel(panelInfo.id, 'tbl_bac_sample_to_panel');
+            $scope.samples.samplesActivePage('panelFullDetails', 1);
+
+        }
+
+        /*===================================================================END OF RECEIVE FUNCTION==================================================================*/
+
+
         /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
     }).controller('DatepickerPopupCtrl', function ($scope) {

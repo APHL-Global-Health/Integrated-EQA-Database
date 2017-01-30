@@ -1,0 +1,62 @@
+<div class="panel panel-default bg-info">
+    <div class="h4 border-bottom col-md-12">
+        <br>
+        {{receive.clickedPanel.panelLabel}} {{receive.clickedPanel.panelName}}
+        <small><i>-({{receive.clickedPanel.panelDatePrepared}}) : {{samples.sampleToPanel.length}} Samples</i></small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button class="pull-right label label-success text-gray"
+                ng-click="samples.samplesActivePage('viewReceivedSamples',1)">Back
+        </button>
+    </div>
+
+
+    <input class="form-control search-input" ng-model="search" placeholder="search sample">
+
+    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Batch Name</th>
+            <th>Date Created</th>
+            <th>Date Prepared</th>
+            <th>Date Delivered</th>
+            <th>Blood Pack #</th>
+            <th>Material Origin</th>
+            <th>Status</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" ng-repeat="sample in samples.sampleToPanel">
+            <td>{{$index+1}}</td>
+            <td>{{sample.batchName}}</td>
+            <td nowrap>{{sample.dateCreated}}</td>
+            <td nowrap>{{sample.dateDelivered}}</td>
+            <td>{{sample.datePrepared}}</td>
+
+            <td>{{sample.bloodPackNo}}</td>
+            <td>{{sample.materialOrigin}}</td>
+            <td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+                   ng-click="samples.updateStatus('tbl_bac_sample_to_panel',5,sample.id)">
+                    <i class="fa fa-remove">
+
+                    </i>
+                </button>&nbsp; | &nbsp;
+                <button class="btn btn-success btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+                   ng-click="samples.updateStatus('tbl_bac_sample_to_panel',4,sample.id)">
+                    <i class="fa fa-check">
+
+                    </i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
