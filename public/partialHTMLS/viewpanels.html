@@ -88,6 +88,10 @@
                                                 <a about="" ng-click="samples.addSamplesToPanel(panel)"
                                                    href="#addSamples" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-unlock  "></i></a>
+                                                &nbsp;
+                                                <a about="" ng-click="samples.generateBarcode(panel)"
+                                                   href="#barcodeModal" data-backdrop="false" data-toggle="modal">
+                                                    <i class="fa fa-barcode  "></i></a>
                                             </div>
                                             <div class="clearfix">&nbsp;</div>
                                         </div>
@@ -219,6 +223,10 @@
                             <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"
                             ><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-sm" href="#barcodeModal" data-backdrop="false"
+                               data-toggle="modal"
+                               ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
+                            </a>
                         </td>
                     </tr>
 

@@ -110,13 +110,13 @@
         }
         $scope.samples.returnSampleStatus = function (panelStatus) {
             if (panelStatus == 1) {
-                return 'Dispatched';
+                return 'Delivered';
             }
             if (panelStatus == 0) {
                 return 'Unshipped';
             }
             if (panelStatus == 2) {
-                return 'Delivered';
+                return 'Dispatched';
             }
             if (panelStatus == 3) {
                 return 'Delivered Broken';
@@ -129,34 +129,34 @@
             }
         }
         $scope.samples.returnPanelStatus = function (panelStatus) {
-            if (panelStatus == 1) {
+            if (panelStatus == 2) {
                 return 'Dispatched';
             }
-           else if (panelStatus == 0) {
+            else if (panelStatus == 0) {
                 return 'Unshipped';
             }
-           else if (panelStatus == 2) {
+            else if (panelStatus == 1) {
                 return 'Delivered';
             }
-          else  if (panelStatus == 3) {
+            else if (panelStatus == 3) {
                 return 'Delivered Broken';
             }
-         else   if (panelStatus == 4) {
+            else if (panelStatus == 4) {
                 return 'Delivered & Checked';
             }
-            else{
+            else {
                 return "Unknown status"
             }
         }
         $scope.samples.returnShipmentStatus = function (shipmentStatus) {
 
-            if (shipmentStatus == 1) {
+            if (shipmentStatus == 2) {
                 return 'Dispatched';
             }
             if (shipmentStatus == 0) {
                 return 'In Lab';
             }
-            if (shipmentStatus == 2) {
+            if (shipmentStatus == 1) {
                 return 'Delivered Ok';
             }
             if (shipmentStatus == 3) {
@@ -459,8 +459,15 @@
             try {
                 if (angular.isDefined(tableName) && angular.isDefined(data)) {
                     var postedData = {};
+
+
+                    if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
+                        data.barcode = EptServices.EptServiceObject.returnBarcode();
+                    }
                     postedData.data = data;
                     postedData.tableName = tableName;
+                    console.log(data);
+
                     var url = serverSamplesURL + 'insert';
                     changeSavingSpinner(true);
                     try {
@@ -670,6 +677,78 @@
 
             } catch (Exception) {
                 console.log(Exception)
+            }
+        }
+        $scope.samples.panelReceived = function (panelId, table, status) {
+            try {
+                if (angular.isDefined(panelId)) {
+                    var postedData = {
+                        where: {panelId: panelId},
+                        tableName: table,
+                        updateData: {deliveryStatus: status}
+                    }
+                    console.log(postedData)
+                    $scope.samples.updateWhere(postedData);
+
+                    $scope.samples.getAllSamples('tbl_bac_panel_mst');
+
+                }
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+        $scope.samples.currentBarcodeData = 'test code'
+
+        $scope.samples.showBarcode = function () {
+            // try {
+            //     $("#barcode").barcode("124512652", "ean13",
+            //         {barWidth: 2, barHeight: 50}
+            //     );
+            //     console.log($scope.samples.currentBarcodeData + ' works')
+            // } catch (Exc) {
+            //     console.log(Exc)
+            // }
+        }
+        $scope.samples.printDiv = function (div) {
+            // $("#demo").clone().printThis(
+            //     {
+            //         debug: true,        //     * show the iframe for debugging
+            //         importCSS: true,           // * import page CSS
+            //         importStyle: false,         //* import style tags
+            //         printContainer: true,       //* grab outer container as well as the contents of the selector
+            //         // loadCSS: "path/to/my.css",  //* path to additional css file - use an array [] for multiple
+            //         pageTitle: "",           //   * add title to print page
+            //         removeInline: false,       // * remove all inline styles from print elements
+            //         printDelay: 333,            //* variable print delay; depending on complexity a higher value may be necessary
+            //         header: null,               //* prefix to html
+            //         footer: null,               //* postfix to html
+            //         base: false,                //* preserve the BASE tag, or accept a string for the URL
+            //         formValues: true,           //* preserve input/form values
+            //         canvas: false,
+            //     }
+            // );
+            console.log('called hidden')
+            $scope.samples.showBarcode = false;
+            $("#demo").print();
+            console.log(div)
+        }
+        $scope.samples.showBarcode = false;
+        $scope.samples.generateBarcode = function (data) {
+            try {
+                $scope.samples.showBarcode = true;
+                $timeout(function () {
+                    $scope.samples.currentBarcodeData = data;
+
+                    var barcodeString = data.barcode;
+                    console.log(barcodeString)
+                    $("#demo").barcode(barcodeString, "ean13",
+                        {barWidth: 3, barHeight: 60}
+                    );
+                }, 300)
+
+
+            } catch (Exc) {
+                console.log(Exc)
             }
         }
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {

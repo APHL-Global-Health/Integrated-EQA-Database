@@ -87,6 +87,9 @@
                             <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
                             <button class="btn btn-warning btn-sm"><i class="fa fa-map-marker"></i></button>
                             <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
+                            <a class="btn btn-primary btn-sm"   href="#barcodeModal" data-backdrop="false" data-toggle="modal"
+                               ng-click="samples.generateBarcode(sample)"><i class="fa fa-barcode"></i>
+                            </a>
                         </td>
                     </tr>
 
@@ -96,6 +99,7 @@
                 <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
                                          boundary-links="true">
                 </dir-pagination-controls>
+
 
             </div>
 

@@ -2,7 +2,8 @@
     <div class="h4 border-bottom col-md-12">
         <br>
         {{receive.clickedPanel.panelLabel}} {{receive.clickedPanel.panelName}}
-        <small><i>-({{receive.clickedPanel.panelDatePrepared}})</i></small>
+        <small><i>-({{receive.clickedPanel.panelDatePrepared}}) : {{samples.sampleToPanel.length}} Samples</i></small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
         <button class="pull-right label label-success text-gray"
                 ng-click="samples.samplesActivePage('viewReceivedSamples',1)">Back
         </button>
@@ -41,13 +42,13 @@
             <td>{{sample.materialOrigin}}</td>
             <td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>
             <td>
-                <button class="label label-danger" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+                <button class="btn btn-danger btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
                    ng-click="samples.updateStatus('tbl_bac_sample_to_panel',5,sample.id)">
                     <i class="fa fa-remove">
 
                     </i>
                 </button>&nbsp; | &nbsp;
-                <button class="label label-success" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+                <button class="btn btn-success btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
                    ng-click="samples.updateStatus('tbl_bac_sample_to_panel',4,sample.id)">
                     <i class="fa fa-check">
 

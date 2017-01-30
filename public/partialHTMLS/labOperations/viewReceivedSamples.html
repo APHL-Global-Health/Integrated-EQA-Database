@@ -1,13 +1,17 @@
 <div class="">
-    <div class="h4 border-bottom col-md-12">Panels & Samples in Lab</div>
-    <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+    <div class="h4 border-bottom col-md-12">
+        Panels & Samples in Lab
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+
+    <div class="col-md-1 pull-right"><a href="#" class=" label label-default btn-sm"
                                         ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
-            class="fa fa-refresh"></i></a>
+            class="fa fa-refresh"></i>
+    </a>
         &nbsp;
     </div>
-
+    </div>
     <div>
-        <table class="table table-striped table-condensed table-bordered">
+        <table class="table table-striped table-condensed table-bordered" id="printableTable">
             <thead>
             <tr>
                 <th>#.</th>
@@ -21,6 +25,7 @@
                 <th>Status</th>
                 <!--                                <th>Date Saved</th>-->
                 <th>Ship't Number</th>
+                <th>Lab ID</th>
                 <th>Created on</th>
                 <th></th>
             </tr>
@@ -37,15 +42,18 @@
                 <td nowrap>{{samples.returnPanelStatus(panel.panelStatus)}}</td>
                 <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
                 <td nowrap>{{panel.shipmentNo}}</td>
+                <td nowrap>{{panel.lab}}</td>
                 <td nowrap>{{panel.dateCreated}}</td>
                 <td nowrap>
                     <a class="btn btn-danger btn-sm"
-                       ng-click="samples.panelReceived(panel.id,'tbl_bac_panel_mst')"><i
+                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',5)"><i
                             class="fa fa-thumbs-down"></i>
                     </a>
                     <a class="btn btn-success btn-sm"
-                       ng-click="samples.panelReceived(panel.id,'tbl_bac_panel_mst')"><i
-                            class="fa fa-thumbs-up"></i>
+                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',5)"><i class="fa fa-thumbs-up"></i>
+                    </a>
+                    <a class="btn btn-primary btn-sm"   href="#barcodeModal" data-backdrop="false" data-toggle="modal"
+                       ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
                     </a>
 
                 </td>
@@ -54,10 +62,16 @@
             </tbody>
         </table>
 
+<div id="demos">
+
+</div>
         <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
                                  direction-links="true"
                                  boundary-links="true">
         </dir-pagination-controls>
+        <div ng-include="'../partialHTMLS/barcodePrinting.html'" onload="samples.showBarcode()">
+
+        </div>
     </div>
 
 

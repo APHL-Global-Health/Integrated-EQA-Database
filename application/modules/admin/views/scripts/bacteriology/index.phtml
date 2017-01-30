@@ -62,8 +62,11 @@
             <ng-include src='samples.linksObject.currentTemplate' onload="samples.createNanobar(100)">
 
             </ng-include>
+            <div ng-if="samples.showBarcode">
+                <div ng-include="'../partialHTMLS/barcodePrinting.html'">
 
-
+                </div>
+            </div>
 
 
             <!--        <div class="col-md-{{samples.menuLength}} side-menu">-->
