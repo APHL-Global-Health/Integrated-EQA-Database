@@ -101,7 +101,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
-    public function returnValueWhere($id, $tableName, $col)
+    public function returnValueWhere($id, $tableName)
     {
         $returnArray = '';
         $whereId['id'] = $id;
@@ -114,7 +114,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                     foreach ($dataDB as $key => $value) {
                         // array_push($returnArray,$value);
-                        $returnArray = $value->$col;
+                        $returnArray = $value;
                     }
                 } catch (Exception $e) {
                     return '';
@@ -123,7 +123,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             }
         }
-        return $returnArray;
+        return (array)$returnArray;
         exit();
     }
 
@@ -138,13 +138,18 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 foreach ($dataDB as $key => $value) {
                     if ($tableName == 'tbl_bac_panels_shipments') {
-                        $dataDB[$key]->panelName = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelName');
-                        $dataDB[$key]->panelDatePrepared = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelDatePrepared');
+                        $panel =  $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+
+
+                        $dataDB[$key]->panelName = $panel['panelName'];
+                        $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
+
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
-                        $dataDB[$key]->batchName = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'batchName');
-                        $dataDB[$key]->datePrepared = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'datePrepared');
-                        $dataDB[$key]->bloodPackNo = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'bloodPackNo');
-                        $dataDB[$key]->materialOrigin = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'materialOrigin');
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
                     }
@@ -248,6 +253,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         } catch (Exception $exc) {
             $exc->getMessage();
         }
+        exit();
+    }
+    public function getusersessionAction(){
+        print_r($this->dbConnection->getUserSession());
         exit();
     }
 }

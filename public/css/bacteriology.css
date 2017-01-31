@@ -74,3 +74,15 @@ aside {
     border-bottom: 1px lightgrey solid;
 
 }
+table .btn-sm{
+    height: 25px !important;
+    /*margin: 0px!important;*/
+    padding-top:1px!important;
+}
+.side-info a{
+    color:white !important;
+}
+.side-info a:hover{
+    color:white !important;
+    text-decoration: underline;
+}

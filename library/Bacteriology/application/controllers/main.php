@@ -24,6 +24,7 @@ Class Main
     public function createInsertStatement($tableName, $dataArray)
     {
         $query['status'] = false;
+        $dataArray['createdBy'] = $this->getUserSession();
         try {
             $query = "insert into " . $tableName . " ( ";
             $counter = 0;
@@ -96,7 +97,7 @@ Class Main
 
         $where = ' where ';
         if (is_array($array)) {
-            $st = isset($array['status']) ? '=' . $array['status'] : '<' . '4 ';
+            $st = isset($array['status']) ? '=' . $array['status'] : '<' . '7 ';
 
 
             $counter = 0;
@@ -223,6 +224,7 @@ Class Main
     public function returnUpdateStatement($updateInfo)
     {
         try {
+            $updateInfo['lastUpdatePerson'] = $this->getUserSession();
             $updateStatement = ' ';
             if (sizeof($updateInfo) > 0) {
                 $updateStatement .= ' set ';
@@ -247,6 +249,16 @@ Class Main
 
         }
 
+    }
+
+    public function getUserSession()
+    {
+        if(isset($_SESSION)) {
+            return $_SESSION['administrators']['admin_id'];
+        }
+        else{
+            return null;
+        }
     }
 
 }

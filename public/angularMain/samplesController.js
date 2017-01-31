@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http, serverSamplesURL, EptServices, $timeout) {
+    samplesModule.controller('samplesController', function ($scope, $http,$location, serverSamplesURL, EptServices, $timeout) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -32,6 +32,9 @@
         function changeFb(data) {
             $scope.samples.feedbackObject = data;
             $('.alert').show('slow');
+
+           //  $(window).scrollTop($('#alert').offset().top);
+            $("#alert").focus();
         }
 
         $scope.samples.samplesData = {};
@@ -119,7 +122,7 @@
                 return 'Dispatched';
             }
             if (panelStatus == 3) {
-                return 'Delivered Broken';
+                return 'Delivered ';
             }
             if (panelStatus == 4) {
                 return 'Delivered & Checked Ok';
@@ -132,16 +135,16 @@
             if (panelStatus == 2) {
                 return 'Dispatched';
             }
-            else if (panelStatus == 0) {
+            if (panelStatus == 0) {
                 return 'Unshipped';
             }
-            else if (panelStatus == 1) {
+            if (panelStatus == 1) {
                 return 'Delivered';
             }
-            else if (panelStatus == 3) {
-                return 'Delivered Broken';
+            if (panelStatus == 3) {
+                return 'Delivered ';
             }
-            else if (panelStatus == 4) {
+            if (panelStatus == 4) {
                 return 'Delivered & Checked';
             }
             else {
@@ -160,7 +163,7 @@
                 return 'Delivered Ok';
             }
             if (shipmentStatus == 3) {
-                return 'Delivered Broken';
+                return 'Delivered ';
             } else {
                 return 'Unknown';
             }
@@ -198,7 +201,29 @@
             console.log($scope.samples.linksObject)
 
         }
-
+        $scope.samples.returnPanelColorFromStatus = function (status, type) {
+            console.log(status)
+            if (status == 0) {
+                return type == 1 ? 'panel-primary' : 'btn-primary';
+            }
+            else if (status == 1) {
+                return type == 1 ? 'panel-primary' : 'btn-primary';
+            } else if (status == 2) {
+                return type == 1 ? 'panel-info' : 'btn-info';
+            }
+            else if (status == 3) {
+                return type == 1 ? 'panel-warning' : 'btn-warning';
+            }
+            else if (status == 4) {
+                return type == 1 ? 'panel-success' : 'btn-success';
+            }
+            else if (status == 5) {
+                return type == 1 ? 'panel-danger' : 'btn-danger';
+            }
+            else {
+                return type == 1 ? 'panel-default' : 'btn-default';
+            }
+        }
         $scope.samples.addSampleGrading = function (sample) {
             $scope.samples.samplesActivePage('addsamplegrading', 0);
             $scope.samples.clickedSample = sample;
@@ -459,42 +484,57 @@
             try {
                 if (angular.isDefined(tableName) && angular.isDefined(data)) {
                     var postedData = {};
+                    if (angular.isUndefined(data.id)) {
+
+                        if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
+                            data.barcode = EptServices.EptServiceObject.returnBarcode();
+                        }
+                        postedData.data = data;
+                        postedData.tableName = tableName;
+                        console.log(data);
+
+                        var url = serverSamplesURL + 'insert';
+                        changeSavingSpinner(true);
+                        try {
+                            console.log(data)
+                            $http.post(url, postedData)
+                                .success(function (response) {
+
+                                    console.log('data')
+                                    console.log(response.data)
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                    if (response.status == 1) {
+                                        emptyFormData(tableName);
+
+                                    }
+                                    changeSavingSpinner(false);
+                                })
+                                .error(function (error) {
+                                    changeSavingSpinner(false);
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                })
+                        } catch (error) {
+                            console.log(error)
+                        }
+
+                    } else {
+                        var id = data.id;
+                        delete data.id;
 
 
-                    if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
-                        data.barcode = EptServices.EptServiceObject.returnBarcode();
+                        var postedData = {
+                            where: {id: id},
+                            tableName: tableName,
+                            updateData: data
+                        }
+                        console.log(postedData)
+                        $scope.samples.updateWhere(postedData);
                     }
-                    postedData.data = data;
-                    postedData.tableName = tableName;
-                    console.log(data);
-
-                    var url = serverSamplesURL + 'insert';
-                    changeSavingSpinner(true);
-                    try {
-                        console.log(data)
-                        $http.post(url, postedData)
-                            .success(function (response) {
-
-                                console.log('data')
-                                console.log(response.data)
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
-                                if (response.status == 1) {
-                                    emptyFormData(tableName);
-
-                                }
-                                changeSavingSpinner(false);
-                            })
-                            .error(function (error) {
-                                changeSavingSpinner(false);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                            })
-                    } catch (error) {
-                        console.log(error)
-                    }
-
-                } else {
+                }
+                else {
                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(4));
                 }
+
             } catch (error) {
                 changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                 console.log(error)
@@ -632,7 +672,9 @@
                         changeSavingSpinner(false);
                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
+                        emptyFormData()
                         if (response.status == 1) {
+                            emptyFormData(postedData.tableName);
                             $scope.samples.receiveShipmentFormData = {};
                         }
                     })
@@ -754,7 +796,7 @@
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
                 receiveShipmentData.dateReceived = $scope.samples.getClickedDate();
-                receiveShipmentData.shipmentStatus = 2;
+                receiveShipmentData.shipmentStatus = 3;
                 console.log(receiveShipmentData);
 
 
@@ -826,6 +868,30 @@
             simplebar.go(len);
 
         }
+
+        //===============================================================edit functions=============================================================================
+
+        $scope.samples.editFunction = function (data, tableName) {
+            if (tableName == 'tbl_bac_shipments') {
+                $scope.samples.shipmentFormData = data;
+                $scope.samples.samplesActivePage('addShipments', 0)
+            }
+            if (tableName == 'tbl_bac_samples') {
+                $scope.samples.sampleFormData = data;
+                $scope.samples.samplesActivePage('addSamples', 0)
+            }
+            if (tableName == 'tbl_bac_panel_mst') {
+                $scope.samples.panelFormData = data;
+                $scope.samples.samplesActivePage('addPanels', 0)
+            }
+            if (tableName == 'tbl_bac_panel_to_shipment') {
+                $scope.samples.shipmentFormData = data;
+                $scope.samples.samplesActivePage('addShipments', 0)
+            }
+        }
+
+        //===================================================================end of edit function===================================================================
+
         //===========================================================================================================================================================
         //--------------------------------------------------------------RECEIVE PANELS AND SHIPMENT FUNCTIONS START HERE---------------------------------------------
         //===========================================================================================================================================================

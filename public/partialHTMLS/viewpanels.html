@@ -58,7 +58,7 @@
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
                     <div class="panel-group" id="accordion">
-                        <div class="panel panel-primary "
+                        <div class="panel {{samples.returnPanelColorFromStatus(panel.panelStatus,1)}}"
                              dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -69,23 +69,23 @@
                                 </h4>
                             </div>
                             <div id="{{panel.id}}" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <p class="col-md-12">
+                                <div class="panel-body" padding-left: 0px!important;>
+                                    <p class="">
 
-                                    <div class="col-md-5 pull-left">
-                                        <div class="col-md-12 btn-primary">
+                                    <div class="col-md-5 pull-left" style="padding-left: 0px!important;">
+                                        <div class="col-md-12  {{samples.returnPanelColorFromStatus(panel.panelStatus)}}">
                                             <div class="clearfix">&nbsp;</div>
                                             <div class="col-md-7 pull-left">Panel Details</div>
                                             <div class="col-md-5 pull-right">
-                                                <a href="#"
+                                                <a href="#" ng-show="panel.panelStatus==0"
                                                    ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
                                                     <i class="fa fa-remove  "></i></a> &nbsp;
-                                                <a href="">
+                                                <a href="" ng-show="panel.panelStatus==0">
                                                     <i class="fa fa-edit  "></i></a> &nbsp;
-                                                <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                <a about="" ng-click="samples.addSamplesToPanel(panel)" ng-show="panel.panelStatus==0"
                                                    href="#addSamples" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-plus-square  "></i></a> &nbsp;
-                                                <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                <a about="" ng-click="samples.addSamplesToPanel(panel)" ng-show="panel.panelStatus==0"
                                                    href="#addSamples" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-unlock  "></i></a>
                                                 &nbsp;
@@ -125,7 +125,7 @@
                                                     <br>
 
                                                     Shipment Status :
-                                                    <i nowrap>{{panel.returnShipmentStatus(panel.panelStatus)}}</i>
+                                                    <i nowrap><b>{{samples.returnPanelStatus(panel.panelStatus)}}</b> </i>
 
                                                     <div class="text-left ">
                                                         <small class="text-gray"><i>{{panel.panelDatePrepared}}</i>
@@ -159,7 +159,7 @@
                                                 <td>{{sample.materialOrigin}}</td>
                                                 <td nowrap>{{sample.dateCreated}}</td>
                                                 <td>
-                                                    <a href="#" class=""
+                                                    <a href="#" class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus!==0"
                                                        ng-click="samples.deleteCustomRow(sample.id,'tbl_bac_sample_to_panel')">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
@@ -215,12 +215,17 @@
                         <td nowrap>{{panel.shipmentNo}}</td>
                         <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
-                            <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm"
+                            <a class="btn btn-info btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus!=0"
                                ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i
                                     class="fa fa-remove"></i></a>
-                            <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
-                            <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
+                            <a class="btn btn-success btn-sm"  ng-disabled="panel.panelStatus!=0">
+                                <i class="fa fa-unlock"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm" about=""  ng-disabled="panel.panelStatus!=0"
+                               ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"
                             ><i class="fa fa-plus"></i></a>
                             <a class="btn btn-primary btn-sm" href="#barcodeModal" data-backdrop="false"
