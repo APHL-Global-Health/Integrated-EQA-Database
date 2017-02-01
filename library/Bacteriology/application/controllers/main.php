@@ -151,6 +151,28 @@ Class Main
 
     }
 
+    public function selectFromDStatusTable($tableName, $where = "")
+    {
+        $col = $where['column'];
+        $status = $where['status'];
+        $sql = "SELECT * FROM $tableName where $col in ($status)";
+
+        $result = $this->connect_db->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_object()) {
+                $user_arr[] = $row;
+            }
+
+            return $user_arr;
+        } else {
+            return false;
+        }
+
+    }
+
+
     public function deleteFromWhere($tableName, $where)
     {
         $error['status'] = 0;
@@ -253,10 +275,9 @@ Class Main
 
     public function getUserSession()
     {
-        if(isset($_SESSION)) {
+        if (isset($_SESSION)) {
             return $_SESSION['administrators']['admin_id'];
-        }
-        else{
+        } else {
             return null;
         }
     }

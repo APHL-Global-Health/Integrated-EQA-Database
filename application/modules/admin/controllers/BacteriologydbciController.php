@@ -138,7 +138,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 foreach ($dataDB as $key => $value) {
                     if ($tableName == 'tbl_bac_panels_shipments') {
-                        $panel =  $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+                        $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
 
 
                         $dataDB[$key]->panelName = $panel['panelName'];
@@ -163,6 +163,36 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $e->getMessage();
         }
 
+    }
+
+    public function getwheredeliveryAction()
+    {
+        try {
+            $postedData = file_get_contents('php://input');
+            $postedData = (array)(json_decode($postedData));
+
+            $tableName = $postedData['tableName'];
+
+            $where = $postedData['where'];
+            $where = (array)($where);
+
+//            print_r($where);
+//            exit;
+            $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
+
+            if (sizeof($dataDB) > 0) {
+                $data['status'] = 1;
+                $data['data'] = $dataDB;
+                echo($this->returnJson($data));
+            } else {
+                echo($this->returnJson(json_encode(array('status' => 0))));
+            }
+
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit();
     }
 
     public function selectfromtableAction()
@@ -242,7 +272,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if (is_array($dataArray)) {
 
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
-                if($dataArray['tableName']=='tbl_bac_shipments'){
+                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                 }
 
@@ -255,7 +285,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         }
         exit();
     }
-    public function getusersessionAction(){
+
+    public function getusersessionAction()
+    {
         print_r($this->dbConnection->getUserSession());
         exit();
     }

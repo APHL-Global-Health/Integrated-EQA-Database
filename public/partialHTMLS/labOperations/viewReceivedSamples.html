@@ -1,16 +1,71 @@
 <div class="">
+    <!--
     <div class="h4 border-bottom col-md-12">
         Panels & Samples in Lab
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
 
-    <div class="col-md-1 pull-right"><a href="#" class=" label label-default btn-sm"
-                                        ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
-            class="fa fa-refresh"></i>
-    </a>
-        &nbsp;
-    </div>
-    </div>
+        <div class="col-md-1 pull-right"><a href="#" class=" label label-default btn-sm"
+                                            ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
+                class="fa fa-refresh"></i>
+        </a>
+            &nbsp;
+        </div>
+
+    </div-->
+    <h3> Delivered Panels
+        <small>{{samples.panelsData.length}} records</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <div class="pull-right col-mod-12">
+            <div class="dropdown col-md-3 pull-right">
+
+                <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
+                        id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
+
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
+
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="pull-right" ng-init="expand=true">
+                <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
+            </div>
+            <div class="col-md-7 pull-right">
+                <input type="search" class="col-md-12" ng-model="samples.searchData">
+            </div>
+            <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_panel_mst','panelStatus','3,4,5')"><i
+                    class="fa fa-refresh"></i></a>
+                &nbsp;
+            </div>
+        </div>
+    </h3>
+
+
     <div>
+        <div class="text-capitalize path">
+            <a href="#" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"
+               ng-show="samples.showShipmentInfoStatus"
+            >
+                Shipments : {{samples.clickedShipmentData.shipmentName }}
+                <small>
+                    <i>{{samples.clickedShipmentData.datePrepared}}</i></small>
+            </a>
+            <!--<button class="btn btn-sm btn-success pull-right col-md-1" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"> << Back</button>-->
+        </div>
         <table class="table table-striped table-condensed table-bordered" id="printableTable">
             <thead>
             <tr>
@@ -33,11 +88,12 @@
             <tbody>
             <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                 <td>{{$index+1}}</td>
-                <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)" class="">{{panel.panelName}}</a></td>
+                <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)"
+                       class="">{{panel.panelName}}</a></td>
                 <td>{{panel.panelType}}</td>
                 <td>{{panel.panelLabel}}</td>
                 <td>{{panel.panelDatePrepared}}</td>
-                <td nowrap>{{panel.panelDateOfDelivery}}</td>
+                <td nowrap>{{panel.dateDelivered}}</td>
                 <td nowrap>{{panel.preparedBy}}</td>
                 <td nowrap>{{samples.returnPanelStatus(panel.panelStatus)}}</td>
                 <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
@@ -45,14 +101,20 @@
                 <td nowrap>{{panel.lab}}</td>
                 <td nowrap>{{panel.dateCreated}}</td>
                 <td nowrap>
-                    <a class="btn btn-danger btn-sm"
+                    <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus > 3"
+                       data-toggle="tooltip" data-placement="top" title="Click to mark all as rejected!"
                        ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',5)"><i
                             class="fa fa-thumbs-down"></i>
                     </a>
-                    <a class="btn btn-success btn-sm"
-                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',4)"><i class="fa fa-thumbs-up"></i>
+                    <a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus > 3"
+                       data-toggle="tooltip" data-placement="top"
+                       title="Click to mark all as successfully received without any issue!"
+                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',4)"><i
+                            class="fa fa-thumbs-up"></i>
                     </a>
-                    <a class="btn btn-primary btn-sm"   href="#barcodeModal" data-backdrop="false" data-toggle="modal"
+                    <a class="btn btn-primary btn-sm"
+                       data-placement="top" title="Click to to generate barcodes!"
+                       href="#barcodeModal" data-backdrop="false" data-toggle="modal"
                        ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
                     </a>
 
@@ -62,9 +124,9 @@
             </tbody>
         </table>
 
-<div id="demos">
+        <div id="demos">
 
-</div>
+        </div>
         <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
                                  direction-links="true"
                                  boundary-links="true">
@@ -76,4 +138,7 @@
 
 
 </div>
+<script>
+
+</script>
 

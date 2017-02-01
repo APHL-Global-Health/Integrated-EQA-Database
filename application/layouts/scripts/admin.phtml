@@ -100,7 +100,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
                         <li class="divider"></li>
                         <li>
                             <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">Micro-Biology
-                                </a>
+                            </a>
                         </li>
                         <li>
                             <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'lab-samples-manage'), 'default', true); ?>">PT
@@ -294,6 +294,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 <script src="<?php echo $this->baseUrl("js/jquery.print.js"); ?>" type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl('js/DT_bootstrap.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modalmanager.js"); ?>"></script>
+
 <?php
 if ($controllerName . $actionName != 'distributionsindex') {
     ?>
@@ -309,8 +310,11 @@ if ($controllerName . $actionName != 'distributionsindex') {
 <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css"
       media="all">
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
+
 <script type="text/javascript">
     $(function () {
+
+
         $(".checkNum").keydown(function (e) {
             // Allow: backspace, delete, tab, escape, enter and .
             if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||

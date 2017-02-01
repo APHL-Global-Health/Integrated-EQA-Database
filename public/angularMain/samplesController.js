@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http,$location, serverSamplesURL, EptServices, $timeout) {
+    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, $timeout) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -33,7 +33,7 @@
             $scope.samples.feedbackObject = data;
             $('.alert').show('slow');
 
-           //  $(window).scrollTop($('#alert').offset().top);
+            //  $(window).scrollTop($('#alert').offset().top);
             $("#alert").focus();
         }
 
@@ -44,6 +44,7 @@
         $scope.samples.panelsToShipment = {};
         $scope.samples.sampleToPanel = {};
         function assignHTTPResponse(data, tableName) {
+
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesData = data.data;
             }
@@ -76,12 +77,23 @@
             console.log($scope.samples.labs);
         }
 
-        $scope.samples.getAllSamples = function (tableName, where) {
+        $scope.samples.getShipmentsForDelivery = function (tableName, columnName, where) {
+            var whereData = {
+                column: columnName,
+                status: where
+            }
+            $scope.samples.getAllSamples(tableName, whereData, 1)
+        }
+        $scope.samples.getAllSamples = function (tableName, where, whereDelivery) {
 
             try {
                 $scope.samples.loaderProgressSpinner = 'fa-spinner'
-                var url = serverSamplesURL + EptServices.EptServiceObject.returnServerUrl(tableName);
 
+                var url = serverSamplesURL + EptServices.EptServiceObject.returnServerUrl(tableName);
+                if (angular.isDefined(whereDelivery)) {
+
+                    url = serverSamplesURL + 'getwheredelivery';
+                }
                 var varData = {};
                 varData.tableName = tableName;
                 if (angular.isDefined(where)) {
@@ -146,6 +158,9 @@
             }
             if (panelStatus == 4) {
                 return 'Delivered & Checked';
+            }
+            if (panelStatus == 5) {
+                return 'Delivered & Rejected';
             }
             else {
                 return "Unknown status"
@@ -729,15 +744,33 @@
                         tableName: table,
                         updateData: {deliveryStatus: status}
                     }
-                    console.log(postedData)
-                    $scope.samples.updateWhere(postedData);
 
-                    $scope.samples.getAllSamples('tbl_bac_panel_mst');
+                    $scope.samples.updateWhere(postedData);
+                    postedData = {
+                        where: {id: panelId},
+                        tableName: 'tbl_bac_panel_mst',
+                        updateData: {panelStatus: status}
+                    }
+                    console.log(postedData)
+
+                    $scope.samples.updateWhere(postedData);
+                    $timeout(function () {
+                        $scope.samples.getShipmentsForDelivery('tbl_bac_panel_mst', 'panelStatus', '3,4,5');
+                    }, 200)
 
                 }
             } catch (Exc) {
                 console.log(Exc)
             }
+        }
+        $scope.samples.showShipmentInfoStatus = false;
+        $scope.samples.showShipmentAndPanels = function (link, shipment) {
+            $scope.samples.samplesActivePage(link, 1)
+            $scope.samples.showShipmentInfoStatus = true;
+
+            $scope.samples.clickedShipmentData = shipment;
+            console.log($scope.samples.clickedShipmentData)
+            $scope.samples.getPanelFromShipment(shipment.id, 'tbl_bac_panels_shipments')
         }
         $scope.samples.currentBarcodeData = 'test code'
 
@@ -793,6 +826,7 @@
                 console.log(Exc)
             }
         }
+        $('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
                 receiveShipmentData.dateReceived = $scope.samples.getClickedDate();
@@ -897,12 +931,13 @@
         //===========================================================================================================================================================
 
         $scope.receive = {}
+        $scope.receive.showPanelStatus = false;
         $scope.receive.showPanelFullDetails = function (panelInfo) {
             console.log(panelInfo)
             $scope.receive.clickedPanel = panelInfo;
             $scope.samples.getSampleFromPanel(panelInfo.id, 'tbl_bac_sample_to_panel');
             $scope.samples.samplesActivePage('panelFullDetails', 1);
-
+            $scope.receive.showPanelStatus = true;
         }
 
         /*===================================================================END OF RECEIVE FUNCTION==================================================================*/

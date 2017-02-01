@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12 no-padding">
     <div class="main-div">
 
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
@@ -51,7 +51,7 @@
         </h3>
 
 
-        <div class="panel panel-body text-sm bg-aqua" ng-show="!expanded">
+        <div class="panel panel-body text-sm bg-aqua no-padding" ng-show="!expanded">
             <div class="fullInfoDiv">
                 <div class="clearfix">&nbsp;</div>
                 <h4 class="h4">Expanded Shipping Information</h4>
@@ -337,7 +337,7 @@
                                 </td>
 
                                 <td>{{panel.panelName}}</td>
-                                <td>{{panel.datePrepared}}</td>
+                                <td>{{panel.panelDatePrepared}}</td>
 
                             </tr>
                         </table>
