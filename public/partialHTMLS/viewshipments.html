@@ -66,6 +66,17 @@
                                    data-parent="#accordion">{{$index+1}}.
                                     {{shipment.shipmentName}}
                                 </a>
+                                <div class="pull-right">
+                                    &nbsp;&nbsp;
+                                    <a href="#{{shipment.id}}" data-toggle="collapse" class="no-padding"
+                                       data-parent="#accordion"
+                                       ng-click="samples.getPanelFromShipment(shipment.id,'tbl_bac_panels_shipments')">
+                                        <i class="fa fa-angle-down fa-2x no-padding"
+                                           ng-show="samples.shopAngleArrows&&samples.clickedShipment==shipment.id"></i>
+                                        <i class="fa fa-angle-up fa-2x no-padding"
+                                           ng-hide="samples.shopAngleArrows&&samples.clickedShipment==shipment.id"></i>
+                                    </a>
+                                </div>
                                 <small class="pull-right">{{shipment.dateCreated}}
                                     {{samples.returnShipmentStatus(shipment.shipmentStatus)}}
                                 </small>

@@ -217,7 +217,7 @@
 
         }
         $scope.samples.returnPanelColorFromStatus = function (status, type) {
-            console.log(status)
+
             if (status == 0) {
                 return type == 1 ? 'panel-primary' : 'btn-primary';
             }
@@ -347,18 +347,26 @@
 
 
         /*-------------------------------------------------------------------Get panels from a specific shipment----------------------------------------------------------*/
-
+        $scope.samples.shopAngleArrows = true;
         $scope.samples.getPanelFromShipment = function (shipmentId) {
-            $scope.samples.clickedShipment = shipmentId;
+
+            $scope.samples.shopAngleArrows = !$scope.samples.shopAngleArrows;
             if (isNumeric(shipmentId)) {
                 try {
                     var where = {shipmentId: shipmentId};
-                    $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
 
+                    if (shipmentId !== $scope.samples.clickedShipment) {
+
+                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
+                    }else{
+                        $scope.samples.shopAngleArrows = true;
+                    }
+                    $scope.samples.clickedShipment = shipmentId;
                 } catch (Exc) {
                     console.log(Exc);
                 }
             }
+            console.log( $scope.samples.shopAngleArrows)
         }
         /*-------------------------------------------------------------------END get Panel From Shipment----------------------------------------------------------*/
 
@@ -413,9 +421,16 @@
 
         /*-------------------------------------------------------------------------START of function  for adding sample to a panel---------------------------------------------------------------------------------*/
 
-        $scope.samples.addSampleToArray = function (id, checker) {
+        $scope.samples.addSampleToArray = function (id, checker, quantity) {
             try {
                 $scope.samples.samplePanelArray = EptServices.EptServiceObject.returnIdArray($scope.samples.samplePanelArray, id, checker);
+
+                if (angular.isDefined(quantity)) {
+                    $scope.samples.samplePanelArray = EptServices.EptServiceObject.returnIdArray($scope.samples.samplePanelArray, id, checker, quantity);
+                } else {
+                    $scope.samples.samplePanelArray = EptServices.EptServiceObject.returnIdArray($scope.samples.samplePanelArray, id, checker);
+                }
+                console.log($scope.samples.samplePanelArray)
             } catch (error) {
                 console.log(error);
             }

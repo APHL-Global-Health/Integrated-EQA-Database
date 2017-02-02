@@ -1,11 +1,11 @@
-<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewpanels'" >
+<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewpanels'">
     <div class="main-div">
-
-        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        <div id='alert' tabindex='1'>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
         </div>
-
 
         <h3> Available Panels
             <small>{{samples.panelsData.length}} records</small>
@@ -83,7 +83,8 @@
                                                 <a href="#" ng-show="panel.panelStatus==0"
                                                    ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
                                                     <i class="fa fa-remove  "></i></a> &nbsp;
-                                                <a href="" ng-show="panel.panelStatus==0" ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
+                                                <a href="" ng-show="panel.panelStatus==0"
+                                                   ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
                                                     <i class="fa fa-edit  "></i></a> &nbsp;
                                                 <a about="" ng-click="samples.addSamplesToPanel(panel)"
                                                    ng-show="panel.panelStatus==0"
@@ -190,7 +191,7 @@
 
 
             <div ng-if="expand">
-                <table class="table table-striped table-condensed table-bordered" >
+                <table class="table table-striped table-condensed table-bordered">
                     <thead>
                     <tr>
                         <th>#.</th>
@@ -296,15 +297,16 @@
 
                                     <input type="checkbox"
                                            ng-checked="samples.returnCheckedRow(sample.id,samples.samplePanelArray)"
-                                           ng-click="samples.addSampleToArray(sample.id,sampleCheck)"
-                                           ng-model="sampleCheck">
+                                           ng-click="samples.addSampleToArray(sample.id,sample.sampleCheck,sample.quantity)"
+                                           ng-model="sample.sampleCheck">
 
 
                                 </td>
                                 <td>
                                     <form name="sampleQuantityForm">
-                                        <input type="number" ng-disabled="!sampleCheck" name="sampleQuantity"
-                                               ng-model="sample.quantity" placeholder="quantity" required
+                                        <input type="number" ng-disabled="!sample.sampleCheck" name="sampleQuantity"
+                                               ng-init="sample.quantity=1" min="1" max="100" ng-keyup="samples.addSampleToArray(sample.id,sample.sampleCheck,sample.quantity)"
+                                               ng-model="sample.quantity" placeholder="quantity of samples" required
                                                ng-class="{'has-error' :sampleQuantityForm.sampleQuantity.$invalid && !sampleQuantityForm.sampleQuantity.$pristine }">
                                     </form>
                                 </td>
