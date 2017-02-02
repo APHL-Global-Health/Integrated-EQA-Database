@@ -6,7 +6,9 @@
  * Date: 1/13/2017
  * Time: 16:40
  */
-require_once 'C:\xampp\htdocs\ePT-Repository\library\Bacteriology\application\controllers\main.php';
+require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
+    . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
 class Admin_BacteriologydbciController extends Zend_Controller_Action
 {
@@ -18,6 +20,25 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
         $this->dbConnection = new Main();
+    }
+
+    public function rootdirAction()
+    {
+        $this->dbConnection->testpdf();
+
+        exit();
+
+    }
+
+    public function returnTotalCount($tableName, $id, $column)
+    {
+
+        try {
+            $where[$column] = $id;
+            return $this->dbConnection->selectCount($tableName, $where);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function returnJson($dataArray)
@@ -125,6 +146,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         }
         return (array)$returnArray;
         exit();
+    }
+
+    public function testpdfAction()
+    {
+
+        exit();
+
     }
 
     public function returnWithRefColNames($tableName, $where)
