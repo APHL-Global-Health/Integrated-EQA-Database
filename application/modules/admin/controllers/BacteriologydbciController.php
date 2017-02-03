@@ -174,12 +174,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->datePrepared = $sample['datePrepared'];
                         $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                    } else if ($tableName == 'tbl_bac_panel_mst') {
+                        $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+
+
                     }
                 }
 
@@ -207,7 +212,21 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 //            print_r($where);
 //            exit;
             $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
+            if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel') {
+                foreach ($dataDB as $key => $value) {
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                    }
+                }
+            }
             if (sizeof($dataDB) > 0) {
                 $data['status'] = 1;
                 $data['data'] = $dataDB;

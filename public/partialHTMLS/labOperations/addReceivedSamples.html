@@ -94,6 +94,11 @@
                    ng-disabled="shipment.shipmentStatus !=2">
                     <i class="fa fa-download"></i>
                 </a>
+                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment.id)"
+                   title="Click to to cance shipment!"
+                   ng-disabled="shipment.shipmentStatus !=2">
+                    <i class="fa fa-remove"></i>
+                </a>
 
             </td>
         </tr>

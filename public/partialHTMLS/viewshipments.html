@@ -60,27 +60,31 @@
                     <div class="panel {{samples.returnPanelColorFromStatus(shipment.shipmentStatus,1)}} "
                          dir-paginate="shipment in samples.shipmentsData| itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
+                            <div class="panel-title">
+
                                 <a data-toggle="collapse" href="#{{shipment.id}}"
                                    ng-click="samples.getPanelFromShipment(shipment.id,'tbl_bac_panels_shipments')"
                                    data-parent="#accordion">{{$index+1}}.
                                     {{shipment.shipmentName}}
                                 </a>
-                                <div class="pull-right">
-                                    &nbsp;&nbsp;
-                                    <a href="#{{shipment.id}}" data-toggle="collapse" class="no-padding"
+
+                                <!--<div  class="pul-right">-->
+                                    <a href="#{{shipment.id}}" style="color:white;" data-toggle="collapse" class="no-padding pull-right"
                                        data-parent="#accordion"
                                        ng-click="samples.getPanelFromShipment(shipment.id,'tbl_bac_panels_shipments')">
-                                        <i class="fa fa-angle-down fa-2x no-padding"
-                                           ng-show="samples.shopAngleArrows&&samples.clickedShipment==shipment.id"></i>
-                                        <i class="fa fa-angle-up fa-2x no-padding"
+                                        <i class="fa fa-chevron-down fa-2x no-padding"
+                                           ng-show="samples.shopAngleArrows&&samples.clickedShipment==shipment.id">
+
+                                        </i>
+                                        <i class="fa fa-chevron-up fa-2x no-padding"
                                            ng-hide="samples.shopAngleArrows&&samples.clickedShipment==shipment.id"></i>
                                     </a>
-                                </div>
-                                <small class="pull-right">{{shipment.dateCreated}}
-                                    {{samples.returnShipmentStatus(shipment.shipmentStatus)}}
-                                </small>
-                            </h4>
+
+                                    <small class="pull-right">{{shipment.dateCreated}}
+                                        {{samples.returnShipmentStatus(shipment.shipmentStatus)}} &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </small>
+                                <!--</div>-->
+                            </div>
                         </div>
                         <div id="{{shipment.id}}" class="panel-collapse collapse">
                             <div class="panel-body">

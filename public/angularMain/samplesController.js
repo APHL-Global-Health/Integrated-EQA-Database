@@ -39,7 +39,7 @@
 
         $scope.samples.samplesData = {};
         $scope.samples.feedbackObject = EptServices.EptServiceObject.loaderStatus;
-
+        $scope.samples.labUsers = {}
         $scope.samples.loaderProgressSpinner = '';
         $scope.samples.panelsToShipment = {};
         $scope.samples.sampleToPanel = {};
@@ -62,6 +62,9 @@
             }
             if (tableName == 'participant') {
                 $scope.samples.labs = data.data;
+            }
+            if (tableName == 'data_manager') {
+                $scope.samples.labUsers = data.data;
             }
 
         }
@@ -157,10 +160,13 @@
                 return 'Delivered ';
             }
             if (panelStatus == 4) {
-                return 'Delivered & Checked';
+                return 'Delivered & Checked Ok';
             }
             if (panelStatus == 5) {
                 return 'Delivered & Rejected';
+            }
+            if (panelStatus == 6) {
+                return 'Del\'d,Good/Rejected';
             }
             else {
                 return "Unknown status"
@@ -179,7 +185,11 @@
             }
             if (shipmentStatus == 3) {
                 return 'Delivered ';
-            } else {
+            }
+            if (shipmentStatus == 5) {
+                return 'Rejected ';
+            }
+            else {
                 return 'Unknown';
             }
         }
@@ -347,26 +357,27 @@
 
 
         /*-------------------------------------------------------------------Get panels from a specific shipment----------------------------------------------------------*/
-        $scope.samples.shopAngleArrows = true;
+        $scope.samples.shopAngleArrows = false;
         $scope.samples.getPanelFromShipment = function (shipmentId) {
 
-            $scope.samples.shopAngleArrows = !$scope.samples.shopAngleArrows;
+
             if (isNumeric(shipmentId)) {
+
                 try {
                     var where = {shipmentId: shipmentId};
 
                     if (shipmentId !== $scope.samples.clickedShipment) {
-
-                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
-                    }else{
                         $scope.samples.shopAngleArrows = true;
+                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
+                    } else {
+                        $scope.samples.shopAngleArrows = !$scope.samples.shopAngleArrows;
                     }
                     $scope.samples.clickedShipment = shipmentId;
                 } catch (Exc) {
                     console.log(Exc);
                 }
             }
-            console.log( $scope.samples.shopAngleArrows)
+            console.log($scope.samples.shopAngleArrows)
         }
         /*-------------------------------------------------------------------END get Panel From Shipment----------------------------------------------------------*/
 
@@ -751,33 +762,157 @@
                 console.log(Exception)
             }
         }
-        $scope.samples.panelReceived = function (panelId, table, status) {
+        $scope.samples.updateStatusShipment = function (tableName, status, id) {
+            var postedData = {};
+            try {
+                postedData.updateData = {shipmentStatus: status};
+                postedData.tableName = tableName;
+                postedData.where = {id: id}
+                $scope.samples.updateWhere(postedData);
+                $timeout(function () {
+                    $scope.samples.getShipmentsForDelivery('tbl_bac_shipments', 'shipmentStatus', '2,3,4,5');
+                }, 100)
+
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
+        $scope.samples.saveSampleToUser = function (user, users2) {
+            console.log(user)
+            console.log(users2)
+            var array_of_checked_values = $("#undo_redo").multiselect("getChecked").map(function (input) {
+                return this.value;
+            }).get().join(",");
+            console.log(array_of_checked_values)
+        }
+        $scope.samples.showMultiSelect = function (sample, type) {
+            $scope.samples.clickedSample = sample;
+            if (type == 1) {
+                $("#users_table").show('fast');
+                $("#multi_select").hide('fast');
+            } else {
+                $("#users_table").hide('fast');
+                $("#multi_select").show('fast');
+            }
+        }
+        $scope.samples.getAllFacilityUsers = function (tableName) {
+            try {
+                $scope.samples.getAllSamples(tableName);
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
+        function checkIfAllSamplesAdded() {
+            var samples = $scope.samples.sampleToPanel;
+            try {
+                if (samples.length > 0) {
+                    var goodcounter = 0;
+                    var rejectedcounter = 0;
+                    console.log('checking length')
+                    for (var i = 0; i < samples.length; i++) {
+                        console.log('Running inside looop')
+                        console.log(samples[i])
+                        if (samples[i]['deliveryStatus'] == 4) {
+
+                            console.log('checking okay delivery')
+                            goodcounter++;
+
+                        }
+                        if (samples[i]['deliveryStatus'] == 5) {
+
+                            console.log('checking bad delivery')
+                            rejectedcounter++;
+
+                        }
+                        console.log($scope.receive.clickedPanel.totalSamplesAdded + ',counter ' + rejectedcounter)
+                        if ((goodcounter + rejectedcounter) == $scope.receive.clickedPanel.totalSamplesAdded) {
+
+                            var update;
+                            if (rejectedcounter > 0 && goodcounter > 0) {
+                                update = 6
+                            }
+                            else if (goodcounter == $scope.receive.clickedPanel.totalSamplesAdded) {
+                                update = 4
+                            } else {
+                                update = 5
+                            }
+                            $scope.samples.panelReceived(samples[i]['panelId'], 'tbl_bac_panel_mst', update, 1);
+
+                        }
+                    }
+
+                }
+            }
+            catch (Exception) {
+                console.log(Exception)
+            }
+
+        }
+
+        $scope.samples.updateStatus = function (tableName, status, id) {
+            var postedData = {};
+            try {
+                postedData.updateData = {deliveryStatus: status};
+                postedData.tableName = tableName;
+                postedData.where = {id: id}
+                $scope.samples.updateWhere(postedData);
+
+
+                $timeout(function () {
+                    $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.id, 'tbl_bac_sample_to_panel');
+                }, 200)
+                $timeout(function () {
+                    if (tableName == 'tbl_bac_sample_to_panel') {
+                        console.log('trying to update panel data')
+                        checkIfAllSamplesAdded()
+                    }
+                }, 1000)
+
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
+
+        $scope.samples.panelReceived = function (panelId, table, status, from) {
             try {
                 if (angular.isDefined(panelId)) {
-                    var postedData = {
-                        where: {panelId: panelId},
-                        tableName: table,
-                        updateData: {deliveryStatus: status}
-                    }
+                    if (from == 1) {
+                        postedData = {
+                            where: {id: panelId},
+                            tableName: 'tbl_bac_panel_mst',
+                            updateData: {panelStatus: status}
+                        }
+                        console.log(postedData)
 
-                    $scope.samples.updateWhere(postedData);
-                    postedData = {
-                        where: {id: panelId},
-                        tableName: 'tbl_bac_panel_mst',
-                        updateData: {panelStatus: status}
-                    }
-                    console.log(postedData)
+                        $scope.samples.updateWhere(postedData);
+                    } else {
+                        var postedData = {
+                            where: {panelId: panelId},
+                            tableName: table,
+                            updateData: {deliveryStatus: status}
+                        }
 
-                    $scope.samples.updateWhere(postedData);
+                        $scope.samples.updateWhere(postedData);
+                        postedData = {
+                            where: {id: panelId},
+                            tableName: 'tbl_bac_panel_mst',
+                            updateData: {panelStatus: status}
+                        }
+                        console.log(postedData)
+
+                        $scope.samples.updateWhere(postedData);
+
+
+                    }
                     $timeout(function () {
-                        $scope.samples.getShipmentsForDelivery('tbl_bac_panel_mst', 'panelStatus', '3,4,5');
+                        $scope.samples.getShipmentsForDelivery('tbl_bac_panel_mst', 'panelStatus', '3,4,5,6');
                     }, 200)
-
                 }
             } catch (Exc) {
                 console.log(Exc)
             }
         }
+
         $scope.samples.showShipmentInfoStatus = false;
         $scope.samples.showShipmentAndPanels = function (link, shipment) {
             $scope.samples.samplesActivePage(link, 1)
@@ -1082,4 +1217,5 @@
     /*-------------------------------------------------------------------END if of the capitalizing filter-------------------------------------------------------------------------------------*/
 
 
-})();
+})
+();

@@ -1,3 +1,150 @@
 <div>
-    add samples  users
-</div>
+    <div class="row">
+        <h3> Issue Samples
+            <small>{{samples.sampleToPanel.length}} records</small>
+            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            <div class="pull-right col-mod-12">
+                <div class="dropdown col-md-3 pull-right">
+
+                    <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
+                            id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
+
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="pull-right" ng-init="expand=true">
+                    <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
+                </div>
+                <div class="col-md-7 pull-right">
+                    <input type="search" class="col-md-12" ng-model="samples.searchData">
+                </div>
+                <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+                                                    ng-click="samples.getShipmentsForDelivery('tbl_bac_sample_to_panel','deliveryStatus','4')"><i
+                        class="fa fa-refresh"></i></a>
+                    &nbsp;
+                </div>
+            </div>
+        </h3>
+
+        <div id="users_table">
+
+            <table class="table table-striped">
+                <td>No.</td>
+                <td>Batch Name</td>
+                <td>Date Prep'd</td>
+                <td>Date Del'd</td>
+                <td>Blood Pack No</td>
+                <td>action</td>
+                <tr dir-paginate="sample in samples.sampleToPanel | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                    <td>{{$index+1}}</td>
+                    <td>{{sample.batchName}}</td>
+                    <td>{{sample.datePrepared}}</td>
+                    <td>{{sample.dateDelivered}}</td>
+                    <td>{{sample.bloodPackNo}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info" ng-click="samples.showMultiSelect(sample,0)">Issue</button>
+                    </td>
+                </tr>
+            </table>
+            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
+                                     direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+        </div>
+        <div id="multi_select" style="display: none;">
+            <div class="panel panel-default bg-info">
+                <div class="h4 col-md-12 text-capitalize">
+                    <br>
+                    Distribute Samples <b> {{samples.clickedSample.batchName}}</b>
+                    <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
+                </div>
+                <br>
+            </div>
+            <div class="col-md-12">
+                <div class="col-xs-5" ng-init="samples.getAllFacilityUsers('data_manager')">
+                    <select name="from[]" id="undo_redo" class="form-control text-capitalize" ng-model="samples.userIds"
+                            size="13" multiple="multiple">
+                        <option value="{{users.dm_id}}" ng-repeat="users in samples.labUsers">
+                            {{users.first_name |
+                            capitalizeLetter}} {{users.last_name| capitalizeLetter}}
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-xs-2">
+                    <button type="button" id="undo_redo_undo" class="btn btn-primary btn-block btn-sm">undo <i
+                            class="fa fa-undo"></i></button>
+                    <button type="button" id="undo_redo_rightAll" class="btn btn-default btn-block btn-sm">Select all <i
+                            class="fa fa-forward"></i></button>
+                    <button type="button" id="undo_redo_rightSelected" class="btn btn-default btn-block btn-sm">Select
+                        <i
+                                class="fa fa-chevron-right"></i></button>
+                    <button type="button" id="undo_redo_leftSelected" class="btn btn-default btn-block btn-sm">Remove <i
+                            class="fa fa-chevron-left"></i></button>
+                    <button type="button" id="undo_redo_leftAll" class="btn btn-default btn-block btn-sm">Deselect All
+                        <i
+                                class="fa fa-backward"></i></button>
+                    <button type="button" id="undo_redo_redo" class="btn btn-warning btn-block btn-sm">redo <i
+                            class="fa fa-re"></i></button>
+                </div>
+
+                <div class="col-xs-5">
+                    <select name="to[]" id="undo_redo_to" ng-model="samples.addedUsers" class="form-control users"
+                            size="13"
+                            multiple="multiple"></select>
+                </div>
+
+            </div>
+            <div class="clearfix">&nbsp;</div>
+
+            <div class="col-md-12">
+                <div class="text-center col-md-offset-4">
+                    <button class="btn btn-info col-md-2"
+                            ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)"><i
+                            class="fa fa-save"></i>
+                        Save
+                    </button>
+
+                    <button class="btn btn-danger col-md-2"
+                            ng-click="samples.showMultiSelect(sample,1)"
+                    ><i class="fa fa-remove"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // make code pretty
+            window.prettyPrint && prettyPrint();
+
+            $('#undo_redo').multiselect(
+                {
+                    click: function(event, ui){
+                        if(ui.checked){
+                        alert('')
+                        }
+                        else {
+                        }
+                    }
+                }
+            );
+
+        });
+    </script>

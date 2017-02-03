@@ -13,6 +13,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
     <!--s<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" type="text/css" media="all">-->
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery_ui_min.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/admin.css"); ?>" type="text/css" media="all">
@@ -310,7 +311,7 @@ if ($controllerName . $actionName != 'distributionsindex') {
 <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css"
       media="all">
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
-
+<script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
 <script type="text/javascript">
     $(function () {
 

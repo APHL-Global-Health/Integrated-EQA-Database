@@ -314,22 +314,24 @@ EOD;
 
     }
 
-    public function selectCount($tableName, $where = "")
+    public function selectCount($tableName, $id, $col)
     {
 
 
-        $sql = "SELECT count(*) FROM $tableName";
-        if (isset($where)) {
+        $sql = "SELECT count($col) FROM $tableName where $col=$id";
 
-            if (is_array($where)) {
-                $sql .= $this->returnWhereStatement($where);
-            }
-        }
-//        echo $sql;
+//        if (isset($where)) {
+//
+//            if (is_array($where)) {
+//                $sql .= $this->returnWhereStatement($where);
+//            }
+//        }
+//       echo $sql;
 //        exit;
-        $result = $this->connect_db->query($sql);
+        $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
 
-        return $result->num_rows;
+        return ($result);//->num_rows;
+
         // output data of each row
 
 
