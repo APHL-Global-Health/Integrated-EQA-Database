@@ -707,6 +707,7 @@
 
                 var url = serverSamplesURL + 'updatetablewhere';
                 changeSavingSpinner(true);
+                console.log(postedData)
                 $http.post(url, postedData)
                     .success(function (response) {
                         console.log(response)
