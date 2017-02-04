@@ -1,0 +1,114 @@
+<div>
+    <!--<h3>Receive Shipments-->
+        <!--<small>{{samples.shipmentsData.length}} records-->
+        <!--</small>-->
+        <!--<small><i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></small>-->
+        <!--<div class="col-md-1 pull-right">-->
+            <!--<a href="#" class=" btn btn-default btn-sm"-->
+               <!--ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i-->
+                    <!--class="fa fa-refresh"></i>-->
+            <!--</a>-->
+        <!--</div>-->
+
+    <!--</h3>-->
+    <h3> Receive Shipments
+        <small>{{samples.shipmentsData.length}} records</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <div class="pull-right col-mod-12">
+            <div class="dropdown col-md-3 pull-right">
+
+                <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
+                        id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
+
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
+
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="pull-right" ng-init="expand=true">
+                <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
+            </div>
+            <div class="col-md-7 pull-right">
+                <input type="search" class="col-md-12" ng-model="samples.searchData">
+            </div>
+            <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
+                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i
+                    class="fa fa-refresh"></i></a>
+                &nbsp;
+            </div>
+        </div>
+    </h3>
+    <hr>
+    <table class="table table-striped table-condensed table-bordered">
+        <thead>
+        <tr>
+            <th>#.</th>
+            <th>Shipment Name</th>
+            <th>No Of Panels</th>
+            <th>Courier</th>
+            <th>ship't Desc</th>
+
+            <th>Round ID</th>
+            <th>Created By</th>
+            <th>Prepared On</th>
+            <!--                                <th>Date Saved</th>-->
+            <th>Prepared By</th>
+            <th>Ship't Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+            <td>{{$index+1}}</td>
+            <td><a href="#" ng-click="samples.showShipmentAndPanels('viewReceivedSamples',shipment)">{{shipment.shipmentName}}</a></td>
+            <td>{{shipment.numberOfPanels}}</td>
+            <td>{{shipment.courier}}</td>
+            <td>{{shipment.shipmentDsc}}</td>
+            <td nowrap>{{shipment.roundId}}</td>
+            <td nowrap>{{shipment.createdBy}}</td>
+
+            <td nowrap>{{shipment.datePrepared}}</td>
+            <td nowrap>{{shipment.preparedBy}}</td>
+            <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+            <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+
+            <td nowrap>
+
+                <a class="btn btn-success btn-sm"  ng-click="samples.receiveShipment(shipment,'receiveShipments')"
+                   data-placement="top" title="Click to to receive shipment!"
+                   href="#receiveShipments" data-backdrop="false" data-toggle="modal"
+                   ng-disabled="shipment.shipmentStatus !=2">
+                    <i class="fa fa-download"></i>
+                </a>
+                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment.id)"
+                   title="Click to to cance shipment!"
+                   ng-disabled="shipment.shipmentStatus !=2">
+                    <i class="fa fa-remove"></i>
+                </a>
+
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                             boundary-links="true">
+    </dir-pagination-controls>
+
+    <div ng-include="'../partialHTMLS/modals/receiveShipment.html'" id="">
+    </div>
+</div>

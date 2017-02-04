@@ -1,5 +1,5 @@
 
-<div class="col-md-12" ng-show="samples.linksObject.samplesLink=='viewsamples'">
+<div class="col-md-12 no-padding" ng-show="samples.linksObject.samplesLink=='viewsamples'" >
     <div class="main-div">
 
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
@@ -47,7 +47,7 @@
 
 
 
-            <div class="panel panel-body text-sm">
+            <div class="panel panel-body text-sm no-padding" >
 
 
                 <table class="table table-striped table-condensed table-bordered">
@@ -83,8 +83,10 @@
                         <td nowrap>{{sample.bloodPackNo}}</td>
                         <td nowrap><a href="#/" target="_self" ng-click="samples.addSampleGrading(sample)">Add grading</a> </td>
                         <td nowrap>
-                            <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button>
+                            <button class="btn btn-info btn-sm" ng-click="samples.editFunction(sample,'tbl_bac_samples')"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"
+                                    ng-click="samples.deleteCustomRow(sample.id,'tbl_bac_samples')"
+                            ><i class="fa fa-remove"></i></button>
                             <button class="btn btn-warning btn-sm"><i class="fa fa-map-marker"></i></button>
                             <button class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></button>
                             <a class="btn btn-primary btn-sm"   href="#barcodeModal" data-backdrop="false" data-toggle="modal"

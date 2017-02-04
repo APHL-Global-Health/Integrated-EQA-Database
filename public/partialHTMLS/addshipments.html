@@ -2,9 +2,12 @@
     <div class="col-md-8 col-md-offset-2">
         <h3 class="h3">Shipments Registration Form</h3>
         <hr>
-        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        <div id='alert' tabindex='1'>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
         </div>
         <form class="form-horizontal " name="shipmentForm" novalidate>
             <div class="form-group row"

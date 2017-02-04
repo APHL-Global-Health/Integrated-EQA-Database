@@ -6,7 +6,9 @@
  * Date: 1/13/2017
  * Time: 16:40
  */
-require_once 'C:\xampp\htdocs\ePT-Repository\library\Bacteriology\application\controllers\main.php';
+require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
+    . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
 class Admin_BacteriologydbciController extends Zend_Controller_Action
 {
@@ -18,6 +20,25 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
         $this->dbConnection = new Main();
+    }
+
+    public function rootdirAction()
+    {
+        $this->dbConnection->testpdf();
+
+        exit();
+
+    }
+
+    public function returnTotalCount($tableName, $id, $column)
+    {
+
+        try {
+            $where[$column] = $id;
+            return $this->dbConnection->selectCount($tableName, $where);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function returnJson($dataArray)
@@ -101,7 +122,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
-    public function returnValueWhere($id, $tableName, $col)
+    public function returnValueWhere($id, $tableName)
     {
         $returnArray = '';
         $whereId['id'] = $id;
@@ -114,7 +135,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                     foreach ($dataDB as $key => $value) {
                         // array_push($returnArray,$value);
-                        $returnArray = $value->$col;
+                        $returnArray = $value;
                     }
                 } catch (Exception $e) {
                     return '';
@@ -123,8 +144,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             }
         }
-        return $returnArray;
+        return (array)$returnArray;
         exit();
+    }
+
+    public function testpdfAction()
+    {
+
+        exit();
+
     }
 
     public function returnWithRefColNames($tableName, $where)
@@ -138,15 +166,25 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 foreach ($dataDB as $key => $value) {
                     if ($tableName == 'tbl_bac_panels_shipments') {
-                        $dataDB[$key]->panelName = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelName');
-                        $dataDB[$key]->panelDatePrepared = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst', 'panelDatePrepared');
+                        $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+
+
+                        $dataDB[$key]->panelName = $panel['panelName'];
+                        $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
+
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
-                        $dataDB[$key]->batchName = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'batchName');
-                        $dataDB[$key]->datePrepared = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'datePrepared');
-                        $dataDB[$key]->bloodPackNo = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'bloodPackNo');
-                        $dataDB[$key]->materialOrigin = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples', 'materialOrigin');
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                    } else if ($tableName == 'tbl_bac_panel_mst') {
+                        $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+
+
                     }
                 }
 
@@ -158,6 +196,50 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $e->getMessage();
         }
 
+    }
+
+    public function getwheredeliveryAction()
+    {
+        try {
+            $postedData = file_get_contents('php://input');
+            $postedData = (array)(json_decode($postedData));
+
+            $tableName = $postedData['tableName'];
+
+            $where = $postedData['where'];
+            $where = (array)($where);
+
+//            print_r($where);
+//            exit;
+            $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
+            if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel') {
+                foreach ($dataDB as $key => $value) {
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                    }
+                }
+            }
+            if (sizeof($dataDB) > 0) {
+                $data['status'] = 1;
+                $data['data'] = $dataDB;
+                echo($this->returnJson($data));
+            } else {
+                echo($this->returnJson(json_encode(array('status' => 0))));
+            }
+
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit();
     }
 
     public function selectfromtableAction()
@@ -237,7 +319,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if (is_array($dataArray)) {
 
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
-                if($dataArray['tableName']=='tbl_bac_shipments'){
+                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                 }
 
@@ -248,6 +330,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         } catch (Exception $exc) {
             $exc->getMessage();
         }
+        exit();
+    }
+
+    public function getusersessionAction()
+    {
+        print_r($this->dbConnection->getUserSession());
         exit();
     }
 }

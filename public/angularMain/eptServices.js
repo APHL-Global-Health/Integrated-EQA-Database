@@ -115,16 +115,26 @@ EptServices.service('EptServices', function () {
         }
         return yyyy + '-' + mm + '-' + dd;
     }
-    this.EptServiceObject.returnIdArray = function (arrayData, id, checker) {
+    this.EptServiceObject.returnIdArray = function (arrayData, id, checker, quantity) {
         try {
             if (angular.isNumber(Number(id))) {
-                if (checker) {
-                    arrayData.push(id);
+                if (angular.isDefined(quantity)) {
+                    if (checker) {
+                        arrayData.push(
+                            {id: id, quantity: quantity}
+                            );
+                    } else {
+                        var indexOf = arrayData.indexOf({id:id});
+                        arrayData.splice(indexOf, 1);
+                    }
                 } else {
-                    var indexOf = arrayData.indexOf(id);
-                    arrayData.splice(indexOf, 1);
+                    if (checker) {
+                        arrayData.push(id);
+                    } else {
+                        var indexOf = arrayData.indexOf(id);
+                        arrayData.splice(indexOf, 1);
+                    }
                 }
-
             } else {
                 console.log('id not a number');
             }

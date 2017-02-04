@@ -1,11 +1,11 @@
-<div class="col-md-12" ng-if="samples.linksObject.samplesLink=='viewpanels'">
+<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewpanels'">
     <div class="main-div">
-
-        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        <div id='alert' tabindex='1'>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
         </div>
-
 
         <h3> Available Panels
             <small>{{samples.panelsData.length}} records</small>
@@ -50,7 +50,7 @@
         </h3>
 
 
-        <div class="panel panel-body text-sm">
+        <div class="panel panel-body text-sm no-padding">
 
             <div class="panel panel-body text-sm bg-aqua" ng-if="!expand">
                 <h4 class="h4">Expanded Panel Information</h4>
@@ -58,7 +58,7 @@
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
                     <div class="panel-group" id="accordion">
-                        <div class="panel panel-primary "
+                        <div class="panel {{samples.returnPanelColorFromStatus(panel.panelStatus,1)}}"
                              dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -66,26 +66,32 @@
                                        ng-click="samples.getSampleFromPanel(panel.id,'tbl_bac_sample_to_panel')"
                                        data-parent="#accordion">{{$index+1}}.
                                         {{panel.panelName}}</a>
+                                    <small class="pull-right">{{panel.dateCreated}}
+                                        {{samples.returnPanelStatus(panel.panelStatus)}}
+                                    </small>
                                 </h4>
                             </div>
                             <div id="{{panel.id}}" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <p class="col-md-12">
+                                <div class="panel-body" padding-left: 0px!important;>
+                                    <p class="">
 
-                                    <div class="col-md-5 pull-left">
-                                        <div class="col-md-12 btn-primary">
+                                    <div class="col-md-5 pull-left side-info" style="padding-left: 0px!important;">
+                                        <div class="col-md-12  {{samples.returnPanelColorFromStatus(panel.panelStatus)}}">
                                             <div class="clearfix">&nbsp;</div>
                                             <div class="col-md-7 pull-left">Panel Details</div>
                                             <div class="col-md-5 pull-right">
-                                                <a href="#"
+                                                <a href="#" ng-show="panel.panelStatus==0"
                                                    ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')">
                                                     <i class="fa fa-remove  "></i></a> &nbsp;
-                                                <a href="">
+                                                <a href="" ng-show="panel.panelStatus==0"
+                                                   ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
                                                     <i class="fa fa-edit  "></i></a> &nbsp;
                                                 <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                   ng-show="panel.panelStatus==0"
                                                    href="#addSamples" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-plus-square  "></i></a> &nbsp;
                                                 <a about="" ng-click="samples.addSamplesToPanel(panel)"
+                                                   ng-show="panel.panelStatus==0"
                                                    href="#addSamples" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-unlock  "></i></a>
                                                 &nbsp;
@@ -125,7 +131,8 @@
                                                     <br>
 
                                                     Shipment Status :
-                                                    <i nowrap>{{panel.returnShipmentStatus(panel.panelStatus)}}</i>
+                                                    <i nowrap><b>{{samples.returnPanelStatus(panel.panelStatus)}}</b>
+                                                    </i>
 
                                                     <div class="text-left ">
                                                         <small class="text-gray"><i>{{panel.panelDatePrepared}}</i>
@@ -159,7 +166,8 @@
                                                 <td>{{sample.materialOrigin}}</td>
                                                 <td nowrap>{{sample.dateCreated}}</td>
                                                 <td>
-                                                    <a href="#" class=""
+                                                    <a href="#" class="btn btn-danger btn-sm"
+                                                       ng-disabled="panel.panelStatus!=0"
                                                        ng-click="samples.deleteCustomRow(sample.id,'tbl_bac_sample_to_panel')">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
@@ -215,12 +223,17 @@
                         <td nowrap>{{panel.shipmentNo}}</td>
                         <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
-                            <a class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm"
+                            <a class="btn btn-info btn-sm" ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus!=0"
                                ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i
                                     class="fa fa-remove"></i></a>
-                            <a class="btn btn-success btn-sm"><i class="fa fa-unlock"></i></a>
-                            <a class="btn btn-primary btn-sm" about="" ng-click="samples.addSamplesToPanel(panel)"
+                            <a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0">
+                                <i class="fa fa-unlock"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm" about="" ng-disabled="panel.panelStatus!=0"
+                               ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"
                             ><i class="fa fa-plus"></i></a>
                             <a class="btn btn-primary btn-sm" href="#barcodeModal" data-backdrop="false"
@@ -284,15 +297,16 @@
 
                                     <input type="checkbox"
                                            ng-checked="samples.returnCheckedRow(sample.id,samples.samplePanelArray)"
-                                           ng-click="samples.addSampleToArray(sample.id,sampleCheck)"
-                                           ng-model="sampleCheck">
+                                           ng-click="samples.addSampleToArray(sample.id,sample.sampleCheck,sample.quantity)"
+                                           ng-model="sample.sampleCheck">
 
 
                                 </td>
                                 <td>
                                     <form name="sampleQuantityForm">
-                                        <input type="number" ng-disabled="!sampleCheck" name="sampleQuantity"
-                                               ng-model="sample.quantity" placeholder="quantity" required
+                                        <input type="number" ng-disabled="!sample.sampleCheck" name="sampleQuantity"
+                                               ng-init="sample.quantity=1" min="1" max="100" ng-keyup="samples.addSampleToArray(sample.id,sample.sampleCheck,sample.quantity)"
+                                               ng-model="sample.quantity" placeholder="quantity of samples" required
                                                ng-class="{'has-error' :sampleQuantityForm.sampleQuantity.$invalid && !sampleQuantityForm.sampleQuantity.$pristine }">
                                     </form>
                                 </td>

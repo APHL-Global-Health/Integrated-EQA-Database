@@ -1,45 +1,49 @@
 .side-menu ul li {
-    background-color:#002a80 !important;
+    background-color: #002a80 !important;
     color: white;
 }
 
 .side-menu ul li:hover {
     background-color: #0922DE;
 }
-.has-error{
-    border-color: red;
-    color:red;
-}
 
+.has-error {
+    border-color: red;
+    color: red;
+}
 
 * {
     border-radius: 0 !important;
 }
-*,.btn{
+
+*, .btn {
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
     border-radius: 0 !important;
 }
-.btn{
+
+.btn {
     border-radius: 0 !important;
 }
+
 aside {
-    position:  absolute;
+    position: absolute;
     left: 0;
     top: 0; /* set these so Chrome doesn't return 'auto' from getComputedStyle */
     width: 200px;
-    background: rgba(255,255,255,0.66);
-    border: 2px  solid rgba(0,0,0,0.5);
-    border-radius: 4px; padding: 8px;
+    background: rgba(255, 255, 255, 0.66);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 8px;
 }
 
-.modal
-{
+.modal {
     /*overflow: hidden;*/
-    border-radius:0px !important;
+    border-radius: 0px !important;
 
 }
-.modal-dialog{
+
+.modal-dialog {
     margin-right: auto;
     margin-left: auto;
     z-index: 10000;
@@ -50,6 +54,7 @@ aside {
     border-radius: 32px;
     color: black;
 }
+
 .partially button span {
     background-color: orange;
     border-radius: 32px;
@@ -60,17 +65,153 @@ aside {
     width: 100%;
     height: 3px;
     z-index: 9999;
-    top:0
+    top: 0
 }
+
 .bar {
     width: 0;
     height: 100%;
     transition: height .9s;
-    background:#FF1716;
+    background: #FF1716;
 }
-.border-bottom{
+
+.border-bottom {
     padding-bottom: 7px;
     margin-bottom: 7px;
     border-bottom: 1px lightgrey solid;
+
+}
+
+table .btn-sm {
+    height: 25px !important;
+    /*margin: 0px!important;*/
+    padding-top: 1px !important;
+}
+
+.side-info a {
+    color: white !important;
+}
+
+.side-info a:hover {
+    color: white !important;
+    text-decoration: underline;
+}
+
+h3 input type {
+    font-size: 14px;
+}
+
+.no-padding {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.panel small {
+    color: white !important;
+}
+
+.table {
+    /*padding-left:0px !important;*/
+    /*padding-right:0px !important;*/
+    /*margin-left:0px !important;*/
+    /*margin-right:0px !important;*/
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.path{
+    border-bottom: 1px darkgray solid;
+    border-top: 1px darkgray solid;
+    padding: 5px;
+    font-size: 16px;
+    background-color: rgba(100,100,111,0.51);
+    color: white;
+}
+.path a{
+    color:white;
+}
+
+.github.ribbon {
+    position: fixed;
+    display: block;
+    top: 40px;
+    right: 0;
+    border: 0;
+    z-index: 1001;
+}
+
+.prettyprint {
+    padding: 10px!important;
+}
+
+#wrap {
+    padding-top: 70px;
+}
+
+#home h1 {
+    margin-bottom: 30px;
+}
+#demo,
+#examples,
+#support,
+#download {
+    padding-top: 40px;
+}
+
+.com { color: #93a1a1; }
+.lit { color: #195f91; }
+.pun, .opn, .clo { color: #93a1a1; }
+.fun { color: #dc322f; }
+.str, .atv { color: #D14; }
+.kwd, .linenums .tag { color: #1e347b; }
+.typ, .atn, .dec, .var { color: teal; }
+.pln { color: #48484c; }
+
+.prettyprint {
+    padding: 8px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+}
+.prettyprint.linenums {
+    -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+    margin: 0 0 0 33px; /* IE indents via margin-left */
+}
+ol.linenums li {
+    padding-left: 12px;
+    color: #bebec5;
+    line-height: 18px;
+    text-shadow: 0 1px 0 #fff;
+}
+h3{
+    border-bottom: 3px lightgrey solid;
+    padding-bottom:12px;
 
 }
