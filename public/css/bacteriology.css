@@ -116,6 +116,7 @@ h3 input type {
     /*margin-left:0px !important;*/
     /*margin-right:0px !important;*/
 }
+
 .tooltip {
     position: relative;
     display: inline-block;
@@ -141,16 +142,18 @@ h3 input type {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
-.path{
+
+.path {
     border-bottom: 1px darkgray solid;
     border-top: 1px darkgray solid;
     padding: 5px;
     font-size: 16px;
-    background-color: rgba(100,100,111,0.51);
+    background-color: rgba(100, 100, 111, 0.51);
     color: white;
 }
-.path a{
-    color:white;
+
+.path a {
+    color: white;
 }
 
 .github.ribbon {
@@ -163,7 +166,7 @@ h3 input type {
 }
 
 .prettyprint {
-    padding: 10px!important;
+    padding: 10px !important;
 }
 
 #wrap {
@@ -173,6 +176,7 @@ h3 input type {
 #home h1 {
     margin-bottom: 30px;
 }
+
 #demo,
 #examples,
 #support,
@@ -180,20 +184,44 @@ h3 input type {
     padding-top: 40px;
 }
 
-.com { color: #93a1a1; }
-.lit { color: #195f91; }
-.pun, .opn, .clo { color: #93a1a1; }
-.fun { color: #dc322f; }
-.str, .atv { color: #D14; }
-.kwd, .linenums .tag { color: #1e347b; }
-.typ, .atn, .dec, .var { color: teal; }
-.pln { color: #48484c; }
+.com {
+    color: #93a1a1;
+}
+
+.lit {
+    color: #195f91;
+}
+
+.pun, .opn, .clo {
+    color: #93a1a1;
+}
+
+.fun {
+    color: #dc322f;
+}
+
+.str, .atv {
+    color: #D14;
+}
+
+.kwd, .linenums .tag {
+    color: #1e347b;
+}
+
+.typ, .atn, .dec, .var {
+    color: teal;
+}
+
+.pln {
+    color: #48484c;
+}
 
 .prettyprint {
     padding: 8px;
     background-color: #f7f7f9;
     border: 1px solid #e1e1e8;
 }
+
 .prettyprint.linenums {
     -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
     -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
@@ -204,14 +232,20 @@ h3 input type {
 ol.linenums {
     margin: 0 0 0 33px; /* IE indents via margin-left */
 }
+
 ol.linenums li {
     padding-left: 12px;
     color: #bebec5;
     line-height: 18px;
     text-shadow: 0 1px 0 #fff;
 }
-h3{
-    border-bottom: 3px lightgrey solid;
-    padding-bottom:12px;
 
+h3 {
+    border-bottom: 3px lightgrey solid;
+    padding-bottom: 12px;
+
+}
+
+.active {
+    border-top: 3px red solid;
 }

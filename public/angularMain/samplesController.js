@@ -43,6 +43,7 @@
         $scope.samples.loaderProgressSpinner = '';
         $scope.samples.panelsToShipment = {};
         $scope.samples.sampleToPanel = {};
+        $scope.samples.samplesToUsers={}
         function assignHTTPResponse(data, tableName) {
 
             if (tableName == 'tbl_bac_samples') {
@@ -66,6 +67,11 @@
             if (tableName == 'data_manager') {
                 $scope.samples.labUsers = data.data;
             }
+            if (tableName == 'tbl_bac_samples_to_users') {
+                $scope.samples.samplesToUsers = data.data;
+            }
+
+
 
         }
 
@@ -621,6 +627,13 @@
                         $scope.samples.sampleToPanel = changedData;
                     }
                 }
+                if (tableName == 'tbl_bac_samples_to_users') {
+
+                    data = $scope.samples.samplesToUsers;
+                    if (operation == 1) {
+                        $scope.samples.samplesToUsers = changedData;
+                    }
+                }
                 if (operation != 1) {
                     return data;
                 }
@@ -778,22 +791,97 @@
                 console.log(Exception)
             }
         }
-        $scope.samples.saveSampleToUser = function (user, users2) {
-            console.log(user)
-            console.log(users2)
-            var array_of_checked_values = $("#undo_redo").multiselect("getChecked").map(function (input) {
-                return this.value;
-            }).get().join(",");
-            console.log(array_of_checked_values)
+        $scope.samples.saveSampleToUser = function () {
+            try {
+
+                var users = $scope.samples.usersToSamples;
+                if (users.length > 0) {
+
+                    try {
+
+                        var url = serverSamplesURL + 'saveuserstosample';
+                        var postedData = {};
+                        postedData = {
+                            sampleId: $scope.samples.clickedSample.sampleId,
+                            panelToSampleId: $scope.samples.clickedSample.id,
+                            userIds: users
+                        };
+                        console.log(postedData);
+                        changeSavingSpinner(true);
+                        $http
+                            .post(url, postedData)
+                            .success(function (response) {
+                                console.log(response)
+                                changeSavingSpinner(false);
+                                if (response.status == 1) {
+                                    $scope.samples.samplePanelArray = [];
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                } else {
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                }
+                                $scope.samples.showMultiSelect('', 1);
+                            })
+                            .error(function (error) {
+                                changeSavingSpinner(false);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                console.log(error)
+                            })
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                } else {
+                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(4,'please select atleas'));
+                }
+            } catch (Exception) {
+                console.log(Exception)
+            }
         }
+        $scope.samples.usersToSamples = []
+        $scope.samples.addUsersToSamples = function (id, status) {
+            console.log(id)
+
+            if (status == 1) {
+                if (angular.isDefined(id)) {
+                    if ($scope.samples.usersToSamples.indexOf(Number(id)) < 0) {
+                        $scope.samples.usersToSamples.push(Number(id));
+                    }
+                }
+            }
+            if (status == 0) {
+                console.log(id)
+                var position = $scope.samples.usersToSamples.indexOf(Number(id));
+                console.log(position)
+                if (Number(position) > -1) {
+                    console.log('should splice')
+                    $scope.samples.usersToSamples.splice(position, 1)
+                }
+            }
+            if (status == 2) {
+                $scope.samples.usersToSamples = []
+            }
+            if (status == 3) {
+
+                $scope.samples.usersToSamples = EptServices.EptServiceObject.returnIdArrayFromObject($scope.samples.labUsers);
+            }
+
+            $scope.samples.userIds = '';
+            console.log($scope.samples.usersToSamples);
+
+        }
+        $scope.samples.showMultiSelectFlag = false;
         $scope.samples.showMultiSelect = function (sample, type) {
             $scope.samples.clickedSample = sample;
             if (type == 1) {
                 $("#users_table").show('fast');
                 $("#multi_select").hide('fast');
+                $scope.samples.showMultiSelectFlag = false;
             } else {
+                $scope.samples.showMultiSelectFlag = true;
                 $("#users_table").hide('fast');
                 $("#multi_select").show('fast');
+
+                console.log($scope.samples.showMultiSelectFlag);
             }
         }
         $scope.samples.getAllFacilityUsers = function (tableName) {
@@ -1084,6 +1172,7 @@
         $scope.receive = {}
         $scope.receive.showPanelStatus = false;
         $scope.receive.showPanelFullDetails = function (panelInfo) {
+            $scope.samples.sampleToPanel = {};
             console.log(panelInfo)
             $scope.receive.clickedPanel = panelInfo;
             $scope.samples.getSampleFromPanel(panelInfo.id, 'tbl_bac_sample_to_panel');

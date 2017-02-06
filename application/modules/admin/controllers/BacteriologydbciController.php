@@ -78,6 +78,35 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     }
 
+    public function saveuserstosampleAction()
+    {
+        try {
+            $jsPostData = file_get_contents('php://input');
+
+            $jsPostData = (array)(json_decode($jsPostData));
+            $idArray = $jsPostData['userIds'];
+
+            if (is_array($jsPostData)) {
+                $response = [];
+                foreach ($idArray as $value) {
+                    //   $connection = new Main();
+                    $data['userId'] = $value;
+                    $data['sampleId'] = $jsPostData['sampleId'];
+                    $data['panelToSampleId'] = $jsPostData['panelToSampleId'];
+                    $response = $this->dbConnection->insertData('tbl_bac_samples_to_users', $data);
+
+
+                }
+                echo $this->returnJson($response);
+            }
+            exit();
+        } catch (Exception $error) {
+            echo $error->getMessage();
+        }
+
+    }
+
+
     public function savepaneltoshipmentAction()
     {
         try {
@@ -125,8 +154,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function returnValueWhere($id, $tableName)
     {
         $returnArray = '';
-        $whereId['id'] = $id;
-        if (is_numeric($whereId['id'])) {
+        if ($tableName == 'data_manager') {
+            $whereId['dm_id'] = $id;
+        } else {
+            $whereId['id'] = $id;
+        }
+        if (is_array($whereId)) {
             $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
 //            echo($dataDB);
 //            exit;
@@ -212,10 +245,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 //            print_r($where);
 //            exit;
             $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
-            if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel') {
+            if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
                 foreach ($dataDB as $key => $value) {
+
                     $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
-                    if ($tableName == 'tbl_bac_sample_to_panel') {
+
+                    if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
+
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
                         $dataDB[$key]->batchName = $sample['batchName'];
@@ -224,6 +260,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+
+                        if ($tableName == 'tbl_bac_samples_to_users') {
+
+                            $issuedTo = $this->returnValueWhere($value->userId, 'data_manager');
+//                            var_dump($issuedTo);
+//                            exit;
+                            $dataDB[$key]->issuedTo = $issuedTo['last_name'] . ' ' . $issuedTo['first_name'];
+                        }
                     }
                 }
             }

@@ -42,24 +42,32 @@ EptServices.service('EptServices', function () {
         if (status == 1) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: 'Data saved successfully',
+                fbMessage:angular.isDefined(message) ? message : 'Data saved successfully',
                 fbbgColor: 'alert-success'
             }
         }
         if (status == 2) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: 'No data available or missing fields',
+                fbMessage: angular.isDefined(message) ? message :'No data available or missing fields',
                 fbbgColor: 'alert-warning'
             }
         }
         if (status == 4) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: 'Please fill all the fields,or missing data',
+                fbMessage: angular.isDefined(message) ? message : 'Please fill/select all the fields,or missing data',
                 fbbgColor: 'alert-warning'
             }
         }
+        if (status == 5) {
+            loaderStatus = {
+                fbStatus: true,
+                fbMessage: angular.isDefined(message) ? message :'Unknown message',
+                fbbgColor: 'alert-danger'
+            }
+        }
+
         // else {
         //     loaderStatus = {
         //         fbStatus: true,
@@ -103,6 +111,25 @@ EptServices.service('EptServices', function () {
 
         }
     }
+    this.EptServiceObject.returnIdArrayFromObject = function (dataObject) {
+
+        try {
+            var ids = []
+
+            if (dataObject.length > 0) {
+                console.log(dataObject)
+                for (var i = 0; i < dataObject.length; i++) {
+
+                    ids.push(Number(dataObject[i]['dm_id']))
+                }
+
+            }
+            console.log(ids)
+            return ids;
+        } catch (Exception) {
+            console.log(Exception)
+        }
+    }
     this.EptServiceObject.EptFormatDate = function (cDate) {
         var dd = cDate.getDate();
         var mm = cDate.getMonth() + 1; //January is 0!
@@ -122,9 +149,9 @@ EptServices.service('EptServices', function () {
                     if (checker) {
                         arrayData.push(
                             {id: id, quantity: quantity}
-                            );
+                        );
                     } else {
-                        var indexOf = arrayData.indexOf({id:id});
+                        var indexOf = arrayData.indexOf({id: id});
                         arrayData.splice(indexOf, 1);
                     }
                 } else {
