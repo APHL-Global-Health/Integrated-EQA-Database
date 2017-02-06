@@ -41,7 +41,12 @@
                 </div>
             </div>
         </h3>
-
+        <div id="alert" tabindex="1">
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
+        </div>
         <div id="users_table">
 
             <table class="table table-striped">
@@ -89,20 +94,27 @@
                 </div>
 
                 <div class="col-xs-2">
-                    <button type="button" id="undo_redo_undo" class="btn btn-primary btn-block btn-sm">undo <i
-                            class="fa fa-undo"></i></button>
-                    <button type="button" id="undo_redo_rightAll" class="btn btn-default btn-block btn-sm">Select all <i
+                    <!--<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block btn-sm">undo <i-->
+                    <!--class="fa fa-undo"></i></button>-->
+                    <button type="button" id="undo_redo_rightAll" ng-click="samples.addUsersToSamples(1,3)"
+                            class="btn btn-info btn-block btn-sm">Select all <i
                             class="fa fa-forward"></i></button>
-                    <button type="button" id="undo_redo_rightSelected" class="btn btn-default btn-block btn-sm">Select
+                    <button type="button" id="undo_redo_rightSelected"
+                            ng-click="samples.addUsersToSamples(samples.userIds,1)"
+                            class="btn btn-primary btn-block btn-sm">Select
                         <i
                                 class="fa fa-chevron-right"></i></button>
-                    <button type="button" id="undo_redo_leftSelected" class="btn btn-default btn-block btn-sm">Remove <i
+                    <button type="button" id="undo_redo_leftSelected"
+                            ng-click="samples.addUsersToSamples(samples.addedUsers,0)"
+                            class="btn btn-warning btn-block btn-sm">Remove <i
                             class="fa fa-chevron-left"></i></button>
-                    <button type="button" id="undo_redo_leftAll" class="btn btn-default btn-block btn-sm">Deselect All
-                        <i
-                                class="fa fa-backward"></i></button>
-                    <button type="button" id="undo_redo_redo" class="btn btn-warning btn-block btn-sm">redo <i
-                            class="fa fa-re"></i></button>
+                    <button type="button" id="undo_redo_leftAll" ng-click="samples.addUsersToSamples(1,2)"
+                            class="btn btn-danger btn-block btn-sm">Remove All
+                    </button>
+                    <!--<i-->
+                    <!--class="fa fa-backward"></i></button>-->
+                    <!--<button type="button" id="undo_redo_redo" class="btn btn-warning btn-block btn-sm">redo <i-->
+                    <!--class="fa fa-re"></i></button>-->
                 </div>
 
                 <div class="col-xs-5">
@@ -115,16 +127,19 @@
             <div class="clearfix">&nbsp;</div>
 
             <div class="col-md-12">
+                <div class="clearfix">&nbsp;</div>
                 <div class="text-center col-md-offset-4">
                     <button class="btn btn-info col-md-2"
-                            ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)"><i
-                            class="fa fa-save"></i>
+                            ng-disabled=" samples.savingInProgress"
+                            ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)">
+                        <i class="fa fa-spin {{samples.savingSpinner}}"></i>
                         Save
                     </button>
 
                     <button class="btn btn-danger col-md-2"
                             ng-click="samples.showMultiSelect(sample,1)"
-                    ><i class="fa fa-remove"></i> Cancel</button>
+                    ><i class="fa fa-remove"></i> Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -136,9 +151,9 @@
 
             $('#undo_redo').multiselect(
                 {
-                    click: function(event, ui){
-                        if(ui.checked){
-                        alert('')
+                    click: function (event, ui) {
+                        if (ui.checked) {
+                            alert('')
                         }
                         else {
                         }

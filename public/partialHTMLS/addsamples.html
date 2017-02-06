@@ -2,10 +2,11 @@
 
     <div class="col-md-8 col-md-offset-2">
         <H3>Sample Preparation Form</H3>
-        <hr>
-        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        <div id='alert' tabindex='1'>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
         </div>
         <form name="sampleData" novalidate="" class="form-horizontal ">
             <div class="form-group row"
@@ -121,7 +122,8 @@
 
 
                     </div>
-                    <input class="form-control col-md-12" ng-hide="true"  required="" ng-model="samples.sampleFormData.datePrepared"
+                    <input class="form-control col-md-12" ng-hide="true" required=""
+                           ng-model="samples.sampleFormData.datePrepared"
                            name="dateCreated"
                            ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
@@ -171,8 +173,8 @@
 
                     <button class="btn btn-primary col-md-12"
                             ng-click="samples.saveSampleFormData('tbl_bac_samples',samples.sampleFormData)"
-                            ng-disabled="sampleData.$invalid || samples.sampleSaveMonitor"
-                    >Save
+                            ng-disabled="sampleData.$invalid || samples.savingInProgress"
+                    >Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
                     </button>
                 </div>
             </div>
