@@ -42,14 +42,14 @@ EptServices.service('EptServices', function () {
         if (status == 1) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage:angular.isDefined(message) ? message : 'Data saved successfully',
+                fbMessage: angular.isDefined(message) ? message : 'Data saved successfully',
                 fbbgColor: 'alert-success'
             }
         }
         if (status == 2) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: angular.isDefined(message) ? message :'No data available or missing fields',
+                fbMessage: angular.isDefined(message) ? message : 'No data available or missing fields',
                 fbbgColor: 'alert-warning'
             }
         }
@@ -63,7 +63,7 @@ EptServices.service('EptServices', function () {
         if (status == 5) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: angular.isDefined(message) ? message :'Unknown message',
+                fbMessage: angular.isDefined(message) ? message : 'Unknown message',
                 fbbgColor: 'alert-danger'
             }
         }
@@ -144,12 +144,33 @@ EptServices.service('EptServices', function () {
     }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker, quantity) {
         try {
+            console.log(arrayData)
             if (angular.isNumber(Number(id))) {
                 if (angular.isDefined(quantity)) {
                     if (checker) {
-                        arrayData.push(
-                            {id: id, quantity: quantity}
-                        );
+                        var ar = [];
+                        ar['id'] = id;
+                        ar['quantity'] = quantity;
+                        var position = false;
+                        if (angular.isNumber(quantity)) {
+                            if (quantity > 1000) {
+                                quantity = 1000;
+                            }
+                        } else {
+                            quantity = 1;
+                        }
+                        if (arrayData.length > 0) {
+                            for (var i = 0; i < arrayData.length; i++) {
+                                if (arrayData[i]['id'] == id) {
+                                    position = true;
+                                    arrayData[i]['quantity'] = quantity;
+                                    break
+                                }
+                            }
+                        }
+                        if (!position) {
+                            arrayData.push({id: id, quantity: quantity});
+                        }
                     } else {
                         var indexOf = arrayData.indexOf({id: id});
                         arrayData.splice(indexOf, 1);

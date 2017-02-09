@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <h3> Issue Samples
-            <small>{{samples.sampleToPanel.length}} records</small>
+            <small class="label label-info">{{samples.sampleToPanel.length}} records</small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
                 <div class="dropdown col-md-3 pull-right">
@@ -109,7 +109,8 @@
                             class="btn btn-warning btn-block btn-sm">Remove <i
                             class="fa fa-chevron-left"></i></button>
                     <button type="button" id="undo_redo_leftAll" ng-click="samples.addUsersToSamples(1,2)"
-                            class="btn btn-danger btn-block btn-sm">Remove All
+                            class="btn btn-danger btn-block btn-sm">Remove All <i
+                            class="fa fa-backward"></i>
                     </button>
                     <!--<i-->
                     <!--class="fa fa-backward"></i></button>-->

@@ -1,0 +1,158 @@
+<div class="col-md-12" ng-cloak="">
+
+    <div class="col-md-8 col-md-offset-2">
+        <H3>Add Round Dates</H3>
+        <div id='alert' tabindex='1'>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
+        </div>
+        <form name="sampleData" novalidate="" class="form-horizontal ">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : sampleData.batchName.$invalid && !sampleData.batchName.$pristine }">
+                <label class="col-2 col-form-label">Round Code</label>
+                <div class="col-10">
+                    <input class="form-control " required="" ng-model="samples.sampleFormData.batchName"
+                           name="batchName"
+                           ng-pattern="samples.alphaNumHyDashRegExp">
+                    <small class="text-danger col-md-12"
+                           ng-show="sampleData.batchName.$invalid && !sampleData.batchName.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
+
+                </div>
+            </div>
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : sampleData.preparedBy.$invalid && !sampleData.preparedBy.$pristine }">
+                <label class="col-2 col-form-label">Round Name</label>
+                <div class="col-10">
+                    <input class="form-control" required="" ng-model="samples.sampleFormData.preparedBy"
+                           name="preparedBy"
+                           ng-pattern="samples.alphaNumHyDashRegExp">
+                    <small class="text-danger col-md-12"
+                           ng-show="sampleData.preparedBy.$invalid && !sampleData.preparedBy.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
+
+                </div>
+            </div>
+
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : sampleData.materialOrigin.$invalid && !sampleData.materialOrigin.$pristine }">
+                <label class="col-2 col-form-label">Round Description</label>
+                <div class="col-10">
+                    <input class="form-control" required="" ng-model="samples.sampleFormData.materialOrigin"
+                           name="materialOrigin"
+                           ng-pattern="samples.alphaNumHyDashRegExp">
+                    <small class="text-danger col-md-12"
+                           ng-show="sampleData.materialOrigin.$invalid && !sampleData.materialOrigin.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
+
+                </div>
+            </div>
+            <div class="form-group"
+                 ng-class="{ 'has-error'  : sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine }">
+                <label class="col-2 col-form-label">Start Date</label>
+                <div class="col-10">
+                    <div class="col-10" ng-click="samples.setSampleDatePrepared()">
+
+                        <date-picker name="" id="datePrepared">
+
+                        </date-picker>
+
+
+                    </div>
+                    <input class="form-control col-md-12" ng-hide="true" required=""
+                           ng-model="samples.sampleFormData.datePrepared"
+                           name="dateCreated"
+                           ng-pattern="samples.alphaNumHyDashRegExp">
+                    <small class="text-danger col-md-12"
+                           ng-show="sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
+
+                </div>
+            </div>
+
+            <div class="form-group"
+                 ng-class="{ 'has-error'  : sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine }">
+                <label class="col-2 col-form-label">End Date</label>
+                <div class="col-10">
+                    <div class="col-10" ng-click="samples.setSampleDatePrepared()">
+
+                        <date-picker name="" id="datePrepared">
+
+                        </date-picker>
+
+
+                    </div>
+                    <input class="form-control col-md-12" ng-hide="true" required=""
+                           ng-model="samples.sampleFormData.datePrepared"
+                           name="dateCreated"
+                           ng-pattern="samples.alphaNumHyDashRegExp">
+                    <small class="text-danger col-md-12"
+                           ng-show="sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine">
+                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                    </small>
+
+                </div>
+            </div>
+
+            <div class="clearfix">&nbsp;</div>
+            <div class="form-group"
+                 ng-class="{ 'has-error'  : sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine }">
+
+                <div class="col-10">
+
+                    <button class="btn btn-primary col-md-12"
+                            ng-click="samples.saveSampleFormData('tbl_bac_samples',samples.sampleFormData)"
+                            ng-disabled="sampleData.$invalid || samples.savingInProgress"
+                    >Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                    </button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+
+    ___________________________________________________________________________________________________________
+    Date range (dynamic)
+
+    From
+
+    Until
+    <form name="datepickerForm" class="form-inline" role="form">
+        <!-- Basic example -->
+        <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+            <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
+            <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker>
+        </div>
+        <!-- Custom example -->
+        <div class="form-group" ng-class="{'has-error': datepickerForm.date2.$invalid}">
+            <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
+            <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="today" data-autoclose="1" name="date2" bs-datepicker>
+        </div>
+        <hr>
+        <!-- Date range example -->
+        <div class="form-group">
+            <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
+            <div class="form-group col-xs-6">
+                <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
+            </div>
+            <div class="form-group col-xs-6">
+                <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
+            </div>
+        </div>
+    </form>
+
+
+
+
+</div>
+<div class="clearfix">&nbsp;</div>

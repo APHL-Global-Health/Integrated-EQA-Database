@@ -241,7 +241,7 @@ ol.linenums li {
 }
 
 h3 {
-    border-bottom: 3px lightgrey solid;
+    /*border-bottom: 0px lightgrey solid;*/
     padding-bottom: 12px;
 
 }

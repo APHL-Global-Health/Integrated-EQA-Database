@@ -1,0 +1,69 @@
+<div id="addPanels" class="modal modal-lg fade"  ng-if="samples.showShipmentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="samples.hideShipmentModal()">&times;</button>
+                <h4 class="modal-title">add panels :
+                    {{samples.currentShipment.shipmentName | capitalizeLetter}} :
+                    {{samples.currentShipment.shipmentDsc | capitalizeLetter}}
+                    <small class="small">
+                        {{samples.panelsToShipmentArray.length}} Panels
+                    </small>
+                    <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                    <small class="">
+                        <a href="#" class=" btn btn-default btn-sm"
+                           ng-click="samples.getAllSamples('tbl_bac_panel_mst')">
+                            <i class="fa fa-refresh"></i>
+                        </a>
+                    </small>
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
+                <p class="pre-scrollable">
+
+                <table class="table table-bordered table-responsive">
+                    <tr>
+                        <td></td>
+
+                        <td><b>Panel</b></td>
+                        <td><b>Date Prer'd</b></td>
+                        <td><b>Quantity</b></td>
+                    </tr>
+                    <tr ng-repeat="panel in samples.panelsData |filter : searchSample |limitTo : 8"
+                        ng-class="{'alert-danger':panel.totalSamplesAdded==0}"
+                    >
+                        <td>
+
+                            <input type="checkbox" ng-disabled="panel.totalSamplesAdded==0"
+                                   ng-checked="samples.returnCheckedRow(panel.id,samples.panelsToShipmentArray)"
+                                   ng-click="samples.addPanelToShipment(panel.id,panelCheck)"
+                                   ng-model="panelCheck">
+
+
+                        </td>
+
+                        <td>{{panel.panelName}}</td>
+                        <td>{{panel.panelDatePrepared}}</td>
+                        <td>{{panel.totalSamplesAdded}}</td>
+                    </tr>
+                </table>
+                </p>
+                <div class="alert {{samples.feedbackObject.fbbgColor}}"
+                     ng-if="samples.feedbackObject.fbStatus">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                </div>
+                <button class="btn btn-info col-md-12"
+                        ng-disabled="samples.panelsToShipmentArray.length==0 || samples.savingInProgress"
+                        ng-click="samples.savePanelsToShipments(samples.currentShipment)"
+                >
+                    Save Panel to {{samples.currentShipment.shipmentName | capitalizeLetter}} <i
+                        class="fa fa-spin {{samples.savingSpinner}}"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

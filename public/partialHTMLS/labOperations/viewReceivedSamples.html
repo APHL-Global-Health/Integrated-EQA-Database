@@ -13,7 +13,7 @@
 
     </div-->
     <h3> Delivered Panels
-        <small>{{samples.panelsData.length}} records</small>
+        <small class="label label-info">{{samples.panelsToShipment.length}} records</small>
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
         <div class="pull-right col-mod-12">
             <div class="dropdown col-md-3 pull-right">
@@ -47,7 +47,7 @@
                 <input type="search" class="col-md-12" ng-model="samples.searchData">
             </div>
             <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
-                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_panel_mst','panelStatus','3,4,5,6')"><i
+                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_panels_shipments','deliveryStatus','3,4,5,6')"><i
                     class="fa fa-refresh"></i></a>
                 &nbsp;
             </div>
@@ -86,7 +86,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+            <tr dir-paginate="panel in samples.panelsToShipment | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                 <td>{{$index+1}}</td>
                 <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)" ng-show="panel.totalSamplesAdded >0"
                        class="">{{panel.panelName}}</a><x ng-show="panel.totalSamplesAdded==0">{{panel.panelName}}</x></td>
@@ -94,23 +94,23 @@
                 <td>{{panel.panelLabel}}</td>
                 <td>{{panel.panelDatePrepared}}</td>
                 <td nowrap>{{panel.dateDelivered}}</td>
-                <td nowrap>{{samples.returnPanelStatus(panel.panelStatus)}}</td>
+                <td nowrap>{{samples.returnPanelStatus(panel.deliveryStatus)}}</td>
                 <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
                 <td nowrap>{{panel.shipmentNo}}</td>
-                <td nowrap>{{panel.lab}}</td>
+                <td nowrap>{{panel.participantId}}</td>
 
                 <td nowrap>{{panel.totalSamplesAdded}}</td>
                 <td nowrap>{{panel.dateCreated}}</td>
                 <td nowrap>
-                    <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus > 3"
+                    <a class="btn btn-danger btn-sm" ng-disabled="panel.deliveryStatus > 3"
                        data-toggle="tooltip" data-placement="top" title="Click to mark all as rejected!"
-                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',5)"><i
+                       ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',5)"><i
                             class="fa fa-thumbs-down"></i>
                     </a>
-                    <a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus > 3"
+                    <a class="btn btn-success btn-sm" ng-disabled="panel.deliveryStatus > 3"
                        data-toggle="tooltip" data-placement="top"
                        title="Click to mark all as successfully received without any issue!"
-                       ng-click="samples.panelReceived(panel.id,'tbl_bac_sample_to_panel',4)"><i
+                       ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',4)"><i
                             class="fa fa-thumbs-up"></i>
                     </a>
                     <a class="btn btn-primary btn-sm"

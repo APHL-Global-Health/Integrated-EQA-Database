@@ -58,12 +58,16 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             $jsPostData = (array)(json_decode($jsPostData));
             $idArray = $jsPostData['sampleIds'];
+            $idArray = (array)$idArray;
 
             if (is_array($jsPostData)) {
                 $response = [];
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
-                    $data['sampleId'] = $value;
+                    $value =((array)$value);
+
+                    $data['sampleId'] = $value['id'];
+                    $data['totalAddedSamples'] = $value['quantity'];
                     $data['panelId'] = $jsPostData['panelId'];
                     $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $data);
 
@@ -199,12 +203,18 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 foreach ($dataDB as $key => $value) {
                     if ($tableName == 'tbl_bac_panels_shipments') {
+
+
                         $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
 
 
                         $dataDB[$key]->panelName = $panel['panelName'];
+                        $dataDB[$key]->panelLabel = $panel['panelLabel'];
+                        $dataDB[$key]->panelType = $panel['panelType'];
                         $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
-
+                        $dataDB[$key]->dateCreated = $panel['dateCreated'];
+                        $dataDB[$key]->barcode = $panel['barcode'];
+                        $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
@@ -245,32 +255,59 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 //            print_r($where);
 //            exit;
             $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
-            if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
-                foreach ($dataDB as $key => $value) {
+//            var_dump($dataDB);
+//            echo sizeof($dataDB);
+//            exit;
+            if ($dataDB != false) {
 
-                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
+                if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel'|| $tableName == 'tbl_bac_panels_shipments'
+                    || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'
+                ) {
+                    foreach ($dataDB as $key => $value) {
 
-                    if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
+                        $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
 
-                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                        if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
 
-                        $dataDB[$key]->batchName = $sample['batchName'];
-                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
-                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
-                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
-                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
-                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                            $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
-                        if ($tableName == 'tbl_bac_samples_to_users') {
+                            $dataDB[$key]->batchName = $sample['batchName'];
+                            $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                            $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                            $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                            $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                            $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
 
-                            $issuedTo = $this->returnValueWhere($value->userId, 'data_manager');
+                            if ($tableName == 'tbl_bac_samples_to_users') {
+
+                                $issuedTo = $this->returnValueWhere($value->userId, 'data_manager');
 //                            var_dump($issuedTo);
 //                            exit;
-                            $dataDB[$key]->issuedTo = $issuedTo['last_name'] . ' ' . $issuedTo['first_name'];
+                                $dataDB[$key]->issuedTo = $issuedTo['last_name'] . ' ' . $issuedTo['first_name'];
+                            }
+
+                        }
+                        if ($tableName == 'tbl_bac_rounds') {
+                            $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate, $dataDB[$key]->startDate);
+                        }
+                        if ($tableName == 'tbl_bac_panels_shipments') {
+
+
+                            $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+
+
+                            $dataDB[$key]->panelName = $panel['panelName'];
+                            $dataDB[$key]->panelLabel = $panel['panelLabel'];
+                            $dataDB[$key]->panelType = $panel['panelType'];
+                            $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
+                            $dataDB[$key]->dateCreated = $panel['dateCreated'];
+                            $dataDB[$key]->barcode = $panel['barcode'];
+                            $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
                         }
                     }
                 }
             }
+
             if (sizeof($dataDB) > 0) {
                 $data['status'] = 1;
                 $data['data'] = $dataDB;
@@ -284,6 +321,28 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             echo $e->getMessage();
         }
         exit();
+    }
+
+    public function converttodays($endDate, $startDate)
+    {
+        $diff = strtotime($endDate) - strtotime($startDate);
+        return round($diff / (60 * 60 * 24), 1);
+        exit;
+    }
+
+    public function returnTotalSamples($array, $tableName)
+    {
+        if (count($array)) {
+            foreach ($array as $key => $value) {
+                if ($tableName == 'tbl_bac_panel_mst') {
+                    $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
+                }
+                if ($tableName == 'tbl_bac_shipments') {
+                    $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $value->id, 'shipmentId');
+                }
+            }
+        }
+        return $array;
     }
 
     public function selectfromtableAction()
@@ -310,13 +369,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
+                $dataDB = $this->returnTotalSamples($dataDB, $tableName);
             }
-            if (sizeof($dataDB) > 0) {
+            if ($dataDB != false) {
                 $data['status'] = 1;
                 $data['data'] = $dataDB;
+
                 echo($this->returnJson($data));
             } else {
-                echo($this->returnJson(json_encode(array('status' => 0))));
+                echo($this->returnJson(json_encode(array('status' => 0, 'message' => 'No Records Found'))));
             }
 
 

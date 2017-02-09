@@ -66,12 +66,15 @@
                     </small>
                 </div>
             </div>
-            <div class="form-group row"
+            <div class="form-group row"  ng-init="samples.getShipmentsForDelivery('tbl_bac_rounds','status','1')"
                  ng-class="{ 'has-error'  : shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine }">
                 <label for="round" class="col-2 col-form-label">Round</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="round" required name="roundId"
-                           ng-model="samples.shipmentFormData.roundId">
+                    <select class="form-control" type="text" id="round" required name="roundId"
+                            ng-model="samples.shipmentFormData.roundId">
+                        <option selected disabled>--Select Round--</option>
+                        <option value="{{round.id}}" ng-repeat="round in samples.rounds">{{round.roundName}}</option>
+                    </select>
                 </div>
                 <small class="text-danger col-md-12"
                        ng-show="shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine">
