@@ -64,7 +64,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $response = [];
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
-                    $value =((array)$value);
+                    $value = ((array)$value);
 
                     $data['sampleId'] = $value['id'];
                     $data['totalAddedSamples'] = $value['quantity'];
@@ -97,6 +97,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $data['userId'] = $value;
                     $data['sampleId'] = $jsPostData['sampleId'];
                     $data['panelToSampleId'] = $jsPostData['panelToSampleId'];
+                    $data['roundId'] = $jsPostData['roundId'];
                     $response = $this->dbConnection->insertData('tbl_bac_samples_to_users', $data);
 
 
@@ -260,7 +261,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 //            exit;
             if ($dataDB != false) {
 
-                if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel'|| $tableName == 'tbl_bac_panels_shipments'
+                if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_panels_shipments'
                     || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'
                 ) {
                     foreach ($dataDB as $key => $value) {
@@ -288,7 +289,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                         }
                         if ($tableName == 'tbl_bac_rounds') {
-                            $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate, $dataDB[$key]->startDate);
+                            $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->startDate);
                         }
                         if ($tableName == 'tbl_bac_panels_shipments') {
 
@@ -323,9 +324,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
-    public function converttodays($endDate, $startDate)
+    public function converttodays($startDate, $endDate = null)
     {
-        $diff = strtotime($endDate) - strtotime($startDate);
+        if (isset($endDate)) {
+            $diff = $endDate - strtotime($startDate);
+        } else {
+            $diff = time() - strtotime($startDate);
+        }
+
         return round($diff / (60 * 60 * 24), 1);
         exit;
     }
@@ -413,6 +419,49 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             echo $e->getMessage();
         }
         exit();
+    }
+
+    public function getusersamplesissuedAction()
+    {
+        try {
+            $where['userId'] = $this->dbConnection->getUserSession();
+            if (count($where) > 0) {
+                $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
+                if ($dataDB != false) {
+                    foreach ($dataDB as $key => $value) {
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+
+                        $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                        $dataDB[$key]->startDate = $round['startDate'];
+                        $dataDB[$key]->endDate = $round['endDate'];
+                        $dataDB[$key]->roundCode = $round['roundCode'];
+                        $dataDB[$key]->roundStatus = $round['roundStatus'];
+                        $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->startDate);
+                        $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
+
+                     }
+                    $data['status'] = 1;
+                    $data['data'] = $dataDB;
+
+                    echo($this->returnJson($data));
+                }else{
+                    $data['status'] = 0;
+                    $data['message'] = 'No data available';
+
+                    echo($this->returnJson($data));
+                }
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit;
     }
 
     public function updatetablewhereAction()

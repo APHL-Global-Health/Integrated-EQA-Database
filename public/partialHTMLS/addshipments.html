@@ -50,23 +50,27 @@
             <div class="form-group row"
                  ng-class="{ 'has-error'  : shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine }">
                 <label for="type" class="col-2 col-form-label">Date Prepared</label>
-                <div class="col-10" ng-click="samples.setShipmentDatePrepared()">
+                <div class="col-10">
 
 
-                    <input class="form-control" type="text" ng-hide="true" id="" required name="datePrepared"
-                           ng-model="samples.shipmentFormData.datePrepared">
-
-                    <date-picker name="" id="datePrepared">
-
-                    </date-picker>
-
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" ng-model="samples.shipmentFormData.datePrepared"
+                               data-date-format="yyyy-MM-dd" required=""
+                               data-min-date="" data-max-date="today"
+                               data-autoclose="1" aria-describedby="basic-addon2"
+                               name="startDate"
+                               bs-datepicker>
+                    </div>
                     <small class="text-danger col-md-12"
                            ng-show="shipmentForm.datePrepared.$invalid && !shipmentForm.datePrepared.$pristine">
-                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
                     </small>
+
                 </div>
             </div>
-            <div class="form-group row"  ng-init="samples.getShipmentsForDelivery('tbl_bac_rounds','status','1')"
+
+            <div class="form-group row" ng-init="samples.getShipmentsForDelivery('tbl_bac_rounds','status','1')"
                  ng-class="{ 'has-error'  : shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine }">
                 <label for="round" class="col-2 col-form-label">Round</label>
                 <div class="col-10">

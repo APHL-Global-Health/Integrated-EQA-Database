@@ -37,14 +37,21 @@
                             <label for="dateDispatched" class="col-2 col-form-label">Date Dispatched</label>
                             <div class="col-10">
 
-                                <date-picker name="dateDispatched" id="dateDispatched">
-
-                                </date-picker>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" ng-model="samples.dispatchShipmentFormData.dateDispatched"
+                                           data-date-format="yyyy-MM-dd" required=""
+                                           data-min-date="" data-max-date="today"
+                                           data-autoclose="1" aria-describedby="basic-addon2"
+                                           name="panelDateOfDelivery"
+                                           bs-datepicker>
+                                </div>
+                                <small class="text-danger col-md-12"
+                                       ng-show="dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine">
+                                    Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                                </small>
                             </div>
-                            <small class="text-danger col-md-12"
-                                   ng-show="dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine">
-                                Error : Required & correct date format
-                            </small>
+
                         </div>
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.shippingMethod.$invalid && !dispatchShipmentForm.shippingMethod.$pristine }">

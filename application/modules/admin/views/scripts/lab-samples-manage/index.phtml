@@ -10,8 +10,8 @@
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samplesToUsers'}">
                         <a href="" ng-click="clickedTab = 'samplesToUsers'">Users & Samples</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'userSampleReport'}">
-                        <a href="" ng-click="clickedTab = 'userSampleReport'">Reports</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'results'}">
+                        <a href="" ng-click="clickedTab = 'results'">Results</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'notifications'}">
                         <a href="" ng-click="clickedTab = 'notifications'">Notifications</a>
@@ -26,7 +26,10 @@
 
                                 <li role="presentation" ng-show="clickedTab!='notifications'">
                                     <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab,1)"><i
-                                            class="fa fa-fw fa-save"></i> Add {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
+                                            class="fa fa-fw fa-save"></i>
+                                        <x ng-show="clickedTab == 'results'">Enter</x>
+                                        <x ng-show="clickedTab != 'results'">Add</x>
+                                        {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
 
                                 </li>
                                 <li role="presentation">

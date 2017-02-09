@@ -111,21 +111,28 @@
             </div>
 
             <div class="form-group"
-                 ng-class="{ 'has-error'  : sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine }">
+                 ng-class="{ 'has-error'  : sampleData.datePrepared.$invalid && !sampleData.datePrepared.$pristine }">
                 <label class="col-2 col-form-label">Date Prepared</label>
                 <div class="col-10">
-                    <div class="col-10" ng-click="samples.setSampleDatePrepared()">
+                    <div class="col-10" >
 
-                        <date-picker name="" id="datePrepared">
-
-                        </date-picker>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" ng-model="samples.sampleFormData.datePrepared"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="today" data-max-date=""
+                                   data-autoclose="1" aria-describedby="basic-addon2"
+                                   name="datePrepared"
+                                   bs-datepicker>
+                        </div>
+                        <small class="text-danger col-md-12"
+                               ng-show="sampleData.datePrepared.$invalid && !sampleData.datePrepared.$pristine">
+                            Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                        </small>
 
 
                     </div>
-                    <input class="form-control col-md-12" ng-hide="true" required=""
-                           ng-model="samples.sampleFormData.datePrepared"
-                           name="dateCreated"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+
                     <small class="text-danger col-md-12"
                            ng-show="sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed

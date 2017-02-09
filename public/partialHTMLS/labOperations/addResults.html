@@ -1,0 +1,55 @@
+<div class="col-md-12 border-bottom padding">
+    <div class="col-md-4 no-padding h3">
+        Respond To Results <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+        
+        <small class="label label-info text-aqua">{{samples.samplesIssuedToUser.length}} records</small>
+
+    </div>
+    <div class="col-md-6 pull-right padding">
+        <div class="col-md-8 pull-right">
+            <input type="search" class="col-md-12 form-control input-sm" ng-model="samples.searchData">
+        </div>
+        <div class="col-md-1 pull-right">
+            <a href="#" class=" btn btn-default btn-sm"
+               ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
+                    class="fa fa-refresh"></i>
+            </a>
+            &nbsp;
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+
+    <table class="table table-striped">
+        <td>No.</td>
+        <td>Batch Name</td>
+        <td>Round Code</td>
+        <td>Days Left</td>
+        <td>Date Prep'd</td>
+        <td>Date Iss'd</td>
+        <td>Blood Pack No</td>
+        <td>action</td>
+        <tr dir-paginate="sample in samples.samplesIssuedToUser | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+            <td>{{$index+1}}</td>
+            <td>{{sample.batchName}}</td>
+            <td>{{sample.roundCode}}</td>
+            <td>{{sample.daysLeft}}</td>
+            <td>{{sample.datePrepared}}</td>
+            <td>{{sample.dateAllocated}}</td>
+            <td>{{sample.bloodPackNo}}</td>
+            <td>
+                <button class="btn btn-sm btn-success" ng-click="samples.showMultiSelect(sample,0)"><i
+                        class="fa fa-reply"></i> Respond
+                </button>
+                <button class="btn btn-sm btn-primary" ng-click="samples.showMultiSelect(sample,0)"><i
+                        class="fa fa-download"></i> Download
+                </button>
+            </td>
+        </tr>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
+                             direction-links="true"
+                             boundary-links="true">
+    </dir-pagination-controls>
+</div>

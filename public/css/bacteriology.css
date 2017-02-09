@@ -76,8 +76,8 @@ aside {
 }
 
 .border-bottom {
-    padding-bottom: 7px;
-    margin-bottom: 7px;
+    padding-bottom: 39px;
+    /*margin-bottom: 7px;*/
     border-bottom: 1px lightgrey solid;
 
 }

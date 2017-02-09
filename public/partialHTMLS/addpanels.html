@@ -39,23 +39,63 @@
                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                 </small>
             </div>
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.datePrepared.$invalid && !panelForm.datePrepared.$pristine }">
+            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine }">
                 <label for="" class="col-2 col-form-label">Date Prepared</label>
-                <div class="col-10" ng-click="samples.setDatePrepared()">
+                <div class="col-10">
 
-                    <date-picker name="" id="datePrepared">
+                    <div class="col-10">
 
-                    </date-picker>
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" ng-model="samples.panelFormData.panelDatePrepared"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="" data-max-date="today"
+                                   data-autoclose="1" aria-describedby="basic-addon1"
+                                   name="datePrepared"
+                                   bs-datepicker>
+                        </div>
+                        <small class="text-danger col-md-12"
+                               ng-show="panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine">
+                            Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                        </small>
+
+                    </div>
 
 
                 </div>
 
             </div>
 
+
+
+            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine }">
+                <label for='' class="col-2 col-form-label">Expected Date of Delivery</label>
+                <div class="col-10" >
+                    <div class="col-10">
+
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" ng-model="samples.panelFormData.panelDateOfDelivery"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="today" data-max-date=""
+                                   data-autoclose="1" aria-describedby="basic-addon2"
+                                   name="panelDateOfDelivery"
+                                   bs-datepicker>
+                        </div>
+                        <small class="text-danger col-md-12"
+                               ng-show="panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine">
+                            Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                        </small>
+
+                    </div>
+                </div>
+            </div>
             <div class="form-group row" ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
                 <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(panel capacity)</label>
                 <div class="col-10">
-                    <input class="form-control" type="number" id="numberOfSamples" name="numberOfSamples" required
+                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples" required ng-pattern=""
                            ng-model="samples.panelFormData.numberOfSamples">
 
                 </div>
@@ -63,17 +103,6 @@
                        ng-show="panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine">
                     Error : Required & Only numbers
                 </small>
-            </div>
-
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine }">
-                <label for="dateDelivery" class="col-2 col-form-label">Expected Date of Delivery</label>
-                <div class="col-10" ng-click="samples.setExpectedDeliveryDate()">
-                    <date-picker name="" id="datePrepared">
-
-                    </date-picker>
-                    <!--<input class="form-control" type="date" id="dateDelivery"  name="panelDateOfDelivery"-->
-                           <!--required  ng-model="samples.panelFormData.panelDateOfDelivery">-->
-                </div>
             </div>
             <div class="form-group row">
                 <label for="" class="col-2 col-form-label">Samples</label>

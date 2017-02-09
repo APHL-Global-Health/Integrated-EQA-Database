@@ -1,5 +1,5 @@
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination',
-    'ngAnimate', 'ngSanitize', 'ui.bootstrap','highcharts-ng', 'nvd3ChartDirectives']);
+    'ngAnimate', 'ngSanitize', 'ui.bootstrap','highcharts-ng', 'nvd3ChartDirectives','mgcrea.ngStrap.datepicker']);
 ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
                                                       graphDataCache, $filter, filterFilter) {

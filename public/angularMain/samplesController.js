@@ -311,6 +311,7 @@
                 $scope.samples.savingSpinner = '';
                 $scope.samples.savingInProgress = false;
             }
+            console.log($scope.samples.savingSpinner)
         }
 
         function emptyFormData(tableName) {
@@ -366,7 +367,7 @@
 
 
                             } else {
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status,'Error : possibly you trying to add a panel  to already add shipment'));
                             }
 
                         })
@@ -437,7 +438,7 @@
                 if (isNumeric(panelId)) {
                     try {
                         var where = {panelId: panelId};
-                        if ($scope.samples.clickedPanel !== panelId || tableName=='tbl_bac_sample_to_panel') {
+                        if ($scope.samples.clickedPanel !== panelId || tableName == 'tbl_bac_sample_to_panel') {
                             $scope.samples.panelArrowDown = true;
                             $scope.samples.getAllSamples(tableName, where);
                         } else {
@@ -552,7 +553,7 @@
                             $scope.samples.samplePanelArray = [];
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
                         } else {
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0,'Error : possibly you trying to add sample   to already added panel'));
                         }
                     })
                     .error(function (error) {
@@ -835,6 +836,32 @@
                 console.log(Exception)
             }
         }
+        $scope.samples.samplesIssuedToUser = {}
+        $scope.samples.getUserIssuedSamples = function (where) {
+            try {
+                var url = serverSamplesURL + 'getusersamplesissued';
+                changeSavingSpinner(true);
+                $http
+                    .post(url, where)
+                    .success(function (response) {
+                        changeSavingSpinner(false);
+                        if (response.status == 1) {
+                            $scope.samples.samplesIssuedToUser = response.data;
+                        } else {
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                        }
+                    })
+                    .error(function (error) {
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err '+error));
+                    })
+
+
+            } catch (Exception) {
+                console.log(Exception);
+            }
+
+        }
         $scope.samples.saveSampleToUser = function () {
             try {
 
@@ -848,6 +875,7 @@
                         postedData = {
                             sampleId: $scope.samples.clickedSample.sampleId,
                             panelToSampleId: $scope.samples.clickedSample.id,
+                            roundId: $scope.samples.clickedSample.roundId,
                             userIds: users
                         };
                         console.log(postedData);
@@ -971,6 +999,7 @@
                             } else {
                                 update = 5
                             }
+                            console.log(samples[i]);
                             $scope.samples.panelReceived(samples[i], 'tbl_bac_panels_shipments', update, 1);
 
                         }
@@ -994,7 +1023,8 @@
 
 
                 $timeout(function () {
-                    $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.id, 'tbl_bac_sample_to_panel');
+                   // $scope.samples.getSampleFromPanel(panelInfo.panelId, 'tbl_bac_sample_to_panel');
+                    $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.panelId, 'tbl_bac_sample_to_panel');
                 }, 200)
                 $timeout(function () {
                     if (tableName == 'tbl_bac_sample_to_panel') {
@@ -1010,26 +1040,27 @@
 
         $scope.samples.panelReceived = function (panel, table, status, from) {
             try {
+
                 if (angular.isDefined(panel.panelId)) {
                     if (from == 1) {
                         postedData = {
-                            where: {panelId: panel['panelId'],participantId:panel['participantId']},
-                            tableName: 'tbl_bac_panel_mst',
-                            updateData: {panelStatus: status}
+                            where: {panelId: panel['panelId'], participantId: panel['participantId'],shipmentId: panel.shipmentId},
+                            tableName: table,
+                            updateData: {deliveryStatus: status}
                         }
                         console.log(postedData)
 
                         $scope.samples.updateWhere(postedData);
                     } else {
                         var postedData = {
-                            where: {panelId: panel.panelId,participantId:panel.participantId},
+                            where: {panelId: panel.panelId, participantId: panel.participantId,shipmentId: panel.shipmentId},
                             tableName: table,
                             updateData: {deliveryStatus: status}
                         }
 
                         $scope.samples.updateWhere(postedData);
                         var postedData = {
-                            where: {panelId: panel.panelId,participantId:panel.participantId},
+                            where: {panelId: panel.panelId, participantId: panel.participantId,shipmentId: panel.shipmentId},
                             tableName: 'tbl_bac_panels_shipments',
                             updateData: {deliveryStatus: status}
                         }

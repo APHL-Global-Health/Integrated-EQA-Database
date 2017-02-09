@@ -8,16 +8,16 @@
                 <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
             </div>
         </div>
-        <form name="sampleData" novalidate="" class="form-horizontal ">
+        <form name="roundData" novalidate="" class="form-horizontal ">
             <div class="form-group row"
-                 ng-class="{ 'has-error'  : sampleData.batchName.$invalid && !sampleData.batchName.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.roundCode.$invalid && !roundData.roundCode.$pristine }">
                 <label class="col-2 col-form-label">Round Code</label>
                 <div class="col-10">
-                    <input class="form-control " required="" ng-model="samples.sampleFormData.batchName"
-                           name="batchName"
+                    <input class="form-control " required="" ng-model="samples.roundFormData.roundCode"
+                           name="roundCode"
                            ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="sampleData.batchName.$invalid && !sampleData.batchName.$pristine">
+                           ng-show="roundData.roundCode.$invalid && !roundData.roundCode.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                     </small>
 
@@ -25,14 +25,14 @@
             </div>
 
             <div class="form-group row"
-                 ng-class="{ 'has-error'  : sampleData.preparedBy.$invalid && !sampleData.preparedBy.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.roundName.$invalid && !roundData.roundName.$pristine }">
                 <label class="col-2 col-form-label">Round Name</label>
                 <div class="col-10">
-                    <input class="form-control" required="" ng-model="samples.sampleFormData.preparedBy"
-                           name="preparedBy"
+                    <input class="form-control" required="" ng-model="samples.roundFormData.roundName"
+                           name="roundName"
                            ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="sampleData.preparedBy.$invalid && !sampleData.preparedBy.$pristine">
+                           ng-show="roundData.roundName.$invalid && !roundData.roundName.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                     </small>
 
@@ -41,62 +41,55 @@
 
 
             <div class="form-group row"
-                 ng-class="{ 'has-error'  : sampleData.materialOrigin.$invalid && !sampleData.materialOrigin.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.roundDesc.$invalid && !roundData.roundDesc.$pristine }">
                 <label class="col-2 col-form-label">Round Description</label>
                 <div class="col-10">
-                    <input class="form-control" required="" ng-model="samples.sampleFormData.materialOrigin"
-                           name="materialOrigin"
+                    <input class="form-control" required="" ng-model="samples.roundFormData.roundDesc"
+                           name="roundDesc"
                            ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="sampleData.materialOrigin.$invalid && !sampleData.materialOrigin.$pristine">
+                           ng-show="roundData.roundDesc.$invalid && !roundData.roundDesc.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                     </small>
 
                 </div>
             </div>
             <div class="form-group"
-                 ng-class="{ 'has-error'  : sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.startDate.$invalid && !roundData.startDate.$pristine }">
                 <label class="col-2 col-form-label">Start Date</label>
                 <div class="col-10">
-                    <div class="col-10" ng-click="samples.setSampleDatePrepared()">
-
-                        <date-picker name="" id="datePrepared">
-
-                        </date-picker>
-
-
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" ng-model="samples.roundFormData.startDate"
+                               data-date-format="yyyy-MM-dd" required=""
+                               data-min-date="today" data-max-date="{{samples.roundFormData.endDate}}"
+                               data-autoclose="1" aria-describedby="basic-addon2"
+                               name="startDate"
+                               bs-datepicker>
                     </div>
-                    <input class="form-control col-md-12" ng-hide="true" required=""
-                           ng-model="samples.sampleFormData.datePrepared"
-                           name="dateCreated"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine">
-                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                           ng-show="roundData.startDate.$invalid && !roundData.startDate.$pristine">
+                        Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
                     </small>
 
                 </div>
             </div>
 
             <div class="form-group"
-                 ng-class="{ 'has-error'  : sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.endDate.$invalid && !roundData.endDate.$pristine }">
                 <label class="col-2 col-form-label">End Date</label>
                 <div class="col-10">
-                    <div class="col-10" ng-click="samples.setSampleDatePrepared()">
-
-                        <date-picker name="" id="datePrepared">
-
-                        </date-picker>
-
-
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" ng-model="samples.roundFormData.endDate"
+                               data-date-format="yyyy-MM-dd" required="" aria-describedby="basic-addon1"
+                               data-min-date="{{samples.roundFormData.startDate}}" data-max-date="" data-autoclose="1"
+                               name="endDate"
+                               bs-datepicker>
                     </div>
-                    <input class="form-control col-md-12" ng-hide="true" required=""
-                           ng-model="samples.sampleFormData.datePrepared"
-                           name="dateCreated"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="sampleData.dateCreated.$invalid && !sampleData.dateCreated.$pristine">
-                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                           ng-show="roundData.endDate.$invalid && !roundData.endDate.$pristine">
+                        Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
                     </small>
 
                 </div>
@@ -104,13 +97,13 @@
 
             <div class="clearfix">&nbsp;</div>
             <div class="form-group"
-                 ng-class="{ 'has-error'  : sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine }">
+                 ng-class="{ 'has-error'  : roundData.dispatchable.$invalid && !roundData.dispatchable.$pristine }">
 
                 <div class="col-10">
 
                     <button class="btn btn-primary col-md-12"
-                            ng-click="samples.saveSampleFormData('tbl_bac_samples',samples.sampleFormData)"
-                            ng-disabled="sampleData.$invalid || samples.savingInProgress"
+                            ng-click="samples.saveSampleFormData('tbl_bac_rounds',samples.roundFormData)"
+                            ng-disabled="roundData.$invalid || samples.savingInProgress"
                     >Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
                     </button>
                 </div>
@@ -119,39 +112,6 @@
 
         </form>
     </div>
-
-
-    ___________________________________________________________________________________________________________
-    Date range (dynamic)
-
-    From
-
-    Until
-    <form name="datepickerForm" class="form-inline" role="form">
-        <!-- Basic example -->
-        <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
-            <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as date)</small></label>
-            <input type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker>
-        </div>
-        <!-- Custom example -->
-        <div class="form-group" ng-class="{'has-error': datepickerForm.date2.$invalid}">
-            <label class="control-label"><i class="fa fa-calendar"></i> Date <small>(as number)</small></label>
-            <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-max-date="today" data-autoclose="1" name="date2" bs-datepicker>
-        </div>
-        <hr>
-        <!-- Date range example -->
-        <div class="form-group">
-            <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(dynamic)</small></label><br>
-            <div class="form-group col-xs-6">
-                <input type="text" class="form-control" ng-model="fromDate" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
-            </div>
-            <div class="form-group col-xs-6">
-                <input type="text" class="form-control" ng-model="untilDate" data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
-            </div>
-        </div>
-    </form>
-
-
 
 
 </div>

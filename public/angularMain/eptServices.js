@@ -35,7 +35,7 @@ EptServices.service('EptServices', function () {
         if (status == 0 || status == 3) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: 'Error : Bad server response,please contact admin',
+                fbMessage: angular.isDefined(message) ? message : 'Error : Bad server response,please contact admin',
                 fbbgColor: 'alert-danger'
             }
         }
