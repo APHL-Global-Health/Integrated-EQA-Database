@@ -2,7 +2,8 @@
 
 Welcome to the Open Source repository of the e-Proficiency Testing (ePT) software
 
-### How do I get set up? ###
+## How do I get set up? ##
+### *NIX Systems
 
 1. [Download]((https://framework.zend.com/downloads/archives)) and install and set up/configure Zend Framework 1.12
    ```
@@ -32,11 +33,14 @@ Welcome to the Open Source repository of the e-Proficiency Testing (ePT) softwar
       source /etc/bash.bashrc
       ```
 1. Clone this git repository and put it into your server's root folder (www or htdocs). 
-1. Create a database and [import and execute the appropriate SQL file from the downloads folder](https://github.com/APHLK/ePT-Repository/tree/master/database)
+1. Create a database and [import and execute the appropriate SQL file from the `databases` folder](https://github.com/APHLK/ePT-Repository/tree/master/database)
 1. Modify the config file (application/configs/application.ini) and update the database parameters
 1. Create a virtual host pointing to the public folder of the source code
 
-### Next Steps ###
+### Windows
+... coming soon ...
+
+## Next Steps ##
 
 1. Once you have the software set up, you can visit the admin panel http://ept/admin and log in with the credentials eptmanager@eqapt.com and 123
 1. Now you can start adding Participants, Participant logins, PT Surveys, Shipments etc.
