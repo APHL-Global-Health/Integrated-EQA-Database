@@ -32,7 +32,7 @@ Welcome to the Open Source repository of the e-Proficiency Testing (ePT) softwar
       source /etc/bash.bashrc
       ```
 1. Clone this git repository and put it into your server's root folder (www or htdocs). 
-1. Create a database and [import the sql file that you can find in the downloads section of this repository](https://bitbucket.org/deforay/ept/downloads)
+1. Create a database and [import and execute the appropriate SQL file from the downloads folder](https://github.com/APHLK/ePT-Repository/tree/master/database)
 1. Modify the config file (application/configs/application.ini) and update the database parameters
 1. Create a virtual host pointing to the public folder of the source code
 
