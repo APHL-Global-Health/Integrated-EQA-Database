@@ -11,7 +11,7 @@ Welcome to the Open Source repository of the e-Proficiency Testing (ePT) softwar
    tar xzf ZendFramework-1.12.20.tar.gz
    
    ```
-   * Edit your `php.ini` file to include your ZF1 libraries
+   * Edit your `php.ini` file to include your ZF1 libraries (Apache2 example below. Change analogous file for other web servers)
    ```
    vi /etc/php5/apache2/php.ini
    ```
