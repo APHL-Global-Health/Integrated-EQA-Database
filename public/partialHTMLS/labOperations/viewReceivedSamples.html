@@ -44,11 +44,19 @@
                 <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
             </div>
             <div class="col-md-7 pull-right">
-                <input type="search" class="col-md-12" ng-model="samples.searchData">
+                <input type="search" class="col-md-12"
+
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Search inside results" bs-tooltip
+                       ng-model="samples.searchData">
             </div>
-            <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
-                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_panels_shipments','deliveryStatus','3,4,5,6')"><i
-                    class="fa fa-refresh"></i></a>
+            <div class="col-md-1 pull-right">
+                <a href="#" class=" btn btn-default btn-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                   ng-click="samples.getShipmentsForDelivery('tbl_bac_panels_shipments','deliveryStatus','3,4,5,6')"><i
+                        class="fa fa-refresh"></i>
+                </a>
                 &nbsp;
             </div>
         </div>
@@ -88,8 +96,14 @@
             <tbody>
             <tr dir-paginate="panel in samples.panelsToShipment | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                 <td>{{$index+1}}</td>
-                <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)" ng-show="panel.totalSamplesAdded >0"
-                       class="">{{panel.panelName}}</a><x ng-show="panel.totalSamplesAdded==0">{{panel.panelName}}</x></td>
+                <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Click to view more about {{panel.panelName}} panel" bs-tooltip
+
+                       ng-show="panel.totalSamplesAdded >0"
+                       class="">{{panel.panelName}}</a>
+                    <x ng-show="panel.totalSamplesAdded==0">{{panel.panelName}}</x>
+                </td>
                 <td>{{panel.panelType}}</td>
                 <td>{{panel.panelLabel}}</td>
                 <td>{{panel.panelDatePrepared}}</td>
@@ -103,18 +117,20 @@
                 <td nowrap>{{panel.dateCreated}}</td>
                 <td nowrap>
                     <a class="btn btn-danger btn-sm" ng-disabled="panel.deliveryStatus > 3"
-                       data-toggle="tooltip" data-placement="top" title="Click to mark all as rejected!"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Reject {{panel.panelName}} panel" bs-tooltip
                        ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',5)"><i
                             class="fa fa-thumbs-down"></i>
                     </a>
                     <a class="btn btn-success btn-sm" ng-disabled="panel.deliveryStatus > 3"
-                       data-toggle="tooltip" data-placement="top"
-                       title="Click to mark all as successfully received without any issue!"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Successfully receive {{panel.panelName}} panel" bs-tooltip
                        ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',4)"><i
                             class="fa fa-thumbs-up"></i>
                     </a>
                     <a class="btn btn-primary btn-sm"
-                       data-placement="top" title="Click to to generate barcodes!"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Print Barcode {{panel.panelName}} panel" bs-tooltip
                        href="#barcodeModal" data-backdrop="false" data-toggle="modal"
                        ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
                     </a>

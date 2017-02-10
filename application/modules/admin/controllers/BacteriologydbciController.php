@@ -289,7 +289,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                         }
                         if ($tableName == 'tbl_bac_rounds') {
-                            $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->startDate);
+                            $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                         }
                         if ($tableName == 'tbl_bac_panels_shipments') {
 
@@ -324,12 +324,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
-    public function converttodays($startDate, $endDate = null)
+    public function converttodays($endDate, $startDate = null)
     {
-        if (isset($endDate)) {
+        if (isset($startDate)) {
             $diff = $endDate - strtotime($startDate);
         } else {
-            $diff = time() - strtotime($startDate);
+            $diff =  strtotime($endDate)-time();
         }
 
         return round($diff / (60 * 60 * 24), 1);
@@ -443,7 +443,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->endDate = $round['endDate'];
                         $dataDB[$key]->roundCode = $round['roundCode'];
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
-                        $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->startDate);
+                        $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
 
                      }

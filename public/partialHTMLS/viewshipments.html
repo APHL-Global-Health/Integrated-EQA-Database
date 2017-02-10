@@ -36,14 +36,25 @@
 
             </div>
             <div class="pull-right" ng-init="expanded=true">
-                <small><a href="#" ng-click="expanded=!expanded"><i class="fa fa-expand"></i> </a></small>
+                <small><a href="#" ng-click="expanded=!expanded"
+                          data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                          data-trigger="hover" data-type="success" data-title="Expand Shipments" bs-tooltip
+                ><i class="fa fa-expand"></i> </a></small>
             </div>
             <div class="col-md-7 pull-right">
-                <input type="search" class="col-md-12" ng-model="samples.searchData">
+                <input type="search" class="col-md-12"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Search Shipment" bs-tooltip
+
+                       ng-model="samples.searchData">
             </div>
-            <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
-                                                ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
-                    class="fa fa-refresh"></i></a>
+            <div class="col-md-1 pull-right">
+                <a href="#" class=" btn btn-default btn-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                    ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
+                    class="fa fa-refresh"></i>
+                </a>
                 &nbsp;
             </div>
         </div>
@@ -295,18 +306,30 @@
 
             <td nowrap>
                 <a class="btn btn-info btn-sm" ng-disabled="shipment.shipmentStatus!=0"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Edit Shipment" bs-tooltip
                    ng-click="samples.editFunction(shipment,'tbl_bac_shipments')"><i
                         class="fa fa-edit"></i>
                 </a>
                 <a class="btn btn-danger btn-sm" ng-disabled="shipment.shipmentStatus!=0"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Remove Shipment" bs-tooltip
+
                    ng-click="samples.deleteCustomRow(shipment.id,'tbl_bac_shipments')">
                     <i class="fa fa-remove"></i>
                 </a>
-                <a class="btn btn-success btn-sm">
+                <a class="btn btn-success btn-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Lock Shipment" bs-tooltip
+                >
                     <i class="fa fa-unlock"></i>
                 </a>
-                <a class="btn btn-primary btn-sm" ng-click="samples.lockShipment(shipment)"
+                <a class="btn btn-primary btn-sm" ng-click="samples.addPanelsToShipment(shipment)"
                    ng-disabled="shipment.shipmentStatus!=0"
+
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Add Panels" bs-tooltip
+
                    href="#addPanels" data-backdrop="false" data-toggle="modal"
                 >
                     <i class="fa fa-plus"></i>

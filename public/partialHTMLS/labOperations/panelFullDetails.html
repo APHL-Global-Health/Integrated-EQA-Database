@@ -23,7 +23,8 @@
             <small>
                 <i>{{samples.clickedShipmentData.datePrepared}}</i></small>
         </a>
-        &nbsp; <x ng-show="samples.showShipmentInfoStatus"> >> </x>
+        &nbsp;
+        <x ng-show="samples.showShipmentInfoStatus"> >></x>
         <a href="#" ng-click="samples.samplesActivePage('viewReceivedSamples', 1)"
            ng-show="receive.showPanelStatus"
         >
@@ -61,20 +62,27 @@
             <td>{{sample.materialOrigin}}</td>
             <td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>
             <td>
-                <button class="btn btn-danger btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
-                        ng-click="samples.updateStatus('tbl_bac_sample_to_panel',5,sample.id)">
-                    <i class="fa fa-remove">
-
-                    </i>
-                </button>
-                &nbsp;
                 <button class="btn btn-success btn-sm"
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Receive Sample" bs-tooltip
+
                         ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
                         ng-click="samples.updateStatus('tbl_bac_sample_to_panel',4,sample.id)">
                     <i class="fa fa-check">
 
                     </i>
                 </button>
+                <button class="btn btn-danger btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Reject Sample" bs-tooltip
+                        ng-click="samples.updateStatus('tbl_bac_sample_to_panel',5,sample.id)">
+                    <i class="fa fa-remove">
+
+                    </i>
+                </button>
+                &nbsp;
+
             </td>
         </tr>
         </tbody>

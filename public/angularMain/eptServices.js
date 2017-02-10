@@ -30,6 +30,26 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject.returnAlphaNumHyDashRegExp = function () {
         return alphaNumHyDashRegExp;
     }
+    this.EptServiceObject.returnTableColumn = function (table) {
+        var message = '';
+        if (table == 'tbl_bac_samples') {
+            message = 'Batch name is already used';
+        }
+        if (table == 'tbl_bac_panel_mst') {
+            message = 'Panel name is already used';
+        }
+        if (table == 'tbl_bac_shipment') {
+            message = 'Shipment name is already used';
+        }
+        if (table == 'tbl_bac_rounds') {
+            message = 'round code/name already i use';
+        }
+        if (table == 'tbl_bac_panels') {
+            message = '';
+        }
+        return message;
+    }
+
     this.EptServiceObject.returnLoaderStatus = function (status, message) {
         var loaderStatus = {};
         if (status == 0 || status == 3) {
