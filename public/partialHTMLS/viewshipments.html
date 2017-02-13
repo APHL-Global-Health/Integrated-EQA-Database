@@ -35,11 +35,13 @@
                 </ul>
 
             </div>
-            <div class="pull-right" ng-init="expanded=true">
-                <small><a href="#" ng-click="expanded=!expanded"
-                          data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                          data-trigger="hover" data-type="success" data-title="Expand Shipments" bs-tooltip
-                ><i class="fa fa-expand"></i> </a></small>
+            <div class="pull-right" ng-init="expanded=true"
+
+            >
+                <a href="#" ng-click="expanded=!expanded" class=" btn btn-default btn-sm"
+
+                ><i class="fa fa-expand"></i>
+                </a>
             </div>
             <div class="col-md-7 pull-right">
                 <input type="search" class="col-md-12"
@@ -52,8 +54,7 @@
                 <a href="#" class=" btn btn-default btn-sm"
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                    data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
-                    ng-click="samples.getAllSamples('tbl_bac_shipments')"><i
-                    class="fa fa-refresh"></i>
+                   ng-click="samples.getAllSamples('tbl_bac_shipments')"><i class="fa fa-refresh"></i>
                 </a>
                 &nbsp;
             </div>
@@ -105,10 +106,10 @@
                                     <div class="pull-left col-md-7">Shipping Details</div>
                                     <div class="pull-right col-md-5">
                                         <x ng-hide="samples.loaderProgressSpinner=='fa-spinner'">
-                                        <a ng-click="samples.dispatchShipment(shipment,'dipatchSipments')"
-                                           ng-show="shipment.shipmentStatus==0 && samples.panelsToShipment.length >0"
-                                           href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
-                                            <i class="fa fa-truck"></i></a> &nbsp;
+                                            <a ng-click="samples.dispatchShipment(shipment,'dipatchSipments')"
+                                               ng-show="shipment.shipmentStatus==0 && samples.panelsToShipment.length >0"
+                                               href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
+                                                <i class="fa fa-truck"></i></a> &nbsp;
 
                                         </x>
                                         <!--<a ng-click="samples.receiveShipment(shipment,'receiveShipments')"-->
@@ -225,7 +226,8 @@
 
                             </div>
                             <div class="col-md-7 pull-right">
-                                <h4 ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">panels
+                                <h4 ng-if="samples.clickedShipment==shipment.id && samples.loaderProgressSpinner!='fa-spinner'">
+                                    panels
                                     <div class="label {{samples.returnPanelColorFromStatus(shipment.shipmentStatus)}}">
                                         {{samples.panelsToShipment.length}} records
                                     </div>
@@ -233,7 +235,7 @@
                                 </h4>
                                 <table class="table table-striped"
                                        ng-click="shipment.totalPanelsAdded=samples.panelsToShipment.length"
-                                       >
+                                >
                                     <tr>
                                         <th></th>
                                         <th>Panel Name</th>

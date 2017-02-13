@@ -52,9 +52,15 @@
                 </ul>
             </div>
             <div class="col-md-12 no-padding">
-                <div class="btn btn-warning pull-right">Report {{clickedTab|capitalizeLetter}}</div>
-                <div class="btn btn-info pull-right">View {{clickedTab|capitalizeLetter}}</div>
-                <div class="btn btn-primary pull-right">Add {{clickedTab|capitalizeLetter}}</div>
+                <div class="btn btn-warning pull-right col-md-2 col-sm-4" ng-click="samples.samplesActivePage('reports'+clickedTab)">
+                    <i class="fa fa-list"></i> {{clickedTab|capitalizeLetter}} Report
+                </div>
+                <div class="btn btn-info pull-right col-md-2 col-sm-4" ng-click="samples.samplesActivePage('view'+clickedTab)">
+                    <i class="fa fa-eye"></i> View {{clickedTab|capitalizeLetter}}
+                </div>
+                <div class="btn btn-primary pull-right col-md-2  col-sm-4" ng-click="samples.samplesActivePage('add'+clickedTab)">
+                    <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
+                </div>
             </div>
 
             <div class="col-md-12" ng-hide="samples.menuLength==2">

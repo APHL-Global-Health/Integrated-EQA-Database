@@ -12,34 +12,40 @@
                  ng-class="{ 'has-error'  : panelForm.panelName.$invalid && !panelForm.panelName.$pristine }">
                 <label for="panelName" class="col-2 col-form-label">Panel Name.</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="panelName" required name="panelName" ng-model="samples.panelFormData.panelName">
+                    <input class="form-control" type="text" id="panelName" required name="panelName"
+                           ng-model="samples.panelFormData.panelName">
                 </div>
                 <small class="text-danger col-md-12"
                        ng-show="panelForm.panelName.$invalid && !panelForm.panelName.$pristine">
                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                 </small>
             </div>
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
                 <label for="label" class="col-2 col-form-label">Panel Label</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="label" required ng-model="samples.panelFormData.panelLabel" name="panelLabel">
+                    <input class="form-control" type="text" id="label" required
+                           ng-model="samples.panelFormData.panelLabel" name="panelLabel">
                 </div>
                 <small class="text-danger col-md-12"
                        ng-show="panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine">
                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                 </small>
             </div>
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelType.$invalid && !panelForm.panelType.$pristine }">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelType.$invalid && !panelForm.panelType.$pristine }">
                 <label for="type" class="col-2 col-form-label">Type</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="type" required name="panelType" ng-model="samples.panelFormData.panelType">
+                    <input class="form-control" type="text" id="type" required name="panelType"
+                           ng-model="samples.panelFormData.panelType">
                 </div>
                 <small class="text-danger col-md-12"
                        ng-show="panelForm.panelType.$invalid && !panelForm.panelType.$pristine">
                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                 </small>
             </div>
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine }">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine }">
                 <label for="" class="col-2 col-form-label">Date Prepared</label>
                 <div class="col-10">
 
@@ -68,10 +74,10 @@
             </div>
 
 
-
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine }">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine }">
                 <label for='' class="col-2 col-form-label">Expected Date of Delivery</label>
-                <div class="col-10" >
+                <div class="col-10">
                     <div class="col-10">
 
 
@@ -92,10 +98,12 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group row" ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
                 <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(panel capacity)</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples" required ng-pattern=""
+                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples" required
+                           ng-pattern=""
                            ng-model="samples.panelFormData.numberOfSamples">
 
                 </div>
@@ -114,9 +122,20 @@
 
             <div class="form-group row">
 
-                <button class="btn btn-success col-md-12 pull-right" ng-disabled="panelForm.$invalid || samples.savingInProgress"
-                ng-click="samples.saveSampleFormData('tbl_bac_panel_mst',samples.panelFormData)"
-                >Save Panel <i class="fa fa-spin {{samples.savingSpinner}}"></i> </button>
+                <button class="btn btn-success col-md-12 pull-right"
+                        ng-disabled="panelForm.$invalid || samples.savingInProgress"
+                        ng-click="samples.saveSampleFormData('tbl_bac_panel_mst',samples.panelFormData)"
+                >Save Panel <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+            </div>
+            <div class="form-group">
+
+                <div class="col-10">
+
+                    <button class="btn btn-danger col-md-12"
+                            ng-click="samples.emptyFormData('tbl_bac_panel_mst',0)"
+                    >Cancel</i>
+                    </button>
+                </div>
             </div>
 
         </form>

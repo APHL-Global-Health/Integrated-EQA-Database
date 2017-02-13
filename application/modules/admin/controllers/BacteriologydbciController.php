@@ -329,10 +329,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         if (isset($startDate)) {
             $diff = $endDate - strtotime($startDate);
         } else {
-            $diff =  strtotime($endDate)-time();
+            $diff = strtotime($endDate) - time();
         }
-
-        return round($diff / (60 * 60 * 24), 1);
+        $diff = round($diff / (60 * 60 * 24), 1);
+        return $diff > 0 ? $diff : 0;
         exit;
     }
 
@@ -446,12 +446,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
 
-                     }
+                    }
                     $data['status'] = 1;
                     $data['data'] = $dataDB;
 
                     echo($this->returnJson($data));
-                }else{
+                } else {
                     $data['status'] = 0;
                     $data['message'] = 'No data available';
 

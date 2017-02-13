@@ -74,17 +74,20 @@
                  ng-class="{ 'has-error'  : shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine }">
                 <label for="round" class="col-2 col-form-label">Round</label>
                 <div class="col-10">
-                    <select class="form-control" type="text" id="round" required name="roundId"
-                            ng-model="samples.shipmentFormData.roundId">
-                        <option selected disabled>--Select Round--</option>
-                        <option value="{{round.id}}" ng-repeat="round in samples.rounds">{{round.roundName}}</option>
-                    </select>
+                    <input type="text" class="form-control" ng-model="samples.shipmentFormData.roundId" data-min-length="0"
+                           data-html="1" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           required
+                           bs-options="icon.roundName as icon.roundName for icon in samples.rounds" placeholder="Search Round" bs-typeahead>
                 </div>
                 <small class="text-danger col-md-12"
                        ng-show="shipmentForm.roundId.$invalid && !shipmentForm.roundId.$pristine">
                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                 </small>
             </div>
+
+
+
+
             <div class="form-group row"
                  ng-class="{ 'has-error'  : shipmentForm.shipmentDsc.$invalid && !shipmentForm.shipmentDsc.$pristine }">
                 <label for="type" class="col-2 col-form-label">Shipment Description</label>
@@ -125,6 +128,16 @@
                         ng-disabled="shipmentForm.$invalid || samples.savingInProgress"
                         ng-click="samples.saveSampleFormData('tbl_bac_shipments',samples.shipmentFormData)"
                 >Save Shipment <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+            </div>
+            <div class="form-group">
+
+                <div class="col-10">
+
+                    <button class="btn btn-danger col-md-12"
+                            ng-click="samples.emptyFormData('tbl_bac_shipments',0)"
+                    >Cancel</i>
+                    </button>
+                </div>
             </div>
 
         </form>

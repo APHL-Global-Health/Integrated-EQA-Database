@@ -20,13 +20,14 @@
                         <div class="dropdown">
 
                             <button class="text-capitalize btn btn-default btn-sm dropdown-toggle" type="button"
-                                    id="menu1" data-toggle="dropdown">{{clickedTab|spaceCapitals|capitalizeLetter}} &nbsp;
+                                    id="menu1" data-toggle="dropdown">{{clickedTab|spaceCapitals|capitalizeLetter}}
+                                &nbsp;
                                 <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" >
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 
                                 <li role="presentation" ng-show="clickedTab!='notifications'">
                                     <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab,1)"><i
-                                            class="fa fa-fw fa-save"></i>
+                                                class="fa fa-fw fa-save"></i>
                                         <x ng-show="clickedTab == 'results'">Enter</x>
                                         <x ng-show="clickedTab != 'results'">Add</x>
                                         {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
@@ -34,12 +35,13 @@
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="samples.samplesActivePage('view'+clickedTab,1)"><i
-                                            class="fa fa-fw fa-folder"></i> View {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
+                                                class="fa fa-fw fa-folder"></i> View
+                                        {{clickedTab|spaceCapitals|capitalizeLetter}}</a>
 
                                 </li>
                                 <li role="presentation" ng-show="clickedTab!='notifications'">
                                     <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab,1)"><i
-                                            class="fa fa-fw fa-search-plus"></i>
+                                                class="fa fa-fw fa-search-plus"></i>
                                         {{clickedTab|spaceCapitals|capitalizeLetter}} Report </a>
                                 </li>
                             </ul>
@@ -54,7 +56,19 @@
 
                 </ul>
             </div>
-
+            <div class="col-md-12 no-padding">
+                <div class="btn btn-warning pull-right col-md-3 col-xs-4" ng-show="clickedTab!='notifications'"
+                     ng-click="samples.samplesActivePage('reports'+clickedTab,1)">
+                    <i class="fa fa-list"></i> {{clickedTab|spaceCapitals|capitalizeLetter}} Report
+                </div>
+                <div class="btn btn-info pull-right col-md-3 col-xs-4" ng-click="samples.samplesActivePage('view'+clickedTab,1)">
+                    <i class="fa fa-eye"></i> View {{clickedTab|spaceCapitals|capitalizeLetter}}
+                </div>
+                <div class="btn btn-primary pull-right col-md-2 col-xs-4" ng-show="clickedTab!='notifications'"
+                     ng-click="samples.samplesActivePage('add'+clickedTab,1)">
+                    <i class="fa fa-plus"></i> Add {{clickedTab|spaceCapitals|capitalizeLetter}}
+                </div>
+            </div>
 
             <div class="col-md-12" ng-hide="samples.menuLength==2">
                 <a href="#" class="pull-right btn btn-primary btn-sm"
@@ -65,11 +79,6 @@
             <ng-include src='samples.linksLabObject.currentTemplate' onload="samples.createNanobar(100)">
 
             </ng-include>
-
-
-
-
-
 
 
         </div>

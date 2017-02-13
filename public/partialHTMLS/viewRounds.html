@@ -1,111 +1,160 @@
-<div class="row">
-    <h3>
-        <div class="pull-left col-md-4 col-sm-12"> View Current Rounds
-            <small>{{samples.samplesToUsers.length}} records</small>
-            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+<div class="row" ng-init="samples.showRoundInfo=true">
+    <div class="col-md-12" ng-if="samples.showRoundInfo">
+        <div class="col-md-12">
+            <h3>
+                <div class="pull-left col-md-4 col-sm-12">Current Rounds
+                    <small>{{samples.rounds.length}} records</small>
+                    <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                </div>
+                <div class="pull-right col-md-8 col-sm-12">
+                    <items-per-page></items-per-page>
+
+                    <div class="col-md-7 col-sm-9 pull-right">
+                        <input type="search" class="col-md-12" ng-model="samples.searchData">
+                    </div>
+                    <div class="col-md-1 col-sm-3 pull-right">
+                        <a href="#" class=" btn btn-default btn-sm"
+                           ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
+                            <i class="fa fa-refresh"></i>
+                        </a>
+                        &nbsp;
+                    </div>
+                </div>
+            </h3>
         </div>
-        <div class="pull-right col-md-8 col-sm-12">
-            <div class="dropdown col-md-3 col-sm-12  pull-right">
+        <div id="alert" tabindex="1" class="col-md-12">
+            <div class="clearfix">&nbsp;</div>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
 
-                <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
-                        id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
-                    </li>
-                </ul>
-
-            </div>
-
-            <div class="col-md-7 col-sm-9 pull-right">
-                <input type="search" class="col-md-12" ng-model="samples.searchData">
-            </div>
-            <div class="col-md-1 col-sm-3 pull-right">
-                <a href="#" class=" btn btn-default btn-sm"
-                   ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
-                    <i class="fa fa-refresh"></i>
-                </a>
-                &nbsp;
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
             </div>
         </div>
-    </h3>
-    <div id="alert" tabindex="1">
-        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
 
-            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        <table class="table table-striped table-condensed table-bordered" id="printableTable">
+            <thead>
+            <tr>
+                <th>#.</th>
+                <th>Round Name</th>
+                <th>Round Code</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Date Created</th>
+
+                <th>Day(s) to go</th>
+                <th>Total Shipments</th>
+                <th>Status</th>
+                <!--                                <th>Date Saved</th>
+                <th>Ship't Number</th>
+                <th>Lab ID</th>
+                <th>Total Samps.</th>
+                <th>Created on</th>
+                -->
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
+                <td>{{$index+1}}</td>
+                <td><a href="#/{{panel.id}}"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
+                       bs-tooltip
+                       ng-click="samples.showRoundFullDetails(round)"
+                       class="">{{round.roundName}}</a>
+                </td>
+                <td>{{round.roundCode}}</td>
+                <td>{{round.startDate}}</td>
+                <td>{{round.endDate}}</td>
+                <td nowrap>{{round.dateCreated}}</td>
+                <td nowrap>{{round.daysLeft}}</td>
+                <td nowrap>{{sample.totalShipments}}</td>
+                <td nowrap>{{samples.returnSoundStatus(round.status,round.daysLeft)}}</td>
+
+                <td nowrap>
+                    <a class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0"
+
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Edit Round" bs-tooltip
+
+                       ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
+                            class="fa fa-edit"></i>
+                    </a>
+
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div id="demos">
+
+        </div>
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+    <div ng-if="!samples.showRoundInfo">
+        <br>
+        <div class="panel panel-primary">
+            <div class="panel panel-heading"><h4>Round Information
+                <i class="btn btn-sm btn-success pull-right" ng-click="samples.showRoundFullDetails('')"> Back</i></h4>
+            </div>
+            <p class="panel panel-body">
+                <b> Round Name : </b> {{samples.currentRound.roundName}}<br>
+                <b> Date Created : </b> {{samples.currentRound.dateCreated}} <br>
+                <b> Starts : </b> {{samples.currentRound.startDate}} <br>
+                <b> Ends : </b> {{samples.currentRound.endDate}}<br>
+                <b> Days Left : </b> {{samples.currentRound.daysLeft}}
+            </p>
+
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel panel-heading ">
+                <h4>Shipments <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                    <small class="text-black"><i>{{samples.shipmentsData.length}} records</i></small>
+                </h4>
+            </div>
+            <table class="table table-striped table-condensed table-bordered no-padding">
+                <thead>
+                <tr>
+                    <th>#.</th>
+                    <th>Shipment Name</th>
+                    <th>No Of Panels</th>
+                    <th>Courier</th>
+                    <th>ship't Desc</th>
+
+                    <th>Round ID</th>
+                    <th>Created By</th>
+                    <th>Prepared On</th>
+                    <th>Panel Added</th>
+                    <th>Prepared By</th>
+                    <th>Ship't Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                    <td>{{$index+1}}</td>
+                    <td>{{shipment.shipmentName}}</td>
+                    <td>{{shipment.numberOfPanels}}</td>
+                    <td>{{shipment.courier}}</td>
+                    <td>{{shipment.shipmentDsc}}</td>
+                    <td nowrap>{{shipment.roundId}}</td>
+                    <td nowrap>{{shipment.createdBy}}</td>
+
+                    <td nowrap>{{shipment.datePrepared}}</td>
+                    <td>{{shipment.totalPanelsAdded}}</td>
+                    <td nowrap>{{shipment.preparedBy}}</td>
+                    <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+
         </div>
     </div>
-
-    <table class="table table-striped table-condensed table-bordered" id="printableTable">
-        <thead>
-        <tr>
-            <th>#.</th>
-            <th>Round Name</th>
-            <th>Round Code</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Date Created</th>
-
-            <th>Day(s) to go</th>
-            <th>Total Shipments</th>
-            <th>Status</th>
-            <!--                                <th>Date Saved</th>
-            <th>Ship't Number</th>
-            <th>Lab ID</th>
-            <th>Total Samps.</th>
-            <th>Created on</th>
-            -->
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
-            <td>{{$index+1}}</td>
-            <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)"
-                   class="">{{round.roundName}}</a>
-            </td>
-            <td>{{round.roundCode}}</td>
-            <td>{{round.startDate}}</td>
-            <td>{{round.endDate}}</td>
-            <td nowrap>{{round.dateCreated}}</td>
-            <td nowrap>{{round.daysLeft}}</td>
-            <td nowrap>{{sample.totalShipments}}</td>
-            <td nowrap>{{samples.returnSoundStatus(round.status,round.daysLeft)}}</td>
-
-            <td nowrap>
-                <a class="btn btn-danger btn-sm" ng-disabled="round.roundStatus >0"
-                   data-toggle="tooltip" data-placement="top" title="Click to remove round!"
-                   ng-click="samples.deleteCustomRow(round.id,'tbl_bac_rounds')"><i
-                        class="fa fa-remove"></i>
-                </a>
-
-
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-
-    <div id="demos">
-
-    </div>
-    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10"
-                             direction-links="true"
-                             boundary-links="true">
-    </dir-pagination-controls>
-
 
 </div>

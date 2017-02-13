@@ -108,6 +108,8 @@
                 column: columnName,
                 status: where
             }
+            $scope.samples.clickedShipmentData = {};
+            $scope.samples.showShipmentInfoStatus = false;
             $scope.samples.getAllSamples(tableName, whereData, 1)
         }
         $scope.samples.getAllSamples = function (tableName, where, whereDelivery) {
@@ -315,6 +317,8 @@
         }
 
         function emptyFormData(tableName) {
+
+            $scope.samples.showMainTable(tableName)
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = {};
             }
@@ -324,11 +328,35 @@
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.shipmentFormData = {};
             }
+            if (tableName == 'tbl_bac_rounds') {
+                $scope.samples.roundFormData = {};
+            }
             if (tableName == 'tbl_bac_panels_shipments') {
 
             }
+
         }
 
+        $scope.samples.showMainTable = function (tableName) {
+            console.log(tableName)
+            if (tableName == 'tbl_bac_shipments') {
+                $scope.samples.samplesActivePage('viewshipments', 0);
+                $scope.samples.getAllSamples('tbl_bac_shipments');
+            }
+            if (tableName == 'tbl_bac_samples') {
+                $scope.samples.samplesActivePage('viewsamples', 0);
+                $scope.samples.getAllSamples('tbl_bac_samples');
+            }
+            if (tableName == 'tbl_bac_panel_mst') {
+                $scope.samples.samplesActivePage('viewpanels', 0);
+                $scope.samples.getAllSamples('tbl_bac_panel_mst');
+            }
+            if (tableName == 'tbl_bac_rounds') {
+                $scope.samples.samplesActivePage('viewrounds', 0);
+                $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+
+            }
+        }
         $scope.samples.emptyFormData = function (tableName) {
             emptyFormData(tableName)
         }
@@ -404,6 +432,7 @@
 
                     if (shipmentId !== $scope.samples.clickedShipment || (angular.isDefined(status) && status == 1)) {
                         $scope.samples.shopAngleArrows = true;
+                        $scope.samples.panelsToShipment = {};
                         $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
                     } else {
                         $scope.samples.shopAngleArrows = !$scope.samples.shopAngleArrows;
@@ -438,15 +467,22 @@
         $scope.samples.getSampleFromPanel = function (panelId, tableName) {
             try {
 
-                console.log(panelId);
+
                 if (isNumeric(panelId)) {
                     try {
                         var where = {panelId: panelId};
                         if ($scope.samples.clickedPanel !== panelId || tableName == 'tbl_bac_sample_to_panel') {
-                            $scope.samples.panelArrowDown = true;
+
+                            if($scope.samples.clickedPanel !== panelId){
+                                $scope.samples.panelArrowDown = true;
+                            }else{
+                                $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
+
+                            }
                             $scope.samples.getAllSamples(tableName, where);
+
                         } else {
-                            $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
+
                         }
 
 
@@ -619,7 +655,7 @@
                     } else {
                         var id = data.id;
                         delete data.id;
-
+                        $scope.samples.currentEditingId = id
 
                         var postedData = {
                             where: {id: id},
@@ -627,7 +663,7 @@
                             updateData: data
                         }
                         console.log(postedData)
-                        $scope.samples.updateWhere(postedData);
+                        $scope.samples.updateWhere(postedData, 1);
                     }
                 }
                 else {
@@ -685,6 +721,13 @@
                     data = $scope.samples.samplesToUsers;
                     if (operation == 1) {
                         $scope.samples.samplesToUsers = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_rounds') {
+
+                    data = $scope.samples.rounds;
+                    if (operation == 1) {
+                        $scope.samples.rounds = changedData;
                     }
                 }
                 if (operation != 1) {
@@ -768,7 +811,23 @@
             }
 
         }
-        $scope.samples.updateWhere = function (postedData) {
+        function addIdToEditing(tableName) {
+            if (tableName == 'tbl_bac_samples') {
+                $scope.samples.sampleFormData.id = $scope.samples.currentEditingId;
+            }
+            if (tableName == 'tbl_bac_panel_mst') {
+                $scope.samples.panelFormData.id = $scope.samples.currentEditingId;
+                ;
+            }
+            if (tableName == 'tbl_bac_shipments') {
+                $scope.samples.shipmentFormData.id = $scope.samples.currentEditingId;
+            }
+            if (tableName == 'tbl_bac_rounds') {
+                $scope.samples.roundFormData.id = $scope.samples.currentEditingId;
+            }
+        }
+
+        $scope.samples.updateWhere = function (postedData, type) {
             try {
 
                 var url = serverSamplesURL + 'updatetablewhere';
@@ -785,8 +844,14 @@
                             emptyFormData(postedData.tableName);
 
                             $scope.samples.receiveShipmentFormData = {};
-                        } else {
+                            if (type == 1) {
+                                $scope.samples.showMainTable(postedData.tableName)
+                            }
 
+                        } else {
+                            if (type == 1) {
+                                addIdToEditing(postedData.tableName)
+                            }
                             $scope.samples.sampleFormData.id = postedData.where.id;
                         }
                     })
@@ -1245,7 +1310,17 @@
             return cDate;
 
         }
+        $scope.samples.showRoundFullDetails = function (round) {
+            $scope.samples.shipmentsData ={};
+            $scope.samples.currentRound = round;
+            $scope.samples.showRoundInfo = !$scope.samples.showRoundInfo;
 
+            var where = {roundId: round.roundName}
+            if (round != '') {
+                $scope.samples.getAllSamples('tbl_bac_shipments', where)
+            }
+
+        }
         $scope.samples.createNanobar = function (len) {
 
             var options = {};
@@ -1263,7 +1338,16 @@
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = data;
-                $scope.samples.samplesActivePage('addSamples', 0)
+                $scope.samples.samplesActivePage('addSamples', 0);
+
+
+            }
+            if (tableName == 'tbl_bac_rounds') {
+                $scope.samples.roundFormData = data;
+                console.log(data)
+                $scope.samples.samplesActivePage('addrounds', 0);
+
+
             }
             if (tableName == 'tbl_bac_panel_mst') {
                 $scope.samples.panelFormData = data;
@@ -1274,7 +1358,6 @@
                 $scope.samples.samplesActivePage('addShipments', 0)
             }
         }
-
         //===================================================================end of edit function===================================================================
 
         //===========================================================================================================================================================
@@ -1420,4 +1503,5 @@
 
 
 })
+
 ();
