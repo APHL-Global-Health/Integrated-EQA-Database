@@ -1,6 +1,10 @@
 <div>
     <div class="col-md-8 col-md-offset-2">
-        <h3 class="h3">Panel Registration Form</h3>
+        <h3 class="h3">
+            <x ng-show="samples.panelFormData.id > 0">Edit {{samples.panelFormData.panelName}}</x>
+            <x ng-hide="samples.panelFormData.id > 0">Add</x>
+            Panel
+        </h3>
         <hr>
         <div id="alert" tabindex="1"></div>
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
@@ -112,13 +116,13 @@
                     Error : Required & Only numbers
                 </small>
             </div>
-            <div class="form-group row">
-                <label for="" class="col-2 col-form-label">Samples</label>
-                <div class="col-10">
-                    <a class="link-black link">Click to add samples to samples or add later</a>
-                </div>
-            </div>
-
+            <!--  <div class="form-group row">
+                  <label for="" class="col-2 col-form-label">Samples</label>
+                  <div class="col-10">
+                      <a class="link-black link">Click to add samples to samples or add later</a>
+                  </div>
+              </div>
+             -->
 
             <div class="form-group row">
 

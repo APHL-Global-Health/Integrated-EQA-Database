@@ -1,6 +1,9 @@
 <div>
     <div class="col-md-8 col-md-offset-2">
-        <h3 class="h3">Shipments Registration Form</h3>
+        <h3 class="h3">
+            <x ng-show="samples.shipmentFormData.id > 0">Edit {{samples.panelFormData.shipmentName}}</x>
+            <x ng-hide="samples.shipmentFormData.id > 0">Add</x>
+            Shipment</h3>
         <hr>
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">

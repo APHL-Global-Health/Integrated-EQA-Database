@@ -293,7 +293,13 @@
         <tbody>
         <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData| orderBy :'-id'">
             <td>{{$index+1}}</td>
-            <td>{{shipment.shipmentName}}</td>
+            <td>
+                <a href="" ng-click="samples.showFullShipmentInfo(shipment)"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Click to view full {{shipment.shipmentName}} info" bs-tooltip
+                >{{shipment.shipmentName}}</a>
+
+            </td>
             <td>{{shipment.numberOfPanels}}</td>
             <td>{{shipment.courier}}</td>
             <td>{{shipment.shipmentDsc}}</td>

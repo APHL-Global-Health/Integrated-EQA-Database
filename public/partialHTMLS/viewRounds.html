@@ -79,7 +79,14 @@
                        ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
                             class="fa fa-edit"></i>
                     </a>
+                    <a class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0"
 
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Shipments" bs-tooltip
+
+                       ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
+                            class="fa fa-plus"></i>
+                    </a>
 
                 </td>
             </tr>

@@ -1,7 +1,10 @@
 <div class="col-md-12" ng-cloak="">
 
     <div class="col-md-8 col-md-offset-2">
-        <H3>Sample Preparation Form</H3>
+        <H3>
+            <x ng-show="samples.sampleFormData.id > 0">Edit {{samples.sampleFormData.batchName}}</x>
+            <x ng-hide="samples.sampleFormData.id > 0">Add</x>
+            Sample</H3>
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
