@@ -97,12 +97,12 @@ class Application_Service_Common {
 		
 		$to = Application_Service_Common::getConfig('admin_email');
 		
-		$mailSent = $this->sendMail($to,null,null,"New contact message from the ePT program",$message,$fromEmail,$fromName);
-		if($mailSent){
-			return 1;
-		}else{
-			return 0;
-		}		
+		//$mailSent = $this->sendMail($to,null,null,"New contact message from the ePT program",$message,$fromEmail,$fromName);
+//		if($mailSent){
+//			return 1;
+//		}else{
+//			return 0;
+//		}		
     }
     public function checkDuplicate($params) {
         $session = new Zend_Session_Namespace('credo');

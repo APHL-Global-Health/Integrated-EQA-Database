@@ -6,7 +6,7 @@
  * Date: 1/13/2017
  * Time: 16:40
  */
-require_once 'C:\xampp\htdocs\ePT-Repository\library\Bacteriology\application\controllers\main.php';
+require_once dirname($_SERVER['DOCUMENT_ROOT']).'\library\Bacteriology\application\controllers\main.php';
 
 class Admin_BacteriologydbciController extends Zend_Controller_Action
 {

@@ -1,15 +1,7 @@
-
-
-
-var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng']);
-ReportModule.constant('serverURL', 'http://localhost:86/reports/repository/');
-ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache, $filter, filterFilter) {
-
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng', 'nvd3ChartDirectives']);
-ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
+ReportModule.constant('serverURL', 'http://localhost:86/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
                                                       graphDataCache, $filter, filterFilter) {
-
 
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
@@ -787,4 +779,3 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         return $cacheFactory('graphData');
 
     })
-

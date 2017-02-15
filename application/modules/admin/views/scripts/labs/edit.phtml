@@ -34,25 +34,19 @@
 		    </div>
 	    </div>
             <div class="form-group">
-                <label class="col-lg-3 control-label">Contact Name <span class="mandatory">*</span></label>
-
-                <div class="col-lg-5"><input type="text" id="ContactName" name="ContactName" size="50" maxlength="45"
-                                             class="isRequired form-control"
-                                             title="Please enter contact name here"
-                                             placeholder="Please enter contact name here" value="<?php echo $this->admin['ContactName']; ?>" /></div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Contact Email</label>
+                <label class="col-lg-3 control-label">County <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-		    <input type="text" id="ContactEmail" name="ContactEmail" size="50" maxlength="45" value="<?php echo $this->admin['ContactEmail']; ?>" placeholder="Please enter contact email here" class="form-control isEmail" onblur="cheackEmailId()"/>
-		</div>
+                    <select class="form-control isRequired" name="County" id="County" title="Please choose the county here">
+                        <option value=""></option>
+                        <?php foreach ($this->countyList as $prov) {
+                            ?>
+                            <option value="<?php echo $prov['CountyID']; ?>" <?php echo(($this->admin["County"] == $prov['CountyID']) ? "selected='selected'" : "") ?>><?php echo $prov['Description']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-		<label class="col-lg-3 control-label">Contact Telephone <span class="mandatory">*</span></label>
-		<div class="col-lg-5">
-		    <input type="Telephone" id="ContactTelephone" name="ContactTelephone" size="50" value="<?php echo $this->admin['ContactTelephone']; ?>" class="isRequired form-control" title="Please enter a telephone" placeholder="Please enter a telephone"/>
-		</div>
-	    </div>
 	                
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>

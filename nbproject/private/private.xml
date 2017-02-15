@@ -3,19 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/controllers/ContactUsController.php</file>
+            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/contact-us/index.phtml</file>
+            <file>file:/C:/webserver/htdocs/eptnew/application/controllers/ContactUsController.php</file>
             <file>file:/C:/webserver/htdocs/eptnew/application/services/Common.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/layouts/scripts/admin.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/controllers/ImportcsvController.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/periods/index.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/periods/add.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/controllers/LoginController.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/importcsv/add.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/periods/edit.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/admin/views/scripts/participants/add.phtml</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/reports/controllers/ShipmentResponseController.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/modules/reports/controllers/RepositoryController.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/models/DbTable/Providers.php</file>
-            <file>file:/C:/webserver/htdocs/eptnew/application/models/DbTable/Importcsv.php</file>
+            <file>file:/C:/webserver/htdocs/eptnew/application/views/scripts/contact-us/index.phtml</file>
         </group>
     </open-files>
 </project-private>

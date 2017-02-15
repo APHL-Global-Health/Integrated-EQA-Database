@@ -4,7 +4,7 @@
 
 (function () {
     var samplesModule = angular.module('ReportModule');
-    ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
+    ReportModule.constant('serverSamplesURL', 'http://localhost:86/admin/Bacteriologydbci/');
     samplesModule.controller('samplesController', function ($scope, $http, serverSamplesURL, EptServices) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;

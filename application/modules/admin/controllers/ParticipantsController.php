@@ -11,10 +11,10 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             ->addActionContext('get-participant', 'html')
             ->initContext();
 
-                ->addActionContext('view-participants', 'html')
-                ->addActionContext('get-datamanager', 'html')
-                ->addActionContext('get-participant', 'html')
-                ->initContext();
+//                ->addActionContext('view-participants', 'html')
+//                ->addActionContext('get-datamanager', 'html')
+//                ->addActionContext('get-participant', 'html')
+//                ->initContext();
 
         $this->_helper->layout()->pageName = 'configMenu';
     }
@@ -90,17 +90,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
 
     }
 
-    public function participantManagerMapAction()
-    {
-
-    public function viewParticipantsAction() {
-        $this->_helper->layout()->setLayout('modal');
-        $participantService = new Application_Service_Participants();
-        if ($this->_hasParam('id')) {
-            $dmId = (int) $this->_getParam('id');
-            $this->view->participant = $participantService->getAllParticipantDetails($dmId);
-        }
-    }
+    
 
     public function participantManagerMapAction() {
 

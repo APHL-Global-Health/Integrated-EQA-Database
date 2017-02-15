@@ -144,9 +144,6 @@ class Application_Model_DbTable_Labs extends Zend_Db_Table_Abstract
             $row[] = $aRow['Address'];
             $row[] = $aRow['Telephone'];
             //$row[] = $aRow['PostalCode'];
-            $row[] = $aRow['ContactName'];
-            $row[] = $aRow['ContactEmail'];
-            $row[] = $aRow['ContactTelephone'];
             $row[] = $aRow['Status'];
             $row[] = '<a href="/admin/labs/edit/id/' . $aRow['LabID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             $output['aaData'][] = $row;
@@ -165,9 +162,7 @@ class Application_Model_DbTable_Labs extends Zend_Db_Table_Abstract
                       'Address'=>$params['Address'],
                       'Telephone'=>$params['Telephone'],
                       'PostalCode'=>$params['PostalCode'],
-                      'ContactName'=>$params['ContactName'],
-                      'ContactTelephone'=>$params['ContactTelephone'],
-                      'ContactEmail'=>$params['ContactEmail'],
+                      'County'=>$params['County'],
                       'Status'=>$params['Status'],
 		      'CreatedBy' => $authNameSpace->admin_id,
                       'CreatedDate' => new Zend_Db_Expr('now()')
@@ -185,9 +180,7 @@ class Application_Model_DbTable_Labs extends Zend_Db_Table_Abstract
                       'Address'=>$params['Address'],
                       'Telephone'=>$params['Telephone'],
                       'PostalCode'=>$params['PostalCode'],
-                      'ContactName'=>$params['ContactName'],
-                      'ContactTelephone'=>$params['ContactTelephone'],
-                      'ContactEmail'=>$params['ContactEmail'],
+                      'County'=>$params['County'],
                       'Status'=>$params['Status'],
 		      'CreatedBy' => $authNameSpace->admin_id,
                       'CreatedDate' => new Zend_Db_Expr('now()')

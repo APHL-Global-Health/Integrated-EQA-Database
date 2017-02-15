@@ -26,15 +26,18 @@ class Admin_LabsController extends Zend_Controller_Action
     public function addAction()
     {
         $adminService = new Application_Service_Labs();
+        $commonService = new Application_Service_Common();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->addLabs($params);
             $this->_redirect("/admin/labs");
         }
+        $this->view->countyList = $commonService->getCountiesList();
     }
     public function editAction()
     {
         $adminService = new Application_Service_Labs();
+        $commonService = new Application_Service_Common();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->updateLabs($params);
@@ -43,6 +46,7 @@ class Admin_LabsController extends Zend_Controller_Action
             if($this->_hasParam('id')){
                 $adminId = (int)$this->_getParam('id');
                 $this->view->admin = $adminService->getLabDetails($adminId);
+                $this->view->countyList = $commonService->getCountiesList();
             }
         }
     }
