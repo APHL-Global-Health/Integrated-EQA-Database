@@ -1,5 +1,5 @@
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination','ngRoute', 'highcharts-ng', 'nvd3ChartDirectives']);
-ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
+ReportModule.constant('serverURL', 'http://labmapping.nphls.or.ke:8082/reports/repository/');
 ReportModule.config(function ($routeProvider, $httpProvider) {
 
     $httpProvider.defaults.headers.common = {};
