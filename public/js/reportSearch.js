@@ -1,5 +1,13 @@
-var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination', 'highcharts-ng', 'nvd3ChartDirectives']);
-ReportModule.constant('serverURL', 'http://localhost:86/reports/repository/');
+var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination','ngRoute', 'highcharts-ng', 'nvd3ChartDirectives']);
+ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
+ReportModule.config(function ($routeProvider, $httpProvider) {
+
+    $httpProvider.defaults.headers.common = {};
+    $httpProvider.defaults.headers.post = {};
+    $httpProvider.defaults.headers.put = {};
+    $httpProvider.defaults.headers.patch = {};
+}
+)
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
                                                       graphDataCache, $filter, filterFilter) {
 
@@ -31,7 +39,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
 
-    $scope.reports.itemsPerPage = 50;
+    $scope.reports.itemsPerPage = 25;
     $scope.reports.countyChange = function (county) {
 
         for (var i = 0; i < $scope.reports.allCounties.length; i++) {
@@ -705,6 +713,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(error)
                     })
             } else {
+                $scope.reports.showGraphLoader = false;
+                $scope.reports.showGraph = false;
                 updateGraphMessages("please select a program to proceed", true, 'btn-danger')
             }
         } catch (E) {

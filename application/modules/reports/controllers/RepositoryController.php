@@ -1,5 +1,6 @@
 <?php
 
+
 class Reports_RepositoryController extends Zend_Controller_Action
 {
     protected $homeDir;
@@ -7,12 +8,22 @@ class Reports_RepositoryController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
             ->addActionContext('report', 'html')
             ->initContext();
         $this->_helper->layout()->pageName = 'report';
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
+        if (!class_exists('databases'. DIRECTORY_SEPARATOR .'core'. DIRECTORY_SEPARATOR .'mysql'. DIRECTORY_SEPARATOR .'DatabaseUtils')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'core-apis'. DIRECTORY_SEPARATOR .'DatabaseUtils.php';
+        }
+        if (!class_exists('database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'SystemAdmin')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'SystemAdmin.php';
+        }
+        if (!class_exists('database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'RepRepository')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'RepRepository.php';
+        }
     }
 
     public function indexAction()
@@ -47,15 +58,6 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
             . "  from rep_repository";
@@ -82,15 +84,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
             . "  from rep_repository";
@@ -108,7 +102,6 @@ class Reports_RepositoryController extends Zend_Controller_Action
         }
         //if(isset())
         $query .= " GROUP BY ProgramID;";
-
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -130,15 +123,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select labID as name,count(SampleCode) as data"
             . "  from rep_repository";
@@ -178,15 +163,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select ProviderID as name,count(DISTINCT LabID) as data"
             . "  from rep_repository";
@@ -204,7 +181,6 @@ class Reports_RepositoryController extends Zend_Controller_Action
         }
         //if(isset())
         $query .= " GROUP BY ProviderID;";
-
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -220,15 +196,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
     public function getcountiesAction()
     {
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "Select*from rep_counties";
         echo json_encode($databaseUtils->rawQuery($query));
@@ -237,15 +205,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
     public function getprogramsAction()
     {
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "Select*from rep_programs";
         echo json_encode($databaseUtils->rawQuery($query));
@@ -260,15 +220,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select DISTINCT RoundID as name,count(SampleCode)  as data";
         $query .= "";
@@ -308,15 +260,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select RoundID as title,Grade as name, count(Grade) as data "
             . "from rep_repository ";
@@ -362,15 +306,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select LabID as title,Grade as name, count(Grade) as data "
             . "from rep_repository ";
@@ -410,12 +346,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
     public function dumpAction()
     {
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $repRepository = new database\crud\RepRepository($databaseUtils);
         $tests = array('Malaria', 'HIV', 'Bacteriology', 'Bio-Chemisty');
@@ -446,15 +377,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once 'C:\xampp\htdocs\ePT-Repository\database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select ProgramID as title,Grade as name, count(Grade) as data "
             . "from rep_repository ";
@@ -492,15 +415,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        if (!class_exists('database\core\mysql\DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\core-apis\DatabaseUtils.php';
-        }
-        if (!class_exists('database\crud\SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\SystemAdmin.php';
-        }
-        if (!class_exists('database\crud\RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database\crud\RepRepository.php';
-        }
+
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select * "
             . "from rep_repository ";
@@ -513,11 +428,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
-
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
             $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
-
         $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
         $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
@@ -558,14 +471,14 @@ class Reports_RepositoryController extends Zend_Controller_Action
         $dateArray['dateFrom'] = 'Date From :' . $searchArray['dateFrom'];
         $dateTo['dateTo'] = 'Date To :' . $searchArray['dateTo'];
 
-        $provider['provider']='Provider : '.strtoupper($searchArray['ProviderId']);
-        $county['county']='County : '.strtoupper($searchArray['county']);
-        $prog['provider']='Program : '.strtoupper($searchArray['ProgramId']);
-        fputcsv($output,$dateArray);
-        fputcsv($output,$dateTo);
-        fputcsv($output,$provider);
-        fputcsv($output,$prog);
-        fputcsv($output,$county);
+        $provider['provider'] = 'Provider : ' . strtoupper($searchArray['ProviderId']);
+        $county['county'] = 'County : ' . strtoupper($searchArray['county']);
+        $prog['provider'] = 'Program : ' . strtoupper($searchArray['ProgramId']);
+        fputcsv($output, $dateArray);
+        fputcsv($output, $dateTo);
+        fputcsv($output, $provider);
+        fputcsv($output, $prog);
+        fputcsv($output, $county);
         fputcsv($output, $headers);
         foreach ($data as $row) {
             fputcsv($output, $row); // here you can change delimiter/enclosure
