@@ -491,9 +491,9 @@
 
                             }
                             $scope.samples.getAllSamples(tableName, where);
-
+                            console.log('Called')
                         } else {
-
+                            console.log('unknown tabke name')
                         }
 
 
@@ -1239,10 +1239,15 @@
             //         canvas: false,
             //     }
             // );
-            console.log('called hidden')
+            console.log('div loaded ' + div);
             $scope.samples.showBarcode = false;
-            $("#demo").print();
+            $("#" + div).print();
             console.log(div)
+        }
+        $scope.samples.printLabels = function (id, total) {
+            var url = serverSamplesURL + 'generateLabels/?id=' + id + '&total=' + total;
+            var win = window.open(url, '_blank');
+            win.focus();
         }
         $scope.samples.showBarcode = false;
         $scope.samples.generateBarcode = function (data) {
@@ -1403,8 +1408,9 @@
             $scope.receive.showPanelStatus = true;
         }
         $scope.samples.showFullShipmentInfo = function (shipment) {
+            $scope.samples.sampleToPanel = {};
             $scope.samples.samplesActivePage('viewShipmentFullInfo', 0);
-
+            $scope.samples.clickedShipmentFull = shipment;
             $scope.samples.getPanelFromShipment(shipment.id, 1);
         }
 

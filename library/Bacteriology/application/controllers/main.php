@@ -3,6 +3,7 @@
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
     . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
 require_once 'pdfCreator.php';
+
 Class Main extends pdfCreator
 {
     protected $username = 'eptadmin';
@@ -28,7 +29,6 @@ Class Main extends pdfCreator
         return substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
             . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
     }
-
 
 
     public function createInsertStatement($tableName, $dataArray)
@@ -322,6 +322,10 @@ Class Main extends pdfCreator
         }
     }
 
+    public function generatePanelLabels()
+    {
+
+    }
 }
 
 ?>

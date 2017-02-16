@@ -22,13 +22,6 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         $this->dbConnection = new Main();
     }
 
-    public function rootdirAction()
-    {
-        $this->dbConnection->testpdf();
-
-        exit();
-
-    }
 
     public function returnTotalCount($tableName, $id, $column)
     {
@@ -160,6 +153,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     {
         $returnArray = '';
         if ($tableName == 'data_manager') {
+            $whereId['dm_id'] = $id;
+        } else if ($tableName == 'participant') {
+            $whereId['participant_id'] = $id;
+        } else if ($tableName == 'participant_manager_map') {
             $whereId['dm_id'] = $id;
         } else {
             $whereId['id'] = $id;
@@ -491,5 +488,70 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     {
         print_r($this->dbConnection->getUserSession());
         exit();
+    }
+
+    public function getPanelsFromShipment($where)
+    {
+
+        try {
+            $tableName = 'tbl_bac_panels_shipments';
+            $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
+            //  echo(sizeof($dataDB));
+//            exit;
+            if ($dataDB != false) {
+
+                foreach ($dataDB as $key => $value) {
+
+
+                    $panel = $this->returnValueWhere($value->participantId, 'participant');
+                    $panelDtls = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+
+                    $dataDB[$key]->originLab = 'GHNH';
+                    $dataDB[$key]->panelName = $panelDtls['panelName'];
+                    $dataDB[$key]->panelLabel = $panelDtls['panelLabel'];
+                    $dataDB[$key]->labName = $panel['lab_name'];
+                    $dataDB[$key]->instituteName = $panel['institute_name'];
+                    $dataDB[$key]->city = $panel['city'];
+                    $dataDB[$key]->region = $panel['region'];
+                    $dataDB[$key]->firstName = $panel['first_name'];
+                    $dataDB[$key]->mobile = $panel['mobile'];
+                    $dataDB[$key]->phone = $panel['phone'];
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+
+                }
+
+
+            }
+            return $dataDB;
+        } catch
+        (Exception $e) {
+            $e->getMessage();
+        }
+
+
+    }
+
+    public function generatelabelsAction()
+    {
+        $where['shipmentId'] = $_GET['id'];
+        $loggedIn = $this->dbConnection->getUserSession();
+        $userLab = $this->returnValueWhere($loggedIn, 'participant_manager_map');
+        var_dump($userLab);
+        exit;
+        if ($loggedIn > 0) {
+            $count = $_GET['total'];
+            $panels = $this->getPanelsFromShipment($where);
+
+            if ($panels > 0) {
+                // print_r($panels);
+                $this->dbConnection->generatePdfFile($panels, $count);
+            } else {
+                echo 'No Panel Available records available';
+            }
+        } else {
+            echo '<b>You not logged in</b>';
+        }
+        exit();
+
     }
 }

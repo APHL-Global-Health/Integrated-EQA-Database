@@ -249,3 +249,16 @@ h3 {
 .active {
     border-top: 3px red solid;
 }
+.text-bolder{
+    font-weight:bolder !important;
+}
+.label-left{
+    border-right:1px solid black;
+}
+.label-mini{
+    border : 1px solid rgba(19,19,19,0.72);
+    padding: 13px;
+    border-radius: 8px !important;
+    margin : 8px;
+}
+
