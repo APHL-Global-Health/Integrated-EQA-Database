@@ -57,14 +57,14 @@
                 </ul>
             </div>
             <div class="col-md-12 no-padding">
-                <div class="btn btn-warning pull-right col-md-3 col-xs-4" ng-show="clickedTab!='notifications'"
+                <div class="btn btn-warning btn-sm pull-right " ng-show="clickedTab!='notifications'"
                      ng-click="samples.samplesActivePage('reports'+clickedTab,1)">
                     <i class="fa fa-list"></i> {{clickedTab|spaceCapitals|capitalizeLetter}} Report
                 </div>
-                <div class="btn btn-info pull-right col-md-3 col-xs-4" ng-click="samples.samplesActivePage('view'+clickedTab,1)">
+                <div class="btn btn-info btn-sm pull-right " ng-click="samples.samplesActivePage('view'+clickedTab,1)">
                     <i class="fa fa-eye"></i> View {{clickedTab|spaceCapitals|capitalizeLetter}}
                 </div>
-                <div class="btn btn-primary pull-right col-md-2 col-xs-4" ng-show="clickedTab!='notifications'"
+                <div class="btn btn-primary btn-sm pull-right " ng-show="clickedTab!='notifications'"
                      ng-click="samples.samplesActivePage('add'+clickedTab,1)">
                     <i class="fa fa-plus"></i> Add {{clickedTab|spaceCapitals|capitalizeLetter}}
                 </div>

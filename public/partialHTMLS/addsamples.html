@@ -4,13 +4,14 @@
         <H3>
             <x ng-show="samples.sampleFormData.id > 0">Edit {{samples.sampleFormData.batchName}}</x>
             <x ng-hide="samples.sampleFormData.id > 0">Add</x>
-            Sample</H3>
-        <div id='alert' tabindex='1'>
-            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
-                <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
-            </div>
+            Sample
+        </H3>
+        <div id='alert' tabindex='1'></div>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
         </div>
+
         <form name="sampleData" novalidate="" class="form-horizontal ">
             <div class="form-group row"
                  ng-class="{ 'has-error'  : sampleData.batchName.$invalid && !sampleData.batchName.$pristine }">
@@ -117,7 +118,7 @@
                  ng-class="{ 'has-error'  : sampleData.datePrepared.$invalid && !sampleData.datePrepared.$pristine }">
                 <label class="col-2 col-form-label">Date Prepared</label>
                 <div class="col-10">
-                    <div class="col-10" >
+                    <div class="col-10">
 
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>

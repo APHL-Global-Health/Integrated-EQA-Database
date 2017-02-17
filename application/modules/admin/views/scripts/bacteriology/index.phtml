@@ -58,21 +58,21 @@
                 <!--                    <i class="fa fa-list"></i> {{clickedTab|capitalizeLetter}} Extras-->
                 <!---->
                 <!--                </div>-->
-                <div class="dropdown btn btn-success pull-right col-md-2 col-sm-4">
+                <div class="dropdown btn-sm btn btn-success pull-right ">
                     <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#" ng-click="samples.samplesActivePage('viewCouriers')">Couriers</a></li>
-                        <li><a href="#">Print Labels</a></li>
-                        <li><a href="#">Round Calendar</a></li>
-                        <li><a href="#">Reports</a></li>
+                        <li><a href="#"  ng-click="samples.samplesActivePage('printLabels')">Print Labels</a></li>
+                        <li><a href="#"  ng-click="samples.samplesActivePage('calendar')">Round Calendar</a></li>
+                        <li><a href="#"  ng-click="samples.samplesActivePage('viewReports')">Reports</a></li>
                     </ul>
                 </div>
-                <div class="btn btn-info pull-right col-md-2 col-sm-4"
+                <div class="btn btn-info btn-sm pull-right "
                      ng-click="samples.samplesActivePage('view'+clickedTab)">
                     <i class="fa fa-eye"></i> View {{clickedTab|capitalizeLetter}}
                 </div>
-                <div class="btn btn-primary pull-right col-md-2  col-sm-4"
+                <div class="btn btn-sm btn-primary pull-right "
                      ng-click="samples.samplesActivePage('add'+clickedTab)">
                     <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
                 </div>

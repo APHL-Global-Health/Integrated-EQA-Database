@@ -484,10 +484,19 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
-    public function getusersessionAction()
+    public function saveshipmentstoroundAction()
     {
-        print_r($this->dbConnection->getUserSession());
-        exit();
+        $postedData = $this->returnArrayFromInput();
+        if (is_array($postedData)) {
+            $shipments = $postedData['shipmentIds'];
+            for($i=0;$i <sizeof($shipments);$i++){
+                $where['id'] =$shipments[$i];
+                $updateData['roundId'] =$postedData['roundCode'];
+                $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where,$updateData);
+                print_r($data);
+            }
+        }
+        exit;
     }
 
     public function getPanelsFromShipment($where)
@@ -506,7 +515,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $panel = $this->returnValueWhere($value->participantId, 'participant');
                     $panelDtls = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
 
-                    $dataDB[$key]->originLab = $userLabDtls['first_name'].' - '.$userLabDtls['institute_name'];
+                    $dataDB[$key]->originLab = $userLabDtls['first_name'] . ' - ' . $userLabDtls['institute_name'];
                     $dataDB[$key]->panelName = $panelDtls['panelName'];
                     $dataDB[$key]->panelLabel = $panelDtls['panelLabel'];
                     $dataDB[$key]->labName = $panel['lab_name'];

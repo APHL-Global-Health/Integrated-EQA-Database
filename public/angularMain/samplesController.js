@@ -555,17 +555,32 @@
         }
 
         $scope.samples.indexOfId = function (id, arr) {
-            try {
-                if (arr.indexOf(id) > -1) {
-                    console.log('true')
-                    return true;
-                } else {
-                    console.log('false')
-                    return false;
+
+            return arr.indexOf(id) > -1;
+
+        }
+        $scope.samples.saveShipmentsToRound = function (arr, round) {
+            if (round.id > 0) {
+                changeSavingSpinner(true);
+                var url = serverSamplesURL + 'saveshipmentstoround';
+                var data = {
+                    roundId: round.id,
+                    roundCode: round.roundCode,
+                    shipmentIds: arr
                 }
-            } catch (E) {
-                console.log(E);
+                $http.post(url, data)
+                    .success(function (response) {
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
+                        $scope.samples.showAddShipment=true
+                        $scope.samples.shipmentsToRoundArray =[];
+                    })
+                    .error(function (error) {
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                    })
             }
+
 
         }
         $scope.samples.returnCheckedRow = function (id, data) {
