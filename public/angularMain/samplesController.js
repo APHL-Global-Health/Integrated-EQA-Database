@@ -377,10 +377,12 @@
         $scope.samples.currentShipment = {}
         $scope.samples.showShipmentModal = false;
         $scope.samples.panelsToShipmentArray = [];
+        $scope.samples.showPanel = '';
         $scope.samples.addPanelsToShipment = function (shipment) {
             $scope.samples.currentShipment = shipment;
             $scope.samples.showShipmentModal = true;
             $scope.samples.panelsToShipmentArray = [];
+            $scope.samples.showPanel = 'panels'
 
 
         }
@@ -468,7 +470,14 @@
                 console.log(error);
             }
         }
-
+        $scope.samples.shipmentsToRoundArray = [];
+        $scope.samples.addShimentToRound = function (id, checker) {
+            try {
+                $scope.samples.shipmentsToRoundArray = EptServices.EptServiceObject.returnIdArray($scope.samples.shipmentsToRoundArray, id, checker);
+            } catch (error) {
+                console.log(error);
+            }
+        }
         /*-------------------------------------------------------------------End function to add Panel To Shipment----------------------------------------------------------*/
         /*---------------------------------------------------------------------END of add panels to shipments---------------------------------------------------------------*/
 
@@ -545,7 +554,22 @@
             $('#' + id).modal('hide');
         }
 
+        $scope.samples.indexOfId = function (id, arr) {
+            try {
+                if (arr.indexOf(id) > -1) {
+                    console.log('true')
+                    return true;
+                } else {
+                    console.log('false')
+                    return false;
+                }
+            } catch (E) {
+                console.log(E);
+            }
+
+        }
         $scope.samples.returnCheckedRow = function (id, data) {
+            console.log(data)
             var position = false;
             if (data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
@@ -554,6 +578,8 @@
                         break
                     }
                 }
+            } else {
+                console.log('no datra')
             }
             return position;
 
@@ -756,6 +782,7 @@
             }
         }
 
+        $scope.samples.showAddShipment = true;
 
         /*-------------------------------------------------------------------------End of returing the correct data---------------------------------------------------------*/
         /*---------------------------------------------------------------------------------------Start of custom delete function------------------------------------*/
@@ -807,10 +834,16 @@
 
 
         }
+        $scope.samples.addShipmentsToRound = function (round) {
+            $scope.samples.clickedRoundInfo = round;
+            console.log(round)
+            $scope.samples.showAddShipment = false;
+        }
         /*--------------------------------------------------------------dispatch shipment------------------------------------------*/
         $scope.samples.dispatchShipment = function (shipment, modal) {
             try {
                 $scope.samples.addPanelsToShipment(shipment);
+                $scope.samples.showPanel = 'dispatch';
             } catch (Exc) {
                 console.log(Exc)
             }

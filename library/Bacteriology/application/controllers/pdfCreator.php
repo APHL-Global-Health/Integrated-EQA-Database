@@ -246,7 +246,7 @@ EOD;
             $tr= '
                 <tr valign="" colspan="4">
                       <td class="header1"  align="left" valign="" width="35%">
-                      <b>SAMPLE SPLIT : ' . $value->originLab . '</b><br> <br>
+                      <b>FROM : ' . $value->originLab . '</b><br> <br>
                        <b>Osoro Michael</b><br>
                        <b>' . $value->firstName . ' ' . $value->instituteName . '</b><br>
                        <b>' . $value->city . ',' . $value->region . '</b><br><br>
@@ -257,7 +257,7 @@ EOD;
                                              ' . $value->totalSamplesAdded . ' Samples
                        </td>
                      <td class="header1"  align="left" valign="" width="35%">
-                      <b>SAMPLE SPLIT : ' . $value->originLab . '</b><br> <br>
+                      <b>FROM : ' . $value->originLab . '</b><br> <br>
                        <b>Osoro Michael</b><br>
                        <b>' . $value->firstName . ' ' . $value->instituteName . '</b><br>
                        <b>' . $value->city . ',' . $value->region . '</b><br><br>

@@ -1,23 +1,25 @@
-<div id="dispatchShipments" class="modal fade" draggable="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header btn-primary">
+<div ng-if="samples.showShipmentModal">
+    <br>
+    {{samples.showPanel}}
+    <div class="" ng-show="samples.showPanel=='dispatch'">
+        <div class="panel panel-info"  >
+            <div class="panel panel-heading">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                         ng-click="samples.hideShipmentModal()">&times;</button>
-                <h4 class="modal-title">Dispatch Shipment
+                <h4 class="modal-title"><i class="fa fa-truck"></i> Dispatch Shipment
                     {{samples.currentShipment.shipmentName | capitalizeLetter}} :
                     {{samples.currentShipment.shipmentDsc | capitalizeLetter}}
 
                 </h4>
             </div>
 
-            <div class="modal-body">
+            <div class="panel panel-body">
                 <div class="container">
                     <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
                         <a href="#" class="close" data-dismiss="alert">&times;</a>
                         <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
                     </div>
-                    <form class="form-horizontal " name="dispatchShipmentForm" novalidate="">
+                    <form class="form-horizontal container" name="dispatchShipmentForm" novalidate="">
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
                             <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>

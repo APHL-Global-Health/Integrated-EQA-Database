@@ -499,14 +499,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             //  echo(sizeof($dataDB));
 //            exit;
             if ($dataDB != false) {
-
+                $userLabDtls = $this->returnUserLabDetails();
                 foreach ($dataDB as $key => $value) {
 
 
                     $panel = $this->returnValueWhere($value->participantId, 'participant');
                     $panelDtls = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
 
-                    $dataDB[$key]->originLab = 'GHNH';
+                    $dataDB[$key]->originLab = $userLabDtls['first_name'].' - '.$userLabDtls['institute_name'];
                     $dataDB[$key]->panelName = $panelDtls['panelName'];
                     $dataDB[$key]->panelLabel = $panelDtls['panelLabel'];
                     $dataDB[$key]->labName = $panel['lab_name'];
@@ -531,13 +531,25 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     }
 
+    public function returnUserLabDetails()
+    {
+        $loggedIn = $this->dbConnection->getUserSession();
+        try {
+            $userLab = $this->returnValueWhere($loggedIn, 'participant_manager_map');
+            $userLabDetails = $this->returnValueWhere($userLab['participant_id'], 'participant');
+            return $userLabDetails;
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
+
     public function generatelabelsAction()
     {
         $where['shipmentId'] = $_GET['id'];
-        $loggedIn = $this->dbConnection->getUserSession();
-        $userLab = $this->returnValueWhere($loggedIn, 'participant_manager_map');
-        var_dump($userLab);
-        exit;
+        $loggedIn = $this->returnUserLabDetails();
+
         if ($loggedIn > 0) {
             $count = $_GET['total'];
             $panels = $this->getPanelsFromShipment($where);
