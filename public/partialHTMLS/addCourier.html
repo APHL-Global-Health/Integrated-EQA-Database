@@ -23,8 +23,7 @@
                 <label class="col-2 col-form-label">Courier Name</label>
                 <div class="col-10">
                     <input class="form-control " required="" ng-model="samples.courierFormData.courierName"
-                           name="courierName"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+                           name="courierName" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.courierName.$invalid && !courierData.courierName.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -39,7 +38,7 @@
                 <div class="col-10">
                     <input class="form-control" required="" ng-model="samples.courierFormData.mobile"
                            name="mobile"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+                           ng-pattern="samples.numericOnly">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.mobile.$invalid && !courierData.mobile.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -53,7 +52,7 @@
                 <div class="col-10">
                     <input class="form-control" required="" ng-model="samples.courierFormData.physicalAddress"
                            name="physicalAddress"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.physicalAddress.$invalid && !courierData.physicalAddress.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -68,7 +67,7 @@
                 <div class="col-10">
                     <input class="form-control" required="" ng-model="samples.courierFormData.address"
                            name="address"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.address.$invalid && !courierData.address.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -82,10 +81,10 @@
                 <div class="col-">
                     <input class="form-control" required="" ng-model="samples.courierFormData.tel"
                            name="tel"
-                           ng-pattern="samples.alphaNumHyDashRegExp">
+                           ng-pattern="samples.numericOnly">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.tel.$invalid && !courierData.tel.$pristine">
-                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        Error : Required & Only numbers
                     </small>
 
                 </div>
@@ -94,12 +93,12 @@
                  ng-class="{ 'has-error'  : courierData.email.$invalid && !courierData.email.$pristine }">
                 <label class="col-2 col-form-label">Email</label>
                 <div class="col-10">
-                    <input class="form-control" required="" ng-model="samples.courierFormData.email"
-                           name="email"
+                    <input class="form-control" required="" ng-model="samples.courierFormData.email" type="email"
+                           name="email"  ng-pattern="samples.emailAddressRegex"
                           >
                     <small class="text-danger col-md-12"
                            ng-show="courierData.email.$invalid && !courierData.email.$pristine">
-                        Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        Error : Valid email addredd required
                     </small>
 
                 </div>
@@ -109,8 +108,7 @@
                 <label class="col-2 col-form-label">Contact Person</label>
                 <div class="col-10">
                     <input class="form-control" required="" ng-model="samples.courierFormData.contactPerson"
-                           name="contactPerson"
-                           ng-pattern=''>
+                           name="contactPerson" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
                            ng-show="courierData.contactPerson.$invalid && !courierData.contactPerson.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed

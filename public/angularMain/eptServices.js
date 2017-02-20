@@ -9,7 +9,9 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject.loaderStatus = {};
     var itemsPerPage = 10;
     var alphaNumHyDashRegExp = /^[a-zA-Z0-9\-\/]+$/;
-    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9\-\/]+$/;
+    var numericRegex = /^[0-9]*$/;
+    var emailRegex = '';
+    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9](?:[_\-. /]?[a-zA-Z0-9]+)*$/; ///^[a-zA-Z0-9. _\-\/]+$/;
     this.EptServiceObject.loaderStatus = {
 
         fbMessage: '',
@@ -23,7 +25,12 @@ EptServices.service('EptServices', function () {
 
         return barcode;
     }
-
+    this.EptServiceObject.returnNumericRegexRegExp = function () {
+        return numericRegex;
+    }
+    this.EptServiceObject.returnEmailRegexRegExp = function () {
+        return emailRegex;
+    }
     this.EptServiceObject.returnAlphaNumHyDashSpaceRegExp = function () {
         return alphaNumHyDashSpaceRegExp;
     }

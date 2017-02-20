@@ -321,8 +321,12 @@
 
     <!---------Modal---------->
     <div>
-        <div draggable="true" ng-if="samples.showPanelModal">
-            <br>
+        <div  ng-if="samples.showPanelModal">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-sm btn-danger"
+                        ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> cancel
+                </button>
+            </div>
             <div class="panel panel-primary">
 
                 <div class="panel panel-heading">

@@ -1,0 +1,79 @@
+<div class="panel panel-default">
+    <div class="panel-heading" >
+        <i class="fa fa-calendar"></i> Tickets Calendar <spinner></spinner>
+    </div>
+    <div role="main" style="min-height: 500px;">
+        <div class="col-lg-12" ng-controller="modalsController">
+            <section id="directives-calendar" ng-controller="CalendarCtrl" style="padding: 0px;margin:0px;" >
+                <div class="">
+                    <div class="row-fluid" ng-init="data.createEvents()">
+                        <!--  <div class="col-lg-4">
+                              <div class="btn-group calTools">
+                                  <button class="btn" ng-click="changeLang()">
+                                      {{changeTo}}
+                                  </button>
+                                  <button class="btn" >
+                                     Filter
+                                  </button>
+                                  <button type="button" class="btn btn-primary" ng-click="data.createEvents()">
+                                      <i class="fa fa-refresh"></i>
+                                  </button>
+                              </div>
+                              <div class="pre-scrollable">
+                              <table class="table">
+                                  <tr ng-repeat="e in events" class="{{modalData.returnRowClass(e.id,e.closedFlag)}}" ng-click="modalData.makeRowActive(e.id)"
+                                      >
+                                      <td>  {{e.desc}} : <b>{{e.start| date:"MMM dd"}} - {{e.end| date:"MMM dd"}}</b></td>
+
+
+                                  </tr>
+                              </table>
+                              </div>
+                          </div>
+                        -->
+                        <div class="col-lg-12 pull-right" ng-if="data.showCalendar">
+                            <tabset ng-controller="ticketsController">
+                                <tab ng-init="renderCalender('myCalendar1');">
+
+
+                                    <div class="btn-toolbar">
+
+                                        <div class="btn-group">
+                                            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">Day Work</button>
+                                            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">Week Work</button>
+                                            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month Work</button>
+
+                                        </div>
+                                        <button class="btn btn-warning pull-right" ng-disabled="true">{{data.totalEvents}}
+                                            Events Scheduled for today {{data.convertToHumanTime(data.returnDateToday())}}</button>
+
+                                    </div>
+                                    <div style="margin-top: 5px;" class="{{data.classAlert}} alert-dismissable col-lg-12" ng-show="alertMessage != undefined && alertMessage != ''">
+                                        {{alertMessage}}
+                                    </div>
+                                    <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar">
+
+                                    </div>
+                                </tab>
+
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-17352735-3']);
+        _gaq.push(['_trackPageview']);
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</div>

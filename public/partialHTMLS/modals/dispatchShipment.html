@@ -1,8 +1,12 @@
 <div ng-if="samples.showShipmentModal">
     <br>
-    {{samples.showPanel}}
+    <div class="col-md-12">
+        <button type="button" class="pull-right btn btn-sm btn-danger"
+                ng-click="samples.hideShipmentModal()"><i class="fa fa-remove"></i> cancel
+        </button>
+    </div>
     <div class="" ng-show="samples.showPanel=='dispatch'">
-        <div class="panel panel-info"  >
+        <div class="panel panel-info">
             <div class="panel panel-heading">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                         ng-click="samples.hideShipmentModal()">&times;</button>
@@ -24,9 +28,12 @@
                              ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
                             <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>
                             <div class="col-10" ng-init="samples.getAllLabs()">
-                                <select class="form-control"  id="addressedTo" required name="addressedTo"   ng-model="samples.dispatchShipmentFormData.addressedTo">
+                                <select class="form-control" id="addressedTo" required name="addressedTo"
+                                        ng-model="samples.dispatchShipmentFormData.addressedTo">
                                     <option selected disabled>--Select Lab--</option>
-                                    <option ng-repeat="lab in samples.labs" value="{{lab.participant_id}}">{{lab.first_name}}</option>
+                                    <option ng-repeat="lab in samples.labs" value="{{lab.participant_id}}">
+                                        {{lab.first_name}}
+                                    </option>
                                 </select>
                             </div>
                             <small class="text-danger col-md-12"
@@ -40,8 +47,10 @@
                             <div class="col-10">
 
                                 <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" ng-model="samples.dispatchShipmentFormData.dateDispatched"
+                                    <span class="input-group-addon" id="basic-addon2"><i
+                                            class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control"
+                                           ng-model="samples.dispatchShipmentFormData.dateDispatched"
                                            data-date-format="yyyy-MM-dd" required=""
                                            data-min-date="" data-max-date="today"
                                            data-autoclose="1" aria-describedby="basic-addon2"
@@ -60,7 +69,7 @@
                             <label for="shippingMethod" class="col-2 col-form-label">Shipping Method</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="shippingMethod" required
-                                       name="shippingMethod"
+                                       name="shippingMethod"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                        ng-model="samples.dispatchShipmentFormData.shippingMethod">
                             </div>
                             <small class="text-danger col-md-12"
@@ -72,7 +81,7 @@
                              ng-class="{ 'has-error'  : dispatchShipmentForm.dispatchComments.$invalid && !dispatchShipmentForm.dispatchComments.$pristine }">
                             <label for="dispatchComments" class="col-2 col-form-label">Dispatch Comments</label>
                             <div class="col-10">
-                                <textarea class="form-control" id="dispatchComments"  name="dispatchComments"
+                                <textarea class="form-control" id="dispatchComments" name="dispatchComments"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                           ng-model="samples.dispatchShipmentFormData.dispatchComments">
 
                                 </textarea>
@@ -87,6 +96,7 @@
                             <label for="type" class="col-2 col-form-label">Courier</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="type" required name="dispatchCourier"
+                                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                        ng-model="samples.dispatchShipmentFormData.dispatchCourier">
                             </div>
                             <small class="text-danger col-md-12"
@@ -100,6 +110,7 @@
                             <label for="temperature" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="temperature" required name="temperature"
+                                       ng-pattern="samples.numericOnly"
                                        ng-model="samples.dispatchShipmentFormData.temperature">
                             </div>
                             <small class="text-danger col-md-12"

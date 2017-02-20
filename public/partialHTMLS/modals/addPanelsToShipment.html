@@ -41,7 +41,7 @@
 
                         <div class="[ form-group ]">
 
-                            <input type="checkbox"  ng-hide="true" ng-disabled="panel.totalSamplesAdded==0" name="{{panel.id}}" id="{{panel.id}}" autocomplete="off"
+                            <input type="checkbox"  ng-hidden="true" ng-disabled="panel.totalSamplesAdded==0" name="{{panel.id}}" id="{{panel.id}}" autocomplete="off"
                                    ng-checked="samples.indexOfId(panel.id,samples.panelsToShipmentArray)"
                                    ng-click="samples.addPanelToShipment(panel.id,panelCheck)"
                                    ng-model="panelCheck">

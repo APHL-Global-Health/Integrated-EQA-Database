@@ -17,6 +17,7 @@
                 <label for="panelName" class="col-2 col-form-label">Panel Name.</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="panelName" required name="panelName"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            ng-model="samples.panelFormData.panelName">
                 </div>
                 <small class="text-danger col-md-12"
@@ -28,7 +29,7 @@
                  ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
                 <label for="label" class="col-2 col-form-label">Panel Label</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="label" required
+                    <input class="form-control" type="text" id="label" required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            ng-model="samples.panelFormData.panelLabel" name="panelLabel">
                 </div>
                 <small class="text-danger col-md-12"
@@ -41,6 +42,7 @@
                 <label for="type" class="col-2 col-form-label">Type</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="type" required name="panelType"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            ng-model="samples.panelFormData.panelType">
                 </div>
                 <small class="text-danger col-md-12"
@@ -106,8 +108,8 @@
                  ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
                 <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(panel capacity)</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples" 
-                           ng-pattern=""
+                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples"
+                           ng-pattern="samples.numericOnly"
                            ng-model="samples.panelFormData.numberOfSamples">
 
                 </div>

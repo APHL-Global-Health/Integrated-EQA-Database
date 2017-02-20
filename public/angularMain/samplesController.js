@@ -10,7 +10,8 @@
         $scope.samples.menuLength = 2;
 
         $scope.samples.alphaNumHyDashRegExp = new RegExp(EptServices.EptServiceObject.returnAlphaNumHyDashRegExp());
-
+        $scope.samples.numericOnly = new RegExp(EptServices.EptServiceObject.returnNumericRegexRegExp());
+        $scope.samples.emailAddressRegex = new RegExp(EptServices.EptServiceObject.returnEmailRegexRegExp());
         $scope.samples.alphaNumHyDashSpaceRegExp = new RegExp(EptServices.EptServiceObject.returnAlphaNumHyDashSpaceRegExp());
 
         $scope.samples.sampleFormData = {}
