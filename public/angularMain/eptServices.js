@@ -228,5 +228,13 @@ EptServices.service('EptServices', function () {
 
 })
 EptServices.factory('EptFactory', function () {
-
+    var roundData = {};
+return {
+    setRoundsData:function(rounds){
+        roundData =rounds
+    },
+    returnRoundData :function(){
+      return  roundData ;
+    }
+}
 })

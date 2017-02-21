@@ -246,7 +246,7 @@ h3 {
 
 }
 
-.active {
+li .active {
     border-top: 3px red solid;
 }
 .text-bolder{

@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, $timeout) {
+    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, EptFactory, $timeout) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -25,8 +25,9 @@
             }
 
         }
-
-
+        $scope.samples.getRoundsWithFactorySave = function (round) {
+            EptFactory.setRoundsData(round)
+        }
         $scope.samples.changeItemsPerPage = function (pages) {
             $scope.samples.itemsPerPage = pages;
         }
@@ -77,6 +78,7 @@
             }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.rounds = data.data;
+                EptFactory.setRoundsData(data.data);
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.couriers = data.data;
@@ -573,8 +575,8 @@
                     .success(function (response) {
                         changeSavingSpinner(false);
                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
-                        $scope.samples.showAddShipment=true
-                        $scope.samples.shipmentsToRoundArray =[];
+                        $scope.samples.showAddShipment = true
+                        $scope.samples.shipmentsToRoundArray = [];
                     })
                     .error(function (error) {
                         changeSavingSpinner(false);
@@ -1468,7 +1470,8 @@
 
         /*-----------------------------------------------------------------filter to capitialize the first letter of the word---------------------------------------*/
 
-    }).controller('DatepickerPopupCtrl', function ($scope) {
+    });
+    samplesModule.controller('DatepickerPopupCtrl', function ($scope) {
         $scope.today = function () {
             $scope.dt = new Date();
         };
@@ -1585,7 +1588,183 @@
         return function (input) {
             return input.replace(/([A-Z])/g, ' $1').trim();
         }
-    })
+    });
+    samplesModule.controller('CalendarCtrl', function ($scope, $compile, $timeout, uiCalendarConfig, EptFactory) {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        $scope.calendar = {};
+        $scope.changeTo = 'Kiswahili';
+        $scope.events = []
+        $scope.calendar.showCalendar = true;
+        $scope.calendar.getRoundData = function () {
+
+            var rounds = EptFactory.returnRoundData();
+            console.log(rounds)
+            var roundArray = [];
+            for (var i = 0; i < rounds.length; i++) {
+                var tempSmall = {
+                    title: rounds[i]['roundName'],
+                    id: rounds[i]['id'],
+                    start: rounds[i]['startDate'],
+                    end: rounds[i]['endDate']
+                };
+                roundArray.push(tempSmall)
+            }
+            console.log(roundArray)
+
+            $scope.events = roundArray;
+
+            $scope.eventsF();
+
+
+        }
+
+        /* event source that pulls from google.com */
+
+        /* event source that contains custom events on the scope */
+
+        /* event source that calls a function on every view switch */
+        $scope.eventsF = function (start, end, timezone, callback) {
+
+            $scope.calendar.showCalendar = false;
+            var s = new Date(start).getTime() / 1000;
+            var e = new Date(end).getTime() / 1000;
+            var m = new Date(start).getMonth();
+            var events = [{
+                title: 'Feed Me ' + m,
+                start: s + (50000),
+                end: s + (100000),
+                allDay: false,
+                className: ['customFeed']
+            }];
+            try {
+                callback(events);
+            } catch (e) {
+
+           }
+
+            $scope.calendar.showCalendar = true;
+        };
+
+        $scope.calEventsExt = {
+            color: '#f00',
+            textColor: 'yellow',
+            events: [
+                {
+                    type: 'party',
+                    title: 'Lunch',
+                    start: new Date(y, m, d, 12, 0),
+                    end: new Date(y, m, d, 14, 0),
+                    allDay: false
+                },
+                {
+                    type: 'party',
+                    title: 'Lunch 2',
+                    start: new Date(y, m, d, 12, 0),
+                    end: new Date(y, m, d, 14, 0),
+                    allDay: false
+                },
+                {
+                    type: 'party',
+                    title: 'Click for Google',
+                    start: new Date(y, m, 28),
+                    end: new Date(y, m, 29),
+                    url: 'http://google.com/'
+                }
+            ]
+        };
+        /* alert on eventClick */
+        $scope.alertOnEventClick = function (date, jsEvent, view) {
+            $scope.alertMessage = (date.title + ' was clicked ');
+        };
+        /* alert on Drop */
+        $scope.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view) {
+            $scope.alertMessage = ('Event Dropped to make dayDelta ' + delta);
+        };
+        /* alert on Resize */
+        $scope.alertOnResize = function (event, delta, revertFunc, jsEvent, ui, view) {
+            $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
+        };
+        /* add and removes an event source of choice */
+        $scope.addRemoveEventSource = function (sources, source) {
+            var canAdd = 0;
+            angular.forEach(sources, function (value, key) {
+                if (sources[key] === source) {
+                    sources.splice(key, 1);
+                    canAdd = 1;
+                }
+            });
+            if (canAdd === 0) {
+                sources.push(source);
+            }
+        };
+        /* add custom event*/
+        $scope.addEvent = function () {
+            $scope.events.push({
+                title: 'Open Sesame',
+                start: new Date(y, m, 28),
+                end: new Date(y, m, 29),
+                className: ['openSesame']
+            });
+        };
+        /* remove event */
+        $scope.remove = function (index) {
+            $scope.events.splice(index, 1);
+        };
+        /* Change View */
+        $scope.changeView = function (view, calendar) {
+            uiCalendarConfig.calendars[calendar].fullCalendar('changeView', view);
+        };
+        /* Change View */
+        $scope.renderCalender = function (calendar) {
+            $timeout(function () {
+                if (uiCalendarConfig.calendars[calendar]) {
+                    uiCalendarConfig.calendars[calendar].fullCalendar('render', 'agendaWeek');
+                }
+            });
+        };
+        /* Render Tooltip */
+        $scope.eventRender = function (event, element, view) {
+            element.attr({
+                'tooltip': event.title,
+                'tooltip-append-to-body': true
+            });
+            $compile(element)($scope);
+        };
+        /* config object */
+        $scope.uiConfig = {
+            calendar: {
+                height: 450,
+                editable: true,
+                header: {
+                    left: 'title',
+                    center: '',
+                    right: 'today prev,next'
+                },
+                eventClick: $scope.alertOnEventClick,
+                eventDrop: $scope.alertOnDrop,
+                eventResize: $scope.alertOnResize,
+                eventRender: $scope.eventRender
+            }
+        };
+
+        $scope.changeLang = function () {
+            if ($scope.changeTo === 'Kiswahili') {
+                $scope.uiConfig.calendar.dayNames = ["Jumapili", "Jumatatu", "Jumanne", "Jumatano", "Alamisi", "Ijumaa", "Jumamosi"];
+                $scope.uiConfig.calendar.dayNamesShort = ["Jumapili", "Jumatatu", "Jumanne", "Jumatano", "Alamisi", "Ijumaa", "Jumamosi"];
+                $scope.changeTo = 'English';
+            } else {
+                $scope.uiConfig.calendar.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                $scope.uiConfig.calendar.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                $scope.changeTo = 'Kiswahili';
+            }
+        };
+        /* event sources array*/
+        $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+
+    });
 
     /*-------------------------------------------------------------------END if of the capitalizing filter-------------------------------------------------------------------------------------*/
 

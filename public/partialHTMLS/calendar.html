@@ -1,54 +1,57 @@
-<div class="panel panel-default">
+<div class="">
     <div class="panel-heading" >
-        <i class="fa fa-calendar"></i> Tickets Calendar <spinner></spinner>
+        <i class="fa fa-calendar"></i> Rounds Calendar   <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
     </div>
-    <div role="main" style="min-height: 500px;">
-        <div class="col-lg-12" ng-controller="modalsController">
-            <section id="directives-calendar" ng-controller="CalendarCtrl" style="padding: 0px;margin:0px;" >
+    <div role="main" class="">
+        <div class="" >
+            <section id="directives-calendar" ng-controller="CalendarCtrl"  >
                 <div class="">
-                    <div class="row-fluid" ng-init="data.createEvents()">
-                        <!--  <div class="col-lg-4">
-                              <div class="btn-group calTools">
+                    <div class="row-fluid">
+
+                         <div class="col-lg-4">
+                              <div class="btn-group col-md-12 calTools">
                                   <button class="btn" ng-click="changeLang()">
                                       {{changeTo}}
                                   </button>
-                                  <button class="btn" >
-                                     Filter
-                                  </button>
-                                  <button type="button" class="btn btn-primary" ng-click="data.createEvents()">
+                                  <button type="button" class="btn btn-primary" ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
                                       <i class="fa fa-refresh"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-primary" ng-click="calendar.getRoundData()">
+                                      Show Calendar
                                   </button>
                               </div>
                               <div class="pre-scrollable">
                               <table class="table">
                                   <tr ng-repeat="e in events" class="{{modalData.returnRowClass(e.id,e.closedFlag)}}" ng-click="modalData.makeRowActive(e.id)"
                                       >
-                                      <td>  {{e.desc}} : <b>{{e.start| date:"MMM dd"}} - {{e.end| date:"MMM dd"}}</b></td>
+                                      <td>  {{e.start| date:"MMM dd"}} - {{e.end| date:"MMM dd"}}</b></td>
 
 
                                   </tr>
                               </table>
                               </div>
                           </div>
-                        -->
-                        <div class="col-lg-12 pull-right" ng-if="data.showCalendar">
-                            <tabset ng-controller="ticketsController">
-                                <tab ng-init="renderCalender('myCalendar1');">
+
+                        <div class="col-lg-8 pull-right" ng-if="calendar.showCalendar" >
+
+                            <tabset>
+                                <tab ng-init="renderCalender('myCalendar1')">
 
 
-                                    <div class="btn-toolbar">
+                                    <div class="no-padding">
 
                                         <div class="btn-group">
-                                            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">Day Work</button>
-                                            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">Week Work</button>
-                                            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month Work</button>
+                                            <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">Day Rounds</button>
+                                            <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">Week Rounds</button>
+                                            <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month Rounds</button>
 
                                         </div>
-                                        <button class="btn btn-warning pull-right" ng-disabled="true">{{data.totalEvents}}
-                                            Events Scheduled for today {{data.convertToHumanTime(data.returnDateToday())}}</button>
+                                        <button class="btn btn-warning btn-sm pull-right" ng-disabled="false">{{data.totalEvents}}
+                                            Rounds Scheduled: the Month {{data.convertToHumanTime(data.returnDateToday())}}</button>
 
                                     </div>
-                                    <div style="margin-top: 5px;" class="{{data.classAlert}} alert-dismissable col-lg-12" ng-show="alertMessage != undefined && alertMessage != ''">
+                                    <div style="margin-top: 5px;" class="alert alert-info alert-dismissable col-lg-12"
+                                         ng-show="alertMessage != undefined && alertMessage != ''">
                                         {{alertMessage}}
                                     </div>
                                     <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar">
