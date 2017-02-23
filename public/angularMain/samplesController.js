@@ -73,6 +73,9 @@
             if (tableName == 'data_manager') {
                 $scope.samples.labUsers = data.data;
             }
+            if (tableName == 'tbl_bac_ready_labs') {
+                $scope.samples.readyLabs = data.data;
+            }
             if (tableName == 'tbl_bac_samples_to_users') {
                 $scope.samples.samplesToUsers = data.data;
             }
@@ -124,6 +127,7 @@
                 $scope.samples.loaderProgressSpinner = 'fa-spinner'
 
                 var url = serverSamplesURL + EptServices.EptServiceObject.returnServerUrl(tableName);
+
                 if (angular.isDefined(whereDelivery)) {
 
                     url = serverSamplesURL + 'getwheredelivery';
@@ -399,6 +403,47 @@
         $scope.samples.hideShipmentModal = function () {
             $scope.samples.showShipmentModal = false;
         }
+
+        $scope.samples.saveLabsToRound = function (round) {
+            try {
+                if (angular.isDefined(round)) {
+                    changeSavingSpinner(true);
+                    var postedData = {};
+                    postedData.roundId = round.id;
+                    postedData.labId = $scope.samples.labsToRoundArray;
+                    var url = serverSamplesURL + 'savelabstoround';
+                    $http
+                        .post(url, postedData)
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labsToRoundArray = [];
+
+
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+
+                                $scope.samples.samplesActivePage('viewRounds', 0);
+
+
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
+                            }
+
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
+
+                } else {
+                    changeSavingSpinner(false);
+                    console.log('error')
+                }
+            } catch (error) {
+                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, error));
+            }
+        }
         $scope.samples.savePanelsToShipments = function (shipment) {
             try {
                 if (angular.isDefined(shipment)) {
@@ -492,6 +537,15 @@
                 console.log(error);
             }
         }
+        $scope.samples.labsToRoundArray = [];
+        $scope.samples.addLabsToRoundArray = function (id, checker) {
+            try {
+                $scope.samples.labsToRoundArray = EptServices.EptServiceObject.returnIdArray($scope.samples.labsToRoundArray, id, checker);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         $scope.samples.shipmentsToRoundArray = [];
         $scope.samples.addShimentToRound = function (id, checker) {
             try {
@@ -587,7 +641,7 @@
                 var url = serverSamplesURL + 'saveshipmentstoround';
                 var data = {
                     roundId: round.id,
-                    roundCode: round.roundCode,
+                    roundCode: round.id,
                     shipmentIds: arr
                 }
                 $http.post(url, data)
@@ -937,6 +991,9 @@
                             $scope.samples.receiveShipmentFormData = {};
                             if (type == 1) {
                                 $scope.samples.showMainTable(postedData.tableName)
+                                if (postedData.tableName == 'tbl_bac_shipments') {
+                                    $scope.samples.showShipmentModal = false;
+                                }
                             }
 
                         } else {
@@ -958,7 +1015,7 @@
         }
         $scope.samples.saveDispatchShipmentForm = function (dispatchShipmentData) {
             try {
-                dispatchShipmentData.dateDispatched = $scope.samples.getClickedDate();
+
                 dispatchShipmentData.shipmentStatus = 2;
                 console.log(dispatchShipmentData);
 
@@ -968,7 +1025,7 @@
                 postedData.updateData = dispatchShipmentData;
                 postedData.where = {id: $scope.samples.currentShipment.id};
                 if (angular.isDefined(postedData)) {
-                    $scope.samples.updateWhere(postedData);
+                    $scope.samples.updateWhere(postedData, 1);
                 }
 
             } catch (Exc) {
@@ -1008,6 +1065,56 @@
             }
         }
         $scope.samples.samplesIssuedToUser = {}
+
+
+        $scope.samples.showRoundFullUsers = function (sample) {
+            $scope.samples.clickedSample = sample;
+            $scope.samples.samplesActivePage('sampleFullInfo', 0);
+        }
+        $scope.samples.sampleToUsers = {};
+        $scope.samples.getSampleAllUsers = function (sample) {
+            try {
+                var url = serverSamplesURL + 'getsampleallusers';
+                var wherer = {
+                    sampleId: sample.id
+                }
+                $scope.samples.sampleToUsers = {}
+                changeSavingSpinner(true);
+                $http
+                    .post(url, where)
+                    .success(function (response) {
+                        changeSavingSpinner(false);
+                        if (response.status == 1) {
+                            $scope.samples.sampleToUsersr = response.data;
+                        } else {
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                        }
+                    })
+                    .error(function (error) {
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                    })
+            } catch (Exception) {
+
+            }
+        }
+        $scope.samples.getReadyLabs = function () {
+
+        }
+        $scope.samples.readyLabs = {}
+        $scope.samples.addLabsToRound = function (round) {
+
+            $scope.samples.samplesActivePage('addLabsToRound', 0);
+            $scope.samples.readyLabs={};
+            console.log(round)
+            var where = {
+                roundId: round.id,
+                status :1
+            }
+            $scope.samples.currentRound = round;
+            $scope.samples.getAllSamples('tbl_bac_ready_labs', where);
+
+        }
         $scope.samples.getUserIssuedSamples = function (where) {
             try {
                 var url = serverSamplesURL + 'getusersamplesissued';
@@ -1410,8 +1517,8 @@
             $scope.samples.shipmentsData = {};
             $scope.samples.currentRound = round;
             $scope.samples.showRoundInfo = !$scope.samples.showRoundInfo;
-
-            var where = {roundId: round.roundName}
+console.log(round)
+            var where = {roundId: round.id}
             if (round != '') {
                 $scope.samples.getAllSamples('tbl_bac_shipments', where)
             }

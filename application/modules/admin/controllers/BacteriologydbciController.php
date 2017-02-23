@@ -132,6 +132,68 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     }
 
+    public function savelabstoroundAction()
+    {
+        try {
+            $jsPostData = file_get_contents('php://input');
+
+            $jsPostData = (array)(json_decode($jsPostData));
+            $idArray = $jsPostData['labId'];
+
+            if (is_array($jsPostData)) {
+                $response = [];
+                foreach ($idArray as $value) {
+
+                    $data['labId'] = $value;
+                    $data['roundId'] = $jsPostData['roundId'];
+                    $response = $this->dbConnection->insertData('tbl_bac_rounds_labs', $data);
+
+                    $updateData['status'] = 2;
+                   // $this->dbConnection->updateTable('tbl_bac_ready_labs', $data, $updateData);
+                    $this->savePanelForEachLab($data['roundId'], $data['labId']);
+                }
+                echo $this->returnJson($response);
+            }
+            exit();
+        } catch (Exception $error) {
+            echo $error->getMessage();
+        }
+
+    }
+
+    public function savePanelForEachLab($round, $labId)
+    {
+        $where['roundId'] = $round;
+
+        $dataDB = $this->dbConnection->selectFromTable('tbl_bac_shipments', $where);
+
+        if ($dataDB != false) {
+            foreach ($dataDB as $key => $value) {
+
+                $whereShipmentId['shipmentId'] = $dataDB[$key]->id;
+
+                $panels = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
+//                var_dump($dataDB);
+//                exit;
+                if ($panels != false) {
+                    foreach ($panels as $key => $panelValue) {
+                        $insert['panelId'] = $panels[$key]->panelId;
+                        $insert['shipmentId'] = $whereShipmentId['shipmentId'];
+                        $insert['deliveryStatus'] = $panels[$key]->deliveryStatus;
+                        $insert['participantId'] = $labId;
+                        $insert['createdBy'] = $this->dbConnection->getUserSession();
+
+                        $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
+                    }
+                }
+
+            }
+        } else {
+            exit;
+        }
+
+    }
+
     public function insertAction()
     {
         $jsPostData = file_get_contents('php://input');
@@ -225,7 +287,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     } else if ($tableName == 'tbl_bac_panel_mst') {
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
 
+                    } else if ($tableName == 'tbl_bac_ready_labs') {
+                        $lab = $this->returnValueWhere($value->labId, 'participant');
 
+                        $dataDB[$key]->first_name = $lab['first_name'];
+                        $dataDB[$key]->region = $lab['region'];
+                        $dataDB[$key]->institute = $lab['institute_name'];
+//                        $dataDB[$key]->batchName = $sample['batchName'];
                     }
                 }
 
@@ -411,7 +479,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             if ($tableName == 'tbl_bac_panels_shipments') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
-            } else if ($tableName == 'tbl_bac_sample_to_panel') {
+            } else if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
@@ -464,7 +532,53 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function getusersamplesissuedAction()
     {
         try {
+
             $where['userId'] = $this->dbConnection->getUserSession();
+
+            if (count($where) > 0) {
+                $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
+                if ($dataDB != false) {
+                    foreach ($dataDB as $key => $value) {
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->datePrepared = $sample['datePrepared'];
+                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                        $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
+                        $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+
+                        $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                        $dataDB[$key]->startDate = $round['startDate'];
+                        $dataDB[$key]->endDate = $round['endDate'];
+                        $dataDB[$key]->roundCode = $round['roundCode'];
+                        $dataDB[$key]->roundStatus = $round['roundStatus'];
+                        $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                        $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
+
+                    }
+                    $data['status'] = 1;
+                    $data['data'] = $dataDB;
+
+                    echo($this->returnJson($data));
+                } else {
+                    $data['status'] = 0;
+                    $data['message'] = 'No data available';
+
+                    echo($this->returnJson($data));
+                }
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit;
+    }
+
+    public function getsampleallusersAction()
+    {
+        try {
+            $where = $this->returnArrayFromInput();
+
             if (count($where) > 0) {
                 $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
                 if ($dataDB != false) {

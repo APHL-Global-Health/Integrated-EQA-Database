@@ -265,7 +265,8 @@ Class Main extends pdfCreator
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
-//echo $sql;exit;
+//                    echo $sql;
+//                    exit;
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {

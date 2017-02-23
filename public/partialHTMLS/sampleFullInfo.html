@@ -1,0 +1,39 @@
+<div class="text-capitalize">
+    <br>
+    <div class="col-md-12">
+        <button class="btn btn-success btn-sm pull-right"
+                ng-click="samples.samplesActivePage('viewsamples', 0)"
+        >
+            <i class="fa fa-backward"></i> back
+        </button>
+        <br>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel panel-heading">
+                Sample Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            </div>
+            <div class="panel panel-body">
+                <p class="">
+                    <b>Sample Batch Name : </b> {{samples.clickedSample.batchName}}<br>
+                    <b>Date Prepared : </b> {{samples.clickedSample.datePrepared}}<br>
+                    <b>Prepared By : </b> {{samples.clickedSample.preparedBy}}<br>
+                    <b>Material Type : </b> {{samples.clickedSample.materialType}}<br>
+                    <b>Material Origin : </b> {{samples.clickedSample.materialOrigin}}<br>
+                    <b>Blood Pack No : </b> {{samples.clickedSample.bloodPackNumber}}<br>
+
+                </p>
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel panel-heading">
+                Users,response status,result
+            </div>
+            <div class="panel panel-body">
+
+            </div>
+        </div>
+    </div>
+</div>

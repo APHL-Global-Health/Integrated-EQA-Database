@@ -4,8 +4,10 @@
         <button type="button" class="pull-right btn btn-sm btn-danger"
                 ng-click="samples.hideShipmentModal()"><i class="fa fa-remove"></i> cancel
         </button>
+        <br>
     </div>
-    <div class="" ng-show="samples.showPanel=='dispatch'">
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-12" ng-show="samples.showPanel=='dispatch'">
         <div class="panel panel-info">
             <div class="panel panel-heading">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -18,23 +20,31 @@
             </div>
 
             <div class="panel panel-body">
-                <div class="container">
+                <div class="container" ng-init="samples.getShipmentsForDelivery('tbl_bac_couriers','status','0,1')">
                     <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
                         <a href="#" class="close" data-dismiss="alert">&times;</a>
                         <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
                     </div>
-                    <form class="form-horizontal container" name="dispatchShipmentForm" novalidate="">
+                    <form class="form-horizontal container  col-md-8 col-md-offset-2" name="dispatchShipmentForm" novalidate="">
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
                             <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>
                             <div class="col-10" ng-init="samples.getAllLabs()">
-                                <select class="form-control" id="addressedTo" required name="addressedTo"
-                                        ng-model="samples.dispatchShipmentFormData.addressedTo">
-                                    <option selected disabled>--Select Lab--</option>
-                                    <option ng-repeat="lab in samples.labs" value="{{lab.participant_id}}">
-                                        {{lab.first_name}}
-                                    </option>
-                                </select>
+
+                                <input type="text" id="addressedTo" class="form-control" required name="addressedTo"
+                                       ng-model="samples.dispatchShipmentFormData.addressedTo" data-min-length="0"
+                                       data-html="1" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                                       required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                       bs-options="icon.first_name as icon.first_name for icon in samples.labs" placeholder="Search Lab" bs-typeahead>
+
+
+                                <!--<select class="form-control" id="addressedTo" required name="addressedTo"-->
+                                        <!--ng-model="samples.dispatchShipmentFormData.addressedTo">-->
+                                    <!--<option selected disabled>&#45;&#45;Select Lab&#45;&#45;</option>-->
+                                    <!--<option ng-repeat="lab in samples.labs" value="{{lab.participant_id}}">-->
+                                        <!--{{lab.first_name}}-->
+                                    <!--</option>-->
+                                <!--</select>-->
                             </div>
                             <small class="text-danger col-md-12"
                                    ng-show="dispatchShipmentForm.panelName.$invalid && !dispatchShipmentForm.panelName.$pristine">
@@ -51,7 +61,7 @@
                                             class="fa fa-calendar"></i></span>
                                     <input type="text" class="form-control"
                                            ng-model="samples.dispatchShipmentFormData.dateDispatched"
-                                           data-date-format="yyyy-MM-dd" required=""
+                                           data-date-format="yyyy-MM-dd" required
                                            data-min-date="" data-max-date="today"
                                            data-autoclose="1" aria-describedby="basic-addon2"
                                            name="panelDateOfDelivery"
@@ -93,11 +103,19 @@
                         </div>
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.dispatchCourier.$invalid && !dispatchShipmentForm.dispatchCourier.$pristine }">
-                            <label for="type" class="col-2 col-form-label">Courier</label>
+                            <label for="dispatchCourier" class="col-2 col-form-label">Courier</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="type" required name="dispatchCourier"
-                                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                       ng-model="samples.dispatchShipmentFormData.dispatchCourier">
+
+                                <input type="text" id="roundId" id="dispatchCourier"  name="dispatchCourier"
+                                       class="form-control" ng-model="samples.dispatchShipmentFormData.dispatchCourier" data-min-length="0"
+                                       data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                                       required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                       bs-options="icon.courierName as icon.courierName for icon in samples.couriers"
+                                       placeholder="Search couriers" bs-typeahead>
+
+                                <!--<input class="form-control" type="text" id="type" required name="dispatchCourier"-->
+                                       <!--ng-pattern="samples.alphaNumHyDashSpaceRegExp"-->
+                                       <!--ng-model="samples.dispatchShipmentFormData.dispatchCourier">-->
                             </div>
                             <small class="text-danger col-md-12"
                                    ng-show="dispatchShipmentForm.dispatchCourier.$invalid && !dispatchShipmentForm.dispatchCourier.$pristine">
