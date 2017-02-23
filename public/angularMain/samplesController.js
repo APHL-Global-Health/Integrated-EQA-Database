@@ -121,6 +121,75 @@
             $scope.samples.showShipmentInfoStatus = false;
             $scope.samples.getAllSamples(tableName, whereData, 1)
         }
+        var alertStartRound = ''
+        $scope.samples.startRound = function (round) {
+
+            $.confirm({
+                title: 'Confirm!',
+                theme: 'supervan',
+                content: 'Please confirm start of round! ' + round.roundName,
+                buttons: {
+                    'start round': {
+                        btnClass: 'btn-blue',
+                        action: function () {
+
+                            alertStartRound = $.alert('starting round,please wait...!');
+                            $scope.samples.startRoundHttp(round);
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-red',
+                        action: function () {
+                            // $.alert('cancelled !');
+                        }
+                    }
+                }
+            })
+
+        }
+        $scope.samples.startRoundHttp = function (round) {
+            try {
+                var postedData = {
+                    where: {id: round.id},
+                    tableName: 'tbl_bac_rounds',
+                    updateData: {
+                        startRoundFlag: 1
+                    }
+                }
+                console.log(postedData)
+                // $scope.samples.updateWhere(postedData, 1);
+                var url = serverSamplesURL + 'updateroundstart';
+                $http
+                    .post(url, postedData)
+                    .success(function (data) {
+                        console.log(data)
+                        alertStartRound.close();
+                        $.alert('Round started OK!');
+                        $scope.samples.showRoundFullDetails(round);
+                        $scope.samples.currentRound.startRoundFlag = 1
+                    })
+                    .error(function (error) {
+                        $.alert('Error Occurred');
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        $scope.samples.roundStatus = function (days, status) {
+            if (days > 0 && status == 1) {
+                return 'Running';
+            }
+            if (days > 0 && status == 0) {
+                return 'Active,Not Started';
+            }
+            if (days == 0 && status == 1) {
+                return 'Expired';
+            }
+            else {
+                return 'Unknown';
+            }
+
+        }
         $scope.samples.getAllSamples = function (tableName, where, whereDelivery) {
 
             try {
@@ -132,7 +201,7 @@
 
                     url = serverSamplesURL + 'getwheredelivery';
 
-                    if(whereDelivery=='panel'){
+                    if (whereDelivery == 'panel') {
                         url = serverSamplesURL + 'getdistinctpanels';
 
                     }
@@ -492,11 +561,11 @@
         $scope.samples.shopAngleArrows = false;
 
         $scope.samples.getDistinctPanel = function (tableName) {
-              try{
+            try {
 
-              }catch(Exception){
-                  console.log(Exception)
-              }
+            } catch (Exception) {
+                console.log(Exception)
+            }
         }
         $scope.samples.getPanelFromShipment = function (shipmentId, status) {
 
@@ -510,7 +579,7 @@
                         $scope.samples.shopAngleArrows = true;
                         $scope.samples.panelsToShipment = {};
 
-                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where,'panel');
+                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where, 'panel');
                         /*select distinct getdistinctpanels*/
                         $scope.samples.getDistinctPanel('tbl_bac_panels_shipments');
 
@@ -637,24 +706,49 @@
         }
         $scope.samples.saveShipmentsToRound = function (arr, round) {
             if (round.id > 0) {
-                changeSavingSpinner(true);
-                var url = serverSamplesURL + 'saveshipmentstoround';
-                var data = {
-                    roundId: round.id,
-                    roundCode: round.id,
-                    shipmentIds: arr
-                }
-                $http.post(url, data)
-                    .success(function (response) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
-                        $scope.samples.showAddShipment = true
-                        $scope.samples.shipmentsToRoundArray = [];
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                $.confirm({
+                    title: 'Confirm changes!',
+                    theme: 'supervan',
+                    content: 'Please note the current round will be overwritten to the shipments',
+                    buttons: {
+                        'Confirm': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+
+                                alertStartRound = $.alert('Saving information,please wait...!');
+                                changeSavingSpinner(true);
+                                var url = serverSamplesURL + 'saveshipmentstoround';
+                                var data = {
+                                    roundId: round.id,
+                                    roundCode: round.id,
+                                    shipmentIds: arr
+                                }
+                                $http.post(url, data)
+                                    .success(function (response) {
+                                        changeSavingSpinner(false);
+                                        //changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
+                                        alertStartRound.close();
+                                        $.alert('Data save successfully');
+                                        $scope.samples.showAddShipment = true
+                                        $scope.samples.shipmentsToRoundArray = [];
+                                    })
+                                    .error(function (error) {
+                                        changeSavingSpinner(false);
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                    })
+
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
+
             }
 
 
@@ -880,14 +974,37 @@
         $scope.samples.deleteCustomRow = function (id, tableName) {
 
             try {
-                var data = sampleData(tableName, 0);
-                console.log(data)
-                data = EptServices.EptServiceObject.sliceRowFromDData(id, data);
+                $.confirm({
+                    title: 'Confirm delete!',
+                    theme: 'supervan',
+                    content: 'Are you sure you wanna delete record',
+                    buttons: {
+                        'Delete': {
+                            btnClass: 'btn-blue',
+                            action: function () {
 
-                if (data.length >= 0) {
-                    sampleData(tableName, 1, data);
-                    $scope.samples.deleteCustomeRowFromDb(tableName, id);
-                }
+                                alertStartRound = $.alert('Deleting record,please wait...!');
+                                var data = sampleData(tableName, 0);
+                                console.log(data)
+                                data = EptServices.EptServiceObject.sliceRowFromDData(id, data);
+
+                                if (data.length >= 0) {
+                                    sampleData(tableName, 1, data);
+                                    $scope.samples.deleteCustomeRowFromDb(tableName, id);
+                                }
+
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
+
             } catch (Exc) {
                 console.log(Exc);
             }
@@ -904,10 +1021,13 @@
                 var url = serverSamplesURL + 'customdelete';
                 $http.post(url, postedData)
                     .success(function (response) {
-                        console.log(response);
+                        alertStartRound.close();
+                        $.alert('1 Record deleted');
                     })
                     .error(function (error) {
                         console.log(error)
+                        alertStartRound.close();
+                        $.alert('Error occurred,record could not be deleted');
                     })
             } catch (Exc) {
                 console.log(Exc);
@@ -1102,14 +1222,22 @@
 
         }
         $scope.samples.readyLabs = {}
-        $scope.samples.addLabsToRound = function (round) {
+        $scope.samples.addLabsToRound = function (round, all) {
 
-            $scope.samples.samplesActivePage('addLabsToRound', 0);
-            $scope.samples.readyLabs={};
+
+            if (all == 1) {
+
+            } else {
+                $scope.samples.samplesActivePage('addLabsToRound', 0);
+            }
+            $scope.samples.readyLabs = {};
             console.log(round)
             var where = {
                 roundId: round.id,
-                status :1
+                status: 1
+            }
+            if (all == 1) {
+                where.status = 2
             }
             $scope.samples.currentRound = round;
             $scope.samples.getAllSamples('tbl_bac_ready_labs', where);
@@ -1517,7 +1645,7 @@
             $scope.samples.shipmentsData = {};
             $scope.samples.currentRound = round;
             $scope.samples.showRoundInfo = !$scope.samples.showRoundInfo;
-console.log(round)
+            console.log(round)
             var where = {roundId: round.id}
             if (round != '') {
                 $scope.samples.getAllSamples('tbl_bac_shipments', where)

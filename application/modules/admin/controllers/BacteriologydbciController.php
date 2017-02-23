@@ -184,6 +184,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $insert['shipmentId'] = $whereShipmentId['shipmentId'];
                         $insert['deliveryStatus'] = $panels[$key]->deliveryStatus;
                         $insert['participantId'] = $labId;
+                        $insert['roundId'] = $round;
                         $insert['createdBy'] = $this->dbConnection->getUserSession();
 
                         $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
@@ -366,6 +367,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         }
                         if ($tableName == 'tbl_bac_rounds') {
                             $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                            $dataDB[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
                         }
                         if ($tableName == 'tbl_bac_panels_shipments') {
 
@@ -396,6 +398,36 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         } catch (Exception $e) {
             echo $e->getMessage();
+        }
+        exit();
+    }
+
+    public function updateroundstartAction()
+    {
+        try {
+            $data['status'] = 0;
+            $dataArray = $this->returnArrayFromInput();
+
+            if (is_array($dataArray)) {
+
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+                $arr = (array)$dataArray['where'];
+                $where['roundId'] = $arr['id'];
+                $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where, (array)$dataArray['updateData']);
+
+                $data = $this->dbConnection->updateTable('tbl_bac_panels_shipments', $where, (array)$dataArray['updateData']);
+                $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, (array)$dataArray['updateData']);
+
+                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
+
+                }
+
+            } else {
+                $data['message'] = ('could not find your request');
+            }
+            echo $this->returnJson($data);
+        } catch (Exception $exc) {
+            $exc->getMessage();
         }
         exit();
     }

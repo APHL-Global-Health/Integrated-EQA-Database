@@ -2,12 +2,21 @@
     &nbsp;
 </div>
 <div class="col-md-12">
+    <h4>Shipment Full Info
+        <small>{{samples.clickedShipmentFull.shipmentName}}</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button type="button" class="pull-right btn btn-sm btn-danger"
+                ng-click="samples.samplesActivePage('viewshipments', 0)"><i class="fa fa-remove"></i> close
+        </button>
+        <hr>
+
+    </h4>
     <a class="pull-right" href="#" ng-click="samples.printDiv('shipmentDetails')">
         <i class="fa fa-print pull-right"> print shipment details</i>
     </a> &nbsp;
-    <a href="#"  ng-click="samples.samplesActivePage('viewshipments', 0)">
-       << Back</a>
-    <br>
+    <!--<a href="#"  ng-click="samples.samplesActivePage('viewshipments', 0)">-->
+       <!--<< Back</a>-->
+    <!--<br>-->
 </div>
 <div id="shipmentDetails">
     <div class="panel panel-primary">

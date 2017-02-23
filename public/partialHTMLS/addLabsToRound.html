@@ -1,17 +1,19 @@
 <div >
-    <br>
-    <div class="col-md-12 no-padding">
-        <button class="btn btn-danger btn-sm pull-right" ng-click="samples.samplesActivePage('viewRounds', 0)">
-            <i class="fa fa-close"></i> cancel</button>
+    <h4>{{samples.currentRound.roundName}}
+        <small>{{samples.currentRound.roundCode}}</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button type="button" class="pull-right btn btn-sm btn-danger"
+                ng-click="samples.samplesActivePage('viewRounds', 0)"><i class="fa fa-remove"></i> cancel
+        </button>
+        <hr>
 
-    </div>
-<div class="clearfix">&nbsp;</div><div class="clearfix">&nbsp;</div>
+    </h4>
     <div class="panel panel-primary" >
 
         <div class="panel panel-heading">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                     ng-click="samples.samplesActivePage('viewRounds', 0)">&times;</button>
-            <h4 class="modal-title"> Enroll Labs :
+            <h4 class="modal-title"> Enroll Ready Labs :
                 {{samples.currentRound.roundName | capitalizeLetter}} :
                 {{samples.currentRound.roundCode | capitalizeLetter}}
                 <small class="small">
