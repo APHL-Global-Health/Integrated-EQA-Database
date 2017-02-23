@@ -127,7 +127,14 @@
                 if (angular.isDefined(whereDelivery)) {
 
                     url = serverSamplesURL + 'getwheredelivery';
+
+                    if(whereDelivery=='panel'){
+                        url = serverSamplesURL + 'getdistinctpanels';
+
+                    }
+
                 }
+
                 var varData = {};
                 console.log(url)
                 varData.tableName = tableName;
@@ -438,6 +445,14 @@
 
         /*-------------------------------------------------------------------Get panels from a specific shipment----------------------------------------------------------*/
         $scope.samples.shopAngleArrows = false;
+
+        $scope.samples.getDistinctPanel = function (tableName) {
+              try{
+
+              }catch(Exception){
+                  console.log(Exception)
+              }
+        }
         $scope.samples.getPanelFromShipment = function (shipmentId, status) {
 
 
@@ -449,7 +464,11 @@
                     if (shipmentId !== $scope.samples.clickedShipment || (angular.isDefined(status) && status == 1)) {
                         $scope.samples.shopAngleArrows = true;
                         $scope.samples.panelsToShipment = {};
-                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
+
+                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where,'panel');
+                        /*select distinct getdistinctpanels*/
+                        $scope.samples.getDistinctPanel('tbl_bac_panels_shipments');
+
                     } else {
                         $scope.samples.shopAngleArrows = !$scope.samples.shopAngleArrows;
                     }
@@ -1643,7 +1662,7 @@
                 callback(events);
             } catch (e) {
 
-           }
+            }
 
             $scope.calendar.showCalendar = true;
         };

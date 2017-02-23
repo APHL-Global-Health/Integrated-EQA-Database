@@ -102,7 +102,7 @@ Class Main extends pdfCreator
         return ($error);
     }
 
-    public function returnWhereStatement($array)
+    public function returnWhereStatement($array,$group)
     {
 
         $where = ' where ';
@@ -126,6 +126,9 @@ Class Main extends pdfCreator
             if (!isset($array['status'])) {
                 $where .= " and status " . $st . ' ';
             }
+            if($group){
+                $where .= "group by shipmentId,panelId";
+            }
             //$where .= ' order by id desc';
             return $where;
 
@@ -134,14 +137,14 @@ Class Main extends pdfCreator
         }
     }
 
-    public function selectFromTable($tableName, $where = "")
+    public function selectFromTable($tableName, $where = "",$group="")
     {
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
 
             if (is_array($where)) {
-                $sql .= $this->returnWhereStatement($where);
+                $sql .= $this->returnWhereStatement($where,$group);
             }
         }
 //        echo $sql;
