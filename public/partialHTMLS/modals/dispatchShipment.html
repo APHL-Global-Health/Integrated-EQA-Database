@@ -28,14 +28,19 @@
                     <form class="form-horizontal container  col-md-8 col-md-offset-2" name="dispatchShipmentForm" novalidate="">
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : dispatchShipmentForm.addressedTo.$invalid && !dispatchShipmentForm.addressedTo.$pristine }">
-                            <label for="addressedTo" class="col-2 col-form-label">Addressed To</label>
+                            <label for="addressedTo" class="col-2 col-form-label">Sent To</label>
                             <div class="col-10" ng-init="samples.getAllLabs()">
 
-                                <input type="text" id="addressedTo" class="form-control" required name="addressedTo"
-                                       ng-model="samples.dispatchShipmentFormData.addressedTo" data-min-length="0"
-                                       data-html="1" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                                       required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                       bs-options="icon.first_name as icon.first_name for icon in samples.labs" placeholder="Search Lab" bs-typeahead>
+                                <input class="form-control" type="text" id="addressedTo" required
+                                       placeholder="Sending to"
+                                       name="addressedTo"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                       ng-model="samples.dispatchShipmentFormData.shippingMethod">
+
+                                <!--<input type="text" id="addressedTo" class="form-control" required name="addressedTo"-->
+                                       <!--ng-model="samples.dispatchShipmentFormData.addressedTo" data-min-length="0"-->
+                                       <!--data-html="1" data-auto-select="true" data-animation="am-flip-x" data-container="body"-->
+                                       <!--required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"-->
+                                       <!--bs-options="icon.first_name as icon.first_name for icon in samples.labs" placeholder="Search Lab" bs-typeahead>-->
 
 
                                 <!--<select class="form-control" id="addressedTo" required name="addressedTo"-->
@@ -60,6 +65,7 @@
                                     <span class="input-group-addon" id="basic-addon2"><i
                                             class="fa fa-calendar"></i></span>
                                     <input type="text" class="form-control"
+                                           placeholder="Date dispatched" id="dateDispatched"
                                            ng-model="samples.dispatchShipmentFormData.dateDispatched"
                                            data-date-format="yyyy-MM-dd" required
                                            data-min-date="" data-max-date="today"
@@ -78,7 +84,8 @@
                              ng-class="{ 'has-error'  : dispatchShipmentForm.shippingMethod.$invalid && !dispatchShipmentForm.shippingMethod.$pristine }">
                             <label for="shippingMethod" class="col-2 col-form-label">Shipping Method</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="shippingMethod" required
+                                <input class="form-control" placeholder="Shipping Method"
+                                       type="text" id="shippingMethod" required
                                        name="shippingMethod"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                        ng-model="samples.dispatchShipmentFormData.shippingMethod">
                             </div>
@@ -91,7 +98,9 @@
                              ng-class="{ 'has-error'  : dispatchShipmentForm.dispatchComments.$invalid && !dispatchShipmentForm.dispatchComments.$pristine }">
                             <label for="dispatchComments" class="col-2 col-form-label">Dispatch Comments</label>
                             <div class="col-10">
-                                <textarea class="form-control" id="dispatchComments" name="dispatchComments"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                <textarea class="form-control" id="dispatchComments"
+                                          placeholder="Dispatch Comments"
+                                          name="dispatchComments"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                           ng-model="samples.dispatchShipmentFormData.dispatchComments">
 
                                 </textarea>
@@ -128,7 +137,7 @@
                             <label for="temperature" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="temperature" required name="temperature"
-                                       ng-pattern="samples.numericOnly"
+                                       ng-pattern="samples.numericOnly" placeholder="Current temperature of panel"
                                        ng-model="samples.dispatchShipmentFormData.temperature">
                             </div>
                             <small class="text-danger col-md-12"

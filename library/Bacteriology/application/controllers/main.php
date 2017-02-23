@@ -102,7 +102,12 @@ Class Main extends pdfCreator
         return ($error);
     }
 
-    public function returnWhereStatement($array,$group)
+    public function deleteWhereCols($where, $table)
+    {
+
+    }
+
+    public function returnWhereStatement($array, $group = "")
     {
 
         $where = ' where ';
@@ -126,7 +131,7 @@ Class Main extends pdfCreator
             if (!isset($array['status'])) {
                 $where .= " and status " . $st . ' ';
             }
-            if($group){
+            if ($group) {
                 $where .= "group by shipmentId,panelId";
             }
             //$where .= ' order by id desc';
@@ -137,14 +142,14 @@ Class Main extends pdfCreator
         }
     }
 
-    public function selectFromTable($tableName, $where = "",$group="")
+    public function selectFromTable($tableName, $where = "", $group = "")
     {
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
 
             if (is_array($where)) {
-                $sql .= $this->returnWhereStatement($where,$group);
+                $sql .= $this->returnWhereStatement($where, $group);
             }
         }
 //        echo $sql;
@@ -164,18 +169,20 @@ Class Main extends pdfCreator
 
     }
 
-    public function selectCount($tableName, $id, $col)
+    public function selectCount($tableName, $where, $col)
     {
 
 
-        $sql = "SELECT count($col) FROM $tableName where $col=$id";
+        $sql = "SELECT count($col) FROM $tableName";
 
-//        if (isset($where)) {
-//
-//            if (is_array($where)) {
-//                $sql .= $this->returnWhereStatement($where);
-//            }
-//        }
+        if (is_array($where)) {
+
+                $sql .= $this->returnWhereStatement($where);
+
+        }
+        else{
+            $sql .=  " where ". $col ." = ".$where;
+        }
 //       echo $sql;
 //        exit;
         $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
