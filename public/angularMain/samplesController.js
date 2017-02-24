@@ -317,13 +317,28 @@
             samplesLink: 'viewReceivedSamples',
             currentTemplate: '../partialHTMLS/labOperations/addReceivedSamples.html'
         }
+        $scope.samples.receivedShipments = {};
         $scope.samples.getDistinctShipmentsForDelivery = function () {
             try {
-                var where = {
-                    type: 0
+                var posted = {
+                    where: {
+                        type: 0
+                    }
                 }
-                var
-                    $http
+                var url = serverSamplesURL + 'getdistinctshipments';
+                changeSavingSpinner(true);
+                console.log(url)
+                $http
+                    .post(url, posted)
+                    .success(function (data) {
+                        console.log(data)
+                        $scope.samples.receivedShipments = data.data;
+                        changeSavingSpinner(false);
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                        changeSavingSpinner(false);
+                    })
             } catch (Exc) {
                 console.log(Exc)
             }
@@ -577,19 +592,34 @@
                 console.log(Exception)
             }
         }
-        $scope.samples.getPanelFromShipment = function (shipmentId, status) {
+        $scope.samples.getPanelFromShipment = function (shipmentId, status, isType) {
 
 
-            if (angular.isNumber(Number(shipmentId))) {
-                console.log('shipment id ' + shipmentId)
+            if (angular.isDefined(shipmentId)) {
+                // console.log('shipment id ' + shipmentId)
                 try {
-                    var where = {shipmentId: shipmentId};
+                    var where = {};
 
+                    if (angular.isObject(shipmentId)) {
+                        where = {
+                            shipmentId: shipmentId.id,
+                            roundId: shipmentId.roundId,
+                            participantId: shipmentId.participantId
+                        }
+                    } else {
+                        where = {
+                            shipmentId: shipmentId
+                        }
+                    }
                     if (shipmentId !== $scope.samples.clickedShipment || (angular.isDefined(status) && status == 1)) {
                         $scope.samples.shopAngleArrows = true;
                         $scope.samples.panelsToShipment = {};
-
-                        $scope.samples.getAllSamples('tbl_bac_panels_shipments', where, 'panel');
+                        var typ = 'panel';
+                        if (angular.isDefined(isType)) {
+                            $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
+                        } else {
+                            $scope.samples.getAllSamples('tbl_bac_panels_shipments', where, typ);
+                        }
                         /*select distinct getdistinctpanels*/
                         $scope.samples.getDistinctPanel('tbl_bac_panels_shipments');
 
@@ -1121,13 +1151,17 @@
                             $scope.samples.receiveShipmentFormData = {};
                             if (type == 1) {
                                 $scope.samples.showMainTable(postedData.tableName)
-                                if (postedData.tableName == 'tbl_bac_shipments') {
+                                if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
                                     $scope.samples.showShipmentModal = false;
                                     alertStartRound.close();
                                     $.alert('Data update successfully');
                                 }
                             }
+                            if (postedData.tableName == 'tbl_bac_panels_shipments') {
 
+                                alertStartRound.close();
+                                $.alert('Data updated successfully');
+                            }
                         } else {
                             if (type == 1) {
                                 addIdToEditing(postedData.tableName)
@@ -1203,15 +1237,70 @@
             }
         }
         $scope.samples.updateStatusShipment = function (tableName, status, id) {
+
             var postedData = {};
             try {
-                postedData.updateData = {shipmentStatus: status};
-                postedData.tableName = tableName;
-                postedData.where = {id: id}
-                $scope.samples.updateWhere(postedData);
-                $timeout(function () {
-                    $scope.samples.getShipmentsForDelivery('tbl_bac_shipments', 'shipmentStatus', '2,3,4,5');
-                }, 100)
+                function update(receiveComment) {
+                    postedData.updateData = {shipmentStatus: status};
+                    postedData.tableName = tableName;
+                    if (angular.isObject(id)) {
+                        postedData.updateData = {
+                            deliveryStatus: status,
+                            receiveComment: receiveComment
+                        };
+                        postedData.tableName = 'tbl_bac_panels_shipments';
+                        postedData.where = {
+                            shipmentId: id.id,
+                            roundId: id.roundId,
+                            participantId: id.participantId
+                        }
+                    } else {
+                        postedData.where = {id: id}
+                    }
+
+                    $scope.samples.updateWhere(postedData);
+                    $timeout(function () {
+                        if (angular.isObject(id)) {
+                            $scope.samples.getDistinctShipmentsForDelivery()
+                        }
+                        else {
+                            $scope.samples.getShipmentsForDelivery('tbl_bac_shipments', 'shipmentStatus', '2,3,4,5');
+                        }
+                    }, 100)
+
+
+                }
+
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: 'Please confirm cancellation of shipment,this cant be undone !' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<label>Reason for Cancellation</label>' +
+                    '<textarea placeholder="Cancellation Comment" class="name form-control" required ></textarea>' +
+                    '</div>' +
+                    '</form>',
+                    buttons: {
+                        'cancel shipment': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+
+                                alertStartRound = $.alert('cancelling shipment,please wait...!');
+                                var receiveComment = this.$content.find('.name').val();
+                               
+                                update(receiveComment);
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
 
             } catch (Exception) {
                 console.log(Exception)
@@ -1586,7 +1675,7 @@
 
             $scope.samples.clickedShipmentData = shipment;
 
-            $scope.samples.getPanelFromShipment(shipment.id, 1)
+            $scope.samples.getPanelFromShipment(shipment, 1, true)
         }
         $scope.samples.currentBarcodeData = 'test code'
 

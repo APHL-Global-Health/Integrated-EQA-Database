@@ -53,8 +53,7 @@
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                    data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
 
-                   ng-click="samples.getDistinctShipmentsForDelivery()"><i
-                        class="fa fa-refresh"></i>
+                   ng-click="samples.getDistinctShipmentsForDelivery()"><i class="fa fa-refresh"></i>
                 </a>
                 &nbsp;
             </div>
@@ -68,7 +67,7 @@
             <th>Shipment Name</th>
             <th>No Of Panels</th>
             <th>Courier</th>
-            <th>ship't Desc</th>
+            <th>Days Left</th>
 
             <th>Round ID</th>
             <th>Created By</th>
@@ -80,24 +79,25 @@
         </tr>
         </thead>
         <tbody>
-        <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+        <tr dir-paginate="shipment in samples.receivedShipments | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
             <td><a href="#"
                    ng-click="samples.showShipmentAndPanels('viewReceivedSamples',shipment)"
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                   data-trigger="hover" data-type="success" data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
+                   data-trigger="hover" data-type="success"
+                   data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
 
             >{{shipment.shipmentName}}</a>
             </td>
-            <td>{{shipment.numberOfPanels}}</td>
-            <td>{{shipment.courier}}</td>
-            <td>{{shipment.shipmentDsc}}</td>
-            <td nowrap>{{shipment.roundId}}</td>
+            <td>{{shipment.totalPanelsAdded}}</td>
+            <td>{{shipment.dispatchCourier}}</td>
+            <td>{{shipment.daysLeft}}</td>
+            <td nowrap>{{shipment.roundCode}}</td>
             <td nowrap>{{shipment.createdBy}}</td>
 
             <td nowrap>{{shipment.datePrepared}}</td>
             <td nowrap>{{shipment.preparedBy}}</td>
-            <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+            <td nowrap>{{samples.returnShipmentStatus(shipment.deliveryStatus)}}</td>
             <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 
             <td nowrap>
@@ -112,15 +112,15 @@
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                    data-trigger="hover" data-type="success" data-title="Receive Shipment" bs-tooltip
 
-                   ng-disabled="shipment.shipmentStatus !=2">
+                   ng-disabled="shipment.deliveryStatus !=2">
                     <i class="fa fa-download"></i>
                 </a>
-                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment.id)"
+                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment)"
 
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                    data-trigger="hover" data-type="success" data-title="Reject Shipment" bs-tooltip
 
-                   ng-disabled="shipment.shipmentStatus !=2">
+                   ng-disabled="shipment.deliveryStatus !=2">
                     <i class="fa fa-remove"></i>
                 </a>
 

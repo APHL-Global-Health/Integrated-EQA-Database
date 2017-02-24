@@ -460,36 +460,53 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         }
         return $array;
     }
+
     public function getdistinctshipmentsAction()
     {
 
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
-        //
+
         $where = (array)$postedData['where'];
 //        print_r($where);
 //          exit();
-        if($where['type']==0){
-            $whereShipment['']
+
+        if ($where['type'] == 0) {
+            $whereShipment = $this->returnUserLabDetails();
+            $whereParticipant['participantId'] = $whereShipment['participant_id'];
         }
         $tableName = 'tbl_bac_panels_shipments';
-        $dataDB = $this->dbConnection->selectFromTable($tableName, $where, true);
+
+        $dataDB = $this->dbConnection->selectFromTable($tableName, $whereParticipant, true);
+
 
         if ($dataDB != false) {
             foreach ($dataDB as $key => $value) {
                 if ($tableName == 'tbl_bac_panels_shipments') {
 
+                    $whereS['shipmentId'] = $value->shipmentId;
+                    $whereS['participantId'] = $whereShipment['participant_id'];
 
-                    $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+                    $shipment = $this->returnValueWhere($value->shipmentId, 'tbl_bac_shipments');
 
+                    $round = $this->returnValueWhere($shipment['roundId'], 'tbl_bac_rounds');
 
-                    $dataDB[$key]->panelName = $panel['panelName'];
-                    $dataDB[$key]->panelLabel = $panel['panelLabel'];
-                    $dataDB[$key]->panelType = $panel['panelType'];
-                    $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
-                    $dataDB[$key]->dateCreated = $panel['dateCreated'];
-                    $dataDB[$key]->barcode = $panel['barcode'];
-                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                    $dataDB[$key]->shipmentName = $shipment['shipmentName'];
+                    $dataDB[$key]->shipmetId = $value->shipmentId;
+                    $dataDB[$key]->id = $value->shipmentId;
+                    $dataDB[$key]->shipmentLabel = $shipment['shipmentLabel'];
+                    $dataDB[$key]->shimentDsc = $shipment['shipmentDsc'];
+                    $dataDB[$key]->dateDispatched = $shipment['dateDispatched'];
+                    $dataDB[$key]->dateCreated = $shipment['dateCreated'];
+                    $dataDB[$key]->roundId = $shipment['roundId'];
+                    $dataDB[$key]->datePrepared = $shipment['datePrepared'];
+                    $dataDB[$key]->dispatchCourier = $shipment['dispatchCourier'];
+                    $dataDB[$key]->roundName =  $round['roundName'];
+                    $dataDB[$key]->roundCode =  $round['roundCode'];
+                    $dataDB[$key]->startDate =  $round['startDate'];
+                    $dataDB[$key]->endDate =  $round['endDate'];
+                    $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                    $dataDB[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $whereS, 'panelId');
                 }
             }
 
@@ -505,6 +522,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         exit;
     }
+
     public function getdistinctpanelsAction()
     {
 
