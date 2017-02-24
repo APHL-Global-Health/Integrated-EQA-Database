@@ -34,7 +34,7 @@
                                 <input class="form-control" type="text" id="addressedTo" required
                                        placeholder="Sending to"
                                        name="addressedTo"  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                       ng-model="samples.dispatchShipmentFormData.shippingMethod">
+                                       ng-model="samples.dispatchShipmentFormData.addressedTo">
 
                                 <!--<input type="text" id="addressedTo" class="form-control" required name="addressedTo"-->
                                        <!--ng-model="samples.dispatchShipmentFormData.addressedTo" data-min-length="0"-->
@@ -57,26 +57,29 @@
                             </small>
                         </div>
                         <div class="form-group row"
-                             ng-class="{ 'has-error'  : dispatchShipmentForm.dateReceived.$invalid && !dispatchShipmentForm.dateDispatched.$pristine }">
-                            <label for="dateDispatched" class="col-2 col-form-label">Date Dispatched</label>
+                             ng-class="{ 'has-error'  : dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine }">
+                            <label for="" class="col-2 col-form-label">Date Dispatched</label>
                             <div class="col-10">
+                                <div class="col-10">
 
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon2"><i
-                                            class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control"
-                                           placeholder="Date dispatched" id="dateDispatched"
-                                           ng-model="samples.dispatchShipmentFormData.dateDispatched"
-                                           data-date-format="yyyy-MM-dd" required
-                                           data-min-date="" data-max-date="today"
-                                           data-autoclose="1" aria-describedby="basic-addon2"
-                                           name="panelDateOfDelivery"
-                                           bs-datepicker>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" class="form-control" ng-model="samples.dispatchShipmentFormData.dateDispatched"
+                                               data-date-format="yyyy-MM-dd" required=""
+                                               data-min-date="" data-max-date="today"
+                                               data-autoclose="1" aria-describedby="basic-addon2"
+                                               name="dateDispatched"
+                                               bs-datepicker>
+                                    </div>
+                                    <small class="text-danger col-md-12"
+                                           ng-show="dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine">
+                                        Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                                    </small>
+
+
                                 </div>
-                                <small class="text-danger col-md-12"
-                                       ng-show="dispatchShipmentForm.dateDispatched.$invalid && !dispatchShipmentForm.dateDispatched.$pristine">
-                                    Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
-                                </small>
+
+
                             </div>
 
                         </div>

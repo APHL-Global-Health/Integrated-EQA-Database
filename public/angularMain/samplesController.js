@@ -315,9 +315,19 @@
 
         $scope.samples.linksLabObject = {
             samplesLink: 'viewReceivedSamples',
-            currentTemplate: '../partialHTMLS/labOperations/viewReceivedSamples.html'
+            currentTemplate: '../partialHTMLS/labOperations/addReceivedSamples.html'
         }
-
+        $scope.samples.getDistinctShipmentsForDelivery = function () {
+            try {
+                var where = {
+                    type: 0
+                }
+                var
+                    $http
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
         $scope.samples.samplesActivePage = function (link, module) {
             $scope.samples.createNanobar(0)
             if (module == 1) {
@@ -1113,6 +1123,8 @@
                                 $scope.samples.showMainTable(postedData.tableName)
                                 if (postedData.tableName == 'tbl_bac_shipments') {
                                     $scope.samples.showShipmentModal = false;
+                                    alertStartRound.close();
+                                    $.alert('Data update successfully');
                                 }
                             }
 
@@ -1139,14 +1151,35 @@
                 dispatchShipmentData.shipmentStatus = 2;
                 console.log(dispatchShipmentData);
 
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: 'Are you sure you want to dispatch,this action can not be undone! ',
+                    buttons: {
+                        'Dispatch Shipment': {
+                            btnClass: 'btn-blue',
+                            action: function () {
 
-                var postedData = {};
-                postedData.tableName = 'tbl_bac_shipments';
-                postedData.updateData = dispatchShipmentData;
-                postedData.where = {id: $scope.samples.currentShipment.id};
-                if (angular.isDefined(postedData)) {
-                    $scope.samples.updateWhere(postedData, 1);
-                }
+                                alertStartRound = $.alert('Dispatching shipment,please wait...!');
+                                var postedData = {};
+                                postedData.tableName = 'tbl_bac_shipments';
+                                postedData.updateData = dispatchShipmentData;
+                                postedData.where = {id: $scope.samples.currentShipment.id};
+                                if (angular.isDefined(postedData)) {
+                                    $scope.samples.updateWhere(postedData, 1);
+                                }
+
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
 
             } catch (Exc) {
                 console.log(Exc);
@@ -1241,6 +1274,47 @@
             }
             $scope.samples.currentRound = round;
             $scope.samples.getAllSamples('tbl_bac_ready_labs', where);
+
+        }
+        $scope.samples.returnFormattedLeft = function (daysLeft) {
+            var delta = Math.abs(daysLeft * 24 * 3600);
+
+// calculate (and subtract) whole days
+            var days = Math.floor(delta / 86400);
+            delta -= days * 86400;
+
+// calculate (and subtract) whole hours
+            var hours = Math.floor(delta / 3600) % 24;
+            delta -= hours * 3600;
+
+// calculate (and subtract) whole minutes
+            var minutes = Math.floor(delta / 60) % 60;
+            delta -= minutes * 60;
+
+// what's left is seconds
+            var seconds = Math.round(delta % 60);
+
+            return days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+        }
+        $scope.samples.timerCountDown = function (daysLeft) {
+
+            var timer = daysLeft * 24 * 60 * 60;
+            console.log(daysLeft)
+            if (timer > 0) {
+                var timout = $timeout(function () {
+                    try {
+                        if (timer > 0) {
+                            timer = timer - 1;
+                            $scope.samples.currentRound.daysLeft = (timer / (24 * 3600));
+                            $timeout.cancels(timout);
+                        } else {
+
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }, 1000)
+            }
 
         }
         $scope.samples.getUserIssuedSamples = function (where) {

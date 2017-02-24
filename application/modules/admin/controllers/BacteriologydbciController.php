@@ -460,7 +460,51 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         }
         return $array;
     }
+    public function getdistinctshipmentsAction()
+    {
 
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+        //
+        $where = (array)$postedData['where'];
+//        print_r($where);
+//          exit();
+        if($where['type']==0){
+            $whereShipment['']
+        }
+        $tableName = 'tbl_bac_panels_shipments';
+        $dataDB = $this->dbConnection->selectFromTable($tableName, $where, true);
+
+        if ($dataDB != false) {
+            foreach ($dataDB as $key => $value) {
+                if ($tableName == 'tbl_bac_panels_shipments') {
+
+
+                    $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
+
+
+                    $dataDB[$key]->panelName = $panel['panelName'];
+                    $dataDB[$key]->panelLabel = $panel['panelLabel'];
+                    $dataDB[$key]->panelType = $panel['panelType'];
+                    $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
+                    $dataDB[$key]->dateCreated = $panel['dateCreated'];
+                    $dataDB[$key]->barcode = $panel['barcode'];
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                }
+            }
+
+        }
+        if ($dataDB != false) {
+            $data['status'] = 1;
+            $data['data'] = $dataDB;
+
+            echo($this->returnJson($data));
+        } else {
+            echo($this->returnJson(json_encode(array('status' => 0, 'message' => 'No Records Found'))));
+        }
+
+        exit;
+    }
     public function getdistinctpanelsAction()
     {
 

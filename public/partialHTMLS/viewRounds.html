@@ -135,7 +135,11 @@
                     <b> Date Created : </b> {{samples.currentRound.dateCreated}} <br>
                     <b> Starts : </b> {{samples.currentRound.startDate}} <br>
                     <b> Ends : </b> {{samples.currentRound.endDate}}<br>
-                    <b> Days Left : </b> {{samples.currentRound.daysLeft}}<br>
+                    <b> Days Left : </b>
+                    <x class="label label-sm label-info">
+                        {{samples.returnFormattedLeft(samples.currentRound.daysLeft)}}
+                        {{samples.timerCountDown(samples.currentRound.daysLeft)}}
+                    </x> <br>
                     <b> Status : </b> {{samples.roundStatus(samples.currentRound.daysLeft,samples.currentRound.startRoundFlag)}}
                 </p>
 
