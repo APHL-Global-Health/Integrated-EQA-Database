@@ -117,9 +117,11 @@ Class Main extends pdfCreator
 
             $counter = 0;
             foreach ($array as $key => $value) {
-
-                $where .= $key . "=" . " '$value' ";
-
+                if ($value === null) {
+                    $where .= $key . " is null ";
+                } else {
+                    $where .= $key . "=" . " '$value' ";
+                }
                 $counter++;
                 if ($counter < sizeof($array)) {
                     $where .= ' and ';
@@ -158,6 +160,7 @@ Class Main extends pdfCreator
 
             }
         }
+
 //        echo $sql;
 //        exit;
         $result = $this->connect_db->query($sql);
@@ -190,9 +193,13 @@ Class Main extends pdfCreator
         }
 //       echo $sql;
 //        exit;
-        $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
+        try {
+            $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
+            return ($result);//->num_rows;
+        }catch (Exception $e){
+            return 'error';
+        }
 
-        return ($result);//->num_rows;
 
         // output data of each row
 

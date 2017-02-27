@@ -424,7 +424,7 @@
                 $scope.samples.savingSpinner = '';
                 $scope.samples.savingInProgress = false;
             }
-            console.log($scope.samples.savingSpinner)
+
         }
 
         $scope.samples.courierFormData = {};
@@ -521,11 +521,12 @@
 
 
                             } else {
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
                             }
 
                         })
                         .error(function (error) {
+                            console.log(error)
                             changeSavingSpinner(false);
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                         })
@@ -815,7 +816,7 @@
         /*-------------------------------------------------------------------------START watcher for slow feedback hiding---------------------------------------------------------------------------------*/
 
         $scope.$watch('samples.feedbackObject', function () {
-            console.log($scope.samples.feedbackObject);
+
             if ($scope.samples.feedbackObject.fbStatus) {
 
                 $timeout(function () {
@@ -854,6 +855,9 @@
                         if (response.status == 1) {
                             $scope.samples.samplePanelArray = [];
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                            console.log('save successfully');
+                            $scope.samples.showPanelModal = false;
+                            $scope.samples.getAllSamples('tbl_bac_panel_mst');
                         } else {
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Error : possibly you trying to add sample   to already added panel'));
                         }
@@ -1288,7 +1292,7 @@
 
                                 alertStartRound = $.alert('cancelling shipment,please wait...!');
                                 var receiveComment = this.$content.find('.name').val();
-                               
+
                                 update(receiveComment);
                             }
                         },
@@ -1350,7 +1354,9 @@
             if (all == 1) {
 
             } else {
+                $scope.samples.labsToRoundArray=[];
                 $scope.samples.samplesActivePage('addLabsToRound', 0);
+
             }
             $scope.samples.readyLabs = {};
             console.log(round)

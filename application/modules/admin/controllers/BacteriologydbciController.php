@@ -142,7 +142,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
 
             if (is_array($jsPostData)) {
-                $response = [];
+
                 foreach ($idArray as $value) {
 
                     $data['labId'] = $value;
@@ -153,7 +153,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $this->dbConnection->updateTable('tbl_bac_ready_labs', $data, $updateData);
                     $this->savePanelForEachLab($data['roundId'], $data['labId']);
                 }
-                echo $this->returnJson($response);
+                echo $this->returnJson(array('status'=>1));
             }
             exit();
         } catch (Exception $error) {
@@ -176,25 +176,33 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $panels = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
 //                var_dump($dataDB);
 //                exit;
-                if ($panels != false) {
-                    $deleteNullPanel['shipmentId'] = $whereShipmentId['shipmentId'];
-                    $deleteNullPanel['panelId'] = $panels[$key]->panelId;
-                    foreach ($panels as $key => $panelValue) {
-                        $insert['panelId'] = $panels[$key]->panelId;
-                        $insert['shipmentId'] = $whereShipmentId['shipmentId'];
-                        $insert['deliveryStatus'] = $panels[$key]->deliveryStatus;
-                        $insert['participantId'] = $labId;
-                        $insert['roundId'] = $round;
-                        $insert['createdBy'] = $this->dbConnection->getUserSession();
+                try {
+                    if ($panels != false) {
 
-                        $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
+                        foreach ($panels as $key => $panelValue) {
+                            $deleteNullPanel['shipmentId'] = $whereShipmentId['shipmentId'];
+                            $deleteNullPanel['panelId'] = $panels[$key]->panelId;
+                            $insert['panelId'] = $panels[$key]->panelId;
+                            $insert['shipmentId'] = $whereShipmentId['shipmentId'];
+                            $insert['deliveryStatus'] = $panels[$key]->deliveryStatus;
+                            $insert['participantId'] = $labId;
+                            $insert['roundId'] = $round;
+                            $insert['createdBy'] = $this->dbConnection->getUserSession();
 
+                            $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
+                            $insertSample = $this->savesampleforeachpanel($insert);
+//                        if (!$insertSample) {
+//                            exit;
+//                        }
+                            if (isset($deleteNullPanel)) {
+                                $deleteNullPanel['panelId'] = null;
+                                //$status = $this->dbConnection->deleteFromWhere('tbl_bac_panels_shipments', $deleteNullPanel);
+                            }
+                        }
 
                     }
-                    if (isset($deleteNullPanel)) {
-                        $deleteNullPanel['panelId'] = null;
-                        //$status = $this->dbConnection->deleteFromWhere('tbl_bac_panels_shipments', $deleteNullPanel);
-                    }
+                } catch (Exception $e) {
+                    echo $e->getMessage();
                 }
 
             }
@@ -202,6 +210,47 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         } else {
             exit;
+        }
+
+    }
+
+    public function savesampleforeachpanel($panelDtls)
+    {
+
+        try {
+
+
+            if (is_array($panelDtls)) {
+                $where['panelId'] = $panelDtls['panelId'];
+                $where['shipmentId'] = $panelDtls['shipmentId'];
+                $where['deliveryStatus'] = 0;
+                $where['participantId'] = null;
+
+
+                $samplesWithPanels = $this->dbConnection->selectFromTable('tbl_bac_sample_to_panel', $where);
+
+                if ($samplesWithPanels != false) {
+
+                    foreach ($samplesWithPanels as $key => $value) {
+
+                        $insert['panelId'] = $panelDtls['panelId'];
+                        $insert['sampleId'] = $samplesWithPanels[$key]->sampleId;
+                        $insert['shipmentId'] = $panelDtls['shipmentId'];
+                        $insert['deliveryStatus'] = $samplesWithPanels[$key]->deliveryStatus;
+                        $insert['participantId'] = $panelDtls['participantId'];
+                        $insert['roundId'] = $panelDtls['roundId'];
+                        $insert['totalAddedSamples'] = $samplesWithPanels[$key]->totalAddedSamples;
+
+                        $insert['createdBy'] = $this->dbConnection->getUserSession();
+                        $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $insert);
+                    }
+//                    return true;
+                }
+//                return false;
+
+            }
+        } catch (Exception $exception) {
+            echo("error occured " . $exception->getMessage());
         }
 
     }
@@ -452,7 +501,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
                 }
                 if ($tableName == 'tbl_bac_shipments') {
-                    $where['participantId !'] = NULL;
+                    $where['participantId  >'] = 0;
                     $where['shipmentId'] = $value->id;
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
@@ -501,10 +550,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $dataDB[$key]->roundId = $shipment['roundId'];
                     $dataDB[$key]->datePrepared = $shipment['datePrepared'];
                     $dataDB[$key]->dispatchCourier = $shipment['dispatchCourier'];
-                    $dataDB[$key]->roundName =  $round['roundName'];
-                    $dataDB[$key]->roundCode =  $round['roundCode'];
-                    $dataDB[$key]->startDate =  $round['startDate'];
-                    $dataDB[$key]->endDate =  $round['endDate'];
+                    $dataDB[$key]->roundName = $round['roundName'];
+                    $dataDB[$key]->roundCode = $round['roundCode'];
+                    $dataDB[$key]->startDate = $round['startDate'];
+                    $dataDB[$key]->endDate = $round['endDate'];
                     $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                     $dataDB[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $whereS, 'panelId');
                 }
