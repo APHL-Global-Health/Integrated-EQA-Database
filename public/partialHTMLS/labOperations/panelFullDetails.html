@@ -67,7 +67,7 @@
                         data-trigger="hover" data-type="success" data-title="Receive Sample" bs-tooltip
 
                         ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
-                        ng-click="samples.updateStatus('tbl_bac_sample_to_panel',4,sample.id)">
+                        ng-click="samples.updateStatusReceivedPanels('tbl_bac_sample_to_panel',4,sample.id)">
                     <i class="fa fa-check">
 
                     </i>
@@ -76,7 +76,7 @@
 
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Reject Sample" bs-tooltip
-                        ng-click="samples.updateStatus('tbl_bac_sample_to_panel',5,sample.id)">
+                        ng-click="samples.updateStatusReceivedPanels('tbl_bac_sample_to_panel',5,sample.id)">
                     <i class="fa fa-remove">
 
                     </i>

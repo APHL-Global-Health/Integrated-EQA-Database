@@ -77,7 +77,7 @@
                 <div class="h4 col-md-12 text-capitalize">
                     <br>
                     Distribute Samples <b> {{samples.clickedSample.batchName}} </b>
-                    <small>{{samples.usersToSamples.length}}users</small>
+
                     <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
                 </div>
                 <div class="col-md-12" ng-init="samples.getAllFacilityUsers('data_manager')">
@@ -124,7 +124,11 @@
                             multiple="multiple"></select>
                 </div>
                 -->
-                    <div class="h3" class="bottom-border">Enrolled users</div>
+                    <div class="" class="bottom-border">
+                        <br>
+                        <i>{{samples.usersToSamples.length}} Enrolled users</i>
+                        <br>
+                    </div>
                     <table class="table table-striped">
                         <tr ng-repeat="users in samples.labUsers">
                             <td>
@@ -170,11 +174,11 @@
                 </div>
 
 
-                <div class="">
+                <div class="col-md-12">
 
                     <div class="text-center ">
                         <button class="btn btn-info "
-                                ng-disabled=" samples.savingInProgress"
+                                ng-disabled="samples.usersToSamples.length==0 || samples.savingInProgress"
                                 ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)">
                             <i class="fa fa-spin {{samples.savingSpinner}}"></i>
                             <i class="fa fa-save"></i> Save
@@ -185,6 +189,7 @@
                         ><i class="fa fa-remove"></i> Cancel
                         </button>
                     </div>
+                    <div class="clearfix">&nbsp;</div>
                 </div>
             </div>
         </div>

@@ -123,7 +123,7 @@
         }
         $scope.samples.getParticipantPanel = function (tableName) {
             var whereData = {
-                participantId : $scope.samples.loginDetails.participant_id
+                participantId: $scope.samples.loginDetails.participant_id
             }
             $scope.samples.getAllSamples(tableName, whereData)
         }
@@ -1082,7 +1082,7 @@
                 $.confirm({
                     title: 'Confirm delete!',
                     theme: 'supervan',
-                    content: 'Are you sure you wanna delete record',
+                    content: 'Are you sure you want to delete this record,this action cannot be undone',
                     buttons: {
                         'Delete': {
                             btnClass: 'btn-blue',
@@ -1285,13 +1285,83 @@
                 console.log(Exc);
             }
         }
+        function getFormattedDate() {
+            var d = new Date();
+
+            d = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) + " " + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+
+            return d;
+        }
+
+        $scope.samples.updateStatusReceivedPanels = function (tableName, status, id) {
+            var postedData = {};
+            try {
+                function updateSamples(sampleComment) {
+
+
+                    postedData.updateData = {
+                        deliveryStatus: status,
+                        dateDelivered: getFormattedDate(),
+                        sampleComment: sampleComment
+                    };
+                    postedData.tableName = tableName;
+                    postedData.where = {
+                        id: id
+                    }
+
+                    $scope.samples.updateWhere(postedData);
+                    $timeout(function () {
+                        // $scope.samples.getSampleFromPanel($scope.receive.clickedPanel.id, 'tbl_bac_sample_to_panel');
+                        $scope.samples.getSampleFromPanel($scope.receive.clickedPanel, 'tbl_bac_sample_to_panel');
+                    }, 300)
+                }
+
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: 'Please confirm action, action can not be undone! ' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<label>Enter a comment</label>' +
+                    '<textarea placeholder="Please enter a comment" class="name form-control" required ></textarea>' +
+                    '</div>' +
+                    '</form>',
+                    buttons: {
+                        'Confirm Action': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+
+                                alertStartRound = $.alert('saving changes,please wait...!');
+                                var sampleComment = this.$content.find('.name').val();
+                                updateSamples(sampleComment);
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
+
+            } catch (Exception) {
+                console.log(Exception)
+            }
+        }
         $scope.samples.updateStatus = function (tableName, status, id) {
             var postedData = {};
             try {
-                postedData.updateData = {deliveryStatus: status};
+                postedData.updateData = {
+                    deliveryStatus: status
+                };
                 postedData.tableName = tableName;
-                postedData.where = {id: id}
+                postedData.where = {
+                    id: id
+                }
                 $scope.samples.updateWhere(postedData);
+
                 if ($scope.samples.clickedShipmentData.id > 1) {
                     $scope.samples.getPanelFromShipment($scope.samples.clickedShipmentData.id, 1);
                 } else {
@@ -1506,37 +1576,64 @@
                 if (users.length > 0) {
 
                     try {
-
-                        var url = serverSamplesURL + 'saveuserstosample';
-                        var postedData = {};
-                        postedData = {
-                            sampleId: $scope.samples.clickedSample.sampleId,
-                            panelToSampleId: $scope.samples.clickedSample.id,
-                            roundId: $scope.samples.clickedSample.roundId,
-                            userIds: users
-                        };
-                        console.log(postedData);
-                        changeSavingSpinner(true);
-                        $http
-                            .post(url, postedData)
-                            .success(function (response) {
-                                console.log(response)
-                                changeSavingSpinner(false);
-                                if (response.status == 1) {
-                                    $scope.samples.samplePanelArray = [];
-                                    $scope.samples.addUsersToSamples(1, 2)
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-
-                                } else {
+                        function savesamples() {
+                            var url = serverSamplesURL + 'saveuserstosample';
+                            var postedData = {};
+                            postedData = {
+                                sampleId: $scope.samples.clickedSample.sampleId,
+                                panelToSampleId: $scope.samples.clickedSample.id,
+                                roundId: $scope.samples.clickedSample.roundId,
+                                userIds: users,
+                                participantId: $scope.samples.loginDetails.participant_id
+                            };
+                            console.log(postedData);
+                            changeSavingSpinner(true);
+                            $http
+                                .post(url, postedData)
+                                .success(function (response) {
+                                    console.log(response)
+                                    changeSavingSpinner(false);
+                                    if (response.status == 1) {
+                                        $scope.samples.samplePanelArray = [];
+                                        $scope.samples.usersToSamples = [];
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                        alertStartRound.close();
+                                    } else {
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                    }
+                                    $scope.samples.showMultiSelect('', 1);
+                                })
+                                .error(function (error) {
+                                    changeSavingSpinner(false);
                                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                    console.log(error)
+                                })
+
+                        }
+
+                        $.confirm({
+                            title: 'Confirm!',
+                            theme: 'supervan',
+                            content: 'Please confirm issue of samples,this action can not be undone to ' + users.length + ' User(s)',
+                            buttons: {
+                                'Issue Sample': {
+                                    btnClass: 'btn-blue',
+                                    action: function () {
+
+                                        alertStartRound = $.alert('Issue samples,please wait...!');
+                                        savesamples();
+                                    }
+                                },
+                                cancel: {
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        // $.alert('cancelled !');
+                                    }
                                 }
-                                $scope.samples.showMultiSelect('', 1);
-                            })
-                            .error(function (error) {
-                                changeSavingSpinner(false);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                console.log(error)
-                            })
+                            }
+                        })
+
+
                     } catch (error) {
                         console.log(error);
                     }
@@ -1737,10 +1834,15 @@
                                 participantId: panel.participantId,
                                 roundId: panel.roundId
                             }
+                            console.log(where)
                             if (from == 1) {
                                 $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', 'deliveryStatus', '3,4,5,6');
                             } else {
-                                $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', where);
+                                if (angular.isDefined($scope.samples.clickedShipmentData.id)) {
+                                    $scope.samples.getPanelFromShipment($scope.samples.clickedShipmentData, 1, true);
+                                } else {
+                                    $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', 'deliveryStatus', '3,4,5,6');
+                                }
                             }
                         }, 200)
                     }

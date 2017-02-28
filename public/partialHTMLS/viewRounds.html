@@ -20,7 +20,8 @@
                             <input type="search" class="col-md-12" ng-model="samples.searchData">
                         </div>
                         <div class="col-md-1 col-sm-3 pull-right">
-                            <a href="#" class=" btn btn-default btn-sm" ng-disabled="samples.loaderProgressSpinner=='fa-spinner'"
+                            <a href="#" class=" btn btn-default btn-sm"
+                               ng-disabled="samples.loaderProgressSpinner=='fa-spinner'"
                                ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
                                 <i class="fa fa-refresh"></i>
                             </a>
@@ -139,8 +140,10 @@
                     <x class="label label-sm label-info">
                         {{samples.returnFormattedLeft(samples.currentRound.daysLeft)}}
                         {{samples.timerCountDown(samples.currentRound.daysLeft)}}
-                    </x> <br>
-                    <b> Status : </b> {{samples.roundStatus(samples.currentRound.daysLeft,samples.currentRound.startRoundFlag)}}
+                    </x>
+                    <br>
+                    <b> Status : </b>
+                    {{samples.roundStatus(samples.currentRound.daysLeft,samples.currentRound.startRoundFlag)}}
                 </p>
 
             </div>
@@ -148,7 +151,8 @@
                 <div class="panel panel-heading ">
                     <h4>Enrolled Labs <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                         <small class="text-black"><i>{{samples.readyLabs.length}} records</i></small>
-                        <a href="#" ng-click="samples.addLabsToRound(samples.currentRound,1)" class="pull-right"><i class="fa fa-download"></i> </a>
+                        <a href="#" ng-click="samples.addLabsToRound(samples.currentRound,1)" class="pull-right"><i
+                                class="fa fa-download"></i> </a>
                     </h4>
                 </div>
                 <input class="form-control col-md-12" placeholder="Search Labs" ng-model="samples.searchLab">
@@ -229,14 +233,15 @@
 
             </div>
 
-            <div class="btn btn-warning col-md-12 text-uppercase" ng-disabled="samples.currentRound.startRoundFlag==1 || samples.currentRound.totalShipmentsAdded"
-            ng-click="samples.startRound(samples.currentRound)"
+            <div class="btn btn-warning col-md-12 text-uppercase"
+                 ng-disabled="samples.currentRound.startRoundFlag==1 || samples.currentRound.totalShipmentsAdded==0"
+                 ng-click="samples.startRound(samples.currentRound)"
             >
                 START ROUND {{samples.currentRound.roundName}}
             </div>
         </div>
     </div>
-    <div class="" >
+    <div class="">
         <div ng-include="'../partialHTMLS/modals/addShipmentsToRounds.html'">
 
         </div>

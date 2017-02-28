@@ -22,7 +22,7 @@
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                 <!--<small class="">-->
                     <!--<a href="#" class=" btn btn-default btn-sm"-->
-                       <!--ng-click="samples.addLabsToRound(samples.currentRound)">-->
+                       <!--ng-click="samples.addLabsToRound('tbl_bac_ready_labs', samples.currentRound)">-->
                         <!--<i class="fa fa-refresh"></i>-->
                     <!--</a>-->
                 <!--</small>-->
@@ -50,19 +50,19 @@
 
                         <div class="[ form-group ]">
 
-                            <input type="checkbox"  ng-hidden="true"  name="{{panel.id}}" id="{{lab.id}}" autocomplete="off"
-                                   ng-checked="samples.indexOfId(panel.id,samples.labsToRoundArray)"
-                                   ng-click="samples.addLabsToRoundArray(lab.id,labCheck)"
+                            <input type="checkbox"  ng-hidden="true"  name="{{panel.labId}}" id="{{lab.labId}}" autocomplete="off"
+                                   ng-checked="samples.indexOfId(panel.labId,samples.labsToRoundArray)"
+                                   ng-click="samples.addLabsToRoundArray(lab.labId,labCheck)"
                                    ng-model="labCheck">
                             <div class="[ no-padding]">
-                                <label for="{{lab.id}}" class="[ btn-round ]">
-                                    <span class="[ fa fa-check-circle  ]" ng-show="samples.indexOfId(lab.id,samples.labsToRoundArray)"
+                                <label for="{{lab.labId}}" class="[ btn-round ]">
+                                    <span class="[ fa fa-check-circle  ]" ng-show="labCheck"
 
                                           data-placement="right" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
                                           data-trigger="hover" data-title="remove panel"
                                     ></span>
-                                    <span class="[ fa fa-minus-circle  ]" ng-show="!samples.indexOfId(lab.id,samples.labsToRoundArray)"
+                                    <span class="[ fa fa-minus-circle  ]" ng-show="!labCheck"
                                           data-placement="right" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
                                           data-trigger="hover" data-title="add panel"

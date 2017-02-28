@@ -91,6 +91,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $data['sampleId'] = $jsPostData['sampleId'];
                     $data['panelToSampleId'] = $jsPostData['panelToSampleId'];
                     $data['roundId'] = $jsPostData['roundId'];
+                    $data['participantId'] = $jsPostData['participantId'];
                     $response = $this->dbConnection->insertData('tbl_bac_samples_to_users', $data);
 
 
@@ -104,6 +105,119 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     }
 
+    public function createEmailBody($name, $message)
+    {
+
+        $html = "<div style='heigth:40px;width:100%;background-color:gray;color:White;text-align:left'>"
+            . "<p style='margin-left : 10px;padding-top : 10px;padding-bottom : 10px;font-size:18px'><b>NPHL</b><br>"
+            . "National Public Health Laboratories,<br>PT Testing</p></div>"
+            . "<br><div style='font-size:16px;'><b>Dear " . $name . ",</b></div>";
+        $html .= "<div style='font-size:14px;text-align:left;margin-top : 10px'>"
+            . 'This is to notify you  ' . $message . '.';
+
+        $html .= '<br><br>Regards,<br>National Public Health Laboratories.'
+            . ''
+            . '<hr>';
+
+        $html .= "<hr>
+            <div style='font-size:14px;text-align:left;padding-top : 10px;padding-bottom : 10px'>
+            
+           DISCLAIMER : This is a system generated mail, please do not reply.
+            All the information contained in this e-mail message is strictly
+            confidential and may be legally privileged. Such information is intended
+            solely for the use of the designated recipient. Any disclosure, copying or
+            distribution of all or part of the information contained herein to or by
+            third parties is prohibited and may be unlawful. If you have received this
+            e-mail message in error please delete it immediately and notify Flex
+            Communications Limited through e-mail to  <mailto:info@nphl.co.ke>
+            mailto:info@nphl.co.ke
+            <hr>
+           </div>
+            ";
+        $html .= "<div style='heigth:70px;width:100%;background-color:#33ccff;color:white;text-align:center;padding-top : 10px;padding-bottom : 10px'>"
+            . "<p style='color:white'>NPHL. | KNH, Upperhill, Nairobi.<br>
+
+
+                    Office: 0712 664-190 | 0703 302-958 | 0712 664-190 | 0701 204-066 | 0701 204-005 | 0701 203-055 |<br>
+
+                    email:   info@nphl.co.ke |web:   <http://www.nphl.co.ke/ > <i style='color:white'>www.nphl.co.ke</i>
+
+                    
+
+                   </p>"
+            . "<p style='margin-left : 10px;margin-bottom : 3px;'>Copyright Reserved @ " . date('Y') . "</p></div>";
+
+
+//        $body['body'] = $html;
+//        $body['subject'] = $message['subject'];
+        return $html;
+    }
+
+    public function generateMessage($message, $type)
+    {
+        $msg = '';
+        if ($type == 0) {//successfully enrollement of lab
+            $msg = "that your request to participant in the round <b>" . $message['roundCode'] .
+                "</b> has been successfully approved<br>You will receive an official start date";
+            $subj = 'Successfully Enrollement Of Lab';
+        }
+        if ($type == 1) {//Official Start of Round
+            $msg = "that the round <b>" . $message['roundCode'] . "</b> has started official on <b>" . $message['date'] . "</b>";
+            $subj = 'Official Start of Round ' . $message['roundCode'];
+        }
+        if ($type == 2) {//Issuance of samples
+            $msg = "that you have been issue with sample " . $message['batchName'] . " for round 
+            <b>" . $message['roundCode'] . "</b> and submit results by <b>" . $message['date'] . "</b>";
+            $subj = 'Issuance of samples ' . $message['batchName'];
+        }
+        if ($type == 3) {//success sending of samples
+            $msg = "that  " . $message['shipmentName'] . " shipment has been dispatched to you lab ,courier is <b>" . $message['courier'] . "</b> on
+            <b>" . $message['date'] . "</b> <br> Kindly confirm on receiving";
+            $subj = 'Shipment Dispatch ' . $message['shipmentName'];
+        }
+        if ($type == 4) {//officia end of round
+            $msg = "that the round <b>" . $message['roundCode'] . "</b> has ended official on <b>" . $message['date'] . "</b> no more submissions are allowed";
+            $subj = 'Official end of round ' . $message['roundCode'];
+        }
+
+        $mess['message'] = $msg;
+        $mess['subject'] = $subj;
+        return $mess;
+    }
+
+    public function sendemailAction($body, $to = '')
+    {
+        try {
+            $config = array('ssl' => 'tls',
+                'auth' => 'login',
+                'username' => 'osoromichael@gmail.com',
+                'password' => 'w@r10r@90');
+
+            $transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
+
+
+            $mail = new Zend_Mail();
+
+
+            $message = $this->createEmailBody('Participant', $body['message']);
+            $mail->setBodyHtml($message);
+            $mail->setFrom('National Public Health Laboratories');
+            if ($to != '') {
+                $mail->addTo($to, '');
+            } else {
+                $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
+            }
+            $mail->setSubject($body['subject']);
+            if ($mail->send($transport)) {
+//                echo 'Sent successfully';
+            } else {
+                echo 'unable to send email';
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        exit();
+    }
 
     public function savepaneltoshipmentAction()
     {
@@ -132,6 +246,29 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     }
 
+    public function saveEmailNotifications()
+    {
+
+    }
+
+    public function sendEmailToEnrolledLabs($dtls)
+    {
+        try {
+            $labDetails = $this->returnValueWhere($dtls['labId'], 'participant');
+            $roundDetails = $this->returnValueWhere($dtls['roundId'], 'tbl_bac_rounds');
+
+            $message['labName'] = $labDetails['first_name'];
+            $message['roundCode'] = $roundDetails['roundCode'];
+            $message['date'] = $roundDetails['startDate'];
+            $emailMessage = $this->generateMessage($message, 0);
+
+            $this->saveEmailNotifications($emailMessage, $labDetails['email']);
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function savelabstoroundAction()
     {
         try {
@@ -140,17 +277,18 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $jsPostData = (array)(json_decode($jsPostData));
             $idArray = $jsPostData['labId'];
 
-
             if (is_array($jsPostData)) {
 
                 foreach ($idArray as $value) {
 
                     $data['labId'] = $value;
+
                     $data['roundId'] = $jsPostData['roundId'];
                     $response = $this->dbConnection->insertData('tbl_bac_rounds_labs', $data);
-
+                    $this->sendEmailToEnrolledLabs($data);
                     $updateData['status'] = 2;
                     $this->dbConnection->updateTable('tbl_bac_ready_labs', $data, $updateData);
+
                     $this->savePanelForEachLab($data['roundId'], $data['labId']);
                 }
                 echo $this->returnJson(array('status' => 1));
@@ -223,7 +361,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if (is_array($panelDtls)) {
                 $where['panelId'] = $panelDtls['panelId'];
                 $where['shipmentId'] = $panelDtls['shipmentId'];
-                $where['deliveryStatus'] = 0;
+                $where['deliveryStatus'] = null;
                 $where['participantId'] = null;
 
 
@@ -377,7 +515,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     public function getusersessionsAction()
     {
-        echo $this->returnJson(array('data'=>$this->returnUserLabDetails(),'status'=>1));
+        echo $this->returnJson(array('data' => $this->returnUserLabDetails(), 'status' => 1));
         exit;
     }
 
@@ -536,6 +674,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         if ($where['type'] == 0) {
             $whereShipment = $this->returnUserLabDetails();
             $whereParticipant['participantId'] = $whereShipment['participant_id'];
+            $whereParticipant['deliveryStatus !'] = 0;
         }
         $tableName = 'tbl_bac_panels_shipments';
 
