@@ -76,26 +76,26 @@
             <div class="panel panel-default bg-info">
                 <div class="h4 col-md-12 text-capitalize">
                     <br>
-                    Distribute Samples <b> {{samples.clickedSample.batchName}}</b>
+                    Distribute Samples <b> {{samples.clickedSample.batchName}} </b>
+                    <small>{{samples.usersToSamples.length}}users</small>
                     <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
                 </div>
-                <br>
-            </div>
-            <div class="col-md-12">
-                <div class="col-xs-5" ng-init="samples.getAllFacilityUsers('data_manager')">
-                    <select name="from[]" id="undo_redo" class="form-control text-capitalize" ng-model="samples.userIds"
-                            size="13" multiple="multiple">
-                        <option value="{{users.dm_id}}" ng-repeat="users in samples.labUsers">
-                            {{users.first_name |
-                            capitalizeLetter}} {{users.last_name| capitalizeLetter}}
-                        </option>
+                <div class="col-md-12" ng-init="samples.getAllFacilityUsers('data_manager')">
+                    <!--
+                    <div class="col-xs-5" >
+                        <select name="from[]" id="undo_redo" class="form-control text-capitalize" ng-model="samples.userIds"
+                                size="13" multiple="multiple">
+                            <option value="{{users.dm_id}}" ng-repeat="users in samples.labUsers">
+                                {{users.first_name |
+                                capitalizeLetter}} {{users.last_name| capitalizeLetter}}
+                            </option>
 
-                    </select>
-                </div>
+                        </select>
+                    </div>
 
-                <div class="col-xs-2">
-                    <!--<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block btn-sm">undo <i-->
-                    <!--class="fa fa-undo"></i></button>-->
+                    <div class="col-xs-2">
+                        <!--<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block btn-sm">undo <i-->
+                    <!--class="fa fa-undo"></i></button>
                     <button type="button" id="undo_redo_rightAll" ng-click="samples.addUsersToSamples(1,3)"
                             class="btn btn-info btn-block btn-sm">Select all <i
                             class="fa fa-forward"></i></button>
@@ -115,7 +115,7 @@
                     <!--<i-->
                     <!--class="fa fa-backward"></i></button>-->
                     <!--<button type="button" id="undo_redo_redo" class="btn btn-warning btn-block btn-sm">redo <i-->
-                    <!--class="fa fa-re"></i></button>-->
+                    <!--class="fa fa-re"></i></button>-
                 </div>
 
                 <div class="col-xs-5">
@@ -123,24 +123,68 @@
                             size="13"
                             multiple="multiple"></select>
                 </div>
+                -->
+                    <div class="h3" class="bottom-border">Enrolled users</div>
+                    <table class="table table-striped">
+                        <tr ng-repeat="users in samples.labUsers">
+                            <td>
 
-            </div>
-            <div class="clearfix">&nbsp;</div>
 
-            <div class="col-md-12">
-                <div class="clearfix">&nbsp;</div>
-                <div class="text-center col-md-offset-4">
-                    <button class="btn btn-info col-md-2"
-                            ng-disabled=" samples.savingInProgress"
-                            ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)">
-                        <i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                        Save
-                    </button>
+                                <div class="[ form-group ]">
+                                    <div class="[ no-padding]">
+                                        <input type="checkbox"
+                                               name="{{users.dm_id}}" id="{{users.dm_id}}" autocomplete="off"
+                                               ng-checked="samples.returnCheckedRow(users.dm_id,samples.usersToSamples)"
+                                               ng-click="samples.addUsersToSamples(users.dm_id,userCheck)"
+                                               ng-model="userCheck">
+                                        <label for="{{users.dm_id}}" class="[ btn-round ]">
+                                    <span class="[ fa fa-check-circle btn-success]"
+                                          ng-show="userCheck"
 
-                    <button class="btn btn-danger col-md-2"
-                            ng-click="samples.showMultiSelect(sample,1)"
-                    ><i class="fa fa-remove"></i> Cancel
-                    </button>
+                                          data-placement="right" data-type="info" data-container="body"
+                                          data-animation="am-fade-and-scale" bs-tooltip
+                                          data-trigger="hover" data-title="remove user"
+                                    ></span>
+                                            <span class="[ fa fa-minus-circle btn-success]"
+                                                  ng-show="!userCheck"
+                                                  data-placement="right" data-type="info" data-container="body"
+                                                  data-animation="am-fade-and-scale" bs-tooltip
+                                                  data-trigger="hover" data-title="add user"
+                                            >
+
+                                        </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {{users.first_name |
+                                capitalizeLetter}} {{users.last_name| capitalizeLetter}}
+                            </td>
+                            <td class="text-success">
+                                received last round
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+
+                <div class="">
+
+                    <div class="text-center ">
+                        <button class="btn btn-info "
+                                ng-disabled=" samples.savingInProgress"
+                                ng-click="samples.saveSampleToUser(samples.userIds,samples.addedUsers)">
+                            <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                            <i class="fa fa-save"></i> Save
+                        </button>
+
+                        <button class="btn btn-danger"
+                                ng-click="samples.showMultiSelect(sample,1)"
+                        ><i class="fa fa-remove"></i> Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

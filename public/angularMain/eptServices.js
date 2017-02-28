@@ -238,3 +238,7 @@ return {
     }
 }
 })
+EptServices.factory('loginDataCache', function ($cacheFactory) {
+    return $cacheFactory('loginData');
+
+})

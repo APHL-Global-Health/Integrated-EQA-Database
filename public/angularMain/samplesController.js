@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, EptFactory, $timeout) {
+    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, EptFactory, $timeout, loginDataCache) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -120,6 +120,12 @@
             $scope.samples.clickedShipmentData = {};
             $scope.samples.showShipmentInfoStatus = false;
             $scope.samples.getAllSamples(tableName, whereData, 1)
+        }
+        $scope.samples.getParticipantPanel = function (tableName) {
+            var whereData = {
+                participantId : $scope.samples.loginDetails.participant_id
+            }
+            $scope.samples.getAllSamples(tableName, whereData)
         }
         var alertStartRound = ''
         $scope.samples.startRound = function (round) {
@@ -326,14 +332,14 @@
                     }
                 }
                 var url = serverSamplesURL + 'getdistinctshipments';
-                changeSavingSpinner(true);
-                console.log(url)
+                // changeSavingSpinner(true);
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
                     .post(url, posted)
                     .success(function (data) {
                         console.log(data)
                         $scope.samples.receivedShipments = data.data;
-                        changeSavingSpinner(false);
+                        $scope.samples.loaderProgressSpinner = '';
                     })
                     .error(function (error) {
                         console.log(error)
@@ -666,6 +672,45 @@
         }
         /*-------------------------------------------------------------------End function to add Panel To Shipment----------------------------------------------------------*/
         /*---------------------------------------------------------------------END of add panels to shipments---------------------------------------------------------------*/
+        $scope.samples.loginDetails = {};
+        function loginCacheMemory() {
+            var cache = loginDataCache.get('loginData');
+            if (cache) {
+                $scope.samples.loginDetails = loginDataCache.get('loginData');
+            } else {
+
+                $scope.samples.loginDetails = {};// reportCache.get('loginData');
+            }
+            var reportData = $scope.samples.loginDetails;
+            return reportData;
+
+        }
+
+        $scope.samples.getLoggedInUserSessionInfo = function () {
+            try {
+                // if ($scope.samples.loginDetails.length == 0) {
+                var url = serverSamplesURL + 'getusersessions';
+
+                $http
+                    .post(url)
+                    .success(function (response) {
+                        if (response.status == 1) {
+                            loginDataCache.put('loginData', response.data);
+                            loginCacheMemory();
+                            console.log($scope.samples.loginDetails);
+                        }
+                    })
+                    .error(function (error) {
+
+                    })
+                // }
+            } catch (Exception) {
+
+            }
+            // console.log($scope.samples.loginDetails);
+        }
+
+        $scope.samples.getLoggedInUserSessionInfo();
 
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
@@ -673,10 +718,22 @@
         $scope.samples.getSampleFromPanel = function (panelId, tableName) {
             try {
 
-
+                var tempPanel = panelId;
+                panelId = angular.isObject(panelId) ? panelId.id : panelId;
                 if (isNumeric(panelId)) {
                     try {
+
                         var where = {panelId: panelId};
+
+                        if (angular.isObject(tempPanel)) {
+                            where = {
+                                panelId: tempPanel.panelId,
+                                roundId: tempPanel.roundId,
+                                participantId: tempPanel.participantId
+                            };
+                        }
+
+
                         if ($scope.samples.clickedPanel !== panelId || tableName == 'tbl_bac_sample_to_panel') {
 
                             if ($scope.samples.clickedPanel !== panelId) {
@@ -685,7 +742,11 @@
                                 $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
 
                             }
+
+
                             $scope.samples.getAllSamples(tableName, where);
+
+
                             console.log('Called')
                         } else {
                             console.log('unknown tabke name')
@@ -1172,6 +1233,7 @@
                             }
                             $scope.samples.sampleFormData.id = postedData.where.id;
                         }
+                        alertStartRound.close();
                     })
                     .error(function (error) {
                         changeSavingSpinner(false);
@@ -1354,7 +1416,7 @@
             if (all == 1) {
 
             } else {
-                $scope.samples.labsToRoundArray=[];
+                $scope.samples.labsToRoundArray = [];
                 $scope.samples.samplesActivePage('addLabsToRound', 0);
 
             }
@@ -1394,7 +1456,7 @@
         $scope.samples.timerCountDown = function (daysLeft) {
 
             var timer = daysLeft * 24 * 60 * 60;
-            console.log(daysLeft)
+
             if (timer > 0) {
                 var timout = $timeout(function () {
                     try {
@@ -1406,7 +1468,7 @@
 
                         }
                     } catch (e) {
-                        console.log(e)
+                        // console.log(e)
                     }
                 }, 1000)
             }
@@ -1490,34 +1552,24 @@
         $scope.samples.addUsersToSamples = function (id, status) {
             console.log(id)
 
-            if (status == 1) {
+            if (status) {
                 if (angular.isDefined(id)) {
-                    if ($scope.samples.usersToSamples.indexOf(Number(id)) < 0) {
-                        $scope.samples.usersToSamples.push(Number(id));
-                    }
+                    $scope.samples.usersToSamples.push(Number(id));
                 }
             }
-            if (status == 0) {
+
+            if (!status) {
                 console.log(id)
                 var position = $scope.samples.usersToSamples.indexOf(Number(id));
                 console.log(position)
                 if (Number(position) > -1) {
-                    console.log('should splice')
                     $scope.samples.usersToSamples.splice(position, 1)
                 }
             }
-            if (status == 2) {
-                $scope.samples.usersToSamples = []
-            }
-            if (status == 3) {
-
-                $scope.samples.usersToSamples = EptServices.EptServiceObject.returnIdArrayFromObject($scope.samples.labUsers);
-            }
-
-            $scope.samples.userIds = '';
-            console.log($scope.samples.usersToSamples);
 
         }
+
+
         $scope.samples.showMultiSelectFlag = false;
         $scope.samples.showMultiSelect = function (sample, type) {
             $scope.samples.clickedSample = sample;
@@ -1615,60 +1667,129 @@
 
         $scope.samples.panelReceived = function (panel, table, status, from) {
             try {
+                function updatePanelStatus(actionComment, condition) {
+                    if (angular.isDefined(panel.panelId)) {
+                        if (from == 1) {
+                            postedData = {
+                                where: {
+                                    panelId: panel['panelId'],
+                                    participantId: panel['participantId'],
+                                    shipmentId: panel.shipmentId
+                                },
+                                tableName: table,
+                                updateData: {
+                                    deliveryStatus: status,
+                                    comments: actionComment
+                                }
+                            }
+                            console.log(postedData)
 
-                if (angular.isDefined(panel.panelId)) {
-                    if (from == 1) {
-                        postedData = {
-                            where: {
-                                panelId: panel['panelId'],
-                                participantId: panel['participantId'],
-                                shipmentId: panel.shipmentId
-                            },
-                            tableName: table,
-                            updateData: {deliveryStatus: status}
+                            $scope.samples.updateWhere(postedData);
+                        } else {
+                            var postedData = {
+                                where: {
+                                    panelId: panel.panelId,
+                                    participantId: panel.participantId,
+                                    shipmentId: panel.shipmentId
+                                },
+                                tableName: table,
+                                updateData: {
+                                    deliveryStatus: status,
+                                    comments: actionComment,
+                                    conditionStatus: condition
+                                }
+                            }
+
+                            $scope.samples.updateWhere(postedData);
+                            var postedData = {
+                                where: {
+                                    panelId: panel.panelId,
+                                    participantId: panel.participantId,
+                                    shipmentId: panel.shipmentId
+                                },
+                                tableName: 'tbl_bac_panels_shipments',
+                                updateData: {
+                                    deliveryStatus: status,
+                                    receiveComment: actionComment,
+                                    conditionStatus: condition
+                                }
+                            }
+
+                            $scope.samples.updateWhere(postedData);
+
+                            postedData = {
+                                where: {id: panel.panelId},
+                                tableName: 'tbl_bac_panel_mst',
+                                updateData: {
+                                    panelStatus: status
+                                }
+                            }
+                            console.log(postedData)
+
+                            $scope.samples.updateWhere(postedData);
+
+
                         }
-                        console.log(postedData)
 
-                        $scope.samples.updateWhere(postedData);
-                    } else {
-                        var postedData = {
-                            where: {
-                                panelId: panel.panelId,
+
+                        $timeout(function () {
+                            var where = {
                                 participantId: panel.participantId,
-                                shipmentId: panel.shipmentId
-                            },
-                            tableName: table,
-                            updateData: {deliveryStatus: status}
-                        }
-
-                        $scope.samples.updateWhere(postedData);
-                        var postedData = {
-                            where: {
-                                panelId: panel.panelId,
-                                participantId: panel.participantId,
-                                shipmentId: panel.shipmentId
-                            },
-                            tableName: 'tbl_bac_panels_shipments',
-                            updateData: {deliveryStatus: status}
-                        }
-
-                        $scope.samples.updateWhere(postedData);
-
-                        postedData = {
-                            where: {id: panel.panelId},
-                            tableName: 'tbl_bac_panel_mst',
-                            updateData: {panelStatus: status}
-                        }
-                        console.log(postedData)
-
-                        $scope.samples.updateWhere(postedData);
-
-
+                                roundId: panel.roundId
+                            }
+                            if (from == 1) {
+                                $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', 'deliveryStatus', '3,4,5,6');
+                            } else {
+                                $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', where);
+                            }
+                        }, 200)
                     }
-                    $timeout(function () {
-                        $scope.samples.getShipmentsForDelivery('tbl_bac_panels_shipments', 'deliveryStatus', '3,4,5,6');
-                    }, 200)
                 }
+
+                var message = '';
+                if (status == 5) {
+                    message = 'please confirm rejection of the panel,this action can not be undone';
+                }
+                else if (status == 4) {
+                    message = 'please confirm receiving of panel,this action can not be undone'
+                } else {
+                    message = 'please confirm action,this action can not be undone'
+                }
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: message +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<label>Condition</label>' +
+                    '<input placeholder="Condition e.g temp,moist etc.." class="condition form-control" required />' +
+                    '<label>Reason for Action</label>' +
+                    '<textarea placeholder="Reason for action" class="name form-control" required ></textarea>' +
+                    '</div>' +
+                    '</form>',
+                    buttons: {
+                        'Save': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+                                var actionComment = this.$content.find('.name').val();
+                                var condition = this.$content.find('.condition').val();
+                                if (actionComment == '' || condition == '') {
+                                    $.alert('please enter a valid reason and condition');
+                                } else {
+                                    alertStartRound = $.alert('saving changes,please wait...!');
+                                    updatePanelStatus(actionComment, condition);
+                                }
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
             } catch (Exc) {
                 console.log(Exc)
             }
@@ -1676,12 +1797,14 @@
 
         $scope.samples.showShipmentInfoStatus = false;
         $scope.samples.showShipmentAndPanels = function (link, shipment) {
-            $scope.samples.samplesActivePage(link, 1)
+
+            $scope.samples.samplesActivePage(link, 1);
             $scope.samples.showShipmentInfoStatus = true;
 
             $scope.samples.clickedShipmentData = shipment;
 
-            $scope.samples.getPanelFromShipment(shipment, 1, true)
+            $scope.samples.getPanelFromShipment(shipment, 1, true);
+
         }
         $scope.samples.currentBarcodeData = 'test code'
 
@@ -1877,7 +2000,7 @@
             $scope.samples.sampleToPanel = {};
             console.log(panelInfo)
             $scope.receive.clickedPanel = panelInfo;
-            $scope.samples.getSampleFromPanel(panelInfo.panelId, 'tbl_bac_sample_to_panel');
+            $scope.samples.getSampleFromPanel(panelInfo, 'tbl_bac_sample_to_panel');
             $scope.samples.samplesActivePage('panelFullDetails', 1);
             $scope.receive.showPanelStatus = true;
         }

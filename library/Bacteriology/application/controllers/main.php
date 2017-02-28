@@ -178,178 +178,187 @@ Class Main extends pdfCreator
 
     }
 
-    public function selectCount($tableName, $where, $col)
+    public function selectCount($tableName, $where, $col, $sum = '')
     {
 
-
-        $sql = "SELECT count($col) FROM $tableName";
-
-        if (is_array($where)) {
-
-            $sql .= $this->returnWhereStatement($where);
-
+        if ($sum) {
+            $sql = "SELECT sum($col) FROM $tableName";
         } else {
-            $sql .= " where " . $col . " = " . $where;
+            $sql = "SELECT count($col) FROM $tableName";
         }
+            if (is_array($where)) {
+
+                $sql .= $this->returnWhereStatement($where);
+
+            } else {
+                $sql .= " where " . $col . " = " . $where;
+            }
 //       echo $sql;
 //        exit;
-        try {
-            $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
-            return ($result);//->num_rows;
-        }catch (Exception $e){
-            return 'error';
-        }
+            try {
+                $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
+                return ($result);//->num_rows;
+            } catch (Exception $e) {
+                return 'error';
+            }
 
 
-        // output data of each row
-
-
-    }
-
-    public function selectFromDStatusTable($tableName, $where = "")
-    {
-        $col = $where['column'];
-        $status = $where['status'];
-        $sql = "SELECT * FROM $tableName where $col in ($status)";
-
-        $result = $this->connect_db->query($sql);
-
-        if ($result->num_rows > 0) {
             // output data of each row
-            while ($row = $result->fetch_object()) {
-                $user_arr[] = $row;
-            }
 
-            return $user_arr;
-        } else {
-            return false;
+
         }
 
-    }
 
+        function selectFromDStatusTable($tableName, $where = "")
+        {
+            $col = $where['column'];
+            $status = $where['status'];
+            $sql = "SELECT * FROM $tableName where $col in ($status)";
 
-    public function deleteFromWhere($tableName, $where)
-    {
-        $error['status'] = 0;
-        try {
-            if (isset($tableName)) {
-                $sql = "delete from $tableName";
-                if (isset($where)) {
-                    if (is_array($where)) {
-                        $sql .= $this->returnWhereStatement($where);
-                    } else {
-                        $error['status'] = 0;
-                        $error['message'] = 'No where clause found';
-                        return $error;
-                    }
+            $result = $this->connect_db->query($sql);
+
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while ($row = $result->fetch_object()) {
+                    $user_arr[] = $row;
                 }
-                if (is_string($sql)) {
-                    $result = $this->connect_db->query($sql);
 
-                    if ($result) {
-                        $error['status'] = 1;
-                        $error['message'] = 'deleted successfully';
-
-                    } else {
-                        $error['message'] = $this->connect_db->error;
-                    }
-                }
+                return $user_arr;
+            } else {
+                return false;
             }
-            return $error;
-        } catch (Exception $e) {
-            echo $e->getMessage();
+
         }
 
-    }
 
-    public function generataPile()
-    {
-
-
-    }
-
-
-    public function updateTable($tableName, $where, $updateData)
-    {
-        try {
+        public
+        function deleteFromWhere($tableName, $where)
+        {
             $error['status'] = 0;
-            if (isset($tableName)) {
+            try {
+                if (isset($tableName)) {
+                    $sql = "delete from $tableName";
+                    if (isset($where)) {
+                        if (is_array($where)) {
+                            $sql .= $this->returnWhereStatement($where);
+                        } else {
+                            $error['status'] = 0;
+                            $error['message'] = 'No where clause found';
+                            return $error;
+                        }
+                    }
+                    if (is_string($sql)) {
+                        $result = $this->connect_db->query($sql);
 
-                $sql = "update $tableName";
-                if (isset($updateData)) {
+                        if ($result) {
+                            $error['status'] = 1;
+                            $error['message'] = 'deleted successfully';
 
-                    $sql .= $this->returnUpdateStatement($updateData);
+                        } else {
+                            $error['message'] = $this->connect_db->error;
+                        }
+                    }
                 }
-                if (isset($where)) {
-                    $sql .= $this->returnWhereStatement($where);
-                }
-                if (is_string($sql)) {
+                return $error;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+
+        }
+
+        public
+        function generataPile()
+        {
+
+
+        }
+
+
+        public
+        function updateTable($tableName, $where, $updateData)
+        {
+            try {
+                $error['status'] = 0;
+                if (isset($tableName)) {
+
+                    $sql = "update $tableName";
+                    if (isset($updateData)) {
+
+                        $sql .= $this->returnUpdateStatement($updateData);
+                    }
+                    if (isset($where)) {
+                        $sql .= $this->returnWhereStatement($where);
+                    }
+                    if (is_string($sql)) {
 //                    echo $sql;
 //                    exit;
-                    $result = $this->connect_db->query($sql);
+                        $result = $this->connect_db->query($sql);
 
-                    if ($result) {
-                        $error['status'] = 1;
-                        $error['message'] = 'Row Update Successfully';
+                        if ($result) {
+                            $error['status'] = 1;
+                            $error['message'] = 'Row Update Successfully';
 
-                    } else {
-                        $error['message'] = $this->connect_db->error;
+                        } else {
+                            $error['message'] = $this->connect_db->error;
+                        }
                     }
+
                 }
+                return $error;
+            } catch (Exception $e) {
+                echo $e->getMessage();
 
             }
-            return $error;
-        } catch (Exception $e) {
-            echo $e->getMessage();
 
         }
 
-    }
-
-    public function returnUpdateStatement($updateInfo)
-    {
-        try {
-            $updateInfo['lastUpdatePerson'] = $this->getUserSession();
+        public
+        function returnUpdateStatement($updateInfo)
+        {
+            try {
+                $updateInfo['lastUpdatePerson'] = $this->getUserSession();
 //            $updateInfo['updateDate'] = $this->getUserSession();
-            $updateStatement = ' ';
-            if (sizeof($updateInfo) > 0) {
-                $updateStatement .= ' set ';
-                $counter = 0;
-                foreach ($updateInfo as $key => $value) {
+                $updateStatement = ' ';
+                if (sizeof($updateInfo) > 0) {
+                    $updateStatement .= ' set ';
+                    $counter = 0;
+                    foreach ($updateInfo as $key => $value) {
 
-                    $updateStatement .= $key . "=" . " '$value' ";
+                        $updateStatement .= $key . "=" . " '$value' ";
 
-                    $counter++;
-                    if ($counter < sizeof($updateInfo)) {
-                        $updateStatement .= ' , ';
+                        $counter++;
+                        if ($counter < sizeof($updateInfo)) {
+                            $updateStatement .= ' , ';
+
+
+                        }
 
 
                     }
-
-
                 }
+
+                return $updateStatement;
+            } catch (Exception $e) {
+
             }
 
-            return $updateStatement;
-        } catch (Exception $e) {
-
         }
 
-    }
+        public
+        function getUserSession()
+        {
+            if (isset($_SESSION)) {
+                return $_SESSION['administrators']['admin_id'];
+            } else {
+                return null;
+            }
+        }
 
-    public function getUserSession()
-    {
-        if (isset($_SESSION)) {
-            return $_SESSION['administrators']['admin_id'];
-        } else {
-            return null;
+        public
+        function generatePanelLabels()
+        {
+
         }
     }
-
-    public function generatePanelLabels()
-    {
-
-    }
-}
 
 ?>

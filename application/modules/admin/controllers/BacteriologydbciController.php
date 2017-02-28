@@ -153,7 +153,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $this->dbConnection->updateTable('tbl_bac_ready_labs', $data, $updateData);
                     $this->savePanelForEachLab($data['roundId'], $data['labId']);
                 }
-                echo $this->returnJson(array('status'=>1));
+                echo $this->returnJson(array('status' => 1));
             }
             exit();
         } catch (Exception $error) {
@@ -335,7 +335,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
                         $dataDB[$key]->dateCreated = $panel['dateCreated'];
                         $dataDB[$key]->barcode = $panel['barcode'];
-                        $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                        if (isset($where['participantId'])) {
+                            $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'panelId');
+                        } else {
+                            $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                        }
+
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
@@ -346,7 +351,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
                     } else if ($tableName == 'tbl_bac_panel_mst') {
+
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+
 
                     } else if ($tableName == 'tbl_bac_ready_labs') {
                         $lab = $this->returnValueWhere($value->labId, 'participant');
@@ -366,6 +373,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $e->getMessage();
         }
 
+    }
+
+    public function getusersessionsAction()
+    {
+        echo $this->returnJson(array('data'=>$this->returnUserLabDetails(),'status'=>1));
+        exit;
     }
 
     public function getwheredeliveryAction()
