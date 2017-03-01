@@ -634,8 +634,10 @@
                         $scope.samples.panelsToShipment = {};
                         var typ = 'panel';
                         if (angular.isDefined(isType)) {
+                            console.log('called here with istype')
                             $scope.samples.getAllSamples('tbl_bac_panels_shipments', where);
                         } else {
+                            console.log('called here without istype')
                             $scope.samples.getAllSamples('tbl_bac_panels_shipments', where, typ);
                         }
                         /*select distinct getdistinctpanels*/
