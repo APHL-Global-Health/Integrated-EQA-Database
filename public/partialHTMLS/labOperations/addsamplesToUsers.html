@@ -162,11 +162,14 @@
                                 </div>
                             </td>
                             <td>
-                                {{users.first_name |
-                                capitalizeLetter}} {{users.last_name| capitalizeLetter}}
+                                {{users.names |
+                                capitalizeLetter}}
                             </td>
-                            <td class="text-success">
-                                received last round
+                            <td class="text-success" ng-show="!users.receivedLastStatus">
+                                {{users.receivedLastMessage}}
+                            </td>
+                            <td class="text-danger"  ng-show="users.receivedLastStatus">
+                                {{users.receivedLastMessage}}
                             </td>
                         </tr>
                     </table>

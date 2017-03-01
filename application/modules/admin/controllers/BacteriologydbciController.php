@@ -763,6 +763,35 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit;
     }
 
+    public function returnLastRounds($where, $userId)
+    {
+        $whr['labId'] = $where['participant_id'];
+        $rounds = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $whr);
+//        var_dump($rounds);
+//        exit;
+        if ($rounds != false) {
+            $i = 0;
+            foreach ($rounds as $key => $value) {
+                if ($i == 1) {
+                    break;
+                }
+                $whereUserRound['userId'] = $userId;
+                $whereUserRound['roundId'] = $value->roundId;
+                $getUserFromIssuedSamples = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $whereUserRound);
+                if ($getUserFromIssuedSamples != false) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+
+                $i++;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public function getlabusersAction()
     {
 
@@ -771,7 +800,21 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $where['participant_id'] = $labDetails['participant_id'];
 
             if (isset($where['participant_id'])) {
-                $
+                $labUsers = $this->dbConnection->selectFromTable('participant_manager_map', $where);
+                if ($labUsers != false) {
+                    foreach ($labUsers as $key => $value) {
+                        $userDetails = $this->returnValueWhere($value->dm_id, 'data_manager');
+
+                        $receivedLastRound = $this->returnLastRounds($where, $value->dm_id);
+
+                        $labUsers[$key]->names = $userDetails['first_name'] . ' ' . $userDetails['last_name'];
+
+                        $labUsers[$key]->receivedLastMessage = $receivedLastRound ? 'Received sample previous Round' : 'Didn\'t receive sample previous round';
+                        $labUsers[$key]->receivedLastStatus = $receivedLastRound;
+
+                    }
+                    echo  $this->returnJson(array("status"=>1,"data"=>$labUsers));
+                }
             }
 
         } catch (Exception $exception) {

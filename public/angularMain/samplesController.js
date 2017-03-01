@@ -1705,7 +1705,7 @@
         $scope.samples.showMultiSelectFlag = false;
         $scope.samples.showMultiSelect = function (sample, type) {
             $scope.samples.clickedSample = sample;
-             $scope.samples.usersToSamples=[];
+            $scope.samples.usersToSamples = [];
             if (type == 1) {
                 $("#users_table").show('fast');
                 $("#multi_select").hide('fast');
@@ -1722,8 +1722,21 @@
         $scope.samples.getAllFacilityUsers = function (tableName) {
             try {
 
+                var url = serverSamplesURL + 'getlabusers';
+                changeSavingSpinner(true);
+                $http
+                    .post(url)
+                    .success(function (response) {
+                        changeSavingSpinner(false);
+                        if (response.status == 1) {
+                            $scope.samples.labUsers = response.data;
+                        } else {
+                            $scope.samples.labUsers = {};
+                        }
+                    })
+                    .error(function (error) {
 
-                $scope.samples.getAllSamples(tableName);
+                    })
 
             } catch (Exception) {
                 console.log(Exception)

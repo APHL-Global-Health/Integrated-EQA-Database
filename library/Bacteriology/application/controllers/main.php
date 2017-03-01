@@ -141,6 +141,9 @@ Class Main extends pdfCreator
                     $where .= "group by shipmentId,panelId";
                 }
             }
+            if($tableName=='tbl_bac_ready_labs'){
+                $where .= "order by roundId desc";
+            }
             //$where .= ' order by id desc';
             return $where;
 
