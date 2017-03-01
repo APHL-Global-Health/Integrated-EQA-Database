@@ -530,14 +530,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $where = $postedData['where'];
             $where = (array)($where);
 
-//            print_r($where);
-//            exit;
             $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
-//            var_dump($dataDB);
-//            echo sizeof($dataDB);
-//            exit;
-            if ($dataDB != false) {
 
+            if ($dataDB != false) {
+                $tableArry = array();
                 if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_panels_shipments'
                     || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'
                 ) {
@@ -764,6 +760,23 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             echo($this->returnJson(json_encode(array('status' => 0, 'message' => 'No Records Found'))));
         }
 
+        exit;
+    }
+
+    public function getlabusersAction()
+    {
+
+        try {
+            $labDetails = $this->returnUserLabDetails();
+            $where['participant_id'] = $labDetails['participant_id'];
+
+            if (isset($where['participant_id'])) {
+                $
+            }
+
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+        }
         exit;
     }
 

@@ -138,19 +138,19 @@
                                     <div class="[ no-padding]">
                                         <input type="checkbox"
                                                name="{{users.dm_id}}" id="{{users.dm_id}}" autocomplete="off"
-                                               ng-checked="samples.returnCheckedRow(users.dm_id,samples.usersToSamples)"
+                                               ng-checked="samples.returnCheckedRowId(users.dm_id,samples.usersToSamples)"
                                                ng-click="samples.addUsersToSamples(users.dm_id,userCheck)"
                                                ng-model="userCheck">
                                         <label for="{{users.dm_id}}" class="[ btn-round ]">
                                     <span class="[ fa fa-check-circle btn-success]"
-                                          ng-show="userCheck"
+                                          ng-show="samples.returnCheckedRowId(users.dm_id,samples.usersToSamples)"
 
                                           data-placement="right" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
                                           data-trigger="hover" data-title="remove user"
                                     ></span>
                                             <span class="[ fa fa-minus-circle btn-success]"
-                                                  ng-show="!userCheck"
+                                                  ng-show="!samples.returnCheckedRowId(users.dm_id,samples.usersToSamples)"
                                                   data-placement="right" data-type="info" data-container="body"
                                                   data-animation="am-fade-and-scale" bs-tooltip
                                                   data-trigger="hover" data-title="add user"
