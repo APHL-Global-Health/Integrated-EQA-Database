@@ -1,8 +1,8 @@
 <div class="col-md-12">
     <div class="col-md-12 border-bottom">
         <h3>
-            <div class="pull-left col-md-4 col-sm-12">Couriers
-                <small>{{samples.couriers.length}} records</small>
+            <div class="pull-left col-md-4 col-sm-12">Programs
+                <small>{{samples.programs.length}} records</small>
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             </div>
             <div class="pull-right col-md-8 col-sm-12">
@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-md-1 col-sm-3 pull-right">
                     <a href="#" class=" btn btn-default btn-sm"
-                       ng-click="samples.getShipmentsForDelivery('tbl_bac_couriers','status','0,1')">
+                       ng-click="samples.getShipmentsForDelivery('tbl_bac_programs','status','0,1')">
                         <i class="fa fa-refresh"></i>
                     </a>
                     &nbsp;
@@ -31,51 +31,41 @@
 </div>
 
 <div class="">
-    <button class="btn btn-sm btn-primary" ng-click="samples.samplesActivePage('addcourier')">Add Courier</button>
-    <br>
+    <button class="btn btn-sm btn-info pull-right" ng-click="samples.samplesActivePage('addprograms')">Add Program</button>
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-condensed table-bordered">
         <thead>
         <tr>
             <th>#.</th>
-            <th>Courier Name</th>
-            <th>Mobile</th>
-            <th>Tel.</th>
-            <th>Email</th>
-
-            <th>Address</th>
-            <th>Physical Addr</th>
-            <th>Contact Person</th>
-            <th>Date</th>
-            <!--                                <th>Date Saved</th>-->
+            <th>Program Name</th>
+            <th>code</th>
+            <th>Date Created</th>
+            <th>Description</th>            <!--                                <th>Date Saved</th>-->
 
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr dir-paginate="courier in samples.couriers | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+        <tr dir-paginate="program in samples.programs | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
-            <td>{{courier.courierName}}</td>
-            <td>{{courier.mobile}}</td>
-            <td>{{courier.tel}}</td>
-            <td>{{courier.email}}</td>
-            <td nowrap>{{courier.address}}</td>
-            <td nowrap>{{courier.physicalAddress}}</td>
-            <td nowrap>{{courier.contactPerson}}</td>
-            <td nowrap>{{courier.dateCreated}}</td>
+            <td>{{program.programName}}</td>
+            <td>{{program.programCode}}</td>
+            <td>{{program.dateCreated}}</td>
+            <td>{{program.programDesc}}</td>
+
             <td nowrap>
                 <button class="btn btn-info btn-sm"
                         data-placement="right" data-type="info" data-container="body"
                         data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Edit courier" bs-tooltip
-                        ng-click="samples.editFunction(courier,'tbl_bac_couriers')"><i
+                        ng-click="samples.editFunction(program,'tbl_bac_programs')"><i
                         class="fa fa-edit"></i></button>
                 <button class="btn btn-danger btn-sm"
                         data-placement="right" data-type="info" data-container="body"
                         data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Remove courier" bs-tooltip
-                        ng-click="samples.deleteCustomRow(courier.id,'tbl_bac_couriers')"
+                        ng-click="samples.deleteCustomRow(program.id,'tbl_bac_programs')"
                 ><i class="fa fa-remove"></i></button>
             </td>
         </tr>

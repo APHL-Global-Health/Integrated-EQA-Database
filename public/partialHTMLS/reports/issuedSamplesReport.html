@@ -1,0 +1,56 @@
+<div class="" ng-hide="reports.loaderStatus">
+
+    <div class="col-md-12 no-padding text-center">
+        <table class="table table-bordered">
+            <div class="col-md-3 no-padding">
+
+                <input type="text" class="form-control input-sm" ng-model="samples.report.dateFrom"
+                       data-date-format="yyyy-MM-dd" required="" placeholder="select from date"
+                       data-min-date="" data-max-date="today"
+                       data-autoclose="1" aria-describedby="basic-addon2"
+                       name="datePrepared"
+                       bs-datepicker>
+            </div>
+            <div class="col-md-3 ">
+
+                <input type="text" class="form-control input-sm" ng-model="samples.report.dateTo"
+                       data-date-format="yyyy-MM-dd" required="" placeholder="select to date"
+                       data-min-date="samples.report.dateFrom" data-max-date="today"
+                       data-autoclose="1" aria-describedby="basic-addon1"
+                       name="datePrepared"
+                       bs-datepicker>
+            </div>
+            <div class="col-md-3 no-padding">
+                <input class="form-control input-sm" ng-model="samples.report.status" placeholder="Select Status">
+            </div>
+            <div class="col-md-2 ">
+                <select class="form-control input-sm">
+                    <option>--status--</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                </select>
+            </div>
+            <div>
+                &nbsp;
+                <button class="btn btn-sm btn-info">get report</button>
+            </div>
+        </table>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>sample Name</th>
+                <th>Lab</th>
+                <th>Username</th>
+                <th>Response status</th>
+                <th>Date issued</th>
+                <th>Date Dispatched</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
