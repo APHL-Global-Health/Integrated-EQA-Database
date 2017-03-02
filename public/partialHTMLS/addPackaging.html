@@ -3,7 +3,7 @@
         <h3 class="h3">
             <x ng-show="samples.panelFormData.id > 0">Edit {{samples.panelFormData.panelName}}</x>
             <x ng-hide="samples.panelFormData.id > 0">Add</x>
-            Panel
+            Packaging
         </h3>
         <hr>
         <div id="alert" tabindex="1"></div>
@@ -14,7 +14,7 @@
         <form class="form-horizontal " name="panelForm" novalidate>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : panelForm.panelName.$invalid && !panelForm.panelName.$pristine }">
-                <label for="panelName" class="col-2 col-form-label">Panel Name.</label>
+                <label for="panelName" class="col-2 col-form-label">Packaging Name.</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="panelName" required name="panelName"
                            ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
-                <label for="label" class="col-2 col-form-label">Panel Label</label>
+                <label for="label" class="col-2 col-form-label">Packaging Label</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="label" required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            ng-model="samples.panelFormData.panelLabel" name="panelLabel">
@@ -106,7 +106,7 @@
             </div>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
-                <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(panel capacity)</label>
+                <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(Packaging capacity)</label>
                 <div class="col-10">
                     <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples"
                            ng-pattern="samples.numericOnly"
@@ -131,7 +131,7 @@
                 <button class="btn btn-success col-md-12 pull-right"
                         ng-disabled="panelForm.$invalid || samples.savingInProgress"
                         ng-click="samples.saveSampleFormData('tbl_bac_panel_mst',samples.panelFormData)"
-                >Save Panel <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+                >Save Packaging <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
             </div>
             <div class="form-group">
 

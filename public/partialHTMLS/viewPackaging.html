@@ -1,4 +1,4 @@
-<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewpanels'">
+<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewPackaging'">
     <div class="main-div" ng-show="!samples.showPanelModal">
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <h3> Available Panels
+        <h3> Available Packaging
             <small>{{samples.panelsData.length}} records</small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
@@ -39,7 +39,7 @@
         <div class="panel panel-body text-sm no-padding">
 
             <div class="panel panel-body text-sm bg-aqua" ng-if="!expand">
-                <h4 class="h4">Expanded Panel Information</h4>
+                <h4 class="h4">Expanded Packaging Information</h4>
 
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
@@ -101,10 +101,10 @@
                                         <div>
                                             <blockquote class="small">
                                                 <div>
-                                                    Panel Name :
+                                                    Packaging Name :
                                                     <i>{{panel.panelName}}</i>
                                                     <br>
-                                                    Panel Type :
+                                                    Packaging Type :
                                                     <i>{{panel.panelType}}</i><br>
                                                     Number of samples
                                                     <i class="">{{panel.numberOfSamples}}</i>
@@ -115,7 +115,7 @@
                                                     <i class="">{{panel.shipmentNumber}}</i>
                                                     <br>
 
-                                                    Panel Label :
+                                                    Packaging Label :
                                                     <i nowrap>{{panel.panelLabel}}</i>
 
                                                     <br>
@@ -143,7 +143,7 @@
                                                                     class="fa fa-exclamation-circle"></i> please add
                                                             samples to
                                                             this
-                                                            panel to ship it
+                                                            Packaging to ship it
                                                         </x>
                                                         <x class="text-success"
                                                            ng-show="samples.sampleToPanel.length > 0 && panel.panelStatus==0">
@@ -158,7 +158,7 @@
                                     </div>
                                     <div class="col-md-7"
                                          ng-if="samples.clickedPanel==panel.id && samples.loaderProgressSpinner!='fa-spinner'">
-                                        <div class="h4">Samples In this panel
+                                        <div class="h4">Samples In this Packaging
                                             <div class="label {{samples.returnPanelColorFromStatus(panel.panelStatus)}}">
                                                 {{samples.sampleToPanel.length}} records
                                             </div>
@@ -211,9 +211,9 @@
                     <thead>
                     <tr>
                         <th>#.</th>
-                        <th>Panel Name</th>
-                        <th>Panel Type</th>
-                        <th>Panel Label</th>
+                        <th>Packaging Name</th>
+                        <th>Packaging Type</th>
+                        <th>Packaging Label</th>
                         <th>Prepared on</th>
 
                         <th>Delivered on</th>
@@ -243,7 +243,7 @@
                             <a class="btn btn-info btn-sm"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Edit Panel" bs-tooltip
+                               data-trigger="hover" data-type="success" data-title="Edit Packaging" bs-tooltip
 
                                ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
                                 <i class="fa fa-edit"></i>
@@ -251,14 +251,14 @@
                             <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus!=0"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Remove Panel" bs-tooltip
+                               data-trigger="hover" data-type="success" data-title="Remove Packaging" bs-tooltip
 
                                ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i
                                     class="fa fa-remove"></i></a>
                             <a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Lock Panel" bs-tooltip
+                               data-trigger="hover" data-type="success" data-title="Lock Packaging" bs-tooltip
                             >
                                 <i class="fa fa-unlock"></i>
                             </a>
@@ -270,14 +270,14 @@
                                data-trigger="hover" data-type="success" data-title="Add Samples" bs-tooltip
 
                             ><i class="fa fa-plus"></i></a>
-                            <a class="btn btn-primary btn-sm" href="#barcodeModal"
-                               data-placement="right" data-type="info" data-container="body"
-                               data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip
-                               data-backdrop="false"
-                               data-toggle="modal"
-                               ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
-                            </a>
+                            <!--<a class="btn btn-primary btn-sm" href="#barcodeModal"-->
+                               <!--data-placement="right" data-type="info" data-container="body"-->
+                               <!--data-animation="am-fade-and-scale"-->
+                               <!--data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip-->
+                               <!--data-backdrop="false"-->
+                               <!--data-toggle="modal"-->
+                               <!--ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>-->
+                            <!--</a>-->
 
                         </td>
                     </tr>
