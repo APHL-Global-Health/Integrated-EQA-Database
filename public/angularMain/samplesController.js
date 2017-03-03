@@ -101,6 +101,27 @@
 
         }
 
+        $scope.samples.returnSamplesType = function (test) {
+            console.log(test)
+            if(test==1){
+                return 'ID';
+            }
+            else if(test==2){
+                return 'Grain Stain';
+            }
+            else if(test==3){
+                return 'AST';
+            }
+            else{
+                return '?'
+            }
+        }
+        $scope.samples.returnRange = function (range) {
+            range = Number(range);
+            range++;
+
+            return range;
+        }
         $scope.samples.returnSoundStatus = function (status, days) {
             if (Number(days) > 0) {
                 return 'Active';
@@ -1310,7 +1331,7 @@
                             }
                             $scope.samples.sampleFormData.id = postedData.where.id;
                         }
-                        angular.isDefined(alertStartRound)&&alertStartRound!='' ? alertStartRound.close() : false;
+                        angular.isDefined(alertStartRound) && alertStartRound != '' ? alertStartRound.close() : false;
                     })
                     .error(function (error) {
                         changeSavingSpinner(false);
@@ -2064,7 +2085,11 @@
         }
         //+++++++++++++++++++++++++++++++++++++++++++++++++RETURN RESULTS+++++++++++++++++++++++++++++++++++++++++++++++
         //==============================================================================================================
-                  $scope.samples.
+        $scope.samples.showAddResponse = function (sample) {
+            console.log(sample)
+            $scope.samples.currentSampleForResponse = sample;
+            $scope.samples.samplesActivePage("userFeedbackForm", 1);
+        }
 
 
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -912,7 +912,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->datePrepared = $sample['datePrepared'];
-                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
+                        $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+
+                        $dataDB[$key]->materialSource= $sample['materialSource'];
+                        $dataDB[$key]->sampleDetails= $sample['sampleDetails'];
+                        $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
+
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
