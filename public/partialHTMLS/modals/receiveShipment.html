@@ -18,39 +18,47 @@
                         <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
                     </div>
                     <form class="form-horizontal " name="receiveShipmentForm" novalidate="">
-                        <div class="form-group row"
-                             ng-class="{ 'has-error'  : receiveShipmentForm.receivedBy.$invalid && !receiveShipmentForm.receivedBy.$pristine }">
-                            <label for="receivedBy" class="col-2 col-form-label">Received By</label>
-                            <div class="col-10">
-                                <input class="form-control" type="text" id="receivedBy" required name="receivedBy"
-                                       ng-pattern="alphaNumHyDashSpaceRegExp"
-                                       ng-model="samples.receiveShipmentFormData.receivedBy">
-                            </div>
-                            <small class="text-danger col-md-12"
-                                   ng-show="receiveShipmentForm.panelName.$invalid && !receiveShipmentForm.panelName.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                            </small>
-                        </div>
+                        <!--<div class="form-group row"-->
+                             <!--ng-class="{ 'has-error'  : receiveShipmentForm.receivedBy.$invalid && !receiveShipmentForm.receivedBy.$pristine }">-->
+                            <!--<label for="receivedBy" class="col-2 col-form-label">Received By</label>-->
+                            <!--<div class="col-10">-->
+                                <!--<input class="form-control" type="text" id="receivedBy" required name="receivedBy"-->
+                                       <!--ng-pattern="samples.alphaNumHyDashSpaceRegExp"-->
+                                       <!--ng-model="samples.receiveShipmentFormData.receivedBy">-->
+                            <!--</div>-->
+                            <!--<small class="text-danger col-md-12"-->
+                                   <!--ng-show="receiveShipmentForm.panelName.$invalid && !receiveShipmentForm.panelName.$pristine">-->
+                                <!--Error : Required & Only numbers,alphabets,hyphen and dashes allowed-->
+                            <!--</small>-->
+                        <!--</div>-->
+
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : receiveShipmentForm.dateReceived.$invalid && !receiveShipmentForm.dateReceived.$pristine }">
                             <label for="dateReceived" class="col-2 col-form-label">Date Received</label>
                             <div class="col-10">
 
-                                <date-picker name="dateReceived" id="dateReceived">
-
-                                </date-picker>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="dateReceived" ng-model="samples.receiveShipmentFormData.dateReceived"
+                                           data-date-format="yyyy-MM-dd" required=""
+                                           data-min-date="" data-max-date="today"
+                                           data-autoclose="1" aria-describedby="basic-addon2"
+                                           name="panelDateOfDelivery"
+                                           bs-datepicker>
+                                </div>
+                                <small class="text-danger col-md-12"
+                                       ng-show="receiveShipmentForm.dateReceived.$invalid && !receiveShipmentForm.dateReceived.$pristine">
+                                    Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                                </small>
                             </div>
-                            <small class="text-danger col-md-12"
-                                   ng-show="receiveShipmentForm.dateReceived.$invalid && !receiveShipmentForm.dateReceived.$pristine">
-                                Error : Required & correct date format
-                            </small>
+                          
                         </div>
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : receiveShipmentForm.panelsReceived.$invalid && !receiveShipmentForm.panelsReceived.$pristine }">
                             <label for="panelsReceived" class="col-2 col-form-label"># Panels Received</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="panelsReceived" required
-                                       name="panelsReceived"
+                                       name="panelsReceived"  ng-pattern="samples.numericOnly"
                                        ng-model="samples.receiveShipmentFormData.panelsReceived">
                             </div>
                             <small class="text-danger col-md-12"
@@ -63,6 +71,7 @@
                             <label for="receiveComments" class="col-2 col-form-label">Receive Comments</label>
                             <div class="col-10">
                                 <textarea class="form-control" id="receiveComments" required name="receiveComments"
+                                          ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                           ng-model="samples.receiveShipmentFormData.receiveComments">
 
                                 </textarea>
@@ -72,23 +81,26 @@
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                             </small>
                         </div>
-                        <div class="form-group row"
-                             ng-class="{ 'has-error'  : receiveShipmentForm.courier.$invalid && !receiveShipmentForm.courier.$pristine }">
-                            <label for="type" class="col-2 col-form-label">Courier</label>
-                            <div class="col-10">
-                                <input class="form-control" type="text" id="type" required name="courier"
-                                       ng-model="samples.receiveShipmentFormData.courier">
-                            </div>
-                            <small class="text-danger col-md-12"
-                                   ng-show="receiveShipmentForm.courier.$invalid && !receiveShipmentForm.courier.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                            </small>
-                        </div>
+                        <!--<div class="form-group row"-->
+                             <!--ng-class="{ 'has-error'  : receiveShipmentForm.courier.$invalid && !receiveShipmentForm.courier.$pristine }">-->
+                            <!--<label for="type" class="col-2 col-form-label">Courier</label>-->
+                            <!--<div class="col-10">-->
+                                <!--<input class="form-control" type="text" id="type" required name="courier"-->
+                                       <!--ng-pattern="samples.alphaNumHyDashSpaceRegExp"-->
+                                       <!--ng-model="samples.receiveShipmentFormData.courier">-->
+                            <!--</div>-->
+                            <!--<small class="text-danger col-md-12"-->
+                                   <!--ng-show="receiveShipmentForm.courier.$invalid && !receiveShipmentForm.courier.$pristine">-->
+                                <!--Error : Required & Only numbers,alphabets,hyphen and dashes allowed-->
+                            <!--</small>-->
+                        <!--</div>-->
+
                         <div class="form-group row"
                              ng-class="{ 'has-error'  : receiveShipmentForm.storage.$invalid && !receiveShipmentForm.storage.$pristine }">
-                            <label for="type" class="col-2 col-form-label">Means Of Storage</label>
+                            <label for="storage" class="col-2 col-form-label">Means Of Storage</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="" required name="storage"
+                                <input class="form-control" type="text" id="storage" required name="storage"
+                                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                        ng-model="samples.receiveShipmentFormData.storage">
                             </div>
                             <small class="text-danger col-md-12"
@@ -102,6 +114,7 @@
                             <label for="type" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" id="" required name="tempAtReceiving"
+                                       ng-pattern="samples.numericStorage"
                                        ng-model="samples.receiveShipmentFormData.tempAtReceiving">
                             </div>
                             <small class="text-danger col-md-12"

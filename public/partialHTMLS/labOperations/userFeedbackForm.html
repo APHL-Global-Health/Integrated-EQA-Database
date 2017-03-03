@@ -1,0 +1,346 @@
+<div class="col-md-12">
+    <h3><u>MICROBIOLOGY IDENTIFICATION REPORT FORM</u></h3>
+    <div class="">
+        <table class="table table-bordered">
+            <thead class="btn-primary">
+            <tr>
+                <th>
+                    SAMPLE
+                </th>
+                <th>
+                    SOURCE
+                </th>
+                <th>
+                    CLINICAL DETAILS
+                </th>
+                <th>
+                    INSTRUCTIONS
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{samples.currentSampleForResponse.batchName}}</td>
+                <td>{{samples.currentSampleForResponse.materialSource}}</td>
+
+                <td>{{samples.currentSampleForResponse.sampleDetails}}</td>
+                <td>{{samples.currentSampleForResponse.sampleInstructions}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <form class="form-horizontal" novalidate="" name="resultsData">
+        <table class="table table-bordered">
+            <thead class="btn-primary">
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Results
+                </th>
+
+
+            </tr>
+            </thead>
+            <tbody ng-form novalidate="" name="resultsData">
+            <tr ng-class="{ 'has-error'
+             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine )
+              }">
+                <td width="30%">Gram stain reaction and morphology</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter the grain stain results"
+                           ng-model="samples.susceptibilityFormData.grainStainReaction" required name="grainStainReaction">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine }">
+                <td width="30%">Details of primary media used for isolation and manufacturer</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Details of primary media "
+                           ng-model="samples.susceptibilityFormData.primaryMedia" required
+                           name="primaryMedia">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine }">
+                <td width="30%">Incubation conditions</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Incubation conditions"
+                           ng-model="samples.susceptibilityFormData.incubationConditions" required name="incubationConditions">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine  }">
+                <td width="30%">Colonial morphology (colony appearance on media)</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Colonial morphology"
+                           ng-model="samples.susceptibilityFormData.colonialMorphology" required name="colonialMorphology">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine}">
+                <td width="30%">Bacterial quantification (if applicable)</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Bacterial quantification"
+                           ng-model="samples.susceptibilityFormData.bacterialQualification" required
+                           name="bacterialQualification">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine }">
+                <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
+                    Indicate
+                    the reaction observed.
+                </td>
+
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
+                           placeholder="Please enter Biochemical reagents"
+                           ng-model="samples.susceptibilityFormData.bacterialReagents" required name="bacterialReagents">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine  }">
+                <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please Discuss further processing"
+                           ng-model="samples.susceptibilityFormData.isolateProcessing" required name="isolateProcessing">
+                </td>
+
+            </tr>
+
+            <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine }">
+                <td width="30%">Final identification (i.e. report given to clinician)</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Final identification "
+                           ng-model="samples.susceptibilityFormData.finalIdentification" required name="finalIdentification">
+
+                </td>
+
+            </tr>
+            <tr>
+                <td width="30%">
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-warning col-md-12"
+                                ng-click="samples.susceptibilityFormData =''"
+                        >Reset
+                        </button>
+                    </div>
+                </td>
+                <td width="70%">
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-info col-md-12"
+                                ng-click="samples.savesusceptibilityFormData(samples.susceptibilityFormData)"
+                                ng-disabled="resultsData.$invalid || samples.savingInProgress"
+                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                    </div>
+                </td>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+
+</div>
+<div class="col-md-12">
+    <h3><u>SUSCEPTIBILITY TESTING REPORT FORM.</u></h3>
+    <div class="">
+        Please report only those antimicrobial appropriate for the pathogen isolated and which and routinely tested.
+        Please indicate carefully which antibiotics would be reported to the clinician.<br>
+    </div>
+    <div class="form-horizontal" novalidate="" name="resultsData">
+        <table class="table table-bordered">
+            <thead class="btn-primary">
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Results
+                </th>
+
+
+            </tr>
+            </thead>
+            <tbody ng-form novalidate="" name="susceptibilityData">
+            <tr ng-class="{ 'has-error'
+             : susceptibilityData.surveyNumber.$invalid && !susceptibilityData.surveyNumber.$pristine
+              }">
+                <td width="30%">Survey number</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="System Picked" ng-disabled="true"
+                           ng-model="samples.susceptibilityFormData.surveyNumber" required name="surveyNumber">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.isolateIdentification.$invalid && !susceptibilityData.isolateIdentification.$pristine }">
+                <td width="30%">Isolate identification</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Isolate identification "
+                           ng-model="samples.susceptibilityFormData.isolateIdentification" required
+                           name="isolateIdentification">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
+                <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Method used for disc diffusion (Kirby Bauer, Stroke etc.)"
+                           ng-model="samples.susceptibilityFormData.methodUsed" required name="methodUsed">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.mediaUsed.$invalid && !susceptibilityData.mediaUsed.$pristine  }">
+                <td width="30%">Media used</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Media used"
+                           ng-model="samples.susceptibilityFormData.mediaUsed" required name="mediaUsed">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.mediaManufacturer.$invalid && !susceptibilityData.mediaManufacturer.$pristine}">
+                <td width="30%">Manufacturer of media</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Manufacturer of media"
+                           ng-model="samples.susceptibilityFormData.mediaManufacturer" required
+                           name="mediaManufacturer">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.discManufacturer.$invalid && !susceptibilityData.discManufacturer.$pristine }">
+                <td width="30%">Manufacturer of disc and disc size (mm):
+                </td>
+
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.discManufacturer"
+                           placeholder="Manufacturer of disc and disc size (mm)"
+                           ng-model="samples.susceptibilityFormData.discManufacturer" required name="discManufacturer">
+                </td>
+
+            </tr>
+            <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
+                <td width="30%">Guidelines used (CLSI):</td>
+                <td width="70%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Guidelines used (CLSI)"
+                           ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
+                </td>
+
+            </tr>
+            <tr>
+                <td width="30%">
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-warning col-md-12"
+                                ng-click="samples.susceptibilityFormData =''"
+                        >Reset
+                        </button>
+                    </div>
+                </td>
+                <td width="70%">
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-success col-md-12"
+                                ng-click="samples.savesusceptibilityFormData(samples.susceptibilityFormData)"
+                                ng-disabled="susceptibilityData.$invalid || samples.savingInProgress"
+                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="">
+        <h3><u>ANTIMICROBIAL AGENT</u></h3>
+        <table class="table table-bordered">
+            <thead class="btn-primary">
+            <tr>
+                <th>
+                    ANTIMICROBIAL
+                    AGENT
+
+                </th>
+                <th>
+                    Reported to
+                    Clinician(Yes or No)
+
+                </th>
+                <th>
+                    DISK CONTENT
+                    (&micro;g or Units)
+
+                </th>
+                <th>
+                    S <sup>1</sup>
+                </th>
+                <th>
+                    I <sup>2</sup>
+                </th>
+                <th>
+                    R <sup>3</sup>
+                </th>
+                <th>
+                    <button class="btn btn-sm btn-success"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-sm btn-danger"><i class="fa fa-plus"></i></button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{}}</td>
+                <td>{{}}</td>
+
+                <td>{{}}</td>
+                <td>{{}}</td>
+                <td>{{}}</td>
+                <td>{{}}</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-warning col-md-12"
+                                ng-click="samples.susceptibilityFormData =''"
+                        >Reset
+                        </button>
+                    </div>
+                </td>
+                <td >
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-success col-md-12"
+                                ng-click="samples.savesusceptibilityFormData(samples.susceptibilityFormData)"
+                                ng-disabled="susceptibilityData.$invalid || samples.savingInProgress"
+                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

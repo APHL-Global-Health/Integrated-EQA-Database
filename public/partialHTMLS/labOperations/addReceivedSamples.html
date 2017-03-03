@@ -1,53 +1,35 @@
 <div>
     <!--<h3>Receive Shipments-->
-        <!--<small>{{samples.shipmentsData.length}} records-->
-        <!--</small>-->
-        <!--<small><i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></small>-->
-        <!--<div class="col-md-1 pull-right">-->
-            <!--<a href="#" class=" btn btn-default btn-sm"-->
-               <!--ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i-->
-                    <!--class="fa fa-refresh"></i>-->
-            <!--</a>-->
-        <!--</div>-->
+    <!--<small>{{samples.shipmentsData.length}} records-->
+    <!--</small>-->
+    <!--<small><i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></small>-->
+    <!--<div class="col-md-1 pull-right">-->
+    <!--<a href="#" class=" btn btn-default btn-sm"-->
+    <!--ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i-->
+    <!--class="fa fa-refresh"></i>-->
+    <!--</a>-->
+    <!--</div>-->
 
     <!--</h3>-->
     <h3> Receive Shipments
-        <small>{{samples.shipmentsData.length}} records</small>
+        <small class="label label-primary btn-sm">{{samples.shipmentsData.length}} records</small>
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
         <div class="pull-right col-mod-12">
-            <div class="dropdown col-md-3 pull-right">
+            <items-per-page></items-per-page>
 
-                <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
-                        id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
-                    </li>
-                </ul>
-
-            </div>
-            <div class="pull-right" ng-init="expand=true">
-                <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
-            </div>
             <div class="col-md-7 pull-right">
-                <input type="search" class="col-md-12" ng-model="samples.searchData">
+                <input type="search" class="col-md-12"
+                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Search inside shipments" bs-tooltip
+                       ng-model="samples.searchData">
             </div>
-            <div class="col-md-1 pull-right"><a href="#" class=" btn btn-default btn-sm"
-                                                ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i
-                    class="fa fa-refresh"></i></a>
+            <div class="col-md-1 pull-right">
+                <a href="#" class=" btn btn-default btn-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+
+                   ng-click="samples.getDistinctShipmentsForDelivery()"><i class="fa fa-refresh"></i>
+                </a>
                 &nbsp;
             </div>
         </div>
@@ -60,7 +42,7 @@
             <th>Shipment Name</th>
             <th>No Of Panels</th>
             <th>Courier</th>
-            <th>ship't Desc</th>
+            <th>Days Left</th>
 
             <th>Round ID</th>
             <th>Created By</th>
@@ -72,31 +54,48 @@
         </tr>
         </thead>
         <tbody>
-        <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+        <tr dir-paginate="shipment in samples.receivedShipments | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
-            <td><a href="#" ng-click="samples.showShipmentAndPanels('viewReceivedSamples',shipment)">{{shipment.shipmentName}}</a></td>
-            <td>{{shipment.numberOfPanels}}</td>
-            <td>{{shipment.courier}}</td>
-            <td>{{shipment.shipmentDsc}}</td>
-            <td nowrap>{{shipment.roundId}}</td>
+            <td><a href="#"
+                   ng-click="samples.showShipmentAndPanels('viewReceivedSamples',shipment)"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success"
+                   data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
+
+            >{{shipment.shipmentName}}</a>
+            </td>
+            <td>{{shipment.totalPanelsAdded}}</td>
+            <td>{{shipment.dispatchCourier}}</td>
+            <td>{{shipment.daysLeft}}</td>
+            <td nowrap>{{shipment.roundCode}}</td>
             <td nowrap>{{shipment.createdBy}}</td>
 
             <td nowrap>{{shipment.datePrepared}}</td>
             <td nowrap>{{shipment.preparedBy}}</td>
-            <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+            <td nowrap>{{samples.returnShipmentStatus(shipment.deliveryStatus)}}</td>
             <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 
             <td nowrap>
+                <!--<a ng-click="samples.receiveShipment(shipment,'receiveShipments')"-->
 
-                <a class="btn btn-success btn-sm"  ng-click="samples.receiveShipment(shipment,'receiveShipments')"
-                   data-placement="top" title="Click to to receive shipment!"
+                <!--href="#receiveShipments" data-backdrop="false" data-toggle="modal">-->
+                <!--<i class="fa fa-truck">-->
+
+                <!--</i></a>&nbsp;-->
+                <a class="btn btn-success btn-sm" ng-click="samples.receiveShipment(shipment,'receiveShipments')"
                    href="#receiveShipments" data-backdrop="false" data-toggle="modal"
-                   ng-disabled="shipment.shipmentStatus !=2">
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Receive Shipment" bs-tooltip
+
+                   ng-disabled="shipment.deliveryStatus !=2">
                     <i class="fa fa-download"></i>
                 </a>
-                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment.id)"
-                   title="Click to to cance shipment!"
-                   ng-disabled="shipment.shipmentStatus !=2">
+                <a class="btn btn-danger btn-sm"  ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment)"
+
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Reject Shipment" bs-tooltip
+
+                   ng-disabled="shipment.deliveryStatus !=2">
                     <i class="fa fa-remove"></i>
                 </a>
 

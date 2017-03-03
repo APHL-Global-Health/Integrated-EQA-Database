@@ -33,6 +33,8 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
+    <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
     <!--[if IE 7]>
     <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
@@ -45,6 +47,15 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
+
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.tpl.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.tpl.min.js'); ?>"></script>
+
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.tpl.min.js'); ?>"></script>
+
     <script type="text/javascript"
             src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
 
@@ -56,6 +67,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/samplesController.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/reportsController.js'); ?>"></script>
     <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
 
@@ -66,6 +78,16 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
 
+
+    <!---------------------------------Calendar Module-------------------------------------->
+<!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
+
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
+<!--    <script type="text/javascript" src="--><?php //echo $this->baseUrl('angularMain/calendar/.js'); ?><!--"></script>-->
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>-->
@@ -398,7 +420,8 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 <script src="<?php echo $this->baseUrl("js/jquery.print.js"); ?>" type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl('js/DT_bootstrap.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modalmanager.js"); ?>"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
 <?php
 if ($controllerName . $actionName != 'distributionsindex') {
     ?>

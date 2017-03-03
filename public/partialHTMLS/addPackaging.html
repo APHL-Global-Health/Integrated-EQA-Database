@@ -1,0 +1,149 @@
+<div>
+    <div class="col-md-8 col-md-offset-2">
+        <h3 class="h3">
+            <x ng-show="samples.panelFormData.id > 0">Edit {{samples.panelFormData.panelName}}</x>
+            <x ng-hide="samples.panelFormData.id > 0">Add</x>
+            Packaging
+        </h3>
+        <hr>
+        <div id="alert" tabindex="1"></div>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        </div>
+        <form class="form-horizontal " name="panelForm" novalidate>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelName.$invalid && !panelForm.panelName.$pristine }">
+                <label for="panelName" class="col-2 col-form-label">Packaging Name.</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="panelName" required name="panelName"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           ng-model="samples.panelFormData.panelName">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="panelForm.panelName.$invalid && !panelForm.panelName.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
+                <label for="label" class="col-2 col-form-label">Packaging Label</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="label" required  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           ng-model="samples.panelFormData.panelLabel" name="panelLabel">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelType.$invalid && !panelForm.panelType.$pristine }">
+                <label for="type" class="col-2 col-form-label">Type</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="type" required name="panelType"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           ng-model="samples.panelFormData.panelType">
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="panelForm.panelType.$invalid && !panelForm.panelType.$pristine">
+                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                </small>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine }">
+                <label for="" class="col-2 col-form-label">Date Prepared</label>
+                <div class="col-10">
+
+                    <div class="col-10">
+
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" ng-model="samples.panelFormData.panelDatePrepared"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="" data-max-date="today"
+                                   data-autoclose="1" aria-describedby="basic-addon1"
+                                   name="datePrepared"
+                                   bs-datepicker>
+                        </div>
+                        <small class="text-danger col-md-12"
+                               ng-show="panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine">
+                            Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine }">
+                <label for='' class="col-2 col-form-label">Expected Date of Delivery</label>
+                <div class="col-10">
+                    <div class="col-10">
+
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" ng-model="samples.panelFormData.panelDateOfDelivery"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="today" data-max-date=""
+                                   data-autoclose="1" aria-describedby="basic-addon2"
+                                   name="panelDateOfDelivery"
+                                   bs-datepicker>
+                        </div>
+                        <small class="text-danger col-md-12"
+                               ng-show="panelForm.panelDateOfDelivery.$invalid && !panelForm.panelDateOfDelivery.$pristine">
+                            Error : please check you date format : e.g 2016-10-22/yyyy-MM-DD
+                        </small>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row"
+                 ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
+                <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(Packaging capacity)</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples"
+                           ng-pattern="samples.numericOnly"
+                           ng-model="samples.panelFormData.numberOfSamples">
+
+                </div>
+                <small class="text-danger col-md-12"
+                       ng-show="panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine">
+                    Error : Required & Only numbers
+                </small>
+            </div>
+            <!--  <div class="form-group row">
+                  <label for="" class="col-2 col-form-label">Samples</label>
+                  <div class="col-10">
+                      <a class="link-black link">Click to add samples to samples or add later</a>
+                  </div>
+              </div>
+             -->
+
+            <div class="form-group row">
+
+                <button class="btn btn-success col-md-12 pull-right"
+                        ng-disabled="panelForm.$invalid || samples.savingInProgress"
+                        ng-click="samples.saveSampleFormData('tbl_bac_panel_mst',samples.panelFormData)"
+                >Save Packaging <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+            </div>
+            <div class="form-group">
+
+                <div class="col-10">
+
+                    <button class="btn btn-danger col-md-12"
+                            ng-click="samples.emptyFormData('tbl_bac_panel_mst',0)"
+                    >Cancel</i>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

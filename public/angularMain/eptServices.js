@@ -9,7 +9,9 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject.loaderStatus = {};
     var itemsPerPage = 10;
     var alphaNumHyDashRegExp = /^[a-zA-Z0-9\-\/]+$/;
-    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9\-\/]+$/;
+    var numericRegex = /^[0-9]*$/;
+    var emailRegex = '';
+    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9](?:[_\-. /]?[a-zA-Z0-9]+)*$/; ///^[a-zA-Z0-9. _\-\/]+$/;
     this.EptServiceObject.loaderStatus = {
 
         fbMessage: '',
@@ -23,33 +25,68 @@ EptServices.service('EptServices', function () {
 
         return barcode;
     }
-
+    this.EptServiceObject.returnNumericRegexRegExp = function () {
+        return numericRegex;
+    }
+    this.EptServiceObject.returnEmailRegexRegExp = function () {
+        return emailRegex;
+    }
     this.EptServiceObject.returnAlphaNumHyDashSpaceRegExp = function () {
         return alphaNumHyDashSpaceRegExp;
     }
     this.EptServiceObject.returnAlphaNumHyDashRegExp = function () {
         return alphaNumHyDashRegExp;
     }
+    this.EptServiceObject.returnTableColumn = function (table) {
+        var message = '';
+        if (table == 'tbl_bac_samples') {
+            message = 'Batch name is already used';
+        }
+        else if (table == 'tbl_bac_panel_mst') {
+            message = 'Panel name is already used';
+        }
+        else if (table == 'tbl_bac_shipment') {
+            message = 'Shipment name is already used';
+        }
+        else if (table == 'tbl_bac_rounds') {
+            message = 'round code/name already in use';
+        }
+        else if (table == 'tbl_bac_programs') {
+            message = 'program code/name already in use';
+        }
+        else if (table == 'tbl_bac_expected_results') {
+            message = 'Sample results already entered';
+        }
+        else if (table == 'tbl_bac_test_agents') {
+            message = 'Test reagent already saved';
+        }
+
+        else{
+            message = 'Unknown server error occurred';
+        }
+        return message;
+    }
+
     this.EptServiceObject.returnLoaderStatus = function (status, message) {
         var loaderStatus = {};
         if (status == 0 || status == 3) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: 'Error : Bad server response,please contact admin',
+                fbMessage: angular.isDefined(message) ? message : 'Error : Bad server response,please contact admin',
                 fbbgColor: 'alert-danger'
             }
         }
         if (status == 1) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage:angular.isDefined(message) ? message : 'Data saved successfully',
+                fbMessage: angular.isDefined(message) ? message : 'Data saved successfully',
                 fbbgColor: 'alert-success'
             }
         }
         if (status == 2) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: angular.isDefined(message) ? message :'No data available or missing fields',
+                fbMessage: angular.isDefined(message) ? message : 'No data available or missing fields',
                 fbbgColor: 'alert-warning'
             }
         }
@@ -63,7 +100,7 @@ EptServices.service('EptServices', function () {
         if (status == 5) {
             loaderStatus = {
                 fbStatus: true,
-                fbMessage: angular.isDefined(message) ? message :'Unknown message',
+                fbMessage: angular.isDefined(message) ? message : 'Unknown message',
                 fbbgColor: 'alert-danger'
             }
         }
@@ -144,12 +181,33 @@ EptServices.service('EptServices', function () {
     }
     this.EptServiceObject.returnIdArray = function (arrayData, id, checker, quantity) {
         try {
+            console.log(arrayData)
             if (angular.isNumber(Number(id))) {
                 if (angular.isDefined(quantity)) {
                     if (checker) {
-                        arrayData.push(
-                            {id: id, quantity: quantity}
-                        );
+                        var ar = [];
+                        ar['id'] = id;
+                        ar['quantity'] = quantity;
+                        var position = false;
+                        if (angular.isNumber(quantity)) {
+                            if (quantity > 1000) {
+                                quantity = 1000;
+                            }
+                        } else {
+                            quantity = 1;
+                        }
+                        if (arrayData.length > 0) {
+                            for (var i = 0; i < arrayData.length; i++) {
+                                if (arrayData[i]['id'] == id) {
+                                    position = true;
+                                    arrayData[i]['quantity'] = quantity;
+                                    break
+                                }
+                            }
+                        }
+                        if (!position) {
+                            arrayData.push({id: id, quantity: quantity});
+                        }
                     } else {
                         var indexOf = arrayData.indexOf({id: id});
                         arrayData.splice(indexOf, 1);
@@ -180,5 +238,17 @@ EptServices.service('EptServices', function () {
 
 })
 EptServices.factory('EptFactory', function () {
+    var roundData = {};
+return {
+    setRoundsData:function(rounds){
+        roundData =rounds
+    },
+    returnRoundData :function(){
+      return  roundData ;
+    }
+}
+})
+EptServices.factory('loginDataCache', function ($cacheFactory) {
+    return $cacheFactory('loginData');
 
 })

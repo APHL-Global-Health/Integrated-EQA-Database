@@ -1,0 +1,61 @@
+<div ng-controller="ReportsController">
+    <div class="col-md-12 border-bottom">
+        <h3>
+            <div class="pull-left col-md-4 col-sm-12">{{reports.currentReports}}
+                <small> Page</small>
+                <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            </div>
+            <div class="pull-right col-md-8 col-sm-12">
+
+
+                <div class="pull-right">
+                    <!--<button class="btn btn-info btn-sm">Select Report <span class="caret"></span>-->
+                    <!--</button>-->
+                    <!--<div class="dropdown">-->
+                    <!--<button class="dropbtn btn-sm btn">Select Report</button>-->
+                    <!--<div class="dropdown-content">-->
+                    <!--<table class="table table-bordered"><tr><td>Hello table works fines</td></tr></table>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="dropdown text-capitalize">
+                        <button class="btn btn-info btn-sm dropdown-toggle"
+                                type="button" data-toggle="dropdown">Select Report
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"
+                                   ng-click="reports.changeCurrentReport('Issued samples report','issuedSamplesReport')">Issued
+                                samples report</a></li>
+                            <li><a href="#"
+                                   ng-click="reports.changeCurrentReport('Issued panels report','issuedPanelsReport')">Issued
+                                Panels Report</a></li>
+                            <li><a href="#"
+                                   ng-click="reports.changeCurrentReport('Rounds/Labs Report','roundLabsReport')">Rounds/Labs
+                                Report</a></li>
+                            <li><a href="#"
+                                   ng-click="reports.changeCurrentReport('Rounds/Users Report','roundUsersReport')">Rounds/Users
+                                Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <items-per-page></items-per-page>
+                <div class="col-md-1 col-sm-3 pull-right">
+
+                </div>
+            </div>
+        </h3>
+    </div>
+    <div id="alert" tabindex="1" class="col-md-12">
+        <div class="clearfix">&nbsp;</div>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+        </div>
+    </div>
+
+    <ng-include src='reports.loadedCurrentUrl' onload="reports.hideFaLoader()"></ng-include>
+
+    <div class="text-center" ng-show="reports.loaderStatus">
+        <i class="fa fa-spin fa-spinner fa-3x"></i><br>
+        Loading page...
+    </div>
+</div>

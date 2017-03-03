@@ -1,0 +1,31 @@
+<div class="col-md-12 border-bottom padding">
+    <div class="col-md-4 no-padding h3">
+        Results Feedback <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+
+        <small class="label label-info text-aqua">{{samples.samplesIssuedToUser.length}} records</small>
+
+    </div>
+    <div class="col-md-6 pull-right padding">
+        <div class="col-md-8 pull-right">
+            <input type="search"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Search inside results" bs-tooltip
+
+                   class="col-md-12 form-control input-sm" ng-model="samples.searchData">
+        </div>
+        <div class="col-md-1 pull-right">
+            <a href="#" class=" btn btn-default btn-sm"
+               data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+               data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+
+               ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
+                    class="fa fa-refresh"></i>
+            </a>
+            &nbsp;
+        </div>
+    </div>
+</div>
+<div class="search-panel col-md-12 btn-default">
+
+
+</div>

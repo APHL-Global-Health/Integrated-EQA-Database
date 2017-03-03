@@ -7,14 +7,14 @@
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
                         <a href="" ng-click="clickedTab = 'samples'">Manage Samples</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'panels'}">
-                        <a href="" ng-click="clickedTab = 'panels'">Manage Panels</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'Packaging'}">
+                        <a href="" ng-click="clickedTab = 'Packaging'">Manage Packaging</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
                         <a href="" ng-click="clickedTab = 'shipments'">Manage Shipments</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'lab'}">
-                        <a href="" ng-click="clickedTab = 'lab'">Manage Lab</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
+                        <a href="" ng-click="clickedTab = 'rounds'">Config Rounds</a>
                     </li>
                     <li class='pull-right'>
                         <div class="dropdown">
@@ -34,11 +34,13 @@
                                                 class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
 
                                 </li>
+                                <!--
                                 <li role="presentation">
                                     <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab)"><i
                                                 class="fa fa-fw fa-search-plus"></i>
                                         {{clickedTab|capitalizeLetter}} Report </a>
                                 </li>
+                                -->
                             </ul>
 
                         </div>
@@ -51,7 +53,33 @@
 
                 </ul>
             </div>
+            <div class="col-md-12 no-padding">
+                <!--                <div class="btn btn-warning pull-right col-md-2 col-sm-4" ng-click="samples.samplesActivePage('reports'+clickedTab)">-->
+                <!--                    <i class="fa fa-list"></i> {{clickedTab|capitalizeLetter}} Extras-->
+                <!---->
+                <!--                </div>-->
+                <div class="dropdown btn-sm btn btn-success pull-right ">
+                    <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" ng-click="samples.samplesActivePage('viewCouriers')">Couriers</a></li>
+                        <li><a href="#" ng-click="samples.samplesActivePage('viewprograms')">Programs</a></li>
 
+                        <li><a href="#"  ng-click="samples.samplesActivePage('addTestAgents')">Test Reagents</a></li>
+
+<!--                        <li><a href="#"  ng-click="samples.samplesActivePage('calendar')">Round Calendar</a></li>-->
+                        <li><a href="#"  ng-click="samples.samplesActivePage('viewReports')">Reports</a></li>
+                    </ul>
+                </div>
+                <div class="btn btn-info btn-sm pull-right "
+                     ng-click="samples.samplesActivePage('view'+clickedTab)">
+                    <i class="fa fa-eye"></i> View {{clickedTab|capitalizeLetter}}
+                </div>
+                <div class="btn btn-sm btn-primary pull-right "
+                     ng-click="samples.samplesActivePage('add'+clickedTab)">
+                    <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
+                </div>
+            </div>
 
             <div class="col-md-12" ng-hide="samples.menuLength==2">
                 <a href="#" class="pull-right btn btn-primary btn-sm"

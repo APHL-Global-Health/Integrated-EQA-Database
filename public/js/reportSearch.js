@@ -1,5 +1,6 @@
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination',
-    'ngAnimate', 'ngSanitize', 'ui.bootstrap','highcharts-ng', 'nvd3ChartDirectives']);
+    'ngAnimate', 'ngSanitize', 'ui.bootstrap','highcharts-ng', 'nvd3ChartDirectives','ui.calendar',
+    'mgcrea.ngStrap.datepicker','mgcrea.ngStrap.tooltip','mgcrea.ngStrap.typeahead']);
 ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
                                                       graphDataCache, $filter, filterFilter) {
@@ -779,5 +780,29 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     .factory('graphDataCache', function ($cacheFactory) {
         return $cacheFactory('graphData');
 
+    })
+    .directive('itemsPerPage',function(){
+        return {
+            restrict: 'EA',
+            template: "<div class='dropdown col-md-3 col-sm-12  pull-right'>" +
+            "<button class='text-capitalize btn btn-success btn-sm dropdown-toggle' type='button'" +
+            "id='menu1' data-toggle='dropdown'>Items Per Page {{samples.itemsPerPage}}" +
+            "<span class='caret'></span></button>" +
+            "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(10)'>10</a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(25)'>25</a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(50)'>50 </a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(100)'>100</a>" +
+            "</li>" +
+            "</ul>" +
+            "</div>"
+        }
     })
 
