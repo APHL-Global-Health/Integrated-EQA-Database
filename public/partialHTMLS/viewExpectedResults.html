@@ -1,0 +1,86 @@
+<div>
+    <h3>EXPECTED RESULTS AND SCORES <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></h3>
+    <div class="pull-right">
+
+        <div class=" col-md-12 no-padding">
+            <items-per-page></items-per-page>
+            <div class="col-md-7 pull-right">
+                <input type="input" class="col-md-12 btn-sm"
+                       data-placement="right" data-type="info" data-container="body"
+                       data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="Search Panel" bs-tooltip
+                       ng-model="samples.searchData">
+            </div>
+            <div class="col-md-1 pull-right">
+                <a href="#" class=" btn btn-default btn-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Load Samples" bs-tooltip
+                   ng-click="samples.getAllSamples('tbl_bac_expected_results')"><i
+                        class="fa fa-refresh"></i>
+                </a>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div id='alert' tabindex='1'></div>
+    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Server Response : </strong> {{samples.feedbackObject.fbMessage}}
+    </div>
+    <div class="col-md-12" style="overflow-x:auto;">
+        <table class="table table-bordered">
+            <thead>
+            <tr class="btn-primary">
+                <th>#</th>
+                <th>Sample</th>
+                <!--<th>Round</th>-->
+                <th>primary Media</th>
+                <th>primaryMedia Score</th>
+                <th>incubation Conditions</th>
+                <th>incubation Conditions Score</th>
+                <th>colonial Morphology</th>
+                <th>colonial Morphology Score</th>
+                <th>bacterial Qualification</th>
+                <th>bacterial Qualification Score</th>
+                <th>bacterial Reagents</th>
+                <th>bacterial Reagents Score</th>
+                <th>final Identification</th>
+                <th>final Identification Score</th>
+                <th>Date Created</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="expectedResults in samples.expectedResults | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                <td>{{$index+1}}</td>
+                <td>{{expectedResults.batchName}}</td>
+                <!--<td>{{expectedResults.roundName}}</td>-->
+                <td>{{expectedResults.primaryMedia}}</td>
+                <td>{{expectedResults.primaryMediaScore}}</td>
+                <td>{{expectedResults.incubationConditions}}</td>
+                <td>{{expectedResults.incubationConditionsScore}}</td>
+                <td>{{expectedResults.colonialMorphology}}</td>
+                <td>{{expectedResults.colonialMorphologyScore}}</td>
+                <td>{{expectedResults.bacterialQualification}}</td>
+                <td>{{expectedResults.bacterialQualificationScore}}</td>
+                <td>{{expectedResults.bacterialReagents}}</td>
+                <td>{{expectedResults.bacterialReagentsScore}}</td>
+                <td>{{expectedResults.finalIdentification}}</td>
+                <td>{{expectedResults.finalIdentificationScore}}</td>
+                <td>{{expectedResults.dateCreated}}</td>
+                <td>
+                    <a href="#" class="label label-info"
+                       ng-click="samples.editFunction(expectedResults,'tbl_bac_expected_results')">
+                        <i class="fa fa-edit"></i> edit
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+</div>

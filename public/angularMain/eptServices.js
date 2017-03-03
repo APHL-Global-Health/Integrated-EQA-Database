@@ -42,17 +42,27 @@ EptServices.service('EptServices', function () {
         if (table == 'tbl_bac_samples') {
             message = 'Batch name is already used';
         }
-        if (table == 'tbl_bac_panel_mst') {
+        else if (table == 'tbl_bac_panel_mst') {
             message = 'Panel name is already used';
         }
-        if (table == 'tbl_bac_shipment') {
+        else if (table == 'tbl_bac_shipment') {
             message = 'Shipment name is already used';
         }
-        if (table == 'tbl_bac_rounds') {
-            message = 'round code/name already i use';
+        else if (table == 'tbl_bac_rounds') {
+            message = 'round code/name already in use';
         }
-        if (table == 'tbl_bac_panels') {
-            message = '';
+        else if (table == 'tbl_bac_programs') {
+            message = 'program code/name already in use';
+        }
+        else if (table == 'tbl_bac_expected_results') {
+            message = 'Sample results already entered';
+        }
+        else if (table == 'tbl_bac_test_agents') {
+            message = 'Test reagent already saved';
+        }
+
+        else{
+            message = 'Unknown server error occurred';
         }
         return message;
     }

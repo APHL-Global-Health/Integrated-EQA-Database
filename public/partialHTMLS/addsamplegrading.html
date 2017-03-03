@@ -10,194 +10,202 @@
     </div>
     <br>
 </div>
+<div id='alert' tabindex='1'></div>
+<div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+</div>
 
+<h3>MICROBIOLOGY IDENTIFICATION REPORT FORM</h3>
+<div class="">
+    <table class="table table-bordered">
+        <thead class="btn-primary">
+        <tr>
+            <th>
+                SAMPLE
+            </th>
+            <th>
+                SOURCE
+            </th>
+            <th>
+                CLINICAL DETAILS
+            </th>
+            <th>
+                INSTRUCTIONS
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{samples.clickedSample.batchName}}</td>
+            <td>{{samples.clickedSample.materialSource}}</td>
 
-    <h3>MICROBIOLOGY IDENTIFICATION REPORT FORM</h3>
-    <div class="">
-        <table class="table table-bordered">
-            <thead class="btn-primary">
-            <tr>
-                <th>
-                    SAMPLE
-                </th>
-                <th>
-                    SOURCE
-                </th>
-                <th>
-                    CLINICAL DETAILS
-                </th>
-                <th>
-                    INSTRUCTIONS
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{samples.clickedSample.batchName}}</td>
-                <td>{{samples.clickedSample.materialSource}}</td>
+            <td>{{samples.clickedSample.sampleDetails}}</td>
+            <td>{{samples.clickedSample.sampleInstructions}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="clearfix">&nbsp;</div>
+<form class="form-horizontal" novalidate="" name="resultsData">
+    <table class="table table-bordered">
+        <thead class="btn-primary">
+        <tr>
+            <th>
+                Description
+            </th>
+            <th>
+                Results
+            </th>
+            <th>
+                score
+            </th>
 
-                <td>{{samples.clickedSample.sampleDetails}}</td>
-                <td>{{samples.clickedSample.sampleInstructions}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="clearfix">&nbsp;</div>
-    <form class="form-horizontal" novalidate="" name="resultsData">
-        <table class="table table-bordered">
-            <thead class="btn-primary">
-            <tr>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Results
-                </th>
-                <th>
-                    score
-                </th>
-
-            </tr>
-            </thead>
-            <tbody ng-form novalidate="" name="resultsData">
-            <tr ng-class="{ 'has-error'
+        </tr>
+        </thead>
+        <tbody ng-form novalidate="" name="resultsData">
+        <tr ng-class="{ 'has-error'
              : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine ) ||
               (resultsData.grainStainReactionScore.$invalid && !resultsData.grainStainReactionScore.$pristine )
               }">
-                <td width="30%">Gram stain reaction and morphology</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter the grain stain results"
-                           ng-model="samples.resultsFormData.grainStainReaction" required name="grainStainReaction">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.grainStainReactionScore" required
-                                       name="grainStainReactionScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
+            <td width="30%">Gram stain reaction and morphology</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter the grain stain results"
+                       ng-model="samples.resultsFormData.grainStainReaction" required name="grainStainReaction">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.grainStainReactionScore" required
+                                   name="grainStainReactionScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
               (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine ) }">
-                <td width="30%">Details of primary media used for isolation and manufacturer</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text"
-                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Details of primary media "
-                           ng-model="samples.resultsFormData.primaryMedia" required
-                           name="primaryMedia">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.numericOnly" required
-                                       name="primaryMediaScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine||
+            <td width="30%">Details of primary media used for isolation and manufacturer</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text"
+                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter Details of primary media "
+                       ng-model="samples.resultsFormData.primaryMedia" required
+                       name="primaryMedia">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.primaryMediaScore" required
+                                   name="primaryMediaScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine||
               (resultsData.incubationConditionsScore.$invalid && !resultsData.incubationConditionsScore.$pristine )  }">
-                <td width="30%">Incubation conditions</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Incubation conditions"
-                           ng-model="samples.resultsFormData.incubationConditions" required name="incubationConditions">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.incubationConditionsScore" required
-                                       name="incubationConditionsScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine||
+            <td width="30%">Incubation conditions</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter Incubation conditions"
+                       ng-model="samples.resultsFormData.incubationConditions" required name="incubationConditions">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.incubationConditionsScore" required
+                                   name="incubationConditionsScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine||
               (resultsData.colonialMorphologyScore.$invalid && !resultsData.colonialMorphologyScore.$pristine )  }">
-                <td width="30%">Colonial morphology (colony appearance on media)</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Colonial morphology"
-                           ng-model="samples.resultsFormData.colonialMorphology" required name="colonialMorphology">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.colonialMorphologyScore" required
-                                       name="colonialMorphologyScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
+            <td width="30%">Colonial morphology (colony appearance on media)</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter Colonial morphology"
+                       ng-model="samples.resultsFormData.colonialMorphology" required name="colonialMorphology">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.colonialMorphologyScore" required
+                                   name="colonialMorphologyScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
               (resultsData.bacterialQualificationScore.$invalid && !resultsData.bacterialQualificationScore.$pristine ) }">
-                <td width="30%">Bacterial quantification (if applicable)</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Bacterial quantification"
-                           ng-model="samples.resultsFormData.bacterialQualification" required
-                           name="bacterialQualification">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.bacterialQualificationScore" required
-                                       name="bacterialQualificationScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine||
+            <td width="30%">Bacterial quantification (if applicable)</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter Bacterial quantification"
+                       ng-model="samples.resultsFormData.bacterialQualification" required
+                       name="bacterialQualification">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.bacterialQualificationScore" required
+                                   name="bacterialQualificationScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine||
               (resultsData.bacterialReagentsScore.$invalid && !resultsData.bacterialReagentsScore.$pristine )  }">
-                <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
-                    Indicate
-                    the reaction observed.
-                </td>
-              
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
-                           placeholder="Please enter Biochemical reagents"
-                           ng-model="samples.resultsFormData.bacterialReagents" required name="bacterialReagents">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.bacterialReagentsScore" required
-                                       name="bacterialReagentsScore"></td>
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
+            <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
+                Indicate
+                the reaction observed.
+            </td>
+
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
+                       placeholder="Please enter Biochemical reagents"
+                       ng-model="samples.resultsFormData.bacterialReagents" required name="bacterialReagents">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.bacterialReagentsScore" required
+                                   name="bacterialReagentsScore"></td>
+        </tr>
+        <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
               (resultsData.isolateProcessingScore.$invalid && !resultsData.isolateProcessingScore.$pristine ) }">
-                <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please Discuss further processing"
-                           ng-model="samples.resultsFormData.isolateProcessing" required name="isolateProcessing">
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.isolateProcessingScore" required
-                                       name="isolateProcessingScore"></td>
-            </tr>
+            <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please Discuss further processing"
+                       ng-model="samples.resultsFormData.isolateProcessing" required name="isolateProcessing">
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.isolateProcessingScore" required
+                                   name="isolateProcessingScore"></td>
+        </tr>
 
-            <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
+        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
               (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine ) }">
-                <td width="30%">Final identification (i.e. report given to clinician)</td>
-                <td width="55%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Final identification "
-                           ng-model="samples.resultsFormData.finalIdentification" required name="finalIdentification">
+            <td width="30%">Final identification (i.e. report given to clinician)</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter Final identification "
+                       ng-model="samples.resultsFormData.finalIdentification" required name="finalIdentification">
 
-                </td>
-                <td width="15%"><input class="form-control col-md-12" type="text"
-                                       ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="samples.resultsFormData.finalIdentificationScore" required
-                                       name="finalIdentificationScore"></td>
-            </tr>
-            <tr>
-                <td width="30%">
-                    <div class="col-md-12 no-padding">
-                        <button class="btn btn-danger col-md-12"
-                                ng-click="samples.resultsFormData =''"
-                        >Reset
-                        </button>
-                    </div>
-                </td>
-                <td width="55%">
-                    <div class="col-md-12 no-padding">
-                        <button class="btn btn-info col-md-12"
-                                ng-click="samples.saveResultsFormData('tbl_bac_samples',samples.resultsFormData)"
-                                ng-disabled="resultsData.$invalid || samples.savingInProgress"
-                        >Save
-                            <i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                        </button>
-                    </div>
-                </td>
-                <td width="15%">
-
-                </td>
-            </tbody>
-        </table>
-    </form>
-    </div>
+            </td>
+            <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
+                                   ng-model="samples.resultsFormData.finalIdentificationScore" required
+                                   name="finalIdentificationScore"></td>
+        </tr>
+        <tr>
+            <td width="30%">
+                <div class="col-md-12 no-padding">
+                    <button class="btn btn-warning col-md-12"
+                            ng-click="samples.resultsFormData =''"
+                    >Reset
+                    </button>
+                </div>
+            </td>
+            <td width="55%">
+                <div class="col-md-12 no-padding">
+                    <button class="btn btn-info col-md-12"
+                            ng-click="samples.saveResultsFormData(samples.resultsFormData)"
+                            ng-disabled="resultsData.$invalid || samples.savingInProgress"
+                    >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                    </button>
+                </div>
+            </td>
+            <td width="15%">
+                <div class="col-md-12 no-padding">
+                    <button class="btn btn-danger col-md-12"
+                            ng-click="samples.samplesActivePage('viewsamples',0)"
+                    >Cancel
+                    </button>
+                </div>
+            </td>
+        </tbody>
+    </table>
+</form>
+</div>

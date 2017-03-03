@@ -484,11 +484,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->datePrepared = $sample['datePrepared'];
-                        $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                        $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
-                    } else if ($tableName == 'tbl_bac_panel_mst') {
+                    }
+                    else if($tableName == 'tbl_bac_expected_results'){
+                        $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+
+                        $dataDB[$key]->batchName = $sample['batchName'];
+                    }
+                    else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
 
@@ -843,7 +849,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             if ($tableName == 'tbl_bac_panels_shipments') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
-            } else if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs') {
+            } else if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs' || $tableName == 'tbl_bac_expected_results') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);

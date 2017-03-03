@@ -33,10 +33,10 @@
                 <b>Date Created</b> : {{samples.clickedShipmentFull.dateCreated}}<br>
                 <b>Date Dispatched</b> : <i>{{samples.dateDispatched.courier}}</i>
                 <br>
-                <b>Panels Size </b>:
+                <b>Packaging Size </b>:
                 <i class="">{{samples.clickedShipmentFull.numberOfPanels}}</i>
                 <br>
-                <b>Total Panels Added :</b>
+                <b>Total Packages Added :</b>
                 <i class="">{{samples.clickedShipmentFull.totalPanelsAdded}}</i>
                 <br>
                 <b>Round Id :</b>
@@ -59,7 +59,7 @@
     </div>
     <div class="panel panel-primary">
         <div class="panel panel-heading">
-            <h2 class="panel-title">Panel Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            <h2 class="panel-title">Packaging Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                 <a href="#" class=" pull-right" ng-show="samples.panelsToShipment.length >0"
                    ng-click="samples.printLabels(samples.clickedShipmentFull.id,2)"><i
                         ng-hide=" samples.clickedShipmentFull.shipmentStatus==0"
@@ -72,7 +72,7 @@
             >
                 <tr>
                     <th></th>
-                    <th>Panel Name</th>
+                    <th>Packaging Name</th>
                     <th>Date Prepared</th>
                     <th>Del'ry date</th>
                     <th>Del'ry status</th>
@@ -82,7 +82,7 @@
                 <tr class="" ng-repeat="panels in samples.panelsToShipment">
                     <td>{{$index+1}}</td>
                     <td ng-click="panel=panels.panelName"><a href="#"
-                                                             ng-click="samples.getSampleFromPanel(panels.panelId,'tbl_bac_sample_to_panel')">
+                                                             ng-click="samples.getSampleFromPanel(panels,'tbl_bac_sample_to_panel')">
                         {{panels.panelName}}</a></td>
                     <td nowrap>{{panels.panelDatePrepared}}</td>
                     <td nowrap>{{panels.dateDelivered}}</td>
@@ -106,7 +106,7 @@
                     <th></th>
                     <th>Batch Name</th>
                     <th>Date Prepared</th>
-                    <th>Blood Pack #</th>
+                    <th>Material Source</th>
                     <th>Material Origin</th>
                     <th>Date Created</th>
 
