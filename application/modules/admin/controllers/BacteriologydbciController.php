@@ -488,13 +488,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
-                    }
-                    else if($tableName == 'tbl_bac_expected_results'){
+                    } else if ($tableName == 'tbl_bac_expected_results') {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
                         $dataDB[$key]->batchName = $sample['batchName'];
-                    }
-                    else if ($tableName == 'tbl_bac_panel_mst') {
+                    } else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
 
@@ -819,7 +817,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $labUsers[$key]->receivedLastStatus = $receivedLastRound;
 
                     }
-                    echo  $this->returnJson(array("status"=>1,"data"=>$labUsers));
+                    echo $this->returnJson(array("status" => 1, "data" => $labUsers));
                 }
             }
 
@@ -915,8 +913,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
 
-                        $dataDB[$key]->materialSource= $sample['materialSource'];
-                        $dataDB[$key]->sampleDetails= $sample['sampleDetails'];
+                        $dataDB[$key]->materialSource = $sample['materialSource'];
+                        $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
 
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
@@ -947,6 +945,48 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+        exit;
+    }
+
+    public function saveusermicroagentsAction()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+        $insertData = (array)$postedData['resultsAba'];
+
+        if (count($insertData) > 0) {
+            $resp['status'] = 0;
+
+            for ($i = 0; $i < sizeof($insertData); $i++) {
+
+                $newFinal = (array)$insertData[$i];
+
+                $newFinalArray['antiMicroAgent'] = $newFinal['antiMicroAgent'];
+                $newFinalArray['reportedToStatus'] = $newFinal['reportedToStatus'];
+                $newFinalArray['diskContent'] = $newFinal['diskContent'];
+
+                $newFinalArray['userId'] = $postedData['userId'];
+                $newFinalArray['sampleId'] = $postedData['sampleId'];
+                $newFinalArray['participantId'] = $postedData['participantId'];
+                $newFinalArray['roundId'] = $postedData['roundId'];
+                $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
+                $newFinalArray['level'] = 1;
+
+                $insertStatus = $this->dbConnection->insertData('tbl_bac_micro_bacterial_agents', $newFinalArray);
+
+                $resp['status'] = 1;
+                if ($insertStatus['status'] != 1) {
+                    $resp['status'] = 0;
+                    $resp['message'] = $insertStatus['message'];
+                }
+
+
+            }
+            echo $this->returnJson($resp);
+
+        }
+
+
         exit;
     }
 
