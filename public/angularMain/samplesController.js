@@ -1494,7 +1494,7 @@
             }
 
         }
-        $scope.samples.saveAntiMicroAgent = function (data) {
+        $scope.samples.saveAntiMicroAgent = function (data, type) {
             var correctData = true;
             for (var i = 0; i < data.length; i++) {
                 if (data[i]['antiMicroAgent'] == '' || angular.isUndefined(data[i]['antiMicroAgent'])) {
@@ -1524,14 +1524,47 @@
             }
             function saveABA() {
                 var url = serverSamplesURL + 'saveusermicroagents';
+
                 var sampleData = $scope.samples.currentSampleForResponse;
+
                 var aba = {}
+
                 aba.userId = sampleData.userId;
+
                 aba.sampleId = sampleData.sampleId;
                 aba.participantId = sampleData.participantId;
                 aba.roundId = sampleData.roundId;
+                aba.tableName = "tbl_bac_micro_bacterial_agents";
                 aba.panelToSampleId = sampleData.panelToSampleId;
                 aba.resultsAba = data;
+                $http
+                    .post(url, aba)
+                    .success(function (res) {
+                        console.log(res)
+                        alertStartRound.close();
+                        if (res.status == 1) {
+                            $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
+                        } else {
+                            $.alert("<i class='fa fa-remove text-danger'></i> error occured,likely you already submtted the result");
+                        }
+                    })
+                    .error(function (error) {
+                        $.alert("<i class='fa fa-remove text-danger'> Server error occured,please try again");
+                    })
+            }
+
+            function saveMicroDataForAdmin() {
+                var url = serverSamplesURL + 'saveusermicroagents';
+
+                var sampleData = $scope.samples.clickedSample;
+
+                var aba = {}
+                console.log($scope.samples.clickedSample);
+                aba.sampleId = sampleData.id;
+                aba.roundId = sampleData.roundId;
+                aba.tableName = "tbl_bac_expected_micro_bacterial_agents";
+                aba.resultsAba = data;
+
                 $http
                     .post(url, aba)
                     .success(function (res) {
@@ -1559,7 +1592,11 @@
                             action: function () {
 
                                 alertStartRound = $.alert('<i class="fa fa-spinner fa-spin"> </i> Saving results,please wait...!');
-                                saveABA();
+                                if (angular.isDefined(type)) {
+                                    saveMicroDataForAdmin();
+                                } else {
+                                    saveABA();
+                                }
                                 // $scope.samples.saveSampleFormData(tablename, userFeedbackData)
 
                             }
@@ -1580,7 +1617,7 @@
 
             var agents = $scope.samples.testAgents;
             console.log(agent)
-            if (agents.length > 0 && agent != ''&&angular.isDefined(agent)) {
+            if (agents.length > 0 && agent != '' && angular.isDefined(agent)) {
 
                 for (var i = 0; i < agents.length; i++) {
 
@@ -1594,7 +1631,7 @@
                         }
                         else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'many';
-                        } else if(range < 0 || range > Number(agents[i].manyRange)) {
+                        } else if (range < 0 || range > Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'outOfRange'
 
                         }

@@ -964,15 +964,21 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $newFinalArray['antiMicroAgent'] = $newFinal['antiMicroAgent'];
                 $newFinalArray['reportedToStatus'] = $newFinal['reportedToStatus'];
                 $newFinalArray['diskContent'] = $newFinal['diskContent'];
-
-                $newFinalArray['userId'] = $postedData['userId'];
                 $newFinalArray['sampleId'] = $postedData['sampleId'];
-                $newFinalArray['participantId'] = $postedData['participantId'];
-                $newFinalArray['roundId'] = $postedData['roundId'];
-                $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
-                $newFinalArray['level'] = 1;
 
-                $insertStatus = $this->dbConnection->insertData('tbl_bac_micro_bacterial_agents', $newFinalArray);
+
+                if ($postedData['tableName'] =="tbl_bac_micro_bacterial_agents"){
+                    $newFinalArray['userId'] = $postedData['userId'];
+                    $newFinalArray['roundId'] = $postedData['roundId'];
+                    $newFinalArray['participantId'] = $postedData['participantId'];
+
+                    $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
+                    $newFinalArray['level'] = 1;
+                }else{
+                    $newFinalArray['finalScore'] = $newFinal['finalScore'];
+
+                }
+                $insertStatus = $this->dbConnection->insertData($postedData['tableName'], $newFinalArray);
 
                 $resp['status'] = 1;
                 if ($insertStatus['status'] != 1) {
