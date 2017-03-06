@@ -142,7 +142,7 @@ Class Main extends pdfCreator
                 }
             }
             if($tableName=='tbl_bac_ready_labs'){
-                $where .= "order by roundId desc";
+                $where .= " order by roundId desc";
             }
             //$where .= ' order by id desc';
             return $where;
