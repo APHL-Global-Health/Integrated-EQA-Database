@@ -41,7 +41,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                 $data[$key]->daysLeft = $this->converttodays($data[$key]->endDate);
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
-//                $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
+                $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
             }
             echo $this->returnJson(array('status' => 1, 'data' => $data));
         }else{
