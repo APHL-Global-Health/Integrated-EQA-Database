@@ -468,9 +468,15 @@
         }
 
         $scope.samples.courierFormData = {};
-        function emptyFormData(tableName) {
+        function emptyFormData(tableName,type) {
 
-            $scope.samples.showMainTable(tableName, true)
+
+            if(!type){
+                $scope.samples.showMainTable(tableName, false);
+            }else{
+                $scope.samples.showMainTable(tableName, true);
+            }
+
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = {};
             }
@@ -512,7 +518,7 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_panel_mst') {
-                $scope.samples.samplesActivePage('viewpanels', 0);
+                $scope.samples.samplesActivePage('viewPackaging', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
             }
             if (tableName == 'tbl_bac_couriers') {
@@ -1032,17 +1038,19 @@
 
                                     console.log('data')
                                     console.log(response.data)
-
+                                    changeSavingSpinner(false);
                                     if (response.data.status == 1) {
-                                        emptyFormData(tableName);
+                                        emptyFormData(tableName,false);
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
 
                                     }
-                                    if (angular.isDefined(alertStartRound)) {
-                                        alertStartRound.close();
+                                    if (alertStartRound!='') {
+
+                                        angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
+
                                         if (response.data.status == 1) {
                                             $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
                                         } else {
@@ -1050,10 +1058,11 @@
                                         }
 
                                     }
-                                    changeSavingSpinner(false);
+
                                 })
                                 .error(function (error) {
                                     changeSavingSpinner(false);
+
                                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                                 })
                         } catch (error) {

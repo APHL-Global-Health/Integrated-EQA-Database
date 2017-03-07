@@ -1,0 +1,91 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>General Report <i class="fa fa-spin {{reports.loader}}"></i></h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereGenRounds.dateFrom"
+                           data-date-format="yyyy-MM-dd" required placeholder="select from date"
+                           data-min-date="" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="dateFrom"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 ">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereGenRounds.dateTo"
+                           data-date-format="yyyy-MM-dd"  placeholder="select to date"
+                           data-min-date="reports.whereGenRounds.dateFrom" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon1"
+                           name="dateTo"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 no-padding">
+                    <input class="form-control input-sm" placeholder="Inactive">
+                </div>
+                <div class="col-md-2 ">
+                    <select class="form-control input-sm" ng-model="reports.whereGenRounds.status">
+                        <option selected disabled>--status--</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div>
+                    &nbsp;
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getGeneralRoundReport(reports.whereGenRounds)">get report
+                    </button>
+                </div>
+
+            </table>
+        </form>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Round Name</th>
+                <th>Round Code</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Date Created</th>
+
+                <th>Day(s) to go</th>
+                <th>Total Shipments</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="round in reports.generalRoundData | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td><a href="#/{{round.id}}"
+                       data-placement="right" data-type="info" data-container="body"
+                       data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
+                       bs-tooltip
+                       ng-click="samples.showRoundFullDetails(round)"
+                       class="">{{round.roundName}}</a>
+                </td>
+                <td>{{round.roundCode}}</td>
+                <td>{{round.startDate}}</td>
+                <td>{{round.endDate}}</td>
+                <td nowrap>{{round.dateCreated}}</td>
+                <td nowrap>{{round.daysLeft}}</td>
+                <td nowrap>{{round.totalShipmentsAdded}}</td>
+                <td>{{round.currentStatus}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                             direction-links="true"
+                             boundary-links="true">
+    </dir-pagination-controls>
+</div>
+</div>

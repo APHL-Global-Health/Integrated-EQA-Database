@@ -2,12 +2,12 @@
     <div id='ng-app' ng-app="ReportModule" ng-cloak="">
         <div class="bacteriology" ng-controller="samplesController">
 
-            <div ng-controller="ReportController">
+            <div ng-controller="ReportsController">
                 <div class="">
                     <ul class="nav nav-tabs" ng-init="clickedTab = 'samples'">
 
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
-                            <a href="" ng-click="clickedTab = 'samples'">Analyze</a>
+                            <a href="" ng-click="clickedTab = 'samples'">General</a>
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
                             <a href="" ng-click="clickedTab = 'rounds'">Evaluate</a>
@@ -16,7 +16,7 @@
                             <a href="" ng-click="clickedTab = 'Packaging'">Generate Reports</a>
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
-                            <a href="" ng-click="clickedTab = 'shipments'">Finalize Reports</a>
+                            <a href="" ng-click="clickedTab = 'shipments'">Finalized Reports</a>
                         </li>
 
 
@@ -57,18 +57,11 @@
 
                     </ul>
                 </div>
-                <div class="col-md-12" ng-hide="samples.menuLength==2">
-                    <a href="#" class="pull-right btn btn-primary btn-sm"
-                       ng-click="samples.toggleSamplesMenu()"><i class="fa fa-list"></i></a>
-                </div>
-                <ng-include src='samples.linksObject.currentTemplate' onload="samples.createNanobar(100)">
+
+                <ng-include src='reports.loadedCurrentUrl' onload="samples.createNanobar(100)">
 
                 </ng-include>
-                <div ng-if="samples.showBarcode">
-                    <div ng-include="'../partialHTMLS/barcodePrinting.html'">
 
-                    </div>
-                </div>
 
 
             </div>
