@@ -38,13 +38,19 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.tpl.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.tpl.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.tpl.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.tpl.min.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.tpl.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.min.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.tpl.min.js'); ?>"></script>
 
     <script type="text/javascript"
             src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
@@ -70,14 +76,16 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 
 
     <!---------------------------------Calendar Module-------------------------------------->
-<!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
+    <!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
-<!--    <script type="text/javascript" src="--><?php //echo $this->baseUrl('angularMain/calendar/.js'); ?><!--"></script>-->
+    <!--    <script type="text/javascript" src="-->
+    <?php //echo $this->baseUrl('angularMain/calendar/.js'); ?><!--"></script>-->
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>-->
@@ -117,8 +125,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
 
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT
-                                Managers</a>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">Admin Manager</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -131,50 +138,37 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">PT
-                                Participants</a></li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">Micro Labs</a></li>
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">PT
-                                Participant Login</a></li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">Users</a></li>
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">Participant
-                                Login Map</a></li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default',
+                                true); ?>">
+                                Lab & User Mapping
+                            </a></li>
                         <li>
                             <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'pending'), 'default', true); ?>">Pending
                                 PT Participants</a></li>
-                      
+
                     </ul>
                 </li>
-                <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'manageMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-beaker"></i>&nbsp;&nbsp;Manage
-                        <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions'), 'default', true); ?>">PT
-                                Survey</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment'), 'default', true); ?>">Shipments</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="javascript:void(0);">Packaging</a></li>
-                    </ul>
-                </li>
+
                 <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze
                         <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'evaluate'), 'default', true); ?>">Evaluate
-                                Responses</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'distribution'), 'default', true); ?>">Generate
-                                Reports</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize'), 'default', true); ?>">Finalize
-                                Reports</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize', 'action' => 'shipments'), 'default', true); ?>">View
-                                Finalized Shipments</a></li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">Micro Reports</a>
+                        </li>
+<!--                        <li>-->
+<!--                            <a href="--><?php //echo $this->url(array('module' => 'reports', 'controller' => 'distribution'), 'default', true); ?><!--">Generate-->
+<!--                                Reports</a></li>-->
+<!--                        <li>-->
+<!--                            <a href="--><?php //echo $this->url(array('module' => 'reports', 'controller' => 'finalize'), 'default', true); ?><!--">Finalize-->
+<!--                                Reports</a></li>-->
+<!--                        <li>-->
+<!--                            <a href="--><?php //echo $this->url(array('module' => 'reports', 'controller' => 'finalize', 'action' => 'shipments'), 'default', true); ?><!--">View-->
+<!--                                Finalized Shipments</a></li>-->
                     </ul>
                 </li>
                 <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'report') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -203,58 +197,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
                                 Report</a></li>
                     </ul>
                 </li>
-                <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-upload"></i>&nbsp;&nbsp;Repository
-                        <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'providers'), 'default', true); ?>">PT
-                                Providers/Vendors</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'programs'), 'default', true); ?>">PT
-                                Programs</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Periods</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'testkits'), 'default', true); ?>">Test
-                                Kits</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result
-                                Codes</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail
-                                Reasons</a></li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">Upload
-                                Report</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>">Import
-                                Data</a></li>
-                    </ul>
-                </li>
-                <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repositoryreports') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i>&nbsp;&nbsp;Repository
-                        Reports <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Participatory
-                                Reports</a></li>
-                        <li>
-                            <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance
-                                Reports</a></li>
-                    </ul>
-                </li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
