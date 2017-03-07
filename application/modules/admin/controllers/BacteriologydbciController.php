@@ -967,14 +967,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $newFinalArray['sampleId'] = $postedData['sampleId'];
 
 
-                if ($postedData['tableName'] =="tbl_bac_micro_bacterial_agents"){
+                if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
                     $newFinalArray['userId'] = $postedData['userId'];
                     $newFinalArray['roundId'] = $postedData['roundId'];
                     $newFinalArray['participantId'] = $postedData['participantId'];
 
                     $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
                     $newFinalArray['level'] = 1;
-                }else{
+                } else {
                     $newFinalArray['finalScore'] = $newFinal['finalScore'];
 
                 }
@@ -982,8 +982,20 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 $resp['status'] = 1;
                 if ($insertStatus['status'] != 1) {
+
                     $resp['status'] = 0;
                     $resp['message'] = $insertStatus['message'];
+                } else {
+                    if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
+                        $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
+                        $where['participantId'] = $postedData['participantId'];
+                        $update['responseStatus'] = 1;
+
+                        $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel',
+                            $where, $update);
+                        $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users',
+                            $where, $update);
+                    }
                 }
 
 
