@@ -413,14 +413,18 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function returnValueWhere($id, $tableName)
     {
         $returnArray = '';
-        if ($tableName == 'data_manager') {
-            $whereId['dm_id'] = $id;
-        } else if ($tableName == 'participant') {
-            $whereId['participant_id'] = $id;
-        } else if ($tableName == 'participant_manager_map') {
-            $whereId['dm_id'] = $id;
+        if (!is_array($id)) {
+            if ($tableName == 'data_manager') {
+                $whereId['dm_id'] = $id;
+            } else if ($tableName == 'participant') {
+                $whereId['participant_id'] = $id;
+            } else if ($tableName == 'participant_manager_map') {
+                $whereId['dm_id'] = $id;
+            } else {
+                $whereId['id'] = $id;
+            }
         } else {
-            $whereId['id'] = $id;
+            $whereId = $id;
         }
         if (is_array($whereId)) {
             $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);

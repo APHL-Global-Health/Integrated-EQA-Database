@@ -29,12 +29,14 @@
         <strong>Server Response : </strong> {{samples.feedbackObject.fbMessage}}
     </div>
     <div class="col-md-12" style="overflow-x:auto;">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-capitalize">
             <thead>
             <tr class="btn-primary">
                 <th>#</th>
                 <th>Sample</th>
                 <!--<th>Round</th>-->
+                <th>grain Stain Reaction</th>
+                <th>grain StainScore</th>
                 <th>primary Media</th>
                 <th>primaryMedia Score</th>
                 <th>incubation Conditions</th>
@@ -55,7 +57,8 @@
             <tr dir-paginate="expectedResults in samples.expectedResults | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                 <td>{{$index+1}}</td>
                 <td>{{expectedResults.batchName}}</td>
-                <!--<td>{{expectedResults.roundName}}</td>-->
+                <td>{{expectedResults.grainStainReaction}}</td>
+                <td>{{expectedResults.grainStainReactionScore}}</td>
                 <td>{{expectedResults.primaryMedia}}</td>
                 <td>{{expectedResults.primaryMediaScore}}</td>
                 <td>{{expectedResults.incubationConditions}}</td>

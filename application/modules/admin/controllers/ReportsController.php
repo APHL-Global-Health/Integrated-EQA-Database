@@ -36,7 +36,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
-            foreach ($data as $key=>$value){
+            foreach ($data as $key => $value) {
                 $round = $this->returnValueWhere($value->id, 'tbl_bac_rounds');
 
                 $data[$key]->daysLeft = $this->converttodays($data[$key]->endDate);
@@ -44,11 +44,230 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
             }
             echo $this->returnJson(array('status' => 1, 'data' => $data));
-        }else{
-            echo $this->returnJson(array('status' => 0,"msg"=>'No Records available with the selected filters'));
+        } else {
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
         }
         exit;
     }
 
+    public function getresponsefeedbackAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+        $col = ['*'];
+        $orderArray = ['id', 'dateCreated'];
 
+        $groupArray = ['id'];
+
+
+        $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);
+
+        if ($data != false) {
+            foreach ($data as $key => $value) {
+                $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                $sampleName = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                $data[$key]->daysLeft = $this->converttodays($round['endDate']);
+                $data[$key]->batchName = $sampleName['batchName'];
+                $data[$key]->roundName = $round['roundName'];
+                $data[$key]->roundCode = $round['roundCode'];
+                $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
+                $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
+            }
+            echo $this->returnJson(array('status' => 1, 'data' => $data));
+        } else {
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
+        }
+        exit;
+    }
+
+    public function evaluateresultsAction()
+    {
+        /*select results for evaluation*/
+
+        $where['shipmentId'] = 115;
+        $where['startRoundFlag'] = 1;
+        $shipmentInfo = $this->returnValueWhere($where['shipmentId'], 'tbl_bac_shipments');
+        $orderArray = ['id', 'dateCreated'];
+        $col = ['*'];
+        $groupArray = ['id'];
+        if (count($where) > 0) {
+            $where['dateFrom'] = $shipmentInfo['dateCreated'];
+
+            $panelSamples = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $where, $orderArray, true, $groupArray);
+            if ($panelSamples != false) {
+                foreach ($panelSamples as $key => $value) {
+                    $whereSampleId['sampleId'] = $panelSamples[$key]->sampleId;
+                    $whereSampleId['participantId'] = $panelSamples[$key]->participantId;
+                    $whereSampleId['roundId'] = $panelSamples[$key]->roundId;
+
+                    $responseResults = $this->dbConnection->selectFromTable('tbl_bac_response_results', $whereSampleId);
+                    if ($responseResults != false) {
+
+                        foreach ($responseResults as $key => $value) {
+
+                            $updateArray = $this->updateResponseResults((array)$responseResults[$key]);
+
+
+                        }
+
+
+                    }
+
+                }
+            }
+
+        } else {
+            $response['message'] = 'Invalid survey or round ';
+        }
+        exit;
+    }
+
+    public function testinAction()
+    {
+        $ar = 'michael osoro';
+        $arr = explode(" ", $ar);
+
+        $in = 'osoros';
+        var_dump(in_array($in, $arr));
+        exit;
+    }
+
+    public function updateResponseResults($responseResults)
+    {
+        if (is_array($responseResults)) {
+            $whereSampleExpectedResult['sampleId'] = $responseResults['sampleId'];
+            $sampleExpectedResult = $this->returnValueWhere($whereSampleExpectedResult, 'tbl_bac_expected_results');
+            if (count($sampleExpectedResult) > 0) {
+                $score['grainStainReactionScore'] = 0;
+                $score['primaryMediaScore'] = 0;
+                $score['incubationConditionsScore'] = 0;
+                $score['colonialMorphologyScore'] = 0;
+                $score['bacterialQualificationScore'] = 0;
+                $score['isolateProcessingScore'] = 0;
+                $score['bacterialReagentsScore'] = 0;
+                $score['finalIdentificationScore'] = 0;
+                if ($responseResults['grainStainReaction'] == $sampleExpectedResult['grainStainReaction']) {
+                    $score['grainStainReactionScore'] = $sampleExpectedResult['grainStainReactionScore'];
+                }
+                else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
+                    $score['grainStainReactionScore'] = 0.75 * $sampleExpectedResult['grainStainReactionScore'];
+                }
+                if ($responseResults['primaryMedia'] == $sampleExpectedResult['primaryMedia']) {
+                    $score['primaryMedia'] = $sampleExpectedResult['primaryMediaScore'];
+                }
+                if ($responseResults['incubationConditions'] == $sampleExpectedResult['incubationConditions']) {
+                    $score['incubationConditionsScore'] = $sampleExpectedResult['incubationConditionsScore'];
+                }
+                if ($responseResults['colonialMorphology'] == $sampleExpectedResult['colonialMorphology']) {
+                    $score['colonialMorphologyScore'] = $sampleExpectedResult['colonialMorphologyScore'];
+                }
+                if ($responseResults['bacterialQualification'] == $sampleExpectedResult['bacterialQualification']) {
+                    $score['bacterialQualificationScore'] = $sampleExpectedResult['bacterialQualificationScore'];
+                }
+                if ($responseResults['bacterialReagents'] == $sampleExpectedResult['bacterialReagents']) {
+                    $score['bacterialReagentsScore'] = $sampleExpectedResult['bacterialReagentsScore'];
+                }
+                if ($responseResults['isolateProcessing'] == $sampleExpectedResult['isolateProcessing']) {
+                    $score['isolateProcessingScore'] = $sampleExpectedResult['isolateProcessing'];
+                }
+                if ($responseResults['finalIdentification'] == $sampleExpectedResult['finalIdentification']) {
+                    $score['finalIdentificationScore'] = $sampleExpectedResult['finalIdentificationScore'];
+                }
+                $whereResponse['sampleId'] = $responseResults['sampleId'];
+                $whereResponse['roundId'] = $responseResults['roundId'];
+                $whereResponse['participantId'] = $responseResults['participantId'];
+                $score['finalScore'] = array_sum($score);
+
+                $score['markedStatus'] = 1;
+                $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
+                if ($updateLabResults['status'] == 0) {
+                    return false;
+                } else {
+                    $updateSuscepibility = $this->updateSuscepibilityScore($whereResponse);
+                    if ($updateSuscepibility['status']) {
+                        $update['feedBack'] = 1;
+                        $update['totalCorrectScore'] = $score['finalScore'];
+                        $update['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
+                        $updateLabResults = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereResponse, $update);
+
+                        if ($updateLabResults['status'] == 0) {
+                            var_dump($updateLabResults);
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    public function getMicroLevel($diskContent, $antiMicroAgent)
+    {
+        $where['testAgentName'] = $antiMicroAgent;
+
+        $antiMicroAgentData = $this->returnValueWhere($where, 'tbl_bac_test_agents');
+
+        if ($diskContent > 0 && $diskContent <= $antiMicroAgentData['fewRange']) {
+            return 'few';
+        }
+        if ($diskContent > $antiMicroAgentData['fewRange'] && $diskContent <= $antiMicroAgentData['modRange']) {
+            return 'mod';
+        }
+        if ($diskContent > $antiMicroAgentData['modRange'] && $diskContent <= $antiMicroAgentData['manyRange']) {
+            return 'many';
+        } else {
+            return 'outOfRange';
+        }
+    }
+
+    public function outOfRange($range, $where)
+    {
+
+    }
+
+    public function updateSuscepibilityScore($whereResponse)
+    {
+        try {
+            if (isset($whereResponse)) {
+                $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $whereResponse);
+
+                $whereSampleId = $whereResponse['sampleId'];
+
+                $microExpectedAgents = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $whereSampleId);
+                $returnScore = 0;
+                foreach ($microAgents as $key => $value) {
+                    $score['score'] = 0;
+
+                    foreach ($microExpectedAgents as $ekey => $evalue) {
+                        if ($microAgents[$key]->antiMicroAgent == $microExpectedAgents[$key]->antiMicroAgent) {
+                            $score['score'] = ($microExpectedAgents[$key]->finalScore / 2);
+                            if ($this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent)
+                                == $this->getMicroLevel($microExpectedAgents[$key]->diskContent, $microExpectedAgents[$key]->antiMicroAgent)
+                            ) {
+                                $score['score'] = $microExpectedAgents[$key]->finalScore;
+
+                            } else {
+
+                                $this->outOfRange($this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent), $whereResponse);
+                            }
+
+                            break;
+                        }
+                    }
+                    $returnScore += $score['score'];
+                    $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
+                    $score['markedStatus'] = 1;
+                    $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
+                    if ($updateSuscepibility['status'] == 0) {
+
+                        return false;
+                    }
+
+                }
+
+                return array('status' => true, 'susScore' => $returnScore);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }

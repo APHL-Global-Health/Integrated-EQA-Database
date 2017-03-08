@@ -195,10 +195,10 @@ Class Main extends pdfCreator
                     $key == 'dateTo' ?$where .= " dateCreated <= '".date('Y-m-d',time())." 23:59' ": $where .= $key . " is null ";
                 } else {
                     if ($key == 'dateFrom') {
-                        $where .= "dateCreated >=" . " '$value' ";
+                        $where .= "dateCreated >=" . " '".substr($value,0,10)." 05:59:59'";
                     } else if ($key == 'dateTo') {
 
-                        $where .= "dateCreated <=" . " '$value' ";
+                        $where .= "dateCreated <=" . " '".substr($value,0,10)." 23:59:59'";
 
                     } else {
                         $where .= $key . "=" . " '$value' ";
@@ -223,7 +223,7 @@ Class Main extends pdfCreator
 
             $where .= " order by " . implode(',', $orderBy) . " desc";
 
-            //$where .= ' order by id desc';
+//             $where .= ' order by id desc';
             return $where;
 
         }

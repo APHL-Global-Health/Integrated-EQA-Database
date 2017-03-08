@@ -468,12 +468,12 @@
         }
 
         $scope.samples.courierFormData = {};
-        function emptyFormData(tableName,type) {
+        function emptyFormData(tableName, type) {
 
 
-            if(!type){
+            if (!type) {
                 $scope.samples.showMainTable(tableName, false);
-            }else{
+            } else {
                 $scope.samples.showMainTable(tableName, true);
             }
 
@@ -543,6 +543,9 @@
 
             }
         }
+
+
+
         $scope.samples.emptyFormData = function (tableName) {
             emptyFormData(tableName)
         }
@@ -1040,14 +1043,14 @@
                                     console.log(response.data)
                                     changeSavingSpinner(false);
                                     if (response.data.status == 1) {
-                                        emptyFormData(tableName,false);
+                                        emptyFormData(tableName, false);
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
 
                                     }
-                                    if (alertStartRound!='') {
+                                    if (alertStartRound != '') {
 
                                         angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
 

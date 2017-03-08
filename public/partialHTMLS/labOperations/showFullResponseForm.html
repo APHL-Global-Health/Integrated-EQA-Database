@@ -1,0 +1,320 @@
+<div class="col-md-12">
+    <div class="clearfix">
+        &nbsp;
+    </div>
+    <div class=" col-md-12">
+
+        <button class="btn btn-sm btn-danger pull-right"
+                ng-click="samples.samplesActivePage('viewresults',1)"><i class="fa fa-close"></i> close
+        </button>
+    </div>
+    <div class="clearfix">
+        &nbsp;
+    </div>
+    <div class="h3 text-center col-md-12">
+        RESPONSE PT REPORT
+        <hr>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel panel-body">
+            <div class="h4 text-center col-md-12 text-bold border-bottom">
+                MINISTRY OF HEALTH<br>
+                NATIONAL PUBLIC HEALTH LABORATORY<br>
+                NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA<br>
+                STANDARD OPERATING PROCEDURE
+
+            </div>
+            <div class="col-md-12">
+                <h4>MICROBIOLOGY IDENTIFICATION REPORT
+
+                </h4>
+                <div class="">
+                    <table class="table table-bordered">
+                        <thead class="btn-primary">
+                        <tr>
+                            <th>
+                                SAMPLE
+                            </th>
+                            <th>
+                                SOURCE
+                            </th>
+                            <th>
+                                CLINICAL DETAILS
+                            </th>
+                            <th>
+                                INSTRUCTIONS
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{samples.currentSampleForResponse.batchName}}</td>
+                            <td>{{samples.currentSampleForResponse.materialSource}}</td>
+
+                            <td>{{samples.currentSampleForResponse.sampleDetails}}</td>
+                            <td>{{samples.currentSampleForResponse.sampleInstructions}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <form class="form-horizontal" novalidate="" name="resultsData">
+                    <table class="table table-bordered">
+                        <thead class="btn-primary">
+                        <tr>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Results
+                            </th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody ng-form novalidate="" name="resultsData">
+                        <tr ng-class="{ 'has-error'
+             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine )
+              }">
+                            <td width="30%">Gram stain reaction and morphology</td>
+                            <td width="70%">
+
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine }">
+                            <td width="30%">Details of primary media used for isolation and manufacturer</td>
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine }">
+                            <td width="30%">Incubation conditions</td>
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine  }">
+                            <td width="30%">Colonial morphology (colony appearance on media)</td>
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine}">
+                            <td width="30%">Bacterial quantification (if applicable)</td>
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine }">
+                            <td width="30%">Biochemical reagents or test used for organisms identification e.g. API,
+                                Indole.
+                                Indicate
+                                the reaction observed.
+                            </td>
+
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine  }">
+                            <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+                            <td width="70%">
+
+                            </td>
+
+                        </tr>
+
+                        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine }">
+                            <td width="30%">Final identification (i.e. report given to clinician)</td>
+                            <td width="70%">
+                            </td>
+
+                        </tr>
+                        <tr class="text-bold">
+                            <td width="30% ">
+                                TOTAL SCORE
+                            </td>
+                            <td width="70%">
+
+                            </td>
+                        </tr>
+                        <tr class="text-bold">
+                            <td width="30%">
+                                Recommedations
+                            </td>
+                            <td width="70%">
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <h4>SUSCEPTIBILITY TESTING REPORT</h4>
+            <div class="">
+                <br>
+            </div>
+            <div class="form-horizontal" novalidate="" name="resultsData">
+                <table class="table table-bordered">
+                    <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Results
+                        </th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody ng-form novalidate="" name="susceptibilityData">
+                    <tr>
+                        <td width="30%">Survey number</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.isolateIdentification.$invalid && !susceptibilityData.isolateIdentification.$pristine }">
+                        <td width="30%">Isolate identification</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
+                        <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaUsed.$invalid && !susceptibilityData.mediaUsed.$pristine  }">
+                        <td width="30%">Media used</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaManufacturer.$invalid && !susceptibilityData.mediaManufacturer.$pristine}">
+                        <td width="30%">Manufacturer of media</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.discManufacturer.$invalid && !susceptibilityData.discManufacturer.$pristine }">
+                        <td width="30%">Manufacturer of disc and disc size (mm):
+                        </td>
+
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
+                        <td width="30%">Guidelines used (CLSI):</td>
+                        <td width="70%">
+                        </td>
+
+                    </tr>
+                    <tr class="text-bold">
+                        <td width="30%">
+                            Recommedations
+                        </td>
+                        <td width="70%">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="">
+
+                <h4>ANTIMICROBIAL AGENT</h4>
+                <div class="">
+                    <br>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            ANTIMICROBIAL
+                            AGENT
+
+                        </th>
+                        <th>
+                            Reported to
+                            Clinician(Yes or No)
+
+                        </th>
+                        <th>
+                            DISK CONTENT
+                            (&micro;g or Units)
+
+                        </th>
+                        <th>
+                            S <sup>1</sup>
+                        </th>
+                        <th>
+                            I <sup>2</sup>
+                        </th>
+                        <th>
+                            R <sup>3</sup>
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="fields in samples.resultFields"
+                        ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
+                        <td nowrap></td>
+                        <td>
+                        </td>
+
+                        <td></td>
+                        <td>
+                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='few'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+                        <td>
+                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='mod'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+                        <td>
+                            <x ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'">
+                                <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
+                                </small>
+                            </x>
+                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='many'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+
+                    </tr>
+
+                    <tr class="text-bold">
+                        <td>
+                            SCORE
+                        </td>
+                        <td colspan="5">
+                        </td>
+
+                    </tr>
+                    <tr class="text-bold">
+                        <td>
+                            RECOMMEDATIONS
+                        </td>
+                        <td colspan="5">
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</div>

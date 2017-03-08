@@ -6,7 +6,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     $scope.reports = {};
     $scope.reports.loaderStatus = false;
     $scope.reports.currentReports = 'Issued Samples Report';
-
+    console.log($scope.reports.currentReports)
     $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/generalReport.html';
     $scope.reports.changeCurrentReport = function (report, htmlFile) {
         $scope.reports.loaderStatus = true;
@@ -40,7 +40,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
     }
 
-    $scope.reports.getGeneralRoundReport = function (where) {
+    $scope.reports.getUserResults = function (where) {
         var url = serverReportURL + 'getgeneralroundreport';
         showAjaxLoader(true)
         $http.post(url, where)
@@ -50,6 +50,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 if (response.status == 1) {
                     $scope.reports.generalRoundData = response.data;
                 } else if (response.status == 0) {
+                    $scope.reports.generalRoundData = {};
                     showResponseMessage(response)
                 } else {
                     $.alert('Unknown error occurred');
@@ -60,6 +61,28 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 showAjaxLoader(false)
             })
 
+    }
+    $scope.reports.responseInfoData = {};
+    $scope.reports.getGeneralRoundReport= function (where) {
+        var url = serverReportURL + 'getresponsefeedback';
+        showAjaxLoader(true)
+        $http.post(url, where)
+            .success(function (response) {
+                console.log(response)
+                showAjaxLoader(false)
+                if (response.status == 1) {
+                    $scope.reports.responseInfoData = response.data;
+                } else if (response.status == 0) {
+                    $scope.reports.responseInfoData = {};
+                    showResponseMessage(response)
+                } else {
+                    $.alert('Unknown error occurred');
+                }
+
+            })
+            .error(function (error) {
+                showAjaxLoader(false)
+            })
     }
 
 })

@@ -1,6 +1,8 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
-        <h3>General Report <i class="fa fa-spin {{reports.loader}}"></i></h3>
+        <h3>General Report
+            <small>{{reports.generalRoundData.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i></h3>
     </div>
     <div class="col-md-12 no-padding text-center">
         <form name="search" novalidate>
@@ -18,7 +20,7 @@
                 <div class="col-md-3 ">
 
                     <input type="text" class="form-control input-sm" ng-model="reports.whereGenRounds.dateTo"
-                           data-date-format="yyyy-MM-dd"  placeholder="By default,(TO-DATE)"
+                           data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"
                            data-min-date="reports.whereGenRounds.dateFrom" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon1"
                            name="dateTo"
@@ -79,6 +81,9 @@
                 <td nowrap>{{round.totalShipmentsAdded}}</td>
                 <td>{{round.currentStatus}}</td>
 
+            </tr>
+            <tr ng-hide="reports.generalRoundData.length >0" >
+                <td colspan="9" class="text-center">No records available</td>
             </tr>
             </tbody>
         </table>
