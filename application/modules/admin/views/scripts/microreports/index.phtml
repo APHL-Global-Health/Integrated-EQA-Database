@@ -58,10 +58,14 @@
                     </ul>
                 </div>
 
-                <ng-include src='reports.loadedCurrentUrl' onload="samples.createNanobar(100)">
+                <ng-include src='reports.loadedCurrentUrl' onload="reports.hideFaLoader()">
 
                 </ng-include>
-
+                <div ng-show="reports.loaderStatus" class="text-center">
+                    <hr><br>
+                    <i class="fa fa-spin fa-spinner fa-3x"></i><br>
+                    loading...
+                </div>
 
 
             </div>

@@ -60,6 +60,7 @@
                 <th>Day(s) to go</th>
                 <th>Total Shipments</th>
                 <th>Status</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -80,17 +81,26 @@
                 <td nowrap>{{round.daysLeft}}</td>
                 <td nowrap>{{round.totalShipmentsAdded}}</td>
                 <td>{{round.currentStatus}}</td>
+                <td>
+                    <button ng-disabled="round.totalShipmentsAdded==0" ng-click="reports.showShipmentEvaluationForRound(round)" class="btn btn-danger btn-sm">
+                        <i class="fa fa-check"></i> <x ng-show="round.evaluated==0">evaluate</x>
+                        <x ng-show="round.evaluated==1">Re-evaluate</x>
+                    </button>
+                </td>
 
             </tr>
             <tr ng-hide="reports.generalRoundData.length >0" >
-                <td colspan="9" class="text-center">No records available</td>
+                <td colspan="10" class="text-center">No records available</td>
             </tr>
             </tbody>
         </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
     </div>
-    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
-                             direction-links="true"
-                             boundary-links="true">
-    </dir-pagination-controls>
+
+
 </div>
 </div>

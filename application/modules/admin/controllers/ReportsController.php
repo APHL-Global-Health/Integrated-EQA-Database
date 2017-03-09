@@ -79,20 +79,69 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
-    public function evaluateresultsAction()
+    public function evaluateroundAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+        $whereRound['roundId'] = $postedData['id'];
+        $whereRound['startRoundFlag'] = 1;
+        $updateStatus = false;
+        $shipments = $this->dbConnection->selectFromTable('tbl_bac_shipments', $whereRound);
+        if ($shipments != false) {
+            foreach ($shipments as $key => $value) {
+                $whereShipmentRound['shipmentId'] = $value->id;
+                $whereShipmentRound['startRoundFlag'] = $value->startRoundFlag;
+                $whereShipmentRound['dateFrom'] = $value->dateCreated;
+                $updateStatus = $this->evaluateresultsAction($whereShipmentRound);
+            }
+
+            if ($updateStatus) {
+                $whereEvaluation['id'] = $postedData['id'];
+                $whereEvaluation['startRoundFlag'] = 1;
+                $updateEval['evaluated'] = 1;
+
+                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_rounds', $whereEvaluation, $updateEval);
+                echo $this->returnJson(array('status' => 1, 'message' => 'Round Evaluation was Successful !'));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation was Unsuccessful !'));
+            }
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation was Unsuccessful !'));
+        }
+        exit;
+    }
+
+    public function evaluateresultsAction($whereRoundData = '')
     {
         /*select results for evaluation*/
+        $postedData = $this->returnArrayFromInput();
+        $where = [];
 
-        $where['shipmentId'] = 115;
-        $where['startRoundFlag'] = 1;
-        $shipmentInfo = $this->returnValueWhere($where['shipmentId'], 'tbl_bac_shipments');
+
+        if (!empty($whereRoundData)) {
+            $where = $whereRoundData;
+
+        } else {
+            $where['shipmentId'] = $postedData['id'];
+            $where['startRoundFlag'] = 1;
+
+
+            $shipmentInfo = $this->returnValueWhere($where['shipmentId'], 'tbl_bac_shipments');
+            $where['dateFrom'] = $shipmentInfo['dateCreated'];
+
+        }
+
+        /*run this on retrieving shipment from shipment table*/
         $orderArray = ['id', 'dateCreated'];
         $col = ['*'];
         $groupArray = ['id'];
+        $updateArray = false;
+
         if (count($where) > 0) {
-            $where['dateFrom'] = $shipmentInfo['dateCreated'];
+
 
             $panelSamples = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $where, $orderArray, true, $groupArray);
+//            var_dump($panelSamples);
+//            exit;
             if ($panelSamples != false) {
                 foreach ($panelSamples as $key => $value) {
                     $whereSampleId['sampleId'] = $panelSamples[$key]->sampleId;
@@ -107,6 +156,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             $updateArray = $this->updateResponseResults((array)$responseResults[$key]);
 
 
+
                         }
 
 
@@ -114,6 +164,37 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                 }
             }
+
+
+            /*run this if update on all tables was a success*/
+
+            if ($updateArray) {
+
+                $whereEvaluation['id'] = $where['shipmentId'];
+                $whereEvaluation['startRoundFlag'] = 1;
+
+                $updateEval['evaluated'] = 1;
+
+                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_shipments', $whereEvaluation, $updateEval);
+
+                $arr = array('status' => 1, 'message' => 'Shipment Evaluation was successful !');
+//                var_dump(!empty($whereRoundData));
+//                exit;
+                if (!empty($whereRoundData)) {
+
+                    return true;
+
+                }
+
+                echo $this->returnJson($arr);
+
+            } else {
+                if (!empty($whereRoundData)) {
+                    return false;
+                }
+                echo $this->returnJson(array('status' => 0, 'message' => 'Evaluation was Unsuccessful !'));
+            }
+
 
         } else {
             $response['message'] = 'Invalid survey or round ';
@@ -147,8 +228,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $score['finalIdentificationScore'] = 0;
                 if ($responseResults['grainStainReaction'] == $sampleExpectedResult['grainStainReaction']) {
                     $score['grainStainReactionScore'] = $sampleExpectedResult['grainStainReactionScore'];
-                }
-                else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
+                } else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
                     $score['grainStainReactionScore'] = 0.75 * $sampleExpectedResult['grainStainReactionScore'];
                 }
                 if ($responseResults['primaryMedia'] == $sampleExpectedResult['primaryMedia']) {
@@ -198,6 +278,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             }
 
         }
+        return true;
     }
 
     public function getMicroLevel($diskContent, $antiMicroAgent)
@@ -222,6 +303,52 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
     public function outOfRange($range, $where)
     {
 
+    }
+
+    public function getshipmentsforroundAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+        $col = ['id', 'shipmentName', 'roundId', 'dateCreated', 'status', 'startRoundFlag', 'evaluated'];
+        $orderArray = ['id', 'dateCreated'];
+
+        $postedData['startRoundFlag'] = 1;
+//        $postedData['roundId'] = 33;
+
+        $groupArray = ['id'];
+        $data = $this->dbConnection->selectReportFromTable('tbl_bac_shipments', $col, $postedData, $orderArray, true, $groupArray);
+
+        if ($data != false) {
+            foreach ($data as $key => $value) {
+                $whereShipmentId['shipmentId'] = $value->id;
+                $whereShipmentId['roundId'] = $value->roundId;
+                $data[$key]->totalSamples = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereShipmentId, 'quantity', true);
+                $colSamPan = ['sampleId', 'id'];
+
+                $samplesToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $colSamPan, $whereShipmentId, $orderArray, true, $groupArray);
+                $data[$key]->totalRespondedSamples = 0;
+                $data[$key]->totalEvaluatedSamples = 0;
+                if ($samplesToPanel != false) {
+                    foreach ($samplesToPanel as $keyPan => $valPan) {
+                        $whereSamPan['panelToSampleId'] = $valPan->id;
+                        $whereSamPan['sampleId'] = $valPan->sampleId;
+
+                        $data[$key]->totalRespondedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan, 'id');
+                        $whereSamPan['markedStatus'] = 1;
+                        $data[$key]->totalEvaluatedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan, 'id');
+                    }
+
+                }
+                $data[$key]->totalUnRespondedSamples = $data[$key]->totalSamples - $data[$key]->totalRespondedSamples;
+                $data[$key]->totalUnEvaluatedSamples = $data[$key]->totalRespondedSamples - $data[$key]->totalEvaluatedSamples;
+
+
+            }
+            echo $this->returnJson(array('status' => 1, 'data' => $data));
+        } else {
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
+        }
+
+        exit;
     }
 
     public function updateSuscepibilityScore($whereResponse)

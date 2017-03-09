@@ -1,0 +1,72 @@
+<div class="col-md-12" ng-hide="reports.loaderStatus">
+    <div>
+        <h3 class="col-md-12 no-padding">
+            {{reports.currentRoundEvaluation.roundName}}
+            <small>{{reports.currentRoundEvaluation.roundCode}}</small>
+            Evaluation
+            <small>{{reports.shipmentsToRound.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i></h3>
+
+        </h3>
+    </div>
+    <div class=" text-right">
+
+        <a href="#" ng-click="reports.evaluateRound()" class="btn btn-primary btn-sm"
+           ng-show="reports.currentRoundEvaluation.evaluated==0"><i
+                class="fa fa-check"></i> Evaluate Survey
+        </a>
+        <a href="#" ng-click="reports.evaluateRound()" class="btn btn-primary btn-sm"
+           ng-show="reports.currentRoundEvaluation.evaluated==1"><i
+                class="fa fa-check"></i> Re-Evaluate Survey
+        </a>
+        <a href="#" ng-click="reports.changeCurrentReport('generalReport')" class="btn btn-danger btn-sm"><i
+                class="fa fa-close"></i> close
+        </a>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th> #</th>
+                <th> Shipment Name</th>
+                <th> Date Created</th>
+                <th> Total Samples</th>
+                <th> Total Responded</th>
+                <th> Total Un-Responded</th>
+                <th> Total Evaluated</th>
+                <th> Total Un-Evaluated</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="shipmentsToRound in reports.shipmentsToRound | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                <td>{{$ndex+1}}</td>
+                <td>{{shipmentsToRound.shipmentName}}</td>
+                <td>{{shipmentsToRound.dateCreated}}</td>
+                <td>{{shipmentsToRound.totalSamples}}</td>
+                <td>{{shipmentsToRound.totalRespondedSamples}}</td>
+                <td>{{shipmentsToRound.totalUnRespondedSamples}}</td>
+                <td>{{shipmentsToRound.totalEvaluatedSamples}}</td>
+                <td>{{shipmentsToRound.totalUnEvaluatedSamples}}</td>
+                <td>
+                    <button ng-click="reports.evaluateShipment(shipmentsToRound)"
+                            ng-disabled="shipmentsToRound.totalRespondedSamples==0"
+                            ng-show="shipmentsToRound.evaluated==0" class="btn btn-danger btn-sm">evaluate
+                        batch
+                    </button>
+                    <button ng-click="reports.evaluateShipment(shipmentsToRound)"
+                            ng-disabled="shipmentsToRound.totalRespondedSamples==0"
+                            ng-show="shipmentsToRound.evaluated==1" class="btn btn-warning btn-sm">Re-Evaluate
+                        batch
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+</div>
