@@ -12,7 +12,7 @@
         &nbsp;
     </div>
     <div class="h3 text-center col-md-12">
-        RESPONSE PT REPORT
+        RESPONSE PT REPORT  <i class="fa fa-spin {{reports.loader}}"></i>
         <hr>
     </div>
     <div class="panel panel-primary">
@@ -48,18 +48,18 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>{{samples.currentResults.batchName}}</td>
-                            <td>{{samples.currentResults.materialSource}}</td>
+                            <td>{{reports.currentResults.batchName}}</td>
+                            <td>{{reports.currentResults.materialSource}}</td>
 
-                            <td>{{samples.currentResults.sampleDetails}}</td>
-                            <td>{{samples.currentResults.sampleInstructions}}</td>
+                            <td>{{reports.currentResults.sampleDetails}}</td>
+                            <td>{{reports.currentResults.sampleInstructions}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="clearfix">&nbsp;</div>
                 <form class="form-horizontal" novalidate="" name="resultsData">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" >
                         <thead class="btn-primary">
                         <tr>
                             <th>
@@ -68,66 +68,76 @@
                             <th>
                                 Results
                             </th>
-
+                            <th>
+                                score
+                            </th>
 
                         </tr>
                         </thead>
-                        <tbody ng-form novalidate="" name="resultsData">
-                        <tr ng-class="{ 'has-error'
-             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine )
-              }">
+                        <tbody ng-form novalidate="" name="resultsData" >
+                        <tr >
                             <td width="30%">Gram stain reaction and morphology</td>
-                            <td width="70%">
-
+                            <td width="60%">
+                                {{reports.userResults.results.grainStainReaction}}
+                            </td>
+                            <td class="10%">
+                                {{reports.userResults.results.grainStainReactionScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine }">
+                        <tr >
                             <td width="30%">Details of primary media used for isolation and manufacturer</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.primaryMedia}}</td>
+                            <td class="10%"> {{reports.userResults.results.primaryMediaScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine }">
+                        <tr >
                             <td width="30%">Incubation conditions</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.incubationConditions}}</td>
+                            <td class="10%"> {{reports.userResults.results.incubationConditionsScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine  }">
+                        <tr>
                             <td width="30%">Colonial morphology (colony appearance on media)</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.colonialMorphology}}</td>
+                            <td class="10%"> {{reports.userResults.results.colonialMorphologyScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine}">
+                        <tr>
                             <td width="30%">Bacterial quantification (if applicable)</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.bacterialQualification}}</td>
+                            <td class="10%"> {{reports.userResults.results.bacterialQualificationScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine }">
+                        <tr>
                             <td width="30%">Biochemical reagents or test used for organisms identification e.g. API,
                                 Indole.
                                 Indicate
                                 the reaction observed.
                             </td>
 
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.bacterialReagents}}</td>
+                            <td class="10%"> {{reports.userResults.results.bacterialReagentsScore}}
                             </td>
 
                         </tr>
-                        <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine  }">
+                        <tr>
                             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.isolateProcessing}}</td>
+                            <td class="10%"> {{reports.userResults.results.isolateProcessingScore}}
 
                             </td>
 
                         </tr>
 
-                        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine }">
+                        <tr>
                             <td width="30%">Final identification (i.e. report given to clinician)</td>
-                            <td width="70%">
+                            <td width="60%"> {{reports.userResults.results.finalIdentification}}</td>
+                            <td class="10%"> {{reports.userResults.results.finalIdentificationScore}}
                             </td>
 
                         </tr>
@@ -135,15 +145,17 @@
                             <td width="30% ">
                                 TOTAL SCORE
                             </td>
-                            <td width="70%">
+                            <td width="60%" > {{reports.userResults.results.finalScore}}</td>
+                            <td class="10%">
 
                             </td>
                         </tr>
                         <tr class="text-bold">
                             <td width="30%">
-                                Recommedations
+                                Remarks
                             </td>
-                            <td width="70%">
+                            <td width="60%" > {{reports.userResults.results.remarks}}</td>
+                            <td class="10%">
 
                             </td>
                         </tr>
@@ -168,6 +180,9 @@
                         <th>
                             Results
                         </th>
+                        <th>
+                            score
+                        </th>
 
 
                     </tr>
@@ -175,45 +190,52 @@
                     <tbody ng-form novalidate="" name="susceptibilityData">
                     <tr>
                         <td width="30%">Survey number</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.isolateIdentification.$invalid && !susceptibilityData.isolateIdentification.$pristine }">
+                    <tr>
                         <td width="30%">Isolate identification</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
+                    <tr>
                         <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaUsed.$invalid && !susceptibilityData.mediaUsed.$pristine  }">
+                    <tr>
                         <td width="30%">Media used</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaManufacturer.$invalid && !susceptibilityData.mediaManufacturer.$pristine}">
+                    <tr>
                         <td width="30%">Manufacturer of media</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.discManufacturer.$invalid && !susceptibilityData.discManufacturer.$pristine }">
+                    <tr>
                         <td width="30%">Manufacturer of disc and disc size (mm):
                         </td>
 
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
-                    <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
+                    <tr>
                         <td width="30%">Guidelines used (CLSI):</td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
                         </td>
 
                     </tr>
@@ -221,7 +243,8 @@
                         <td width="30%">
                             Recommedations
                         </td>
-                        <td width="70%">
+                        <td width="60%">{{reports.userResults.susceptibility.remarks}}</td>
+                        <td class="10%">N/A
                         </td>
                     </tr>
                     </tbody>
@@ -252,6 +275,7 @@
                             (&micro;g or Units)
 
                         </th>
+                        <th>Score</th>
                         <th>
                             S <sup>1</sup>
                         </th>
@@ -266,27 +290,34 @@
                     </thead>
                     <tbody>
 
-                    <tr ng-repeat="fields in samples.resultFields"
-                        ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
-                        <td nowrap></td>
+                    <tr ng-repeat="fields in  reports.userResults.microAgents">
+                        <td nowrap>
+                            {{fields.antiMicroAgent}}
+                        </td>
                         <td>
+                            {{fields.reportedToStatus}}
                         </td>
 
-                        <td></td>
                         <td>
-                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='few'"
+                            {{fields.diskContent}}
+                        </td>
+                        <td>
+                            {{fields.score}}
+                        </td>
+                        <td>
+                            <i ng-show="fields.range=='few'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
                         <td>
-                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='mod'"
+                            <i ng-show="fields.range=='mod'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
                         <td>
-                            <x ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'">
+                            <x ng-show="fields.range=='outOfRange'">
                                 <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
                                 </small>
                             </x>
-                            <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='many'"
+                            <i ng-show="fields.range=='many'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
 
@@ -296,7 +327,8 @@
                         <td>
                             SCORE
                         </td>
-                        <td colspan="5">
+                        <td colspan="6">
+                            {{reports.userResults.results.totalMicroAgentsScore}}
                         </td>
 
                     </tr>
@@ -304,7 +336,8 @@
                         <td>
                             RECOMMEDATIONS
                         </td>
-                        <td colspan="5">
+                        <td colspan="6">
+                            {{reports.userResults.results.remarks}}
                         </td>
 
                     </tr>

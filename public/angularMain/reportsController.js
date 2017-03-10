@@ -227,19 +227,28 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     }
     $scope.reports.showResults = true;
     $scope.samples.currentResults = {};
+    $scope.reports.userResults ={};
+
+
     $scope.reports.showReponseFullInfo = function (samples) {
         try {
             $scope.reports.showResults = false;
-            $scope.samples.currentResults = samples;
+            $scope.reports.userResults ={};
+            $scope.reports.currentResults = samples;
             console.log($scope.samples.currentResults);
             var url = serverReportURL + 'getlabuserresponse';
-
+            showAjaxLoader(true)
             $http.post(url, samples)
                 .success(function (response) {
-                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.userResults = response.data;
+                    } else {
+                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Evaluation was unsuccessful');
+                    }
                 })
                 .error(function () {
-
+                    showAjaxLoader(false)
                 })
         } catch (Exc) {
 

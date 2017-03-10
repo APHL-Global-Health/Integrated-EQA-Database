@@ -438,5 +438,20 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
     public function getlabuserresponseAction()
     {
         $postedData = $this->returnArrayFromInput();
+        $where['userId'] = $postedData['userId'];
+        $where['sampleId'] = $postedData['sampleId'];
+        $where['roundId'] = $postedData['roundId'];
+
+        $results =$this->returnValueWhere($where, 'tbl_bac_response_results');
+        $susceptibility = $this->dbConnection->selectFromTable('tbl_bac_suscepitibility', $where);
+        $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
+
+        $data['results'] = $results;
+        $data['susceptibility'] = $susceptibility;
+        $data['microAgents'] = $microAgents;
+
+        echo $this->returnJson(array('status' => 1, 'data' => $data));
+
+        exit;
     }
 }
