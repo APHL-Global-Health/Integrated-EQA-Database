@@ -3,10 +3,12 @@
         <br>
         Expected Result for <b> {{samples.clickedSample.batchName}}</b>
         <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
-        <button class="pull-right btn btn-danger btn-sm text-gray"
+        <button class="pull-right btn btn-danger btn-sm text-gray"  ng-hide="samples.resultsFormData.id >0"
                 ng-click="samples.samplesActivePage('viewsamples',0)"><i class="fa fa-close"></i> cancel
         </button>
-
+        <button class="pull-right btn btn-danger btn-sm text-gray" ng-show="samples.resultsFormData.id >0"
+                ng-click="samples.samplesActivePage('viewExpectedResults',0)"><i class="fa fa-close"></i> close
+        </button>
     </div>
     <br>
 </div>
@@ -208,4 +210,131 @@
         </tbody>
     </table>
 </form>
+</div>
+<div class="" ng-init="samples.get">
+    <h3><u>ANTIMICROBIAL AGENT</u></h3>
+    <table class="table table-bordered">
+        <thead class="btn-primary">
+        <tr>
+            <th>
+                ANTIMICROBIAL
+                AGENT
+
+            </th>
+            <th>
+                Reported to
+                Clinician(Yes or No)
+
+            </th>
+            <th>
+                DISK CONTENT
+                (&micro;g or Units)
+
+            </th>
+            <th>Score</th>
+            <th>
+                S <sup>1</sup>
+            </th>
+            <th>
+                I <sup>2</sup>
+            </th>
+            <th>
+                R <sup>3</sup>
+            </th>
+            <th ng-init="where.testAgentType=3">
+                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length >1"
+                        ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                        class="fa fa-plus"></i></button>
+            </th>
+        </tr>
+        </thead>
+        <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
+
+        <tr ng-repeat="fields in samples.resultFields"
+            ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
+            <td nowrap><input type="text" class="form-control"
+                              ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                              id="antiMicroAgent" name="antiMicroAgent"
+                              class="form-control"
+                              data-min-length="0"
+                              data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                              required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                              bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
+                              placeholder="Search Reagent" bs-typeahead
+
+                              ng-model="fields.antiMicroAgent">
+
+            </td>
+            <td>
+                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                        ng-model="fields.reportedToStatus">
+                    <option class="" selected disabled>--select reported--</option>
+                    <option value="yes">YES</option>
+                    <option value="no">NO</option>
+                </select>
+            </td>
+
+            <td><input type="text" class="form-control"
+                       ng-change="" ng-pattern="samples.numericOnly"
+                       ng-model="fields.diskContent"></td>
+            <td ng-init="fields.finalScore==4">
+                <input type="number" class="form-control"
+                                                      ng-change="" value="4"
+                                                      ng-model="fields.finalScore">
+            </td>
+            <td>
+                <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='few'"
+                   class="fa fa-check-circle fa-2x"></i>
+            </td>
+            <td>
+                <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='mod'"
+                   class="fa fa-check-circle fa-2x"></i>
+            </td>
+            <td>
+                <x ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'">
+                    <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
+                    </small>
+                </x>
+                <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='many'"
+                   class="fa fa-check-circle fa-2x"></i>
+            </td>
+            <td ng-init="samples.resultActiveFields=fields">
+                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
+                        ng-click="samples.resultAddField(0,$index)"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                        class="fa fa-plus"></i></button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="col-md-12 no-padding">
+                    <button class="btn btn-warning col-md-12" ng-disabled="true"
+                            ng-click="samples.susceptibilityFormData =''"
+                    >Reset
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div class="col-md-12 no-padding">
+
+                    <button class="btn btn-success col-md-12"
+                            ng-click="samples.saveAntiMicroAgent(samples.resultFields,1)"
+                            ng-disabled=" samples.savingInProgress||
+                                samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
+                    >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                    </button>
+
+
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
 </div>

@@ -50,6 +50,7 @@
         $scope.samples.couriers = {};
         $scope.samples.programs = {}
         $scope.samples.expectedResults = {};
+        $scope.samples.testAgents = {};
         function assignHTTPResponse(data, tableName) {
 
             if (tableName == 'tbl_bac_samples') {
@@ -98,21 +99,24 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgents = data.data;
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.grades = data.data;
+            }
 
         }
 
         $scope.samples.returnSamplesType = function (test) {
             console.log(test)
-            if(test==1){
+            if (test == 1) {
                 return 'ID';
             }
-            else if(test==2){
+            else if (test == 2) {
                 return 'Grain Stain';
             }
-            else if(test==3){
+            else if (test == 3) {
                 return 'AST';
             }
-            else{
+            else {
                 return '?'
             }
         }
@@ -428,6 +432,8 @@
         }
         $scope.samples.addSampleGrading = function (sample) {
             $scope.samples.samplesActivePage('addsamplegrading', 0);
+            $scope.samples.resultsFormData = {};
+            $scope.samples.resultFields = [{id: 1}];
             $scope.samples.clickedSample = sample;
         }
 
@@ -467,9 +473,16 @@
         }
 
         $scope.samples.courierFormData = {};
-        function emptyFormData(tableName) {
+        $scope.samples.gradingFormData = {};
+        function emptyFormData(tableName, type) {
 
-            $scope.samples.showMainTable(tableName, true)
+
+            if (!type) {
+                $scope.samples.showMainTable(tableName, false);
+            } else {
+                $scope.samples.showMainTable(tableName, true);
+            }
+
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = {};
             }
@@ -494,6 +507,9 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = {};
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData = {};
+            }
             if (tableName == 'tbl_bac_panels_shipments') {
 
             }
@@ -511,7 +527,7 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_panel_mst') {
-                $scope.samples.samplesActivePage('viewpanels', 0);
+                $scope.samples.samplesActivePage('viewPackaging', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
             }
             if (tableName == 'tbl_bac_couriers') {
@@ -530,12 +546,18 @@
                 $scope.samples.samplesActivePage('viewTestAgents', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_test_agents');
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.samplesActivePage('viewGrading', 0);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_grades');
+            }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.samplesActivePage('viewrounds', 0);
                 return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
             }
         }
+
+
         $scope.samples.emptyFormData = function (tableName) {
             emptyFormData(tableName)
         }
@@ -1031,19 +1053,31 @@
 
                                     console.log('data')
                                     console.log(response.data)
-
+                                    changeSavingSpinner(false);
                                     if (response.data.status == 1) {
-                                        emptyFormData(tableName);
+                                        emptyFormData(tableName, false);
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
 
                                     }
-                                    changeSavingSpinner(false);
+                                    if (alertStartRound != '') {
+
+                                        angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
+
+                                        if (response.data.status == 1) {
+                                            $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
+                                        } else {
+                                            $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                        }
+
+                                    }
+
                                 })
                                 .error(function (error) {
                                     changeSavingSpinner(false);
+
                                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                                 })
                         } catch (error) {
@@ -1078,6 +1112,7 @@
         /*-------------------------------------------------------------------------------END of saving generic function------------------------------------------------------------------------------------*/
         /*-------------------------------------------------------------------------------return the correct sample data from table name---------------------------------*/
         $scope.samples.couriers = {}
+        $scope.samples.grades = {}
         function sampleData(tableName, operation, changedData) {
             try {
                 var data = {};
@@ -1099,6 +1134,12 @@
                     data = $scope.samples.couriers;
                     if (operation == 1) {
                         $scope.samples.couriers = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_grades') {
+                    data = $scope.samples.grades;
+                    if (operation == 1) {
+                        $scope.samples.grades = changedData;
                     }
                 }
                 if (tableName == 'tbl_bac_programs') {
@@ -1284,6 +1325,9 @@
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.courierFormData.id = $scope.samples.currentEditingId;
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData.id = $scope.samples.currentEditingId;
+            }
             if (tableName == 'tbl_bac_programs') {
                 $scope.samples.programFormData.id = $scope.samples.currentEditingId;
             }
@@ -1398,7 +1442,9 @@
         $scope.samples.saveResultsFormData = function (resultsFormData) {
             if (angular.isDefined($scope.samples.resultsFormData.sampleId)) {
                 delete resultsFormData.batchName;
-
+                delete resultsFormData.materialSource;
+                delete resultsFormData.sampleDetails;
+                delete resultsFormData.sampleInstructions;
             } else {
                 resultsFormData.sampleId = $scope.samples.clickedSample.id;
             }
@@ -1472,6 +1518,224 @@
                 console.log(Exception)
             }
         }
+        $scope.samples.resultFields = [{id: 1}];
+        $scope.samples.resultAddField = function (action, indexPos) {
+            if (action == 0) {
+                var index = angular.isDefined(indexPos) ? indexPos : $scope.samples.resultFields.length - 1
+                $scope.samples.resultFields.splice(index, 1);
+            } else {
+
+                $scope.samples.resultFields.push({id: ($scope.samples.resultFields.length + 1)})
+
+            }
+
+        }
+        $scope.samples.saveAntiMicroAgent = function (data, type) {
+            var correctData = true;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i]['antiMicroAgent'] == '' || angular.isUndefined(data[i]['antiMicroAgent'])) {
+                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure Anti Micro Agent is filled at row " + (i + 1));
+                    correctData = false;
+                    break;
+                }
+                else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
+                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure reported To clinician is filled at row " + (i + 1));
+                    correctData = false;
+                    break;
+                }
+                else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
+                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure Disk Content is filled,and is a number at row " + (i + 1));
+                    correctData = false;
+                    break;
+                }
+                if (data[i]['diskContent'] != '' || angular.isDefined(data[i]['diskContent'])) {
+                    if (!angular.isNumber(Number(data[i]['diskContent']))) {
+                        $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> Disk content must be a number at row " + (i + 1));
+                        correctData = false;
+                        break;
+                    }
+                }
+
+
+            }
+            function saveABA() {
+
+                var aba = {}
+
+                var url = serverSamplesURL + 'saveusermicroagents';
+
+                var sampleData = $scope.samples.currentSampleForResponse;
+
+
+                aba.userId = sampleData.userId;
+
+                aba.sampleId = sampleData.sampleId;
+                aba.participantId = sampleData.participantId;
+                aba.roundId = sampleData.roundId;
+                aba.tableName = "tbl_bac_micro_bacterial_agents";
+                aba.panelToSampleId = sampleData.panelToSampleId;
+                aba.resultsAba = data;
+                $http
+                    .post(url, aba)
+                    .success(function (res) {
+                        console.log(res)
+                        alertStartRound.close();
+
+                        if (res.status == 1) {
+                            $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
+                        } else {
+                            $.alert("<i class='fa fa-remove text-danger'></i> error occured,likely you already submtted the result");
+                        }
+                    })
+                    .error(function (error) {
+                        $.alert("<i class='fa fa-remove text-danger'> Server error occured,please try again");
+                    })
+            }
+
+            function saveMicroDataForAdmin() {
+                var url = serverSamplesURL + 'saveusermicroagents';
+                var aba = {}
+                var sampleData = $scope.samples.clickedSample;
+                aba.sampleId = sampleData.id;
+                if (angular.isDefined($scope.samples.resultsFormData.id)) {
+
+                    aba.edit = 1;
+                    aba.sampleId = $scope.samples.resultsFormData.sampleId;
+                }
+
+                console.log($scope.samples.clickedSample);
+
+                aba.roundId = sampleData.roundId;
+                aba.tableName = "tbl_bac_expected_micro_bacterial_agents";
+                aba.resultsAba = data;
+
+                $http
+                    .post(url, aba)
+                    .success(function (res) {
+                        console.log(res)
+                        alertStartRound.close();
+                        if (res.status == 1) {
+                            $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
+                        } else {
+                            $.alert("<i class='fa fa-remove text-danger'></i> error occured,likely you already submtted the result");
+                        }
+                    })
+                    .error(function (error) {
+                        $.alert("<i class='fa fa-remove text-danger'> Server error occured,please try again");
+                    })
+            }
+
+            if (correctData) {
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: 'Are  you sure you want to submit the results anti microbacterial data? ',
+                    buttons: {
+                        'Confirm Action': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+
+                                alertStartRound = $.alert('<i class="fa fa-spinner fa-spin"> </i> Saving results,please wait...!');
+                                if (angular.isDefined(type)) {
+                                    saveMicroDataForAdmin();
+                                } else {
+                                    saveABA();
+                                }
+                                // $scope.samples.saveSampleFormData(tablename, userFeedbackData)
+
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+            }
+        }
+        $scope.samples.reagentLevel = '';
+        $scope.samples.exists = false;
+        $scope.samples.checkReagentLevel = function (agent, range) {
+
+            var agents = $scope.samples.testAgents;
+            console.log(agent)
+            if (agents.length > 0 && agent != '' && angular.isDefined(agent)) {
+
+                for (var i = 0; i < agents.length; i++) {
+
+                    if (agent == agents[i].testAgentName) {
+                        $scope.samples.exists = true;
+                        if (range <= Number(agents[i].fewRange)) {
+                            $scope.samples.reagentLevel = 'few';
+                        }
+                        else if (range > Number(agents[i].fewRange) && range <= Number(agents[i].modRange)) {
+                            $scope.samples.reagentLevel = 'mod';
+                        }
+                        else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
+                            $scope.samples.reagentLevel = 'many';
+                        } else if (range < 0 || range > Number(agents[i].manyRange)) {
+                            $scope.samples.reagentLevel = 'outOfRange'
+
+                        }
+                        break;
+                    } else {
+                        $scope.samples.reagentLevel = 'outOfRange'
+                        $scope.samples.exists = false;
+                    }
+                }
+                if (!$scope.samples.exists) {
+                    // $.alert("<i class='fa fa-exclamation-triangle'></i> please type the corrent anti-bacterial name");
+                }
+                return $scope.samples.reagentLevel;
+            } else {
+                // $.alert("<i class='fa fa-exclamation-triangle'></i> No test reagents found");
+            }
+        }
+        $scope.samples.saveFeedbackFormData = function (userFeedbackData, tablename) {
+
+            var sampleData = $scope.samples.currentSampleForResponse;
+            console.log(sampleData)
+            userFeedbackData.userId = sampleData.userId;
+            userFeedbackData.sampleId = sampleData.sampleId;
+            userFeedbackData.participantId = sampleData.participantId;
+            userFeedbackData.roundId = sampleData.roundId;
+            userFeedbackData.panelToSampleId = sampleData.panelToSampleId;
+
+
+            try {
+                $.confirm({
+                    title: 'Confirm!',
+                    theme: 'supervan',
+                    content: 'Are  you sure you want to submit the results? ',
+                    buttons: {
+                        'Confirm Action': {
+                            btnClass: 'btn-blue',
+                            action: function () {
+
+                                alertStartRound = $.alert('<i class="fa fa-spinner fa-spin"> </i> Saving results,please wait...!');
+                                $scope.samples.saveSampleFormData(tablename, userFeedbackData)
+
+                            }
+                        },
+                        cancel: {
+                            btnClass: 'btn-red',
+                            action: function () {
+                                // $.alert('cancelled !');
+                            }
+                        }
+                    }
+                })
+
+
+            } catch (Exc) {
+
+            }
+
+
+        }
+
         $scope.samples.updateStatus = function (tableName, status, id) {
             var postedData = {};
             try {
@@ -2231,6 +2495,13 @@
 
 
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData = data;
+                console.log(data)
+                $scope.samples.samplesActivePage('addGradingLevels', 0);
+
+
+            }
             if (tableName == 'tbl_bac_programs') {
                 $scope.samples.programFormData = data;
                 console.log(data)
@@ -2250,6 +2521,7 @@
                 $scope.samples.resultsFormData = data;
                 console.log(data)
                 $scope.samples.samplesActivePage('addsamplegrading', 0);
+                getMicroAgents(data)
 
             }
             if (tableName == 'tbl_bac_test_agents') {
@@ -2259,6 +2531,29 @@
 
             }
         }
+        $scope.samples.microAgentsUpdateStatus = false;
+        function getMicroAgents(data) {
+            try {
+                var where = data;
+                $scope.samples.microAgentsUpdateStatus = true;
+                var url = serverSamplesURL + 'getmicroagents';
+                $scope.samples.clickedSample = data;
+                $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        if (response.status == 1) {
+                            $scope.samples.resultFields = response.data;
+                        }
+                    })
+                    .error(function () {
+
+                    })
+
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+
         //===================================================================end of edit function===================================================================
 
         //===========================================================================================================================================================

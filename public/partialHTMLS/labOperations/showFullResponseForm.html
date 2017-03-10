@@ -1,0 +1,352 @@
+<div class="col-md-12">
+    <div class="clearfix">
+        &nbsp;
+    </div>
+    <div class=" col-md-12">
+
+        <button class="btn btn-sm btn-danger pull-right"
+                ng-click="reports.showResults=true"><i class="fa fa-close"></i> close
+        </button>
+    </div>
+    <div class="clearfix">
+        &nbsp;
+    </div>
+    <div class="h3 text-center col-md-12">
+        RESPONSE PT REPORT  <i class="fa fa-spin {{reports.loader}}"></i>
+        <hr>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel panel-body">
+            <div class="h4 text-center col-md-12 text-bold border-bottom">
+                MINISTRY OF HEALTH<br>
+                NATIONAL PUBLIC HEALTH LABORATORY<br>
+                NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA<br>
+                STANDARD OPERATING PROCEDURE
+
+            </div>
+            <div class="col-md-12">
+                <h4>MICROBIOLOGY IDENTIFICATION REPORT
+
+                </h4>
+                <div class="">
+                    <table class="table table-bordered">
+                        <thead class="btn-primary">
+                        <tr>
+                            <th>
+                                SAMPLE
+                            </th>
+                            <th>
+                                SOURCE
+                            </th>
+                            <th>
+                                CLINICAL DETAILS
+                            </th>
+                            <th>
+                                INSTRUCTIONS
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{reports.currentResults.batchName}}</td>
+                            <td>{{reports.currentResults.materialSource}}</td>
+
+                            <td>{{reports.currentResults.sampleDetails}}</td>
+                            <td>{{reports.currentResults.sampleInstructions}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <form class="form-horizontal" novalidate="" name="resultsData">
+                    <table class="table table-bordered" >
+                        <thead class="btn-primary">
+                        <tr>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Results
+                            </th>
+                            <th>
+                                score
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody ng-form novalidate="" name="resultsData" >
+                        <tr >
+                            <td width="30%">Gram stain reaction and morphology</td>
+                            <td width="60%">
+                                {{reports.userResults.results.grainStainReaction}}
+                            </td>
+                            <td class="10%">
+                                {{reports.userResults.results.grainStainReactionScore}}
+                            </td>
+
+                        </tr>
+                        <tr >
+                            <td width="30%">Details of primary media used for isolation and manufacturer</td>
+                            <td width="60%"> {{reports.userResults.results.primaryMedia}}</td>
+                            <td class="10%"> {{reports.userResults.results.primaryMediaScore}}
+                            </td>
+
+                        </tr>
+                        <tr >
+                            <td width="30%">Incubation conditions</td>
+                            <td width="60%"> {{reports.userResults.results.incubationConditions}}</td>
+                            <td class="10%"> {{reports.userResults.results.incubationConditionsScore}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td width="30%">Colonial morphology (colony appearance on media)</td>
+                            <td width="60%"> {{reports.userResults.results.colonialMorphology}}</td>
+                            <td class="10%"> {{reports.userResults.results.colonialMorphologyScore}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td width="30%">Bacterial quantification (if applicable)</td>
+                            <td width="60%"> {{reports.userResults.results.bacterialQualification}}</td>
+                            <td class="10%"> {{reports.userResults.results.bacterialQualificationScore}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td width="30%">Biochemical reagents or test used for organisms identification e.g. API,
+                                Indole.
+                                Indicate
+                                the reaction observed.
+                            </td>
+
+                            <td width="60%"> {{reports.userResults.results.bacterialReagents}}</td>
+                            <td class="10%"> {{reports.userResults.results.bacterialReagentsScore}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+                            <td width="60%"> {{reports.userResults.results.isolateProcessing}}</td>
+                            <td class="10%"> {{reports.userResults.results.isolateProcessingScore}}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td width="30%">Final identification (i.e. report given to clinician)</td>
+                            <td width="60%"> {{reports.userResults.results.finalIdentification}}</td>
+                            <td class="10%"> {{reports.userResults.results.finalIdentificationScore}}
+                            </td>
+
+                        </tr>
+                        <tr class="text-bold">
+                            <td width="30% ">
+                                TOTAL SCORE
+                            </td>
+                            <td width="60%" > {{reports.userResults.results.finalScore}}</td>
+                            <td class="10%">
+
+                            </td>
+                        </tr>
+                        <tr class="text-bold">
+                            <td width="30%">
+                                Remarks
+                            </td>
+                            <td width="60%" > {{reports.userResults.results.remarks}}</td>
+                            <td class="10%">
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <h4>SUSCEPTIBILITY TESTING REPORT</h4>
+            <div class="">
+                <br>
+            </div>
+            <div class="form-horizontal" novalidate="" name="resultsData">
+                <table class="table table-bordered">
+                    <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Results
+                        </th>
+                        <th>
+                            score
+                        </th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody ng-form novalidate="" name="susceptibilityData">
+                    <tr>
+                        <td width="30%">Survey number</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Isolate identification</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Media used</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Manufacturer of media</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Manufacturer of disc and disc size (mm):
+                        </td>
+
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="30%">Guidelines used (CLSI):</td>
+                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td class="10%">N/A
+                        </td>
+
+                    </tr>
+                    <tr class="text-bold">
+                        <td width="30%">
+                            Recommedations
+                        </td>
+                        <td width="60%">{{reports.userResults.susceptibility.remarks}}</td>
+                        <td class="10%">N/A
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="">
+
+                <h4>ANTIMICROBIAL AGENT</h4>
+                <div class="">
+                    <br>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            ANTIMICROBIAL
+                            AGENT
+
+                        </th>
+                        <th>
+                            Reported to
+                            Clinician(Yes or No)
+
+                        </th>
+                        <th>
+                            DISK CONTENT
+                            (&micro;g or Units)
+
+                        </th>
+                        <th>Score</th>
+                        <th>
+                            S <sup>1</sup>
+                        </th>
+                        <th>
+                            I <sup>2</sup>
+                        </th>
+                        <th>
+                            R <sup>3</sup>
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="fields in  reports.userResults.microAgents">
+                        <td nowrap>
+                            {{fields.antiMicroAgent}}
+                        </td>
+                        <td>
+                            {{fields.reportedToStatus}}
+                        </td>
+
+                        <td>
+                            {{fields.diskContent}}
+                        </td>
+                        <td>
+                            {{fields.score}}
+                        </td>
+                        <td>
+                            <i ng-show="fields.range=='few'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+                        <td>
+                            <i ng-show="fields.range=='mod'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+                        <td>
+                            <x ng-show="fields.range=='outOfRange'">
+                                <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
+                                </small>
+                            </x>
+                            <i ng-show="fields.range=='many'"
+                               class="fa fa-check-circle fa-2x"></i>
+                        </td>
+
+                    </tr>
+
+                    <tr class="text-bold">
+                        <td>
+                            SCORE
+                        </td>
+                        <td colspan="6">
+                            {{reports.userResults.results.totalMicroAgentsScore}}
+                        </td>
+
+                    </tr>
+                    <tr class="text-bold">
+                        <td>
+                            RECOMMEDATIONS
+                        </td>
+                        <td colspan="6">
+                            {{reports.userResults.results.remarks}}
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

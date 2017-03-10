@@ -1,0 +1,74 @@
+<div>
+    <div id='ng-app' ng-app="ReportModule" ng-cloak="">
+        <div class="bacteriology" ng-controller="samplesController">
+
+            <div ng-controller="ReportsController">
+                <div class="">
+                    <ul class="nav nav-tabs" ng-init="clickedTab = 'samples'">
+
+                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
+                            <a href="" ng-click="clickedTab = 'samples'">General</a>
+                        </li>
+                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
+                            <a href="" ng-click="clickedTab = 'rounds'">Evaluate</a>
+                        </li>
+                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'Packaging'}">
+                            <a href="" ng-click="clickedTab = 'Packaging'">Generate Reports</a>
+                        </li>
+                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
+                            <a href="" ng-click="clickedTab = 'shipments'">Finalized Reports</a>
+                        </li>
+
+
+                        <li class='pull-right'>
+                            <div class="dropdown">
+
+                                <button class="text-capitalize btn btn-default btn-sm dropdown-toggle" type="button"
+                                        id="menu1" data-toggle="dropdown">{{clickedTab|capitalizeLetter}} &nbsp;
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                                    <li role="presentation">
+                                        <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab)"><i
+                                                class="fa fa-fw fa-save"></i> Add {{clickedTab|capitalizeLetter}}</a>
+
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#" ng-click="samples.samplesActivePage('view'+clickedTab)"><i
+                                                class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
+
+                                    </li>
+                                    <!--
+                                    <li role="presentation">
+                                        <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab)"><i
+                                                    class="fa fa-fw fa-search-plus"></i>
+                                            {{clickedTab|capitalizeLetter}} Report </a>
+                                    </li>
+                                    -->
+                                </ul>
+
+                            </div>
+
+                            <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
+                            -->
+
+                        </li>
+
+
+                    </ul>
+                </div>
+
+                <ng-include src='reports.loadedCurrentUrl' onload="reports.hideFaLoader()">
+
+                </ng-include>
+                <div ng-show="reports.loaderStatus" class="text-center">
+                    <hr><br>
+                    <i class="fa fa-spin fa-spinner fa-3x"></i><br>
+                    loading...
+                </div>
+
+
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+</div>
