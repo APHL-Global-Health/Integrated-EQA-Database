@@ -1,5 +1,9 @@
 <div>
-    <h3>EXPECTED RESULTS AND SCORES <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></h3>
+    <h3>EXPECTED RESULTS AND SCORES <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button class="pull-right btn btn-danger btn-sm text-gray"
+                ng-click="samples.samplesActivePage('viewsamples',0)"><i class="fa fa-close"></i> close
+        </button>
+    </h3>
     <div class="pull-right">
 
         <div class=" col-md-12 no-padding">
@@ -21,12 +25,18 @@
                 &nbsp;
             </div>
         </div>
+
     </div>
     <div class="clearfix">&nbsp;</div>
     <div id='alert' tabindex='1'></div>
     <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Server Response : </strong> {{samples.feedbackObject.fbMessage}}
+    </div>
+    <div ng-init="scoreCols=false" class="col-md-12 text-primary">
+
+        <a href="#" ng-click="scoreCols=false" ng-show="scoreCols"><i class="fa fa-check-circle"></i> hide score columns</a>
+        <a href="#" ng-click="scoreCols=true" ng-hide="scoreCols"><i class="fa fa-minus-circle"></i> show score columns</a>
     </div>
     <div class="col-md-12" style="overflow-x:auto;">
         <table class="table table-bordered text-capitalize">
@@ -36,19 +46,19 @@
                 <th>Sample</th>
                 <!--<th>Round</th>-->
                 <th>grain Stain Reaction</th>
-                <th>grain StainScore</th>
+                <th ng-show="scoreCols">grain StainScore</th>
                 <th>primary Media</th>
-                <th>primaryMedia Score</th>
+                <th ng-show="scoreCols">primaryMedia Score</th>
                 <th>incubation Conditions</th>
-                <th>incubation Conditions Score</th>
+                <th ng-show="scoreCols">incubation Conditions Score</th>
                 <th>colonial Morphology</th>
-                <th>colonial Morphology Score</th>
+                <th ng-show="scoreCols">colonial Morphology Score</th>
                 <th>bacterial Qualification</th>
-                <th>bacterial Qualification Score</th>
+                <th ng-show="scoreCols">bacterial Qualification Score</th>
                 <th>bacterial Reagents</th>
-                <th>bacterial Reagents Score</th>
+                <th ng-show="scoreCols">bacterial Reagents Score</th>
                 <th>final Identification</th>
-                <th>final Identification Score</th>
+                <th ng-show="scoreCols">final Identification Score</th>
                 <th>Date Created</th>
                 <th></th>
             </tr>
@@ -58,20 +68,20 @@
                 <td>{{$index+1}}</td>
                 <td>{{expectedResults.batchName}}</td>
                 <td>{{expectedResults.grainStainReaction}}</td>
-                <td>{{expectedResults.grainStainReactionScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.grainStainReactionScore}}</td>
                 <td>{{expectedResults.primaryMedia}}</td>
-                <td>{{expectedResults.primaryMediaScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.primaryMediaScore}}</td>
                 <td>{{expectedResults.incubationConditions}}</td>
-                <td>{{expectedResults.incubationConditionsScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.incubationConditionsScore}}</td>
                 <td>{{expectedResults.colonialMorphology}}</td>
-                <td>{{expectedResults.colonialMorphologyScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.colonialMorphologyScore}}</td>
                 <td>{{expectedResults.bacterialQualification}}</td>
-                <td>{{expectedResults.bacterialQualificationScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.bacterialQualificationScore}}</td>
                 <td>{{expectedResults.bacterialReagents}}</td>
-                <td>{{expectedResults.bacterialReagentsScore}}</td>
+                <td ng-show="scoreCols">{{expectedResults.bacterialReagentsScore}}</td>
                 <td>{{expectedResults.finalIdentification}}</td>
-                <td>{{expectedResults.finalIdentificationScore}}</td>
-                <td>{{expectedResults.dateCreated}}</td>
+                <td ng-show="scoreCols">{{expectedResults.finalIdentificationScore}}</td>
+                <td>{{expectedResults.dateCreated }}</td>
                 <td>
                     <a href="#" class="label label-info"
                        ng-click="samples.editFunction(expectedResults,'tbl_bac_expected_results')">

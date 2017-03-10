@@ -3,10 +3,12 @@
         <br>
         Expected Result for <b> {{samples.clickedSample.batchName}}</b>
         <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
-        <button class="pull-right btn btn-danger btn-sm text-gray"
+        <button class="pull-right btn btn-danger btn-sm text-gray"  ng-hide="samples.resultsFormData.id >0"
                 ng-click="samples.samplesActivePage('viewsamples',0)"><i class="fa fa-close"></i> cancel
         </button>
-
+        <button class="pull-right btn btn-danger btn-sm text-gray" ng-show="samples.resultsFormData.id >0"
+                ng-click="samples.samplesActivePage('viewExpectedResults',0)"><i class="fa fa-close"></i> close
+        </button>
     </div>
     <br>
 </div>
@@ -308,7 +310,7 @@
         <tr>
             <td>
                 <div class="col-md-12 no-padding">
-                    <button class="btn btn-warning col-md-12"
+                    <button class="btn btn-warning col-md-12" ng-disabled="true"
                             ng-click="samples.susceptibilityFormData =''"
                     >Reset
                     </button>

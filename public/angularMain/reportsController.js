@@ -132,7 +132,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     showAjaxLoader(false)
                     alertStartRound.close();
                     if (response.status == 1) {
-                        $scope.reports.currentRoundEvaluation.evaluated=1;
+                        $scope.reports.currentRoundEvaluation.evaluated = 1;
                         $scope.reports.showShipmentEvaluationForRound($scope.reports.currentRoundEvaluation, true);
 
 
@@ -224,5 +224,25 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 }
             }
         })
+    }
+    $scope.reports.showResults = true;
+    $scope.samples.currentResults = {};
+    $scope.reports.showReponseFullInfo = function (samples) {
+        try {
+            $scope.reports.showResults = false;
+            $scope.samples.currentResults = samples;
+            console.log($scope.samples.currentResults);
+            var url = serverReportURL + 'getlabuserresponse';
+
+            $http.post(url, samples)
+                .success(function (response) {
+                    console.log(response)
+                })
+                .error(function () {
+
+                })
+        } catch (Exc) {
+
+        }
     }
 })

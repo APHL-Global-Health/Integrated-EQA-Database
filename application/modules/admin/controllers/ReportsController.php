@@ -305,8 +305,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $returnArray['remarks'] = 'Not Available';
 
         if ($range != false) {
-            foreach($range as $key=>$value){
-                if( $total >=$value->lowerMark && $total<=$value->upperMark ){
+            foreach ($range as $key => $value) {
+                if ($total >= $value->lowerMark && $total <= $value->upperMark) {
                     $returnArray['grade'] = $value->grade;
                     $returnArray['remarks'] = $value->remarks;
                     break;
@@ -433,5 +433,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function getlabuserresponseAction()
+    {
+        $postedData = $this->returnArrayFromInput();
     }
 }

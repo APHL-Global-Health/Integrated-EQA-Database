@@ -1442,7 +1442,9 @@
         $scope.samples.saveResultsFormData = function (resultsFormData) {
             if (angular.isDefined($scope.samples.resultsFormData.sampleId)) {
                 delete resultsFormData.batchName;
-
+                delete resultsFormData.materialSource;
+                delete resultsFormData.sampleDetails;
+                delete resultsFormData.sampleInstructions;
             } else {
                 resultsFormData.sampleId = $scope.samples.clickedSample.id;
             }
