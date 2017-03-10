@@ -99,6 +99,9 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgents = data.data;
             }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.grades = data.data;
+            }
 
         }
 
@@ -468,6 +471,7 @@
         }
 
         $scope.samples.courierFormData = {};
+        $scope.samples.gradingFormData = {};
         function emptyFormData(tableName, type) {
 
 
@@ -500,6 +504,9 @@
             }
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = {};
+            }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData = {};
             }
             if (tableName == 'tbl_bac_panels_shipments') {
 
@@ -536,6 +543,10 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.samplesActivePage('viewTestAgents', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_test_agents');
+            }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.samplesActivePage('viewGrading', 0);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_grades');
             }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.samplesActivePage('viewrounds', 0);
@@ -1100,6 +1111,7 @@
         /*-------------------------------------------------------------------------------END of saving generic function------------------------------------------------------------------------------------*/
         /*-------------------------------------------------------------------------------return the correct sample data from table name---------------------------------*/
         $scope.samples.couriers = {}
+        $scope.samples.grades ={}
         function sampleData(tableName, operation, changedData) {
             try {
                 var data = {};
@@ -1121,6 +1133,12 @@
                     data = $scope.samples.couriers;
                     if (operation == 1) {
                         $scope.samples.couriers = changedData;
+                    }
+                }
+                if (tableName == 'tbl_bac_grades') {
+                    data = $scope.samples.grades;
+                    if (operation == 1) {
+                        $scope.samples.grades = changedData;
                     }
                 }
                 if (tableName == 'tbl_bac_programs') {
@@ -1305,6 +1323,9 @@
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.courierFormData.id = $scope.samples.currentEditingId;
+            }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData.id = $scope.samples.currentEditingId;
             }
             if (tableName == 'tbl_bac_programs') {
                 $scope.samples.programFormData.id = $scope.samples.currentEditingId;
@@ -2460,6 +2481,13 @@
                 $scope.samples.courierFormData = data;
                 console.log(data)
                 $scope.samples.samplesActivePage('addcourier', 0);
+
+
+            }
+            if (tableName == 'tbl_bac_grades') {
+                $scope.samples.gradingFormData = data;
+                console.log(data)
+                $scope.samples.samplesActivePage('addGradingLevels', 0);
 
 
             }

@@ -1,28 +1,29 @@
 <div class="col-md-12" ng-cloak="">
 
-    <div class="col-md-8 col-md-offset-2 ">
+    <div class="col-md-8 col-md-offset-2 text-capitalize">
         <H3>
             <x ng-show="samples.gradingFormData.id > 0">Edit {{samples.gradingFormData.batchName}}</x>
             <x ng-hide="samples.gradingFormData.id > 0">Add</x>
-            Program
+            Grades
             <div class="pull-right">
                 <button class="btn btn-sm btn-info" ng-click="samples.samplesActivePage('viewGrading')">View
                     Grading
                 </button>
             </div>
         </H3>
-        <div id='alert' tabindex='1'>
-            <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
-                <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
-            </div>
+        <div id='alert' tabindex='1'></div>
+        <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
         </div>
+
         <form name="gradingData" novalidate="" class="form-horizontal ">
             <div class="form-group row"
                  ng-class="{ 'has-error'  : gradingData.grade.$invalid && !gradingData.grade.$pristine }">
                 <label class="col-2 col-form-label">Grade</label>
                 <div class="col-10">
-                    <input class="form-control " required="" ng-model="samples.gradingFormData.grade" placeholder="Grade Name"
+                    <input class="form-control " required="" ng-model="samples.gradingFormData.grade"
+                           placeholder="Grade Name"
                            name="grade" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
                            ng-show="gradingData.grade.$invalid && !gradingData.grade.$pristine">
@@ -53,7 +54,8 @@
                        || gradingData.upperMark.$invalid && !gradingData.upperMark.$pristine">
                     Error : Required & Only numbers.
                 </small>
-                <small  class="text-danger col-md-12" ng-show="samples.gradingFormData.lowerMark >= samples.gradingFormData.upperMark">
+                <small class="text-danger col-md-12"
+                       ng-show="samples.gradingFormData.lowerMark >= samples.gradingFormData.upperMark">
                     Upper marks should be more than lower marks
                 </small>
             </div>

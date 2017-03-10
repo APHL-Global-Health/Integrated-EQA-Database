@@ -156,7 +156,6 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             $updateArray = $this->updateResponseResults((array)$responseResults[$key]);
 
 
-
                         }
 
 
@@ -265,12 +264,28 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                     $updateSuscepibility = $this->updateSuscepibilityScore($whereResponse);
                     if ($updateSuscepibility['status']) {
                         $update['feedBack'] = 1;
+
+
                         $update['totalCorrectScore'] = $score['finalScore'];
                         $update['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
+
+                        $score['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
+                        /*total grading update of marks happens here*/
+                        $total = $score['totalMicroAgentsScore'] + $update['totalCorrectScore'];
+                        $gradingArray = $this->getGradeRemark($total);
+
+                        $update['grade'] = $gradingArray['grade'];
+                        $update['remarks'] = $gradingArray['remarks'];
+
+                        $score['grade'] = $gradingArray['grade'];
+                        $score['remarks'] = $gradingArray['remarks'];
+
+                        $updateLabResultsResp = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
+
                         $updateLabResults = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereResponse, $update);
 
                         if ($updateLabResults['status'] == 0) {
-                            var_dump($updateLabResults);
+//                            var_dump($updateLabResults);
                         }
                     }
                 }
@@ -279,6 +294,28 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
         }
         return true;
+    }
+
+    public function getGradeRemark($total)
+    {
+
+        $where = '';
+        $range = $this->dbConnection->selectFromTable('tbl_bac_grades', $where);
+        $returnArray['grade'] = 'Not Set';
+        $returnArray['remarks'] = 'Not Available';
+
+        if ($range != false) {
+            foreach($range as $key=>$value){
+                if( $total >=$value->lowerMark && $total<=$value->upperMark ){
+                    $returnArray['grade'] = $value->grade;
+                    $returnArray['remarks'] = $value->remarks;
+                    break;
+                }
+            }
+        }
+        return $returnArray;
+
+
     }
 
     public function getMicroLevel($diskContent, $antiMicroAgent)
