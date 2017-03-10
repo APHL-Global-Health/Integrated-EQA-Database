@@ -432,6 +432,8 @@
         }
         $scope.samples.addSampleGrading = function (sample) {
             $scope.samples.samplesActivePage('addsamplegrading', 0);
+            $scope.samples.resultsFormData = {};
+            $scope.samples.resultFields = [{id: 1}];
             $scope.samples.clickedSample = sample;
         }
 
@@ -554,7 +556,6 @@
 
             }
         }
-
 
 
         $scope.samples.emptyFormData = function (tableName) {
@@ -1111,7 +1112,7 @@
         /*-------------------------------------------------------------------------------END of saving generic function------------------------------------------------------------------------------------*/
         /*-------------------------------------------------------------------------------return the correct sample data from table name---------------------------------*/
         $scope.samples.couriers = {}
-        $scope.samples.grades ={}
+        $scope.samples.grades = {}
         function sampleData(tableName, operation, changedData) {
             try {
                 var data = {};
@@ -1546,7 +1547,7 @@
                     break;
                 }
                 if (data[i]['diskContent'] != '' || angular.isDefined(data[i]['diskContent'])) {
-                    if (!angular.isNumber(data[i]['diskContent'])) {
+                    if (!angular.isNumber(Number(data[i]['diskContent']))) {
                         $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> Disk content must be a number at row " + (i + 1));
                         correctData = false;
                         break;
@@ -1556,11 +1557,13 @@
 
             }
             function saveABA() {
+
+                var aba = {}
+
                 var url = serverSamplesURL + 'saveusermicroagents';
 
                 var sampleData = $scope.samples.currentSampleForResponse;
 
-                var aba = {}
 
                 aba.userId = sampleData.userId;
 
@@ -1575,6 +1578,7 @@
                     .success(function (res) {
                         console.log(res)
                         alertStartRound.close();
+
                         if (res.status == 1) {
                             $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
                         } else {
@@ -1588,12 +1592,17 @@
 
             function saveMicroDataForAdmin() {
                 var url = serverSamplesURL + 'saveusermicroagents';
-
-                var sampleData = $scope.samples.clickedSample;
-
                 var aba = {}
-                console.log($scope.samples.clickedSample);
+                var sampleData = $scope.samples.clickedSample;
                 aba.sampleId = sampleData.id;
+                if (angular.isDefined($scope.samples.resultsFormData.id)) {
+
+                    aba.edit = 1;
+                    aba.sampleId = $scope.samples.resultsFormData.sampleId;
+                }
+
+                console.log($scope.samples.clickedSample);
+
                 aba.roundId = sampleData.roundId;
                 aba.tableName = "tbl_bac_expected_micro_bacterial_agents";
                 aba.resultsAba = data;
@@ -2510,6 +2519,7 @@
                 $scope.samples.resultsFormData = data;
                 console.log(data)
                 $scope.samples.samplesActivePage('addsamplegrading', 0);
+                getMicroAgents(data)
 
             }
             if (tableName == 'tbl_bac_test_agents') {
@@ -2519,6 +2529,29 @@
 
             }
         }
+        $scope.samples.microAgentsUpdateStatus = false;
+        function getMicroAgents(data) {
+            try {
+                var where = data;
+                $scope.samples.microAgentsUpdateStatus = true;
+                var url = serverSamplesURL + 'getmicroagents';
+                $scope.samples.clickedSample = data;
+                $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        if (response.status == 1) {
+                            $scope.samples.resultFields = response.data;
+                        }
+                    })
+                    .error(function () {
+
+                    })
+
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+
         //===================================================================end of edit function===================================================================
 
         //===========================================================================================================================================================

@@ -1,4 +1,4 @@
-<div class="" ng-hide="reports.loaderStatus" ng-controller="ReportsController">
+<div class=""  ng-controller="ReportsController">
     <div class="col-md-12 clearfix">
         <h3>Response Reports
             <small>{{reports.responseInfoData.length}} records</small>
@@ -58,9 +58,9 @@
                 <th>organisms Score</th>
                 <th>Susceptibility Score</th>
 
-                <th>Remark</th>
+                <th>Grade</th>
                 <th>Date</th>
-                <th>recom'n</th>
+                <th>Remarks</th>
                 <th></th>
             </tr>
             </thead>
@@ -80,9 +80,9 @@
                 <td>{{sampleResponse.totalCorrectScore}}</td>
                 <td nowrap>{{sampleResponse.totalMicroAgentsScore}}</td>
 
-                <td nowrap>{{sampleResponse.remark}}</td>
+                <td nowrap>{{sampleResponse.grade}}</td>
                 <td>{{sampleResponse.dateCreated}}</td>
-                <td>{{sampleResponse.recommedations}}</td>
+                <td>{{sampleResponse.remarks}}</td>
                 <td>
                     <button class="label label-info" ng-click="samples.samplesActivePage('showFullResponseForm',1)"><i class="fa fa-eye"></i> view</button>
                 </td>

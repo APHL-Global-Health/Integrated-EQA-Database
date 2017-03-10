@@ -209,7 +209,7 @@
     </table>
 </form>
 </div>
-<div class="">
+<div class="" ng-init="samples.get">
     <h3><u>ANTIMICROBIAL AGENT</u></h3>
     <table class="table table-bordered">
         <thead class="btn-primary">
@@ -273,8 +273,8 @@
                 </select>
             </td>
 
-            <td><input type="number" class="form-control"
-                       ng-change=""
+            <td><input type="text" class="form-control"
+                       ng-change="" ng-pattern="samples.numericOnly"
                        ng-model="fields.diskContent"></td>
             <td ng-init="fields.finalScore==4">
                 <input type="number" class="form-control"
@@ -316,12 +316,15 @@
             </td>
             <td>
                 <div class="col-md-12 no-padding">
+
                     <button class="btn btn-success col-md-12"
                             ng-click="samples.saveAntiMicroAgent(samples.resultFields,1)"
                             ng-disabled=" samples.savingInProgress||
                                 samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
                     >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                     </button>
+
+
                 </div>
             </td>
             <td></td>

@@ -496,6 +496,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
                         $dataDB[$key]->batchName = $sample['batchName'];
+                        $dataDB[$key]->materialSource = $sample['materialSource'];
+                        $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
+                        $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
                     } else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
@@ -519,6 +522,23 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $e->getMessage();
         }
 
+    }
+
+    public function getmicroagentsAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+//print_r($postedData);
+//exit;
+        $where['sampleId'] = $postedData['sampleId'];
+        $microAgents = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $where);
+//        var_dump($where);
+//        exit;
+        if ($microAgents != false) {
+            echo $this->returnJson(array("status" => 1, 'data' => $microAgents));
+        } else {
+            echo $this->returnJson(array("status" => 0, 'message' => 'No Records Found'));
+        }
+        exit;
     }
 
     public function getusersessionsAction()
@@ -960,7 +980,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         if (count($insertData) > 0) {
             $resp['status'] = 0;
-
+            if (isset($postedData['edit'])) {
+                $deleteWhere['sampleId'] = $postedData['sampleId'];
+                $status = $this->dbConnection->deleteFromWhere('tbl_bac_expected_micro_bacterial_agents', $deleteWhere);
+//                echo $this->returnJson($status);
+//                exit;
+            }
             for ($i = 0; $i < sizeof($insertData); $i++) {
 
                 $newFinal = (array)$insertData[$i];

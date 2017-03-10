@@ -332,6 +332,8 @@ Class Main extends pdfCreator
                     }
                 }
                 if (is_string($sql)) {
+//                    echo $sql;
+//                    exit;
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {
