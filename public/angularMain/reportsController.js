@@ -318,36 +318,67 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         }
     }
     $scope.reports.currentClickedLabResults = {};
+    $scope.reports.microagentsData = {};
     $scope.reports.evaluateIndividual = function (individual) {
         $scope.reports.currentClickedLabResults = individual;
         $scope.reports.changeCurrentReport('evaluateIndividualLabs');
+        showAjaxLoader(true);
+        var where = {
+            userId: individual.userId,
+            sampleId: individual.sampleId,
+            participantId: individual.participantId,
+            roundId: individual.roundId
+        }
+        var url = serverReportURL + 'getmicroagentswhere';
+        $http.post(url, where)
+            .success(function (response) {
+                showAjaxLoader(false);
+                console.log(response);
+                if (response.status == 1) {
+                    $scope.reports.microagentsData = response.data;
+                }
+            })
+            .error(function (error) {
+                showAjaxLoader(false);
+            })
+
     }
 
     $scope.reports.saveIndividualEvaluation = function (individualResults) {
         try {
 
-            var data = {
-                update: individualResults,
-                id: individualResults.id
-            }
-            delete data.update.id;
-            delete data.update.batchName;
-            delete data.update.materialSource;
-            delete data.update.sampleDetails;
-            delete data.update.sampleInstructions;
-            delete data.update.labDetails;
-            delete data.update.evaluatedStatus;
-            console.log(individualResults);
-            var url = serverReportURL + 'updatefunction';
-            $http
-                .post(url, data)
-                .success(function (response) {
-                    console.log(response)
-                })
-                .error(function (error) {
-                    console.log(error)
-                })
+            function evaluateLab() {
+                var data = {
+                    update: individualResults,
+                    id: individualResults.id
+                }
+                // delete data.update.id;
+                // delete data.update.batchName;
+                // delete data.update.materialSource;
+                // delete data.update.sampleDetails;
+                // delete data.update.sampleInstructions;
+                // delete data.update.labDetails;
+                // delete data.update.evaluatedStatus;
+                console.log(individualResults);
+                var url = serverReportURL + 'updatefunction';
+                $http
+                    .post(url, data)
+                    .success(function (response) {
+                        if (response.status == 1) {
+                            $.alert('<i class="fa fa-check-circle"></i> Lab evaluated successfully');
+                        } else {
+                            $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                        }
+                    })
+                    .error(function (error) {
+                        $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                        console.log(error)
+                    })
 
+            }
+
+            var message = 'Are you sure you want to evaluate the lab ' + individualResults.labDetails.institute_name;
+            $scope.reports.confirmDialog(message, evaluateLab)
         } catch (exc) {
 
         }

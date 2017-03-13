@@ -85,7 +85,7 @@
             <td width="30%">Gram stain reaction and morphology</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter the grain stain results"
+                       placeholder="Please enter the grain stain results" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.grainStainReaction" required
                        name="grainStainReaction">
             </td>
@@ -98,7 +98,7 @@
               (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine ) }">
             <td width="30%">Details of primary media used for isolation and manufacturer</td>
             <td width="55%">
-                <input class="form-control col-md-12" type="text"
+                <input class="form-control col-md-12" type="text" ng-disabled="true"
                        ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Details of primary media "
                        ng-model="reports.currentClickedLabResults.primaryMedia" required
@@ -114,7 +114,7 @@
             <td width="30%">Incubation conditions</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Incubation conditions"
+                       placeholder="Please enter Incubation conditions" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.incubationConditions" required
                        name="incubationConditions">
             </td>
@@ -128,7 +128,7 @@
             <td width="30%">Colonial morphology (colony appearance on media)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Colonial morphology"
+                       placeholder="Please enter Colonial morphology" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.colonialMorphology" required
                        name="colonialMorphology">
             </td>
@@ -142,7 +142,7 @@
             <td width="30%">Bacterial quantification (if applicable)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Bacterial quantification"
+                       placeholder="Please enter Bacterial quantification" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.bacterialQualification" required
                        name="bacterialQualification">
             </td>
@@ -160,7 +160,7 @@
 
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
-                       placeholder="Please enter Biochemical reagents"
+                       placeholder="Please enter Biochemical reagents" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.bacterialReagents" required name="bacterialReagents">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
@@ -173,7 +173,7 @@
             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please Discuss further processing"
+                       placeholder="Please Discuss further processing" ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.isolateProcessing" required name="isolateProcessing">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
@@ -187,7 +187,7 @@
             <td width="30%">Final identification (i.e. report given to clinician)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Final identification "
+                       placeholder="Please enter Final identification " ng-disabled="true"
                        ng-model="reports.currentClickedLabResults.finalIdentification" required
                        name="finalIdentification">
 
@@ -249,22 +249,17 @@
             <th>
                 R <sup>3</sup>
             </th>
-            <th ng-init="where.testAgentType=3">
-                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length >1"
-                        ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                        class="fa fa-plus"></i></button>
-            </th>
+
         </tr>
         </thead>
         <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
 
-        <tr ng-repeat="fields in samples.resultFields"
+        <tr ng-repeat="fields in reports.microagentsData"
             ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
             <td nowrap><input type="text" class="form-control"
                               ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                               id="antiMicroAgent" name="antiMicroAgent"
-                              class="form-control"
+                              class="form-control" ng-disabled="true"
                               data-min-length="0"
                               data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
                               required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -275,7 +270,7 @@
 
             </td>
             <td>
-                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp" ng-disabled="true"
                         ng-model="fields.reportedToStatus">
                     <option class="" selected disabled>--select reported--</option>
                     <option value="yes">YES</option>
@@ -283,13 +278,13 @@
                 </select>
             </td>
 
-            <td><input type="text" class="form-control"
+            <td><input type="text" class="form-control" ng-disabled="true"
                        ng-change="" ng-pattern="samples.numericOnly"
                        ng-model="fields.diskContent"></td>
-            <td ng-init="fields.finalScore==4">
-                <input type="number" class="form-control"
+            <td>
+                <input type="text" class="form-control" ng-pattern="samples.numericOnly"
                        ng-change="" value="4"
-                       ng-model="fields.finalScore">
+                       ng-model="fields.score">
             </td>
             <td>
                 <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='few'"
@@ -307,31 +302,19 @@
                 <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='many'"
                    class="fa fa-check-circle fa-2x"></i>
             </td>
-            <td ng-init="samples.resultActiveFields=fields">
-                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
-                        ng-click="samples.resultAddField(0,$index)"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                        class="fa fa-plus"></i></button>
-            </td>
         </tr>
 
         <tr>
             <td>
-                <div class="col-md-12 no-padding">
-                    <button class="btn btn-warning col-md-12" ng-disabled="true"
-                            ng-click="samples.susceptibilityFormData =''"
-                    >Reset
-                    </button>
-                </div>
+
             </td>
             <td>
                 <div class="col-md-12 no-padding">
 
                     <button class="btn btn-success col-md-12"
-                            ng-click="samples.saveAntiMicroAgent(samples.resultFields,1)"
-                            ng-disabled=" samples.savingInProgress||
-                                samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
-                    >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                            ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"
+                            ng-disabled="reports.load=='fa-spinner'"
+                    >Update<i class="fa fa-spin {{reports.load}}"></i>
                     </button>
 
 

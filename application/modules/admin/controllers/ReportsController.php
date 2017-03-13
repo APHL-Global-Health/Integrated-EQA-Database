@@ -165,13 +165,38 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
     public function updatefunctionAction()
     {
         $posted = $this->returnArrayFromInput();
-        print_r($posted);
-        exit;
-        $whereEvaluation['id'] = $posted['id'];
-        $updateEval = $posted['data'];
 
+        $whereEvaluation['id'] = $posted['id'];
+        $updateEval = (array)$posted['update'];
+
+        unset($updateEval['id']);
+        unset($updateEval['batchName']);
+        unset($updateEval['materialSource']);
+        unset($updateEval['sampleDetails']);
+        unset($updateEval['sampleInstructions']);
+        unset($updateEval['labDetails']);
+        unset($updateEval['evaluatedStatus']);
+//        print_r($updateEval);
+//        exit;
         $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
+
         echo $this->returnJson($updateEvaluation);
+        exit;
+    }
+
+    public function getmicroagentswhereAction()
+    {
+        $posted = $this->returnArrayFromInput();
+
+        $responseResults = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $posted);
+//        print_r($posted);
+//        exit;
+        if ($responseResults != false) {
+            echo $this->returnJson(array('status' => 1, "data" => $responseResults));
+        } else {
+            echo $this->returnJson(array('status' => 0, "message" => "No records found"));
+        }
+
         exit;
     }
 
