@@ -118,6 +118,63 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
+    public function updatepublicationAction()
+    {
+        $where = $this->returnArrayFromInput();
+        $wherePub['id'] = $where['id'];
+
+        $update['published'] = $where['published'];
+//print_r($where);exit;
+        $updatePublication = $this->dbConnection->updateTable('tbl_bac_rounds', $wherePub, $update);
+
+        echo $this->returnJson($updatePublication);
+        exit;
+
+
+    }
+
+    public function getindividuallabsAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+        $col = ['*'];
+        $orderArray = ['id', 'dateCreated'];
+
+        $groupArray = ['id'];
+
+        $data = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $postedData, $orderArray, true, $groupArray);
+
+        if ($data != false) {
+
+            foreach ($data as $key => $value) {
+                $labDetails = $this->returnValueWhere($value->participantId, 'participant');
+                $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
+                $data[$key]->labDetails = $labDetails;
+                $data[$key]->batchName = $sample['batchName'];
+                $data[$key]->sampleInstructions = $sample['sampleInstructions'];
+                $data[$key]->sampleDetails = $sample['sampleDetails'];
+                $data[$key]->materialSource = $sample['materialSource'];
+                $data[$key]->evaluatedStatus = $value->markedStatus == 1 ? 'Evaluated' : 'Un-evaluated';
+            }
+            echo $this->returnJson(array('status' => 1, 'data' => $data));
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'No records available'));
+        }
+        exit;
+    }
+
+    public function updatefunctionAction()
+    {
+        $posted = $this->returnArrayFromInput();
+        print_r($posted);
+        exit;
+        $whereEvaluation['id'] = $posted['id'];
+        $updateEval = $posted['data'];
+
+        $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
+        echo $this->returnJson($updateEvaluation);
+        exit;
+    }
+
     public function evaluateresultsAction($whereRoundData = '')
     {
         /*select results for evaluation*/

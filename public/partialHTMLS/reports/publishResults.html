@@ -1,6 +1,6 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
-        <h3>Evaluation Report
+        <h3>Publish Reuslts
             <small>{{reports.generalRoundData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
             <input ng-model="searchRounds" class="pull-right" placeholder="">
@@ -12,7 +12,7 @@
 
                 <div class="col-md-3 no-padding">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereGenRounds.dateFrom"
+                    <input type="text" class="form-control input-sm" ng-model="reports.wherePublishRounds.dateFrom"
                            data-date-format="yyyy-MM-dd" required placeholder="select from date"
                            data-min-date="" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon2"
@@ -21,27 +21,27 @@
                 </div>
                 <div class="col-md-3 ">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereGenRounds.dateTo"
+                    <input type="text" class="form-control input-sm" ng-model="reports.wherePublishRounds.dateTo"
                            data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"
-                           data-min-date="reports.whereGenRounds.dateFrom" data-max-date="today"
+                           data-min-date="reports.wherePublishRounds.dateFrom" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon1"
                            name="dateTo"
                            bs-datepicker>
                 </div>
                 <div class="col-md-3 no-padding">
-                    <input class="form-control input-sm" placeholder="Inactive">
+                    <input class="form-control input-sm" placeholder="Round Name" ng-model="reports.wherePublishRounds.roundName">
                 </div>
-                <div class="col-md-2 ">
-                    <select class="form-control input-sm" ng-model="reports.whereGenRounds.status">
-                        <option selected disabled>--status--</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
+                <div class="col-md-2 " ng-init="reports.wherePublishRounds.evaluated=1">
+                    <select class="form-control input-sm" ng-model="reports.wherePublishRounds.evaluated">
+
+                        <option value="1" selected>Evaluated</option>
+
                     </select>
                 </div>
                 <div>
                     &nbsp;
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
-                            ng-click="reports.getGeneralRoundReport(reports.whereGenRounds)">get report
+                            ng-click="reports.getGeneralRoundReport(reports.wherePublishRounds)">get report
                     </button>
                 </div>
 
@@ -66,7 +66,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="round in reports.generalRoundData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+            <tr dir-paginate="round in reports.generalRoundData|filter:{evaluated :1} | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
                 <td><a href="#/{{round.id}}"
                        data-placement="right" data-type="info" data-container="body"
@@ -84,11 +84,14 @@
                 <td nowrap>{{round.totalShipmentsAdded}}</td>
                 <td>{{round.currentStatus}}</td>
                 <td>
-                    <button ng-disabled="round.totalShipmentsAdded==0"
-                            ng-click="reports.showShipmentEvaluationForRound(round)" class="btn btn-danger btn-sm">
-                        <i class="fa fa-check"></i>
-                        <x ng-show="round.evaluated==0">evaluate</x>
-                        <x ng-show="round.evaluated==1">Re-evaluate</x>
+                    <button ng-disabled="round.totalShipmentsAdded==0" ng-show="round.published==0"
+                            ng-click="reports.publishRoundResults(round,1)" class="btn btn-success btn-sm">
+                        <i class="fa fa-check"></i> Publish
+                    </button>
+                    <button ng-disabled="round.totalShipmentsAdded==0" ng-show="round.published==1"
+                            ng-click="reports.publishRoundResults(round,0)" class="btn btn-danger btn-sm">
+                        <i class="fa fa-close"></i> Cancel publication
+
                     </button>
                 </td>
 

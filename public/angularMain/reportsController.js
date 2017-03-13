@@ -205,11 +205,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     }
     $scope.reports.confirmDialog = function (message, callbackFunction) {
         $.confirm({
-            title: 'Confirm Evaluation!',
+            title: 'Confirm !',
             theme: 'supervan',
             content: message,
             buttons: {
-                'Evaluate': {
+                'Confirm': {
                     btnClass: 'btn-blue',
                     action: function () {
                         callbackFunction();
@@ -255,6 +255,102 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
         }
     }
+    $scope.reports.wherePublishRounds = {};
+    $scope.reports.publishRoundResults = function (round, published) {
+        var message = '';
+        published == 1 ? message = 'Are you sure you want ot publish results for ' + round.roundName : message = 'Are you sure you want to cancel publication of results for ' + round.roundName;
+        var action = '';
+        published == 1 ? action = 'published' : action = 'cancelled';
 
+        function publishResults() {
+            //console.log($scope.reports.whereGenRounds);
+            var where = {id: round.id, published: published};
+            var url = serverReportURL + 'updatepublication';
+            alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait...')
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    alertStartRound.close();
+                    if (response.status == 1) {
+                        $scope.reports.getGeneralRoundReport(reports.wherePublishRounds);
+
+                        $.alert('<i class="fa fa-check-circle"> Results ' + action + ' successfully');
+
+                    } else {
+                        $.alert('<i class="fa fa-check-circle">results could not ' + action + ',please try again');
+                    }
+                })
+                .error(function (error) {
+                    alertStartRound.close();
+                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                })
+        }
+
+        $scope.reports.confirmDialog(message, publishResults);
+    }
+    $scope.reports.individualLabsEvaluation = {};
+    $scope.reports.whereIndividualLabs = {};
+    $scope.reports.getIndividualReport = function (whereIndividualLabs) {
+        try {
+            var url = serverReportURL + 'getindividuallabs';
+            var where = whereIndividualLabs;
+            showAjaxLoader(true);
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response);
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.individualLabsEvaluation = response.data;
+                    } else {
+                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Could not retrieve report data');
+                        $scope.reports.individualLabsEvaluation = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false);
+                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                })
+
+        } catch (Exc) {
+            $log.debug('Serious error occurred');
+        }
+    }
+    $scope.reports.currentClickedLabResults = {};
+    $scope.reports.evaluateIndividual = function (individual) {
+        $scope.reports.currentClickedLabResults = individual;
+        $scope.reports.changeCurrentReport('evaluateIndividualLabs');
+    }
+
+    $scope.reports.saveIndividualEvaluation = function (individualResults) {
+        try {
+
+            var data = {
+                update: individualResults,
+                id: individualResults.id
+            }
+            delete data.update.id;
+            delete data.update.batchName;
+            delete data.update.materialSource;
+            delete data.update.sampleDetails;
+            delete data.update.sampleInstructions;
+            delete data.update.labDetails;
+            delete data.update.evaluatedStatus;
+            console.log(individualResults);
+            var url = serverReportURL + 'updatefunction';
+            $http
+                .post(url, data)
+                .success(function (response) {
+                    console.log(response)
+                })
+                .error(function (error) {
+                    console.log(error)
+                })
+
+        } catch (exc) {
+
+        }
+    }
 
 })
