@@ -69,6 +69,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->batchName = $sampleName['batchName'];
                 $data[$key]->roundName = $round['roundName'];
                 $data[$key]->roundCode = $round['roundCode'];
+
+                $deliveryDetails = $this->returnValueWhere($value->panelToSampleId, 'tbl_bac_sample_to_panel');
+
+                $data[$key]->dateDelivered = $deliveryDetails['dateDelivered'];
+
+                $data[$key]->sampleInstructions = $sampleName['sampleInstructions'];
+                $data[$key]->sampleDetails = $sampleName['sampleDetails'];
+                $data[$key]->materialSource = $sampleName['materialSource'];
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
             }
@@ -442,14 +450,20 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $where['sampleId'] = $postedData['sampleId'];
         $where['roundId'] = $postedData['roundId'];
 
-        $results =$this->returnValueWhere($where, 'tbl_bac_response_results');
+        $results = $this->returnValueWhere($where, 'tbl_bac_response_results');
         $susceptibility = $this->dbConnection->selectFromTable('tbl_bac_suscepitibility', $where);
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
 
         $data['results'] = $results;
         $data['susceptibility'] = $susceptibility;
         $data['microAgents'] = $microAgents;
+        if ($microAgents != false) {
+            foreach ($microAgents as $key => $value) {
 
+                $sampleInfoRange = $this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent);
+                $microAgents[$key]->range = $sampleInfoRange;
+            }
+        }
         echo $this->returnJson(array('status' => 1, 'data' => $data));
 
         exit;

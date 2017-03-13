@@ -82,7 +82,7 @@
                     <td nowrap>{{sampleResponse.totalMicroAgentsScore}}</td>
 
                     <td nowrap>{{sampleResponse.grade}}</td>
-                    <td>{{sampleResponse.dateCreated}}</td>
+                    <td>{{samples.returnSubstring(sampleResponse.dateCreated,10)}}</td>
                     <td>{{sampleResponse.remarks}}</td>
                     <td>
                         <button class="label label-info"

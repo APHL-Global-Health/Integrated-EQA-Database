@@ -787,7 +787,9 @@
             }
             // console.log($scope.samples.loginDetails);
         }
-
+        $scope.samples.returnSubstring = function (longerString, len) {
+            return longerString.substring(0,len);
+        }
         $scope.samples.getLoggedInUserSessionInfo();
 
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
