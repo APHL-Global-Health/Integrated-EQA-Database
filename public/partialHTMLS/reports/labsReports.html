@@ -1,7 +1,7 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
         <h3>Lab Performance Report
-            <small>{{reports.generalRoundData.length}} records</small>
+            <small>{{reports.labPerformanceData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
             <input ng-model="searchRounds" class="pull-right" placeholder="">
         </h3>
@@ -29,14 +29,22 @@
                            bs-datepicker>
                 </div>
                 <div class="col-md-3 no-padding">
-                    <input class="form-control input-sm"   ng-model="reports.whereLabResults.region"
-                           placeholder="county">
+                    <input class="form-control input-sm" ng-init="reports.getCounties()"
+                           ng-model="reports.whereLabResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
                 </div>
                 <div class="col-md-2 ">
                     <select class="form-control input-sm" ng-model="reports.whereLabResults.grade">
-                        <option selected disabled>--status--</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
+                        <option selected disabled>--Grades--</option>
+
+                        <option value="1">passed</option>
+                        <option value="0">failed</option>
                     </select>
                 </div>
                 <div>
@@ -74,7 +82,7 @@
                 <th>Micro Agents</th>
                 <th>Remarks</th>
                 <th>Status</th>
-                <th></th>
+                <th>Total</th>
             </tr>
             </thead>
             <tbody>
@@ -82,17 +90,17 @@
                 <td>{{$index+1}}</td>
                 <td>{{lab.roundName}}</td>
                 <td>{{lab.roundCode}}</td>
-                <td>{{lab.startDate}}</td>
-                <td>{{lab.endDate}}</td>
-                <td nowrap>{{lab.dateCreated}}</td>
-                <td nowrap>{{lab.daysLeft}}</td>
-                <td nowrap>{{lab.totalShipmentsAdded}}</td>
-                <td>{{lab.currentStatus}}</td>
-
-
+                <td>{{lab.county}}</td>
+                <td>{{lab.batchName}}</td>
+                <td nowrap>{{lab.roundCode}}</td>
+                <td nowrap>{{lab.finalScore}}</td>
+                <td nowrap>{{lab.totalMicroAgentsScore}}</td>
+                <td>{{lab.remarks}}</td>
+                <td>{{lab.status}}</td>
+                <td>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
             </tr>
             <!--<tr ng-hide="reports.generalRoundData.length >0">-->
-                <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
             <!--</tr>-->
             </tbody>
         </table>

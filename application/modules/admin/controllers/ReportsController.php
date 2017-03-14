@@ -600,6 +600,73 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
+    public function getlabperformanceAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+
+        if (isset($postedData['region'])) {
+            $county = $postedData['region'];
+            unset($postedData['region']);
+            $whereCounty['region'] = $county;
+            $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+            $where = $postedData;
+            if ($labs != false) {
+
+                $report = [];
+                foreach ($labs as $key => $value) {
+
+                    $where['participantId'] = $value->participant_id;
+                    $orderArray = ['id', 'dateCreated'];
+                    $col = ['*'];
+
+                    $groupArray = ['id'];
+                    $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $where, $orderArray, true, $groupArray);
+                    if ($reportData != false) {
+
+                        foreach ($reportData as $keys => $val) {
+
+                            $whereSampleId['id'] = $val->sampleId;
+                            $whereRoundId['id'] = $val->roundId;
+
+                            $roundInfo = $this->returnValueWhere($whereRoundId, 'tbl_bac_rounds');
+                            $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+
+                            $reportData[$keys]->labName = $value->institute_name;
+                            $reportData[$keys]->county = $value->region;
+                            $reportData[$keys]->unique_identifier = $value->unique_identifier;
+
+                            $reportData[$keys]->roundName = $roundInfo['roundName'];
+                            $reportData[$keys]->roundCode = $roundInfo['roundCode'];
+
+                            $reportData[$keys]->batchName = $sampleInfo['batchName'];
+                            $reportData[$keys]->materialSource = $sampleInfo['materialSource'];
+
+                            $reportData[$keys]->unique_identifier = $value->unique_identifier;
+                            $reportData[$keys]->status ='valid';
+                            array_push($report, (array)$reportData[$keys]);
+                        }
+
+
+
+                    }
+
+
+                }
+
+                if (!empty($report)) {
+                    echo $this->returnJson(array('status' => 1, 'data' => $report));
+                }
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+
+        }else{
+
+        }
+
+        exit;
+    }
+
     public function getcountiesAction()
     {
         $where['status'] = 1;

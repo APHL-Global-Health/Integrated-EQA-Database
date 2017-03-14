@@ -135,9 +135,30 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             })
     }
 
-
+    $scope.reports.labPerformanceData = {};
     $scope.reports.getLabPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getlabperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.labPerformanceData = response.data;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        $scope.reports.labPerformanceData = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
 
+        } catch (exc) {
+
+        }
     }
 
     var alertStartRound = '';
