@@ -127,6 +127,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 //print_r($where);exit;
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_rounds', $wherePub, $update);
 
+        $whereRound['roundId'] = $where['id'];
+        $updatePublication = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereRound, $update);
+        $updatePublication = $this->dbConnection->updateTable('tbl_bac_response_results', $whereRound, $update);
+        $updatePublication = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereRound, $update);
         echo $this->returnJson($updatePublication);
         exit;
 
@@ -162,6 +166,35 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
+    public function savemicroagentsevaluationAction()
+    {
+        $posted = $this->returnArrayFromInput()['update'];
+        if (count($posted) > 0) {
+            $microSum = 0;
+            $where = [];
+            foreach ($posted as $key => $value) {
+                $arr = (array)$value;
+                $whereUpdate['id'] = $arr['id'];
+
+                $where['panelToSampleId'] = $arr['panelToSampleId'];
+                $where['participantId'] = $arr['participantId'];
+                $where['userId'] = $arr['userId'];
+                $where['sampleId'] = $arr['sampleId'];
+                $where['roundId'] = $arr['roundId'];
+
+                $update['score'] = $arr['score'];
+                $microSum += $arr['score'];
+                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereUpdate, $update);
+            }
+            $updateEval['totalMicroAgentsScore'] = $microSum;
+            $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
+            echo $this->returnJson($updateEvaluation);
+            exit;
+        }
+
+        exit;
+    }
+
     public function updatefunctionAction()
     {
         $posted = $this->returnArrayFromInput();
@@ -176,8 +209,24 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         unset($updateEval['sampleInstructions']);
         unset($updateEval['labDetails']);
         unset($updateEval['evaluatedStatus']);
+        unset($updateEval['finalScore']);
+        unset($updateEval['totalMicroAgentsScore']);
+
 //        print_r($updateEval);
 //        exit;
+        $finalScore = 0;
+        $score = '';
+        $updateEval['markedStatus'] = 1;
+        foreach ($updateEval as $key => $value) {
+
+            if (is_numeric($value) && substr($key, -5) == 'Score') {
+
+                $finalScore += $value;
+            }
+        }
+        $updateEval['finalScore'] = $finalScore;
+
+
         $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
 
         echo $this->returnJson($updateEvaluation);
@@ -533,7 +582,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $where['roundId'] = $postedData['roundId'];
 
         $results = $this->returnValueWhere($where, 'tbl_bac_response_results');
-        $susceptibility = $this->dbConnection->selectFromTable('tbl_bac_suscepitibility', $where);
+        $susceptibility = $this->returnValueWhere($where, 'tbl_bac_suscepitibility');
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
 
         $data['results'] = $results;
@@ -547,6 +596,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             }
         }
         echo $this->returnJson(array('status' => 1, 'data' => $data));
+
+        exit;
+    }
+
+    public function getcountiesAction()
+    {
+        $where['status'] = 1;
+        $counties = $this->dbConnection->selectFromTable('rep_counties', $where);
+        echo $this->returnJson(array('status' => 1, 'data' => $counties));
 
         exit;
     }

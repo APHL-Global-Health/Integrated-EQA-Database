@@ -40,6 +40,18 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
     }
 
+    $scope.reports.counties = {};
+    $scope.reports.getCounties = function () {
+        var url = serverReportURL + 'getcounties';
+        var where = {}
+        $http.post(url, where)
+            .success(function (response) {
+                if (response.status == 1) {
+                    $scope.reports.counties = response.data;
+                }
+            })
+
+    }
     $scope.reports.getGeneralRoundReport = function (where) {
         var url = serverReportURL + 'getgeneralroundreport';
         showAjaxLoader(true)
@@ -97,9 +109,13 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         }
     }
     $scope.reports.responseInfoData = {};
-    $scope.reports.getUserResults = function (where) {
+    $scope.reports.getUserResults = function (where, type) {
         var url = serverReportURL + 'getresponsefeedback';
         showAjaxLoader(true)
+        if (angular.isDefined(type)) {
+            where.published = 1
+        }
+
         $http.post(url, where)
             .success(function (response) {
                 console.log(response)
@@ -118,6 +134,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 showAjaxLoader(false)
             })
     }
+
+
+    $scope.reports.getLabPerformanceReport = function (where) {
+
+    }
+
     var alertStartRound = '';
     $scope.reports.evaluateRound = function () {
         var where = $scope.reports.currentRoundEvaluation;
@@ -226,7 +248,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         })
     }
     $scope.reports.showResults = true;
-    $scope.samples.currentResults = {};
+    $scope.reports.currentResults = {};
     $scope.reports.userResults = {};
 
 
@@ -273,7 +295,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     console.log(response)
                     alertStartRound.close();
                     if (response.status == 1) {
-                        $scope.reports.getGeneralRoundReport(reports.wherePublishRounds);
+                        $scope.reports.getGeneralRoundReport($scope.reports.wherePublishRounds);
 
                         $.alert('<i class="fa fa-check-circle"> Results ' + action + ' successfully');
 
@@ -364,6 +386,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 $http
                     .post(url, data)
                     .success(function (response) {
+                        console.log(response)
                         if (response.status == 1) {
                             $.alert('<i class="fa fa-check-circle"></i> Lab evaluated successfully');
                         } else {
@@ -381,6 +404,61 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             $scope.reports.confirmDialog(message, evaluateLab)
         } catch (exc) {
 
+        }
+    }
+    $scope.reports.sumNumbers = function (num1, num2) {
+        return Number(num1) + Number(num2);
+    }
+    $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
+        $scope.reports.saveIndividualEvaluation(primaryEvaluation);
+        $timeout(function () {
+
+            $scope.reports.saveMicroAgentsEvaluation(microEvaluation)
+        }, 1500)
+    }
+    $scope.reports.saveMicroAgentsEvaluation = function (microAgents) {
+        if (microAgents.length > 0) {
+            var error = false;
+            for (var i = 0; i < microAgents.length; i++) {
+
+                if (microAgents[i].score == '' || isNaN(microAgents[i].score)) {
+                    error = true;
+                    $.alert("<i class='fa fa-exclamation-circle'></i> please fill score at row " + (i + 1) + " and should be a number");
+                    break;
+                }
+            }
+            if (!error) {
+                function updateMicroAgents() {
+                    var url = serverReportURL + 'saveMicroAgentsEvaluation';
+                    var where = {
+                        update: microAgents
+                    }
+                    showAjaxLoader(true);
+                    $http.post(url, where)
+                        .success(function (response) {
+                            // alertStartRound.close();
+                            showAjaxLoader(false);
+                            if (response.status == 1) {
+                                $.alert('<i class="fa fa-check-circle"></i> Micro agents update was successful');
+                            } else {
+                                $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                            }
+                        })
+                        .error(function (error) {
+                            showAjaxLoader(false);
+                            $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                        })
+
+
+                }
+
+                var message = 'Are you sure you want to save this evaluation';
+                $scope.reports.confirmDialog(message, updateMicroAgents);
+
+            }
+
+        } else {
+            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
         }
     }
 

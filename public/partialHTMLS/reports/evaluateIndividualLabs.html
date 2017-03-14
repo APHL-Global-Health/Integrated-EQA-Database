@@ -197,6 +197,26 @@
                                    ng-model="reports.currentClickedLabResults.finalIdentificationScore" required
                                    name="finalIdentificationScore"></td>
         </tr>
+
+        <tr ng-class="{ 'has-error'  : resultsData.adminRemarks.$invalid && !resultsData.adminRemarks.$pristine  }">
+            <td width="30%">Result Remarks</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter remarks  "
+                       ng-model="reports.currentClickedLabResults.adminRemarks" required
+                       name="adminRemarks">
+
+            </td>
+            <td width="15%">
+                <select class="form-control col-md-12" type="text" placeholder="score"
+                                   ng-model="reports.currentClickedLabResults.correctiveAction" required
+                        name="correctiveAction">
+                    <option selected disabled>--Corrective Action--</option>
+                    <option value="1">YES</option>
+                    <option value="0">NO</option>
+                </select>
+            </td>
+        </tr>
         <tr>
             <td width="30%">
                 <div class="col-md-12 no-padding">
@@ -281,7 +301,7 @@
             <td><input type="text" class="form-control" ng-disabled="true"
                        ng-change="" ng-pattern="samples.numericOnly"
                        ng-model="fields.diskContent"></td>
-            <td>
+            <td >
                 <input type="text" class="form-control" ng-pattern="samples.numericOnly"
                        ng-change="" value="4"
                        ng-model="fields.score">
@@ -328,4 +348,6 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="col-md-12 btn btn-warning" ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData)" ng-disabled="resultsData.$invalid"> Evaluate Both</div>
 </div>

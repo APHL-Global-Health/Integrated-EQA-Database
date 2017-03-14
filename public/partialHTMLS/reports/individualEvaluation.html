@@ -79,7 +79,7 @@
                 <td>{{lab.labDetails.city}}</td>
                 <td>{{lab.dateCreated}}</td>
                 <td nowrap>{{lab.evaluatedStatus}}</td>
-                <td nowrap>{{lab.finalScore+lab.totalMicroAgentsScore}}</td>
+                <td nowrap>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
 
                 <td>{{lab.batchName}}</td>
                 <td>
