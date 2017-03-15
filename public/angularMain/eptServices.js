@@ -18,6 +18,19 @@ EptServices.service('EptServices', function () {
         fbStatus: false,
         fbbgColor: 'alert-success'
     }
+
+
+    this.EptServiceObject.returnServerErrorAlert = function () {
+        $.alert('<i class="fa fa-exclamation-triangle text-danger"></i> Server error occurred,please try again.');
+    }
+    this.EptServiceObject.returnNoRecordsFoundAlert = function () {
+        $.alert('<i class="fa fa-exclamation-triangle text-warning"></i> No Records found.');
+    }
+    this.EptServiceObject.returnActionSuccessAlert = function () {
+        $.alert('<i class="fa fa-check-circle text-danger"></i> Action was successful.');
+    }
+
+
     this.EptServiceObject.returnBarcode = function () {
         var barcode = Math.random().toString();
 
@@ -28,6 +41,7 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject.returnNumericRegexRegExp = function () {
         return numericRegex;
     }
+
     this.EptServiceObject.returnEmailRegexRegExp = function () {
         return emailRegex;
     }
@@ -61,7 +75,7 @@ EptServices.service('EptServices', function () {
             message = 'Test reagent already saved';
         }
 
-        else{
+        else {
             message = 'Unknown server error occurred';
         }
         return message;
@@ -239,14 +253,14 @@ EptServices.service('EptServices', function () {
 })
 EptServices.factory('EptFactory', function () {
     var roundData = {};
-return {
-    setRoundsData:function(rounds){
-        roundData =rounds
-    },
-    returnRoundData :function(){
-      return  roundData ;
+    return {
+        setRoundsData: function (rounds) {
+            roundData = rounds
+        },
+        returnRoundData: function () {
+            return roundData;
+        }
     }
-}
 })
 EptServices.factory('loginDataCache', function ($cacheFactory) {
     return $cacheFactory('loginData');

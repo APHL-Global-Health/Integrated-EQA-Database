@@ -40,6 +40,18 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
     }
 
+    $scope.reports.counties = {};
+    $scope.reports.getCounties = function () {
+        var url = serverReportURL + 'getcounties';
+        var where = {}
+        $http.post(url, where)
+            .success(function (response) {
+                if (response.status == 1) {
+                    $scope.reports.counties = response.data;
+                }
+            })
+
+    }
     $scope.reports.getGeneralRoundReport = function (where) {
         var url = serverReportURL + 'getgeneralroundreport';
         showAjaxLoader(true)
@@ -97,9 +109,13 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         }
     }
     $scope.reports.responseInfoData = {};
-    $scope.reports.getUserResults = function (where) {
+    $scope.reports.getUserResults = function (where, type) {
         var url = serverReportURL + 'getresponsefeedback';
         showAjaxLoader(true)
+        if (angular.isDefined(type)) {
+            where.published = 1
+        }
+
         $http.post(url, where)
             .success(function (response) {
                 console.log(response)
@@ -118,6 +134,33 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 showAjaxLoader(false)
             })
     }
+
+    $scope.reports.labPerformanceData = {};
+    $scope.reports.getLabPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getlabperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.labPerformanceData = response.data;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        $scope.reports.labPerformanceData = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (exc) {
+
+        }
+    }
+
     var alertStartRound = '';
     $scope.reports.evaluateRound = function () {
         var where = $scope.reports.currentRoundEvaluation;
@@ -205,11 +248,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     }
     $scope.reports.confirmDialog = function (message, callbackFunction) {
         $.confirm({
-            title: 'Confirm Evaluation!',
+            title: 'Confirm !',
             theme: 'supervan',
             content: message,
             buttons: {
-                'Evaluate': {
+                'Confirm': {
                     btnClass: 'btn-blue',
                     action: function () {
                         callbackFunction();
@@ -226,25 +269,26 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         })
     }
     $scope.reports.showResults = true;
-    $scope.samples.currentResults = {};
-    $scope.reports.userResults ={};
+    $scope.reports.currentResults = {};
+    $scope.reports.userResults = {};
 
 
     $scope.reports.showReponseFullInfo = function (samples) {
         try {
             $scope.reports.showResults = false;
-            $scope.reports.userResults ={};
+            $scope.reports.userResults = {};
             $scope.reports.currentResults = samples;
-            console.log($scope.samples.currentResults);
+            console.log($scope.reports.currentResults);
             var url = serverReportURL + 'getlabuserresponse';
             showAjaxLoader(true)
             $http.post(url, samples)
                 .success(function (response) {
+                    console.log(response);
                     showAjaxLoader(false)
                     if (response.status == 1) {
                         $scope.reports.userResults = response.data;
                     } else {
-                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Evaluation was unsuccessful');
+                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Could not retrieve report data');
                     }
                 })
                 .error(function () {
@@ -254,4 +298,189 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
         }
     }
+    $scope.reports.wherePublishRounds = {};
+    $scope.reports.publishRoundResults = function (round, published) {
+        var message = '';
+        published == 1 ? message = 'Are you sure you want ot publish results for ' + round.roundName : message = 'Are you sure you want to cancel publication of results for ' + round.roundName;
+        var action = '';
+        published == 1 ? action = 'published' : action = 'cancelled';
+
+        function publishResults() {
+            //console.log($scope.reports.whereGenRounds);
+            var where = {id: round.id, published: published};
+            var url = serverReportURL + 'updatepublication';
+            alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait,participnats are being notified through mail...')
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    alertStartRound.close();
+                    if (response.status == 1) {
+                        $scope.reports.getGeneralRoundReport($scope.reports.wherePublishRounds);
+
+                        $.alert('<i class="fa fa-check-circle"> Results ' + action + ' successfully');
+
+                    } else {
+                        $.alert('<i class="fa fa-check-circle">results could not ' + action + ',please try again');
+                    }
+                })
+                .error(function (error) {
+                    alertStartRound.close();
+                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                })
+        }
+
+        $scope.reports.confirmDialog(message, publishResults);
+    }
+    $scope.reports.individualLabsEvaluation = {};
+    $scope.reports.whereIndividualLabs = {};
+    $scope.reports.getIndividualReport = function (whereIndividualLabs) {
+        try {
+            var url = serverReportURL + 'getindividuallabs';
+            var where = whereIndividualLabs;
+            showAjaxLoader(true);
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response);
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.individualLabsEvaluation = response.data;
+                    } else {
+                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Could not retrieve report data');
+                        $scope.reports.individualLabsEvaluation = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false);
+                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                })
+
+        } catch (Exc) {
+            $log.debug('Serious error occurred');
+        }
+    }
+    $scope.reports.currentClickedLabResults = {};
+    $scope.reports.microagentsData = {};
+    $scope.reports.evaluateIndividual = function (individual) {
+        $scope.reports.currentClickedLabResults = individual;
+        $scope.reports.changeCurrentReport('evaluateIndividualLabs');
+        showAjaxLoader(true);
+        var where = {
+            userId: individual.userId,
+            sampleId: individual.sampleId,
+            participantId: individual.participantId,
+            roundId: individual.roundId
+        }
+        var url = serverReportURL + 'getmicroagentswhere';
+        $http.post(url, where)
+            .success(function (response) {
+                showAjaxLoader(false);
+                console.log(response);
+                if (response.status == 1) {
+                    $scope.reports.microagentsData = response.data;
+                }
+            })
+            .error(function (error) {
+                showAjaxLoader(false);
+            })
+
+    }
+
+    $scope.reports.saveIndividualEvaluation = function (individualResults) {
+        try {
+
+            function evaluateLab() {
+                var data = {
+                    update: individualResults,
+                    id: individualResults.id
+                }
+                // delete data.update.id;
+                // delete data.update.batchName;
+                // delete data.update.materialSource;
+                // delete data.update.sampleDetails;
+                // delete data.update.sampleInstructions;
+                // delete data.update.labDetails;
+                // delete data.update.evaluatedStatus;
+                console.log(individualResults);
+                var url = serverReportURL + 'updatefunction';
+                $http
+                    .post(url, data)
+                    .success(function (response) {
+                        console.log(response)
+                        if (response.status == 1) {
+                            $.alert('<i class="fa fa-check-circle"></i> Lab evaluated successfully');
+                        } else {
+                            $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                        }
+                    })
+                    .error(function (error) {
+                        $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                        console.log(error)
+                    })
+
+            }
+
+            var message = 'Are you sure you want to evaluate the lab ' + individualResults.labDetails.institute_name;
+            $scope.reports.confirmDialog(message, evaluateLab)
+        } catch (exc) {
+
+        }
+    }
+    $scope.reports.sumNumbers = function (num1, num2) {
+        return Number(num1) + Number(num2);
+    }
+    $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
+        $scope.reports.saveIndividualEvaluation(primaryEvaluation);
+        $timeout(function () {
+
+            $scope.reports.saveMicroAgentsEvaluation(microEvaluation)
+        }, 1500)
+    }
+    $scope.reports.saveMicroAgentsEvaluation = function (microAgents) {
+        if (microAgents.length > 0) {
+            var error = false;
+            for (var i = 0; i < microAgents.length; i++) {
+
+                if (microAgents[i].score == '' || isNaN(microAgents[i].score)) {
+                    error = true;
+                    $.alert("<i class='fa fa-exclamation-circle'></i> please fill score at row " + (i + 1) + " and should be a number");
+                    break;
+                }
+            }
+            if (!error) {
+                function updateMicroAgents() {
+                    var url = serverReportURL + 'saveMicroAgentsEvaluation';
+                    var where = {
+                        update: microAgents
+                    }
+                    showAjaxLoader(true);
+                    $http.post(url, where)
+                        .success(function (response) {
+                            // alertStartRound.close();
+                            showAjaxLoader(false);
+                            if (response.status == 1) {
+                                $.alert('<i class="fa fa-check-circle"></i> Micro agents update was successful');
+                            } else {
+                                $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                            }
+                        })
+                        .error(function (error) {
+                            showAjaxLoader(false);
+                            $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                        })
+
+
+                }
+
+                var message = 'Are you sure you want to save this evaluation';
+                $scope.reports.confirmDialog(message, updateMicroAgents);
+
+            }
+
+        } else {
+            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
+        }
+    }
+
 })

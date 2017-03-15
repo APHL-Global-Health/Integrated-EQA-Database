@@ -73,7 +73,7 @@
                                     <p class="">
 
                                     <div class="col-md-5 pull-left side-info" style="padding-left: 0px!important;">
-                                        <div class="col-md-12  {{samples.returnPanelColorFromStatus(panel.panelStatus)}}">
+                                        <div class="col-md-12 btn-success">
                                             <div class="clearfix">&nbsp;</div>
                                             <div class="col-md-7 pull-left">Panel Details</div>
                                             <div class="col-md-5 pull-right">
@@ -94,7 +94,7 @@
                                                 &nbsp;
                                                 <a about="" ng-click="samples.generateBarcode(panel)"
                                                    href="#barcodeModal" data-backdrop="false" data-toggle="modal">
-                                                    <i class="fa fa-barcode  "></i></a>
+                                                    <i class="fa fa-barcode "></i></a>
                                             </div>
                                             <div class="clearfix">&nbsp;</div>
                                         </div>
@@ -128,28 +128,16 @@
                                                     <i nowrap>{{panel.dateCreated}}</i>
                                                     <br>
 
-                                                    Shipment Status :
-                                                    <i nowrap><b>{{samples.returnPanelStatus(panel.panelStatus)}}</b>
-                                                    </i>
+                                                    <!--Shipment Status :-->
+                                                    <!--<i nowrap><b>{{samples.returnPanelStatus(panel.panelStatus)}}</b>-->
+                                                    <!--</i>-->
 
                                                     <div class="text-left ">
                                                         <i class="text-gray"><i>{{panel.panelDatePrepared}}</i>
                                                         </i>
                                                     </div>
                                                     <div ng-hide="samples.loaderProgressSpinner=='fa-spinner'">
-                                                        <x class="has-error"
-                                                           ng-hide="samples.sampleToPanel.length >0 && panel.panelStatus!=0">
-                                                            <i
-                                                                    class="fa fa-exclamation-circle"></i> please add
-                                                            samples to
-                                                            this
-                                                            Packaging to ship it
-                                                        </x>
-                                                        <x class="text-success"
-                                                           ng-show="samples.sampleToPanel.length > 0 && panel.panelStatus==0">
-                                                            <i
-                                                                    class="fa fa-check-circle"></i> ready for shipment
-                                                        </x>
+
                                                     </div>
                                                 </div>
                                             </blockquote>
@@ -159,7 +147,7 @@
                                     <div class="col-md-7"
                                          ng-if="samples.clickedPanel==panel.id && samples.loaderProgressSpinner!='fa-spinner'">
                                         <div class="h4">Samples In this Packaging
-                                            <div class="label {{samples.returnPanelColorFromStatus(panel.panelStatus)}}">
+                                            <div class="label label-success">
                                                 {{samples.sampleToPanel.length}} records
                                             </div>
                                         </div>
@@ -169,7 +157,7 @@
                                                 <th></th>
                                                 <th>Batch Name</th>
                                                 <th>Date Prepared</th>
-                                                <th>Blood Pack #</th>
+                                                <th>Material Source</th>
                                                 <th>Material Origin</th>
                                                 <th>Date Created</th>
                                                 <th></th>
@@ -178,7 +166,7 @@
                                                 <td>{{$index+1}}</td>
                                                 <td>{{sample.batchName}}</td>
                                                 <td>{{sample.datePrepared}}</td>
-                                                <td>{{sample.bloodPackNo}}</td>
+                                                <td>{{sample.materialSource}}</td>
                                                 <td>{{sample.materialOrigin}}</td>
                                                 <td nowrap>{{sample.dateCreated}}</td>
                                                 <td>

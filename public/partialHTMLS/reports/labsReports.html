@@ -1,0 +1,116 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>Lab Performance Report
+            <small>{{reports.labPerformanceData.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchRounds" class="pull-right" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereLabResults.dateFrom"
+                           data-date-format="yyyy-MM-dd" required placeholder="select from date"
+                           data-min-date="" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="dateFrom"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 ">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereLabResults.dateTo"
+                           data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"
+                           data-min-date="reports.whereLabResults.dateFrom" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon1"
+                           name="dateTo"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 no-padding">
+                    <input class="form-control input-sm" ng-init="reports.getCounties()"
+                           ng-model="reports.whereLabResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
+                </div>
+                <div class="col-md-2 ">
+                    <select class="form-control input-sm" ng-model="reports.whereLabResults.grade">
+                        <option selected disabled>--Grades--</option>
+
+                        <option value="1">passed</option>
+                        <option value="0">failed</option>
+                    </select>
+                </div>
+                <div>
+                    &nbsp;
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getLabPerformanceReport(reports.whereLabResults)">get report
+                    </button>
+                </div>
+
+            </table>
+        </form>
+        <table class="table table-bordered">
+            <tr>
+                <td>Mean</td>
+                <td>--</td>
+                <td>Total Labs</td>
+                <td> 0</td>
+                <td>SD</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Lab Name</th>
+                <th>Lab Code</th>
+                <th>County</th>
+                <th>Sample</th>
+                <th>Round</th>
+                <th>Micro</th>
+
+                <th>Micro Agents</th>
+                <th>Remarks</th>
+                <th>Status</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="lab in reports.labPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td>{{lab.roundName}}</td>
+                <td>{{lab.roundCode}}</td>
+                <td>{{lab.county}}</td>
+                <td>{{lab.batchName}}</td>
+                <td nowrap>{{lab.roundCode}}</td>
+                <td nowrap>{{lab.finalScore}}</td>
+                <td nowrap>{{lab.totalMicroAgentsScore}}</td>
+                <td>{{lab.remarks}}</td>
+                <td>{{lab.status}}</td>
+                <td>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
+            </tr>
+            <!--<tr ng-hide="reports.generalRoundData.length >0">-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

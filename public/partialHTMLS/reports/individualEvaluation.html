@@ -1,0 +1,107 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>Individual Labs Evaluation
+            <small>{{reports.individualLabsEvaluation.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchLabs" class="pull-right" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereIndividualLabs.dateFrom"
+                           data-date-format="yyyy-MM-dd" required placeholder="select from date"
+                           data-min-date="" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="dateFrom"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 ">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereIndividualLabs.dateTo"
+                           data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"
+                           data-min-date="reports.whereIndividualLabs.dateFrom" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon1"
+                           name="dateTo"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 no-padding">
+                    <input class="form-control input-sm" ng-model="reports.whereIndividualLabs.participantId" placeholder="lab name">
+                </div>
+                <div class="col-md-2 ">
+                    <select class="form-control input-sm" ng-model="reports.whereIndividualLabs.evaluated">
+                        <option selected disabled>--status--</option>
+                        <option value="1">evaluated</option>
+                        <option value="0">Un-evaluated</option>
+                    </select>
+                </div>
+                <div>
+                    &nbsp;
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getIndividualReport(reports.whereIndividualLabs)">Fetch
+                    </button>
+                </div>
+
+            </table>
+        </form>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Lab Name</th>
+                <th>Lab Code</th>
+                <th>County</th>
+                <th>Date Responded</th>
+
+                <th>Current status</th>
+                <th>Marks</th>
+                <th>Sample</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="lab in reports.individualLabsEvaluation|filter:searchLabs | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td><a href="#/{{lab.id}}"
+                       data-placement="right" data-type="info" data-container="body"
+                       data-animation="am-fade-and-scale"
+                       data-trigger="hover" data-type="success" data-title="More infor on {{lab.labDetails.institute_name}}"
+                       bs-tooltip
+                       ng-click="samples.showlabFullDetails(lab)"
+                       class="">{{lab.labDetails.institute_name}}</a>
+                </td>
+                <td>{{lab.labDetails.unique_identifier}}</td>
+                <td>{{lab.labDetails.city}}</td>
+                <td>{{lab.dateCreated}}</td>
+                <td nowrap>{{lab.evaluatedStatus}}</td>
+                <td nowrap>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
+
+                <td>{{lab.batchName}}</td>
+                <td>
+                    <button
+                            ng-click="reports.evaluateIndividual(lab)" class="btn btn-danger btn-sm">
+                        <i class="fa fa-check"></i>
+                        <x ng-show="lab.markedStatus==0">evaluate</x>
+                        <x ng-show="lab.markedStatus==1">Re-evaluate</x>
+                    </button>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

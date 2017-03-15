@@ -128,8 +128,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             solely for the use of the designated recipient. Any disclosure, copying or
             distribution of all or part of the information contained herein to or by
             third parties is prohibited and may be unlawful. If you have received this
-            e-mail message in error please delete it immediately and notify Flex
-            Communications Limited through e-mail to  <mailto:info@nphl.co.ke>
+            e-mail message in error please delete it immediately and notify NPHL through e-mail to  <mailto:info@nphl.co.ke>
             mailto:info@nphl.co.ke
             <hr>
            </div>
@@ -138,7 +137,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             . "<p style='color:white'>NPHL. | KNH, Upperhill, Nairobi.<br>
 
 
-                    Office: 0712 664-190 | 0703 302-958 | 0712 664-190 | 0701 204-066 | 0701 204-005 | 0701 203-055 |<br>
+                    Office:  |<br>
 
                     email:   info@nphl.co.ke |web:   <http://www.nphl.co.ke/ > <i style='color:white'>www.nphl.co.ke</i>
 
@@ -185,7 +184,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         return $mess;
     }
 
-    public function sendemailAction($body, $to = '')
+    public function sendemailAction($body, $to = '', $send = '')
     {
         try {
             $config = array('ssl' => 'tls',
@@ -199,7 +198,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $mail = new Zend_Mail();
 
 
-            $message = $this->createEmailBody('Participant', $body['message']);
+            $message = isset($send) ? $body : $this->createEmailBody('Participant', $body['message']);
             $mail->setBodyHtml($message);
             $mail->setFrom('National Public Health Laboratories');
             if ($to != '') {
@@ -207,7 +206,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             } else {
                 $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
             }
-            $mail->setSubject($body['subject']);
+            $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
+            $mail->setSubject($subject);
             if ($mail->send($transport)) {
 //                echo 'Sent successfully';
             } else {

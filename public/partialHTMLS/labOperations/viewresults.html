@@ -41,7 +41,7 @@
                     <div>
                         &nbsp;
                         <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
-                                ng-click="reports.getUserResults(reports.whereGenRounds)">get report
+                                ng-click="reports.getUserResults(reports.whereGenRounds,1)">get report
                         </button>
                     </div>
 
@@ -82,7 +82,7 @@
                     <td nowrap>{{sampleResponse.totalMicroAgentsScore}}</td>
 
                     <td nowrap>{{sampleResponse.grade}}</td>
-                    <td>{{sampleResponse.dateCreated}}</td>
+                    <td>{{samples.returnSubstring(sampleResponse.dateCreated,10)}}</td>
                     <td>{{sampleResponse.remarks}}</td>
                     <td>
                         <button class="label label-info"

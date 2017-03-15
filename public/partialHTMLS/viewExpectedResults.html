@@ -38,7 +38,7 @@
         <a href="#" ng-click="scoreCols=false" ng-show="scoreCols"><i class="fa fa-check-circle"></i> hide score columns</a>
         <a href="#" ng-click="scoreCols=true" ng-hide="scoreCols"><i class="fa fa-minus-circle"></i> show score columns</a>
     </div>
-    <div class="col-md-12" style="overflow-x:auto;">
+    <div class="col-md-12 no-padding" style="overflow-x:auto;">
         <table class="table table-bordered text-capitalize">
             <thead>
             <tr class="btn-primary">
@@ -81,7 +81,7 @@
                 <td ng-show="scoreCols">{{expectedResults.bacterialReagentsScore}}</td>
                 <td>{{expectedResults.finalIdentification}}</td>
                 <td ng-show="scoreCols">{{expectedResults.finalIdentificationScore}}</td>
-                <td>{{expectedResults.dateCreated }}</td>
+                <td nowrap>{{samples.returnSubstring(expectedResults.dateCreated ,10)}}</td>
                 <td>
                     <a href="#" class="label label-info"
                        ng-click="samples.editFunction(expectedResults,'tbl_bac_expected_results')">

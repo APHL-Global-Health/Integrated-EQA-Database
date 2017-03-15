@@ -7,22 +7,36 @@
         <button class="btn btn-sm btn-danger pull-right"
                 ng-click="reports.showResults=true"><i class="fa fa-close"></i> close
         </button>
+        <div class="pull-right"> &nbsp;&nbsp; </div>
+        <button class="btn btn-sm btn-primary pull-right"
+                ng-click="samples.printDiv('printable-response')"><i class="fa fa-print"></i> print
+        </button>
     </div>
     <div class="clearfix">
         &nbsp;
     </div>
     <div class="h3 text-center col-md-12">
-        RESPONSE PT REPORT  <i class="fa fa-spin {{reports.loader}}"></i>
+        RESPONSE PT REPORT <i class="fa fa-spin {{reports.loader}}"></i>
         <hr>
     </div>
-    <div class="panel panel-primary">
+    <div class="panel panel-primary" id="printable-response">
         <div class="panel panel-body">
             <div class="h4 text-center col-md-12 text-bold border-bottom">
-                MINISTRY OF HEALTH<br>
-                NATIONAL PUBLIC HEALTH LABORATORY<br>
-                NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA<br>
-                STANDARD OPERATING PROCEDURE
-
+                <b> MINISTRY OF HEALTH<br>
+                    NATIONAL PUBLIC HEALTH LABORATORY<br>
+                    NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA<br>
+                    STANDARD OPERATING PROCEDURE
+                </b>
+            </div>
+            <div class="h5 col-md-12 text-bold text-left  border-bottom">
+                <br>
+                LABORATORY NAME : {{samples.loginDetails.institute_name}} <br><br>
+                ADDRESS: {{samples.loginDetails.shipping_address}} <br><br>
+                LABORATORY CODE : {{samples.loginDetails.unique_identifier}} <br><br>
+                E-MAIL ADDRESS : {{samples.loginDetails.email}} <br><br>
+                DATE PT SAMPLES RECEIVED IN THE LABOLATORY : {{reports.currentResults.dateDelivered}}<br><br>
+                DATE RETURNED : {{reports.userResults.results.dateCreated}}<br>
+                <br>
             </div>
             <div class="col-md-12">
                 <h4>MICROBIOLOGY IDENTIFICATION REPORT
@@ -59,7 +73,7 @@
                 </div>
                 <div class="clearfix">&nbsp;</div>
                 <form class="form-horizontal" novalidate="" name="resultsData">
-                    <table class="table table-bordered" >
+                    <table class="table table-bordered">
                         <thead class="btn-primary">
                         <tr>
                             <th>
@@ -74,8 +88,8 @@
 
                         </tr>
                         </thead>
-                        <tbody ng-form novalidate="" name="resultsData" >
-                        <tr >
+                        <tbody ng-form novalidate="" name="resultsData">
+                        <tr>
                             <td width="30%">Gram stain reaction and morphology</td>
                             <td width="60%">
                                 {{reports.userResults.results.grainStainReaction}}
@@ -85,14 +99,14 @@
                             </td>
 
                         </tr>
-                        <tr >
+                        <tr>
                             <td width="30%">Details of primary media used for isolation and manufacturer</td>
                             <td width="60%"> {{reports.userResults.results.primaryMedia}}</td>
                             <td class="10%"> {{reports.userResults.results.primaryMediaScore}}
                             </td>
 
                         </tr>
-                        <tr >
+                        <tr>
                             <td width="30%">Incubation conditions</td>
                             <td width="60%"> {{reports.userResults.results.incubationConditions}}</td>
                             <td class="10%"> {{reports.userResults.results.incubationConditionsScore}}
@@ -145,7 +159,7 @@
                             <td width="30% ">
                                 TOTAL SCORE
                             </td>
-                            <td width="60%" > {{reports.userResults.results.finalScore}}</td>
+                            <td width="60%"> {{reports.userResults.results.finalScore}}</td>
                             <td class="10%">
 
                             </td>
@@ -154,7 +168,7 @@
                             <td width="30%">
                                 Remarks
                             </td>
-                            <td width="60%" > {{reports.userResults.results.remarks}}</td>
+                            <td width="60%"> {{reports.userResults.results.remarks}}</td>
                             <td class="10%">
 
                             </td>
@@ -190,35 +204,35 @@
                     <tbody ng-form novalidate="" name="susceptibilityData">
                     <tr>
                         <td width="30%">Survey number</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.currentResults.roundName}}</td>
                         <td class="10%">N/A
                         </td>
 
                     </tr>
                     <tr>
                         <td width="30%">Isolate identification</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.isolateIdentification}}</td>
                         <td class="10%">N/A
                         </td>
 
                     </tr>
                     <tr>
                         <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.methodUsed}}</td>
                         <td class="10%">N/A
                         </td>
 
                     </tr>
                     <tr>
                         <td width="30%">Media used</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.mediaUsed}}</td>
                         <td class="10%">N/A
                         </td>
 
                     </tr>
                     <tr>
                         <td width="30%">Manufacturer of media</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.mediaManufacturer}}</td>
                         <td class="10%">N/A
                         </td>
 
@@ -227,14 +241,14 @@
                         <td width="30%">Manufacturer of disc and disc size (mm):
                         </td>
 
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.discManufacturer}}</td>
                         <td class="10%">N/A
                         </td>
 
                     </tr>
                     <tr>
                         <td width="30%">Guidelines used (CLSI):</td>
-                        <td width="60%">{{reports.userResults.susceptibility.roundId}}</td>
+                        <td width="60%">{{reports.userResults.susceptibility.guidelines}}</td>
                         <td class="10%">N/A
                         </td>
 
@@ -344,7 +358,14 @@
                     </tbody>
                 </table>
             </div>
-
+            <div class="">
+                <br><br>
+                <h4>CORRECTIVE ACTION</h4>
+                <hr>
+                <div class="">
+                    <br>
+                </div>
+            </div>
         </div>
 
 
