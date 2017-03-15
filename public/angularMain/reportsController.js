@@ -40,6 +40,27 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
     }
 
+    $scope.reports.grades = {};
+    $scope.reports.getGrades = function () {
+        var url = serverReportURL + 'getgrades';
+        var where = {}
+        showAjaxLoader(true);
+        $timeout(function () {
+            $http.post(url, where)
+                .success(function (response) {
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.grades = response.data;
+                    }
+                })
+                .error(function () {
+                    showAjaxLoader(false);
+                })
+                , 300
+        })
+    }
+
+
     $scope.reports.counties = {};
     $scope.reports.getCounties = function () {
         var url = serverReportURL + 'getcounties';
@@ -52,6 +73,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             })
 
     }
+
+    $scope.reports.rounds = {};
+    $scope.reports.getRounds = function () {
+        var url = serverReportURL + 'getrounds';
+        var where = {}
+        $http.post(url, where)
+            .success(function (response) {
+                if (response.status == 1) {
+                    $scope.reports.rounds = response.data;
+                }
+            })
+
+    }
+    $scope.reports.samples = {};
+    $scope.reports.getSamples = function () {
+
+        var url = serverReportURL + 'getsamples';
+        var where = {}
+        showAjaxLoader(true);
+        $timeout(function () {
+            $http.post(url, where)
+                .success(function (response) {
+                    if (response.status == 1) {
+                        $scope.reports.samples = response.data;
+                    }
+                })
+                , 500
+        })
+
+    }
+
     $scope.reports.getGeneralRoundReport = function (where) {
         var url = serverReportURL + 'getgeneralroundreport';
         showAjaxLoader(true)
@@ -136,6 +188,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     }
 
     $scope.reports.labPerformanceData = {};
+    $scope.reports.labPerformanceDataStat = {};
     $scope.reports.getLabPerformanceReport = function (where) {
         try {
             showAjaxLoader(true)
@@ -146,9 +199,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     showAjaxLoader(false)
                     if (response.status == 1) {
                         $scope.reports.labPerformanceData = response.data;
+                        $scope.reports.labPerformanceDataStat = response.stat;
                     } else {
                         EptServices.EptServiceObject.returnNoRecordsFoundAlert();
                         $scope.reports.labPerformanceData = {};
+                        $scope.reports.labPerformanceDataStat = {};
                     }
                 })
                 .error(function (error) {
@@ -160,6 +215,35 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
         }
     }
+    $scope.reports.roundsPerformanceData = {};
+    $scope.reports.roundsPerformanceDataStat = {};
+    $scope.reports.getRoundPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getroundperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.roundsPerformanceData = response.data;
+                        $scope.reports.roundsPerformanceDataStat = response.stat;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        $scope.reports.roundsPerformanceData = {};
+                        $scope.reports.roundsPerformanceDataStat = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (exc) {
+
+        }
+    }
+
 
     var alertStartRound = '';
     $scope.reports.evaluateRound = function () {
