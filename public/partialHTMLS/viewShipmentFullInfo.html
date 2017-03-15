@@ -74,8 +74,8 @@
                     <th></th>
                     <th>Packaging Name</th>
                     <th>Date Prepared</th>
-                    <th>Del'ry date</th>
-                    <th>Del'ry status</th>
+                    <th>Panel Type</th>
+                    <!--<th>Del'ry status</th>-->
                     <th>Total Samples Added</th>
 
                 </tr>
@@ -85,8 +85,8 @@
                                                              ng-click="samples.getSampleFromPanel(panels,'tbl_bac_sample_to_panel')">
                         {{panels.panelName}}</a></td>
                     <td nowrap>{{panels.panelDatePrepared}}</td>
-                    <td nowrap>{{panels.dateDelivered}}</td>
-                    <td nowrap>{{samples.returnShipmentStatus(panels.deliveryStatus)}}</td>
+                    <td nowrap>{{panels.panelType}}</td>
+                    <!--<td nowrap>{{samples.returnShipmentStatus(panels.deliveryStatus)}}</td>-->
                     <td nowrap>{{panels.totalSamplesAdded}}</td>
 
                 </tr>
@@ -115,7 +115,7 @@
                     <td>{{$index+1}}</td>
                     <td>{{sample.batchName}}</td>
                     <td>{{sample.datePrepared}}</td>
-                    <td>{{sample.bloodPackNo}}</td>
+                    <td>{{sample.materialSource}}</td>
                     <td>{{sample.materialOrigin}}</td>
                     <td nowrap>{{sample.dateCreated}}</td>
 
