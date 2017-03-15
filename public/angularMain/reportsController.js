@@ -309,7 +309,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             //console.log($scope.reports.whereGenRounds);
             var where = {id: round.id, published: published};
             var url = serverReportURL + 'updatepublication';
-            alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait...')
+            alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait,participnats are being notified through mail...')
             $http
                 .post(url, where)
                 .success(function (response) {

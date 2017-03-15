@@ -132,9 +132,47 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_response_results', $whereRound, $update);
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereRound, $update);
         echo $this->returnJson($updatePublication);
+
+        if ($update['published'] == 1) {
+            $this->sendEmailToEnrolledLabsForPublish($wherePub['id']);
+        }
         exit;
 
 
+    }
+
+    public function sendEmailToEnrolledLabsForPublish($roundId)
+    {
+        $where['roundId'] = $roundId;
+        $where['status'] = 2;
+
+        $enrolledLabs = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $where);
+
+        if ($enrolledLabs != false) {
+            $round = $this->returnValueWhere($where['roundId'], 'tbl_bac_rounds');
+
+            foreach ($enrolledLabs as $key => $value) {
+                $labDetails = $this->returnValueWhere($value->labId, 'participant');
+                if (!empty($labDetails)) {
+                    if ($labDetails['email'] != '' || $labDetails['email'] != null) {
+                        $this->publishedMails($labDetails, $round);
+                    }
+                }
+            }
+
+        }
+    }
+
+    public function publishedMails($lab, $round)
+    {
+
+        $name = $lab['institute_name'] . ' ' . $lab['unique_identifier'];
+
+        $message = 'The results for for round, <b>' . $round['roundName'] . ' : ' . $round['roundCode'] . '</b> have been evaluated and published.<br>Please log in to view.';
+
+        $body = $this->createEmailBody($name, $message);
+
+        $this->sendemailAction($body, $lab['email'], true);
     }
 
     public function getindividuallabsAction()
@@ -642,10 +680,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             $reportData[$keys]->materialSource = $sampleInfo['materialSource'];
 
                             $reportData[$keys]->unique_identifier = $value->unique_identifier;
-                            $reportData[$keys]->status ='valid';
+                            $reportData[$keys]->status = 'valid';
                             array_push($report, (array)$reportData[$keys]);
                         }
-
 
 
                     }
@@ -660,7 +697,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
             }
 
-        }else{
+        } else {
 
         }
 
