@@ -563,7 +563,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if ($dataDB != false) {
                 $tableArry = array();
                 if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_panels_shipments'
-                    || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'
+                    || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'|| $tableName == 'tbl_bac_shipments'
                 ) {
                     foreach ($dataDB as $key => $value) {
 
@@ -592,6 +592,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         if ($tableName == 'tbl_bac_rounds') {
                             $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                             $dataDB[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
+                            $whereReady['roundId'] =$value->id;
+                            $whereReady['status'] =2;
+                            $dataDB[$key]->totalLabsAdded = $this->dbConnection->selectCount('tbl_bac_ready_labs', $whereReady,'roundId');
                         }
                         if ($tableName == 'tbl_bac_panels_shipments') {
 
@@ -607,6 +610,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                             $dataDB[$key]->barcode = $panel['barcode'];
                             $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
                         }
+
+                        if ($tableName == 'tbl_bac_shipments') {
+                            $where['participantId'] = null;
+                            $whereSS['shipmentId'] = $value->id;
+                            $dataDB[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $whereSS, 'shipmentId');
+                        }
+
                     }
                 }
             }
@@ -676,7 +686,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
                 }
                 if ($tableName == 'tbl_bac_shipments') {
-                    $where['participantId  >'] = 0;
+                    $where['participantId'] = null;
                     $where['shipmentId'] = $value->id;
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
@@ -742,7 +752,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             echo($this->returnJson($data));
         } else {
-            echo($this->returnJson(json_encode(array('status' => 0, 'message' => 'No Records Found'))));
+            echo $this->returnJson(array('status' => 0, 'message' => 'No Records Found'));
         }
 
         exit;

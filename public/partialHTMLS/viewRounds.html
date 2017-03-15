@@ -92,7 +92,7 @@
                                 class="fa fa-plus"></i>
                         </a>
 
-                        <a class="btn btn-success btn-sm" ng-disabled="round.daysLeft ==0"
+                        <a class="btn btn-success btn-sm" ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
@@ -234,7 +234,8 @@
             </div>
 
             <div class="btn btn-warning col-md-12 text-uppercase"
-                 ng-disabled="samples.currentRound.startRoundFlag==1 || samples.currentRound.totalShipmentsAdded==0"
+                 ng-disabled="samples.currentRound.startRoundFlag==1
+                 || samples.currentRound.totalShipmentsAdded==0 ||  samples.currentRound.totalLabsAdded==0"
                  ng-click="samples.startRound(samples.currentRound)"
             >
                 START ROUND {{samples.currentRound.roundName}}

@@ -160,7 +160,8 @@
         }
         $scope.samples.getParticipantPanel = function (tableName) {
             var whereData = {
-                participantId: $scope.samples.loginDetails.participant_id
+                participantId: $scope.samples.loginDetails.participant_id,
+                startRoundFlag: 1
             }
             $scope.samples.getAllSamples(tableName, whereData)
         }
@@ -269,8 +270,11 @@
                         } else {
                             assignHTTPResponse({}, tableName);
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
+                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
                         }
-
+                        if (data.data == false) {
+                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        }
                     })
                     .error(function (error) {
                         console.log(error)
@@ -377,6 +381,10 @@
                         console.log(data)
                         $scope.samples.receivedShipments = data.data;
                         $scope.samples.loaderProgressSpinner = '';
+
+                        if (data.status == 0) {
+                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        }
                     })
                     .error(function (error) {
                         console.log(error)
@@ -579,44 +587,71 @@
         $scope.samples.hideShipmentModal = function () {
             $scope.samples.showShipmentModal = false;
         }
+        $scope.samples.confirmDialog = function (message, callbackFunction) {
+            $.confirm({
+                title: 'Confirm !',
+                theme: 'supervan',
+                content: message,
+                buttons: {
+                    'Confirm': {
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            callbackFunction();
 
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-red',
+                        action: function () {
+                            // $.alert('cancelled !');
+                        }
+                    }
+                }
+            })
+        }
         $scope.samples.saveLabsToRound = function (round) {
             try {
                 if (angular.isDefined(round)) {
-                    changeSavingSpinner(true);
-                    var postedData = {};
-                    postedData.roundId = round.id;
-                    postedData.labId = $scope.samples.labsToRoundArray;
-                    var url = serverSamplesURL + 'savelabstoround';
-                    $http
-                        .post(url, postedData)
-                        .success(function (response) {
-                            console.log(response)
-                            changeSavingSpinner(false);
-                            if (response.status == 1) {
-                                $scope.samples.labsToRoundArray = [];
+                    function saveLabsToRounds() {
+                        changeSavingSpinner(true);
+                        var postedData = {};
+                        postedData.roundId = round.id;
+                        postedData.labId = $scope.samples.labsToRoundArray;
+                        var url = serverSamplesURL + 'savelabstoround';
+                        $http
+                            .post(url, postedData)
+                            .success(function (response) {
+                                console.log(response)
+                                changeSavingSpinner(false);
+                                if (response.status == 1) {
+                                    $scope.samples.labsToRoundArray = [];
 
 
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                $scope.samples.samplesActivePage('viewRounds', 0);
+                                    $scope.samples.samplesActivePage('viewRounds', 0);
+                                    $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
+                                } else {
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
+                                }
 
-                            } else {
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
-                            }
+                            })
+                            .error(function (error) {
+                                console.log(error)
+                                changeSavingSpinner(false);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            })
 
-                        })
-                        .error(function (error) {
-                            console.log(error)
-                            changeSavingSpinner(false);
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                        })
+                    }
 
+                    var message = 'Are you sure you want to add this lab(a) to the round, this action can not be undone';
+                    $scope.samples.confirmDialog(message, saveLabsToRounds);
                 } else {
                     changeSavingSpinner(false);
                     console.log('error')
                 }
+
             } catch (error) {
                 changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, error));
             }
@@ -793,7 +828,7 @@
         $scope.samples.showRangeError = function (num1, num2) {
             if (Number(num1) >= Number(num2)) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -919,6 +954,7 @@
                                         alertStartRound.close();
                                         $.alert('Data save successfully');
                                         $scope.samples.showAddShipment = true
+                                        $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
                                         $scope.samples.shipmentsToRoundArray = [];
                                     })
                                     .error(function (error) {

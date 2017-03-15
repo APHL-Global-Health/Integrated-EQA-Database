@@ -11,7 +11,9 @@
     </div>
     <div class=" text-right">
 
-        <a href="#" ng-click="reports.evaluateRound()" class="btn btn-primary btn-sm"
+        <a href="#" ng-click="reports.evaluateRound()"
+           ng-disabled="reports.currentRoundEvaluation.totalShipmentsAdded==0"
+           class="btn btn-primary btn-sm"
            ng-show="reports.currentRoundEvaluation.evaluated==0"><i
                 class="fa fa-check"></i> Evaluate Survey
         </a>
