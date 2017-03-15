@@ -788,7 +788,14 @@
             // console.log($scope.samples.loginDetails);
         }
         $scope.samples.returnSubstring = function (longerString, len) {
-            return longerString.substring(0,len);
+            return longerString.substring(0, len);
+        }
+        $scope.samples.showRangeError = function (num1, num2) {
+            if (Number(num1) >= Number(num2)) {
+                return true;
+            }else{
+                return false;
+            }
         }
         $scope.samples.getLoggedInUserSessionInfo();
         console.log($scope.samples.loginDetails);
@@ -1458,7 +1465,6 @@
                 console.log(Exc)
             }
         }
-
 
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

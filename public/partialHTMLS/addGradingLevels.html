@@ -55,7 +55,7 @@
                     Error : Required & Only numbers.
                 </small>
                 <small class="text-danger col-md-12"
-                       ng-show="samples.gradingFormData.lowerMark >= samples.gradingFormData.upperMark">
+                       ng-show="samples.showRangeError(samples.gradingFormData.lowerMark ,samples.gradingFormData.upperMark)">
                     Upper marks should be more than lower marks
                 </small>
             </div>
@@ -80,7 +80,8 @@
                 <button class="btn btn-primary col-md-6"
 
                         ng-click="samples.saveSampleFormData('tbl_bac_grades',samples.gradingFormData)"
-                        ng-disabled="gradingData.$invalid || samples.savingInProgress||samples.gradingFormData.lowerMark >= samples.gradingFormData.upperMark"
+                        ng-disabled="gradingData.$invalid || samples.savingInProgress||
+                        samples.showRangeError(samples.gradingFormData.lowerMark ,samples.gradingFormData.upperMark)"
                 >Save Grading<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                 </button>
                 <!--</div>-->
