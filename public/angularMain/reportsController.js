@@ -36,7 +36,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         if (status.status == 0) {
             EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
         }
-        else{
+        else {
             EptServices.EptServiceObject.returnActionUnSuccessAlert();
         }
     }
@@ -100,8 +100,9 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         $scope.reports.samples = response.data;
                     }
                 })
-                , 500
-        })
+            showAjaxLoader(false);
+
+        }, 1000)
 
     }
 
@@ -432,6 +433,38 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     }
     $scope.reports.individualLabsEvaluation = {};
     $scope.reports.whereIndividualLabs = {};
+
+    $scope.reports.roundsParticipatoryData = {};
+
+    $scope.reports.getRoundParticipatoryReport = function (where) {
+        try {
+            var url = serverReportURL + 'getroundparticipatory';
+            var where = where;
+            showAjaxLoader(true);
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response);
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.roundsParticipatoryData = response.data;
+                    } else {
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
+                        $scope.reports.roundsParticipatoryData = {};
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    showAjaxLoader(false);
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (Exc) {
+            $log.debug('Serious error occurred');
+        }
+    }
     $scope.reports.getIndividualReport = function (whereIndividualLabs) {
         try {
             var url = serverReportURL + 'getindividuallabs';
@@ -511,7 +544,10 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         console.log(response)
                         if (response.status == 1) {
 
-                            $.alert({title :'<i class="fa fa-check-circle"></i> Success',content :'Lab evaluated successfully'});
+                            $.alert({
+                                title: '<i class="fa fa-check-circle"></i> Success',
+                                content: 'Lab evaluated successfully'
+                            });
 
 
                             $scope.reports.getIndividualReport($scope.reports.whereIndividualLabs)

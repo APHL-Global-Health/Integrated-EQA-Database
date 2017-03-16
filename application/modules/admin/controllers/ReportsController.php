@@ -792,6 +792,158 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
     }
 
+    public function getroundparticipatoryAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+
+
+        if (isset($postedData['grade'])) {
+            if ($postedData['grade'] == '') {
+                unset($postedData['grade']);
+            } else {
+                $postedData['grade'] = $postedData['grade'];
+
+            }
+            unset($postedData['grade']);
+        }
+        if (isset($postedData['sample'])) {
+            if ($postedData['sample'] == '') {
+                unset($postedData['sample']);
+            } else {
+                $wheresample['batchName'] = $postedData['sample'];
+                $sampleDetails = $this->returnValueWhere($wheresample, 'tbl_bac_samples');
+
+                $postedData['sampleId'] = $sampleDetails['id'];
+            }
+            unset($postedData['sample']);
+        }
+
+        if (isset($postedData['region'])) {
+            if ($postedData['region'] == '') {
+                unset($postedData['region']);
+            } else {
+                $whereCounty['region'] = $postedData['region'];
+                $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+
+            }
+            unset($postedData['region']);
+        }
+        if (isset($postedData['round'])) {
+            if ($postedData['round'] == '') {
+                unset($postedData['round']);
+            } else {
+                $whereRound['roundName'] = $postedData['round'];
+                $roundDetails = $this->returnValueWhere($whereRound, 'tbl_bac_rounds');
+
+                $postedData['roundId'] = $roundDetails['id'];
+            }
+            unset($postedData['round']);
+        }
+
+
+        $orderArray = ['id', 'dateCreated'];
+        $col = ['id', 'participantId', 'roundId', 'sampleId'];
+
+        $groupArray = ['participantId', 'roundId', 'sampleId'];
+
+//        var_dump($labs);
+//        exit;
+        $report = [];
+
+        $data['totalResponded'] = 0;
+        $data['totalUnresponded'] = 0;
+        $data['totalTotalEvaluated'] = 0;
+        $data['totalTotalUnevaluated'] = 0;
+        $data['totalLabsAndSamples'] = 0;
+
+        if (isset($labs)) {
+            if ($labs != false) {
+
+
+                $data['totalResponded'] = 0;
+                foreach ($labs as $key => $value) {
+                    $postedData['participantId'] = $value->participant_id;
+                    $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
+                    if ($sampleToPanel != false) {
+                        foreach ($sampleToPanel as $ky => $val) {
+
+                            $where['participantId'] = $val->participantId;
+                            $where['roundId'] = $val->roundId;
+                            $where['sampleId'] = $val->sampleId;
+
+                            $whereSampleId['id'] = $where['sampleId'];
+                            $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                            $roundId['id'] = $where['roundId'];
+                            $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
+                            $data['sample'] = $sampleInfo;
+                            $data['round'] = $roundInfo;
+
+                            $data['totalResponded'] = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'roundId');
+
+
+                            $evaluated = $where;
+                            $unevaluated['markedStatus'] = 1;
+                            $data['totalTotalEvaluated'] = $this->dbConnection->selectCount('tbl_bac_response_results', $evaluated, 'roundId');
+                            $unevaluated = $where;
+                            $unevaluated['markedStatus'] = 0;
+                            $data['totalTotalUnevaluated'] = $this->dbConnection->selectCount('tbl_bac_response_results', $unevaluated, 'roundId');
+
+                            $data['totalLabsAndSamples'] = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'roundId');
+                            $data['totalUnresponded'] = $data['totalLabsAndSamples'] - $data['totalResponded'];
+                            $data['responseRate'] = round(($data['totalResponded']/$data['totalLabsAndSamples'])*100,2);
+                            array_push($report, $data);
+                        }
+
+                    }
+                }
+
+                echo $this->returnJson(array('status' => 1, 'data' => $report));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        } else {
+            $postedData['roundId >'] = 0;
+            $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
+            if ($sampleToPanel != false) {
+                foreach ($sampleToPanel as $ky => $val) {
+
+                    $where['participantId'] = $val->participantId;
+                    $where['roundId'] = $val->roundId;
+                    $where['sampleId'] = $val->sampleId;
+
+                    $whereSampleId['id'] = $where['sampleId'];
+                    $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                    $roundId['id'] = $where['roundId'];
+                    $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
+                    $data['sample'] = $sampleInfo;
+                    $data['round'] = $roundInfo;
+
+                    $data['totalResponded'] = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'roundId');
+
+
+                    $evaluated = $where;
+                    $unevaluated['markedStatus'] = 1;
+                    $data['totalTotalEvaluated'] = $this->dbConnection->selectCount('tbl_bac_response_results', $evaluated, 'roundId');
+                    $unevaluated = $where;
+                    $unevaluated['markedStatus'] = 0;
+                    $data['totalTotalUnevaluated'] = $this->dbConnection->selectCount('tbl_bac_response_results', $unevaluated, 'roundId');
+
+                    $data['totalLabsAndSamples'] = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'roundId');
+                    $data['totalUnresponded'] = $data['totalLabsAndSamples'] - $data['totalResponded'];
+                    $data['responseRate'] = round(($data['totalResponded']/$data['totalLabsAndSamples'])*100,2);
+                    array_push($report, $data);
+                }
+
+                echo $this->returnJson(array('status' => 1, 'data' => $report));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        }
+
+        exit;
+    }
+
+
     public function getlabperformanceAction()
     {
         $postedData = $this->returnArrayFromInput();

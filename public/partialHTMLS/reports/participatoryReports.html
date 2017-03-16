@@ -12,7 +12,8 @@
             <table class="table table-bordered">
                 <div class="col-md-3 no-padding">
 
-                    <input type="text" class="form-control input-sm" ng-model="samples.whereParticipatoryResults.dateFrom"
+                    <input type="text" class="form-control input-sm"
+                           ng-model="reports.whereParticipatoryResults.dateFrom"
                            data-date-format="yyyy-MM-dd" required="" placeholder="select from date"
                            data-min-date="" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon2"
@@ -21,8 +22,8 @@
                 </div>
                 <div class="col-md-3 ">
 
-                    <input type="text" class="form-control input-sm" ng-model="samples.whereParticipatoryResults.dateTo"
-                           data-date-format="yyyy-MM-dd" required="" placeholder="select to date"
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereParticipatoryResults.dateTo"
+                           data-date-format="yyyy-MM-dd" placeholder="select to date"
                            data-min-date="samples.report.dateFrom" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon1"
                            name="datePrepared"
@@ -63,20 +64,8 @@
                            bs-options="icon.Description as icon.Description for icon in reports.counties"
                            placeholder="Search County" bs-typeahead>
                 </div>
-                <div class="col-md-2 ">
-                    <br>
-                    <input class="form-control input-sm" ng-model="reports.whereParticipatoryResults.grade"
-                           id="grade" name="grade" ng-init="reports.getGrades()"
-                           class="form-control"
-                           data-min-length="0"
-                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           bs-options="icon.grade as icon.grade for icon in reports.grades"
-                           placeholder="Search grade" bs-typeahead
-                    >
-                </div>
-                <div>
-                    &nbsp;
+
+                <div>  &nbsp;
                     <br>
 
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
@@ -86,48 +75,36 @@
 
             </table>
         </form>
-        <table class="table table-bordered">
-            <tr>
-                <td>Mean</td>
-                <td>{{reports.roundsPerformanceDataStat.mean}}</td>
-                <td>Total Labs</td>
-                <td>{{reports.roundsPerformanceDataStat.labs}}</td>
-                <td>SD</td>
-                <td>{{reports.roundsPerformanceDataStat.sd}}</td>
-            </tr>
-        </table>
+
     </div>
     <div class="col-md-12 no-padding">
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
                 <td>#</td>
-                <th>Lab Name</th>
-                <th>Lab Code</th>
-                <th>County</th>
-                <th>Sample</th>
-                <th>Round</th>
-                <th>Micro</th>
+                <th>Sample Name</th>
+                <th>Round Name</th>
+                <th>Total Enrolled Labs</th>
+                <th>Total Unresponded</th>
+                <th>Total Responded</th>
+                <th>Total Evaluated</th>
 
-                <th>Micro Agents</th>
-                <th>Remarks</th>
-                <th>Grade</th>
-                <th>Total</th>
+                <th>Total Unevaluated</th>
+                <th>Response %</th>
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="lab in reports.roundsPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+            <tr dir-paginate="sample in reports.roundsParticipatoryData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
-                <td>{{lab.labName}}</td>
-                <td>{{lab.labCode}}</td>
-                <td>{{lab.county}}</td>
-                <td>{{lab.batchName}}</td>
-                <td nowrap>{{lab.roundCode}}</td>
-                <td nowrap>{{lab.finalScore}}</td>
-                <td nowrap>{{lab.totalMicroAgentsScore}}</td>
-                <td>{{lab.remarks}}</td>
-                <td>{{lab.grade}}</td>
-                <td>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
+                <td>{{sample.sample.batchName}}</td>
+                <td>{{sample.round.roundName}}</td>
+                <td>{{sample.totalLabsAndSamples}}</td>
+                <td>{{sample.totalUnresponded}}</td>
+                <td nowrap>{{sample.totalResponded}}</td>
+                <td nowrap>{{sample.totalTotalEvaluated}}</td>
+                <td nowrap>{{sample.totalTotalUnevaluated}}</td>
+                <td nowrap>{{sample.responseRate}}</td>
+
             </tr>
             <!--<tr ng-hide="reports.generalRoundData.length >0">-->
             <!--<td colspan="10" class="text-center">No records available</td>-->
