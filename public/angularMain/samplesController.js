@@ -208,9 +208,24 @@
                     .success(function (data) {
                         console.log(data)
                         alertStartRound.close();
-                        $.alert('Round started OK!');
-                        $scope.samples.showRoundFullDetails(round);
-                        $scope.samples.currentRound.startRoundFlag = 1
+                        if (data.status == 1) {
+                            $.alert(
+                                {
+                                    title: '<i class="fa fa-check-circle text-success"></i> Success',
+                                    content: '<hr> Round started OK!'
+                                }
+                            );
+                            $scope.samples.showRoundFullDetails(round);
+                            $scope.samples.currentRound.startRoundFlag = 1
+                        } else {
+                            $.alert(
+                                {
+                                    title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
+                                    content: '<hr>'+data.message
+                                }
+                            );
+                        }
+
                     })
                     .error(function (error) {
                         $.alert('Error Occurred');

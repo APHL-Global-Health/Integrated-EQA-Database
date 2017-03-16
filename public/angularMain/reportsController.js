@@ -34,10 +34,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     function showResponseMessage(status) {
         var msg = '';
         if (status.status == 0) {
-
+            EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
         }
-        $.alert(status.msg)
-
+        else{
+            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+        }
     }
 
     $scope.reports.grades = {};
@@ -201,7 +202,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         $scope.reports.labPerformanceData = response.data;
                         $scope.reports.labPerformanceDataStat = response.stat;
                     } else {
-                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
                         $scope.reports.labPerformanceData = {};
                         $scope.reports.labPerformanceDataStat = {};
                     }
@@ -229,7 +230,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         $scope.reports.roundsPerformanceData = response.data;
                         $scope.reports.roundsPerformanceDataStat = response.stat;
                     } else {
-                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
                         $scope.reports.roundsPerformanceData = {};
                         $scope.reports.roundsPerformanceDataStat = {};
                     }
@@ -263,16 +264,22 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         $scope.reports.showShipmentEvaluationForRound($scope.reports.currentRoundEvaluation, true);
 
 
-                        $.alert('<i class="fa fa-check-circle"></i>Round Evaluation was successful!');
+                        $.alert({
+                            title: '<i class="fa fa-check-circle"></i> Success',
+                            content: 'Round Evaluation was successful!'
+                        });
 
                     } else {
-                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i>Round Evaluation was unsuccessful');
+                        $.alert({
+                            title: '<i class="fa fa-exclamation-triangle fa-warning"></i> Error',
+                            content: 'Round Evaluation was unsuccessful'
+                        });
                     }
 
                 })
                 .error(function (error) {
                     showAjaxLoader(false)
-                    $.alert('<i class="fa fa-exclamation-triangle text-danger"></i> Server error occurred,please try again.');
+                    EptServices.EptServiceObject.returnServerErrorAlert();
                 })
 
         }
@@ -293,10 +300,16 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         $scope.reports.showShipmentEvaluationForRound($scope.reports.currentRoundEvaluation, true);
 
 
-                        $.alert('<i class="fa fa-check-circle"></i> Evaluation was successful!');
+                        $.alert({
+                            title: '<i class="fa fa-check-circle"></i> Success',
+                            content: ' Evaluation was successful!'
+                        });
 
                     } else {
-                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Evaluation was unsuccessful');
+                        $.alert({
+                            title: '<i class="fa fa-exclamation-triangle fa-warning"></i> Error',
+                            content: 'Evaluation was unsuccessful'
+                        });
                     }
 
                 })
@@ -372,11 +385,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     if (response.status == 1) {
                         $scope.reports.userResults = response.data;
                     } else {
-                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Could not retrieve report data');
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
                     }
                 })
                 .error(function () {
-                    showAjaxLoader(false)
+                    showAjaxLoader(false);
+                    EptServices.EptServiceObject.returnServerErrorAlert();
                 })
         } catch (Exc) {
 
@@ -431,13 +445,15 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     if (response.status == 1) {
                         $scope.reports.individualLabsEvaluation = response.data;
                     } else {
-                        $.alert('<i class="fa fa-exclamation-triangle fa-warning"></i> Could not retrieve report data');
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
                         $scope.reports.individualLabsEvaluation = {};
                     }
                 })
                 .error(function (error) {
                     showAjaxLoader(false);
-                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                    EptServices.EptServiceObject.returnServerErrorAlert();
                 })
 
         } catch (Exc) {

@@ -563,7 +563,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if ($dataDB != false) {
                 $tableArry = array();
                 if ($tableName == 'tbl_bac_panel_mst' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_panels_shipments'
-                    || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds'|| $tableName == 'tbl_bac_shipments'
+                    || $tableName == 'tbl_bac_samples_to_users' || $tableName == 'tbl_bac_rounds' || $tableName == 'tbl_bac_shipments'
                 ) {
                     foreach ($dataDB as $key => $value) {
 
@@ -592,9 +592,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         if ($tableName == 'tbl_bac_rounds') {
                             $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
                             $dataDB[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
-                            $whereReady['roundId'] =$value->id;
-                            $whereReady['status'] =2;
-                            $dataDB[$key]->totalLabsAdded = $this->dbConnection->selectCount('tbl_bac_ready_labs', $whereReady,'roundId');
+                            $whereReady['roundId'] = $value->id;
+                            $whereReady['status'] = 2;
+                            $dataDB[$key]->totalLabsAdded = $this->dbConnection->selectCount('tbl_bac_ready_labs', $whereReady, 'roundId');
                         }
                         if ($tableName == 'tbl_bac_panels_shipments') {
 
@@ -643,19 +643,28 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $dataArray = $this->returnArrayFromInput();
 
             if (is_array($dataArray)) {
-
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
                 $arr = (array)$dataArray['where'];
-                $where['roundId'] = $arr['id'];
-                $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where, (array)$dataArray['updateData']);
+                $checkShipment['roundId'] = $arr['id'];
+                $checkShipment['shipmentStatus'] = 0;
 
-                $data = $this->dbConnection->updateTable('tbl_bac_panels_shipments', $where, (array)$dataArray['updateData']);
-                $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, (array)$dataArray['updateData']);
+                $shipmentDispatch = $this->dbConnection->selectCount('tbl_bac_shipments', $checkShipment, 'roundId');
 
-                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
+                if ($shipmentDispatch == 0) {
+                    $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+                    $arr = (array)$dataArray['where'];
+                    $where['roundId'] = $arr['id'];
+                    $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where, (array)$dataArray['updateData']);
 
+                    $data = $this->dbConnection->updateTable('tbl_bac_panels_shipments', $where, (array)$dataArray['updateData']);
+                    $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, (array)$dataArray['updateData']);
+
+                    if ($dataArray['tableName'] == 'tbl_bac_shipments') {
+
+                    }
+                    $data['status'] = 1;
+                } else {
+                    $data['message'] = 'There is undispatched shipment,please dispatch then try again';
                 }
-
             } else {
                 $data['message'] = ('could not find your request');
             }

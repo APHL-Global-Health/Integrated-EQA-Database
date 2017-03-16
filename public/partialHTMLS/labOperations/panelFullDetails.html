@@ -43,7 +43,7 @@
             <th>Date Created</th>
             <th>Date Prepared</th>
             <th>Date Delivered</th>
-            <th>Blood Pack #</th>
+            <th>Material Source</th>
             <th>Material Origin</th>
             <th>Status</th>
             <th>Remove</th>
@@ -58,9 +58,10 @@
             <td nowrap>{{sample.dateDelivered}}</td>
 
 
-            <td>{{sample.bloodPackNo}}</td>
+            <td>{{sample.materialSource}}</td>
             <td>{{sample.materialOrigin}}</td>
-            <td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>
+            <!--<td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>-->
+            <td>Active</td>
             <td>
                 <button class="btn btn-success btn-sm"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
