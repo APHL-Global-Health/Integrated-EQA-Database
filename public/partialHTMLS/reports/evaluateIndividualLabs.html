@@ -198,18 +198,51 @@
                                    name="finalIdentificationScore"></td>
         </tr>
 
-        <tr ng-class="{ 'has-error'  : resultsData.adminRemarks.$invalid && !resultsData.adminRemarks.$pristine  }">
-            <td width="30%">Result Remarks</td>
+        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
+              (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine ) }">
+            <td width="30%">Grade</td>
+            <td width="55%">
+
+                <input class="form-control input-sm" ng-model="reports.currentClickedLabResults.grade"
+                       id="grade" name="grade" ng-init="reports.getGrades()"
+                       class="form-control"
+                       data-min-length="0"
+                       data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       bs-options="icon.grade as icon.grade for icon in reports.grades"
+                       placeholder="Type grade" bs-typeahead
+                >
+
+            </td>
+            <td width="15%"></td>
+        </tr>
+
+        <tr ng-class="{ 'has-error'  : resultsData.remarks.$invalid && !resultsData.remarks.$pristine  }">
+            <td width="30%">Remarks</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter remarks  "
-                       ng-model="reports.currentClickedLabResults.adminRemarks" required
+                       ng-model="reports.currentClickedLabResults.remarks" required
+                       name="remarks">
+
+            </td>
+            <td width="15%">
+
+            </td>
+        </tr>
+
+        <tr ng-class="{ 'has-error'  : resultsData.adminRemarks.$invalid && !resultsData.adminRemarks.$pristine  }">
+            <td width="30%">Result Recommedation</td>
+            <td width="55%">
+                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                       placeholder="Please enter remarks  "
+                       ng-model="reports.currentClickedLabResults.adminRemarks"
                        name="adminRemarks">
 
             </td>
             <td width="15%">
                 <select class="form-control col-md-12" type="text" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.correctiveAction" required
+                        ng-model="reports.currentClickedLabResults.correctiveAction" required
                         name="correctiveAction">
                     <option selected disabled>--Corrective Action--</option>
                     <option value="1">YES</option>
@@ -217,24 +250,25 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td width="30%">
-                <div class="col-md-12 no-padding">
+        <!--<tr>-->
+            <!--<td width="30%">-->
+                <!--<div class="col-md-12 no-padding">-->
 
-                </div>
-            </td>
-            <td width="55%">
-                <div class="col-md-12 no-padding">
-                    <button class="btn btn-info col-md-12"
-                            ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"
-                            ng-disabled="resultsData.$invalid || samples.savingInProgress"
-                    >Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                    </button>
-                </div>
-            </td>
-            <td width="15%">
+                <!--</div>-->
+            <!--</td>-->
+            <!--<td width="55%">-->
+                <!--<div class="col-md-12 no-padding">-->
+                    <!--<button class="btn btn-info col-md-12"-->
+                            <!--ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"-->
+                            <!--ng-disabled="resultsData.$invalid || samples.savingInProgress"-->
+                    <!--&gt;Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</td>-->
+            <!--<td width="15%">-->
 
-            </td>
+            <!--</td>-->
+        <!--</tr>-->
         </tbody>
     </table>
 </form>
@@ -301,7 +335,7 @@
             <td><input type="text" class="form-control" ng-disabled="true"
                        ng-change="" ng-pattern="samples.numericOnly"
                        ng-model="fields.diskContent"></td>
-            <td >
+            <td>
                 <input type="text" class="form-control" ng-pattern="samples.numericOnly"
                        ng-change="" value="4"
                        ng-model="fields.score">
@@ -324,30 +358,33 @@
             </td>
         </tr>
 
-        <tr>
-            <td>
+        <!--<tr>-->
+            <!--<td>-->
 
-            </td>
-            <td>
-                <div class="col-md-12 no-padding">
+            <!--</td>-->
+            <!--<td>-->
+                <!--<div class="col-md-12 no-padding">-->
 
-                    <button class="btn btn-success col-md-12"
-                            ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"
-                            ng-disabled="reports.load=='fa-spinner'"
-                    >Update<i class="fa fa-spin {{reports.load}}"></i>
-                    </button>
+                    <!--<button class="btn btn-success col-md-12"-->
+                            <!--ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"-->
+                            <!--ng-disabled="reports.load=='fa-spinner'"-->
+                    <!--&gt;Update<i class="fa fa-spin {{reports.load}}"></i>-->
+                    <!--</button>-->
 
 
-                </div>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+                <!--</div>-->
+            <!--</td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+        <!--</tr>-->
         </tbody>
     </table>
 
-    <div class="col-md-12 btn btn-warning" ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData)" ng-disabled="resultsData.$invalid"> Evaluate Both</div>
+    <div class="col-md-12 btn btn-warning"
+         ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData)"
+         ng-disabled="resultsData.$invalid"> Evaluate Both
+    </div>
 </div>

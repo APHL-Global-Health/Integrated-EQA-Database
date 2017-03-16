@@ -572,13 +572,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
 
                             $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
-
+                            $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
                             $dataDB[$key]->batchName = $sample['batchName'];
                             $dataDB[$key]->datePrepared = $sample['datePrepared'];
-                            $dataDB[$key]->bloodPackNo = $sample['bloodPackNo'];
+                            $dataDB[$key]->materialSource = $sample['materialSource'];
                             $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
+                            $dataDB[$key]->roundCode = $round['roundCode'];
                             $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                             $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
+                            $dataDB[$key]->feedBackWord = $value->feedBack == 1 ? 'taken' : 'untaken';
 
                             if ($tableName == 'tbl_bac_samples_to_users') {
 

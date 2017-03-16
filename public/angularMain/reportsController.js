@@ -491,6 +491,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         try {
 
             function evaluateLab() {
+
                 var data = {
                     update: individualResults,
                     id: individualResults.id
@@ -509,13 +510,17 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     .success(function (response) {
                         console.log(response)
                         if (response.status == 1) {
-                            $.alert('<i class="fa fa-check-circle"></i> Lab evaluated successfully');
+
+                            $.alert({title :'<i class="fa fa-check-circle"></i> Success',content :'Lab evaluated successfully'});
+
+
+                            $scope.reports.getIndividualReport($scope.reports.whereIndividualLabs)
                         } else {
-                            $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                            EptServices.EptServiceObject.returnServerErrorAlert();
                         }
                     })
                     .error(function (error) {
-                        $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                        EptServices.EptServiceObject.returnServerErrorAlert();
                         console.log(error)
                     })
 
@@ -531,11 +536,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         return Number(num1) + Number(num2);
     }
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
+
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 
             $scope.reports.saveMicroAgentsEvaluation(microEvaluation)
-        }, 1500)
+        }, 2000)
     }
     $scope.reports.saveMicroAgentsEvaluation = function (microAgents) {
         if (microAgents.length > 0) {

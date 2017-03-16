@@ -46,6 +46,15 @@ EptServices.service('EptServices', function () {
         );
 
     }
+    this.EptServiceObject.returnDuplicateAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' You are try to re-submit already submitted data,please go back and edit instead.'
+            }
+        );
+
+    }
     this.EptServiceObject.returnProgressAlert = function () {
         $.alert(
             {

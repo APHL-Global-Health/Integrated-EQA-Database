@@ -42,6 +42,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->daysLeft = $this->converttodays($data[$key]->endDate);
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
+                $data[$key]->totalResponded = $this->dbConnection->selectCount('tbl_bac_response_results', $value->id, 'roundId');
             }
             echo $this->returnJson(array('status' => 1, 'data' => $data));
         } else {
@@ -221,6 +222,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $where['roundId'] = $arr['roundId'];
 
                 $update['score'] = $arr['score'];
+                $update['adminMarked'] = 1;
                 $microSum += $arr['score'];
                 $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereUpdate, $update);
             }
@@ -255,6 +257,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $finalScore = 0;
         $score = '';
         $updateEval['markedStatus'] = 1;
+        $updateEval['adminMarked'] = 1;
         foreach ($updateEval as $key => $value) {
 
             if (is_numeric($value) && substr($key, -5) == 'Score') {
@@ -431,6 +434,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $whereResponse['sampleId'] = $responseResults['sampleId'];
                 $whereResponse['roundId'] = $responseResults['roundId'];
                 $whereResponse['participantId'] = $responseResults['participantId'];
+                $whereResponse['adminMarked'] = 0;
                 $score['finalScore'] = array_sum($score);
 
                 $score['markedStatus'] = 1;
@@ -569,6 +573,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
     {
         try {
             if (isset($whereResponse)) {
+                unset($whereResponse['adminMarked']);
                 $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $whereResponse);
 
                 $whereSampleId = $whereResponse['sampleId'];
@@ -596,6 +601,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                     }
                     $returnScore += $score['score'];
                     $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
+                    $whereResponse['adminMarked'] = 0;
                     $score['markedStatus'] = 1;
                     $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
                     if ($updateSuscepibility['status'] == 0) {
@@ -679,7 +685,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $sum = 0;
         $samples = [];
         if ($roundDetails != false) {
-            if (isset($labs)&&$labs != false) {
+            if (isset($labs) && $labs != false) {
 
                 $report = [];
                 foreach ($labs as $key => $value) {

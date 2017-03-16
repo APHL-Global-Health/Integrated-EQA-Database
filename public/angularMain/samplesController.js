@@ -1129,7 +1129,8 @@
                                         if (response.data.status == 1) {
                                             $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
                                         } else {
-                                            $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                            EptServices.EptServiceObject.returnDuplicateAlert();
+                                            // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
                                         }
 
                                     }
