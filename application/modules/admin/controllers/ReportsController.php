@@ -536,6 +536,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_shipments', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
+            $totalRespondedSamples = 0;
             foreach ($data as $key => $value) {
                 $whereShipmentId['shipmentId'] = $value->id;
                 $whereShipmentId['roundId'] = $value->roundId;
@@ -545,22 +546,27 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $samplesToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $colSamPan, $whereShipmentId, $orderArray, true, $groupArray);
                 $data[$key]->totalRespondedSamples = 0;
                 $data[$key]->totalEvaluatedSamples = 0;
+
                 if ($samplesToPanel != false) {
                     foreach ($samplesToPanel as $keyPan => $valPan) {
+//                        $whereSamPan['roundId'] = $valPan->id;
                         $whereSamPan['panelToSampleId'] = $valPan->id;
-                        $whereSamPan['sampleId'] = $valPan->sampleId;
+//                        $totalRespondedSamples++;
+                        $totalRespondedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan['panelToSampleId'], 'panelToSampleId');
 
-                        $data[$key]->totalRespondedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan, 'id');
+                        $data[$key]->totalRespondedSamples = $totalRespondedSamples;
                         $whereSamPan['markedStatus'] = 1;
                         $data[$key]->totalEvaluatedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan, 'id');
                     }
 
                 }
+
                 $data[$key]->totalUnRespondedSamples = $data[$key]->totalSamples - $data[$key]->totalRespondedSamples;
                 $data[$key]->totalUnEvaluatedSamples = $data[$key]->totalRespondedSamples - $data[$key]->totalEvaluatedSamples;
 
 
             }
+//            var_dump($totalRespondedSamples);exit;
             echo $this->returnJson(array('status' => 1, 'data' => $data));
         } else {
             echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
@@ -890,7 +896,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                             $data['totalLabsAndSamples'] = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'roundId');
                             $data['totalUnresponded'] = $data['totalLabsAndSamples'] - $data['totalResponded'];
-                            $data['responseRate'] = round(($data['totalResponded']/$data['totalLabsAndSamples'])*100,2);
+                            $data['responseRate'] = round(($data['totalResponded'] / $data['totalLabsAndSamples']) * 100, 2);
                             array_push($report, $data);
                         }
 
@@ -930,7 +936,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                     $data['totalLabsAndSamples'] = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'roundId');
                     $data['totalUnresponded'] = $data['totalLabsAndSamples'] - $data['totalResponded'];
-                    $data['responseRate'] = round(($data['totalResponded']/$data['totalLabsAndSamples'])*100,2);
+                    $data['responseRate'] = round(($data['totalResponded'] / $data['totalLabsAndSamples']) * 100, 2);
                     array_push($report, $data);
                 }
 

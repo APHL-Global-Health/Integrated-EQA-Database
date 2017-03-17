@@ -32,9 +32,22 @@
                             </ul>
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'general'}">
-                            <a href="" ng-click="clickedTab = 'general'">General</a>
+                            <a href="" ng-click="clickedTab = 'general'"  id="general" data-toggle="dropdown"
+                               class=" dropdown-toggle">General  <span class="caret"></span></a>
 
-                            
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="general">
+
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('shipmentReport')"><i
+                                                class="fa fa-ship"></i> Shipment Report </a>
+
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('correctiveEvaluation')"><i
+                                                class="fa fa-close"></i> Corrective Report</a>
+
+                                </li>
+                            </ul>
 
 
 
@@ -51,13 +64,13 @@
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="analysis">
 
                                     <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('labsReports')"><i
-                                                    class="fa fa-fw fa-save"></i>Labs Performance</a>
+                                        <a href="#" ng-click="reports.changeCurrentReport('performanceSummary')"><i
+                                                    class="fa fa-fw fa-save"></i>Performance Summary</a>
 
                                     </li>
                                     <li role="presentation">
                                         <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
-                                                    class="fa fa-times-rectangle-o"></i> Survey Performance</a>
+                                                    class="fa fa-times-rectangle-o"></i> </a>
 
                                     </li>
                                     <li role="presentation">

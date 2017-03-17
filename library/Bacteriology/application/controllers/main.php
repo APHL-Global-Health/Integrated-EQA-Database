@@ -192,13 +192,13 @@ Class Main extends pdfCreator
             $counter = 0;
             foreach ($array as $key => $value) {
                 if ($value === null) {
-                    $key == 'dateTo' ?$where .= " dateCreated <= '".date('Y-m-d',time())." 23:59' ": $where .= $key . " is null ";
+                    $key == 'dateTo' ? $where .= " dateCreated <= '" . date('Y-m-d', time()) . " 23:59' " : $where .= $key . " is null ";
                 } else {
                     if ($key == 'dateFrom') {
-                        $where .= "dateCreated >=" . " '".substr($value,0,10)." 05:59:59'";
+                        $where .= "dateCreated >=" . " '" . substr($value, 0, 10) . " 05:59:59'";
                     } else if ($key == 'dateTo') {
 
-                        $where .= "dateCreated <=" . " '".substr($value,0,10)." 23:59:59'";
+                        $where .= "dateCreated <=" . " '" . substr($value, 0, 10) . " 23:59:59'";
 
                     } else {
                         $where .= $key . "=" . " '$value' ";
@@ -277,8 +277,10 @@ Class Main extends pdfCreator
         } else {
             $sql .= " where " . $col . " = " . $where;
         }
-//       echo $sql;
-//        exit;
+        if ($tableName == 'tbl_bac_response_results') {
+//            echo $sql;
+//            exit;
+        }
         try {
             $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
             return ($result);//->num_rows;
