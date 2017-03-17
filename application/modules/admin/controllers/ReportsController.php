@@ -798,6 +798,144 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
     }
 
+    public function getshipmentsreportsAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+
+
+        if (isset($postedData['grade'])) {
+            if ($postedData['grade'] == '') {
+                unset($postedData['grade']);
+            } else {
+                $postedData['grade'] = $postedData['grade'];
+
+            }
+            unset($postedData['grade']);
+        }
+        if (isset($postedData['sample'])) {
+            if ($postedData['sample'] == '') {
+                unset($postedData['sample']);
+            } else {
+                $wheresample['batchName'] = $postedData['sample'];
+                $sampleDetails = $this->returnValueWhere($wheresample, 'tbl_bac_samples');
+
+                $postedData['sampleId'] = $sampleDetails['id'];
+            }
+            unset($postedData['sample']);
+        }
+
+        if (isset($postedData['region'])) {
+            if ($postedData['region'] == '') {
+                unset($postedData['region']);
+            } else {
+                $whereCounty['region'] = $postedData['region'];
+                $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+
+            }
+            unset($postedData['region']);
+        }
+        if (isset($postedData['round'])) {
+            if ($postedData['round'] == '') {
+                unset($postedData['round']);
+            } else {
+                $whereRound['roundName'] = $postedData['round'];
+                $roundDetails = $this->returnValueWhere($whereRound, 'tbl_bac_rounds');
+
+                $postedData['roundId'] = $roundDetails['id'];
+            }
+            unset($postedData['round']);
+        }
+
+
+        $orderArray = ['id', 'dateCreated'];
+        $col = ['*'];
+
+        $groupArray = ['shipmentId','roundId', 'sampleId'];
+
+
+        $report = [];
+        $postedData['roundId >']=0;
+        if (isset($labs)) {
+            if ($labs != false) {
+
+
+                $data['totalResponded'] = 0;
+                foreach ($labs as $key => $value) {
+                    $postedData['participantId'] = $value->participant_id;
+                    $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
+
+                    if ($sampleToPanel != false) {
+                        foreach ($sampleToPanel as $ky => $val) {
+                            $whereParticipantId['participant_id'] = $val->participantId;
+                            $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
+                            $whereSampleId['id'] = $val->sampleId;;
+                            $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                            $roundId['id'] = $val->roundId;;
+                            $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
+
+                            $sampleToPanel[$ky]->sample = $sampleInfo;
+                            $sampleToPanel[$ky]->round = $roundInfo;
+                            $sampleToPanel[$ky]->lab = $participantInfo;
+
+                            $whereSamples['sampleId'] = $val->sampleId;
+                            $whereSamples['shipmentId'] = $val->shipmentId;
+
+                            $sampleToPanel[$ky]->totalSent = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+
+                            $whereSamples['deliveryStatus'] = 4;
+                            $sampleToPanel[$ky]->received = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+                            $whereSamples['deliveryStatus'] = 5;
+                            $sampleToPanel[$ky]->rejected = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+                            unset($whereSamples);
+                            array_push($report, (array)$sampleToPanel[$ky]);
+                        }
+
+                    }
+                }
+
+                echo $this->returnJson(array('status' => 1, 'data' => $report));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        } else {
+
+//            $postedData['shipmentId >'] = 0;
+            $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
+
+            if ($sampleToPanel != false) {
+                foreach ($sampleToPanel as $ky => $val) {
+                    $whereParticipantId['participant_id'] = $val->participantId;
+                    $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
+                    $whereSampleId['id'] = $val->sampleId;;
+                    $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                    $roundId['id'] = $val->roundId;;
+                    $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
+
+                    $sampleToPanel[$ky]->sample = $sampleInfo;
+                    $sampleToPanel[$ky]->round = $roundInfo;
+                    $sampleToPanel[$ky]->lab = $participantInfo;
+
+                    $whereSamples['sampleId'] = $val->sampleId;
+                    $whereSamples['shipmentId'] = $val->shipmentId;
+
+                    $sampleToPanel[$ky]->totalSent = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+
+                    $whereSamples['deliveryStatus'] = 4;
+                    $sampleToPanel[$ky]->received = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+                    $whereSamples['deliveryStatus'] = 5;
+                    $sampleToPanel[$ky]->rejected = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
+                    unset($whereSamples);
+                }
+
+                echo $this->returnJson(array('status' => 1, 'data' => $sampleToPanel));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        }
+
+        exit;
+    }
+
     public function getcorrectiveaactionreportAction()
     {
         $postedData = $this->returnArrayFromInput();

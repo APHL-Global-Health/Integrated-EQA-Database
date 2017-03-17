@@ -277,10 +277,9 @@ Class Main extends pdfCreator
         } else {
             $sql .= " where " . $col . " = " . $where;
         }
-        if ($tableName == 'tbl_bac_response_results') {
-//            echo $sql;
-//            exit;
-        }
+//        echo $sql;
+//        exit;
+
         try {
             $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
             return ($result);//->num_rows;

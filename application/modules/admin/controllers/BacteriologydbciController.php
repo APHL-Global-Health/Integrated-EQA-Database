@@ -469,7 +469,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
 
                         $panel = $this->returnValueWhere($value->panelId, 'tbl_bac_panel_mst');
-
+                        $shipment = $this->returnValueWhere($value->panelId, 'tbl_bac_shipments');
 
                         $dataDB[$key]->panelName = $panel['panelName'];
                         $dataDB[$key]->panelLabel = $panel['panelLabel'];
@@ -477,6 +477,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
                         $dataDB[$key]->dateCreated = $panel['dateCreated'];
                         $dataDB[$key]->barcode = $panel['barcode'];
+                        $dataDB[$key]->shipmentDeliveryStatus = $shipment['shipmentStatus'];
                         if (isset($where['participantId'])) {
                             $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $where, 'panelId');
                         } else {
@@ -745,6 +746,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $dataDB[$key]->dateDispatched = $shipment['dateDispatched'];
                     $dataDB[$key]->dateCreated = $shipment['dateCreated'];
                     $dataDB[$key]->roundId = $shipment['roundId'];
+                    $dataDB[$key]->shipmentStatus = $shipment['shipmentStatus'];
                     $dataDB[$key]->datePrepared = $shipment['datePrepared'];
                     $dataDB[$key]->dispatchCourier = $shipment['dispatchCourier'];
                     $dataDB[$key]->roundName = $round['roundName'];
@@ -888,7 +890,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
 
             $where = sizeof($where) > 0 ? $where : "";
-
+//print_r($postedData);
+//exit;
 
             if ($tableName == 'tbl_bac_panels_shipments') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);

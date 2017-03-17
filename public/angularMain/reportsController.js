@@ -496,6 +496,36 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             $log.debug('Serious error occurred');
         }
     }
+    $scope.reports.shipmentReportData = {};
+    $scope.reports.whereShipmentResults = {};
+    $scope.reports.getShipmentReport = function (where) {
+        try {
+            var url = serverReportURL + 'getshipmentsreports';
+            // var where = whereIndividualLabs;
+            showAjaxLoader(true);
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response);
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.shipmentReportData = response.data;
+                    } else {
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
+                        $scope.reports.shipmentReportData = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false);
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (Exc) {
+            $log.debug('Serious error occurred');
+        }
+    }
     $scope.reports.getIndividualReport = function (whereIndividualLabs) {
         try {
             var url = serverReportURL + 'getindividuallabs';

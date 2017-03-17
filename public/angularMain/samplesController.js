@@ -221,7 +221,7 @@
                             $.alert(
                                 {
                                     title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
-                                    content: '<hr>'+data.message
+                                    content: '<hr>' + data.message
                                 }
                             );
                         }
@@ -1360,8 +1360,9 @@
         /*------------------------------------------------------end of dispatch shipping-----------------------------------------------*/
         /*-----------------------------------------------------------------------STart of mark as received shipment-----------------------*/
         $scope.samples.showClickedShipment = '';
+        $scope.samples.showReceiveShipment = false;
         $scope.samples.receiveShipment = function (shipment, modal) {
-
+            $scope.samples.showReceiveShipment = true;
             try {
                 $scope.samples.addPanelsToShipment(shipment);
             } catch (Exc) {
@@ -1421,9 +1422,17 @@
                                 $scope.samples.showMainTable(postedData.tableName)
                                 if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
                                     $scope.samples.showShipmentModal = false;
+
+
                                     alertStartRound.close();
                                     $.alert('Data update successfully');
                                 }
+                            }
+                            if (type == 0) {
+                                $scope.samples.hideShipmentModal();
+                                $scope.samples.showReceiveShipment = false;
+                                alert( $scope.samples.showReceiveShipment)
+                                $scope.samples.getDistinctShipmentsForDelivery();
                             }
                             if (postedData.tableName == 'tbl_bac_panels_shipments') {
 
@@ -2445,7 +2454,7 @@
         $('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
-                receiveShipmentData.dateReceived = $scope.samples.getClickedDate();
+
                 receiveShipmentData.shipmentStatus = 3;
                 console.log(receiveShipmentData);
 
@@ -2455,7 +2464,7 @@
                 postedData.updateData = receiveShipmentData;
                 postedData.where = {id: $scope.samples.currentShipment.id};
                 if (angular.isDefined(postedData)) {
-                    $scope.samples.updateWhere(postedData);
+                    $scope.samples.updateWhere(postedData, 0);
                 }
 
             } catch (Exc) {

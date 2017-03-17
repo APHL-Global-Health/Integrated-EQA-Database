@@ -1,8 +1,8 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
         <h3>
-            Corrective Action Report
-            <small>{{reports.correctiveActionData.length}} records</small>
+            Shipment Delivery Report
+            <small>{{reports.shipmentReportData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
             <input ng-model="searchRounds" class="pull-right" placeholder="">
         </h3>
@@ -13,7 +13,7 @@
                 <div class="col-md-3 no-padding">
 
                     <input type="text" class="form-control input-sm"
-                           ng-model="reports.whereCorrectiveActionResults.dateFrom"
+                           ng-model="reports.whereShipmentResults.dateFrom"
                            data-date-format="yyyy-MM-dd" required="" placeholder="select from date"
                            data-min-date="" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon2"
@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-3 ">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.dateTo"
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereShipmentResults.dateTo"
                            data-date-format="yyyy-MM-dd" placeholder="select to date"
                            data-min-date="samples.report.dateFrom" data-max-date="today"
                            data-autoclose="1" aria-describedby="basic-addon1"
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.round"
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereShipmentResults.round"
                            placeholder="Search Round"
                            id="rounds" name="rounds"
                            class="form-control"
@@ -42,7 +42,7 @@
                            bs-typeahead>
                 </div>
                 <div class="col-md-3" ng-init="reports.getSamples()">
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.sample"
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereShipmentResults.sample"
                            placeholder="Sample"
                            id="sample" name="sample"
                            class="form-control"
@@ -55,7 +55,7 @@
                 <div class="col-md-3 no-padding" ng-init="reports.getCounties()">
                     <br>
                     <input class="form-control input-sm"
-                           ng-model="reports.whereCorrectiveActionResults.region"
+                           ng-model="reports.whereShipmentResults.region"
                            id="region" name="region"
                            class="form-control"
                            data-min-length="0"
@@ -65,15 +65,11 @@
                            placeholder="Search County" bs-typeahead>
                 </div>
 
-                <div ng-controller="PdfController">  &nbsp;
+                <div>  &nbsp;
                     <br>
 
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
-                            ng-click="reports.getCorrectiveActionReport(reports.whereCorrectiveActionResults)">get report
-                    </button>
-
-                    <button class="btn btn-sm btn-danger"
-                            ng-click="pdfMake.generateCorrectiveActionPdf(reports.correctiveActionData)"><i class="fa fa-print"></i> print
+                            ng-click="reports.getShipmentReport(reports.whereShipmentResults)">get report
                     </button>
                 </div>
 
@@ -87,23 +83,23 @@
             <tr>
                 <td>#</td>
                 <th>Lab Name</th>
-                <th>Sample Name</th>
                 <th>Round Name</th>
-                <th>Remarks</th>
-                <th>Date</th>
-                <th>Corr. Status</th>
+                <th>Sample Name</th>
+                <th>Sent</th>
+                <th>Received</th>
+                <th>Rejected</th>
 
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="lab in reports.correctiveActionData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+            <tr dir-paginate="shipment in reports.shipmentReportData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
-                <td>{{lab.lab.institute_name}}</td>
-                <td>{{lab.sample.batchName}}</td>
-                <td>{{lab.round.roundName}}</td>
-                <td>{{lab.remarks}}</td>
-                <td nowrap>{{lab.dateCreated}}</td>
-                <td nowrap>yes</td>
+                <td>{{shipment.lab.institute_name}}</td>
+                <td>{{shipment.round.roundName}}</td>
+                <td>{{shipment.sample.batchName}}</td>
+                <td>{{shipment.totalSent}}</td>
+                <td nowrap>{{shipment.received}}</td>
+                <td nowrap>{{shipment.rejected}}</td>
 
 
             </tr>

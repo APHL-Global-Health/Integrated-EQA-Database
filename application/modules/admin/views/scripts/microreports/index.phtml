@@ -38,7 +38,7 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="general">
 
                                 <li role="presentation">
-                                    <a href="#" ng-click="reports.changeCurrentReport('shipmentReport')"><i
+                                    <a href="#" ng-click="reports.changeCurrentReport('shipmentReports')"><i
                                                 class="fa fa-ship"></i> Shipment Report </a>
 
                                 </li>
@@ -57,28 +57,28 @@
 
 
 
-                                <a href="" ng-click="clickedTab = 'analysis'"
-                                   id="analysis" data-toggle="dropdown"
-                                   class=" dropdown-toggle">Analysis Reports <span class="caret"></span></a>
+                            <a href="" ng-click="clickedTab = 'analysis'"
+                               id="analysis" data-toggle="dropdown"
+                               class=" dropdown-toggle">Analysis Reports <span class="caret"></span></a>
 
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="analysis">
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="analysis">
 
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('performanceSummary')"><i
-                                                    class="fa fa-fw fa-save"></i>Performance Summary</a>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('labsReports')"><i
+                                                class="fa fa-fw fa-save"></i>Labs Summary</a>
 
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
-                                                    class="fa fa-times-rectangle-o"></i> </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
+                                                class="fa fa-times-rectangle-o"></i> Round Reports </a>
 
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('participatoryReports')"><i
-                                                    class="fa fa-fw fa-users"></i> Participatory Report</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('participatoryReports')"><i
+                                                class="fa fa-fw fa-users"></i> Participatory Report</a>
 
-                                    </li>
-                                </ul>
+                                </li>
+                            </ul>
 
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'finalized'}">
