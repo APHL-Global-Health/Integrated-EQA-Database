@@ -425,7 +425,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 })
                 .error(function (error) {
                     alertStartRound.close();
-                    $.alert('<i class="fa fa-exclamation-triangle"> Error occured,please try again');
+                    EptServices.EptServiceObject.returnServerErrorAlert();
                 })
         }
 
@@ -453,6 +453,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                         EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
 
                         $scope.reports.roundsParticipatoryData = {};
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    showAjaxLoader(false);
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (Exc) {
+            $log.debug('Serious error occurred');
+        }
+    }
+    $scope.reports.correctiveActionData = {};
+    $scope.reports.whereCorrectiveActionResults = {};
+    $scope.reports.getCorrectiveActionReport = function (where) {
+        try {
+            var url = serverReportURL + 'getcorrectiveaactionreport';
+            // var where = where;
+            showAjaxLoader(true);
+            $http
+                .post(url, where)
+                .success(function (response) {
+                    console.log(response);
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        $scope.reports.correctiveActionData = response.data;
+                    } else {
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
+                        $scope.reports.correctiveActionData = {};
                     }
                 })
                 .error(function (error) {
@@ -624,5 +655,6 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
         }
     }
+
 
 })
