@@ -32,34 +32,53 @@
                             </ul>
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'general'}">
-                            <a href="" ng-click="clickedTab = 'general'">General</a>
+                            <a href="" ng-click="clickedTab = 'general'"  id="general" data-toggle="dropdown"
+                               class=" dropdown-toggle">General  <span class="caret"></span></a>
+
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="general">
+
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('shipmentReports')"><i
+                                                class="fa fa-ship"></i> Shipment Report </a>
+
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('correctiveActionReport')"><i
+                                                class="fa fa-close"></i> Corrective Report</a>
+
+                                </li>
+                            </ul>
+
+
+
+
                         </li>
                         <li class='pull-left dropdown' ng-class="{'active' : clickedTab == 'analysis'}">
 
 
 
-                                <a href="" ng-click="clickedTab = 'analysis'"
-                                   id="analysis" data-toggle="dropdown"
-                                   class=" dropdown-toggle">Analysis Reports <span class="caret"></span></a>
+                            <a href="" ng-click="clickedTab = 'analysis'"
+                               id="analysis" data-toggle="dropdown"
+                               class=" dropdown-toggle">Analysis Reports <span class="caret"></span></a>
 
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="analysis">
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="analysis">
 
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('labsReports')"><i
-                                                    class="fa fa-fw fa-save"></i>Labs Performance</a>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('labsReports')"><i
+                                                class="fa fa-fw fa-save"></i>Labs Summary</a>
 
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
-                                                    class="fa fa-fw fa-folder"></i> Survey Performance</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
+                                                class="fa fa-times-rectangle-o"></i> Round Reports </a>
 
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('samplesReports')"><i
-                                                    class="fa fa-fw fa-folder"></i> Sample Performance</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" ng-click="reports.changeCurrentReport('participatoryReports')"><i
+                                                class="fa fa-fw fa-users"></i> Participatory Report</a>
 
-                                    </li>
-                                </ul>
+                                </li>
+                            </ul>
 
                         </li>
                         <li class='pull-left ' ng-class="{'active' : clickedTab == 'finalized'}">

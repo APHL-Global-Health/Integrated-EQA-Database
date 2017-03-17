@@ -1,6 +1,6 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
-        <h3>Lab Performance Report
+        <h3>Round Performance Report
             <small>{{reports.labPerformanceData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
             <input ng-model="searchRounds" class="pull-right" placeholder="">
@@ -10,27 +10,33 @@
         <form name="search" novalidate>
             <table class="table table-bordered">
 
-                <div class="col-md-3 no-padding">
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereLabResults.dateFrom"
-                           data-date-format="yyyy-MM-dd" required placeholder="select from date"
-                           data-min-date="" data-max-date="today"
-                           data-autoclose="1" aria-describedby="basic-addon2"
-                           name="dateFrom"
-                           bs-datepicker>
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereRoundsResults.round"
+                           required placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
                 </div>
-                <div class="col-md-3 ">
+                <div class="col-md-3" ng-init="reports.getSamples()">
 
-                    <input type="text" class="form-control input-sm" ng-model="reports.whereLabResults.dateTo"
-                           data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"
-                           data-min-date="reports.whereLabResults.dateFrom" data-max-date="today"
-                           data-autoclose="1" aria-describedby="basic-addon1"
-                           name="dateTo"
-                           bs-datepicker>
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereRoundsResults.sample"
+                           placeholder="Sample"
+                           id="sample" name="sample"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.batchName as icon.batchName for icon in reports.samples"
+                           bs-typeahead>
                 </div>
-                <div class="col-md-3 no-padding">
-                    <input class="form-control input-sm" ng-init="reports.getCounties()"
-                           ng-model="reports.whereLabResults.region"
+                <div class="col-md-3 no-padding" ng-init="reports.getCounties()">
+                    <input class="form-control input-sm"
+                           ng-model="reports.whereRoundsResults.region"
                            id="region" name="region"
                            class="form-control"
                            data-min-length="0"
@@ -40,7 +46,7 @@
                            placeholder="Search County" bs-typeahead>
                 </div>
                 <div class="col-md-2 ">
-                    <input class="form-control input-sm"  ng-model="reports.whereLabResults.grade"
+                    <input class="form-control input-sm" ng-model="reports.whereRoundsResults.grade"
                            id="grade" name="grade" ng-init="reports.getGrades()"
                            class="form-control"
                            data-min-length="0"
@@ -53,7 +59,7 @@
                 <div>
                     &nbsp;
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
-                            ng-click="reports.getLabPerformanceReport(reports.whereLabResults)">get report
+                            ng-click="reports.getRoundPerformanceReport(reports.whereRoundsResults)">get report
                     </button>
                 </div>
 
@@ -62,11 +68,11 @@
         <table class="table table-bordered">
             <tr>
                 <td>Mean</td>
-                <td>{{reports.labPerformanceDataStat.mean}}</td>
+                <td>{{reports.roundsPerformanceDataStat.mean}}</td>
                 <td>Total Labs</td>
-                <td>{{reports.labPerformanceDataStat.labs}}</td>
+                <td>{{reports.roundsPerformanceDataStat.labs}}</td>
                 <td>SD</td>
-                <td>{{reports.labPerformanceDataStat.sd}}</td>
+                <td>{{reports.roundsPerformanceDataStat.sd}}</td>
             </tr>
         </table>
     </div>
@@ -89,7 +95,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="lab in reports.labPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+            <tr dir-paginate="lab in reports.roundsPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
                 <td>{{lab.labName}}</td>
                 <td>{{lab.labCode}}</td>

@@ -21,15 +21,67 @@ EptServices.service('EptServices', function () {
 
 
     this.EptServiceObject.returnServerErrorAlert = function () {
-        $.alert('<i class="fa fa-exclamation-triangle text-danger"></i> Server error occurred,please try again.');
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
+                content: ' Server error occurred,please try again.'
+            }
+            );
     }
     this.EptServiceObject.returnNoRecordsFoundAlert = function () {
-        $.alert('<i class="fa fa-exclamation-triangle text-warning"></i> No Records found.');
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' No Records found.'
+            }
+        );
+
+    }
+    this.EptServiceObject.returnNoRecordsFoundFiltersAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' No Records found with selected filters.'
+            }
+        );
+
+    }
+    this.EptServiceObject.returnDuplicateAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' You are try to re-submit already submitted data,please go back and edit instead.'
+            }
+        );
+
+    }
+    this.EptServiceObject.returnProgressAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                content: 'Action in progress,please wait ...'
+            }
+        );
+
     }
     this.EptServiceObject.returnActionSuccessAlert = function () {
-        $.alert('<i class="fa fa-check-circle text-danger"></i> Action was successful.');
-    }
+        $.alert(
+            {
+                title: '<i class="fa fa-check-circle text-success"></i> Success',
+                content: ' Action was successful.'
+            }
+        );
 
+    }
+    this.EptServiceObject.returnActionUnSuccessAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-exclamation-circle text-warning"></i> Alert',
+                content: ' Action was Unsuccessful,please retry'
+            }
+        );
+
+    }
 
     this.EptServiceObject.returnBarcode = function () {
         var barcode = Math.random().toString();

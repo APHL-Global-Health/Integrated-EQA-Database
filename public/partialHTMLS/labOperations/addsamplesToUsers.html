@@ -3,7 +3,7 @@
         <h3> Issue Samples
             <small class="label label-info">{{samples.sampleToPanel.length}} records</small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-            <div class="pull-right col-mod-12">
+            <div class="pull-right col-mod-12" ng-init="samples.getShipmentsForDelivery('tbl_bac_sample_to_panel','deliveryStatus','4')">
                 <div class="dropdown col-md-3 pull-right">
 
                     <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
@@ -54,16 +54,18 @@
                 <td>Batch Name</td>
                 <td>Date Prep'd</td>
                 <td>Date Del'd</td>
-                <td>Blood Pack No</td>
+                <td>Material Origin</td>
                 <td>action</td>
                 <tr dir-paginate="sample in samples.sampleToPanel | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                     <td>{{$index+1}}</td>
                     <td>{{sample.batchName}}</td>
                     <td>{{sample.datePrepared}}</td>
                     <td>{{sample.dateDelivered}}</td>
-                    <td>{{sample.bloodPackNo}}</td>
+                    <td>{{sample.materialOrigin}}</td>
                     <td>
-                        <button class="btn btn-sm btn-info" ng-click="samples.showMultiSelect(sample,0)">Issue</button>
+                        <button class="btn btn-sm btn-info"
+                                ng-click="samples.showMultiSelect(sample,0)">Issue
+                        </button>
                     </td>
                 </tr>
             </table>

@@ -38,6 +38,16 @@
                 DATE RETURNED : {{reports.userResults.results.dateCreated}}<br>
                 <br>
             </div>
+            <div class="h5 col-md-12 text-bold text-left  border-bottom table-bordered">
+                <br>
+                Grade : {{reports.userResults.results.remarks}} <br><br>
+                Total Score:
+                {{reports.sumNumbers(reports.userResults.results.totalMicroAgentsScore,reports.userResults.results.finalScore)}}
+                <br><br>
+                Remarks : {{reports.userResults.results.remarks}} <br><br>
+
+                <br>
+            </div>
             <div class="col-md-12">
                 <h4>MICROBIOLOGY IDENTIFICATION REPORT
 
@@ -363,7 +373,19 @@
                 <h4>CORRECTIVE ACTION</h4>
                 <hr>
                 <div class="">
-                    <br>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>
+                                <div ng-show="reports.userResults.results.correctiveAction==1">
+                                    <b>Please taken a corrective action</b>
+                                </div>
+                                <div ng-show="reports.userResults.results.correctiveAction==0">
+                                    <b>N/A</b>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
             </div>
         </div>

@@ -75,11 +75,13 @@
                 <td>{{$index+1}}</td>
                 <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)"
                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="Click to view more about {{panel.panelName}} panel" bs-tooltip
+                       data-trigger="hover" data-type="success"
+                       data-title="Click to view more about {{panel.panelName}} panel" bs-tooltip
 
-                       ng-show="panel.totalSamplesAdded >0"
+                       ng-show="panel.totalSamplesAdded >0 && panel.shipmentDeliveryStatus !=2"
                        class="">{{panel.panelName}}</a>
-                    <x ng-show="panel.totalSamplesAdded==0">{{panel.panelName}}</x>
+
+                    <x ng-show="panel.totalSamplesAdded==0 || panel.shipmentDeliveryStatus ==2">{{panel.panelName}}</x>
                 </td>
                 <td>{{panel.panelType}}</td>
                 <td>{{panel.panelLabel}}</td>
@@ -93,21 +95,24 @@
                 <td nowrap>{{panel.totalSamplesAdded}}</td>
                 <td nowrap>{{panel.dateCreated}}</td>
                 <td nowrap>
-                    <a class="btn btn-danger btn-sm" ng-disabled="panel.deliveryStatus > 3"
+                    <a class="btn btn-danger btn-sm" ng-disabled="panel.deliveryStatus > 3|| panel.shipmentDeliveryStatus==2"
                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                        data-trigger="hover" data-type="success" data-title="Reject {{panel.panelName}} panel" bs-tooltip
                        ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',5)"><i
                             class="fa fa-thumbs-down"></i>
                     </a>
-                    <a class="btn btn-success btn-sm" ng-disabled="panel.deliveryStatus > 3"
+                    <a class="btn btn-success btn-sm"
+                       ng-disabled="panel.deliveryStatus > 3 || panel.shipmentDeliveryStatus==2"
                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="Successfully receive {{panel.panelName}} panel" bs-tooltip
+                       data-trigger="hover" data-type="success"
+                       data-title="Successfully receive {{panel.panelName}} panel" bs-tooltip
                        ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',4)"><i
                             class="fa fa-thumbs-up"></i>
                     </a>
                     <a class="btn btn-primary btn-sm"
                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="Print Barcode {{panel.panelName}} panel" bs-tooltip
+                       data-trigger="hover" data-type="success" data-title="Print Barcode {{panel.panelName}} panel"
+                       bs-tooltip
                        href="#barcodeModal" data-backdrop="false" data-toggle="modal"
                        ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
                     </a>

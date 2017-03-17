@@ -1,0 +1,123 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>
+            Participatory Report
+            <small>{{reports.participatoryPerformanceData.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchRounds" class="pull-right" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm"
+                           ng-model="reports.whereParticipatoryResults.dateFrom"
+                           data-date-format="yyyy-MM-dd" required="" placeholder="select from date"
+                           data-min-date="" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="datePrepared"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 ">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereParticipatoryResults.dateTo"
+                           data-date-format="yyyy-MM-dd" placeholder="select to date"
+                           data-min-date="samples.report.dateFrom" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon1"
+                           name="datePrepared"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereParticipatoryResults.round"
+                           placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3" ng-init="reports.getSamples()">
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereParticipatoryResults.sample"
+                           placeholder="Sample"
+                           id="sample" name="sample"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.batchName as icon.batchName for icon in reports.samples"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3 no-padding" ng-init="reports.getCounties()">
+                    <br>
+                    <input class="form-control input-sm"
+                           ng-model="reports.whereParticipatoryResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
+                </div>
+
+                <div>  &nbsp;
+                    <br>
+
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getRoundParticipatoryReport(reports.whereParticipatoryResults)">get report
+                    </button>
+                </div>
+
+            </table>
+        </form>
+
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Sample Name</th>
+                <th>Round Name</th>
+                <th>Total Enrolled Labs</th>
+                <th>Total Unresponded</th>
+                <th>Total Responded</th>
+                <th>Total Evaluated</th>
+
+                <th>Total Unevaluated</th>
+                <th>Response %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="sample in reports.roundsParticipatoryData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td>{{sample.sample.batchName}}</td>
+                <td>{{sample.round.roundName}}</td>
+                <td>{{sample.totalLabsAndSamples}}</td>
+                <td>{{sample.totalUnresponded}}</td>
+                <td nowrap>{{sample.totalResponded}}</td>
+                <td nowrap>{{sample.totalTotalEvaluated}}</td>
+                <td nowrap>{{sample.totalTotalUnevaluated}}</td>
+                <td nowrap>{{sample.responseRate}}</td>
+
+            </tr>
+            <!--<tr ng-hide="reports.generalRoundData.length >0">-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

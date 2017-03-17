@@ -38,28 +38,35 @@
                 >
                     <td>
 
+                        <input type="checkbox"   ng-disabled="panel.totalSamplesAdded==0"
+                               name="{{panel.id}}" id="{{panel.id}}" autocomplete="off"
+                               ng-checked="samples.returnCheckedRow(panel.id,samples.panelsToShipmentArray)"
+                               ng-click="samples.addPanelToShipment(panel.id,panelCheck)"
+                               ng-model="panelCheck">
 
                         <div class="[ form-group ]">
 
-                            <input type="checkbox"  ng-hidden="true" ng-disabled="panel.totalSamplesAdded==0" name="{{panel.id}}" id="{{panel.id}}" autocomplete="off"
-                                   ng-checked="samples.indexOfId(panel.id,samples.panelsToShipmentArray)"
-                                   ng-click="samples.addPanelToShipment(panel.id,panelCheck)"
-                                   ng-model="panelCheck">
-                            <div class="[ no-padding]">
-                                <label for="{{panel.id}}" class="[ btn-round ]">
-                                    <span class="[ fa fa-check-circle  ]" ng-show="samples.indexOfId(panel.id,samples.panelsToShipmentArray)"
+                            <!--<input type="checkbox"  ng-hide="true" ng-disabled="panel.totalSamplesAdded==0" -->
+                                   <!--name="{{panel.id}}" id="{{panel.id}}" autocomplete="off"-->
+                                   <!--ng-checked="samples.returnCheckedRow(panel.id,samples.panelsToShipmentArray)"-->
+                                   <!--ng-click="samples.addPanelToShipment(panel.id,panelCheck)"-->
+                                   <!--ng-model="panelCheck">-->
+                            <!--<div class="[ no-padding]">-->
 
-                                          data-placement="right" data-type="info" data-container="body"
-                                          data-animation="am-fade-and-scale" bs-tooltip
-                                          data-trigger="hover" data-title="remove panel"
-                                    ></span>
-                                    <span class="[ fa fa-minus-circle  ]" ng-show="!samples.indexOfId(panel.id,samples.panelsToShipmentArray)"
-                                          data-placement="right" data-type="info" data-container="body"
-                                          data-animation="am-fade-and-scale" bs-tooltip
-                                          data-trigger="hover" data-title="add panel"
-                                    > </span>
-                                </label>
-                            </div>
+                            <!--<label for="{{panel.id}}" class="[ btn-round ]">-->
+                                    <!--<span class="[ fa fa-check-circle  ]" ng-show="samples.indexOfId(panel.id,samples.panelsToShipmentArray)"-->
+
+                                          <!--data-placement="right" data-type="info" data-container="body"-->
+                                          <!--data-animation="am-fade-and-scale" bs-tooltip-->
+                                          <!--data-trigger="hover" data-title="remove panel"-->
+                                    <!--&gt;</span>-->
+                                <!--<span class="[ fa fa-minus-circle  ]" ng-show="!samples.indexOfId(panel.id,samples.panelsToShipmentArray)"-->
+                                      <!--data-placement="right" data-type="info" data-container="body"-->
+                                      <!--data-animation="am-fade-and-scale" bs-tooltip-->
+                                      <!--data-trigger="hover" data-title="add panel"-->
+                                <!--&gt; </span>-->
+                            <!--</label>-->
+                        </div>
                         </div>
 
                     </td>
