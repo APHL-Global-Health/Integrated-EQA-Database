@@ -65,11 +65,17 @@
                            placeholder="Search County" bs-typeahead>
                 </div>
 
-                <div>  &nbsp;
+                <div ng-controller="PdfController">  &nbsp;
                     <br>
 
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
                             ng-click="reports.getShipmentReport(reports.whereShipmentResults)">get report
+                    </button>
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateShipmentPdf(reports.shipmentReportData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateShipmentExcel(reports.shipmentReportData)"><i class="fa fa-file-excel-o"></i>
                     </button>
                 </div>
 
