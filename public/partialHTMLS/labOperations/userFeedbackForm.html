@@ -343,20 +343,13 @@
                            ng-change=""
                            ng-model="fields.diskContent"></td>
                 <td>
-                    <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='few'"
-                       class="fa fa-check-circle fa-2x"></i>
+                    <input type="radio" class="form-control" ng-change="" value="S" ng-checked="true" name="score{{$index}}" ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='mod'"
-                       class="fa fa-check-circle fa-2x"></i>
+                    <input type="radio" class="form-control" ng-change=""  value="I" name="score{{$index}}"  ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <x ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'">
-                        <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
-                        </small>
-                    </x>
-                    <i ng-show="samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='many'"
-                       class="fa fa-check-circle fa-2x"></i>
+                    <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"  ng-model="fields.finalScore">
                 </td>
                 <td ng-init="samples.resultActiveFields=fields">
                     <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
@@ -379,8 +372,7 @@
                     <div class="col-md-12 no-padding">
                         <button class="btn btn-success col-md-12"
                                 ng-click="samples.saveAntiMicroAgent(samples.resultFields)"
-                                ng-disabled=" samples.savingInProgress||
-                                samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
+                                ng-disabled=" samples.savingInProgress"
                         >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                         </button>
                     </div>
@@ -393,6 +385,11 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="btn btn-warning col-md-12" ng-click="samples.saveUserBothResponse(amples.resultFields,samples.susceptibilityFormData)"
+             ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
+            Save Both
+        </div>
     </div>
 
 </div>

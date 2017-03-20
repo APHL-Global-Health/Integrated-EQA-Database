@@ -1608,6 +1608,16 @@
             }
 
         }
+        $scope.samples.saveUserBothResponse = function (microAgentData, agentsData) {
+            try {
+                $scope.samples.saveFeedbackFormData(agentsData, 'tbl_bac_suscepitibility')
+                $timeout(function () {
+                    $scope.samples.saveAntiMicroAgent(microAgentData);
+                }, 3000)
+            } catch (Exception) {
+                console.log(Exception);
+            }
+        }
         $scope.samples.saveAntiMicroAgent = function (data, type, agentScore) {
             var correctData = true;
             for (var i = 0; i < data.length; i++) {
