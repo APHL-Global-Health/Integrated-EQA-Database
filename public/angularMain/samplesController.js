@@ -1100,6 +1100,9 @@
                         if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
                             data.barcode = EptServices.EptServiceObject.returnBarcode();
                         }
+                        if (tableName == 'tbl_bac_samples') {
+                            data.sampleType = JSON.stringify(data.sampleType);
+                        }
                         postedData.data = data;
                         postedData.tableName = tableName;
                         console.log(data);
@@ -1114,13 +1117,15 @@
                                     console.log('data')
                                     console.log(response.data)
                                     changeSavingSpinner(false);
-                                    if (response.data.status == 1) {
-                                        emptyFormData(tableName, false);
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                    if (angular.isDefined(response.data)) {
+                                        if (response.data.status == 1) {
+                                            emptyFormData(tableName, false);
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                        }
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
-
+                                        EptServices.EptServiceObject.returnActionUnSuccessAlert();
                                     }
                                     if (alertStartRound != '') {
 
@@ -1279,7 +1284,10 @@
                             btnClass: 'btn-blue',
                             action: function () {
 
-                                alertStartRound = $.alert('Deleting record,please wait...!');
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                                    content: 'Deleting in progress,please wait ...'
+                                });
                                 var data = sampleData(tableName, 0);
                                 console.log(data)
                                 data = EptServices.EptServiceObject.sliceRowFromDData(id, data);
@@ -1318,12 +1326,12 @@
                 $http.post(url, postedData)
                     .success(function (response) {
                         alertStartRound.close();
-                        $.alert('1 Record deleted');
+                        EptServices.EptServiceObject.returnDeleteAlert();
                     })
                     .error(function (error) {
                         console.log(error)
                         alertStartRound.close();
-                        $.alert('Error occurred,record could not be deleted');
+                        EptServices.EptServiceObject.returnServerErrorAlert();
                     })
             } catch (Exc) {
                 console.log(Exc);
@@ -1707,10 +1715,11 @@
                 console.log(aba);
                 if (angular.isUndefined(aba.agentScore)) {
 
-                    $.alert({
-                        title: "<i class='fa fa-remove text-danger'></i> Error",
-                        content: "Please fill total score"
-                    });
+                    //
+                    // $.alert({
+                    //     title: "<i class='fa fa-remove text-danger'></i> Error",
+                    //     content: "Please fill total score"
+                    // });
                 }
                 else {
                     if (angular.isDefined($scope.samples.resultsFormData.id)) {
@@ -1733,7 +1742,7 @@
 
                             if (res.status == 1) {
                                 $.alert({
-                                    title: "<i class='fa fa-check-circle text-success'></i> ",
+                                    title: "<i class='fa fa-check-circle text-success'></i> Success",
                                     content: "data saved successfully"
                                 });
                             } else {
@@ -1760,10 +1769,31 @@
                             btnClass: 'btn-blue',
                             action: function () {
 
-                                alertStartRound = $.alert('<i class="fa fa-spinner fa-spin"> </i> Saving results,please wait...!');
+
                                 if (angular.isDefined(type)) {
-                                    saveMicroDataForAdmin();
+
+                                    if (angular.isUndefined(agentScore)) {
+
+
+                                        $.alert({
+                                            title: "<i class='fa fa-remove text-danger'></i> Error",
+                                            content: "Please fill total score"
+                                        });
+                                    } else {
+
+                                        alertStartRound = $.alert({
+                                            title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                                            content: 'Saving in progress,please wait ...'
+                                        });
+
+                                        saveMicroDataForAdmin();
+                                    }
                                 } else {
+                                    alertStartRound = $.alert({
+                                        title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                                        content: 'Saving in progress,please wait ...'
+                                    });
+
                                     saveABA();
                                 }
                                 // $scope.samples.saveSampleFormData(tablename, userFeedbackData)
