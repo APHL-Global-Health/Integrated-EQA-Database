@@ -157,9 +157,9 @@
             </div>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : sampleData.sampleType.$invalid && !sampleData.sampleType.$pristine }">
-                <label class="col-2 col-form-label">Sample Type</label>
+                <label class="col-2 col-form-label">test Type</label>
                 <div class="col-10">
-                    <select required="" class="form-control" ng-model="samples.sampleFormData.sampleType"
+                    <select required="" multiple="" class="form-control" ng-model="samples.sampleFormData.sampleType"
                             name="sampleType">
                         <option value="1">ID</option>
                         <option value="2">Gram Stain</option>

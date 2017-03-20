@@ -1001,7 +1001,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
         $insertData = (array)$postedData['resultsAba'];
-
+//print_r($insertData);exit;
         if (count($insertData) > 0) {
             $resp['status'] = 0;
             if (isset($postedData['edit'])) {
@@ -1028,6 +1028,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
                     $newFinalArray['level'] = 1;
                 } else {
+                    $newFinalArray['agentScore'] = $postedData['agentScore'];
                     $newFinalArray['finalScore'] = $newFinal['finalScore'];
 
                 }

@@ -1431,7 +1431,7 @@
                             if (type == 0) {
                                 $scope.samples.hideShipmentModal();
                                 $scope.samples.showReceiveShipment = false;
-                                alert( $scope.samples.showReceiveShipment)
+                                alert($scope.samples.showReceiveShipment)
                                 $scope.samples.getDistinctShipmentsForDelivery();
                             }
                             if (postedData.tableName == 'tbl_bac_panels_shipments') {
@@ -1600,30 +1600,55 @@
             }
 
         }
-        $scope.samples.saveAntiMicroAgent = function (data, type) {
+        $scope.samples.saveAntiMicroAgent = function (data, type, agentScore) {
             var correctData = true;
             for (var i = 0; i < data.length; i++) {
                 if (data[i]['antiMicroAgent'] == '' || angular.isUndefined(data[i]['antiMicroAgent'])) {
-                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure Anti Micro Agent is filled at row " + (i + 1));
+                    $.alert({
+                        title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                        content: " please make sure Anti Micro Agent is filled at row " + (i + 1)
+                    });
                     correctData = false;
                     break;
                 }
                 else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
-                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure reported To clinician is filled at row " + (i + 1));
+                    $.alert({
+                        title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                        content: " please make sure reported To clinician is filled at row " + (i + 1)
+                    });
+
                     correctData = false;
                     break;
                 }
                 else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
-                    $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> please make sure Disk Content is filled,and is a number at row " + (i + 1));
+                    $.alert({
+                        title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                        content: "  please make sure Disk Content is filled,and is a number at row " + (i + 1)
+                    });
+
                     correctData = false;
                     break;
                 }
                 if (data[i]['diskContent'] != '' || angular.isDefined(data[i]['diskContent'])) {
                     if (!angular.isNumber(Number(data[i]['diskContent']))) {
-                        $.alert("<i class='fa fa-exclamation-triangle text-danger'></i> Disk content must be a number at row " + (i + 1));
+                        $.alert({
+                            title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                            content: " Disk content must be a number at row " + (i + 1)
+                        });
+
                         correctData = false;
                         break;
+
                     }
+                }
+                if (angular.isUndefined(data[i]['finalScore'])) {
+                    $.alert({
+                        title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                        content: "  please make sure resistance level is selected at row " + (i + 1)
+                    });
+
+                    correctData = false;
+                    break;
                 }
 
 
@@ -1642,6 +1667,8 @@
                 aba.sampleId = sampleData.sampleId;
                 aba.participantId = sampleData.participantId;
                 aba.roundId = sampleData.roundId;
+
+
                 aba.tableName = "tbl_bac_micro_bacterial_agents";
                 aba.panelToSampleId = sampleData.panelToSampleId;
                 aba.resultsAba = data;
@@ -1652,13 +1679,22 @@
                         alertStartRound.close();
 
                         if (res.status == 1) {
-                            $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
+                            $.alert({
+                                title: "<i class='fa fa-check-circle text-success'></i> ",
+                                content: "data saved successfully"
+                            });
                         } else {
-                            $.alert("<i class='fa fa-remove text-danger'></i> error occured,likely you already submtted the result");
+                            $.alert({
+                                title: "<i class='fa fa-remove text-danger'></i> Error",
+                                content: "error occured,likely you already submtted the result"
+                            });
                         }
                     })
                     .error(function (error) {
-                        $.alert("<i class='fa fa-remove text-danger'> Server error occured,please try again");
+                        $.alert({
+                            title: "<i class='fa fa-remove text-danger'>",
+                            content: " Server error occured,please try again"
+                        });
                     })
             }
 
@@ -1667,32 +1703,51 @@
                 var aba = {}
                 var sampleData = $scope.samples.clickedSample;
                 aba.sampleId = sampleData.id;
-                if (angular.isDefined($scope.samples.resultsFormData.id)) {
+                aba.agentScore = agentScore;
+                console.log(aba);
+                if (angular.isUndefined(aba.agentScore)) {
 
-                    aba.edit = 1;
-                    aba.sampleId = $scope.samples.resultsFormData.sampleId;
+                    $.alert({
+                        title: "<i class='fa fa-remove text-danger'></i> Error",
+                        content: "Please fill total score"
+                    });
+                }
+                else {
+                    if (angular.isDefined($scope.samples.resultsFormData.id)) {
+
+                        aba.edit = 1;
+                        aba.sampleId = $scope.samples.resultsFormData.sampleId;
+                    }
+
+                    console.log($scope.samples.clickedSample);
+
+                    aba.roundId = sampleData.roundId;
+                    aba.tableName = "tbl_bac_expected_micro_bacterial_agents";
+                    aba.resultsAba = data;
+
+                    $http
+                        .post(url, aba)
+                        .success(function (res) {
+                            console.log(res)
+                            alertStartRound.close();
+
+                            if (res.status == 1) {
+                                $.alert({
+                                    title: "<i class='fa fa-check-circle text-success'></i> ",
+                                    content: "data saved successfully"
+                                });
+                            } else {
+                                $.alert({
+                                    title: "<i class='fa fa-remove text-danger'></i> Error",
+                                    content: "error occured,likely you already submtted the result"
+                                });
+                            }
+                        })
+                        .error(function (error) {
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        })
                 }
 
-                console.log($scope.samples.clickedSample);
-
-                aba.roundId = sampleData.roundId;
-                aba.tableName = "tbl_bac_expected_micro_bacterial_agents";
-                aba.resultsAba = data;
-
-                $http
-                    .post(url, aba)
-                    .success(function (res) {
-                        console.log(res)
-                        alertStartRound.close();
-                        if (res.status == 1) {
-                            $.alert("<i class='fa fa-check-circle text-success'></i> data saved successfully");
-                        } else {
-                            $.alert("<i class='fa fa-remove text-danger'></i> error occured,likely you already submtted the result");
-                        }
-                    })
-                    .error(function (error) {
-                        $.alert("<i class='fa fa-remove text-danger'> Server error occured,please try again");
-                    })
             }
 
             if (correctData) {
@@ -1727,6 +1782,10 @@
         }
         $scope.samples.reagentLevel = '';
         $scope.samples.exists = false;
+
+        $scope.samples.saveBothMicrosAndAgents = function () {
+
+        }
         $scope.samples.checkReagentLevel = function (agent, range) {
 
             var agents = $scope.samples.testAgents;
