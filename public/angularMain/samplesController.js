@@ -2518,10 +2518,36 @@
         }
         //+++++++++++++++++++++++++++++++++++++++++++++++++RETURN RESULTS+++++++++++++++++++++++++++++++++++++++++++++++
         //==============================================================================================================
-        $scope.samples.showAddResponse = function (sample) {
+        $scope.samples.showAddResponse = function (sample,type) {
             console.log(sample)
             $scope.samples.currentSampleForResponse = sample;
             $scope.samples.samplesActivePage("userFeedbackForm", 1);
+
+            if(angular.isDefined(type)){
+                showAjaxLoader(true);
+                var where = {
+                    userId: type.userId,
+                    sampleId: type.sampleId,
+                    participantId: type.participantId,
+                    roundId: type.roundId
+                }
+                var url = serverReportURL + 'getmicroagentswhere';
+                $http.post(url, where)
+                    .success(function (response) {
+                        showAjaxLoader(false);
+                        console.log(response);
+                        if (response.status == 1) {
+                            $scope.samples.microagentsData = response.data;
+                        }
+                    })
+                    .error(function (error) {
+                        showAjaxLoader(false);
+
+                    })
+            }else{
+
+            }
+
         }
 
 
