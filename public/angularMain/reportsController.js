@@ -566,7 +566,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             participantId: individual.participantId,
             roundId: individual.roundId
         }
-        var url = serverReportURL + 'getmicroagentswhere';
+        var url = serverReportURL + 'getlabuserresponse';
         $http.post(url, where)
             .success(function (response) {
                 showAjaxLoader(false);

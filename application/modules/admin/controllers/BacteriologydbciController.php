@@ -996,6 +996,72 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit;
     }
 
+    public function editusermicroagentsAction()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+        $insertData = (array)$postedData['resultsAba'];
+//print_r($insertData);exit;
+        if (count($insertData) > 0) {
+            $resp['status'] = 0;
+            if (isset($postedData['edit'])) {
+                $deleteWhere['sampleId'] = $postedData['sampleId'];
+                $status = $this->dbConnection->deleteFromWhere('tbl_bac_micro_bacterial_agents', $deleteWhere);
+//                echo $this->returnJson($status);
+//                exit;
+            }
+            for ($i = 0; $i < sizeof($insertData); $i++) {
+
+                $newFinal = (array)$insertData[$i];
+
+                $newFinalArray['antiMicroAgent'] = $newFinal['antiMicroAgent'];
+                $newFinalArray['reportedToStatus'] = $newFinal['reportedToStatus'];
+                $newFinalArray['diskContent'] = $newFinal['diskContent'];
+                $newFinalArray['sampleId'] = $postedData['sampleId'];
+                $newFinalArray['finalScore'] = $newFinal['finalScore'];
+
+                if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
+                    $newFinalArray['userId'] = $postedData['userId'];
+                    $newFinalArray['roundId'] = $postedData['roundId'];
+                    $newFinalArray['participantId'] = $postedData['participantId'];
+
+                    $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
+                    $newFinalArray['level'] = 1;
+                } else {
+                    $newFinalArray['agentScore'] = $postedData['agentScore'];
+
+
+                }
+                $insertStatus = $this->dbConnection->insertData($postedData['tableName'], $newFinalArray);
+
+                $resp['status'] = 1;
+                if ($insertStatus['status'] != 1) {
+
+                    $resp['status'] = 0;
+                    $resp['message'] = $insertStatus['message'];
+                } else {
+                    if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
+                        $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
+                        $where['participantId'] = $postedData['participantId'];
+                        $update['responseStatus'] = 1;
+                        $update['markedStatus'] = 1;
+                        $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel',
+                            $where, $update);
+                        $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users',
+                            $where, $update);
+                    }
+                }
+
+
+            }
+            echo $this->returnJson($resp);
+
+        }
+
+
+        exit;
+    }
+
     public function saveusermicroagentsAction()
     {
         $postedData = file_get_contents('php://input');
@@ -1115,6 +1181,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             if (is_array($dataArray)) {
 
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                 }

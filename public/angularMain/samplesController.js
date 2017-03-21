@@ -5,7 +5,7 @@
 (function () {
     var samplesModule = angular.module('ReportModule');
     ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
-    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, EptServices, EptFactory, $timeout, loginDataCache) {
+    samplesModule.controller('samplesController', function ($scope, $http, $location, serverSamplesURL, serverReportURL, EptServices, EptFactory, $timeout, loginDataCache) {
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -1618,6 +1618,8 @@
                 console.log(Exception);
             }
         }
+
+
         $scope.samples.saveAntiMicroAgent = function (data, type, agentScore) {
             var correctData = true;
             for (var i = 0; i < data.length; i++) {
@@ -1679,7 +1681,10 @@
 
                 var sampleData = $scope.samples.currentSampleForResponse;
 
-
+                if (angular.isDefined($scope.samples.userFeedbackFormData.id)) {
+                    aba.edit = 1;
+                    url = serverSamplesURL + 'editusermicroagents';
+                }
                 aba.userId = sampleData.userId;
 
                 aba.sampleId = sampleData.sampleId;
@@ -1862,6 +1867,42 @@
                 // $.alert("<i class='fa fa-exclamation-triangle'></i> No test reagents found");
             }
         }
+
+
+        $scope.samples.updateUserResponse = function (tablename, userFeedbackData) {
+            var id = '';
+            if (tablename == 'tbl_bac_response_results') {
+                id = $scope.samples.userFeedbackFormData.id;
+            }
+            if (tablename == 'tbl_bac_suscepitibility') {
+                id = $scope.samples.susceptibilityFormData.id;
+            }
+
+            var updateData = {
+                where: {id: id},
+                updateData: userFeedbackData,
+                tableName: tablename
+            }
+            url = serverSamplesURL + 'updatetablewhere';
+            $http.post(url, updateData)
+                .success(function (response) {
+
+                    alertStartRound.close();
+                    if (response.status == 1) {
+                        $.alert({
+                            title: '<i class="fa fa-check-circle"></i> Success',
+                            content: 'Result saved successfully'
+                        });
+                    } else {
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+                    }
+                    console.log(response);
+                })
+                .error(function (error) {
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                    console.log(error)
+                })
+        }
         $scope.samples.saveFeedbackFormData = function (userFeedbackData, tablename) {
 
             var sampleData = $scope.samples.currentSampleForResponse;
@@ -1871,21 +1912,32 @@
             userFeedbackData.participantId = sampleData.participantId;
             userFeedbackData.roundId = sampleData.roundId;
             userFeedbackData.panelToSampleId = sampleData.panelToSampleId;
-
+            var edit = false;
+            var message = 'Are  you sure you want to submit the results? ';
+            if (angular.isDefined($scope.samples.userFeedbackFormData.id)) {
+                edit = true;
+                message = 'Are you sure you want to edit this record ?'
+            }
 
             try {
                 $.confirm({
                     title: 'Confirm!',
                     theme: 'supervan',
-                    content: 'Are  you sure you want to submit the results? ',
+                    content: message,
                     buttons: {
                         'Confirm Action': {
                             btnClass: 'btn-blue',
                             action: function () {
 
-                                alertStartRound = $.alert('<i class="fa fa-spinner fa-spin"> </i> Saving results,please wait...!');
-                                $scope.samples.saveSampleFormData(tablename, userFeedbackData)
-
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-spinner fa-spin"></i> Processing...',
+                                    content: 'Saving results,please wait...!'
+                                });
+                                if (edit) {
+                                    $scope.samples.updateUserResponse(tablename, userFeedbackData);
+                                } else {
+                                    $scope.samples.saveSampleFormData(tablename, userFeedbackData);
+                                }
                             }
                         },
                         cancel: {
@@ -2518,33 +2570,37 @@
         }
         //+++++++++++++++++++++++++++++++++++++++++++++++++RETURN RESULTS+++++++++++++++++++++++++++++++++++++++++++++++
         //==============================================================================================================
-        $scope.samples.showAddResponse = function (sample,type) {
+        $scope.samples.microagentsData = {};
+        $scope.samples.showAddResponse = function (sample, type) {
             console.log(sample)
             $scope.samples.currentSampleForResponse = sample;
             $scope.samples.samplesActivePage("userFeedbackForm", 1);
 
-            if(angular.isDefined(type)){
-                showAjaxLoader(true);
+            if (angular.isDefined(type)) {
+                changeSavingSpinner(true);
                 var where = {
-                    userId: type.userId,
-                    sampleId: type.sampleId,
-                    participantId: type.participantId,
-                    roundId: type.roundId
+                    userId: sample.userId,
+                    sampleId: sample.sampleId,
+                    participantId: sample.participantId,
+                    roundId: sample.roundId
                 }
-                var url = serverReportURL + 'getmicroagentswhere';
+                var url = serverReportURL + 'getlabuserresponse';
                 $http.post(url, where)
                     .success(function (response) {
-                        showAjaxLoader(false);
+                        console.log(response);
+                        changeSavingSpinner(false);
                         console.log(response);
                         if (response.status == 1) {
-                            $scope.samples.microagentsData = response.data;
+                            $scope.samples.userFeedbackFormData = response.data.results;
+                            $scope.samples.susceptibilityFormData = response.data.susceptibility;
+                            $scope.samples.resultFields = response.data.microAgents;
                         }
                     })
                     .error(function (error) {
-                        showAjaxLoader(false);
-
+                        changeSavingSpinner(false);
+                        EptServices.EptServiceObject.returnServerErrorAlert();
                     })
-            }else{
+            } else {
 
             }
 
