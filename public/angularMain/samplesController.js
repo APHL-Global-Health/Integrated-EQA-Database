@@ -2158,10 +2158,12 @@
                 $http
                     .post(url, where)
                     .success(function (response) {
+                        console.log(response);
                         changeSavingSpinner(false);
                         if (response.status == 1) {
                             $scope.samples.samplesIssuedToUser = response.data;
                         } else {
+                            $scope.samples.samplesIssuedToUser ={};
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
                         }
                     })

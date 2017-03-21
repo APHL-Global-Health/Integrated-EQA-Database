@@ -63,7 +63,7 @@
                     <td>{{sample.dateDelivered}}</td>
                     <td>{{sample.materialOrigin}}</td>
                     <td>
-                        <button class="btn btn-sm btn-info"
+                        <button class="btn btn-sm btn-info" ng-disabled="sample.allowedOnTenDays==0"
                                 ng-click="samples.showMultiSelect(sample,0)">Issue
                         </button>
                     </td>

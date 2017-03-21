@@ -579,9 +579,16 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                             $dataDB[$key]->materialSource = $sample['materialSource'];
                             $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                             $dataDB[$key]->roundCode = $round['roundCode'];
+
                             $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                             $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
                             $dataDB[$key]->feedBackWord = $value->feedBack == 1 ? 'taken' : 'untaken';
+                            $whereId = $tableName == 'tbl_bac_sample_to_panel' ? $dataDB[$key]->id : $dataDB[$key]->panelToSampleId;
+                            $sampleInfo = $this->returnSampleInfo($whereId);
+
+                            $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                            $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
+
 
                             if ($tableName == 'tbl_bac_samples_to_users') {
 
@@ -681,7 +688,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function converttodays($endDate, $startDate = null)
     {
         if (isset($startDate)) {
-            $diff = $endDate - strtotime($startDate);
+            $diff = strtotime($endDate) - strtotime($startDate);
         } else {
             $diff = strtotime($endDate) - time();
         }
@@ -945,6 +952,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
+    public function returnSampleInfo($samplePanelId)
+    {
+
+
+        $sampleDateDelivered = $this->returnValueWhere($samplePanelId, 'tbl_bac_sample_to_panel');
+
+        $endDate = date('Y-m-d');
+        $sampleDateDelivered['endDaysLeft'] = $this->converttodays($endDate, $sampleDateDelivered['dateDelivered']);
+        return $sampleDateDelivered;
+    }
+
     public function getusersamplesissuedAction()
     {
         try {
@@ -975,7 +993,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->endDate = $round['endDate'];
                         $dataDB[$key]->roundCode = $round['roundCode'];
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
+                        $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                        $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                        $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
 
                     }
@@ -1184,7 +1205,6 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
                 }
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
-
 
 
             } else {

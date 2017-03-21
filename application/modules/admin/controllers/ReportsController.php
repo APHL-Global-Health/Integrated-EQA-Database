@@ -195,6 +195,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->batchName = $sample['batchName'];
                 $data[$key]->sampleInstructions = $sample['sampleInstructions'];
                 $data[$key]->sampleDetails = $sample['sampleDetails'];
+                $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                $data[$key]->daysLeft = $this->converttodays($round['endDate']);
+
+
+                $sampleInfo=$this->returnSampleInfo($value->panelToSampleId);
+                $data[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                $data[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
+
                 $data[$key]->materialSource = $sample['materialSource'];
                 $data[$key]->evaluatedStatus = $value->markedStatus == 1 ? 'Evaluated' : 'Un-evaluated';
             }
