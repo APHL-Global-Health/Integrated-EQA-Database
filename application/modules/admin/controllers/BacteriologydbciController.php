@@ -1043,8 +1043,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
                         $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
                         $where['participantId'] = $postedData['participantId'];
-                        $update['responseStatus'] = 1;
-                        $update['markedStatus'] = 1;
+
+                        $update['published'] = 0;
+//                        $update['markedStatus'] = 0;
                         $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel',
                             $where, $update);
                         $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users',
@@ -1179,12 +1180,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $dataArray = $this->returnArrayFromInput();
 
             if (is_array($dataArray)) {
-
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
-
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                 }
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+
+
 
             } else {
                 $data['message'] = ('could not find your request');
