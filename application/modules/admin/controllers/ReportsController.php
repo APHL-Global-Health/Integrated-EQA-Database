@@ -211,6 +211,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         if (count($posted) > 0) {
             $microSum = 0;
             $where = [];
+
             foreach ($posted as $key => $value) {
                 $arr = (array)$value;
                 $whereUpdate['id'] = $arr['id'];
@@ -222,12 +223,19 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $where['roundId'] = $arr['roundId'];
 
                 $update['score'] = $arr['score'];
-                $update['adminMarked'] = 1;
-                $microSum += $arr['score'];
-                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereUpdate, $update);
+                if (is_float($update['score']) || is_numeric($update['score'])) {
+                    $update['adminMarked'] = 1;
+                    $microSum += $arr['score'];
+                    $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereUpdate, $update);
+                } else {
+                    $updateEvaluation = array('status' => 0, 'message' => 'score should be numeric');
+                }
             }
             $updateEval['totalMicroAgentsScore'] = $microSum;
-            $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
+            if ($updateEvaluation['status'] == 1) {
+                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
+
+            }
             echo $this->returnJson($updateEvaluation);
             exit;
         }
@@ -580,43 +588,48 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         try {
             if (isset($whereResponse)) {
                 unset($whereResponse['adminMarked']);
+
                 $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $whereResponse);
 
                 $whereSampleId = $whereResponse['sampleId'];
 
                 $microExpectedAgents = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $whereSampleId);
                 $returnScore = 0;
-                foreach ($microAgents as $key => $value) {
-                    $score['score'] = 0;
 
-                    foreach ($microExpectedAgents as $ekey => $evalue) {
-                        if ($microAgents[$key]->antiMicroAgent == $microExpectedAgents[$key]->antiMicroAgent) {
-                            $score['score'] = ($microExpectedAgents[$key]->finalScore / 2);
-                            if ($this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent)
-                                == $this->getMicroLevel($microExpectedAgents[$key]->diskContent, $microExpectedAgents[$key]->antiMicroAgent)
-                            ) {
-                                $score['score'] = $microExpectedAgents[$key]->finalScore;
+                if ($microExpectedAgents != false) {
+                    foreach ($microAgents as $key => $value) {
+                        $score['score'] = 0;
+                        foreach ($microExpectedAgents as $ekey => $evalue) {
+//                            echo $microAgents[$ekey]->antiMicroAgent .' = '. $microExpectedAgents[$key]->antiMicroAgent.'<br>';
+                            if ($evalue->antiMicroAgent == $value->antiMicroAgent) {
 
-                            } else {
+//                                $score['score'] =0.5*(round(($microExpectedAgents[$key]->agentScore)/(sizeof($microExpectedAgents)),2));
 
-                                $this->outOfRange($this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent), $whereResponse);
+                                if ($microAgents[$key]->finalScore == $microExpectedAgents[$ekey]->finalScore) {
+                                    $score['score'] = round(($microExpectedAgents[$key]->agentScore) / (sizeof($microExpectedAgents)), 2);
+
+                                } else {
+                                    $score['score'] = 0;
+                                    return array('status' => true, 'susScore' => '');
+                                }
+
+                                break;
                             }
-
-                            break;
                         }
-                    }
-                    $returnScore += $score['score'];
-                    $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
-                    $whereResponse['adminMarked'] = 0;
-                    $score['markedStatus'] = 1;
-                    $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
-                    if ($updateSuscepibility['status'] == 0) {
+//                        print_r($score);
+//                        exit;
+                        $returnScore += $score['score'];
+                        $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
+                        $whereResponse['adminMarked'] = 0;
+                        $score['markedStatus'] = 1;
+                        $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
+                        if ($updateSuscepibility['status'] == 0) {
 
-                        return false;
-                    }
+                            return false;
+                        }
 
+                    }
                 }
-
                 return array('status' => true, 'susScore' => $returnScore);
             }
         } catch (Exception $e) {
@@ -850,11 +863,11 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $orderArray = ['id', 'dateCreated'];
         $col = ['*'];
 
-        $groupArray = ['shipmentId','roundId', 'sampleId'];
+        $groupArray = ['shipmentId', 'roundId', 'sampleId'];
 
 
         $report = [];
-        $postedData['roundId >']=0;
+        $postedData['roundId >'] = 0;
         if (isset($labs)) {
             if ($labs != false) {
 

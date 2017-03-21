@@ -630,7 +630,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         }
     }
     $scope.reports.sumNumbers = function (num1, num2) {
-        return Number(num1) + Number(num2);
+        return Math.round((Number(num1) + Number(num2)), 2);
     }
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
 
@@ -645,9 +645,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
             var error = false;
             for (var i = 0; i < microAgents.length; i++) {
 
-                if (microAgents[i].score == '' || isNaN(microAgents[i].score)) {
+                if (microAgents[i].score == '') {
                     error = true;
-                    $.alert("<i class='fa fa-exclamation-circle'></i> please fill score at row " + (i + 1) + " and should be a number");
+                    $.alert({
+                        title: "<i class='fa fa-exclamation-triangle text-danger '></i> Error",
+                        content: "Please fill score at row " + (i + 1) + " and should be a number"
+                    });
                     break;
                 }
             }
@@ -660,17 +663,28 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     showAjaxLoader(true);
                     $http.post(url, where)
                         .success(function (response) {
-                            // alertStartRound.close();
-                            showAjaxLoader(false);
-                            if (response.status == 1) {
-                                $.alert('<i class="fa fa-check-circle"></i> Micro agents update was successful');
-                            } else {
-                                $.alert('<i class="fa fa-exclamation"></i> Error occured,please try again');
+                                console.log(response)
+                                showAjaxLoader(false);
+                                if (response.status == 1) {
+                                    $.alert({
+                                        title: "<i class='fa fa-check-circle text-success'></i> Success ",
+                                        content: " Micro agents update was successful"
+                                    });
+                                }
+                                else {
+                                    $.alert({
+                                        title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
+                                        content: "Error occured,please try again"
+                                    });
+                                }
                             }
-                        })
+                        )
                         .error(function (error) {
                             showAjaxLoader(false);
-                            $.alert('<i class="fa fa-exclamation-triangle "></i> Error occurred,could not evaluate');
+                            $.alert({
+                                title: "<i class='fa fa-exclamation-triangle text-danger '></i> Error",
+                                content: "Error occured,could not evaluate,try again"
+                            });
                         })
 
 

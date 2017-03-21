@@ -329,19 +329,16 @@
                             {{fields.score}}
                         </td>
                         <td>
-                            <i ng-show="fields.range=='few'"
+                            <i ng-show="fields.finalScore=='S'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
                         <td>
-                            <i ng-show="fields.range=='mod'"
+                            <i ng-show="fields.finalScore=='I'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
                         <td>
-                            <x ng-show="fields.range=='outOfRange'">
-                                <small><i class="fa fa-exclamation text-danger"> out of range/invalid name</i><br>
-                                </small>
-                            </x>
-                            <i ng-show="fields.range=='many'"
+
+                            <i ng-show="fields.finalScore=='S'"
                                class="fa fa-check-circle fa-2x"></i>
                         </td>
 

@@ -247,9 +247,13 @@
             <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
                 <td width="30%">Guidelines used (CLSI):</td>
                 <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Guidelines used (CLSI)"
+                    <select class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+
                            ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
+                        <option selected disabled>--SELECT GUIDELINE--</option>
+                        <option value="CLSI">CLSI</option>
+                        <option value="HUQAS">HUQAS</option>
+                    </select>
                 </td>
 
             </tr>
@@ -343,10 +347,10 @@
                            ng-change=""
                            ng-model="fields.diskContent"></td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="S" ng-checked="true" name="score{{$index}}" ng-model="fields.finalScore">
+                    <input type="radio" class="form-control" ng-change="" value="S"  name="score{{$index}}" ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <input type="radio" class="form-control" ng-change=""  value="I" name="score{{$index}}"  ng-model="fields.finalScore">
+                    <input type="radio" class="form-control" ng-change=""   value="I" name="score{{$index}}"  ng-model="fields.finalScore">
                 </td>
                 <td>
                     <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"  ng-model="fields.finalScore">
