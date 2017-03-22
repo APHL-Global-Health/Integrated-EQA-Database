@@ -2717,6 +2717,15 @@
 
         }
 
+        $scope.samples.instructionsFormData = {};
+        $scope.samples.addSampleInstructions = function (sample) {
+            $scope.samples.instructionSample = sample;
+            $scope.samples.instructionsFormData.sampleId = sample.id;
+            $scope.samples.instructionsFormData.batchName = sample.batchName;
+            $scope.samples.samplesActivePage('addSampleInstructions', 0);
+        }
+
+
         $scope.samples.getClickedDate = function () {
 
             var cDate = EptServices.EptServiceObject.EptFormatDate($scope.samples.currenctClickedDate);
