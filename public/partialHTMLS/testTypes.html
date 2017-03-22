@@ -3,11 +3,11 @@
 
     <div class="col-md-8 col-md-offset-2">
         <H3>
-            <x ng-show="samples.testAgentsFormData.id > 0">Edit {{samples.testAgentsFormData.batchName}}</x>
-            <x ng-hide="samples.testAgentsFormData.id > 0">Add</x>
+            <x ng-show="samples.testTypesFormData.id > 0">Edit {{samples.testTypesFormData.testName}}</x>
+            <x ng-hide="samples.testTypesFormData.id > 0">Add</x>
             Test Types
             <div class="pull-right">
-                <button class="btn btn-sm btn-info" ng-click="samples.samplesActivePage('viewTestAgents')">View
+                <button class="btn btn-sm btn-info" ng-click="samples.samplesActivePage('viewTestTypes')">View
                     Test Types
                 </button>
             </div>
@@ -18,15 +18,15 @@
                 <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
             </div>
         </div>
-        <form name="testAgentsForm" novalidate="" class="form-horizontal ">
+        <form name="testTypesForm" novalidate="" class="form-horizontal ">
             <div class="form-group row"
-                 ng-class="{ 'has-error'  : testAgentsForm.testAgentName.$invalid && !testAgentsForm.testAgentName.$pristine }">
+                 ng-class="{ 'has-error'  : testTypesForm.testName.$invalid && !testTypesForm.testName.$pristine }">
                 <label class="col-2 col-form-label">Test Name</label>
                 <div class="col-10">
-                    <input class="form-control " required="" ng-model="samples.testAgentsFormData.testAgentName"
-                           name="testAgentName" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                    <input class="form-control " required="" ng-model="samples.testTypesFormData.testName"
+                           name="testName" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
                     <small class="text-danger col-md-12"
-                           ng-show="testAgentsForm.testAgentName.$invalid && !testAgentsForm.testAgentName.$pristine">
+                           ng-show="testTypesForm.testName.$invalid && !testTypesForm.testName.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                     </small>
 
@@ -34,14 +34,14 @@
             </div>
 
             <div class="form-group row"
-                 ng-class="{ 'has-error'  : testAgentsForm.testAgentCode.$invalid && !testAgentsForm.testAgentCode.$pristine }">
+                 ng-class="{ 'has-error'  : testTypesForm.testDesc.$invalid && !testTypesForm.testDesc.$pristine }">
                 <label class="col-2 col-form-label">Description</label>
                 <div class="col-10">
-                    <input class="form-control" required="" ng-model="samples.testAgentsFormData.testAgentCode"
-                           name="testAgentCode"
+                    <input class="form-control" required="" ng-model="samples.testTypesFormData.testDesc"
+                           name="testDesc"
                            ng-pattern="">
                     <small class="text-danger col-md-12"
-                           ng-show="testAgentsForm.testAgentCode.$invalid && !testAgentsForm.testAgentCode.$pristine">
+                           ng-show="testTypesForm.testDesc.$invalid && !testTypesForm.testDesc.$pristine">
                         Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                     </small>
 
@@ -56,8 +56,8 @@
                 <!--<div class="form-group col-md-6 pull-left">-->
                 <button class="btn btn-primary col-md-6"
 
-                        ng-click="samples.saveSampleFormData('tbl_bac_test_types',samples.testAgentsFormData)"
-                        ng-disabled="testAgentsForm.$invalid || samples.savingInProgress"
+                        ng-click="samples.saveSampleFormData('tbl_bac_test_types',samples.testTypesFormData)"
+                        ng-disabled="testTypesForm.$invalid || samples.savingInProgress"
                 >Save Test Types<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                 </button>
                 <!--</div>-->

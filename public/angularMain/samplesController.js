@@ -99,6 +99,9 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgents = data.data;
             }
+            if (tableName == 'tbl_bac_test_types') {
+                $scope.samples.testTypes = data.data;
+            }
             if (tableName == 'tbl_bac_grades') {
                 $scope.samples.grades = data.data;
             }
@@ -497,6 +500,7 @@
 
         $scope.samples.courierFormData = {};
         $scope.samples.gradingFormData = {};
+        $scope.samples.testTypesFormData = {};
         function emptyFormData(tableName, type) {
 
 
@@ -530,14 +534,19 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = {};
             }
+            if (tableName == 'tbl_bac_test_types') {
+                $scope.samples.testTypesFormData = {};
+            }
             if (tableName == 'tbl_bac_grades') {
                 $scope.samples.gradingFormData = {};
             }
+
             if (tableName == 'tbl_bac_panels_shipments') {
 
             }
 
         }
+
 
         $scope.samples.showMainTable = function (tableName, type) {
             console.log(tableName)
@@ -568,6 +577,10 @@
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.samplesActivePage('viewTestAgents', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_test_agents');
+            }
+            if (tableName == 'tbl_bac_test_types') {
+                $scope.samples.samplesActivePage('viewTestTypes', 0);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_test_types');
             }
             if (tableName == 'tbl_bac_grades') {
                 $scope.samples.samplesActivePage('viewGrading', 0);
@@ -1226,6 +1239,12 @@
                         $scope.samples.testAgents = changedData;
                     }
                 }
+                if (tableName == 'tbl_bac_test_types') {
+                    data = $scope.samples.testTypes;
+                    if (operation == 1) {
+                        $scope.samples.testTypes = changedData;
+                    }
+                }
                 if (tableName == 'tbl_bac_shipments') {
                     data = $scope.samples.shipmentsData;
                     if (operation == 1) {
@@ -1406,6 +1425,9 @@
             }
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData.id = $scope.samples.currentEditingId;
+            }
+            if (tableName == 'tbl_bac_test_types') {
+                $scope.samples.testTypesFormData.id = $scope.samples.currentEditingId;
             }
         }
 
@@ -2163,7 +2185,7 @@
                         if (response.status == 1) {
                             $scope.samples.samplesIssuedToUser = response.data;
                         } else {
-                            $scope.samples.samplesIssuedToUser ={};
+                            $scope.samples.samplesIssuedToUser = {};
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
                         }
                     })
@@ -2764,7 +2786,7 @@
             }
             if (tableName == 'tbl_bac_panel_mst') {
                 $scope.samples.panelFormData = data;
-                $scope.samples.samplesActivePage('addPanels', 0)
+                $scope.samples.samplesActivePage('addPackaging', 0)
             }
             if (tableName == 'tbl_bac_panel_to_shipment') {
                 $scope.samples.shipmentFormData = data;
@@ -2781,6 +2803,12 @@
                 $scope.samples.testAgentsFormData = data;
                 console.log(data)
                 $scope.samples.samplesActivePage('addTestAgents', 0);
+
+            }
+            if (tableName == 'tbl_bac_test_types') {
+                $scope.samples.testTypesFormData = data;
+                console.log(data)
+                $scope.samples.samplesActivePage('testTypes', 0);
 
             }
         }
