@@ -2,6 +2,16 @@ var pdfModule = angular.module('ReportModule')
 
 pdfModule.controller('PdfController', function ($scope, EptServices) {
     $scope.pdfMake = {};
+
+
+    function today() {
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+        var dateTime = date + ' ' + time;
+
+        return dateTime;
+    }
     $scope.pdfMake.mainGeneratorFunction = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader) {
         // var schoolName = '@Session["SchoolName"]';
 
@@ -203,7 +213,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
     $scope.pdfMake.generateParticipatoryReportPdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto','*','*']
+        var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto', '*', '*']
         var reportHeader =
             [
                 {text: ' # ', style: 'subHeader'},
@@ -345,6 +355,60 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
+    }
+    function returnRoundData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Laboratory Name': excelData[i].labName,
+                    'Lab Code': excelData[i].unique_identifier,
+                    'County': excelData[i].county,
+                    'Sample': excelData[i].batchName,
+                    'Round': excelData[i].roundCode,
+                    'Micro Identification Score': excelData[i].finalScore,
+                    'Anti-Baterial Agents': excelData[i].totalMicroAgentsScore,
+                    'Grade': excelData[i].grade,
+                    'Remarks': excelData[i].remarks,
+                    'Total': (Number(excelData[i].finalScore) + Number(excelData[i].totalMicroAgentsScore)),
+                    'Material Source': excelData[i].materialSource
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+
+    $scope.pdfMake.generateSurveyReportExcel = function (data, searchData) {
+
+        var excelData = returnRoundData(data);
+        console.log(excelData);
+        var opts = [{
+                sheetid: 'ROUNDS SHEET', header: true,
+                style: "background:#00ff00",
+
+                caption: {
+                    title: 'Round Data,Round ',
+                    style: 'font-size: 50px; color:blue;'
+                },
+                caption: {
+                    title: 'My Big Table',
+                    style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                },
+                style: 'background:#00FF00',
+                column: {
+                    style: 'font-size:30px'
+                }
+            }]
+            ;
+        var res = alasql('SELECT INTO XLSX("ROUNDS REPORTS '+today()+'.xlsx",?) FROM ?', [opts, [excelData]]);
     }
 
 

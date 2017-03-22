@@ -191,7 +191,7 @@
 
             <div class="form-group row"
                  ng-class="{ 'has-error'  : sampleData.sampleDetails.$invalid && !sampleData.sampleDetails.$pristine }">
-                <label class="col-2 col-form-label">Sample Details</label>
+                <label class="col-2 col-form-label">Clinical Details</label>
                 <div class="col-10">
                     <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleDetails"
                               name="sampleDetails"  ng-pattern="samples.alphaNumHyDashSpaceRegExp">
@@ -206,7 +206,7 @@
             </div>
             <div class="form-group row"
                  ng-class="{ 'has-error'  : sampleData.sampleInstructions.$invalid && !sampleData.sampleInstructions.$pristine }">
-                <label class="col-2 col-form-label">Sample Instructions</label>
+                <label class="col-2 col-form-label">Instructions</label>
                 <div class="col-10">
                     <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleInstructions"
                               name="sampleInstructions"  ng-pattern="samples.alphaNumHyDashSpaceRegExp">
