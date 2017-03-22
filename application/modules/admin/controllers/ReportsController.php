@@ -1008,7 +1008,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
 
         $orderArray = ['id', 'dateCreated'];
-        $col = ['id', 'participantId', 'roundId', 'sampleId', 'remarks', 'adminRemarks', 'correctiveAction', 'dateCreated'];
+        $col = ['id', 'participantId', 'roundId', 'sampleId', 'remarks','grade', 'adminRemarks', 'correctiveAction', 'dateCreated'];
 
         $groupArray = ['id'];
 

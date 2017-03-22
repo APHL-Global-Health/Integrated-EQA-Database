@@ -12,6 +12,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
         return dateTime;
     }
+
     $scope.pdfMake.mainGeneratorFunction = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader) {
         // var schoolName = '@Session["SchoolName"]';
 
@@ -356,7 +357,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
-    function returnRoundData(excelData) {
+    function returnRoundExcelData(excelData) {
 
         if (excelData.length > 0) {
             var returnArray = [];
@@ -387,29 +388,258 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
     $scope.pdfMake.generateSurveyReportExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnRoundExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'ROUNDS SHEET', header: true,
+                    style: "background:#00ff00",
 
-        var excelData = returnRoundData(data);
-        console.log(excelData);
-        var opts = [{
-                sheetid: 'ROUNDS SHEET', header: true,
-                style: "background:#00ff00",
-
-                caption: {
-                    title: 'Round Data,Round ',
-                    style: 'font-size: 50px; color:blue;'
-                },
-                caption: {
-                    title: 'My Big Table',
-                    style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
-                },
-                style: 'background:#00FF00',
-                column: {
-                    style: 'font-size:30px'
-                }
-            }]
-            ;
-        var res = alasql('SELECT INTO XLSX("ROUNDS REPORTS '+today()+'.xlsx",?) FROM ?', [opts, [excelData]]);
+                    caption: {
+                        title: 'Round Data,Round ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                ;
+            var res = alasql('SELECT INTO XLSX("ROUNDS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
     }
 
 
+    function returnLabPerformanceExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Laboratory Name': excelData[i].labName,
+                    'Lab Code': excelData[i].unique_identifier,
+                    'County': excelData[i].county,
+                    'Sample': excelData[i].batchName,
+                    'Round': excelData[i].roundCode,
+                    'Micro Identification Score': excelData[i].finalScore,
+                    'Anti-Baterial Agents': excelData[i].totalMicroAgentsScore,
+                    'Grade': excelData[i].grade,
+                    'Remarks': excelData[i].remarks,
+                    'Total': (Number(excelData[i].finalScore) + Number(excelData[i].totalMicroAgentsScore)),
+                    'Material Source': excelData[i].materialSource
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+
+    $scope.pdfMake.generateLabPerformanceExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnLabPerformanceExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'LABORATORY PERFORMANCE SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'LABORATORY PERFORMANCE ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                ;
+            var res = alasql('SELECT INTO XLSX("LABORATORY PERFORMANCE REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
+
+    function returnParticipatoryReportExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Sample Name': excelData[i].sample.batchName,
+                    'Round Name': excelData[i].round.roundCode,
+                    'Total Enrolled Labs': excelData[i].totalLabsAndSamples,
+                    'Total Unresponded': excelData[i].totalUnresponded,
+                    'Total Responded': excelData[i].totalResponded,
+                    'Total Evaluated': excelData[i].totalTotalEvaluated,
+                    'Total Unevaluated': excelData[i].totalTotalUnevaluated,
+                    'Response %': excelData[i].responseRate,
+
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+
+    $scope.pdfMake.generateParticipatoryReportExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnParticipatoryReportExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'PARTICIPATORY SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'PARTICIPATORY REPORT ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                ;
+            var res = alasql('SELECT INTO XLSX("PARTICIPATORY REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
+
+    function returnShipmentExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'NO.': i + 1,
+                    'Lab Name': excelData[i].lab.institute_name,
+                    'Round Name': excelData[i].round.roundCode,
+                    'Sample Name': excelData[i].sample.batchName,
+                    'Sent': excelData[i].totalSent,
+                    'Received': excelData[i].received,
+                    'Rejected': excelData[i].rejected,
+                    'Comment': excelData[i].conditionStatus
+
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+
+    $scope.pdfMake.generateShipmentExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnShipmentExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'SHIPMENT SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'SHIPMENT REPORT ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                ;
+            var res = alasql('SELECT INTO XLSX("SHIPMENT REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+    function returnCorrectiveActiontExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'NO.': i + 1,
+                    'Lab Name': excelData[i].lab.institute_name,
+                    'Round Name': excelData[i].round.roundCode,
+                    'Sample Name': excelData[i].sample.batchName,
+                    'Remarks': excelData[i].remarks,
+                    'Grade': excelData[i].grade,
+                    'Date': excelData[i].dateCreated,
+                    'Corr. Status': 'Yes'
+
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+
+    $scope.pdfMake.generateCorrectiveActionExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnCorrectiveActiontExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'CORRECTIVE ACTION SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'CORRECTIVE ACTION REPORT ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                ;
+            var res = alasql('SELECT INTO XLSX("CORRECTIVE ACTION REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
 })

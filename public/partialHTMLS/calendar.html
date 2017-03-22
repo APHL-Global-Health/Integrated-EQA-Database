@@ -1,38 +1,17 @@
-<div class="">
+
+<div class="clearfix">&nbsp;</div>
+<div class="panel panel-success">
     <div class="panel-heading" >
         <i class="fa fa-calendar"></i> Rounds Calendar   <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
     </div>
-    <div role="main" class="">
+    <div  class="panel panel-body">
         <div class="" >
             <section id="directives-calendar" ng-controller="CalendarCtrl"  >
                 <div class="">
                     <div class="row-fluid">
 
-                         <div class="col-lg-4">
-                              <div class="btn-group col-md-12 calTools">
-                                  <button class="btn" ng-click="changeLang()">
-                                      {{changeTo}}
-                                  </button>
-                                  <button type="button" class="btn btn-primary" ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
-                                      <i class="fa fa-refresh"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-primary" ng-click="calendar.getRoundData()">
-                                      Show Calendar
-                                  </button>
-                              </div>
-                              <div class="pre-scrollable">
-                              <table class="table">
-                                  <tr ng-repeat="e in events" class="{{modalData.returnRowClass(e.id,e.closedFlag)}}" ng-click="modalData.makeRowActive(e.id)"
-                                      >
-                                      <td>  {{e.start| date:"MMM dd"}} - {{e.end| date:"MMM dd"}}</b></td>
 
-
-                                  </tr>
-                              </table>
-                              </div>
-                          </div>
-
-                        <div class="col-lg-8 pull-right" ng-if="calendar.showCalendar" >
+                        <div class="col-md-12 pull-right" ng-if="calendar.showCalendar" >
 
                             <tabset>
                                 <tab ng-init="renderCalender('myCalendar1')">
@@ -41,13 +20,20 @@
                                     <div class="no-padding">
 
                                         <div class="btn-group">
+
+                                            <button type="button" class="btn btn-primary" ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
+                                                <i class="fa fa-refresh"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary" ng-click="calendar.getRoundData()">
+                                                Refresh Calendar
+                                            </button>
                                             <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">Day Rounds</button>
                                             <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">Week Rounds</button>
                                             <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month Rounds</button>
 
                                         </div>
                                         <button class="btn btn-warning btn-sm pull-right" ng-disabled="false">{{data.totalEvents}}
-                                            Rounds Scheduled: the Month {{data.convertToHumanTime(data.returnDateToday())}}</button>
+                                            Rounds Scheduled: This Month {{data.convertToHumanTime(data.returnDateToday())}}</button>
 
                                     </div>
                                     <div style="margin-top: 5px;" class="alert alert-info alert-dismissable col-lg-12"
