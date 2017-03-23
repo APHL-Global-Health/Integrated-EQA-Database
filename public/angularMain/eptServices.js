@@ -73,6 +73,15 @@ EptServices.service('EptServices', function () {
         );
 
     }
+    this.EptServiceObject.returnDeleteAlert = function () {
+        $.alert(
+            {
+                title: '<i class="fa fa-check-circle text-success"></i> Success',
+                content: '1 row deleted successfully.'
+            }
+        );
+
+    }
     this.EptServiceObject.returnActionUnSuccessAlert = function () {
         $.alert(
             {

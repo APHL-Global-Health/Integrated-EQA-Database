@@ -34,7 +34,7 @@
                            bs-options="icon.batchName as icon.batchName for icon in reports.samples"
                            bs-typeahead>
                 </div>
-                <div class="col-md-3 no-padding" ng-init="reports.getCounties()">
+                <div class="col-md-2 no-padding" ng-init="reports.getCounties()">
                     <input class="form-control input-sm"
                            ng-model="reports.whereRoundsResults.region"
                            id="region" name="region"
@@ -56,10 +56,17 @@
                            placeholder="Search grade" bs-typeahead
                     >
                 </div>
-                <div>
+                <div ng-controller="PdfController">
                     &nbsp;
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
                             ng-click="reports.getRoundPerformanceReport(reports.whereRoundsResults)">get report
+                    </button>
+
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateSurveyReportPdf(reports.roundsPerformanceData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateSurveyReportExcel(reports.roundsPerformanceData,reports.whereRoundsResults)"><i class="fa fa-file-excel-o"></i>
                     </button>
                 </div>
 
@@ -98,7 +105,7 @@
             <tr dir-paginate="lab in reports.roundsPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
                 <td>{{lab.labName}}</td>
-                <td>{{lab.labCode}}</td>
+                <td>{{lab.unique_identifier}}</td>
                 <td>{{lab.county}}</td>
                 <td>{{lab.batchName}}</td>
                 <td nowrap>{{lab.roundCode}}</td>

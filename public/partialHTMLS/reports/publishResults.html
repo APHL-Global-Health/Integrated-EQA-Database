@@ -29,7 +29,8 @@
                            bs-datepicker>
                 </div>
                 <div class="col-md-3 no-padding">
-                    <input class="form-control input-sm" placeholder="Round Name" ng-model="reports.wherePublishRounds.roundName">
+                    <input class="form-control input-sm" placeholder="Round Name"
+                           ng-model="reports.wherePublishRounds.roundName">
                 </div>
                 <div class="col-md-2 " ng-init="reports.wherePublishRounds.evaluated=1">
                     <select class="form-control input-sm" ng-model="reports.wherePublishRounds.evaluated">
@@ -84,7 +85,7 @@
                 <td nowrap>{{round.totalShipmentsAdded}}</td>
                 <td>{{round.currentStatus}}</td>
                 <td>
-                    <button ng-disabled="round.totalShipmentsAdded==0" ng-show="round.published==0"
+                    <button ng-disabled="round.totalShipmentsAdded==0 || round.daysLeft>0" ng-show="round.published==0"
                             ng-click="reports.publishRoundResults(round,1)" class="btn btn-success btn-sm">
                         <i class="fa fa-check"></i> Publish
                     </button>

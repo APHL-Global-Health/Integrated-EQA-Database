@@ -412,7 +412,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     public function returnValueWhere($id, $tableName)
     {
-        $returnArray = '';
+        $returnArray = [];
         if (!is_array($id)) {
             if ($tableName == 'data_manager') {
                 $whereId['dm_id'] = $id;
@@ -579,9 +579,16 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                             $dataDB[$key]->materialSource = $sample['materialSource'];
                             $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
                             $dataDB[$key]->roundCode = $round['roundCode'];
+
                             $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                             $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
                             $dataDB[$key]->feedBackWord = $value->feedBack == 1 ? 'taken' : 'untaken';
+                            $whereId = $tableName == 'tbl_bac_sample_to_panel' ? $dataDB[$key]->id : $dataDB[$key]->panelToSampleId;
+                            $sampleInfo = $this->returnSampleInfo($whereId);
+
+                            $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                            $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
+
 
                             if ($tableName == 'tbl_bac_samples_to_users') {
 
@@ -681,7 +688,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function converttodays($endDate, $startDate = null)
     {
         if (isset($startDate)) {
-            $diff = $endDate - strtotime($startDate);
+            $diff = strtotime($endDate) - strtotime($startDate);
         } else {
             $diff = strtotime($endDate) - time();
         }
@@ -705,6 +712,47 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             }
         }
         return $array;
+    }
+
+    public function getsampleinstructionsAction()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+
+        $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
+
+        if (sizeof($sampleInstructions) == 0) {
+            $where['status'] = 9;
+
+            $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
+
+        }
+
+        if (sizeof($sampleInstructions) > 0) {
+            $sampleInstructions['currentId'] = $sampleInstructions['sampleId'];
+            unset($sampleInstructions['batchName']);
+            echo $this->returnJson(array('status' => 1, 'data' => $sampleInstructions));
+
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
+        }
+//        return $sampleInstructions;
+        exit;
+    }
+
+    public function returnSampleInstructions($postedData)
+    {
+
+        $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
+
+        if (sizeof($sampleInstructions) == 0) {
+            $where['status'] = 9;
+
+            $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
+
+        }
+        return $sampleInstructions;
+
     }
 
     public function getdistinctshipmentsAction()
@@ -945,6 +993,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit();
     }
 
+    public function returnSampleInfo($samplePanelId)
+    {
+
+
+        $sampleDateDelivered = $this->returnValueWhere($samplePanelId, 'tbl_bac_sample_to_panel');
+
+        $endDate = date('Y-m-d');
+        $sampleDateDelivered['endDaysLeft'] = $this->converttodays($endDate, $sampleDateDelivered['dateDelivered']);
+        return $sampleDateDelivered;
+    }
+
     public function getusersamplesissuedAction()
     {
         try {
@@ -975,7 +1034,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->endDate = $round['endDate'];
                         $dataDB[$key]->roundCode = $round['roundCode'];
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
+                        $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                        $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                        $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
 
                     }
@@ -996,12 +1058,79 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit;
     }
 
+    public function editusermicroagentsAction()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+        $insertData = (array)$postedData['resultsAba'];
+//print_r($insertData);exit;
+        if (count($insertData) > 0) {
+            $resp['status'] = 0;
+            if (isset($postedData['edit'])) {
+                $deleteWhere['sampleId'] = $postedData['sampleId'];
+                $status = $this->dbConnection->deleteFromWhere('tbl_bac_micro_bacterial_agents', $deleteWhere);
+//                echo $this->returnJson($status);
+//                exit;
+            }
+            for ($i = 0; $i < sizeof($insertData); $i++) {
+
+                $newFinal = (array)$insertData[$i];
+
+                $newFinalArray['antiMicroAgent'] = $newFinal['antiMicroAgent'];
+                $newFinalArray['reportedToStatus'] = $newFinal['reportedToStatus'];
+                $newFinalArray['diskContent'] = $newFinal['diskContent'];
+                $newFinalArray['sampleId'] = $postedData['sampleId'];
+                $newFinalArray['finalScore'] = $newFinal['finalScore'];
+
+                if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
+                    $newFinalArray['userId'] = $postedData['userId'];
+                    $newFinalArray['roundId'] = $postedData['roundId'];
+                    $newFinalArray['participantId'] = $postedData['participantId'];
+
+                    $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
+                    $newFinalArray['level'] = 1;
+                } else {
+                    $newFinalArray['agentScore'] = $postedData['agentScore'];
+
+
+                }
+                $insertStatus = $this->dbConnection->insertData($postedData['tableName'], $newFinalArray);
+
+                $resp['status'] = 1;
+                if ($insertStatus['status'] != 1) {
+
+                    $resp['status'] = 0;
+                    $resp['message'] = $insertStatus['message'];
+                } else {
+                    if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
+                        $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
+                        $where['participantId'] = $postedData['participantId'];
+
+                        $update['published'] = 0;
+//                        $update['markedStatus'] = 0;
+                        $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel',
+                            $where, $update);
+                        $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users',
+                            $where, $update);
+                    }
+                }
+
+
+            }
+            echo $this->returnJson($resp);
+
+        }
+
+
+        exit;
+    }
+
     public function saveusermicroagentsAction()
     {
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
         $insertData = (array)$postedData['resultsAba'];
-
+//print_r($insertData);exit;
         if (count($insertData) > 0) {
             $resp['status'] = 0;
             if (isset($postedData['edit'])) {
@@ -1018,7 +1147,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 $newFinalArray['reportedToStatus'] = $newFinal['reportedToStatus'];
                 $newFinalArray['diskContent'] = $newFinal['diskContent'];
                 $newFinalArray['sampleId'] = $postedData['sampleId'];
-
+                $newFinalArray['finalScore'] = $newFinal['finalScore'];
 
                 if ($postedData['tableName'] == "tbl_bac_micro_bacterial_agents") {
                     $newFinalArray['userId'] = $postedData['userId'];
@@ -1028,7 +1157,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $newFinalArray['panelToSampleId'] = $postedData['panelToSampleId'];
                     $newFinalArray['level'] = 1;
                 } else {
-                    $newFinalArray['finalScore'] = $newFinal['finalScore'];
+                    $newFinalArray['agentScore'] = $postedData['agentScore'];
+
 
                 }
                 $insertStatus = $this->dbConnection->insertData($postedData['tableName'], $newFinalArray);
@@ -1112,11 +1242,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $dataArray = $this->returnArrayFromInput();
 
             if (is_array($dataArray)) {
-
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                 }
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array)$dataArray['where'], (array)$dataArray['updateData']);
+
 
             } else {
                 $data['message'] = ('could not find your request');

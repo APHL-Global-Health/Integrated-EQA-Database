@@ -28,7 +28,7 @@
                            name="dateTo"
                            bs-datepicker>
                 </div>
-                <div class="col-md-3 no-padding">
+                <div class="col-md-2 no-padding">
                     <input class="form-control input-sm" ng-init="reports.getCounties()"
                            ng-model="reports.whereLabResults.region"
                            id="region" name="region"
@@ -50,11 +50,19 @@
                            placeholder="Search grade" bs-typeahead
                     >
                 </div>
-                <div>
+                <div ng-controller="PdfController">
                     &nbsp;
                     <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
                             ng-click="reports.getLabPerformanceReport(reports.whereLabResults)">get report
                     </button>
+
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateLabPerformancePdf(reports.labPerformanceData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateLabPerformanceExcel(reports.labPerformanceData)"><i class="fa fa-file-excel-o"></i>
+                    </button>
+
                 </div>
 
             </table>
@@ -92,7 +100,7 @@
             <tr dir-paginate="lab in reports.labPerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
                 <td>{{$index+1}}</td>
                 <td>{{lab.labName}}</td>
-                <td>{{lab.labCode}}</td>
+                <td>{{lab.unique_identifier}}</td>
                 <td>{{lab.county}}</td>
                 <td>{{lab.batchName}}</td>
                 <td nowrap>{{lab.roundCode}}</td>

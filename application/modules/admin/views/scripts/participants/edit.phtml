@@ -7,14 +7,8 @@
           id="editParticipantForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "participants", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
             return false;">
         <fieldset>
-            <legend>Edit Participant (<?php echo ucwords($this->participant['status']); ?>)</legend>
+            <legend>Edit Laboratory (<?php echo ucwords($this->participant['status']); ?>)</legend>
 
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label"></label>
-                <div class="col-lg-8">
-                    <input type="checkbox" name="individualParticipant" id="individualParticipant" checked="checked" onclick="checkIndividualParticipant(this)"><b> Individual Participant</b>
-                </div>
-            </div>
 
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Participant ID <span class="mandatory">*</span></label>
@@ -248,12 +242,15 @@
 
                 <div class="col-lg-8">
                     <select name="network" id="network"  class="form-control isRequired" title="Please choose the network tier">
-                        <option value="">--Select--</option>
-                        <?php foreach ($this->networks as $nw) {
-                            ?>
-                            <option value="<?php echo $nw['network_id']; ?>" <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? "selected='selected'" : "" ?>><?php echo $nw['network_name']; ?></option>
-                        <?php }
-                        ?>
+
+                        <option value="">--Select Level--</option>
+
+                        <option value="level 1">level 1</option>
+                        <option value="level 2">level 2</option>
+                        <option value="level 3">level 3</option>
+                        <option value="level 4">level 4</option>
+                        <option value="level 5">level 5</option>
+                        <option value="level 6">level 6</option>
                     </select>
                 </div>
             </div>

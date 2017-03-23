@@ -57,7 +57,7 @@
                     <th>Round Code</th>
                     <th>Sample</th>
                     <th>organisms Score</th>
-                    <th>Susceptibility Score</th>
+                    <th>Agents Score</th>
 
                     <th>Grade</th>
                     <th>Date</th>
@@ -84,10 +84,14 @@
                     <td nowrap>{{sampleResponse.grade}}</td>
                     <td>{{samples.returnSubstring(sampleResponse.dateCreated,10)}}</td>
                     <td>{{sampleResponse.remarks}}</td>
-                    <td>
-                        <button class="label label-info"
+                    <td  ng-controller="PdfController">
+                        <button class="btn btn-warning btn-sm"
                                 ng-click="reports.showReponseFullInfo(sampleResponse)">
                             <i class="fa fa-eye"></i> view
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                ng-click="pdfMake.generateCorrectiveAction(sampleResponse,samples.loginDetails)">
+                            <i class="fa fa-print"></i>
                         </button>
                     </td>
                 </tr>
