@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `eptnew` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `eptnew`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: eptnew
@@ -2208,7 +2206,7 @@ CREATE TABLE `tbl_bac_micro_bacterial_agents` (
   `finalScore` varchar(45) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_sample_round_lab` (`roundId`,`sampleId`,`antiMicroAgent`,`participantId`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2217,7 +2215,7 @@ CREATE TABLE `tbl_bac_micro_bacterial_agents` (
 
 LOCK TABLES `tbl_bac_micro_bacterial_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_micro_bacterial_agents` VALUES (13,'ampicilin','yes',2,1,1,1,1,3,'1','2017-03-21 15:09:23',NULL,NULL,'1',1,0.00,'0','0','0','R'),(14,'colistin','yes',2,1,1,1,1,3,'1','2017-03-21 15:09:23',NULL,NULL,'1',1,0.00,'0','0','0','R'),(15,'cloxacilin','yes',2,1,1,1,1,3,'1','2017-03-21 15:09:23',NULL,NULL,'1',1,0.00,'0','0','0','R'),(18,'ampicilin','yes',10,1,2,1,1,4,'1','2017-03-21 15:17:08',NULL,NULL,'1',1,0.00,'0','0','0','I'),(19,'cloxacilin','yes',12,1,2,1,1,4,'1','2017-03-21 15:17:08',NULL,NULL,'1',1,0.00,'0','0','0','I');
+INSERT INTO `tbl_bac_micro_bacterial_agents` VALUES (18,'ampicilin','yes',10,1,2,1,1,4,'1','2017-03-21 15:17:08','1',NULL,'1',1,0.00,'0','0','0','I'),(19,'cloxacilin','yes',12,1,2,1,1,4,'1','2017-03-21 15:17:08','1',NULL,'1',1,0.00,'0','0','0','I'),(20,'ampicilin','yes',2,1,1,1,1,3,'1','2017-03-23 12:54:41','1',NULL,'1',1,0.00,'0','0','0','R'),(21,'colistin','yes',2,1,1,1,1,3,'1','2017-03-23 12:54:42','1',NULL,'1',1,0.00,'0','0','0','R'),(22,'cloxacilin','yes',2,1,1,1,1,3,'1','2017-03-23 12:54:42','1',NULL,'1',1,0.00,'0','0','0','R');
 /*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2430,7 +2428,7 @@ CREATE TABLE `tbl_bac_response_results` (
 
 LOCK TABLES `tbl_bac_response_results` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_response_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_response_results` VALUES (1,'1','1','1','1','3','2017-03-16 12:07:07',1,1,'0000-00-00 00:00:00','ampicilin',0,'0',0,'0',1,'0',0,'0',0,'0',0,'27',0,'ampicilin',0,1.00,'1','1','1',0,1,4.50,'UNACCEPTABLE','UNACCEPTABLE','Well Done',0,'1'),(5,'2','1','1','1','4','2017-03-16 17:31:10',1,1,'0000-00-00 00:00:00','amikacin',0,'27',0,'27',0,'27',0,'27',0,'27',0,'27',0,'amikacin',0,0.00,'1','1','1',0,1,0.88,'UNACCEPTABLE','UNACCEPTABLE','',1,'1');
+INSERT INTO `tbl_bac_response_results` VALUES (1,'1','1','1','1','3','2017-03-16 12:07:07',1,1,'0000-00-00 00:00:00','ampicilin',0,'0',0,'0',1,'0',0,'0',0,'0',0,'27',0,'ampicilin',0,1.00,'1','1','1',0,0,4.50,'UNACCEPTABLE','UNACCEPTABLE','Well Done',0,'1'),(5,'2','1','1','1','4','2017-03-16 17:31:10',1,1,'0000-00-00 00:00:00','amikacin',0,'27',0,'27',0,'27',0,'27',0,'27',0,'27',0,'amikacin',0,0.00,'1','1','1',0,0,0.88,'UNACCEPTABLE','UNACCEPTABLE','',1,'1');
 /*!40000 ALTER TABLE `tbl_bac_response_results` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2474,7 +2472,7 @@ CREATE TABLE `tbl_bac_rounds` (
 
 LOCK TABLES `tbl_bac_rounds` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_rounds` DISABLE KEYS */;
-INSERT INTO `tbl_bac_rounds` VALUES (1,'ROUND A 2017','ROUND/1/17','2017-03-14','2017-07-16',1,1,1,'2017-03-15 15:25:28',1,'2017-03-15 15:25:28','FIRST ROUND 2017',0,0,0,'1',NULL,1,1);
+INSERT INTO `tbl_bac_rounds` VALUES (1,'ROUND A 2017','ROUND/1/17','2017-03-14','2017-07-16',1,1,1,'2017-03-15 15:25:28',1,'2017-03-15 15:25:28','FIRST ROUND 2017',0,0,0,'1',NULL,1,0);
 /*!40000 ALTER TABLE `tbl_bac_rounds` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2507,6 +2505,52 @@ LOCK TABLES `tbl_bac_rounds_labs` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_rounds_labs` DISABLE KEYS */;
 INSERT INTO `tbl_bac_rounds_labs` VALUES (1,'1','1','2017-03-15 16:57:07','1',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tbl_bac_rounds_labs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_bac_sample_instructions`
+--
+
+DROP TABLE IF EXISTS `tbl_bac_sample_instructions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_bac_sample_instructions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `introduction` varchar(1000) DEFAULT NULL,
+  `scope` varchar(1000) DEFAULT NULL,
+  `proficiency` varchar(1000) DEFAULT NULL,
+  `surveyRequirement` varchar(1000) DEFAULT NULL,
+  `factorsInfluenceTesting` varchar(1000) DEFAULT NULL,
+  `selectionOfSample` varchar(1000) DEFAULT NULL,
+  `homogeneityAndStability` varchar(1000) DEFAULT NULL,
+  `clinicalDetails` varchar(1000) DEFAULT NULL,
+  `specialHandling` varchar(1000) DEFAULT NULL,
+  `specificEnvirons` varchar(1000) DEFAULT NULL,
+  `sampleDispatch` varchar(1000) DEFAULT NULL,
+  `returnInstructions` varchar(1000) DEFAULT NULL,
+  `sampleInstructions` varchar(1000) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` varchar(45) DEFAULT NULL,
+  `lastUpdatePerson` varchar(45) DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  `status` varchar(45) DEFAULT '1',
+  `sampleId` int(11) DEFAULT NULL,
+  `batchName` varchar(45) DEFAULT NULL,
+  `sampleReception` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_SAMPLEID` (`sampleId`),
+  KEY `INDEX_KEY` (`id`,`status`,`sampleId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_sample_instructions`
+--
+
+LOCK TABLES `tbl_bac_sample_instructions` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_sample_instructions` DISABLE KEYS */;
+INSERT INTO `tbl_bac_sample_instructions` VALUES (2,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.',NULL,'the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-22 17:11:50','1',NULL,NULL,'9',0,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(6,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','zxczxczxc','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:17:15','1','','0000-00-00 00:00:00','1',2,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(7,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','asdaSDasdasdAS','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:18:50','1','1','0000-00-00 00:00:00','1',1,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.');
+/*!40000 ALTER TABLE `tbl_bac_sample_instructions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2550,7 +2594,7 @@ CREATE TABLE `tbl_bac_sample_to_panel` (
 
 LOCK TABLES `tbl_bac_sample_to_panel` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_sample_to_panel` DISABLE KEYS */;
-INSERT INTO `tbl_bac_sample_to_panel` VALUES (1,1,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-17',NULL,0,NULL,1,1,0,NULL,NULL,'null','0'),(2,2,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-10',NULL,0,NULL,1,1,0,NULL,NULL,'null','0'),(3,1,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-10',1,0,1,1,1,1,'received okay',NULL,'null','0'),(4,2,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-10',1,0,1,1,1,1,'received okay',NULL,'null','0');
+INSERT INTO `tbl_bac_sample_to_panel` VALUES (1,1,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-17',NULL,0,NULL,1,1,0,NULL,NULL,'null','0'),(2,2,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-19',NULL,0,NULL,1,1,0,NULL,NULL,'null','0'),(3,1,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-19',1,0,1,1,1,1,'received okay',NULL,'null','0'),(4,2,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-19',1,0,1,1,1,1,'received okay',NULL,'null','0');
 /*!40000 ALTER TABLE `tbl_bac_sample_to_panel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2650,7 +2694,7 @@ CREATE TABLE `tbl_bac_samples_to_users` (
 
 LOCK TABLES `tbl_bac_samples_to_users` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_samples_to_users` DISABLE KEYS */;
-INSERT INTO `tbl_bac_samples_to_users` VALUES (1,1,1,3,'2017-03-16 11:28:38','2017-03-16 11:28:38','1','1',NULL,NULL,1,'1','1',NULL,NULL,1,1,1,5,'UNACCEPTABLE','UNACCEPTABLE',1,'1'),(2,1,2,4,'2017-03-16 17:29:50','2017-03-16 17:29:50','1','1',NULL,NULL,1,'1','1',NULL,NULL,1,1,0,1,'UNACCEPTABLE','UNACCEPTABLE',0,'1');
+INSERT INTO `tbl_bac_samples_to_users` VALUES (1,1,1,3,'2017-03-16 11:28:38','2017-03-16 11:28:38','1','1',NULL,NULL,1,'1','1',NULL,NULL,1,1,1,5,'UNACCEPTABLE','UNACCEPTABLE',1,'1'),(2,1,2,4,'2017-03-16 17:29:50','2017-03-16 17:29:50','1','1',NULL,NULL,1,'1','1',NULL,NULL,1,1,0,1,'UNACCEPTABLE','UNACCEPTABLE',1,'1');
 /*!40000 ALTER TABLE `tbl_bac_samples_to_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2816,7 +2860,7 @@ CREATE TABLE `tbl_bac_suscepitibility` (
 
 LOCK TABLES `tbl_bac_suscepitibility` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_suscepitibility` DISABLE KEYS */;
-INSERT INTO `tbl_bac_suscepitibility` VALUES (1,1,1,1,3,'2017-03-16 12:16:32','1','1','0000-00-00 00:00:00',1,'0','0','0','0','0','HUQAS',1),(4,1,1,2,4,'2017-03-16 17:31:21','1','1','0000-00-00 00:00:00',1,'amikacin','slide','glass','smk','smk','HUQAS',1);
+INSERT INTO `tbl_bac_suscepitibility` VALUES (1,1,1,1,3,'2017-03-16 12:16:32','1','1','0000-00-00 00:00:00',1,'0','0','0','0','0','CLSI',1),(4,1,1,2,4,'2017-03-16 17:31:21','1','1','0000-00-00 00:00:00',1,'amikacin','slide','glass','smk','smk','HUQAS',1);
 /*!40000 ALTER TABLE `tbl_bac_suscepitibility` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2852,6 +2896,36 @@ LOCK TABLES `tbl_bac_test_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_test_agents` DISABLE KEYS */;
 INSERT INTO `tbl_bac_test_agents` VALUES (1,'amikacin','501','3',10,100,1000,'1','1','2017-03-15 14:50:01',NULL,NULL),(2,'colistin','702','3',20,500,1500,'1','1','2017-03-15 14:50:36',NULL,NULL),(3,'ampicilin','502','3',100,1000,5000,'1','1','2017-03-15 14:51:06',NULL,NULL),(5,'cloxacilin','520','3',55,155,250,'1','1','2017-03-15 14:52:27',NULL,NULL);
 /*!40000 ALTER TABLE `tbl_bac_test_agents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_bac_test_types`
+--
+
+DROP TABLE IF EXISTS `tbl_bac_test_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_bac_test_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `testName` varchar(45) DEFAULT NULL,
+  `testDesc` varchar(45) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` varchar(45) DEFAULT NULL,
+  `status` varchar(45) DEFAULT '1',
+  `lastUpdatePerson` varchar(45) DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_test_types`
+--
+
+LOCK TABLES `tbl_bac_test_types` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_test_types` DISABLE KEYS */;
+INSERT INTO `tbl_bac_test_types` VALUES (2,'ID testing','Identification','2017-03-22 15:17:21','1','1',NULL,NULL);
+/*!40000 ALTER TABLE `tbl_bac_test_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2893,4 +2967,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-22 14:34:44
+-- Dump completed on 2017-03-23 17:40:47

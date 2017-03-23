@@ -329,12 +329,6 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             footer: function (page, pages) {
                 return {
 
-                    text: [{
-                        
-                        text: "_______________________________________________________________________________________________",
-                        margin: [0, 0, 0, 5]
-
-                    }],
                     columns: [
                         {
                             text: 'ABNO Softwares International',
