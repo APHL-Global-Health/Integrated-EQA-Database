@@ -204,16 +204,16 @@
                     </div>
 
                     <div class="form-group "
-                         ng-class="{ 'has-error'  : instructionsData.sampleReception.$invalid && !instructionsData.sampleReception.$pristine }">
+                         ng-class="{ 'has-error'  : instructionsData.sampleInstructions.$invalid && !instructionsData.sampleInstructions.$pristine }">
                         <label class="col-2 col-form-label">i). sample reception</label>
                         <div class="col-10">
                     <textarea textarea rows="8" cols="50" class="form-control" required=""
-                              ng-model="samples.instructionsFormData.sampleReception"
-                              name="sampleReception" ng-pattern="">
+                              ng-model="samples.instructionsFormData.sampleInstructions"
+                              name="sampleInstructions" ng-pattern="">
 
                     </textarea>
                             <small class="text-danger col-md-12"
-                                   ng-show="instructionsData.sampleReception.$invalid && !instructionsData.sampleReception.$pristine">
+                                   ng-show="instructionsData.sampleInstructions.$invalid && !instructionsData.sampleInstructions.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                             </small>
 

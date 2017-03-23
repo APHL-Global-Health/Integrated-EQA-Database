@@ -200,7 +200,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->daysLeft = $this->converttodays($round['endDate']);
 
 
-                $sampleInfo=$this->returnSampleInfo($value->panelToSampleId);
+                $sampleInfo = $this->returnSampleInfo($value->panelToSampleId);
                 $data[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
                 $data[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
 
@@ -657,9 +657,13 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $susceptibility = $this->returnValueWhere($where, 'tbl_bac_suscepitibility');
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
 
+
         $data['results'] = $results;
         $data['susceptibility'] = $susceptibility;
         $data['microAgents'] = $microAgents;
+        $postedWhere['sampleId'] = $postedData['sampleId'];
+        $data['sampleInstructions'] = $this->returnSampleInstructions($postedWhere);
+
         if ($microAgents != false) {
             foreach ($microAgents as $key => $value) {
 
@@ -1008,7 +1012,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
 
         $orderArray = ['id', 'dateCreated'];
-        $col = ['id', 'participantId', 'roundId', 'sampleId', 'remarks','grade', 'adminRemarks', 'correctiveAction', 'dateCreated'];
+        $col = ['id', 'participantId', 'roundId', 'sampleId', 'remarks', 'grade', 'adminRemarks', 'correctiveAction', 'dateCreated'];
 
         $groupArray = ['id'];
 

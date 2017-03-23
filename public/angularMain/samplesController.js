@@ -2597,6 +2597,7 @@
         //+++++++++++++++++++++++++++++++++++++++++++++++++RETURN RESULTS+++++++++++++++++++++++++++++++++++++++++++++++
         //==============================================================================================================
         $scope.samples.microagentsData = {};
+        $scope.samples.sampleInstructions ={};
         $scope.samples.showAddResponse = function (sample, type) {
             console.log(sample)
             $scope.samples.currentSampleForResponse = sample;
@@ -2620,6 +2621,7 @@
                             $scope.samples.userFeedbackFormData = response.data.results;
                             $scope.samples.susceptibilityFormData = response.data.susceptibility;
                             $scope.samples.resultFields = response.data.microAgents;
+                            $scope.samples.sampleInstructions =response.data.sampleInstructions;
                         }
                     })
                     .error(function (error) {

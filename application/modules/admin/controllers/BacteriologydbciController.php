@@ -736,7 +736,23 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         } else {
             echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
         }
+//        return $sampleInstructions;
         exit;
+    }
+
+    public function returnSampleInstructions($postedData)
+    {
+
+        $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
+
+        if (sizeof($sampleInstructions) == 0) {
+            $where['status'] = 9;
+
+            $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
+
+        }
+        return $sampleInstructions;
+
     }
 
     public function getdistinctshipmentsAction()

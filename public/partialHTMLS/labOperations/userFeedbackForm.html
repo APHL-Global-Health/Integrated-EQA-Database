@@ -1,11 +1,93 @@
 <div class="col-md-12">
-    <h3><u>MICROBIOLOGY IDENTIFICATION REPORT FORM</u>
+    <h3><u>MICROBIOLOGY  FEEDBACK FORM ({{samples.currentSampleForResponse.batchName}})</u>
         <i class="fa fa-spin {{samples.savingSpinner}}"></i>
         <button ng-click="samples.samplesActivePage('addResults','1')"
                 class="btn btn-sm btn-danger pull-right">
             <i class="fa fa-close"></i> cancel
         </button>
     </h3>
+    <h4 class="text-center"><b>INSTRUCTIONS TO PARTICIPANT – BACTERIOLOGY</b></h4>
+    <table class="table text-capitalize">
+        <tr>
+            <td>
+                <h4><b>A)   INTRODUCTION</b></h4>
+                <p class=''>{{samples.sampleInstructions.introduction}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>B)   SCOPE</b></h4>
+                <p class=''>{{samples.sampleInstructions.scope}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>C)   PROFICIENCY TEST ITEM - TREATMENT AND ANALYSIS</b></h4>
+                <p class=''>{{samples.sampleInstructions.proficiency}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>D)	SURVEY REQUIREMENT</b></h4>
+                <p class=''>{{samples.sampleInstructions.surveyRequirement}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>E)	FACTORS THAT COULD INFLUENCE THE TESTING i.e.
+                    NATURE OF THE PT ITEMS, CONDITIONS OF STORAGE, WHETHER THE PTS IS LIMITED TO SELECTED METHODS AND TIMING OF THE PT ITEM</b></h4>
+                <p class=''>{{samples.sampleInstructions.factorsInfluenceTesting}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>F)	SELECTION OF SAMPLE</b></h4>
+                <p class=''>{{samples.sampleInstructions.selectionOfSample}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>G)	HOMOGENEITY AND STABILITY</b></h4>
+                <p class=''>{{samples.sampleInstructions.homogeneityAndStability}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>H)	CLINICAL DETAILS AND SAMPLE PREPARATION</b></h4>
+                <p class=''>{{samples.sampleInstructions.clinicalDetails}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>I)	SPECIAL HANDLING INSTRUCTIONS AND SAFETY REQUIREMENTS</b></h4>
+                <p class=''>{{samples.sampleInstructions.specialHandling}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>J)	SPECIFIC ENVIRONMENTAL CONDITIONS</b></h4>
+                <p class=''>{{samples.sampleInstructions.specificEnvirons}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>K)	SAMPLE DISPATCH NOTIFICATIONS AND ACTIONS TO BE TAKEN IF SAMPLE WAS NOT RECEIVED.</b></h4>
+                <p class=''>{{samples.sampleInstructions.sampleDispatch}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>L)	INSTRUCTIONS ON RETURNING OF PROFICIENCY TEST RESULTS.</b></h4>
+                <p class=''>{{samples.sampleInstructions.returnInstructions}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4><b>M)	SAMPLE RECEPTION</b></h4>
+                <p class=''>{{samples.sampleInstructions.sampleInstructions}}</p>
+            </td>
+        </tr>
+    </table>
     <div class="">
         <table class="table table-bordered">
             <thead class="btn-primary">
@@ -141,10 +223,10 @@
             <tr>
                 <td width="30%">
                     <div class="col-md-12 no-padding">
-                        <button class="btn btn-warning col-md-12"
-                                ng-click="samples.userFeedbackFormData =''"
-                        >Reset
-                        </button>
+                        <!--<button class="btn btn-warning col-md-12"-->
+                                <!--ng-click="samples.userFeedbackFormData =''"-->
+                        <!--&gt;Reset-->
+                        <!--</button>-->
                     </div>
                 </td>
                 <td width="70%">
@@ -250,7 +332,7 @@
                 <td width="70%">
                     <select class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
 
-                           ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
+                            ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
                         <option selected disabled>--SELECT GUIDELINE--</option>
                         <option value="CLSI">CLSI</option>
                         <option value="HUQAS">HUQAS</option>
@@ -261,10 +343,10 @@
             <tr>
                 <td width="30%">
                     <div class="col-md-12 no-padding">
-                        <button class="btn btn-warning col-md-12"
-                                ng-click="samples.susceptibilityFormData =''"
-                        >Reset
-                        </button>
+                        <!--<button class="btn btn-warning col-md-12"-->
+                                <!--ng-click="samples.susceptibilityFormData =''"-->
+                        <!--&gt;Reset-->
+                        <!--</button>-->
                     </div>
                 </td>
                 <td width="70%">
@@ -348,13 +430,16 @@
                            ng-pattern="samples.numericOnly"
                            ng-model="fields.diskContent"></td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="S"  name="score{{$index}}" ng-model="fields.finalScore">
+                    <input type="radio" class="form-control" ng-change="" value="S" name="score{{$index}}"
+                           ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <input type="radio" class="form-control" ng-change=""   value="I" name="score{{$index}}"  ng-model="fields.finalScore">
+                    <input type="radio" class="form-control" ng-change="" value="I" name="score{{$index}}"
+                           ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"  ng-model="fields.finalScore">
+                    <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"
+                           ng-model="fields.finalScore">
                 </td>
                 <td ng-init="samples.resultActiveFields=fields">
                     <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
@@ -367,10 +452,10 @@
             <tr>
                 <td>
                     <div class="col-md-12 no-padding">
-                        <button class="btn btn-warning col-md-12"
-                                ng-click="samples.susceptibilityFormData =''"
-                        >Reset
-                        </button>
+                        <!--<button class="btn btn-warning col-md-12"-->
+                                <!--ng-click="samples.susceptibilityFormData =''"-->
+                        <!--&gt;Reset-->
+                        <!--</button>-->
                     </div>
                 </td>
                 <td>
@@ -391,7 +476,8 @@
             </tbody>
         </table>
 
-        <div class="btn btn-warning col-md-12" ng-click="samples.saveUserBothResponse(amples.resultFields,samples.susceptibilityFormData)"
+        <div class="btn btn-primary col-md-12" ng-disabled="true"
+             ng-click="samples.saveUserBothResponse(amples.resultFields,samples.susceptibilityFormData)"
              ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
             Save Both
         </div>
