@@ -4,9 +4,7 @@
         <div class="panel panel-default">
             <div class="panel panel-heading ">
                 <h5>
-                    <x ng-show="samples.instructionsFormData.id > 0">Edit {{samples.instructionsFormData.batchName}}</x>
-                    <x ng-hide="samples.instructionsFormData.id > 0">Add</x>
-                    Sample Instructions -({{samples.instructionSample.batchName}})
+                    <x >Edit Sample Instructions -({{samples.instructionSample.batchName}})  <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                     <div class="label btn label-default pull-right"
                          ng-click="samples.emptyFormData('tbl_bac_samples',0)">
                         <i class="fa fa-close"></i> Cancel
@@ -123,9 +121,10 @@
 
 
 
-                                    <textarea rows="8" cols="50" class="form-control">
+                                    <textarea rows="8" cols="50" class="form-control" required=""
+                                              ng-model="samples.instructionsFormData.homogeneityAndStability">
                                     </textarea>
-                               
+
                                 <small class="text-danger col-md-12"
                                        ng-show="instructionsData.homogeneityAndStability.$invalid && !instructionsData.homogeneityAndStability.$pristine">
                                     Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -155,7 +154,8 @@
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.specialHandling.$invalid && !instructionsData.specialHandling.$pristine }">
-                        <label class="col-2 col-form-label">i). special handling instructions and safety requirements</label>
+                        <label class="col-2 col-form-label">i). special handling instructions and safety
+                            requirements</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" required="" class="form-control"
                                       ng-model="samples.instructionsFormData.specialHandling"
@@ -221,13 +221,14 @@
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.returnInstructions.$invalid && !instructionsData.returnInstructions.$pristine }">
-                        <label class="col-2 col-form-label">m). instructions on returning of proficiency test results</label>
+                        <label class="col-2 col-form-label">m). instructions on returning of proficiency test
+                            results</label>
                         <div class="col-10">
-                    <textarea textarea rows="8" cols="50" class="form-control" required=""
-                              ng-model="samples.instructionsFormData.returnInstructions"
-                              name="returnInstructions" ng-pattern="">
+                            <textarea textarea rows="8" cols="50" class="form-control" required=""
+                                      ng-model="samples.instructionsFormData.returnInstructions"
+                                      name="returnInstructions" ng-pattern="">
 
-                    </textarea>
+                            </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.returnInstructions.$invalid && !instructionsData.returnInstructions.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -243,7 +244,7 @@
                         <div class="col-10">
 
                             <button class="btn btn-primary col-md-12"
-                                    ng-click="samples.saveSampleFormData('tbl_bac_sample_instructions',samples.instructionsFormData)"
+                                    ng-click="samples.saveSampleInstructions('tbl_bac_sample_instructions',samples.instructionsFormData)"
                                     ng-disabled="instructionsData.$invalid || samples.savingInProgress"
                             >Save Instructions<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                             </button>
@@ -255,7 +256,7 @@
                         <div class="col-10">
 
                             <button class="btn btn-danger col-md-12"
-                                    ng-click="samples.emptyFormData('tbl_bac_sample_instructions',0)"
+                                    ng-click="samples.emptyFormData('tbl_bac_samples',0)"
                             >Cancel</i>
                             </button>
                         </div>

@@ -1134,6 +1134,8 @@
                                         if (response.data.status == 1) {
                                             emptyFormData(tableName, false);
                                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                        }else{
+                                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
                                         }
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
@@ -2718,10 +2720,59 @@
         }
 
         $scope.samples.instructionsFormData = {};
+        $scope.samples.currentRetrievedSampleId ='';
+        var currentRetrievedSampleId='';
+        $scope.samples.saveSampleInstructions = function (tableName, formData) {
+
+            if (formData.sampleId ===  formData.currentId) {
+                var postedData = {};
+
+                delete formData.id;
+                delete formData.status;
+                delete formData.currentId;
+                delete formData.dateCreated;
+
+                postedData.updateData = formData;
+
+                postedData.tableName = tableName;
+                postedData.where = {
+                    sampleId: formData.sampleId
+                }
+
+                $scope.samples.updateWhere(postedData);
+
+            } else {
+                delete formData.id;
+                delete formData.status;
+                delete formData.dateCreated;
+                delete formData.currentId;
+                $scope.samples.saveSampleFormData('tbl_bac_sample_instructions', formData)
+            }
+        }
         $scope.samples.addSampleInstructions = function (sample) {
             $scope.samples.instructionSample = sample;
             $scope.samples.instructionsFormData.sampleId = sample.id;
             $scope.samples.instructionsFormData.batchName = sample.batchName;
+            var where = {
+                sampleId: sample.id
+            }
+            var url = serverSamplesURL + 'getsampleinstructions';
+            $scope.samples.loaderProgressSpinner = 'fa-spinner'
+            $scope.samples.instructionsFormData = {};
+            $http.post(url, where)
+                .success(function (data) {
+                    $scope.samples.loaderProgressSpinner = ''
+                    if (data.status == 1) {
+
+                        $scope.samples.instructionsFormData = data.data;
+                        $scope.samples.instructionsFormData.sampleId = sample.id;
+                        $scope.samples.instructionsFormData.batchName = sample.batchName;
+                    }
+
+                })
+                .error(function (error) {
+                    $scope.samples.loaderProgressSpinner = ''
+                })
             $scope.samples.samplesActivePage('addSampleInstructions', 0);
         }
 

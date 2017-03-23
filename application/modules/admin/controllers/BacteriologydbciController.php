@@ -412,7 +412,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
     public function returnValueWhere($id, $tableName)
     {
-        $returnArray = '';
+        $returnArray = [];
         if (!is_array($id)) {
             if ($tableName == 'data_manager') {
                 $whereId['dm_id'] = $id;
@@ -712,6 +712,31 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             }
         }
         return $array;
+    }
+
+    public function getsampleinstructionsAction()
+    {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array)(json_decode($postedData));
+
+        $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
+
+        if (sizeof($sampleInstructions) == 0) {
+            $where['status'] = 9;
+
+            $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
+
+        }
+
+        if (sizeof($sampleInstructions) > 0) {
+            $sampleInstructions['currentId'] = $sampleInstructions['sampleId'];
+            unset($sampleInstructions['batchName']);
+            echo $this->returnJson(array('status' => 1, 'data' => $sampleInstructions));
+
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
+        }
+        exit;
     }
 
     public function getdistinctshipmentsAction()
