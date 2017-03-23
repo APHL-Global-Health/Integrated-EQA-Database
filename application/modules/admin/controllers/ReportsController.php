@@ -70,7 +70,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->batchName = $sampleName['batchName'];
                 $data[$key]->roundName = $round['roundName'];
                 $data[$key]->roundCode = $round['roundCode'];
-
+                $data[$key]->startDate = $round['startDate'];
+                $data[$key]->endDate = $round['endDate'];
                 $deliveryDetails = $this->returnValueWhere($value->panelToSampleId, 'tbl_bac_sample_to_panel');
 
                 $data[$key]->dateDelivered = $deliveryDetails['dateDelivered'];

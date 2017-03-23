@@ -1,6 +1,6 @@
 var pdfModule = angular.module('ReportModule')
 
-pdfModule.controller('PdfController', function ($scope, EptServices) {
+pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL) {
     $scope.pdfMake = {};
 
 
@@ -124,8 +124,6 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
     }
 
 
-    //Sample Report
-
     $scope.pdfMake.generateCorrectiveActionPdf = function (data) {
         var reportData = new Array();
         var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto']
@@ -161,13 +159,277 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
             var reportSubHeader = 'CORRECTIVE ACTION REPORT';
-            var reportTitle = 'NPHL Microbiology Reporting';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
+    $scope.pdfMake.userFeedbackResults = {};
+    var alerts = '';
+    $scope.pdfMake.userResponseGeneratorPdf = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader, dataDetails) {
+        // var schoolName = '@Session["SchoolName"]';
 
+        var docDefinition = {
+            styles: {
+                header: {
+                    fontSize: 12,
+                    bold: true,
+                },
+
+                subHeader: {
+                    fontSize: 10,
+                    bold: true,
+
+                },
+                contentHeader: {
+
+                    bold: true,
+
+                },
+                content: {
+                    fontSize: 8,
+                    bold: false,
+                },
+
+                numeric: {
+                    alignment: 'right'
+                },
+
+                centerData: {
+                    alignment: 'center'
+                }, leftData: {
+                    alignment: 'left'
+                }
+            },
+
+            content: [
+                //{
+                //    image: schoolLogo,
+                //    width: 60,
+                //    style: ['centerData'],
+                //    margin: [0, 0, 0, 5]
+                //},
+                {text: 'Nation Public Health Laboratories'.toUpperCase(), style: ['header', 'centerData']},
+                {text: reportHeader, style: ['content', 'centerData'], margin: [0, 0, 0, 5]},
+
+                {text: 'P.O BOX 145-00100,Nairobi', style: ['content', 'centerData']},
+                {text: 'info@nphl.co.ke', style: ['content', 'centerData']},
+                {
+                    text: 'www.nphl.or.ke',
+                    link: "http://www.nphl.or.ke",
+                    style: ['content', 'centerData'],
+                    fillColor: 'yellow',
+                    decoration: "underline"
+                },
+                {text: reportTitle, style: ['subHeader', 'centerData'], margin: [0, 5, 0, 0]},
+                // {text:"Google", link:"http://www.google.com", decoration:"underline",fillColor: 'blue', margin: [0, 5, 0, 0]},
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Laboratory Name : ' + dataDetails.lab.institute_name,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Laboratory Unique Identifier : ' + dataDetails.lab.unique_identifier,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {text: 'County : ' + dataDetails.lab.region, style: ['content', 'leftData'], margin: [0, 0, 0, 5]},
+                {text: 'Address : ' + dataDetails.lab.address, style: ['content', 'leftData'], margin: [0, 0, 0, 5]},
+                {text: 'Email : ' + dataDetails.lab.email, style: ['content', 'leftData'], margin: [0, 0, 0, 5]},
+                {text: 'Mobile : ' + dataDetails.lab.mobile, style: ['content', 'leftData'], margin: [0, 0, 0, 5]},
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Round Of Testing : ' + dataDetails.sampleDetails.roundName,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Round Code : ' + dataDetails.sampleDetails.roundCode,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Start Of Round  : ' + dataDetails.sampleDetails.startDate + ' - End Of Round  : ' +
+                    dataDetails.sampleDetails.endDate, style: ['content', 'leftData'], margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Sample : ' + dataDetails.sampleDetails.batchName,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ',Your score ' + dataDetails.results.grainStainReactionScore,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ',Your score ' + dataDetails.results.finalIdentificationScore,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Micro Agents Used : ' + dataDetails.microAgents.length + ',Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Total Score : ' + (Number(dataDetails.results.finalScore) + Number(dataDetails.results.totalMicroAgentsScore)),
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Remarks : ' + dataDetails.results.remarks,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {text: 'Grade : ' + dataDetails.results.grade, style: ['content', 'leftData'], margin: [0, 0, 0, 5]},
+                {
+                    text: 'Recommedations : ' + dataDetails.results.adminRemarks,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Date : ' + dataDetails.results.dateCreated,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {text: 'CORRECTIVE ACTION', style: ['subHeader', 'leftData'], margin: [0, 0, 0, 5]},
+                {
+                    text: 'CORRECTIVE ACTION  : ' + dataDetails.results.correctiveAction == 0 ? 'Corrective action should be taken ' : 'N/A'
+                    , style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+
+
+            ],
+
+            footer: function (page, pages) {
+                return {
+
+                    text: [{
+                        
+                        text: "_______________________________________________________________________________________________",
+                        margin: [0, 0, 0, 5]
+
+                    }],
+                    columns: [
+                        {
+                            text: 'ABNO Softwares International',
+                            style: ['content']
+                        },
+                        {
+                            alignment: 'right',
+                            text: [
+                                {text: 'Page: ' + page.toString(), style: ['content']},
+                                {text: ' of ', italics: true, style: ['content']},
+                                {text: pages.toString(), style: ['content']},
+                            ],
+                        },
+                    ],
+                    margin: [40, 10, 40, 0]
+                }
+            },
+        }
+
+        pdfMake.createPdf(docDefinition).open();
+
+    }
+    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails) {
+        try {
+            var url = serverReportURL + 'getlabuserresponse';
+            alerts = $.alert({
+                title: "<i class='fa fa-spin fa-spinner text-success'></i> Fetching data",
+                content: "please wait..."
+            });
+            $http.post(url, samples)
+                .success(function (response) {
+                    console.log(response);
+                    alerts.close();
+                    if (response.status == 1) {
+                        response.data.sampleDetails = samples;
+                        createUserResponseData(response.data, labDetails)
+                        $scope.pdfMake.userFeedbackResults = response.data;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function () {
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    //Sample Report
+    function returnGradeDetails(microScore) {
+        var reportData = new Array();
+
+        var reportHeader =
+            [
+                {text: ' # ', style: 'subHeader'},
+                {text: 'Gram Stain', style: 'subHeader'},
+                {text: 'Gram Stain Score', style: 'subHeader'},
+                {text: 'Grade', style: 'subHeader'},
+
+
+            ];
+
+        reportData.push(reportHeader);
+
+        for (var i = 0; i < 1; i++) {
+            var rowData = [
+                {text: '' + (i + 1), style: ['content']},
+                {text: ' ' + microScore.grainStainReaction, style: ['content']},
+                {text: ' ' + microScore.grainStainReactionScore, style: ['content']},
+                {text: ' ' + microScore.grade, style: ['content']}
+
+            ];
+
+            reportData.push(rowData);
+            return reportData;
+        }
+    }
+
+    function createUserResponseData(data, labDetails) {
+        var tableWidth1 = ['auto', '*', '*', '*']
+
+        var reportData = returnGradeDetails(data.results);
+        console.log(reportData)
+        var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
+        var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
+
+        data.lab = labDetails
+        $scope.pdfMake.userResponseGeneratorPdf(reportSubHeader, reportData, tableWidth1, reportTitle, data);
+        alerts = $.alert({
+            title: "<i class='fa fa-check text-success'></i> Success",
+            content: "PDF Generated successfully"
+        });
+
+
+    }
 
     $scope.pdfMake.generateShipmentPdf = function (data) {
         var reportData = new Array();
@@ -204,7 +466,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
             var reportSubHeader = 'SHIPMENT RECEIVING REPORT';
-            var reportTitle = 'NPHL Microbiology Reporting';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -252,7 +514,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
             var reportSubHeader = 'PARTICIPATORY REPORT';
-            var reportTitle = 'NPHL Microbiology Reporting';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -301,7 +563,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
             var reportSubHeader = 'LABORATORY PERFORMANCE REPORT';
-            var reportTitle = 'NPHL Microbiology Reporting';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -351,7 +613,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices) {
 
 
             var reportSubHeader = 'ROUND PERFORMANCE REPORT';
-            var reportTitle = 'NPHL Microbiology Reporting';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
