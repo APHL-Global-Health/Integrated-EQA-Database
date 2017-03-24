@@ -869,11 +869,11 @@
             try {
 
                 var tempPanel = panelId;
-                panelId = angular.isObject(panelId) ? panelId.id : panelId;
-                if (isNumeric(panelId)) {
+                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+                if (isNumeric(panId)) {
                     try {
 
-                        var where = {panelId: panelId};
+                        var where = {panelId: panId};
 
                         if (angular.isObject(tempPanel)) {
                             where = {
@@ -884,22 +884,22 @@
                         }
 
 
-                        if ($scope.samples.clickedPanel !== panelId || tableName == 'tbl_bac_sample_to_panel') {
+                        if ($scope.samples.clickedPanel !== panId || tableName == 'tbl_bac_sample_to_panel') {
 
-                            if ($scope.samples.clickedPanel !== panelId) {
+                            if ($scope.samples.clickedPanel !== panId) {
                                 $scope.samples.panelArrowDown = true;
                             } else {
                                 $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
 
                             }
-
+                            console.log(tempPanel);
 
                             $scope.samples.getAllSamples(tableName, where);
 
 
                             console.log('Called')
                         } else {
-                            console.log('unknown tabke name')
+                            console.log('unknown table name')
                         }
 
 
@@ -907,7 +907,7 @@
                         console.log(Exc);
                     }
                 }
-                $scope.samples.clickedPanel = panelId;
+                $scope.samples.clickedPanel = panId;
 
             }
             catch (error) {
@@ -1134,7 +1134,7 @@
                                         if (response.data.status == 1) {
                                             emptyFormData(tableName, false);
                                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
-                                        }else{
+                                        } else {
                                             EptServices.EptServiceObject.returnActionUnSuccessAlert();
                                         }
                                     } else {
@@ -2597,7 +2597,7 @@
         //+++++++++++++++++++++++++++++++++++++++++++++++++RETURN RESULTS+++++++++++++++++++++++++++++++++++++++++++++++
         //==============================================================================================================
         $scope.samples.microagentsData = {};
-        $scope.samples.sampleInstructions ={};
+        $scope.samples.sampleInstructions = {};
         $scope.samples.showAddResponse = function (sample, type) {
             console.log(sample)
             $scope.samples.currentSampleForResponse = sample;
@@ -2621,7 +2621,7 @@
                             $scope.samples.userFeedbackFormData = response.data.results;
                             $scope.samples.susceptibilityFormData = response.data.susceptibility;
                             $scope.samples.resultFields = response.data.microAgents;
-                            $scope.samples.sampleInstructions =response.data.sampleInstructions;
+                            $scope.samples.sampleInstructions = response.data.sampleInstructions;
                         }
                     })
                     .error(function (error) {
@@ -2722,11 +2722,11 @@
         }
 
         $scope.samples.instructionsFormData = {};
-        $scope.samples.currentRetrievedSampleId ='';
-        var currentRetrievedSampleId='';
+        $scope.samples.currentRetrievedSampleId = '';
+        var currentRetrievedSampleId = '';
         $scope.samples.saveSampleInstructions = function (tableName, formData) {
 
-            if (formData.sampleId ===  formData.currentId) {
+            if (formData.sampleId === formData.currentId) {
                 var postedData = {};
 
                 delete formData.id;
