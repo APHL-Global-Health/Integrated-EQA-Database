@@ -167,7 +167,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
     }
     $scope.pdfMake.userFeedbackResults = {};
     var alerts = '';
-    $scope.pdfMake.userResponseGeneratorPdf = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader, dataDetails) {
+    $scope.pdfMake.userResponseGeneratorPdf = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader, dataDetails,microAgents) {
         // var schoolName = '@Session["SchoolName"]';
 
         var docDefinition = {
@@ -281,7 +281,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Micro Agents Used : ' + dataDetails.microAgents.length + ',Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : '+microAgents.toString()+' | Your score ' + dataDetails.results.totalMicroAgentsScore,
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -378,7 +378,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         }
     }
     //Sample Report
-    function returnGradeDetails(microScore) {
+    function returnGradeDetails(microScore, microAgents) {
         var reportData = new Array();
 
         var reportHeader =
@@ -403,20 +403,36 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             ];
 
             reportData.push(rowData);
-            return reportData;
+
         }
+
+        var allData = {}
+        allData.reportData = reportData;
+        var microAst = [];
+
+        for (var j = 0; j < microAgents.length; j++) {
+
+            microAst.push(microAgents[j].antiMicroAgent+' - '+microAgents[j].finalScore);
+
+        }
+        allData.reportData = reportData;
+        allData.microAgents = microAst;
+        return allData;
     }
 
     function createUserResponseData(data, labDetails) {
         var tableWidth1 = ['auto', '*', '*', '*']
 
-        var reportData = returnGradeDetails(data.results);
-        console.log(reportData)
+        var allData = returnGradeDetails(data.results, data.microAgents);
+        console.log(allData)
+        var reportData = allData.reportData;
+        var microAgents = allData.microAgents;
+
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
         data.lab = labDetails
-        $scope.pdfMake.userResponseGeneratorPdf(reportSubHeader, reportData, tableWidth1, reportTitle, data);
+        $scope.pdfMake.userResponseGeneratorPdf(reportSubHeader, reportData, tableWidth1, reportTitle, data,microAgents);
         alerts = $.alert({
             title: "<i class='fa fa-check text-success'></i> Success",
             content: "PDF Generated successfully"
