@@ -600,7 +600,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
             $where = $postedData['where'];
             $where = (array)($where);
-            if ($tableName == 'tbl_bac_sample_to_panel' ||$tableName=='tbl_bac_samples_to_users') {
+            if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_samples_to_users') {
                 $userdetails = $this->returnUserLabDetails();
                 if (!$userdetails) {
                     echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
@@ -610,8 +610,8 @@ class BacteriologydbciController extends Zend_Controller_Action
                 }
                 $participantId = $userdetails['participant_id'];
 
-                $dataDB = $this->dbConnection->selectFromDStatusTableSamples($tableName, $where,$participantId);
-            }else{
+                $dataDB = $this->dbConnection->selectFromDStatusTableSamples($tableName, $where, $participantId);
+            } else {
                 $dataDB = $this->dbConnection->selectFromDStatusTable($tableName, $where);
             }
 
@@ -1466,8 +1466,14 @@ class BacteriologydbciController extends Zend_Controller_Action
         $orderArray = ['id', 'dateCreated'];
 
         $groupArray = ['id'];
+        $userDetails = $this->returnUserLabDetails();
+        if (!$userDetails) {
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
+            exit;
+        } else {
+            $postedData['participantId'] = $userDetails['participant_id'];
 
-
+        }
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
