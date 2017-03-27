@@ -633,7 +633,10 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         return Math.round((Number(num1) + Number(num2)), 2);
     }
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
-
+        delete primaryEvaluation.daysLeft;
+        delete primaryEvaluation.daysLeftOnTen;
+        delete primaryEvaluation.allowedOnTenDays;
+        console.log(primaryEvaluation)
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 

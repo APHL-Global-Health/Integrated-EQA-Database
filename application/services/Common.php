@@ -1,5 +1,7 @@
 <?php
-
+require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
+    . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 class Application_Service_Common {
 
 	public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
@@ -63,7 +65,39 @@ class Application_Service_Common {
 			return false;
         }
     }
-	
+	public function sendEmailSimplified($body, $to = '', $send = ''){
+        try {
+            $config = array('ssl' => 'tls',
+                'auth' => 'login',
+                'username' => 'osoromichael@gmail.com',
+                'password' => 'w@r10r@90');
+
+            $transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
+
+
+            $mail = new Zend_Mail();
+
+
+            $message = isset($send) ? $body : $this->createEmailBody('Participant', $body['message']);
+            $mail->setBodyHtml($message);
+            $mail->setFrom('National Public Health Laboratories');
+            if ($to != '') {
+                $mail->addTo($to, '');
+            } else {
+                $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
+            }
+            $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
+            $mail->setSubject($subject);
+            if ($mail->send($transport)) {
+//                echo 'Sent successfully';
+            } else {
+                echo 'unable to send email';
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
 	public static function getRandomString($length = 8) {
 		$alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
 		$randStr = "";

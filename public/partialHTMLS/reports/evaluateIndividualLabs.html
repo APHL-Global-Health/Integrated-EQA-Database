@@ -308,7 +308,7 @@
         </thead>
         <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
 
-        <tr ng-repeat="fields in reports.microagentsData"
+        <tr ng-repeat="fields in reports.microagentsData.microAgents"
             ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
             <td nowrap><input type="text" class="form-control"
                               ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -378,7 +378,7 @@
     </table>
 
     <div class="col-md-12 btn btn-warning"
-         ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData)"
+         ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData.microAgents)"
          ng-disabled="resultsData.$invalid"> Evaluate Both
     </div>
 </div>
