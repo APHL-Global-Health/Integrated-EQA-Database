@@ -288,6 +288,51 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
         $scope.reports.confirmDialog(message, evaluateRound)
     }
+
+
+    $scope.reports.saveEnrolled = function (round, participant) {
+
+        function insertEnrolled() {
+            var dataLab = {
+                roundId: round,
+                labId: participant
+            }
+            var url = serverSamplesURL + 'saveenrollinglab';
+            try {
+                alertStartRound = $.alert({
+                    title: '<i class="fa fa-spin fa-spinner  text-danger"></i> Enrolling..',
+                    content: 'Enrolling,please wait ....'
+                });
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                $http
+                    .post(url, dataLab)
+                    .success(function (data) {
+                        console.log(data)
+                        alertStartRound.close();
+                        if (data.status == 0) {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-remove  text-danger"></i> Error',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                        } else {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-check-circle  text-success"></i> Success',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                            $scope.samples.getCurrentActiveRound();
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error)
+
+                    })
+
+            } catch (Exception) {
+
+            }
+        }
+        $scope.reports.confirmDialog ('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
+    }
     $scope.reports.evaluateShipment = function (shipment) {
         function evaluateShipment() {
             var url = serverReportURL + 'evaluateresults';
@@ -635,8 +680,8 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
         delete primaryEvaluation.daysLeft;
         delete primaryEvaluation.daysLeftOnTen;
-        delete primaryEvaluation.allowedOnTenDays;
-        console.log(primaryEvaluation)
+
+console.log(primaryEvaluation)
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 

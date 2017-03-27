@@ -377,7 +377,7 @@
             samplesLink: 'viewsamples',
             currentTemplate: '../partialHTMLS/viewsamples.html'
         }
-
+        $scope.samples.showPhmtlPages = true;
         $scope.samples.linksLabObject = {
             samplesLink: 'viewReceivedSamples',
             currentTemplate: '../partialHTMLS/labOperations/addReceivedSamples.html'
@@ -421,6 +421,7 @@
                     samplesLink: link,
                     currentTemplate: currentTemplate
                 }
+                $scope.samples.showPhmtlPages = false;
                 console.log($scope.samples.linksLabObject);
             } else {
                 var currentTemplate = "../partialHTMLS/" + link + ".html";
@@ -431,6 +432,70 @@
                 }
             }
             console.log($scope.samples.linksObject)
+
+        }
+        $scope.samples.currentRound = {};
+        $scope.samples.getCurrentActiveRound = function () {
+            try {
+                var url = serverSamplesURL + 'getroundwherelab';
+                changeSavingSpinner(true);
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                $http
+                    .post(url)
+                    .success(function (data) {
+                        console.log(data)
+                        changeSavingSpinner(false);
+                        if (data.status == 0) {
+                            // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        } else {
+                            $scope.samples.currentRound = data.data;
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                        changeSavingSpinner(false);
+                    })
+            } catch (Exception) {
+                console.log(Exception);
+            }
+        }
+
+        $scope.samples.saveEnrolled = function (round, participant) {
+            var dataLab = {
+                roundId: round,
+                labId: participant
+            }
+            var url = serverSamplesURL + 'saveenrollinglab';
+            try {
+
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                $http
+                    .post(url,dataLab)
+                    .success(function (data) {
+                        console.log(data)
+                        $scope.samples.loaderProgressSpinner = '';
+                        changeSavingSpinner(false);
+                        if (data.status == 0) {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-remove  text-danger"></i> Error',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                        } else {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-check-circle  text-success"></i> Success',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                            $scope.samples.getCurrentActiveRound();
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                        changeSavingSpinner(false);
+                    })
+
+            } catch (Exception) {
+
+            }
 
         }
         $scope.samples.returnPanelColorFromStatus = function (status, type) {

@@ -1,104 +1,80 @@
+<div class="col-md-12 border-bottom padding">
+    <div class="col-md-4 no-padding h3">
+        Respond To Test <i class="fa fa-spin {{samples.savingSpinner}}"></i>
 
-<section class="content-header">
-    <h1>Report PT Data </h1>
-</section>
-<section class="content">
-		<div class="box">
-                <div class="box-body">
-					
-					<input type="radio" name="currentType" class="currentType" id="currentType1" value="all" /> All Schemes &nbsp;&nbsp;&nbsp;
-					<input type="radio" name="currentType" class="currentType" id="currentType2" value="active" checked="checked" /> Active Schemes only &nbsp;&nbsp;&nbsp;
-					<input type="radio" name="currentType" class="currentType" id="currentType3" value="inactive" /> Inactive Schemes only
-					<br/><br/>
-					<table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentSchemeTable">
-							<thead>
-								<tr>
-									<th style="width:100px;">Shipment<br/>Date</th>
-									<th style="width:50px;">Scheme</th>
-									<th style="width:100px;">Shipment Code</th>
-									<th>Participant</th>
-									<th style="width:110px;">Result Due Date</th>
-									<th style="width:100px;">Response<br/>Date</th>
-									<th style="width:100px;">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-							<tr>
-								<td colspan="8" class="dataTables_empty">Loading data from server</td>
-							</tr>
-							</tbody>
-					</table>
-				</div>
-		</div>
-</section>
-<script>
-	
-	var csTable = null;
-	function currentSchemes(){
-		csTable = $('#currentSchemeTable').dataTable({
-			"oLanguage": {
-			    "sLengthMenu": "_MENU_ records per page"
-			},
-			"bJQueryUI": false,
-			"bAutoWidth": false,
-			"bInfo": true,
-			"bScrollCollapse": true,
-			"sPaginationType": "full_numbers",
-			"bRetrieve": false,
-			"bDestroy": true,
-			"aoColumns": [
-			    {"sClass":"center"},
-			    {"sClass":"center"},
-			    {"sClass":"center"},
-			    {"sClass":""},
-			    {"sClass":"center"},
-			    {"sClass":"center"},
-			    {"sClass":"center","bSortable":false}
-			],
-			"aaSorting": [[ 3, "asc" ]],
-			"bProcessing": true,
-			"bServerSide": true,
-			"sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'current-schemes', 'format' => 'html')); ?>",
-			"fnServerParams": function ( aoData ) {
-				aoData.push( { "name": "currentType", "value": $('input[name=currentType]').filter(':checked').val() } );
-			},
-			"fnServerData": function ( sSource, aoData, fnCallback ) {
-			    $.ajax({
-				"dataType": 'json',
-				"type": "POST",
-				"url": sSource,
-				"data": aoData,
-				"success": fnCallback
-			    });
-			}
-		});
-	}
-	
-	
-	
-	
-	$(document).ready(function(){
-		
-		currentSchemes();
+        <small class="label label-info text-aqua">{{samples.samplesIssuedToUser.length}} records</small>
 
-		$('#currentType1,#currentType2,#currentType3').click(function(){
-			currentSchemes();
-		});
-	});
-	
-	
-        function removeSchemes(schemeType,mid){
-		if (window.confirm("Are you sure you want to remove this response?\n This cannot be undone !")) { 
-			$.blockUI();
-			$.post("<?php echo $this->url(array('module'=>'default','controller' =>'common', 'action' => 'delete-response')); ?>", { schemeType:schemeType, mid: mid, format: "html" },
-			    function (data) {
-				alert("Response removed successfully");
-				
-				csTable.fnDraw();
-				
-				$.unblockUI();
-			});
-		}		
-		
-	}
-</script>
+    </div>
+    <div class="col-md-6 pull-right padding">
+        <items-per-page></items-per-page>
+        <div class="col-md-8 pull-right">
+            <input type="search" class="col-md-12 form-control input-sm"
+                   data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                   data-trigger="hover" data-type="success" data-title="Search Inside samples" bs-tooltip
+                   ng-model="samples.searchData">
+        </div>
+        <div class="col-md-1 pull-right">
+            <a href="#" class=" btn btn-default btn-sm"
+               data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+               data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+               ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
+                        class="fa fa-refresh"></i>
+            </a>
+            &nbsp;
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+
+    <table class="table table-striped">
+        <td>No.</td>
+        <td>Batch Name</td>
+        <td>Round Code</td>
+        <td>Days To respond</td>
+        <td>Date Prep'd</td>
+        <td>Date Iss'd</td>
+        <td>Material Source</td>
+        <td>action</td>
+        <tr dir-paginate="sample in samples.samplesIssuedToUser | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+            <td>{{$index+1}}</td>
+            <td>{{sample.batchName}}</td>
+            <td>{{sample.roundCode}}</td>
+            <td>{{sample.daysLeftOnTen}}</td>
+            <td>{{sample.datePrepared}}</td>
+            <td>{{sample.dateAllocated}}</td>
+            <td>{{sample.materialSource}}</td>
+            <td>
+                <button class="btn btn-sm btn-success"
+                        ng-click="samples.showAddResponse(sample)"
+                        ng-disabled="sample.allowedOnTenDays==0"
+                        ng-show="sample.responseStatus==0"
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Click to to respond or give feedback"
+                        bs-tooltip
+                ><i
+                            class="fa fa-reply"></i> Respond
+                </button>
+                <button class="btn btn-sm btn-info" ng-show="sample.responseStatus==1"
+                        ng-click="samples.showAddResponse(sample,0)"
+                        ng-disabled="sample.allowedOnTenDays==0"
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Click to edit feedback" bs-tooltip
+                ><i
+                            class="fa fa-edit"></i> edit
+                </button>
+                <button class="btn btn-sm btn-primary"
+                        ng-disabled="sample.daysLeft==0"
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Click to download results form" bs-tooltip
+                ><i
+                            class="fa fa-download"></i> Download
+                </button>
+            </td>
+        </tr>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5"
+                             direction-links="true"
+                             boundary-links="true">
+    </dir-pagination-controls>
+</div>
