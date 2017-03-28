@@ -3,30 +3,7 @@
         <small>{{samples.samplesToUsers.length}} records</small>
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
         <div class="pull-right col-mod-12">
-            <div class="dropdown col-md-3 pull-right">
-
-                <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
-                        id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
-
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
-                    </li>
-                </ul>
-
-            </div>
+           <items-per-page></items-per-page>
             <div class="pull-right" ng-init="expand=true">
                 <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
             </div>

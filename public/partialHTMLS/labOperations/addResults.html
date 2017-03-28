@@ -1,8 +1,8 @@
 <div class="col-md-12 border-bottom padding">
-    <div class="col-md-4 no-padding h3">
+    <div class="col-md-4 no-padding h4">
         Respond To Test <i class="fa fa-spin {{samples.savingSpinner}}"></i>
 
-        <small class="label label-info text-aqua">{{samples.samplesIssuedToUser.length}} records</small>
+        <small class="">{{samples.samplesIssuedToUser.length}} records</small>
 
     </div>
     <div class="col-md-7 pull-right padding">
@@ -47,7 +47,7 @@
             <td>
                 <button class="btn btn-sm btn-success"
                         ng-click="samples.showAddResponse(sample)"
-                        ng-disabled="sample.allowedOnTenDays==0"
+                        ng-disabled="sample.daysLeftOnTen==0"
                         ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to to respond or give feedback"
@@ -57,14 +57,14 @@
                 </button>
                 <button class="btn btn-sm btn-info" ng-show="sample.responseStatus==1"
                         ng-click="samples.showAddResponse(sample,0)"
-                        ng-disabled="sample.allowedOnTenDays==0"
+                        ng-disabled="sample.daysLeftOnTen==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to edit feedback" bs-tooltip
                 ><i
                         class="fa fa-edit"></i> edit
                 </button>
                 <button class="btn btn-sm btn-primary"
-                        ng-disabled="sample.daysLeft==0"
+                        ng-disabled="sample.daysLeft==0 || sample.daysLeftOnTen==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to download results form" bs-tooltip
                 ><i

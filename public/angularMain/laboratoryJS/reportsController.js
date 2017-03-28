@@ -309,6 +309,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     .success(function (data) {
                         console.log(data)
                         alertStartRound.close();
+                        $scope.samples.loaderProgressSpinner ='';
                         if (data.status == 0) {
                             alertStartRound = $.alert({
                                 title: '<i class="fa fa-remove  text-danger"></i> Error',
@@ -324,7 +325,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     })
                     .error(function (error) {
                         console.log(error)
-
+                        $scope.samples.loaderProgressSpinner ='';
                     })
 
             } catch (Exception) {

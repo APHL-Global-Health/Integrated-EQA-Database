@@ -91,7 +91,7 @@
                         <!--<i class="fa fa-truck">-->
 
                         <!--</i></a>&nbsp;-->
-                        <a class="btn btn-success btn-sm"
+                        <button class="btn btn-success btn-sm"
                            ng-click="samples.receiveShipment(shipment,'receiveShipments')"
                            href="#receiveShipments" data-backdrop="false" data-toggle="modal"
                            data-placement="right" data-type="info" data-container="body"
@@ -100,8 +100,8 @@
 
                            ng-disabled="shipment.deliveryStatus !=2">
                             <i class="fa fa-download"></i>
-                        </a>
-                        <a class="btn btn-danger btn-sm"
+                        </button>
+                        <button class="btn btn-danger btn-sm"
                            ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment)"
 
                            data-placement="right" data-type="info" data-container="body"
@@ -110,7 +110,7 @@
 
                            ng-disabled="shipment.deliveryStatus !=2">
                             <i class="fa fa-remove"></i>
-                        </a>
+                        </button>
 
                     </td>
                 </tr>

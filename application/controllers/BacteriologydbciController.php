@@ -1683,7 +1683,9 @@ class BacteriologydbciController extends Zend_Controller_Action
         unset($updateEval['evaluatedStatus']);
         unset($updateEval['finalScore']);
         unset($updateEval['totalMicroAgentsScore']);
-
+        if (isset($updateEval['allowedOnTenDays'])) {
+            unset($updateEval['allowedOnTenDays']);
+        }
 //        print_r($updateEval);
 //        exit;
         $finalScore = 0;

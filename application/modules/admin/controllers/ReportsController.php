@@ -233,6 +233,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $where['roundId'] = $arr['roundId'];
 
                 $update['score'] = $arr['score'];
+                $update['diskContent'] = $arr['diskContent'];
+                $update['finalScore'] = $arr['finalScore'];
+                $update['reportedToStatus'] = $arr['reportedToStatus'];
+                $update['score'] = $arr['score'];
                 if (is_float($update['score']) || is_numeric($update['score'])) {
                     $update['adminMarked'] = 1;
                     $microSum += $arr['score'];
@@ -269,6 +273,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         unset($updateEval['evaluatedStatus']);
         unset($updateEval['finalScore']);
         unset($updateEval['totalMicroAgentsScore']);
+        unset($updateEval['allowedOnTenDays']);
 
 //        print_r($updateEval);
 //        exit;

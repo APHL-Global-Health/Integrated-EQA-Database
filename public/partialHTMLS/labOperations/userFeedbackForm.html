@@ -430,15 +430,18 @@
                            ng-pattern="samples.numericOnly"
                            ng-model="fields.diskContent"></td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="S" name="score{{$index}}"
+                    <input type="radio" class="form-control"  ng-click="fields.finalScore='S'"
+                           ng-change="" value="S" name="score{{$index}}"
                            ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="I" name="score{{$index}}"
+                    <input type="radio" class="form-control"  ng-click="fields.finalScore='I'"
+                           ng-change="" value="I" name="score{{$index}}"
                            ng-model="fields.finalScore">
                 </td>
                 <td>
-                    <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"
+                    <input type="radio" class="form-control"  ng-click="fields.finalScore='R'"
+                           ng-change="" value="R" name="score{{$index}}"
                            ng-model="fields.finalScore">
                 </td>
                 <td ng-init="samples.resultActiveFields=fields">
@@ -476,11 +479,11 @@
             </tbody>
         </table>
 
-        <div class="btn btn-primary col-md-12" ng-disabled="true"
-             ng-click="samples.saveUserBothResponse(amples.resultFields,samples.susceptibilityFormData)"
+        <button class="btn btn-primary col-md-12" ng-disabled="true"
+             ng-click="samples.saveUserBothResponse(samples.resultFields,samples.susceptibilityFormData)"
              ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
             Save Both
-        </div>
+        </button>
     </div>
 
 </div>

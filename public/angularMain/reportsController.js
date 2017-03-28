@@ -331,7 +331,8 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
             }
         }
-        $scope.reports.confirmDialog ('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
+
+        $scope.reports.confirmDialog('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
     }
     $scope.reports.evaluateShipment = function (shipment) {
         function evaluateShipment() {
@@ -642,7 +643,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 // delete data.update.sampleInstructions;
                 // delete data.update.labDetails;
                 // delete data.update.evaluatedStatus;
-                console.log(individualResults);
+                console.log(data);
                 var url = serverReportURL + 'updatefunction';
                 $http
                     .post(url, data)
@@ -681,7 +682,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         delete primaryEvaluation.daysLeft;
         delete primaryEvaluation.daysLeftOnTen;
 
-console.log(primaryEvaluation)
+        console.log(microEvaluation)
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 

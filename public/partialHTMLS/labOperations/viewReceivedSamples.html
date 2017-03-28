@@ -21,10 +21,8 @@
                 <small class="label label-info">{{samples.panelsToShipment.length}} records</small>
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                 <div class="pull-right col-mod-12">
-                    <item-per-page></item-per-page>
-                    <div class="pull-right" ng-init="expand=true">
-                        <small><a href="#" ng-click="expand=!expand"><i class="fa fa-expand"></i> </a></small>
-                    </div>
+                    <items-per-page></items-per-page>
+
                     <div class="col-md-7 pull-right">
                         <input type="search" class="col-md-12"
 
@@ -48,9 +46,9 @@
 
 
             <div>
-                <div class="text-capitalize path">
+                <div class="text-capitalize path" ng-show="samples.showShipmentInfoStatus">
                     <a href="#" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"
-                       ng-show="samples.showShipmentInfoStatus"
+
                     >
                         Shipments : {{samples.clickedShipmentData.shipmentName }}
                         <small>
@@ -105,7 +103,7 @@
                         <td nowrap>{{panel.totalSamplesAdded}}</td>
                         <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
-                            <a class="btn btn-danger btn-sm"
+                            <button class="btn btn-danger btn-sm"
                                ng-disabled="panel.deliveryStatus > 3|| panel.shipmentDeliveryStatus==2"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
@@ -113,8 +111,8 @@
                                bs-tooltip
                                ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',5)"><i
                                     class="fa fa-thumbs-down"></i>
-                            </a>
-                            <a class="btn btn-success btn-sm"
+                            </button>
+                            <button class="btn btn-success btn-sm"
                                ng-disabled="panel.deliveryStatus > 3 || panel.shipmentDeliveryStatus==2"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
@@ -122,8 +120,8 @@
                                data-title="Successfully receive {{panel.panelName}} panel" bs-tooltip
                                ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',4)"><i
                                     class="fa fa-thumbs-up"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm"
+                            </button>
+                            <button class="btn btn-primary btn-sm"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
                                data-trigger="hover" data-type="success"
@@ -131,7 +129,7 @@
                                bs-tooltip
                                href="#barcodeModal" data-backdrop="false" data-toggle="modal"
                                ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
-                            </a>
+                            </button>
 
                         </td>
                     </tr>

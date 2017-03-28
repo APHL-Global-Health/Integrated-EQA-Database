@@ -85,7 +85,7 @@
             <td width="30%">Gram stain reaction and morphology</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter the grain stain results" 
+                       placeholder="Please enter the grain stain results"
                        ng-model="reports.currentClickedLabResults.grainStainReaction" required
                        name="grainStainReaction">
             </td>
@@ -98,7 +98,7 @@
               (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine ) }">
             <td width="30%">Details of primary media used for isolation and manufacturer</td>
             <td width="55%">
-                <input class="form-control col-md-12" type="text" 
+                <input class="form-control col-md-12" type="text"
                        ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Details of primary media "
                        ng-model="reports.currentClickedLabResults.primaryMedia" required
@@ -114,7 +114,7 @@
             <td width="30%">Incubation conditions</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Incubation conditions" 
+                       placeholder="Please enter Incubation conditions"
                        ng-model="reports.currentClickedLabResults.incubationConditions" required
                        name="incubationConditions">
             </td>
@@ -128,7 +128,7 @@
             <td width="30%">Colonial morphology (colony appearance on media)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Colonial morphology" 
+                       placeholder="Please enter Colonial morphology"
                        ng-model="reports.currentClickedLabResults.colonialMorphology" required
                        name="colonialMorphology">
             </td>
@@ -142,7 +142,7 @@
             <td width="30%">Bacterial quantification (if applicable)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Bacterial quantification" 
+                       placeholder="Please enter Bacterial quantification"
                        ng-model="reports.currentClickedLabResults.bacterialQualification" required
                        name="bacterialQualification">
             </td>
@@ -160,7 +160,7 @@
 
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
-                       placeholder="Please enter Biochemical reagents" 
+                       placeholder="Please enter Biochemical reagents"
                        ng-model="reports.currentClickedLabResults.bacterialReagents" required name="bacterialReagents">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
@@ -173,7 +173,7 @@
             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please Discuss further processing" 
+                       placeholder="Please Discuss further processing"
                        ng-model="reports.currentClickedLabResults.isolateProcessing" required name="isolateProcessing">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
@@ -187,7 +187,7 @@
             <td width="30%">Final identification (i.e. report given to clinician)</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Final identification " 
+                       placeholder="Please enter Final identification "
                        ng-model="reports.currentClickedLabResults.finalIdentification" required
                        name="finalIdentification">
 
@@ -251,23 +251,23 @@
             </td>
         </tr>
         <!--<tr>-->
-            <!--<td width="30%">-->
-                <!--<div class="col-md-12 no-padding">-->
+        <!--<td width="30%">-->
+        <!--<div class="col-md-12 no-padding">-->
 
-                <!--</div>-->
-            <!--</td>-->
-            <!--<td width="55%">-->
-                <!--<div class="col-md-12 no-padding">-->
-                    <!--<button class="btn btn-info col-md-12"-->
-                            <!--ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"-->
-                            <!--ng-disabled="resultsData.$invalid || samples.savingInProgress"-->
-                    <!--&gt;Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>-->
-                    <!--</button>-->
-                <!--</div>-->
-            <!--</td>-->
-            <!--<td width="15%">-->
+        <!--</div>-->
+        <!--</td>-->
+        <!--<td width="55%">-->
+        <!--<div class="col-md-12 no-padding">-->
+        <!--<button class="btn btn-info col-md-12"-->
+        <!--ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"-->
+        <!--ng-disabled="resultsData.$invalid || samples.savingInProgress"-->
+        <!--&gt;Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>-->
+        <!--</button>-->
+        <!--</div>-->
+        <!--</td>-->
+        <!--<td width="15%">-->
 
-            <!--</td>-->
+        <!--</td>-->
         <!--</tr>-->
         </tbody>
     </table>
@@ -303,7 +303,7 @@
             <th>
                 R <sup>3</sup>
             </th>
-
+            <th></th>
         </tr>
         </thead>
         <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
@@ -313,7 +313,7 @@
             <td nowrap><input type="text" class="form-control"
                               ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                               id="antiMicroAgent" name="antiMicroAgent"
-                              class="form-control" 
+                              class="form-control"
                               data-min-length="0"
                               data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
                               required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -324,7 +324,7 @@
 
             </td>
             <td>
-                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp" 
+                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                         ng-model="fields.reportedToStatus">
                     <option class="" selected disabled>--select reported--</option>
                     <option value="yes">YES</option>
@@ -332,7 +332,7 @@
                 </select>
             </td>
 
-            <td><input type="text" class="form-control" 
+            <td><input type="text" class="form-control"
                        ng-change="" ng-pattern="samples.numericOnly"
                        ng-model="fields.diskContent"></td>
             <td>
@@ -341,38 +341,44 @@
                        ng-model="fields.score">
             </td>
             <td>
-                <input type="radio" class="form-control"  ng-checked="fields.finalScore=='S'"
+                <input type="radio" class="form-control" ng-click="fields.finalScore='S'"
+                       ng-checked="fields.finalScore=='S'"
                        name="score{{$index}}" ng-model="fields.finalScore">
             </td>
             <td>
-                <input type="radio" class="form-control" ng-checked="fields.finalScore=='I'"   name="score{{$index}}"  ng-model="fields.finalScore">
+                <input type="radio" class="form-control" ng-click="fields.finalScore='I'"
+                       ng-checked="fields.finalScore=='I'" name="score{{$index}}" ng-model="fields.finalScore">
             </td>
             <td>
-                <input type="radio" class="form-control" ng-checked="fields.finalScore=='R'"  name="score{{$index}}"  ng-model="fields.finalScore">
+                <input type="radio" class="form-control" ng-click="fields.finalScore='R'"
+                       ng-checked="fields.finalScore=='R'" name="score{{$index}}" ng-model="fields.finalScore">
+            </td>
+            <td>
+                {{fields.finalScore}}
             </td>
         </tr>
 
         <!--<tr>-->
-            <!--<td>-->
+        <!--<td>-->
 
-            <!--</td>-->
-            <!--<td>-->
-                <!--<div class="col-md-12 no-padding">-->
+        <!--</td>-->
+        <!--<td>-->
+        <!--<div class="col-md-12 no-padding">-->
 
-                    <!--<button class="btn btn-success col-md-12"-->
-                            <!--ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"-->
-                            <!--ng-disabled="reports.load=='fa-spinner'"-->
-                    <!--&gt;Update<i class="fa fa-spin {{reports.load}}"></i>-->
-                    <!--</button>-->
+        <!--<button class="btn btn-success col-md-12"-->
+        <!--ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"-->
+        <!--ng-disabled="reports.load=='fa-spinner'"-->
+        <!--&gt;Update<i class="fa fa-spin {{reports.load}}"></i>-->
+        <!--</button>-->
 
 
-                <!--</div>-->
-            <!--</td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
+        <!--</div>-->
+        <!--</td>-->
+        <!--<td></td>-->
+        <!--<td></td>-->
+        <!--<td></td>-->
+        <!--<td></td>-->
+        <!--<td></td>-->
         <!--</tr>-->
         </tbody>
     </table>
