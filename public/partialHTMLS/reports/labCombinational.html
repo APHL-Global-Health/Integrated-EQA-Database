@@ -1,0 +1,129 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>Lab General Performance Report
+            <small>{{reports.labPerformanceData.length}} records | in all samples</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchRounds" class="pull-right" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereRoundsResults.round"
+                           required placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereLabGenStatResults.dateFrom"
+                           data-date-format="yyyy-MM-dd"  placeholder="select from date"
+                           data-min-date="" data-max-date="today" required
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="dateFrom"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control input-sm" ng-init="reports.getCounties()"
+                           ng-model="reports.whereLabGenStatResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
+                </div>
+
+                <!--<div class="col-md-3 ">-->
+
+                    <!--<input type="text" class="form-control input-sm" ng-model="reports.whereLabGenStatResults.dateTo"-->
+                           <!--data-date-format="yyyy-MM-dd" placeholder="By default,(TO-DATE)"-->
+                           <!--data-min-date="reports.whereLabGenStatResults.dateFrom" data-max-date="today"-->
+                           <!--data-autoclose="1" aria-describedby="basic-addon1"-->
+                           <!--name="dateTo"-->
+                           <!--bs-datepicker>-->
+                <!--</div>-->
+
+                <div class="col-md-2 ">
+                    <input class="form-control input-sm"  ng-model="reports.whereLabGenStatResults.grade"
+                           id="grade" name="grade" ng-init="reports.getGrades()"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.grade as icon.grade for icon in reports.grades"
+                           placeholder="Search grade" bs-typeahead
+                    >
+                </div>
+                <div ng-controller="PdfController">
+                    &nbsp;
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getGenStatPerformanceReport(reports.whereLabGenStatResults)">get report
+                    </button>
+
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateLabPerformancePdf(reports.labPerformanceData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateLabPerformanceExcel(reports.labPerformanceData)"><i class="fa fa-file-excel-o"></i>
+                    </button>
+
+                </div>
+
+            </table>
+        </form>
+        <table class="table table-bordered">
+            <tr>
+                <td>Mean</td>
+                <td>{{reports.labPerformanceDataStat.mean}}</td>
+                <td>Total Labs</td>
+                <td>{{reports.labPerformanceDataStat.labs}}</td>
+                <td>SD</td>
+                <td>{{reports.labPerformanceDataStat.sd}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="lab in reports.genStatPerformance|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td>{{lab.labName}}</td>
+                <td>{{lab.unique_identifier}}</td>
+                <td>{{lab.county}}</td>
+                <td>{{lab.batchName}}</td>
+                <td nowrap>{{lab.roundCode}}</td>
+                <td nowrap>{{lab.finalScore}}</td>
+                <td nowrap>{{lab.totalMicroAgentsScore}}</td>
+                <td>{{lab.remarks}}</td>
+                <td>{{lab.grade}}</td>
+                <td>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
+            </tr>
+            <!--<tr ng-hide="reports.generalRoundData.length >0">-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

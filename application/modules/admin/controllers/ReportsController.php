@@ -682,6 +682,136 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
+    public function getgenstatperformanceAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+
+
+        if (isset($postedData['grade'])) {
+            if ($postedData['grade'] == '') {
+                unset($postedData['grade']);
+            } else {
+                $whereSearch['grade'] = $postedData['grade'];
+            }
+        }
+
+
+        if (isset($postedData['region'])) {
+            if ($postedData['region'] == '') {
+                unset($postedData['region']);
+            } else {
+                $whereCounty['region'] = $postedData['region'];
+                $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+
+            }
+        }
+
+        $where['roundName'] = $postedData['round'];
+
+        $roundDetails = $this->returnValueWhere($where, 'tbl_bac_rounds');
+
+        $whereSearch['roundId'] = $roundDetails['id'];
+        $sum = 0;
+        $samples = [];
+        if ($roundDetails != false) {
+            if (isset($labs) && $labs != false) {
+
+                $report = [];
+                $lab = [];
+                foreach ($labs as $key => $value) {
+
+                    $whereSearch['participantId'] = $value->participant_id;
+                    $orderArray = ['id', 'dateCreated'];
+                    $col = ['*'];
+
+                    $groupArray = ['id'];
+                    $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
+                    if ($reportData != false) {
+                        $exist = false;
+                        $lab = '';
+                        foreach ($reportData as $keys => $val) {
+
+                            for ($i = 0; $i < sizeof($lab); $i++) {
+                                if ($reportData[$key]->participantId == $lab[$i]) {
+                                    $exist = true;
+
+                                    break;
+                                }
+                            }
+                            if (!$exist) {
+                                array_push($reportData[$key]->participantId);
+                            }
+                        }
+
+
+                    }
+
+
+                }
+                $stat['total'] = $sum;
+                $stat['mean'] = round($sum / sizeof($report), 4);
+                $stat['labs'] = sizeof($report);
+                $stat['sd'] = $this->standard_deviation($samples);
+
+                if (!empty($report)) {
+                    echo $this->returnJson(array('status' => 1, 'data' => $report, 'stat' => $stat));
+                }
+            } else {
+                if (isset($labs)) {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                    exit;
+                }
+                $orderArray = ['id', 'dateCreated'];
+                $col = ['*'];
+
+                $groupArray = ['id'];
+                $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
+                if ($reportData != false) {
+
+                    foreach ($reportData as $keys => $val) {
+
+                        $whereSampleId['id'] = $val->sampleId;
+                        $whereRoundId['id'] = $val->roundId;
+                        $whereLabId['participant_id'] = $val->participantId;
+
+                        $roundInfo = $this->returnValueWhere($whereRoundId, 'tbl_bac_rounds');
+                        $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                        $labInfo = $this->returnValueWhere($whereLabId, 'participant');
+
+                        $reportData[$keys]->labName = $labInfo['institute_name'];
+                        $reportData[$keys]->county = $labInfo['region'];
+                        $reportData[$keys]->unique_identifier = $labInfo['unique_identifier'];
+
+                        $reportData[$keys]->roundName = $roundInfo['roundName'];
+                        $reportData[$keys]->roundCode = $roundInfo['roundCode'];
+
+                        $reportData[$keys]->batchName = $sampleInfo['batchName'];
+                        $reportData[$keys]->materialSource = $sampleInfo['materialSource'];
+
+                        $reportData[$keys]->unique_identifier = $labInfo['unique_identifier'];
+                        $reportData[$keys]->status = 'valid';
+                        array_push($samples, ($val->finalScore + $val->totalMicroAgentsScore));
+                        $sum += ($val->finalScore + $val->totalMicroAgentsScore);
+                    }
+                    $stat['total'] = $sum;
+                    $stat['mean'] = round($sum / sizeof($reportData), 4);
+                    $stat['sd'] = $this->standard_deviation($samples);
+                    $stat['labs'] = sizeof($reportData);
+                    echo $this->returnJson(array('status' => 1, 'data' => $reportData, 'stat' => $stat));
+
+                } else {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                }
+//                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+        }
+
+        exit;
+
+    }
+
     public function getroundperformanceAction()
     {
         $postedData = $this->returnArrayFromInput();

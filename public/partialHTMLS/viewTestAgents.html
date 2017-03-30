@@ -43,9 +43,7 @@
             <th>code</th>
             <th>Date Created</th>
             <th>Type</th>            <!--                                <th>Date Saved</th>-->
-            <th>Few Range</th>
-            <th>Mod Range</th>
-            <th>Many Range</th>
+
             <th></th>
         </tr>
         </thead>
@@ -57,17 +55,7 @@
             <td>{{testAgent.dateCreated}}</td>
             <td>{{samples.returnSamplesType(testAgent.testAgentType)}}</td>
 
-            <td>
-                <x ng-show="testAgent.testAgentType!=3">N/A</x>
-                <x ng-show="testAgent.testAgentType==3">0 - {{testAgent.fewRange}}</x></td>
-            <td>
-                <x ng-show="testAgent.testAgentType!=3">N/A</x>
-                <x ng-show="testAgent.testAgentType==3">{{samples.returnRange(testAgent.fewRange)}} - {{testAgent.modRange}}</x>
-            </td>
-            <td>
-                <x ng-show="testAgent.testAgentType!=3">N/A</x>
-                <x ng-show="testAgent.testAgentType==3">{{samples.returnRange(testAgent.modRange)}} - {{testAgent.manyRange}}</x>
-            </td>
+
             <td nowrap>
                 <button class="btn btn-info btn-sm"
                         data-placement="right" data-type="info" data-container="body"
