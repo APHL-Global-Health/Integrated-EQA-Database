@@ -309,7 +309,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     .success(function (data) {
                         console.log(data)
                         alertStartRound.close();
-                        $scope.samples.loaderProgressSpinner ='';
+                        $scope.samples.loaderProgressSpinner = '';
                         if (data.status == 0) {
                             alertStartRound = $.alert({
                                 title: '<i class="fa fa-remove  text-danger"></i> Error',
@@ -325,14 +325,15 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                     })
                     .error(function (error) {
                         console.log(error)
-                        $scope.samples.loaderProgressSpinner ='';
+                        $scope.samples.loaderProgressSpinner = '';
                     })
 
             } catch (Exception) {
 
             }
         }
-        $scope.reports.confirmDialog ('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
+
+        $scope.reports.confirmDialog('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
     }
     $scope.reports.evaluateShipment = function (shipment) {
         function evaluateShipment() {
@@ -682,7 +683,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         delete primaryEvaluation.daysLeft;
         delete primaryEvaluation.daysLeftOnTen;
 
-console.log(primaryEvaluation)
+        console.log(primaryEvaluation)
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 
@@ -748,6 +749,44 @@ console.log(primaryEvaluation)
             $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
         }
     }
+    $scope.reports.enrolledRounds = {};
 
+    $scope.reports.getEnrolledRounds = function () {
+        try {
+            var url = serverReportURL + 'getenrolledrounds';
+            $http.post(url)
+                .success(function (response) {
+                    console.log(response);
+                    if (response.status == 1) {
+                        $scope.reports.enrolledRounds = response.data;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+
+                })
+        } catch (Except) {
+            throw Error(Except);
+        }
+    }
+    $scope.reports.userDownloadFormResponse = {};
+
+    $scope.reports.getUserResultsForDownload = function (roundId) {
+        var where = {roundId: roundId};
+        var url = serverReportURL + 'getenrolledrounds';
+        $http.post(url,where)
+            .success(function (response) {
+                console.log(response);
+                if (response.status == 1) {
+                    $scope.reports.userDownloadFormResponse = response.data;
+                } else {
+                    EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                }
+            })
+            .error(function (error) {
+                EptServices.EptServiceObject.returnActionUnSuccessAlert();
+            })
+    }
 
 })

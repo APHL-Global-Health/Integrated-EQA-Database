@@ -201,11 +201,11 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                             <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="#">
-                            <i class="icon icon-list-ul"></i> <span>Report PT Data</span>
-                        </a>
-                    </li>
+<!--                    <li class="">-->
+<!--                        <a href="#">-->
+<!--                            <i class="icon icon-list-ul"></i> <span>Report PT Data</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li class="treeview " ng-class="{'active' : clickedTab == 'ReceivedSampless'}">
                         <a href="#" class="" target="_self" ng-click="clickedTab = 'ReceivedSamples'"
                            aria-haspopup="true" aria-expanded="false"><i class="fa fa-ship"></i>
@@ -231,7 +231,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <ul class="treeview-menu">
                             <li class="">
                                 <a href="#" target="_self" ng-click="samples.samplesActivePage('add'+clickedTab,1)">
-                                    Submit Feedback</a></li>
+                                    Issue Samples</a></li>
                             <li class=""><a
                                         href="#" target="_self"
                                         ng-click="samples.samplesActivePage('view'+clickedTab,1)">
@@ -256,8 +256,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
 
                     <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
-                        <a href="#">
-                            <i class="icon icon-list-ul"></i> <span>All Round of testing</span>
+                        <a href="#"  ng-click="samples.samplesActivePage('downloadReports',1)">
+                            <i class="fa fa-download"></i> <span>Download results</span>
                         </a>
                     </li>
 

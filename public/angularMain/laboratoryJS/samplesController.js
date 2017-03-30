@@ -285,9 +285,9 @@
                         $scope.samples.loaderProgressSpinner = '';
                         if (data.status == 1) {
                             assignHTTPResponse(data, tableName);
-                        } else if (data.status == 0){
+                        } else if (data.status == 0) {
                             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }else {
+                        } else {
                             assignHTTPResponse({}, tableName);
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
                             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -472,7 +472,7 @@
 
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url,dataLab)
+                    .post(url, dataLab)
                     .success(function (data) {
                         console.log(data)
                         $scope.samples.loaderProgressSpinner = '';
@@ -907,7 +907,7 @@
                             loginDataCache.put('loginData', response.data);
                             loginCacheMemory();
                             console.log($scope.samples.loginDetails);
-                        }else{
+                        } else {
                             alertStartRound = $.alert({
                                 title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning !',
                                 content: 'You have not been added to any lab,please contact admin add you to a lab.'
@@ -2297,15 +2297,20 @@
                             $http
                                 .post(url, postedData)
                                 .success(function (response) {
+                                    alertStartRound.close();
                                     console.log(response)
                                     changeSavingSpinner(false);
                                     if (response.status == 1) {
                                         $scope.samples.samplePanelArray = [];
                                         $scope.samples.usersToSamples = [];
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-                                        alertStartRound.close();
+
                                     } else {
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                        alertStartRound = $.alert({
+                                            title: '<i class="fa fa-close text-danger"></i> Error',
+                                            content: 'Sample already issued to a user!'
+                                        });
+                                        // changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                                     }
                                     $scope.samples.showMultiSelect('', 1);
                                 })
@@ -2326,7 +2331,10 @@
                                     btnClass: 'btn-blue',
                                     action: function () {
 
-                                        alertStartRound = $.alert('Issue samples,please wait...!');
+                                        alertStartRound = $.alert({
+                                            title: '<i class="fa fa-spinner fa-spin"></i> Saving in progress',
+                                            content: 'Issue samples,please wait...!'
+                                        });
                                         savesamples();
                                     }
                                 },

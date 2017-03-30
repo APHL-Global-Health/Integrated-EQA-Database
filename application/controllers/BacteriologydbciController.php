@@ -93,9 +93,15 @@ class BacteriologydbciController extends Zend_Controller_Action
                     $data['roundId'] = $jsPostData['roundId'];
                     $data['participantId'] = $jsPostData['participantId'];
                     $response = $this->dbConnection->insertData('tbl_bac_samples_to_users', $data);
-
+                    $whereUpdate['id'] = $jsPostData['panelToSampleId'];
 
                 }
+                if (isset($whereUpdate)) {
+                    $updateData['issuedFlag']=1;
+                    $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereUpdate, $updateData);
+
+                }
+
                 echo $this->returnJson($response);
             }
             exit();
@@ -267,6 +273,30 @@ class BacteriologydbciController extends Zend_Controller_Action
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function getenrolledroundsAction()
+    {
+        $whereLab = $this->returnUserLabDetails();
+        $where['labId'] = $whereLab['participant_id'];
+        $where['status'] = 2;
+        $round = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $where);
+        if ($round != false) {
+            foreach ($round as $key => $value) {
+                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                $round[$key]->roundName = $roundInfo['roundName'];
+                $round[$key]->roundCode = $roundInfo['roundCode'];
+                $round[$key]->startDate = $roundInfo['startDate'];
+                $round[$key]->endDate = $roundInfo['endDate'];
+                $round[$key]->evaluated = $roundInfo['evaluated'];
+                $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
+                $round[$key]->DaysLeft = $this->converttodays($round[$key]->endDate);
+            }
+            echo $this->returnJson(array('status' => 1, 'data' => $round));
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'No Records Found'));
+        }
+        exit;
     }
 
     public function getroundwherelabAction()
