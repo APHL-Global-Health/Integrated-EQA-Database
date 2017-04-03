@@ -1,0 +1,166 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/bootstrap-select.min.css'); ?>" />
+<section class="content-header">
+    <h1>
+        Participant/Laboratory Information
+    </h1>
+</section>
+<section class="content">
+    <div class="box">
+
+        <div class="box-body">
+            <form name="participantEdit" id="participantEdit"  method="post"   action="<?php echo $this->url(array("controller" => "participant", "action" => "add", "module" => "default"), null, true) ?>">
+                <div id="view-content">
+
+
+                    <input type="hidden" id ="PartSysID" name="participantId" value="<?php echo $this->rsParticipant['participant_id']; ?>" />
+                    <input type="hidden" id ="UsrSysID" name="dataManager" value="<?php echo $this->rsParticipant['data_manager']; ?>" />
+
+                    <br>
+
+                    <table class="table table-striped table-bordered">
+                        <tr>
+
+                            <th colspan="4" style="text-align: left;padding:20px;">
+                                <input type="checkbox" name="individualParticipant" checked="checked" onclick="" disabled="true"> <span style="">Individual Participant</span>
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <th>Participant System Id <span class="mandatory">*</span></th>
+                            <td>
+                                <input type="text" id="pid" name="pid" class="form-control isRequired" title="Please enter the Participant's ID here" placeholder="Please enter the Participant's Unique ID here"
+                                       onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')" />
+                            </td>
+                            <th id="firstNameLable">Participant First Name <span class="mandatory">*</span></th>
+                            <td><input type="text" id="pfname" name="pfname" size="25" maxlength="45"  class="form-control isRequired"  title="Please enter the Participant's Lab/First Name here" placeholder="Please enter the Participant's First Name here" /></td>
+
+                        </tr>
+                        <tr>
+
+                            <th id="lastNameLable">Participant Last Name (optional)</th>
+                            <td style="width:285px;" id="lastNameLableTd"><input type="text" id="plname" name="plname" size="25" maxlength="45" title="Please enter the Participant's Last Name here" placeholder="Please enter the Participant's Last Name here" class="form-control" /></td>
+                            <th><label>Institute Name <span class="mandatory">*</span></label></th>
+                            <td><input type="text" id="instituteName" name="instituteName" size="25" maxlength="45"
+                                       class="form-control isRequired" title="Please enter the Institute Name here"
+                                       placeholder="Please enter the Institute Name here" /></td>
+                        </tr>
+
+                        <tr>
+                            <th>Participant Phone Number</th>
+                            <td><input type="text" id="pphone1" name="pphone1" size="25" maxlength="45" value="<?php echo $this->rsParticipant['phone']; ?>" title="Please enter the Participant's Phone here" placeholder="Please enter the Participant's Phone here" class=" form-control isNumeric" /></td>
+                            <th>Participant e-mail Address <span class="mandatory">*</span></th>
+                            <td><input type="text" id="pemail" name="pemail" size="25" maxlength="45" value="<?php echo $this->rsParticipant['email']; ?>" title="Please enter the Participant's Email here" placeholder="Please enter the Participant's Email here" class="form-control isRequired isEmail"/></td>
+                        </tr>    
+                        <tr>
+                            <th><span class="mandatory"></span></th>
+                            <td>
+<!--                                <select id="assay" name="assay[]" multiple="multiple" style="width:285px;">-->
+                                    <?php
+                                    //foreach ($this->assay as $scheme) {
+                                        ?>
+                                        <option value="<?php //echo $scheme['id']; ?>"><?php //echo $scheme['name']; ?></option>	
+                                        <?php
+                                    //}
+                                    ?>
+<!--                                </select>-->
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                    <br>
+                    <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+                        <?php if ($this->isEditable) { ?>
+                            <p>
+                                <input name="submitbtn" class="btn btn-primary" type="submit"  onclick="validateNow();
+                                        return false;" tabindex="7" value="Submit"  /> 
+                                &nbsp;&nbsp;&nbsp;
+                                <input name="reset" class="btn btn-danger" type="button" id="reset" tabindex="8" value="Cancel" onclick="javascript:goto_testers()" /> 
+
+                            </p>
+                        <?php } ?>
+                        <?php if (!$this->isEditable) {
+                            ?>
+                            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+                                <a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:goto_testers()" >Back</a>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>	
+                </div>
+            </form>
+        </div>    
+    </div>
+</section>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
+<script>
+
+                                $(document).ready(function () {
+                                    $("#assay").select2({
+                                        placeholder: "Select one or more",
+                                        allowClear: true
+                                    });
+
+                                    $("#enrolledProgram").select2({
+                                        placeholder: "Select one or more Enrolled Programs",
+                                        allowClear: true
+                                    });
+<?php if (!$this->isEditable) {
+    ?>
+                                        $("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
+    <?php
+}
+?>
+                                })
+
+                                function goto_testers() {
+                                    window.history.back();
+                                }
+
+                                var duplicated = false;
+
+                                function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                                    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
+                                    function (data) {
+                                        if (data > 0) {
+                                            alert(msg, "err");
+                                            duplicated = true;
+                                            obj.focus();
+                                        }
+                                        else {
+                                            duplicated = false;
+                                        }
+                                    });
+                                }
+                                function validateNow() {
+                                    //checkDuplicate('participant', 'unique_identifier', $("#participantId"), null, 'This Participant ID already exists for another Participant. Please try something else.')
+                                    flag = deforayValidator.init({
+                                        formId: 'participantEdit'
+                                    });
+                                    if (flag && !duplicated) {
+                                        $.blockUI();
+                                        document.getElementById('participantEdit').submit();
+                                    }
+                                }
+
+                                function checkIndividualParticipant(obj) {
+                                    if (obj.checked) {
+                                        tag = 'Participant First Name <span class="mandatory">*</span>';
+                                        $("#lastNameLable").show();
+                                        $("#lastNameLableTd").show();
+                                        $("#pfname").attr("title", "Please enter the Participant's First Name here");
+                                        $("#pfname").attr("placeholder", "Please enter the Participant's First Name here");
+                                    } else {
+                                        tag = 'Lab Name <span class="mandatory">*</span>';
+                                        $("#lastNameLable").hide();
+                                        $("#lastNameLableTd").hide();
+                                        $("#plname").val('');
+                                        $("#pfname").attr("title", "Please enter the Lab Name here");
+                                        $("#pfname").attr("placeholder", "Please enter the Lab Name here");
+
+                                    }
+                                    $("#firstNameLable").html(tag);
+                                }
+</script>

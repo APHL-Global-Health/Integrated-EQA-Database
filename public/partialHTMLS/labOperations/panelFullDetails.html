@@ -1,0 +1,92 @@
+<div class="panel panel-default bg-info">
+    <div class="h3 border-bottom col-md-12">
+        <br>
+        Sample in panel - {{receive.clickedPanel.panelLabel}} {{receive.clickedPanel.panelName}}
+        <small class="btn-primary"><i>-({{receive.clickedPanel.panelDatePrepared}}) : {{samples.sampleToPanel.length}} Samples</i></small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button class="pull-right label label-success text-gray"
+                ng-click="samples.samplesActivePage('viewReceivedSamples',1)">Back
+        </button>
+    </div>
+
+
+    <input class="form-control search-input" ng-model="search" placeholder="search sample">
+
+    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+    </div>
+    <div class="text-capitalize path">
+        <a href="#" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"
+           ng-show="samples.showShipmentInfoStatus">
+            Shipments : {{samples.clickedShipmentData.shipmentName }}
+            <small>
+                <i>{{samples.clickedShipmentData.datePrepared}}</i></small>
+        </a>
+        &nbsp;
+        <x ng-show="samples.showShipmentInfoStatus"> >></x>
+        <a href="#" ng-click="samples.samplesActivePage('viewReceivedSamples', 1)"
+           ng-show="receive.showPanelStatus"
+        >
+
+            Panels : {{receive.clickedPanel.panelLabel}}
+            <small>
+                <i>{{receive.clickedPanel.panelDatePrepared}}</i></small>
+        </a>
+        <!--<button class="btn btn-sm btn-success pull-right col-md-1" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"> << Back</button>-->
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Batch Name</th>
+            <th>Date Created</th>
+            <th>Date Prepared</th>
+            <th>Date Delivered</th>
+            <th>Material Source</th>
+            <th>Material Origin</th>
+            <th>Status</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" ng-repeat="sample in samples.sampleToPanel">
+            <td>{{$index+1}}</td>
+            <td>{{sample.batchName}}</td>
+            <td nowrap>{{sample.dateCreated}}</td>
+            <td>{{sample.datePrepared}}</td>
+            <td nowrap>{{sample.dateDelivered}}</td>
+
+
+            <td>{{sample.materialSource}}</td>
+            <td>{{sample.materialOrigin}}</td>
+            <!--<td>{{samples.returnSampleStatus(sample.deliveryStatus)}}</td>-->
+            <td>Active</td>
+            <td>
+                <button class="btn btn-success btn-sm"
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Receive Sample" bs-tooltip
+
+                        ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+                        ng-click="samples.updateStatusReceivedPanels('tbl_bac_sample_to_panel',4,sample.id)">
+                    <i class="fa fa-check">
+
+                    </i>
+                </button>
+                <button class="btn btn-danger btn-sm" ng-disabled="sample.deliveryStatus==5 || sample.deliveryStatus==4"
+
+                        data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                        data-trigger="hover" data-type="success" data-title="Reject Sample" bs-tooltip
+                        ng-click="samples.updateStatusReceivedPanels('tbl_bac_sample_to_panel',5,sample.id)">
+                    <i class="fa fa-remove">
+
+                    </i>
+                </button>
+                &nbsp;
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,55 @@
+<div class="text-capitalize">
+    <br>
+    <div class="col-md-12">
+        <button class="btn btn-danger btn-sm pull-right"
+                ng-click="samples.samplesActivePage('viewsamples', 0)"
+        >
+            <i class="fa fa-close"></i> close
+        </button>
+        <br>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel panel-heading">
+                Sample Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+            </div>
+            <div class="panel panel-body">
+                <p class="">
+                    <b>Sample Batch Name : </b> {{samples.clickedSample.batchName}}<br>
+                    <b>Date Prepared : </b> {{samples.clickedSample.datePrepared}}<br>
+                    <b>Prepared By : </b> {{samples.clickedSample.preparedBy}}<br>
+                    <b>Material Type : </b> {{samples.clickedSample.materialType}}<br>
+                    <b>Material Origin : </b> {{samples.clickedSample.materialOrigin}}<br>
+                    <b>Material Source : </b> {{samples.clickedSample.materialSource}}<br>
+                    <b>Sample Type : </b> {{samples.clickedSample.sampleType}}<br>
+                    <b>Sample Details : </b> {{samples.clickedSample.sampleDetails}}<br>
+                    <b>Sample Instructions : </b> {{samples.clickedSample.sampleInstructions}}<br>
+
+                </p>
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel panel-heading text-uppercase">
+                Users,response status,result
+            </div>
+            <div class="panel panel-body">
+                <table class="table table-bordered table-responsive">
+                 <tr>
+                    <tr>  <td><b>Total Participating Labs</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total Participating Individuals</b></td><td>0</td></tr>
+                    <tr><td><b>Total  Responded Labs</b></td><td>0</td></tr>
+                    <tr><td><b>Total  Responded Individuals</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Not-Responded Labs</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Not-Responded Individuals</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Failed Labs</b></td><td>Waiting</td></tr>
+                    <tr>  <td><b>Total Passed Individuals</b></td><td>Waiting</td></tr>
+                    <tr>  <td><b>Total  Cancelled</b></td><td>0</td></tr>
+
+                 </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

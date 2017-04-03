@@ -1,0 +1,127 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>
+            Corrective Action Report
+            <small>{{reports.correctiveActionData.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchRounds" class="pull-right" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+                <div class="col-md-3 no-padding">
+
+                    <input type="text" class="form-control input-sm"
+                           ng-model="reports.whereCorrectiveActionResults.dateFrom"
+                           data-date-format="yyyy-MM-dd" required="" placeholder="select from date"
+                           data-min-date="" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon2"
+                           name="datePrepared"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 ">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.dateTo"
+                           data-date-format="yyyy-MM-dd" placeholder="select to date"
+                           data-min-date="samples.report.dateFrom" data-max-date="today"
+                           data-autoclose="1" aria-describedby="basic-addon1"
+                           name="datePrepared"
+                           bs-datepicker>
+                </div>
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.round"
+                           placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3" ng-init="reports.getSamples()">
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereCorrectiveActionResults.sample"
+                           placeholder="Sample"
+                           id="sample" name="sample"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.batchName as icon.batchName for icon in reports.samples"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3 no-padding" ng-init="reports.getCounties()">
+                    <br>
+                    <input class="form-control input-sm"
+                           ng-model="reports.whereCorrectiveActionResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
+                </div>
+
+                <div ng-controller="PdfController">  &nbsp;
+                    <br>
+
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getCorrectiveActionReport(reports.whereCorrectiveActionResults)">get report
+                    </button>
+
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateCorrectiveActionPdf(reports.correctiveActionData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateCorrectiveActionExcel(reports.correctiveActionData)"><i class="fa fa-file-excel-o"></i>
+                    </button>
+                </div>
+
+            </table>
+        </form>
+
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Lab Name</th>
+                <th>Sample Name</th>
+                <th>Round Name</th>
+                <th>Remarks</th>
+                <th>Date</th>
+                <th>Corr. Status</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="lab in reports.correctiveActionData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td>{{lab.lab.institute_name}}</td>
+                <td>{{lab.sample.batchName}}</td>
+                <td>{{lab.round.roundName}}</td>
+                <td>{{lab.remarks}}</td>
+                <td nowrap>{{lab.dateCreated}}</td>
+                <td nowrap>yes</td>
+
+
+            </tr>
+            <!--<tr ng-hide="reports.generalRoundData.length >0">-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

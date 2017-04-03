@@ -1,0 +1,126 @@
+<div class="clearfix">
+    &nbsp;
+</div>
+<div class="col-md-12">
+    <h4>Shipment Full Info
+        <small>{{samples.clickedShipmentFull.shipmentName}}</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button type="button" class="pull-right btn btn-sm btn-danger"
+                ng-click="samples.samplesActivePage('viewshipments', 0)"><i class="fa fa-remove"></i> close
+        </button>
+        <hr>
+
+    </h4>
+    <a class="pull-right" href="#" ng-click="samples.printDiv('shipmentDetails')">
+        <i class="fa fa-print pull-right"> print shipment details</i>
+    </a> &nbsp;
+    <!--<a href="#"  ng-click="samples.samplesActivePage('viewshipments', 0)">-->
+       <!--<< Back</a>-->
+    <!--<br>-->
+</div>
+<div id="shipmentDetails">
+    <div class="panel panel-primary">
+        <div class="panel panel-heading">
+            <h4>Shipment Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+
+            </h4>
+        </div>
+        <div class="panel panel-body">
+            <div class="text-left panel-title">
+                <b>Name/Code</b> : {{samples.clickedShipmentFull.shipmentName}}<br>
+                <b>Courier</b> : <i>{{samples.clickedShipmentFull.courier}}</i>
+                <br>
+                <b>Date Created</b> : {{samples.clickedShipmentFull.dateCreated}}<br>
+                <b>Date Dispatched</b> : <i>{{samples.dateDispatched.courier}}</i>
+                <br>
+                <b>Packaging Size </b>:
+                <i class="">{{samples.clickedShipmentFull.numberOfPanels}}</i>
+                <br>
+                <b>Total Packages Added :</b>
+                <i class="">{{samples.clickedShipmentFull.totalPanelsAdded}}</i>
+                <br>
+                <b>Round Id :</b>
+                <i nowrap>{{samples.clickedShipmentFull.roundId}}</i>
+                ,Created By
+                <i nowrap>{{samples.clickedShipmentFull.createdBy}}</i>
+                <br>
+                <b> Prepared By</b>
+                <i nowrap>{{samples.clickedShipmentFull.preparedBy}}</i>
+                ,
+                <i nowrap>{{shisamples.clickedShipmentFullpment.datePrepared}}</i>
+                <br>
+
+                <b>Shipment Status</b> :
+                <i nowrap>{{samples.returnShipmentStatus(samples.clickedShipmentFull.shipmentStatus)}}
+                </i>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel panel-heading">
+            <h2 class="panel-title">Packaging Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                <a href="#" class=" pull-right" ng-show="samples.panelsToShipment.length >0"
+                   ng-click="samples.printLabels(samples.clickedShipmentFull.id,2)"><i
+                        ng-hide=" samples.clickedShipmentFull.shipmentStatus==0"
+                        class="glyphicon glyphicon-print"></i></a>
+            </h2>
+        </div>
+        <div class="panel panel-body" ng-init="panel=''">
+            <table class="table table-striped"
+                   ng-click="shipment.totalPanelsAdded=samples.panelsToShipment.length"
+            >
+                <tr>
+                    <th></th>
+                    <th>Packaging Name</th>
+                    <th>Date Prepared</th>
+                    <th>Panel Type</th>
+                    <!--<th>Del'ry status</th>-->
+                    <th>Total Samples Added</th>
+
+                </tr>
+                <tr class="" ng-repeat="panels in samples.panelsToShipment">
+                    <td>{{$index+1}}</td>
+                    <td ng-click="panel=panels.panelName"><a href="#"
+                                                             ng-click="samples.getSampleFromPanel(panels,'tbl_bac_sample_to_panel')">
+                        {{panels.panelName}}</a></td>
+                    <td nowrap>{{panels.panelDatePrepared}}</td>
+                    <td nowrap>{{panels.panelType}}</td>
+                    <!--<td nowrap>{{samples.returnShipmentStatus(panels.deliveryStatus)}}</td>-->
+                    <td nowrap>{{panels.totalSamplesAdded}}</td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="panel panel-primary" ng-show="samples.sampleToPanel.length > 0">
+        <div class="panel panel-heading">
+            <h2 class="panel-title">Samples Information ({{panel}})</h2>
+        </div>
+        <div class="panel panel-body">
+            <table class="table table-striped"
+            >
+                <tr>
+                    <th></th>
+                    <th>Batch Name</th>
+                    <th>Date Prepared</th>
+                    <th>Material Source</th>
+                    <th>Material Origin</th>
+                    <th>Date Created</th>
+
+                </tr>
+                <tr class="" ng-repeat="sample in samples.sampleToPanel">
+                    <td>{{$index+1}}</td>
+                    <td>{{sample.batchName}}</td>
+                    <td>{{sample.datePrepared}}</td>
+                    <td>{{sample.materialSource}}</td>
+                    <td>{{sample.materialOrigin}}</td>
+                    <td nowrap>{{sample.dateCreated}}</td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

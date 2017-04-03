@@ -1,0 +1,135 @@
+<div class="well">
+    <form name="editForm" id="editForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "readiness", "action" => "edit"),'default', true) ?>" class="form-horizontal bs-example" role="form">
+        <fieldset>
+            <legend>Update Readiness Checklist</legend>
+
+
+            <div class="form-group">
+                <div class="col-lg-5">
+                    <input type="hidden" id="ParticipantID" name="ParticipantID" size="50" maxlength="45"
+                                             class="isRequired form-control" value="<?php echo $this->admin['ParticipantID']; ?>"/>
+            </div>
+           
+            </div>
+            
+            
+            <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Are you available to participate in the EQA? <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q1" id="q1" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q1"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q1"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Is the equipment operational? <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q2" id="q2" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q2"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q2"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Do you have sufficient reagent stocks to analyse the EQA panel? <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q3" id="q3" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q3"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q3"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>If the answer to any of the above questions is NO, please specify the challenge(s) <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q4" id="q4" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q4"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q4"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Will they be resolved within 2 weeks? <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q5" id="q5" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q5"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q5"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Do you have pending remedial action(s) from this programme arising from the previous EQA round? <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="q6" id="q6" disabled="disabled">
+                                    <option value="">Select Value</option>
+                                    <option value="1" <?php echo(($this->admin["q6"] == 1) ? "selected='selected'" : "") ?>>Yes</option>
+                                    <option value="0" <?php echo(($this->admin["q6"] == 0) ? "selected='selected'" : "") ?>>No</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Status <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="status" id="status">
+                                    <option value="">Select Value</option>
+                                    <option value="In Review" <?php echo(($this->admin["status"] == "In Review") ? "selected='selected'" : "") ?>>In review</option>
+                                    <option value="Complete" <?php echo(($this->admin["status"] == "Complete") ? "selected='selected'" : "") ?>>Complete</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Verdict <span class="mandatory">*</span></th>
+                            <td>
+                                <select class="form-control isRequired" name="verdict" id="verdict">
+                                    <option value="">Select Value</option>
+                                    <option value="Pending" <?php echo(($this->admin["verdict"] == 1) ? "selected='selected'" : "") ?>>Pending</option>
+                                    <option value="Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support" <?php echo(($this->admin["verdict"] == "Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support") ? "selected='selected'" : "") ?>>Approved</option>
+                                    <option value="We sincerely regret to inform you that you will not be participating in this round of EQA. We hope you will resolve the pending issues and join us again for te next round. We greatly appreciate your continued support." <?php echo(($this->admin["verdict"] == "We sincerely regret to inform you that you will not be participating in this round of EQA. We hope you will resolve the pending issues and join us again for te next round. We greatly appreciate your continued support.") ? "selected='selected'" : "") ?>>Rejected</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Comment <span class="mandatory">*</span></th>
+                            <td>
+                                <textarea id="comment" name="comment" size="225" maxlength="245" title="Please enter here" placeholder="Please enter here" class=" form-control"><?php echo $this->admin['comment']; ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+            
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/labs';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+        function (data) {
+	    if (data > 0) {
+		alert(msg, "err");
+		duplicated = true;
+		$("#"+obj).focus();
+	    }
+	    else {
+		duplicated = false;
+	    }
+	    return duplicated;
+        });
+    }
+
+    
+</script>

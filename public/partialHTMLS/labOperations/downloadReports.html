@@ -1,0 +1,105 @@
+<div class="" ng-controller="ReportsController">
+    <div class="" ng-show="reports.showResults">
+
+        <div class=" panel panel-primary" ng-init="samples.showRoundInfo=true">
+            <div class="panel panel-heading">
+                <h3><i class="fa fa-download"> </i>DOWNLOAD RESULTS
+                    <small>{{reports.responseInfoData.length}} records</small>
+                    <i class="fa fa-spin {{reports.loader}}"></i>
+
+                </h3>
+            </div>
+            <div class="panel panel-body">
+                <div id="alert" tabindex="1"></div>
+                <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                </div>
+                <div ng-init="reports.getEnrolledRounds()">
+                    <div class="col-md-12" ng-if="samples.showRoundInfo">
+                        <div class="col-md-12">
+                            <h4>
+                                <div class="pull-left col-md-4 col-sm-12">Rounds
+                                    <small>{{samples.rounds.length}} records</small>
+                                    <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                                </div>
+                                <div class="pull-right col-md-8 col-sm-12">
+                                    <items-per-page></items-per-page>
+
+                                    <div class="col-md-7 col-sm-9 pull-right">
+                                        <input type="search" class="col-md-12" ng-model="samples.searchData">
+                                    </div>
+                                    <div class="col-md-1 col-sm-3 pull-right">
+                                        <a href="#" class=" btn btn-default btn-sm"
+                                           ng-disabled="samples.loaderProgressSpinner=='fa-spinner'"
+                                           ng-click="reports.getEnrolledRounds()">
+                                            <i class="fa fa-refresh"></i>
+                                        </a>
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </h4>
+                        </div>
+
+                        <table class="table table-striped table-condensed table-bordered" id="printableTable">
+                            <thead>
+                            <tr>
+                                <th>#.</th>
+                                <th>Round Name</th>
+                                <th>Round Code</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Date Created</th>
+
+                                <th>Published</th>
+                                <th>Enrolled</th>
+                                <th></th>
+                                <!--                                <th>Date Saved</th>
+                                <th>Ship't Number</th>
+                                <th>Lab ID</th>
+                                <th>Total Samps.</th>
+                                <th>Created on</th>
+                                -->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr dir-paginate="round in reports.enrolledRounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
+                                <td>{{$index+1}}</td>
+                                <td>{{round.roundName}}
+                                </td>
+                                <td>{{round.roundCode}}</td>
+                                <td>{{round.startDate}}</td>
+                                <td>{{round.endDate}}</td>
+                                <td nowrap>{{round.dateCreated}}</td>
+                                <td nowrap>{{round.evaluatedStatus}}</td>
+                                <td nowrap>Enrolled</td>
+                                <td nowrap>
+                                    <button class="btn btn-primary btn-sm" ng-disabled="round.evaluated==0"
+                                            ng-click="reports.getUserResultsForDownload(round.roundId)"
+                                    >
+                                        <i class="fa fa-download"></i> download
+                                    </button>
+                                </td>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <div id="demos">
+
+                        </div>
+                        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

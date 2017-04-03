@@ -1,0 +1,97 @@
+<div >
+    <h4>{{samples.currentRound.roundName}}
+        <small>{{samples.currentRound.roundCode}}</small>
+        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+        <button type="button" class="pull-right btn btn-sm btn-danger"
+                ng-click="samples.samplesActivePage('viewRounds', 0)"><i class="fa fa-remove"></i> cancel
+        </button>
+        <hr>
+
+    </h4>
+    <div class="panel panel-primary" >
+
+        <div class="panel panel-heading">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                    ng-click="samples.samplesActivePage('viewRounds', 0)">&times;</button>
+            <h4 class="modal-title"> Enroll Ready Labs :
+                {{samples.currentRound.roundName | capitalizeLetter}} :
+                {{samples.currentRound.roundCode | capitalizeLetter}}
+                <small class="small">
+                    {{samples.labsToRoundArray.length}} Labs
+                </small>
+                <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                <!--<small class="">-->
+                    <!--<a href="#" class=" btn btn-default btn-sm"-->
+                       <!--ng-click="samples.addLabsToRound('tbl_bac_ready_labs', samples.currentRound)">-->
+                        <!--<i class="fa fa-refresh"></i>-->
+                    <!--</a>-->
+                <!--</small>-->
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
+            <p class="pre-scrollable">
+
+            <table class="table table-bordered table-responsive">
+                <tr>
+                    <td></td>
+
+                    <td><b>Lab Name</b></td>
+                    <td><b>Region</b></td>
+                    <td><b>Quantity</b></td>
+                    <td><b>Readiness Date</b></td>
+                </tr>
+                <tr ng-repeat="lab in samples.readyLabs |filter : searchSample |limitTo : 8"
+                    ng-class="{'alert-danger':panel.totalSamplesAdded==0}"
+                >
+                    <td>
+
+
+                        <div class="[ form-group ]">
+
+                            <input type="checkbox"  ng-hidden="true"  name="{{panel.labId}}" id="{{lab.labId}}" autocomplete="off"
+                                   ng-checked="samples.indexOfId(panel.labId,samples.labsToRoundArray)"
+                                   ng-click="samples.addLabsToRoundArray(lab.labId,labCheck)"
+                                   ng-model="labCheck">
+                            <div class="[ no-padding]">
+                                <label for="{{lab.labId}}" class="[ btn-round ]">
+                                    <span class="[ fa fa-check-circle  ]" ng-show="labCheck"
+
+                                          data-placement="right" data-type="info" data-container="body"
+                                          data-animation="am-fade-and-scale" bs-tooltip
+                                          data-trigger="hover" data-title="remove panel"
+                                    ></span>
+                                    <span class="[ fa fa-minus-circle  ]" ng-show="!labCheck"
+                                          data-placement="right" data-type="info" data-container="body"
+                                          data-animation="am-fade-and-scale" bs-tooltip
+                                          data-trigger="hover" data-title="add panel"
+                                    > </span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td>{{lab.first_name}}</td>
+                    <td>{{lab.region}}</td>
+                    <td>{{lab.institute}}</td>
+                    <td>{{lab.dateCreated}}</td>
+                </tr>
+            </table>
+            </p>
+            <div class="alert {{samples.feedbackObject.fbbgColor}}"
+                 ng-if="samples.feedbackObject.fbStatus">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+            </div>
+            <button class="btn btn-info col-md-12"
+                    ng-disabled="samples.labsToRoundArray.length==0 || samples.savingInProgress"
+                    ng-click="samples.saveLabsToRound(samples.currentRound)"
+            >
+                Save Lab to {{samples.currentRound.roundName | capitalizeLetter}} <i
+                    class="fa fa-spin {{samples.savingSpinner}}"></i>
+            </button>
+        </div>
+    </div>
+</div>

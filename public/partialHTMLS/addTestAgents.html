@@ -1,0 +1,136 @@
+<div class="col-md-12" ng-cloak="">
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel panel-heading ">
+                <h5>
+                    <x ng-show="samples.testAgentsFormData.id > 0">Edit {{samples.testAgentsFormData.batchName}}</x>
+                    <x ng-hide="samples.testAgentsFormData.id > 0">Add</x>
+                    Micro Agents
+                    
+                    <div class="label btn label-default pull-right"
+                         ng-click="samples.samplesActivePage('viewTestAgents')">
+                        <i class="fa fa-close"></i> Cancel
+                    </div>
+
+                </h5>
+            </div>
+            <div class="panel panel-body" style="margin: 10px !important;">
+                <div id='alert' tabindex='1'>
+                    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                    </div>
+                </div>
+                <form name="testAgentsForm" novalidate="" class="form-horizontal ">
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : testAgentsForm.testAgentName.$invalid && !testAgentsForm.testAgentName.$pristine }">
+                        <label class="col-2 col-form-label">Micro Agents Name</label>
+                        <div class="col-10">
+                            <input class="form-control " required="" ng-model="samples.testAgentsFormData.testAgentName"
+                                   name="testAgentName" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                            <small class="text-danger col-md-12"
+                                   ng-show="testAgentsForm.testAgentName.$invalid && !testAgentsForm.testAgentName.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : testAgentsForm.testAgentCode.$invalid && !testAgentsForm.testAgentCode.$pristine }">
+                        <label class="col-2 col-form-label">Micro Agents Code(optional)</label>
+                        <div class="col-10">
+                            <input class="form-control" required="" ng-model="samples.testAgentsFormData.testAgentCode"
+                                   name="testAgentCode"
+                                   ng-pattern="">
+                            <small class="text-danger col-md-12"
+                                   ng-show="testAgentsForm.testAgentCode.$invalid && !testAgentsForm.testAgentCode.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : testAgentsForm.testAgentType.$invalid && !testAgentsForm.testAgentType.$pristine }">
+                        <label class="col-2 col-form-label">Micro Agents Type</label>
+                        <div class="col-10">
+                            <select class="form-control" required="" ng-model="samples.testAgentsFormData.testAgentType"
+                                    name="testAgentType">
+                                <option value="1">ID</option>
+                                <option value="2">Gram Stain</option>
+                                <option value="3">AST</option>
+                            </select>
+                            <small class="text-danger col-md-12"
+                                   ng-show="testAgentsForm.testAgentType.$invalid && !testAgentsForm.testAgentType.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group row" ng-if="samples.testAgentsFormData.testAgentType==3"-->
+                         <!--ng-class="{-->
+                  <!--'has-error'  : testAgentsForm.programDesc.$invalid && !testAgentsForm.programDesc.$pristine-->
+                  <!--}">-->
+                        <!--<label class="col-2 col-form-label">Ranges</label>-->
+                        <!--<div class="col-10">-->
+
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon" id="basic-addon2">Few.</span>-->
+                                <!--<input type="text" class="form-control" ng-pattern="samples.numericOnly"-->
+                                       <!--name="rewRange"-->
+                                       <!--ng-model="samples.testAgentsFormData.fewRange"-->
+                                       <!--aria-describedby="basic-addon2">-->
+                            <!--</div>-->
+                            <!--<br>-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon" id="basic-addon3">Mod.</span>-->
+                                <!--<input type="text" class="form-control" ng-pattern="samples.numericOnly" name="modRange"-->
+                                       <!--ng-model="samples.testAgentsFormData.modRange"-->
+                                       <!--aria-describedby="basic-addon3">-->
+                            <!--</div>-->
+                            <!--<br>-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon" id="basic-addon4">Man.</span>-->
+                                <!--<input type="text" class="form-control" ng-pattern="samples.numericOnly"-->
+                                       <!--name="manyRange"-->
+                                       <!--ng-model="samples.testAgentsFormData.manyRange"-->
+                                       <!--aria-describedby="basic-addon4">-->
+                            <!--</div>-->
+
+                            <!--<small class="text-danger col-md-12"-->
+                                   <!--ng-show="testAgentsForm.fewRange.$invalid && !testAgentsForm.fewRange.$pristine">-->
+                                <!--Error : Required & Only numbers,alphabets,hyphen and dashes allowed-->
+                            <!--</small>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="col-md-12  text-center">
+                        <!--<div class="form-group col-md-6 pull-left">-->
+                        <button class="btn btn-primary col-md-6"
+
+                                ng-click="samples.saveSampleFormData('tbl_bac_test_agents',samples.testAgentsFormData)"
+                                ng-disabled="testAgentsForm.$invalid || samples.savingInProgress"
+                        >Save Micro Agents<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                        <!--</div>-->
+                        <!--<div class="col-md-6  pull-right">-->
+
+                        <button class="btn btn-danger col-md-6"
+                                ng-click="samples.emptyFormData('tbl_bac_test_agents',0)"
+                        >Cancel</i>
+                        </button>
+                        <!--</div>-->
+                    </div>
+
+
+                </form>
+            </div>
+
+
+        </div>
+        <div class="clearfix">&nbsp;</div>

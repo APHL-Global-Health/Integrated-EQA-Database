@@ -1,0 +1,156 @@
+<div class="col-md-12" ng-cloak="">
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel panel-heading ">
+                <h5>
+                    <x ng-show="samples.courierFormData.id > 0">Edit {{samples.courierFormData.batchName}}</x>
+                    <x ng-hide="samples.courierFormData.id > 0">Add</x>
+                    Courier
+
+                    <div class="label btn label-default pull-right"
+                         ng-click="samples.samplesActivePage('viewCouriers')">
+                        <i class="fa fa-close"></i> Cancel
+                    </div>
+
+                </h5>
+            </div>
+            <div class="panel panel-body"  style="margin: 10px !important;">
+            <div id='alert' tabindex='1'>
+                <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                </div>
+            </div>
+            <form name="courierData" novalidate="" class="form-horizontal ">
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.courierName.$invalid && !courierData.courierName.$pristine }">
+                    <label class="col-2 col-form-label">Courier Name</label>
+                    <div class="col-10">
+                        <input class="form-control " required="" ng-model="samples.courierFormData.courierName"
+                               name="courierName" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.courierName.$invalid && !courierData.courierName.$pristine">
+                            Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        </small>
+
+                    </div>
+                </div>
+
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.mobile.$invalid && !courierData.mobile.$pristine }">
+                    <label class="col-2 col-form-label">Mobile</label>
+                    <div class="col-10">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.mobile"
+                               name="mobile"
+                               ng-pattern="samples.numericOnly">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.mobile.$invalid && !courierData.mobile.$pristine">
+                            Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        </small>
+
+                    </div>
+                </div>
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.physicalAddress.$invalid && !courierData.physicalAddress.$pristine }">
+                    <label class="col-2 col-form-label">Physical Address</label>
+                    <div class="col-10">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.physicalAddress"
+                               name="physicalAddress"
+                               ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.physicalAddress.$invalid && !courierData.physicalAddress.$pristine">
+                            Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        </small>
+
+                    </div>
+                </div>
+
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.address.$invalid && !courierData.address.$pristine }">
+                    <label class="col-2 col-form-label">Address</label>
+                    <div class="col-10">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.address"
+                               name="address"
+                               ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.address.$invalid && !courierData.address.$pristine">
+                            Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        </small>
+
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="samples.courierFormData.address!='NPHL'"
+                     ng-class="{ 'has-error'  : courierData.tel.$invalid && !courierData.tel.$pristine }">
+                    <label class="col-2 col-form-label">Tel.</label>
+                    <div class="col-">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.tel"
+                               name="tel"
+                               ng-pattern="samples.numericOnly">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.tel.$invalid && !courierData.tel.$pristine">
+                            Error : Required & Only numbers
+                        </small>
+
+                    </div>
+                </div>
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.email.$invalid && !courierData.email.$pristine }">
+                    <label class="col-2 col-form-label">Email</label>
+                    <div class="col-10">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.email" type="email"
+                               name="email" ng-pattern="samples.emailAddressRegex"
+                        >
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.email.$invalid && !courierData.email.$pristine">
+                            Error : Valid email addredd required
+                        </small>
+
+                    </div>
+                </div>
+                <div class="form-group row"
+                     ng-class="{ 'has-error'  : courierData.contactPerson.$invalid && !courierData.contactPerson.$pristine }">
+                    <label class="col-2 col-form-label">Contact Person</label>
+                    <div class="col-10">
+                        <input class="form-control" required="" ng-model="samples.courierFormData.contactPerson"
+                               name="contactPerson" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                        <small class="text-danger col-md-12"
+                               ng-show="courierData.contactPerson.$invalid && !courierData.contactPerson.$pristine">
+                            Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                        </small>
+
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="form-group"
+                     ng-class="{ 'has-error'  : courierData.dispatchable.$invalid && !courierData.dispatchable.$pristine }">
+
+                    <div class="col-10">
+
+                        <button class="btn btn-primary col-md-12"
+                                ng-click="samples.saveSampleFormData('tbl_bac_couriers',samples.courierFormData)"
+                                ng-disabled="courierData.$invalid || samples.savingInProgress"
+                        >Save Courier<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-10">
+
+                        <button class="btn btn-danger col-md-12"
+                                ng-click="samples.emptyFormData('tbl_bac_couriers',0)"
+                        >Cancel</i>
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+
+        </div>
+    </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>

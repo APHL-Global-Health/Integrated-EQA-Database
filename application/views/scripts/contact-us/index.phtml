@@ -1,0 +1,231 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/bootstrap-select.min.css'); ?>" />
+<div class="well">
+    <form name="addParticipantForm" id="addParticipantForm" method="post" action="<?php echo $this->url(array("module" => "default", "controller" => "contact-us", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
+            return false;">
+        <fieldset>
+            <legend>Request Enrollment</legend>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <input type="text" id="pid" name="pid" size="50" class="isRequired form-control"
+                           title="Please enter a unique identifier here"
+                           placeholder="Please enter a unique identifier here"
+                           onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')"/>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+           <label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label>
+           <div class="col-lg-8">
+               <input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/>
+           </div>
+               </div>          
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Institute Name <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8"><input type="text" id="instituteName" name="instituteName" size="50" maxlength="255" 
+                                             class="isRequired form-control" title="Please enter the Institute Name here"
+                                             placeholder="Please enter the Institute Name here"/></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Department Name <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8"><input type="text" id="departmentName" name="departmentName" size="50" maxlength="255" 
+                                             class="isRequired form-control" title="Please enter the Department Name here"
+                                             placeholder="Please enter the Department Name here"/></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Physical Address</label>
+
+                <div class="col-lg-8"><textarea id="address" name="address" size="50" 
+                                                class="form-control" title="Please enter the address here"
+                                                placeholder="Please enter the address here"></textarea></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">City <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8"><input type="text" id="city" name="city" size="50" maxlength="255" 
+                                             class="isRequired form-control" title="Please enter the city here"
+                                             placeholder="Please enter the city here"/></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Country <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <select class="form-control isRequired" name="country" id="country" title="Please choose the country here">
+                        <option value=""></option>
+                        <?php foreach ($this->countriesList as $cou) {
+                            ?>
+                            <option value="<?php echo $cou['id']; ?>"><?php echo $cou['iso_name']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">County <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <select class="form-control isRequired" name="region" id="region" title="Please choose the county here">
+                            <option value=""></option>
+                            <?php foreach ($this->countiesList as $cout) {
+                                ?>
+                                <option value="<?php echo $cout['CountyID']; ?>"><?php echo $cout['Description']; ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Partner</label>
+
+                <div class="col-lg-8">
+                    <select class="form-control" name="Partner" id="Partner" title="Please choose the Partner here">
+                            <option value="">Select Partner</option>
+                            <?php foreach ($this->PartnersList as $prt) {
+                                ?>
+                                <option value="<?php echo $prt['partner_id']; ?>"><?php echo $prt['partner_name']; ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Enrolled Programs </label>
+
+                <div class="col-lg-8">
+                    <select name="scheme[]" id="scheme"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
+                        <?php foreach ($this->schemeList as $sch) {
+                                ?>
+                                <option value="<?php echo $sch['ID']; ?>"><?php echo $sch['SchemeName']; ?></option>
+                                <?php
+                            }
+                            ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Platforms </label>
+
+                <div class="col-lg-8">
+                    <select name="platform[]" id="platform"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose platforms" >
+                        <?php foreach ($this->platformList as $platforms) {
+                            ?>
+                            <option value="<?php echo $platforms['ID']; ?>"><?php echo $platforms['PlatformName']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Contact Name </label>
+
+                <div class="col-lg-8"><input type="text" id="contactname" name="contactname" size="50" maxlength="255" class="form-control" title="Please enter the contact name here" placeholder="Please enter the contact name here"/></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">E-mail <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8"><input type="text" id="pemail" name="pemail" size="50" maxlength="255" class="isRequired isEmail form-control" title="Please enter the email id here" placeholder="Please enter the email id here"/></div>
+            </div>
+            
+
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Shipping Address (include city and country)</label>
+
+                <div class="col-lg-8"><textarea id="shippingAddress" name="shippingAddress" size="50" 
+                                                class="form-control" title="Please enter the address here"
+                                                placeholder="Please enter the Shipping Address here"></textarea></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Zip/Postal Code (if applicable)</label>
+
+                <div class="col-lg-8"><input type="text" id="zip" name="zip" size="50" maxlength="255" 
+                                             class="form-control" title="Please enter the Zip/Postal here"
+                                             placeholder="Please enter the Zip/Postal here"/></div>
+            </div>
+            
+            
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Cell/Mobile No.</label>
+
+                <div class="col-lg-8">
+                    <input id="phone1" type="text" id="pphone2" name="pphone2" size="50" maxlength="255" class="form-control isNumeric checkNum" title="Please enter mobile/cell number here" placeholder="Please enter mobile/cell number here"/></div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Phone Number</label>
+                <div class="col-lg-8">
+                    <input id="phone2" type="text" id="pphone1" name="pphone1" size="50" maxlength="255" placeholder="Please enter phone number here" class="form-control isNumeric checkNum"/>
+                </div>
+            </div>
+          </table>
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" class="form-group col-lg-11" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/participants';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
+<script type="text/javascript">
+                    var duplicated = false;
+
+                    $(document).ready(function() {
+                        $('#scheme').selectpicker();
+                        $('#platform').selectpicker();
+                        $('#country').selectpicker();
+                        $('#region').selectpicker();
+                        $('#Partner').selectpicker();
+                        tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
+                            $("#lastNameDiv").hide();
+                            $("#plname").val('');
+                            $("#firstNameDiv").html(tag);
+                    });
+
+                    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
+                        function(data) {
+                            if (data > 0) {
+                                alert(msg, "err");
+                                duplicated = true;
+                                obj.focus();
+                            }
+                            else {
+                                duplicated = false;
+                            }
+                        });
+                    }
+
+                    function validateNow() {
+                        $(".bootstrap-select").removeClass('isRequired');
+                        //checkDuplicate('participant', 'unique_identifier', $("#pid"), null, 'This Participant ID already exists for another Participant. Please try something else.')
+                        flag = deforayValidator.init({
+                            formId: 'addParticipantForm'
+                        });
+                        if (flag && !duplicated) {
+                            $.blockUI();
+                            document.getElementById('addParticipantForm').submit();
+                        }
+                    }
+
+                    function checkIndividualParticipant(obj) {
+                        if (obj.checked) {
+                            tag = '<label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the First Name here" placeholder="Please enter the First Name here"/></div>';
+                            $("#lastNameDiv").show();
+                           
+                        } else {
+                            tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
+                            $("#lastNameDiv").hide();
+                            $("#plname").val('');
+                        }
+                        $("#firstNameDiv").html(tag);
+                    }
+</script>

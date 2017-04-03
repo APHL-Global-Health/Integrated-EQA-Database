@@ -1,0 +1,349 @@
+<div class="well">
+    <form name="addCsvForm" id="addCsvForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "importcsv", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Import Provider Data</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="ProviderID" id="ProviderID" title="Please choose the provider here">
+                        <option value=""></option>
+                        <?php foreach ($this->providerList as $prov) {
+                            ?>
+                            <option value="<?php echo $prov['ProviderName']; ?>"><?php echo $prov['ProviderName']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Program <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="ProgramID" id="ProgramID" title="Please choose the program here">
+                        <option value=""></option>
+                        <?php foreach ($this->programList as $prog) {
+                            ?>
+                            <option value="<?php echo $prog['Description']; ?>"><?php echo $prog['Description']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Period <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select class="form-control isRequired" name="RoundID" id="RoundID" title="Please choose the period here">
+                        <option value=""></option>
+                        <?php foreach ($this->periodList as $pd) {
+                            ?>
+                            <option value="<?php echo $pd['PeriodDescription']; ?>"><?php echo $pd['PeriodDescription']; ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">File Upload <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="file" name="fileToUpload" id="fileToUpload" class="isRequired form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-9" style="margin:0 auto;float:none;">
+                    <h5 id="mapTableH">Map Columns</h5>
+                    <table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" id="mapTable">
+                        <thead>
+                            <tr>
+                                <th>Excel Columns</th>
+                                <th>Repository Columns</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--<tr>
+                                <td>
+                            <?php //foreach ($this->importHeadersList as $eh) {
+                            ?>
+                                        <p><?php //echo $eh;                                     ?></p>
+                            <?php
+                            //}
+                            ?>
+                                </td>
+                                <td>
+                                    <select class="form-control isRequired" name="RepID" id="RoundID" title="Please choose the column here">
+                                        <option value=""></option>
+                            <?php //foreach ($this->repColumnList as $rh) {
+                            ?>
+                                            <option><?php //echo $rh['Field'];                                     ?></option>
+                            <?php
+                            //}
+                            ?>
+                                    </select>
+                                </td>
+                            </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="alert alert-danger col-lg-12 text-center" id="error" style="display: none;"></div>
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Next" id="submitValues"
+                       onclick="postSelectedKeysAndValue()"
+                       id="btnnext"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/importcsv';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+            <br>
+            <img id="loader" src="/public/images/loading.gif" />
+
+        </fieldset>
+    </form>
+
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+        objValue = document.getElementById(obj).value;
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
+        function (data) {
+            if (data > 0) {
+                alert(msg, "err");
+                duplicated = true;
+                $("#" + obj).focus();
+            }
+            else {
+                duplicated = false;
+            }
+            return duplicated;
+        });
+    }
+
+    function validateNow() {
+        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
+        //if (!checkDduplicateId) {
+        flag = deforayValidator.init({
+            formId: 'addCsvForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('addCsvForm').submit();
+        }
+        //}
+    }
+    $(document).ready(function () {
+        $("#mapTable").hide();
+        $("#mapTableH").hide();
+        $("#addCsvForm").submit(function (e) {
+            provider = $("#ProviderID").val();
+            program = $("#ProgramID").val();
+            period = $("#RoundID").val();
+            files = $("#fileToUpload").val();
+            model = {
+                "ProviderID": provider,
+                "ProgramID": program,
+                "RoundID": period,
+                "fileToUpload": files,
+            };
+            $.ajax({
+                type: 'POST',
+                url: 'mapcolumns',
+                dataType: 'json',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $("#mapTableH").show();
+                    $("#mapTable").show();
+                    onReceivedResponse(JSON.stringify(data));
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                }
+            });
+            e.preventDefault();
+            return;
+        });
+    });
+    var excelRepArray = '';
+    function getExcelHeader(excelLabel) {
+        excelRepArray = excelLabel;
+        //  alert('excelLabel : '+excelRepArray)
+    }
+    function onReceivedResponse(data) {
+        var headers = JSON.parse(data);
+        var excelHeaders = headers ["excel-headers"];
+        var schemasHeaders = headers ["schemas-headers"];
+        var tblColumns = Array();
+        var tblComments = Array();
+        for (var index in schemasHeaders) {
+            for (var value in schemasHeaders[index]) {
+                if (value === "Field")
+                    tblColumns[tblColumns.length] = schemasHeaders[index][value];
+                if (value === "Comment")
+                    tblComments[tblComments.length] = schemasHeaders[index][value];
+            }
+        }
+        //alert(tblComments);
+        var tableContents = "<tbody>";
+        for (var i = 0; i < excelHeaders.length; i++) {
+            tableContents += "<tr onClick='getExcelHeader(" + i + ")'><td>" + (i + 1) + "</td><td><label id='label_" + i + "'>" + excelHeaders[i] + "</label></td><td>" + mockDropDown(tblColumns, tblComments, i) + "</td></tr>";
+        }
+        document.getElementById('mapTable').innerHTML = tableContents + "</tbody>";
+    }
+    function mockDropDown(tblColumns, tblComments, i) {
+        var dropDown = "<select id='" + i + "' class='form-control sel selectedVal_" + i + "' ><option value='0'>Unspecified Field</option>";
+        for (var i = 0; i < tblColumns.length; i++) {
+            dropDown += "<option value='" + tblColumns[i] + "' >" + tblComments[i] + "</option>";
+        }
+        return  dropDown + "</select>";
+    }
+    var postParams = "";
+    $('body').on('change', '.sel', function () {
+        //alert(excelRepArray)
+        appendFormParams(excelRepArray, $(this).val());
+    });
+    var excelHeaderI = '';
+    var clickedLabel = [];
+    var clickedExcelLabel = [];
+    var arrayWithExcelLabelValue = [];
+    function appendFormParams(key, value) {
+        if (value != 1) {
+            var singleArray = new Array();
+            var usedPosition = '';
+            if (clickedLabel.length == 1 && value == '0') {
+                clickedLabel = [];
+                arrayWithExcelLabelValue = [];
+            }
+            if (clickedLabel.length > 0) {
+
+                var exists = false;
+                var indexPos = -1;
+                for (var i = 0; i < clickedLabel.length; i++) {
+                    for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
+                        if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
+
+                            indexPos = j;
+                            break;
+                        }
+
+                    }
+
+                    if (clickedLabel[i] == value) {
+
+                        usedPosition = clickedLabel[i];
+                        exists = true; //   
+                        break;
+                    } else {
+
+                        exists = false
+
+                    }
+
+                }
+                if (indexPos >= 0) {
+                    clickedLabel.splice(indexPos, 1);
+                    arrayWithExcelLabelValue.splice(indexPos, 1);
+                    //console.log(indexPos)
+                }
+                if (!exists) {
+                    singleArray.key = key;
+                    singleArray.value = value;
+                    if (value != '0') {
+                        clickedLabel.push(value);
+                        arrayWithExcelLabelValue.push(singleArray);
+                    }
+
+                    if (postParams === "") {
+                        postParams = key + "=" + value;
+                    } else {
+                        postParams += "&" + key + "=" + value;
+                    }
+                    $("#error").hide();
+                    $(".selectedVal_" + key).css("border-color", "lightgray");
+                } else {
+                    $("#error").show();
+                    $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
+                    $(".selectedVal_" + key).css("border-color", "red");
+                    document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
+                }
+                //console.log(arrayWithExcelLabelValue);
+                //console.log(clickedLabel);
+            } else {
+
+                //console.log(clickedLabel);
+                postParams = key + "=" + value;
+                clickedLabel.push(value);
+                singleArray.key = key;
+                singleArray.value = value;
+                if (value != '0') {
+                    arrayWithExcelLabelValue.push(singleArray);
+                }
+            }
+            // alert(postParams);
+        }
+    }
+
+    function postSelectedKeysAndValue() {
+
+        if (arrayWithExcelLabelValue.length > 0) {
+            $("#error").hide();
+            provider = $("#ProviderID").val();
+            program = $("#ProgramID").val();
+            period = $("#RoundID").val();
+            files = $("#fileToUpload").val();
+            var model = {};
+            model.ProviderID = provider,
+                    model.ProgramID = program,
+                    model.RoundID = period,
+                    model.fileToUpload = files
+
+            $('#loader').show();       
+            $.ajax({
+                type: 'POST',
+                url: 'save',
+                dataType: 'text',
+                data: convertArrayToString(arrayWithExcelLabelValue, model),
+                success: function (data) {
+                    alert(data);
+                    //.$('#loader').hide();
+                    window.location='/admin/importcsv/index';
+                    
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#loader').hide();
+                    //alert(data);
+                    //alert(xhr.responseText);
+                    //alert(thrownError);
+                }
+            });
+        } else {
+            $("#error").show();
+            document.getElementById('error').innerHTML = "Please select atleast 5 fields";
+        }
+    }
+    function convertArrayToString(arrayWithExcelLabelValue, model) {
+        var length = arrayWithExcelLabelValue.length,
+                json = [];
+        for (var i = 0; i < length; i++) {
+            var key = arrayWithExcelLabelValue[i]['key'];
+            var value = arrayWithExcelLabelValue[i]['value'];
+            var item = {
+                key: key,
+                value: value
+            };
+            json.push(item);
+        }
+        var item = {
+            ProviderID: model.provider,
+            ProgramID: model.program,
+            RoundID: model.period,
+            fileToUpload: model.files
+        }
+        json.push(model)
+        return JSON.stringify(json);
+    }
+</script>
