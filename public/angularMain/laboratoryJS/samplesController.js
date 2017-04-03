@@ -2684,7 +2684,7 @@
             $scope.samples.currentSampleForResponse = sample;
             $scope.samples.samplesActivePage("userFeedbackForm", 1);
 
-            if (angular.isDefined(type)) {
+
                 changeSavingSpinner(true);
                 var where = {
                     userId: sample.userId,
@@ -2699,19 +2699,20 @@
                         changeSavingSpinner(false);
                         console.log(response);
                         if (response.status == 1) {
-                            $scope.samples.userFeedbackFormData = response.data.results;
-                            $scope.samples.susceptibilityFormData = response.data.susceptibility;
-                            $scope.samples.resultFields = response.data.microAgents;
-                            $scope.samples.sampleInstructions = response.data.sampleInstructions;
+                            if (!angular.isDefined(type)) {
+                                $scope.samples.sampleInstructions = response.data.sampleInstructions;
+                            }else {
+                                $scope.samples.userFeedbackFormData = response.data.results;
+                                $scope.samples.susceptibilityFormData = response.data.susceptibility;
+                                $scope.samples.resultFields = response.data.microAgents;
+                                $scope.samples.sampleInstructions = response.data.sampleInstructions;
+                            }
                         }
                     })
                     .error(function (error) {
                         changeSavingSpinner(false);
                         EptServices.EptServiceObject.returnServerErrorAlert();
                     })
-            } else {
-
-            }
 
         }
 

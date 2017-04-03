@@ -97,7 +97,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                 }
                 if (isset($whereUpdate)) {
-                    $updateData['issuedFlag']=1;
+                    $updateData['issuedFlag'] = 1;
                     $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereUpdate, $updateData);
 
                 }
@@ -2093,6 +2093,21 @@ class BacteriologydbciController extends Zend_Controller_Action
         }
     }
 
+    public function returnExpectedResults($sampleId)
+    {
+        $sampleInstructions = $this->returnValueWhere($sampleId, 'tbl_bac_expected_results');
+        $returnFinalASTExpectedResults = [];
+        if ($sampleInstructions != null) {
+            $returnFinalASTExpectedResults['expectedResults'] = $sampleInstructions;
+        }
+        $sampleWhere['sampleId'] = $sampleId;
+        $expectedASTs = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $sampleWhere);
+        $returnFinalASTExpectedResults['expectedASTs'] = $expectedASTs;
+        return $returnFinalASTExpectedResults;
+
+
+    }
+
     public function getlabuserresponseAction()
     {
         $postedData = $this->returnArrayFromInput();
@@ -2118,6 +2133,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $microAgents[$key]->range = $sampleInfoRange;
             }
         }
+        $data['expectedResults'] =$this->returnExpectedResults($where['sampleId']);
         echo $this->returnJson(array('status' => 1, 'data' => $data));
 
         exit;

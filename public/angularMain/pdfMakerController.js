@@ -1,6 +1,6 @@
 var pdfModule = angular.module('ReportModule')
 
-pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL) {
+pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL,$timeout) {
     $scope.pdfMake = {};
 
 
@@ -629,6 +629,8 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
+
+
     function returnRoundExcelData(excelData) {
 
         if (excelData.length > 0) {
@@ -658,7 +660,27 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         }
     }
 
+    $scope.pdfMake.exportToExcel = function (filename, id) {
+        alert("called");
+        $scope.reports.actionMenu = 0;
+        var date = new Date();
+        $timeout(function () {
 
+
+            filename += '-' + date;
+            $("#" + id).table2excel({
+                exclude: ".noExl",
+                name: "Excel Document Name",
+                filename: filename,
+                fileext: ".xls",
+                exclude_img: true,
+                exclude_links: true,
+                exclude_inputs: true
+            });
+            $scope.reports.actionMenu = 1;
+        }, 100)
+
+    }
     $scope.pdfMake.generateSurveyReportExcel = function (data, searchData) {
         if (data.length > 0) {
             var excelData = returnRoundExcelData(data);
