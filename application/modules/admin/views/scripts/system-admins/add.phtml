@@ -52,7 +52,7 @@
 		    <input type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45" placeholder="Please enter secondary email here" class="form-control isEmail" onblur="cheackEmailId()"/>
 		</div>
             </div>
-            <input type="text" value="<?php echo $_SESSION['loggedInDetails']['IsVl'];?>" name="IsVl"/>
+            <input type="text" value="<?php echo $_SESSION['loggedInDetails']['IsVl'];?>" hidden="" name="IsVl"/>
             <?php if($_SESSION['loggedInDetails']['AssignModule']==1){?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Module <span class="mandatory">*</span></label>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <?php } ?>
-            <?php if($_SESSION['loggedInDetails']['IsVl']==3){?>
+            <?php if($_SESSION['loggedInDetails']['IsVl']==2){?>
             <div class="form-group submodule">
                 <label class="col-lg-3 control-label">Sub Module <span class="mandatory">*</span></label>
                 <div class="col-lg-5">

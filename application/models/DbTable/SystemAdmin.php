@@ -1,14 +1,11 @@
 <?php
 
-class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
-{
+class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
     protected $_name = 'system_admin';
     protected $_primary = 'admin_id';
 
-    
-    public function getAllAdmin($parameters)
-    {
+    public function getAllAdmin($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -91,9 +88,15 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
          * SQL queries
          * Get data to display
          */
-
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            if ($sWhere == "") {
+                $sWhere .= "IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
+            } else {
+                $sWhere .= "and (IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
+            }
+        }
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-	
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -146,52 +149,51 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
 
         echo json_encode($output);
     }
-    
-    public function addSystemAdmin($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function addSystemAdmin($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'first_name'=>$params['firstName'],
-                      'last_name'=>$params['lastName'],
-                      'primary_email'=>$params['primaryEmail'],
-                      'secondary_email'=>$params['secondaryEmail'],
-                      'password'=>$params['password'],
-                      'phone'=>$params['phone'],
-                      'IsVl'=>$params['IsVl'],
-                      'IsProvider'=>$params['IsProvider'],
-                      'AssignModule'=>0,
-                      'status'=>$params['status'],
-                      'force_password_reset'=>1,
-		      'created_by' => $authNameSpace->admin_id,
-                      'created_on' => new Zend_Db_Expr('now()')
-                      );
+            'first_name' => $params['firstName'],
+            'last_name' => $params['lastName'],
+            'primary_email' => $params['primaryEmail'],
+            'secondary_email' => $params['secondaryEmail'],
+            'password' => $params['password'],
+            'phone' => $params['phone'],
+            'IsVl' => $params['IsVl'],
+            'IsProvider' => $params['IsProvider'],
+            'AssignModule' => 0,
+            'status' => $params['status'],
+            'force_password_reset' => 1,
+            'created_by' => $authNameSpace->admin_id,
+            'created_on' => new Zend_Db_Expr('now()')
+        );
         return $this->insert($data);
     }
-    
-    public function getSystemAdminDetails($adminId){
-        return $this->fetchRow($this->select()->where("admin_id = ? ",$adminId));
+
+    public function getSystemAdminDetails($adminId) {
+        return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
     }
-    
-    public function updateSystemAdmin($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function updateSystemAdmin($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'first_name'=>$params['firstName'],
-                      'last_name'=>$params['lastName'],
-                      'primary_email'=>$params['primaryEmail'],
-                      'secondary_email'=>$params['secondaryEmail'],
-                      'phone'=>$params['phone'],
-                      'status'=>$params['status'],
-                      'IsVl'=>$params['IsVl'],
-                      'IsProvider'=>$params['IsProvider'],
-                      'AssignModule'=>0,
-		      'updated_by' => $authNameSpace->admin_id,
-                      'updated_on' => new Zend_Db_Expr('now()')
-                      );
-        if(isset($params['password']) && $params['password'] !=""){
-            $data['password']= $params['password'];
-            $data['force_password_reset']= 1;
+            'first_name' => $params['firstName'],
+            'last_name' => $params['lastName'],
+            'primary_email' => $params['primaryEmail'],
+            'secondary_email' => $params['secondaryEmail'],
+            'phone' => $params['phone'],
+            'status' => $params['status'],
+            'IsVl' => $params['IsVl'],
+            'IsProvider' => $params['IsProvider'],
+            'AssignModule' => 0,
+            'updated_by' => $authNameSpace->admin_id,
+            'updated_on' => new Zend_Db_Expr('now()')
+        );
+        if (isset($params['password']) && $params['password'] != "") {
+            $data['password'] = $params['password'];
+            $data['force_password_reset'] = 1;
         }
-        return $this->update($data,"admin_id=".$params['adminId']);
+        return $this->update($data, "admin_id=" . $params['adminId']);
     }
 
 }
-

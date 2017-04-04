@@ -37,7 +37,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'p.first_name', 'u.status');
+        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "dm_id";
@@ -74,7 +74,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
-        $sWhere = "IsVl = '" . $_SESSION['loggedInDetails']['IsVl'] . "'";
+        $sWhere = "";
         if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
             $searchArray = explode(" ", $parameters['sSearch']);
             $sWhereSub = "";
@@ -116,10 +116,16 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('u' => $this->_name))
-                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array())
-                ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"), 'p.participant_id'))
-                ->group('u.dm_id');
+				    ->joinLeft(array('pmm'=>'participant_manager_map'),'pmm.dm_id=u.dm_id',array())
+				    ->joinLeft(array('p'=>'participant'),'p.participant_id = pmm.participant_id',array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"),'p.participant_id'))
+				    ->group('u.dm_id');
 
+        if ($sWhere == "") {
+            $sWhere .= "IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
+        } else {
+            $sWhere .= "and (IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
+        }
+        
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -157,24 +163,24 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-
+        
         foreach ($rResult as $aRow) {
             $row = array();
-            //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
-            //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
-            //}else{
-            //$participantDetails='';
-            //}
+	    //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
+	    //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
+	    //}else{
+	    //$participantDetails='';
+	    //}
             $row[] = $aRow['institute'];
-            // $row[] = $participantDetails.' '.$aRow['institute'];
-            $row[] = $aRow['first_name'];
-            $row[] = $aRow['last_name'];
+	   // $row[] = $participantDetails.' '.$aRow['institute'];
+            $row[] = $aRow['first_name']; 
+            $row[] = $aRow['last_name']; 
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/' . $aRow['dm_id'] . '\',\'980\',\'500\');" >' . $aRow['participantCount'] . '</a>';
+            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
-
-            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            
+              if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             } else {
                 $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
@@ -183,7 +189,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         }
 
         echo json_encode($output);
-    }
+    }    
 
     public function getUserDetails($userId) {
         return $this->fetchRow("primary_email = '" . $userId . "'")->toArray();
@@ -253,7 +259,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         $sql = $this->select()->order("first_name");
         if ($active) {
             if (isset($_SESSION['loggedInDetails']["IsVl"])) {
-                $IsVl=$_SESSION['loggedInDetails']["IsVl"];
+                $IsVl = $_SESSION['loggedInDetails']["IsVl"];
                 $sql = $sql->where("status='active' and IsVl=$IsVl");
             } else {
                 $sql = $sql->where("status='active'");

@@ -19,7 +19,13 @@ class Admin_SystemAdminsController extends Zend_Controller_Action
             $clientsServices->getAllAdmin($params);
         }
     }
-
+ public function saAction()
+    {
+        $clientsServices = new Application_Service_SystemAdmin();
+            $clientsServices->getAllAdmin($params);
+        var_dump($clientsServices);
+        exit;
+    }
 
     public function addAction()
     {

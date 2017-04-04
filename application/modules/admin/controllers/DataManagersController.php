@@ -19,7 +19,15 @@ class Admin_DataManagersController extends Zend_Controller_Action
             $clientsServices->getAllUsers($params);
         }
     }
-
+  public function testAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();            
+            $clientsServices = new Application_Service_DataManagers();
+            $clientsServices->getAllUsers($params);
+        }
+        exit;
+    }
     public function addAction()
     {
         $userService = new Application_Service_DataManagers();

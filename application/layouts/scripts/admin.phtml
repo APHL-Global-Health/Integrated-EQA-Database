@@ -161,7 +161,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);      ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);        ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -247,7 +247,7 @@ if ($auth->hasIdentity()) {
                         </li>
 
                     </ul>
-                <?php } else if ($rep == 1) { ?>
+                <?php } else if ($rep == 4) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -257,145 +257,147 @@ if ($auth->hasIdentity()) {
                             </ul>
                         </li>
                     </ul>
+                <?php } else if ($vl == 4) { ?>
+                
+                
                 <?php } ?>
+                    <?php if ($vl == 3) { ?>
+                        <ul class="nav navbar-nav">
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
+                                <a href="#"><i
+                                        class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure
+                                    <b class="caret"></b></a>
 
-                <?php if ($vl == 3) { ?>
-                    <ul class="nav navbar-nav">
-                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
-                            <a href="#"><i
-                                    class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
-                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure
-                                <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">Admin
+                                            Manager</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">Micro-Biology
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'lab-samples-manage'), 'default', true); ?>">PT
+                                            Labs & Samples Manager</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">Micro
+                                            Labs</a></li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">Users</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
+                        ?>">
+                                            Lab & User Mapping
+                                        </a></li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'pending'), 'default', true); ?>">Pending
+                                            PT Participants</a></li>
 
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">Admin
-                                        Manager</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">Micro-Biology
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'lab-samples-manage'), 'default', true); ?>">PT
-                                        Labs & Samples Manager</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">Micro
-                                        Labs</a></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">Users</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-                    ?>">
-                                        Lab & User Mapping
-                                    </a></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'pending'), 'default', true); ?>">Pending
-                                        PT Participants</a></li>
+                                </ul>
+                            </li>
 
-                            </ul>
-                        </li>
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze
+                                    <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">Micro
+                                            Reports</a>
+                                    </li>
 
-                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze
-                                <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">Micro
-                                        Reports</a>
-                                </li>
+                                </ul>
+                            </li>
+                        </ul>
 
-                            </ul>
-                        </li>
+
+                    <?php } ?>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
                     </ul>
-
-
-                <?php } ?>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
+                </div><!--/.nav-collapse -->
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-        <?php echo $this->layout()->content; ?>
-    </div> <!-- /container -->
-    <div id="dDiv" class="dialog"> 
-        <div style="text-align:center"><span onclick="closeLayoutModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
-        <iframe id="dFrame" src="" style="border:none;" scrolling='yes' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' >some problem</iframe> 
-    </div>
-    <footer style="padding:40px 0 20px 0;color:grey;">
-        <div class="container">&copy; ePT Admin</div>
-    </footer>
-    <!--s<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
-    <!--s<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->
-    <script src="<?php echo $this->baseUrl("js/jquery_10.3.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/bootstrap-v3.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/jquery.dataTables.min.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/standingRedraw.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/extra.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/jquery.printThis.min.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl("js/jquery.print.js"); ?>" type="text/javascript"></script>
-    <script src="<?php echo $this->baseUrl('js/DT_bootstrap.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modalmanager.js"); ?>"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
+        <div class="container">
+            <?php echo $this->layout()->content; ?>
+        </div> <!-- /container -->
+        <div id="dDiv" class="dialog"> 
+            <div style="text-align:center"><span onclick="closeLayoutModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+            <iframe id="dFrame" src="" style="border:none;" scrolling='yes' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' >some problem</iframe> 
+        </div>
+        <footer style="padding:40px 0 20px 0;color:grey;">
+            <div class="container">&copy; ePT Admin</div>
+        </footer>
+        <!--s<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+        <!--s<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->
+        <script src="<?php echo $this->baseUrl("js/jquery_10.3.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/bootstrap-v3.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/jquery.dataTables.min.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/standingRedraw.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/extra.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/jquery.printThis.min.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl("js/jquery.print.js"); ?>" type="text/javascript"></script>
+        <script src="<?php echo $this->baseUrl('js/DT_bootstrap.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modalmanager.js"); ?>"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
+        <?php
+        if ($controllerName . $actionName != 'distributionsindex') {
+            ?>
+            <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modal.js"); ?>"></script>
+        <?php } ?>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/deforayModal.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/barcode/jquery-barcode.min.js"); ?>"></script>
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css"
+              media="all">
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
+
+        <script type="text/javascript">
+
+
+                $(function () {
+                    $(".checkNum").keydown(function (e) {
+                        // Allow: backspace, delete, tab, escape, enter and .
+                        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                                // Allow: Ctrl+A
+                                        (e.keyCode == 65 && e.ctrlKey === true) ||
+                                        // Allow: home, end, left, right
+                                                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                                    // let it happen, don't do anything
+                                    return;
+                                }
+                                // Ensure that it is a number and stop the keypress
+                                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                                    e.preventDefault();
+                                }
+                            });
+
     <?php
-    if ($controllerName . $actionName != 'distributionsindex') {
+    $alertMsg = new Zend_Session_Namespace('alertSpace');
+    if (isset($alertMsg->message) && $alertMsg->message != "") {
         ?>
-        <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modal.js"); ?>"></script>
-    <?php } ?>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/deforayModal.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/barcode/jquery-barcode.min.js"); ?>"></script>
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css"
-          media="all">
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
-
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
-
-    <script type="text/javascript">
-
-
-            $(function () {
-                $(".checkNum").keydown(function (e) {
-                    // Allow: backspace, delete, tab, escape, enter and .
-                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                            // Allow: Ctrl+A
-                                    (e.keyCode == 65 && e.ctrlKey === true) ||
-                                    // Allow: home, end, left, right
-                                            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                                // let it happen, don't do anything
-                                return;
-                            }
-                            // Ensure that it is a number and stop the keypress
-                            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                                e.preventDefault();
-                            }
-                        });
-
-<?php
-$alertMsg = new Zend_Session_Namespace('alertSpace');
-if (isset($alertMsg->message) && $alertMsg->message != "") {
+                        alert("<?php echo $alertMsg->message; ?>");
+        <?php
+        $alertMsg->message = "";
+        unset($alertMsg->message);
+    }
     ?>
-                    alert("<?php echo $alertMsg->message; ?>");
-    <?php
-    $alertMsg->message = "";
-    unset($alertMsg->message);
-}
-?>
             });
 
             function validatePassword(obj) {
