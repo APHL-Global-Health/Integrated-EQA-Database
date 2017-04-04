@@ -36,7 +36,9 @@ class Admin_UploadreportsController extends Zend_Controller_Action {
             $adapter = new Zend_File_Transfer();
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
-            $adapter->setDestination('C:\temp');
+            
+            $adapter->setDestination(realpath("../public/files"));
+            
             foreach ($files as $file => $info) {
                 $type = $info['type'];
                 $name = $info['name'];

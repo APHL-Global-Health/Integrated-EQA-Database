@@ -108,7 +108,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $adminService = new Application_Service_Importcsv();
         $commonService = new Application_Service_Common();
         $request = $this->getRequest();
-        $headers = [];
+        $headers = array();
 
         if ($request->isPost()) {
             $adapter = new Zend_File_Transfer();
