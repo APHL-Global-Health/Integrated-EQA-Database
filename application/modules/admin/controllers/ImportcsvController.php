@@ -22,14 +22,14 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         }
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-            
+
             $clientsServices = new Application_Service_Importcsv();
-            $clientsServices->getAllData($params,$pname);
+            $clientsServices->getAllData($params, $pname);
         }
     }
 
     public function addAction() {
-        
+
         $program = $this->getRequest()->getPost('ProgramID');
         $provider = $this->getRequest()->getPost('ProviderID');
         $period = $this->getRequest()->getPost('RoundID');
@@ -42,7 +42,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
             chdir(APPLICATION_PATH);
-            $dirpath= realpath("../public/files");
+            $dirpath = realpath("../public/files");
             $adapter->setDestination("'$dirpath'");
             foreach ($files as $file => $info) {
                 // file uploaded ?
@@ -109,14 +109,19 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $commonService = new Application_Service_Common();
         $request = $this->getRequest();
         $headers = [];
-        
+
         if ($request->isPost()) {
             $adapter = new Zend_File_Transfer();
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
             $names = $adapter->getFileName();
-            $newname= $provider;//.'-'.$program.'.'.end(explode('.',$names));
-            $adapter->addFilter('rename',$newname);
+            
+            $extensionArray = explode('.', $names);
+            $lastElement = count($extensionArray) - 1;
+            $sxt = $extensionArray[$lastElement];
+            $newname = $provider.'-'.$program.'.'.$sxt;
+            
+            $adapter->addFilter('rename', $newname);
             $adapter->setDestination('../public/files');
             foreach ($files as $file => $info) {
                 // file uploaded ?
@@ -135,15 +140,15 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
                 $messages = $adapter->getMessages();
                 echo implode("\n", $messages);
             }
-            
+
             $file_handle = NULL;
             $data = NULL;
             $keys = NULL;
             $record = NULL;
             //Get the filename
-            $filename = '../public/files/'.$newname;
+            $filename = '../public/files/' . $newname;
             $filedetails = new Zend_Session_Namespace('filename');
-            $filedetails->filename=$filename;
+            $filedetails->filename = $filename;
             if (file_exists($filename)) {
                 $file_handle = fopen($filename, "r");
             } else {
@@ -243,7 +248,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 //        $excelmapping = $this->getRequest()->getPost('excelMapping');
 //        $filetoupload = $this->getRequest()->getPost('fileToUpload');
         //$filename = strrpos($filetoupload, DIRECTORY_SEPARATOR);
-        
+
         $mappedColumn = array();
         $mappedColumnNames = array();
         $excelHeaders = $this->getUploadedExcelFileHeaders();
@@ -267,7 +272,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo);
         $db->query($insertStatement);
         $filedetails = new Zend_Session_Namespace('filename');
-        $filedetails->filename='';
+        $filedetails->filename = '';
         $this->view->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         return "yes";
@@ -295,7 +300,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
             $query .= " ('";
             $query .= $extraInfo['ProviderID'] . "','";
-            $query .=$extraInfo['ProgramID'] . "','";
+            $query .= $extraInfo['ProgramID'] . "','";
             $query .= $extraInfo['RoundID'] . "',";
 
             for ($i = 0; $i < count($columns); $i++) {
@@ -312,7 +317,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         }
 
         $query .= ";";
-        
+
         return $query;
     }
 

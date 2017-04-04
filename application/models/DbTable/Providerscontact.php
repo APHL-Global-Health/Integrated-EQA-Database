@@ -199,6 +199,9 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
                 'created_by' => $authNameSpace->admin_id,
                 'created_on' => new Zend_Db_Expr('now()')
             );
+            if(isset($_SESSION['loggedInDetails']["IsVl"])){
+                $datas['IsVl']=$_SESSION['loggedInDetails']["IsVl"];
+            }
             return $table->insert($datas);
         }
         return $saved;
