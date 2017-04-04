@@ -53,7 +53,7 @@
 		</div>
             </div>
             <input type="text" value="<?php echo $_SESSION['loggedInDetails']['IsVl'];?>" hidden="" name="IsVl"/>
-            <?php if($_SESSION['loggedInDetails']['AssignModule']==1){?>
+            <?php if($_SESSION['loggedInDetails']['AssignModule']==1 && $_SESSION['loggedInDetails']['IsVl']==4){?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Module <span class="mandatory">*</span></label>
                 <div class="col-lg-5">

@@ -19,6 +19,7 @@ if ($auth->hasIdentity()) {
     $vl = $_SESSION['loggedInDetails']["IsVl"];
     $rep = $_SESSION['loggedInDetails']["AssignModule"];
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -183,7 +184,8 @@ if ($auth->hasIdentity()) {
                         </ul>
                         <?php
                     }
-                } else if ($vl == 1) {
+                } 
+                else if ($vl == 1) {
                     ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
@@ -247,7 +249,8 @@ if ($auth->hasIdentity()) {
                         </li>
 
                     </ul>
-                <?php } else if ($rep == 4) { ?>
+                <?php } 
+                else if ($rep == 4) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -257,10 +260,21 @@ if ($auth->hasIdentity()) {
                             </ul>
                         </li>
                     </ul>
-                <?php } else if ($vl == 4) { ?>
+                <?php }  ?>
                 
-                
-                <?php } ?>
+                <?php 
+                if ($vl == 4) { ?>
+                    <ul class="nav navbar-nav">
+                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
+                        <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
+                            <ul class="dropdown-menu" style="overflow-y:scroll;">
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT Managers</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php }  ?>
+                <?php ?>
                     <?php if ($vl == 3) { ?>
                         <ul class="nav navbar-nav">
                             <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >

@@ -167,6 +167,13 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
+
+        if ($data['IsVl'] == 4) {
+            $data['AssignModule'] = 1;
+        }
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
+        }
         return $this->insert($data);
     }
 
@@ -192,6 +199,12 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         if (isset($params['password']) && $params['password'] != "") {
             $data['password'] = $params['password'];
             $data['force_password_reset'] = 1;
+        }
+        if ($data['IsVl'] == 4) {
+            $data['AssignModule'] = 1;
+        }
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
         }
         return $this->update($data, "admin_id=" . $params['adminId']);
     }

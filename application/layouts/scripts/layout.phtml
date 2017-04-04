@@ -268,7 +268,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <?php
                     }
 
-                    if ($authNameSpace->IsVl == 3) {
+                    if ($authNameSpace->IsVl == 3 && ($_SESSION['datamanagers']['force_password_reset']==0)) {
                         ?>
                         <ul class="sidebar-menu">
 
