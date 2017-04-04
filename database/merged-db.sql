@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `eanalyze` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `eanalyze`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: eanalyze
@@ -117,7 +119,7 @@ CREATE TABLE `data_manager` (
 
 LOCK TABLES `data_manager` WRITE;
 /*!40000 ALTER TABLE `data_manager` DISABLE KEYS */;
-INSERT INTO `data_manager` VALUES (1,'brianonyi@gmail.com','boblacaster1988@','bvidolo Lab','Brian','Vidolo','0711560619','boblacaster@yahoo.com',NULL,NULL,NULL,'0727547388',0,'yes','yes','yes','no','active','2017-02-01 10:22:34','1','2017-04-03 20:37:45','1','2017-03-27 22:17:33','3'),(2,'vvidal@gmail.com','boblacaster1988@','Kenyatta Hospital','Victor','Vidal','','vvidal@gmail.com',NULL,NULL,NULL,'0727547388',0,'no','yes','yes','no','active','2017-03-20 08:36:31','1',NULL,NULL,'2017-03-27 22:18:01','0');
+INSERT INTO `data_manager` VALUES (1,'brianonyi@gmail.com','boblacaster1988@','bvidolo Lab','Brian','Vidolo','0711560619','boblacaster@yahoo.com',NULL,NULL,NULL,'0727547388',0,'yes','yes','yes','no','active','2017-02-01 10:22:34','1','2017-04-03 20:37:45','1','2017-03-27 22:17:33','3'),(2,'osoro@gmail.com','123456','Kenyatta Hospital','Victor','Vidal','','vvidal@gmail.com',NULL,NULL,NULL,'0727547388',0,'no','yes','yes','no','active','2017-03-20 08:36:31','1',NULL,NULL,'2017-04-04 09:44:06','0');
 /*!40000 ALTER TABLE `data_manager` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -452,7 +454,7 @@ CREATE TABLE `participant` (
 
 LOCK TABLES `participant` WRITE;
 /*!40000 ALTER TABLE `participant` DISABLE KEYS */;
-INSERT INTO `participant` VALUES (1,'P001','yes',NULL,'bvidolo Lab','lab','','Nairobi','',116,'','','','','','',NULL,'7','Nairobi','busia ','lab','','','','brianonyi@gmail.com','Hospital',1,'2017-02-01 10:20:59','eptmanager@gmail.com',NULL,NULL,'active'),(2,'P002','yes',NULL,'Kenyatta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'kakamega','lab',NULL,'0727547388',NULL,'brianonyi2@gmail.com',NULL,NULL,'2017-02-22 08:20:54','eptmanager@gmail.com',NULL,NULL,'active'),(8,'F001','no','Kenyatta Hospital','Kenyatta Hospital','Labaratory','upperhill','Nairobi','',116,'00100-47438','','','47676 Nairobi, Kenya','','',NULL,'','BARINGO','Kenyatta Hospital','','4354545','5454545','Brian Vidolo','brianonyi@gmail.com','Hospital',3,'2017-03-19 20:11:33','eptmanager@gmail.com','2017-04-03 23:31:47','eptmanager@gmail.com','active'),(9,'P003','yes',NULL,'Kenyatta Hospital',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Victor','Vidal',NULL,'073923829',NULL,'vvidal@gmail.com',NULL,NULL,'2017-03-19 21:15:18','eptmanager@gmail.com',NULL,NULL,'active'),(10,'TEST001','no','TEST 001','TEST LAB','BATCERIAL','175 KISII','NAIAROBI','N/A',116,'','','','','','',NULL,'','KISII','TEST 001','','','','','TEST@GMAIL.COM','Hospital',3,'2017-04-03 22:03:28','TEST@GMAIL.COM',NULL,NULL,'active'),(11,'pop','no',NULL,'opo','po','opop','po','po',116,'','','','',NULL,NULL,NULL,NULL,'BARINGO','opo','','','','','test@gmail.com',NULL,0,'2017-04-03 23:29:07','eptmanager@gmail.com',NULL,NULL,'active');
+INSERT INTO `participant` VALUES (1,'P001','yes',NULL,'bvidolo Lab','lab','','Nairobi','',116,'','','','','','',NULL,'7','Nairobi','busia ','lab','','','','brianonyi@gmail.com','Hospital',1,'2017-02-01 10:20:59','eptmanager@gmail.com',NULL,NULL,'active'),(2,'P002','yes',NULL,'Kenyatta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'kakamega','lab',NULL,'0727547388',NULL,'brianonyi2@gmail.com',NULL,NULL,'2017-02-22 08:20:54','eptmanager@gmail.com',NULL,NULL,'active'),(8,'F001','no','Kenyatta Hospital','Kenyatta Hospital','Labaratory','upperhill','Nairobi','',116,'00100-47438','','','47676 Nairobi, Kenya','',NULL,NULL,NULL,'BARINGO','Kenyatta Hospital','','4354545','5454545','Brian Vidolo','brianonyi@gmail.com',NULL,0,'2017-03-19 20:11:33','eptmanager@gmail.com','2017-04-04 08:01:01','eptmanager@gmail.com','active'),(9,'P003','yes',NULL,'Kenyatta Hospital',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Victor','Vidal',NULL,'073923829',NULL,'vvidal@gmail.com',NULL,NULL,'2017-03-19 21:15:18','eptmanager@gmail.com',NULL,NULL,'active'),(10,'TEST001','no','TEST 001','TEST LAB','BATCERIAL','175 KISII','NAIAROBI','N/A',116,'','','','','','',NULL,'','KISII','TEST 001','','','','','TEST@GMAIL.COM','Hospital',3,'2017-04-03 22:03:28','TEST@GMAIL.COM',NULL,NULL,'active'),(11,'pop','no',NULL,'opo','po','opop','po','po',116,'','','','',NULL,NULL,NULL,NULL,'BARINGO','opo','','','','','test@gmail.com',NULL,0,'2017-04-03 23:29:07','eptmanager@gmail.com',NULL,NULL,'active');
 /*!40000 ALTER TABLE `participant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2415,7 +2417,7 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (1,'Manager','Test','eptmanager@gmail.com','123','','9841462565',1,'active',NULL,NULL,'2015-03-04 10:56:43','1',3,'0','',0),(2,'Ruth','Mumo','rmumo@gmail.com','boblacaster1988@','','0727547388',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',1,'3','',0),(3,'John','Kinyanjui','micro@gmail.com','boblacaster1988@','','0727547388',1,'active','2017-04-03 10:32:04','1',NULL,NULL,2,'3','',0),(4,'Valentine','Madirani','vmadirani@gmail.com','boblacaster1988@','','0727547388',1,'active','2017-04-03 10:44:17','2',NULL,NULL,1,NULL,'',0),(9,'Nelson','Akenga','nelson@gmail.com','boblacaster1988@','','0727547388',1,'active','2017-04-03 12:05:12','1',NULL,NULL,2,NULL,'',0),(10,'Victor Mwendwa','Victor Mwendwa','vmwesh@gmail.com','boblacaster1988@','vmwesh@gmail.com','0722339993',0,'active','2017-04-03 14:52:06','9',NULL,NULL,2,'1','Amref Provider',0),(11,'TEST 001','TEST AGAIN','osoromichael@gmail.com','Michael@23','','07115603619',1,'active','2017-04-03 23:42:13','1',NULL,NULL,3,'1','',0);
+INSERT INTO `system_admin` VALUES (1,'micro','manager','micro@gmail.com','micro','','9841462565',1,'active',NULL,NULL,'2015-03-04 10:56:43','1',3,'0','',0),(2,'system','admin','admin@gmail.com','admin','','0727547388',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',0),(3,'viral','load','vl@gmail.com','viralload','','0727547388',1,'active','2017-04-03 10:32:04','1',NULL,NULL,1,'3','',0),(4,'repository','module','repository@gmail.com','repository','','0727547388',1,'active','2017-04-03 10:44:17','2',NULL,NULL,2,NULL,'',0),(9,'Nelson','Akenga','nelson@gmail.com','boblacaster1988@','','0727547388',1,'active','2017-04-03 12:05:12','1',NULL,NULL,2,NULL,'',0),(10,'Victor Mwendwa','Victor Mwendwa','vmwesh@gmail.com','boblacaster1988@','vmwesh@gmail.com','0722339993',0,'active','2017-04-03 14:52:06','9',NULL,NULL,2,'1','Amref Provider',0),(11,'TEST 001','TEST AGAIN','osoromichael@gmail.com','Michael@23','','07115603619',1,'active','2017-04-03 23:42:13','1',NULL,NULL,3,'1','',0);
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3650,4 +3652,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-04  7:52:22
+-- Dump completed on 2017-04-04  9:56:49

@@ -49,11 +49,13 @@ class AuthController extends Zend_Controller_Action
 	    		$authNameSpace->last_name = $rs->last_name;
 	    		$authNameSpace->phone = $rs->phone;
 	    		$authNameSpace->email = $rs->primary_email;
+                        $authNameSpace->IsVl = $rs->IsVl;
 	    		$authNameSpace->qc_access = $rs->qc_access;
 	    		$authNameSpace->view_only_access = $rs->view_only_access;
 	    		$authNameSpace->enable_adding_test_response_date = $rs->enable_adding_test_response_date;
 	    		$authNameSpace->enable_choosing_mode_of_receipt = $rs->enable_choosing_mode_of_receipt;
 	    		$authNameSpace->force_password_reset = $rs->force_password_reset;
+                        
 	    		// PT Provider Dependent Configuration 
 	    		//$authNameSpace->UserFld1 = $rs->UserFld1;
 	    		//$authNameSpace->UserFld2 = $rs->UserFld2;
@@ -64,6 +66,7 @@ class AuthController extends Zend_Controller_Action
 				
 				
     			$this->_redirect('/participant/dashboard');
+                        
     		
     		}else
     		{
