@@ -364,10 +364,11 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                                 Password</a></li>
                                     </ul>
                                 </li>
+                                 <?php if (!$authNameSpace->IsVl == 3) { ?>
                                 <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>"><a
                                         href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i
                                             class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
-                                <?php } ?>
+                                 <?php }} ?>
 
 
                             <?php if (!isset($authNameSpace->dm_id)) { ?>

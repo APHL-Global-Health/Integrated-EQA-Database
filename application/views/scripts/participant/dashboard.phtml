@@ -17,6 +17,8 @@ if(isset($this->schemes) && count($this->schemes) >0 ){
 	background-color:red;
     }
 </style>
+
+  <?php if ($authNameSpace->IsVl != 3) { ?>
 <section class="content-header">
     <h1> Dashboard </h1>
 </section>
@@ -798,3 +800,7 @@ if(isset($this->schemes) && count($this->schemes) >0 ){
 	
 	
 </script>
+  <?php }?>
+<div ng-include="'../partialHTMLS/labOperations/participantDashboard.html'">
+    
+</div>
