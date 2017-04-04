@@ -3,13 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/modules/admin/controllers/SystemAdminsController.php</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/modules/admin/views/scripts/system-admins/add.phtml</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/services/SystemAdmin.php</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/models/DbTable/SystemAdmin.php</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/modules/admin/views/scripts/system-admins/edit.phtml</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/controllers/AuthController.php</file>
-            <file>file:/C:/webserver/htdocs/ept-2.5/application/layouts/scripts/admin.phtml</file>
+            <file>file:/C:/xampp/htdocs/ept/application/controllers/AuthController.php</file>
+            <file>file:/C:/xampp/htdocs/ept/application/views/scripts/auth/login.phtml</file>
         </group>
     </open-files>
 </project-private>
