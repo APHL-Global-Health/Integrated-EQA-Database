@@ -115,7 +115,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
             $names = $adapter->getFileName();
-            $newname= $provider.'-'.$program.'.'.end(explode('.',$names));
+            $newname= $provider;//.'-'.$program.'.'.end(explode('.',$names));
             $adapter->addFilter('rename',$newname);
             $adapter->setDestination('../public/files');
             foreach ($files as $file => $info) {

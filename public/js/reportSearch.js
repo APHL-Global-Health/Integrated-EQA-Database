@@ -1,7 +1,9 @@
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination',
     'ngAnimate', 'ngSanitize', 'ui.bootstrap','highcharts-ng', 'nvd3ChartDirectives','ui.calendar',
     'mgcrea.ngStrap.datepicker','mgcrea.ngStrap.tooltip','mgcrea.ngStrap.typeahead']);
-ReportModule.constant('serverURL', 'http://localhost:8082/reports/repository/');
+
+
+ReportModule.constant('serverURL', 'http://localhost:8088/reports/repository/');
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
                                                       graphDataCache, $filter, filterFilter) {
 
@@ -33,7 +35,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
 
-    $scope.reports.itemsPerPage = 50;
+    $scope.reports.itemsPerPage = 15;
     $scope.reports.countyChange = function (county) {
 
         for (var i = 0; i < $scope.reports.allCounties.length; i++) {
@@ -746,31 +748,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }, 100)
 
     }
-
-}).directive('pagination', function () {
-    return {
-        template: "<div class='text-right pull-right'><dir-pagination-controls boundary-links='true' pagination-id='dataPagination' on-page-change='pageChangeHandler(newPageNumber)'" +
-        ">" +
-        "  <ul class='pagination' ng-if='1 < pages.length'>" +
-        "<li ng-if=iboundaryLinks' ng-class='{ disabled : pagination.current == 1 }'>" +
-        " <a href='' ng-click='setCurrent(1)'>&laquo;</a>" +
-        "</li>" +
-        "<li ng-if='directionLinks' ng-class='{ disabled : pagination.current == 1 }' class='ng-scope'>" +
-        "<a href='' ng-click='setCurrent(pagination.current - 1)' class='ng-binding'>‹</a>" +
-        " </li>" +
-        "<li ng-repeat='pageNumber in pages track by $index' ng-class='{ active : pagination.current == pageNumber, disabled : pageNumber == '...' }'>" +
-        "<a href='' ng-click='setCurrent(pageNumber)'>{{ pageNumber }}</a>" +
-        "</li>" +
-        "<li ng-if='directionLinks' ng-class='{ disabled : pagination.current == pagination.last }' class='ng-scope'>" +
-        " <a href=''' ng-click='setCurrent(pagination.current + 1)' class='ng-binding'>›</a>" +
-        "</li>" +
-        "<li ng-if='boundaryLinks'  ng-class='{ disabled : pagination.current == pagination.last }'>" +
-        "<a href='' ng-click='setCurrent(pagination.last)'>&raquo;</a>" +
-        "</li>" +
-        "</ul> " + +"</dir-pagination-controls>  </div>"
-
-    }
-
 
 })
     .factory('reportCache', function ($cacheFactory) {
