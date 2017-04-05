@@ -58,11 +58,12 @@
                         <li class='pull-right'>
 
 
-                            <div class="btn btn-success btn-sm" ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)"><i class="fa fa-pdf"></i> PDF
+                            <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'" ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
+                                <i class="fa fa-pdf"></i> PDF
                             </div>
 
-                            <div class="btn btn-primary btn-sm" ng-click="reports.exportToExcelFile()"><i
-                                    class="fa fa-excel"></i> CSV
+                            <div class="btn btn-primary btn-sm" ng-show="clickedTab != 'graphs'" ng-click="reports.exportToExcelFile()">
+                                <i class="fa fa-excel"></i> CSV
                             </div>
 
 
@@ -144,6 +145,7 @@
                                     <option value="Round-results Graph">Round-results Graph</option>
                                     <option value="Lab-samples Graph">Lab-samples Graph</option>
                                     <option value="Lab-results Graph">Lab-results Graph</option>
+                                    <option value="County-labs Graph">County-labs Graph</option>
                                 </select>
                                 <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'graphs'"
                                         name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
@@ -309,6 +311,11 @@
                         <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
                                                  boundary-links="true">
                         </dir-pagination-controls>
+                    </div>
+                </div>
+                <div ng-show="clickedTab == 'participants'">
+                    <div ng-include="'../partialHTMLS/repositoryReports/participatingLabs.html'">
+                        
                     </div>
                 </div>
                 <div ng-show="clickedTab == 'graphs'">
