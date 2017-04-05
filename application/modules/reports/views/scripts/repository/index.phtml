@@ -6,7 +6,8 @@
 
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <style>
     @media print {
         .dontPrint, #shipmentTable_filter, #shipmentTable_info{
@@ -36,8 +37,8 @@
                         </li>
                         <li class='pull-right'>
 
-                            <div ng-controller="">
-                                <div class="btn btn-success btn-sm" ng-click="reports.exportToPDF()"><i class="fa fa-pdf"></i> PDF
+                            <div ng-controller="PdfController">
+                                <div class="btn btn-success btn-sm" ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)"><i class="fa fa-pdf"></i> PDF
                                 </div>
                             </div>
                             <div class="btn btn-primary btn-sm" ng-click="reports.exportToExcelFile()"><i

@@ -518,7 +518,9 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         }
     }
 
-
+    $scope.pdfMake.generateRepositoryPdf = function (reportData) {
+        console.log(reportData)
+    }
     $scope.pdfMake.generateParticipatoryReportPdf = function (data) {
         var reportData = new Array();
         var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto', '*', '*']
