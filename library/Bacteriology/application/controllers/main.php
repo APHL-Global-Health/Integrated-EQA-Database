@@ -161,16 +161,19 @@ Class Main extends pdfCreator {
 //        echo$sql;
 //        exit;
         $result = $this->connect_db->query($sql);
-
+        $results = array();
         if ($result->num_rows > 0) {
             // output data of each row
-            while ($row = $result->fetch_object()) {
-                $user_arr[] = $row;
+            while ($assoc = $result->fetch_assoc()) {
+                $results [count($results)] = $assoc; // Return rows
             }
+//            while ($row = $result->fetch_object()) {
+//                $user_arr[] = $row;
+//            }
 
-            return $user_arr;
+            return $results;
         } else {
-            return 0;
+            return [];
         }
     }
 

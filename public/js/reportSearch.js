@@ -157,7 +157,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.reportShowTable = true;
 
         } else {
-            $scope.reports.repositoryData ={};
+            $scope.reports.repositoryData = {};
             updateGraphMessages("No records found", true, 'btn-warning');
         }
         $scope.reports.showLoader = false;
@@ -652,6 +652,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             filterData.ProgramId = $("#program").val();
             filterData.ProviderId = reportFilter.providerID;
             filterData.dateRange = $scope.reports.dateRange;
+            filterData.county = $("#county").val();
+            
             console.log(filterData);
             if (filterData.ProgramId != '' && angular.isDefined(filterData.ProgramId)) {
                 updateGraphMessages("please select a program to proceed", false, 'btn-danger')

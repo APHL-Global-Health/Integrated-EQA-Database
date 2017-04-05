@@ -385,7 +385,12 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         $query .= " GROUP BY ProgramID,Grade ";
-        $query = ($databaseUtils->rawQuery($query));
+//        $query = ($databaseUtils->rawQuery($query));
+        
+         $query = $this->dbConnection->doQuery($query);
+//         print_r($query);
+//         exit;
+//         
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -394,7 +399,11 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 $tempData = array();
             }
         }
+//        if(sizeof($query) > 0){
         echo json_encode($query);
+//        }else{
+//            echo json_encode(array());
+//        }
         exit();
     }
 
