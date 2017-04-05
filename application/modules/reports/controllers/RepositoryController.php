@@ -386,8 +386,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
         $query .= " GROUP BY ProgramID,Grade ";
 //        $query = $this->dbConnection->doQuery($query);
-        
-         $query = $this->dbConnection->doQuery($query);
+
+        $query = $this->dbConnection->doQuery($query);
 //         print_r($query);
 //         exit;
 //         
@@ -427,12 +427,10 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
-        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            
-            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
-            
-        }
+//        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
 
+        $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+//        }
 //        echo $query;
 //        exit;
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
@@ -492,17 +490,20 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
     public function returnUserCountStatement($county) {
-        $sql = " and labID in (select labName from rep_labs where  County ='" . $county . "')";
+        $sql='';
+        if (isset($county) && !empty($county)) {
+            $sql = " and labID in (select labName from rep_labs where  County ='" . $county . "')";
+        }
         if (isset($_SESSION['loggedInDetails'])) {
             $ses = $_SESSION['loggedInDetails'];
             if ($ses['IsVl'] == 2) {
-                if ($ses['IsVl']['IsProvider'] == 3) {
-                    $sql = " and labID in (select labName from rep_labs where  County ='" . $ses['IsVl']['County'] . "')";
+                if ($ses['IsProvider'] == 3) {
+                    $sql = " and labID in (select labName from rep_labs where  County ='" . $ses['County'] . "')";
                 }
             }
         }
-        $query .= $sql;
-        return $query;
+//        $query .= $sql;
+        return $sql;
     }
 
     public function convertdate($dateString) {
