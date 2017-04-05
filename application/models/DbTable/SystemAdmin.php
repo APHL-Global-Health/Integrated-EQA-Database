@@ -173,12 +173,18 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         }
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
+            if ($data['IsVl'] == 2) {
+                $data['County'] = $params['County'];
+            }
         }
         if ($_SESSION['loggedInDetails']['IsVl'] == 4) {
             if ($data['IsVl'] == 2) {
                 $data['IsProvider'] = 1;
             }
         }
+        
+        
+        
         return $this->insert($data);
     }
 
@@ -210,6 +216,9 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         }
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
+             if ($data['IsVl'] == 2) {
+                $data['County'] = $params['County'];
+            }
         }
         return $this->update($data, "admin_id=" . $params['adminId']);
     }

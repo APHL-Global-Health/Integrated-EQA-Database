@@ -1,61 +1,54 @@
 <?php
 
-class Admin_SystemAdminsController extends Zend_Controller_Action
-{
+class Admin_SystemAdminsController extends Zend_Controller_Action {
 
-    public function init()
-    {
+    public function init() {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
                 ->initContext();
         $this->_helper->layout()->pageName = 'configMenu';
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         if ($this->getRequest()->isPost()) {
-            $params = $this->_getAllParams();            
+            $params = $this->_getAllParams();
             $clientsServices = new Application_Service_SystemAdmin();
             $clientsServices->getAllAdmin($params);
         }
     }
- public function saAction()
-    {
+
+    public function saAction() {
         $clientsServices = new Application_Service_SystemAdmin();
-            $clientsServices->getAllAdmin($params);
+        $clientsServices->getAllAdmin($params);
         var_dump($clientsServices);
         exit;
     }
 
-    public function addAction()
-    {
+    public function addAction() {
+         $commonService = new Application_Service_Common();
         $adminService = new Application_Service_SystemAdmin();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->addSystemAdmin($params);
             $this->_redirect("/admin/system-admins");
         }
+        $this->view->countyList = $commonService->getCountiesList();
     }
 
-    public function editAction()
-    {
+    public function editAction() {
+         $commonService = new Application_Service_Common();
         $adminService = new Application_Service_SystemAdmin();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->updateSystemAdmin($params);
             $this->_redirect("/admin/system-admins");
-        }else{
-            if($this->_hasParam('id')){
-                $adminId = (int)$this->_getParam('id');
+        } else {
+            if ($this->_hasParam('id')) {
+                $adminId = (int) $this->_getParam('id');
                 $this->view->admin = $adminService->getSystemAdminDetails($adminId);
             }
         }
+          $this->view->countyList = $commonService->getCountiesList();
     }
 
-
 }
-
-
-
-
-

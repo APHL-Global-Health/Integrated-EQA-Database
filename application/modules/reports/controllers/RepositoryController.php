@@ -100,6 +100,8 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
             $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
+        
+        
         //if(isset())
         $query .= " GROUP BY ProgramID;";
         $query = ($databaseUtils->rawQuery($query));
