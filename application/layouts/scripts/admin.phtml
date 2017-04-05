@@ -149,19 +149,19 @@ if ($auth->hasIdentity()) {
             <div class="navbar-collapse collapse">
                 <?php
                 if ($vl == 2) {
-                    if ($role == 0) {
+                    if ($role == 1) {
                         ?>
                         <ul class="nav navbar-nav">
-                            
-                                <ul class="nav navbar-nav">
-                                   <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
-                                        <ul class="dropdown-menu" style="overflow-y:scroll;">
-                                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT Managers</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                           
+
+                            <ul class="nav navbar-nav">
+                                <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" style="overflow-y:scroll;">
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT Managers</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
                             <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-upload"></i>&nbsp;&nbsp;Repository <b class="caret"></b></a>
@@ -171,7 +171,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);         ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);            ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -186,12 +186,24 @@ if ($auth->hasIdentity()) {
                                 </ul>
                             </li>
                         </ul>
-                    <?php } else { ?>
+                    <?php } else if ($role == 2) { ?>
                         <ul class="nav navbar-nav">
                             <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>"><i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a></li>
                             <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data</a></li>
                         </ul>
                         <?php
+                    } else if ($role == 3) {
+                        ?>
+                        <ul class="nav navbar-nav">
+                            <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repositoryreports') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i>&nbsp;&nbsp;Repository Reports <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Participatory Reports</a></li>
+                                    <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
+                                </ul>
+                            </li>
+                        </ul>
+                    <?php
                     }
                 } else if ($vl == 1) {
                     ?>
@@ -208,9 +220,9 @@ if ($auth->hasIdentity()) {
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness', 'action' => 'index'), 'default', true); ?>">Readiness Checklist</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'enrollments'), 'default', true); ?>">Scheme Enrollments</a></li>
                                 <li class="divider"></li>
-    <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
+                                <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'dts-settings'), 'default', true); ?>">DTS Settings</a></li>
-                                <?php } ?>
+    <?php } ?>
                                 <li><a href="/admin/mail-template/index/9u690s3/new_shipment/"> New Shipment Mail Template</a></li>
                                 <li><a href="/admin/mail-template/index/9u690s3/not_participated/"> Not Participated Mail Template</a></li>				
                                 <li class="divider"></li>
@@ -243,12 +255,12 @@ if ($auth->hasIdentity()) {
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'detailed'), 'default', true); ?>">Participant Response Report</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'participant-performance'), 'default', true); ?>">Participant Performance Report</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'corrective-actions'), 'default', true); ?>">Corrective Actions Report</a></li>
-    <?php if ($hideShipmentResponseReport == false) { ?>
+                                <?php if ($hideShipmentResponseReport == false) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipment-response'), 'default', true); ?>">Shipment Response Report</a></li>
                                 <?php } ?>
                                 <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'testkit'), 'default', true); ?>">TestKit Report For DTS</a></li>
-                                <?php } ?>
+    <?php } ?>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments'), 'default', true); ?>">Shipments Report</a></li>		
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-sample-analysis'), 'default', true); ?>">Vl Sample Analysis</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-assay-distribution'), 'default', true); ?>">Vl Assay Distribution</a></li>
@@ -257,8 +269,8 @@ if ($auth->hasIdentity()) {
                         </li>
 
                     </ul>
-<?php } else if ($rep == 4) {
-    ?>
+                <?php } else if ($rep == 4) {
+                    ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -268,9 +280,9 @@ if ($auth->hasIdentity()) {
                             </ul>
                         </li>
                     </ul>
-<?php } ?>
+                <?php } ?>
 
-                <?php if ($vl == 4) { ?>
+<?php if ($vl == 4) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -280,9 +292,9 @@ if ($auth->hasIdentity()) {
                             </ul>
                         </li>
                     </ul>
-<?php } ?>
-<?php ?>
-                <?php if ($vl == 3) { ?>
+                <?php } ?>
+                <?php ?>
+<?php if ($vl == 3) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
                             <a href="#"><i
@@ -314,7 +326,7 @@ if ($auth->hasIdentity()) {
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-                ?>">
+    ?>">
                                         Lab & User Mapping
                                     </a></li>
                                 <li>
@@ -369,11 +381,11 @@ if ($auth->hasIdentity()) {
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modalmanager.js"); ?>"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
-<?php
-if ($controllerName . $actionName != 'distributionsindex') {
-    ?>
+    <?php
+    if ($controllerName . $actionName != 'distributionsindex') {
+        ?>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modal.js"); ?>"></script>
-    <?php } ?>
+<?php } ?>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>

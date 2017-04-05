@@ -174,6 +174,11 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
         }
+        if ($_SESSION['loggedInDetails']['IsVl'] == 4) {
+            if ($data['IsVl'] == 2) {
+                $data['IsProvider'] = 1;
+            }
+        }
         return $this->insert($data);
     }
 
