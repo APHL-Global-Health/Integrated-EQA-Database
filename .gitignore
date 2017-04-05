@@ -1,0 +1,4 @@
+application/cache
+*.hgignore
+.idea/workspace.xml
+*.log
