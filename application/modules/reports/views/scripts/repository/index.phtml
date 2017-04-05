@@ -230,7 +230,7 @@
                                     <th style="text-align: center;">
                                         <input class="form-control col-md-12 input-sm"
                                                ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Frequecy" ng-model='reports.stringSearch.Frequency'>
+                                               placeholder="Search sample" ng-model='reports.stringSearch.SampleCode'>
                                     </th>
                                 </tr>
                             </thead>
@@ -245,7 +245,7 @@
                                     <th style="text-align: center;">Release Date</th>
                                     <th style="text-align: center;">Grade</th>
                                     <th style="text-align: center;">Analyte ID</th>
-                                    <th style="text-align: center;">Frequency</th>
+                                    <th style="text-align: center;">Sample Code</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -278,7 +278,7 @@
                                         {{record.AnalyteID}}
                                     </td>
                                     <td>
-                                        {{record.Frequency}}
+                                        {{record.SampleCode}}
                                     </td>
 
                                 </tr>
