@@ -35,7 +35,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.reportShowTable = false;
     $scope.reports.showLoader = false;
 
-    $scope.reports.itemsPerPage = 15;
+    $scope.reports.itemsPerPage = 50;
     $scope.reports.countyChange = function (county) {
 
         for (var i = 0; i < $scope.reports.allCounties.length; i++) {
