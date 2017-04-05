@@ -64,7 +64,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
                 $scope.reports.showLoader = true;
                 updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -82,9 +82,9 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         })
 
 
-            } else {
-                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-            }
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
 
         }
     }
