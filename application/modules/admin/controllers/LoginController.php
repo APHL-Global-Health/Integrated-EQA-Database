@@ -26,11 +26,11 @@ class Admin_LoginController extends Zend_Controller_Action
     		
 			
     		if($res->isValid()){
-		       Zend_Session::rememberMe(36000); // keeping the session cookie active for 10 hours
+		       Zend_Session::rememberMe(48000); // keeping the session cookie active for 10 hours
 
     			$rs = $adapter->getResultRowObject();
                         $_SESSION['loggedInDetails']=(array)$rs;
-                            
+                        unset($_SESSION['loggedInDetails']['password']);    
                         $auth->getStorage()->write($rs);
                         
     			$authNameSpace = new Zend_Session_Namespace('administrators');
@@ -73,7 +73,7 @@ class Admin_LoginController extends Zend_Controller_Action
     {
         Zend_Auth::getInstance()->clearIdentity();
         Zend_Session::destroy();
-        $this->_redirect('/');
+        $this->_redirect('/admin');
     }
 
 

@@ -171,7 +171,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);            ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);             ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -203,7 +203,7 @@ if ($auth->hasIdentity()) {
                                 </ul>
                             </li>
                         </ul>
-                    <?php
+                        <?php
                     }
                 } else if ($vl == 1) {
                     ?>
@@ -222,7 +222,7 @@ if ($auth->hasIdentity()) {
                                 <li class="divider"></li>
                                 <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'dts-settings'), 'default', true); ?>">DTS Settings</a></li>
-    <?php } ?>
+                                <?php } ?>
                                 <li><a href="/admin/mail-template/index/9u690s3/new_shipment/"> New Shipment Mail Template</a></li>
                                 <li><a href="/admin/mail-template/index/9u690s3/not_participated/"> Not Participated Mail Template</a></li>				
                                 <li class="divider"></li>
@@ -260,7 +260,7 @@ if ($auth->hasIdentity()) {
                                 <?php } ?>
                                 <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'testkit'), 'default', true); ?>">TestKit Report For DTS</a></li>
-    <?php } ?>
+                                <?php } ?>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments'), 'default', true); ?>">Shipments Report</a></li>		
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-sample-analysis'), 'default', true); ?>">Vl Sample Analysis</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-assay-distribution'), 'default', true); ?>">Vl Assay Distribution</a></li>
@@ -282,7 +282,7 @@ if ($auth->hasIdentity()) {
                     </ul>
                 <?php } ?>
 
-<?php if ($vl == 4) { ?>
+                <?php if ($vl == 4) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -294,7 +294,7 @@ if ($auth->hasIdentity()) {
                     </ul>
                 <?php } ?>
                 <?php ?>
-<?php if ($vl == 3) { ?>
+                <?php if ($vl == 3) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
                             <a href="#"><i
@@ -326,7 +326,7 @@ if ($auth->hasIdentity()) {
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-    ?>">
+                    ?>">
                                         Lab & User Mapping
                                     </a></li>
                                 <li>
@@ -350,7 +350,7 @@ if ($auth->hasIdentity()) {
                     </ul>
 
 
-<?php } ?>
+                <?php } ?>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
                 </ul>
@@ -359,7 +359,8 @@ if ($auth->hasIdentity()) {
     </div>
 
     <div class="container">
-<?php echo $this->layout()->content; ?>
+       <?php // print_r($_SESSION['loggedInDetails']); ?>
+        <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 
         <div style="text-align:center"><span onclick="closeLayoutModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
@@ -385,7 +386,7 @@ if ($auth->hasIdentity()) {
     if ($controllerName . $actionName != 'distributionsindex') {
         ?>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-modal.js"); ?>"></script>
-<?php } ?>
+    <?php } ?>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>

@@ -1,33 +1,36 @@
 <?php
 
+require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
+        . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+        . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
-class Reports_RepositoryController extends Zend_Controller_Action
-{
+class Reports_RepositoryController extends Zend_Controller_Action {
+
     protected $homeDir;
+    protected $dbConnection;
 
-    public function init()
-    {
+    public function init() {
         /* Initialize action controller here */
 
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
-            ->addActionContext('report', 'html')
-            ->initContext();
+                ->addActionContext('report', 'html')
+                ->initContext();
         $this->_helper->layout()->pageName = 'report';
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
-        if (!class_exists('databases'. DIRECTORY_SEPARATOR .'core'. DIRECTORY_SEPARATOR .'mysql'. DIRECTORY_SEPARATOR .'DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'core-apis'. DIRECTORY_SEPARATOR .'DatabaseUtils.php';
+        if (!class_exists('databases' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'mysql' . DIRECTORY_SEPARATOR . 'DatabaseUtils')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'core-apis' . DIRECTORY_SEPARATOR . 'DatabaseUtils.php';
         }
-        if (!class_exists('database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'SystemAdmin.php';
+        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin.php';
         }
-        if (!class_exists('database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'crud'. DIRECTORY_SEPARATOR .'RepRepository.php';
+        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository')) {
+            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository.php';
         }
+        $this->dbConnection = new Main();
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $reportService = new Application_Service_Reports();
@@ -39,8 +42,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         $this->view->providers = $provider->getProviders();
     }
 
-    public function reportAction()
-    {
+    public function reportAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $reportService = new Application_Service_Importcsv();
@@ -48,26 +50,24 @@ class Reports_RepositoryController extends Zend_Controller_Action
         }
     }
 
-
-    public function testgraphAction()
-    {
+    public function testgraphAction() {
 
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
-            . "  from rep_repository";
+                . "  from rep_repository";
         //if(isset())
         $query .= " GROUP BY ProgramID;";
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -76,10 +76,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function programsvslabsAction()
-    {
+    public function programsvslabsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -87,7 +86,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
-            . "  from rep_repository";
+                . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
             $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
@@ -98,17 +97,17 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
-        
-        
+
+
         //if(isset())
         $query .= " GROUP BY ProgramID;";
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -117,10 +116,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function labagainstsamplesAction()
-    {
+    public function labagainstsamplesAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -128,7 +126,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select labID as name,count(SampleCode) as data"
-            . "  from rep_repository";
+                . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
             $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
@@ -139,7 +137,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         //if(isset())
         $query .= " GROUP BY labID  order by data desc;";
@@ -148,7 +146,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -157,10 +155,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function providervslabsAction()
-    {
+    public function providervslabsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -168,7 +165,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select ProviderID as name,count(DISTINCT LabID) as data"
-            . "  from rep_repository";
+                . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
             $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
@@ -179,7 +176,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         //if(isset())
         $query .= " GROUP BY ProviderID;";
@@ -187,7 +184,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -196,8 +193,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function getcountiesAction()
-    {
+    public function getcountiesAction() {
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "Select*from rep_counties";
@@ -205,8 +201,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function getprogramsAction()
-    {
+    public function getprogramsAction() {
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "Select*from rep_programs";
@@ -214,10 +209,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function samplesAction()
-    {
+    public function samplesAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -231,13 +225,13 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
-            $query .= "and ProgramID ='" . $whereArray['ProgramID'] . "'";
+            $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         //if(isset())
         $query .= " GROUP BY RoundID;";
@@ -245,7 +239,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -254,10 +248,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function roundagainstresultsAction()
-    {
+    public function roundagainstresultsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -265,18 +258,18 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select RoundID as title,Grade as name, count(Grade) as data "
-            . "from rep_repository ";
+                . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
-            $query .= "and ProgramID ='" . $whereArray['ProgramID'] . "'";
+            $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         $query .= " GROUP BY RoundID,Grade ORDER BY title";
         $query = ($databaseUtils->rawQuery($query));
@@ -291,7 +284,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $gradeCount = $query[$i]['data'];
             $labGrade = array(
                 "name" => $labName . ':' . $gradeName,
-                "data" => array((int)$gradeCount));
+                "data" => array((int) $gradeCount));
             array_push($labGrades, $labGrade);
         }
         $labGradeResults = array("category" => $titles, "data" => $labGrades);
@@ -299,11 +292,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-
-    public function labagainstresultsAction()
-    {
+    public function labagainstresultsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -311,18 +302,18 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select LabID as title,Grade as name, count(Grade) as data "
-            . "from rep_repository ";
+                . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
-            $query .= "and ProgramID ='" . $whereArray['ProgramID'] . "'";
+            $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
 
         $query .= " GROUP BY LabID,Grade ORDER BY title";
@@ -338,7 +329,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
             $gradeCount = $query[$i]['data'];
             $labGrade = array(
                 "name" => $labName . ':' . $gradeName,
-                "data" => array((int)$gradeCount));
+                "data" => array((int) $gradeCount));
             array_push($labGrades, $labGrade);
         }
         $labGradeResults = array("category" => $titles, "data" => $labGrades);
@@ -346,8 +337,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function dumpAction()
-    {
+    public function dumpAction() {
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $repRepository = new database\crud\RepRepository($databaseUtils);
@@ -371,10 +361,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function progranvsresultsAction()
-    {
+    public function progranvsresultsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -382,25 +371,25 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select ProgramID as title,Grade as name, count(Grade) as data "
-            . "from rep_repository ";
+                . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramID ='" . $whereArray['ProgramId'] . "'";
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         $query .= " GROUP BY ProgramID,Grade ";
         $query = ($databaseUtils->rawQuery($query));
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
-                array_push($tempData, (int)$query[$i]['data']);
+                array_push($tempData, (int) $query[$i]['data']);
                 $query[$i]['data'] = $tempData;
                 $tempData = array();
             }
@@ -409,10 +398,9 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
-    public function resultsAction()
-    {
+    public function resultsAction() {
         $whereArray = file_get_contents("php://input");
-        $whereArray = (array)json_decode($whereArray);
+        $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
@@ -420,24 +408,27 @@ class Reports_RepositoryController extends Zend_Controller_Action
 
         $databaseUtils = new \database\core\mysql\DatabaseUtils();
         $query = "select * "
-            . "from rep_repository ";
+                . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
-            $query .= "and ProgramID ='" . $whereArray['ProgramId'] . "'";
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
-            $query .= "and ProviderId ='" . $whereArray['ProviderId'] . "'";
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
-            $query .= "and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
-        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 
-        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+//        echo $query;
+//        exit;
+//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+//
+//        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
 
-        $jsonData = ($databaseUtils->rawQuery($query));
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
         echo json_encode($jsonData);
@@ -445,8 +436,7 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit;
     }
 
-    public function generatecsvAction()
-    {
+    public function generatecsvAction() {
         $data = $_SESSION['currentRepoData'];
 
         $name = 'EPT Repository Data' . date("d-m-Y H:j", time());
@@ -490,16 +480,26 @@ class Reports_RepositoryController extends Zend_Controller_Action
         exit();
     }
 
+    public function returnUserCountStatement($county) {
+        $sql = " and labID in (select labName from rep_labs where  County ='" . $county . "')";
+        if (isset($_SESSION['loggedInDetails'])) {
+            $ses = $_SESSION['loggedInDetails'];
+            if ($ses['IsVl'] == 2) {
+                if ($ses['IsVl']['IsProvider'] == 3) {
+                    $sql = " and labID in (select labName from rep_labs where  County ='" . $ses['IsVl']['County'] . "')";
+                }
+            }
+        }
+        $query .= $sql;
+        return $query;
+    }
 
-    public function convertdate($dateString)
-    {
+    public function convertdate($dateString) {
 
         $dateString = date_format(date_create($dateString), "Y-m-d");
 
         return $dateString;
-
     }
-
 
 }
 

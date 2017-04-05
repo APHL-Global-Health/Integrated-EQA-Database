@@ -1,19 +1,18 @@
 <?php
 
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-    . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
+        . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
 require_once 'pdfCreator.php';
 
-Class Main extends pdfCreator
-{
-    protected $username = 'root';
-    protected $password = '';
-    protected $db = 'eanalyze';
-    protected $host = 'localhost';
+Class Main extends pdfCreator {
+
+    public $username = 'root';
+    public $password = '';
+    public $db = 'eanalyze';
+    public $host = 'localhost';
     public $connect_db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->connect_db = new mysqli($this->host, $this->username, $this->password, $this->db);
 
         if (mysqli_connect_errno()) {
@@ -21,18 +20,14 @@ Class Main extends pdfCreator
             exit();
         }
         return true;
-
     }
 
-    public function returnFileImagePath($imageName)
-    {
+    public function returnFileImagePath($imageName) {
         return substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-            . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
+                . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
     }
 
-
-    public function createInsertStatement($tableName, $dataArray)
-    {
+    public function createInsertStatement($tableName, $dataArray) {
         $query['status'] = false;
         $dataArray['createdBy'] = $this->getUserSession();
         try {
@@ -47,18 +42,13 @@ Class Main extends pdfCreator
                 if ($counter < sizeof($dataArray)) {
                     $query .= ',';
                     $values .= ',';
-
                 } else {
                     $query .= ')';
                     $values .= ')';
                 }
-
-
             }
 
             $query .= $values . ';';
-
-
         } catch (Exception $error) {
             echo $error->getMessage();
             die();
@@ -66,8 +56,7 @@ Class Main extends pdfCreator
         return $query;
     }
 
-    public function insertData($tableName, $dataArray)
-    {
+    public function insertData($tableName, $dataArray) {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {
@@ -82,14 +71,10 @@ Class Main extends pdfCreator
 
                             $error['status'] = 1;
                             $error['message'] = $this->connect_db->insert_id;
-
-
                         } else {
                             $error['message'] = $this->connect_db->error;
                         }
                     }
-
-
                 } else {
                     $error['message'] = 'Incorrect data format';
                 }
@@ -102,13 +87,11 @@ Class Main extends pdfCreator
         return ($error);
     }
 
-    public function deleteWhereCols($where, $table)
-    {
-
+    public function deleteWhereCols($where, $table) {
+        
     }
 
-    public function returnWhereStatement($array, $group = "", $tableName = "")
-    {
+    public function returnWhereStatement($array, $group = "", $tableName = "") {
 
         $where = ' where ';
         if (is_array($array)) {
@@ -125,10 +108,7 @@ Class Main extends pdfCreator
                 $counter++;
                 if ($counter < sizeof($array)) {
                     $where .= ' and ';
-
                 }
-
-
             }
             if (!isset($array['status'])) {
                 $where .= " and status " . $st . ' ';
@@ -146,21 +126,18 @@ Class Main extends pdfCreator
             }
             //$where .= ' order by id desc';
             return $where;
-
         } else {
             return '';
         }
     }
 
-    public function selectFromTable($tableName, $where = "", $group = "")
-    {
+    public function selectFromTable($tableName, $where = "", $group = "") {
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
 
             if (is_array($where)) {
                 $sql .= $this->returnWhereStatement($where, $group, $tableName);
-
             }
         }
 
@@ -178,11 +155,26 @@ Class Main extends pdfCreator
         } else {
             return false;
         }
-
     }
 
-    public function returnReportsWhereStmnt($array, $orderBy, $group = '', $groupArray = '', $tableName = '')
-    {
+    public function doQuery($sql) {
+//        echo$sql;
+//        exit;
+        $result = $this->connect_db->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_object()) {
+                $user_arr[] = $row;
+            }
+
+            return $user_arr;
+        } else {
+            return 0;
+        }
+    }
+
+    public function returnReportsWhereStmnt($array, $orderBy, $group = '', $groupArray = '', $tableName = '') {
 
         $where = ' where ';
         if (is_array($array)) {
@@ -199,7 +191,6 @@ Class Main extends pdfCreator
                     } else if ($key == 'dateTo') {
 
                         $where .= "dateCreated <=" . " '" . substr($value, 0, 10) . " 23:59:59'";
-
                     } else {
                         $where .= $key . "=" . " '$value' ";
                     }
@@ -207,10 +198,7 @@ Class Main extends pdfCreator
                 $counter++;
                 if ($counter < sizeof($array)) {
                     $where .= ' and ';
-
                 }
-
-
             }
             if (!isset($array['status'])) {
                 $where .= " and status " . $st . ' ';
@@ -218,30 +206,25 @@ Class Main extends pdfCreator
             if ($group) {
 
                 $where .= ' group by ' . implode(',', $groupArray);
-
             }
 
             $where .= " order by " . implode(',', $orderBy) . " desc";
 
 //             $where .= ' order by id desc';
             return $where;
-
         }
 
 
         return $where;
-
     }
 
-    public function selectReportFromTable($tableName, $col, $where, $order, $group = '', $groupArray = '')
-    {
+    public function selectReportFromTable($tableName, $col, $where, $order, $group = '', $groupArray = '') {
 
         $sql = "SELECT " . implode(',', $col) . " FROM $tableName";
         if (isset($where)) {
 
             if (is_array($where)) {
                 $sql .= $this->returnReportsWhereStmnt($where, $order, $group, $groupArray, $tableName);
-
             }
         }
 //
@@ -259,11 +242,9 @@ Class Main extends pdfCreator
         } else {
             return false;
         }
-
     }
 
-    public function selectCount($tableName, $where, $col, $sum = '')
-    {
+    public function selectCount($tableName, $where, $col, $sum = '') {
 
         if ($sum) {
             $sql = "SELECT sum($col) FROM $tableName";
@@ -273,7 +254,6 @@ Class Main extends pdfCreator
         if (is_array($where)) {
 
             $sql .= $this->returnWhereStatement($where);
-
         } else {
             $sql .= " where " . $col . " = " . $where;
         }
@@ -282,20 +262,16 @@ Class Main extends pdfCreator
 
         try {
             $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
-            return ($result);//->num_rows;
+            return ($result); //->num_rows;
         } catch (Exception $e) {
             return 'error';
         }
 
 
         // output data of each row
-
-
     }
 
-
-    function selectFromDStatusTable($tableName, $where = "")
-    {
+    function selectFromDStatusTable($tableName, $where = "") {
         $col = $where['column'];
         $status = $where['status'];
         $sql = "SELECT * FROM $tableName where $col in ($status)";
@@ -312,11 +288,9 @@ Class Main extends pdfCreator
         } else {
             return false;
         }
-
     }
 
-    function selectFromDStatusTableSamples($tableName, $where = "", $participantId)
-    {
+    function selectFromDStatusTableSamples($tableName, $where = "", $participantId) {
         $col = $where['column'];
         $status = $where['status'];
         $sql = "SELECT * FROM $tableName where $col in ($status) and roundId is not NULL and participantId=$participantId";
@@ -333,13 +307,10 @@ Class Main extends pdfCreator
         } else {
             return false;
         }
-
     }
 
-
     public
-    function deleteFromWhere($tableName, $where)
-    {
+            function deleteFromWhere($tableName, $where) {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {
@@ -361,7 +332,6 @@ Class Main extends pdfCreator
                     if ($result) {
                         $error['status'] = 1;
                         $error['message'] = 'deleted successfully';
-
                     } else {
                         $error['message'] = $this->connect_db->error;
                     }
@@ -371,20 +341,15 @@ Class Main extends pdfCreator
         } catch (Exception $e) {
             echo $e->getMessage();
         }
-
     }
 
     public
-    function generataPile()
-    {
-
-
+            function generataPile() {
+        
     }
 
-
     public
-    function updateTable($tableName, $where, $updateData)
-    {
+            function updateTable($tableName, $where, $updateData) {
         try {
             $error['status'] = 0;
             if (isset($tableName)) {
@@ -405,24 +370,19 @@ Class Main extends pdfCreator
                     if ($result) {
                         $error['status'] = 1;
                         $error['message'] = 'Row Update Successfully';
-
                     } else {
                         $error['message'] = $this->connect_db->error;
                     }
                 }
-
             }
             return $error;
         } catch (Exception $e) {
             echo $e->getMessage();
-
         }
-
     }
 
     public
-    function returnUpdateStatement($updateInfo)
-    {
+            function returnUpdateStatement($updateInfo) {
         try {
             $updateInfo['lastUpdatePerson'] = $this->getUserSession();
 //            $updateInfo['updateDate'] = $this->getUserSession();
@@ -437,24 +397,18 @@ Class Main extends pdfCreator
                     $counter++;
                     if ($counter < sizeof($updateInfo)) {
                         $updateStatement .= ' , ';
-
-
                     }
-
-
                 }
             }
 
             return $updateStatement;
         } catch (Exception $e) {
-
+            
         }
-
     }
 
     public
-    function getUserSession()
-    {
+            function getUserSession() {
         if (isset($_SESSION)) {
             if (isset($_SESSION['administrators'])) {
                 return $_SESSION['administrators']['admin_id'];
@@ -468,10 +422,10 @@ Class Main extends pdfCreator
     }
 
     public
-    function generatePanelLabels()
-    {
-
+            function generatePanelLabels() {
+        
     }
+
 }
 
 ?>
