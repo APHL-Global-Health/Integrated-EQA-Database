@@ -63,7 +63,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 . "  from rep_repository";
         //if(isset())
         $query .= " GROUP BY ProgramID;";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -103,7 +103,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         //if(isset())
         $query .= " GROUP BY ProgramID;";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -142,7 +142,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         //if(isset())
         $query .= " GROUP BY labID  order by data desc;";
 
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -180,7 +180,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
         //if(isset())
         $query .= " GROUP BY ProviderID;";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -235,7 +235,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
         //if(isset())
         $query .= " GROUP BY RoundID;";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
                 $tempData = array();
@@ -272,7 +272,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         $query .= " GROUP BY RoundID,Grade ORDER BY title";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         $titles = array();
         $labGrades = array();
         for ($i = 0; $i < count($query); $i++) {
@@ -317,7 +317,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
         $query .= " GROUP BY LabID,Grade ORDER BY title";
-        $query = ($databaseUtils->rawQuery($query));
+        $query = $this->dbConnection->doQuery($query);
         $titles = array();
         $labGrades = array();
         for ($i = 0; $i < count($query); $i++) {
@@ -385,7 +385,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
         }
         $query .= " GROUP BY ProgramID,Grade ";
-//        $query = ($databaseUtils->rawQuery($query));
+//        $query = $this->dbConnection->doQuery($query);
         
          $query = $this->dbConnection->doQuery($query);
 //         print_r($query);
@@ -428,7 +428,9 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
         if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+            
             $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+            
         }
 
 //        echo $query;
