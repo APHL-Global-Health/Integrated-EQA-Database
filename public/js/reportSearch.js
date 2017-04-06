@@ -140,6 +140,62 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
     }
 
+    $scope.reports.performanceLabs = {};
+
+    $scope.reports.getLabPerformance = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+
+        $scope.reports.countyChange(searchColumns.county);
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getlabperformance';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.performanceLabs = data;
+                        } else {
+                            $scope.reports.performanceLabs = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
+
+
+
+
     $scope.reports.stringSearch = {}
     $scope.reports.clearSearch = function () {
         $scope.reports.stringSearch = {};
@@ -530,12 +586,43 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 if (graphType == 'Round-results Graph') {
                     $scope.reports.getRoundAgainstResults(filterData);
                 }
+                 if (graphType == 'County-labs Graph') {
+                    $scope.reports.getCountyAgainstLabs(filterData);
+                }
+                if (graphType == 'County-Results Graph') {
+                    $scope.reports.getCountyAgainstLabs(filterData);
+                }
 
             }
         } else {
             updateGraphMessages("Select graph type from the downdrop", true, 'btn-danger');
         }
     }
+    
+    $scope.reports.getCountyAgainstLabs = function (filterData) {
+        try {
+            $scope.reports.showGraphLoader = true;
+            var url = serverURL + 'countyagainstlabs';
+            $http
+                    .post(url, filterData)
+                    .success(function (data) {
+                        $scope.reports.showGraph = true;
+console.log(data);
+                        $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
+                        $scope.reports.showGraphLoader = false;
+                        
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showGraphLoader = false;
+                        $scope.reports.showGraph = false;
+                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    
     $scope.reports.reportFilter = {};
 
 

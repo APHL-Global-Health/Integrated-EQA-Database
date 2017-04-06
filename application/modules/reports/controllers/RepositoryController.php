@@ -155,6 +155,89 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function getlabperformanceAction() {
+        
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+
+        $query = "select labId as LID,roundId,releasedate,(select count(grade) from rep_repository where grade='acceptable'
+                and labid=LID) as acceptable,
+                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID) as unacceptable
+                 from rep_repository ";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+//        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+
+        $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+//        }
+//        echo $query;
+//        exit;
+//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+//
+//        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+        $query .= " GROUP BY LabID,RoundID";
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $_SESSION['currentRepoData'] = $jsonData;
+        $_SESSION['filterData'] = $whereArray;
+        echo json_encode($jsonData);
+
+        exit;
+    }
+
+    public function countyagainstlabsAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+        $query = "select County as name,count(DISTINCT rep_repository.LabID) as data"
+                . "  from rep_repository join rep_labs on rep_labs.LabName=rep_repository.LabID";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+            $query .= " and rep_repository.labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+        }
+        //if(isset())
+        $query .= " GROUP BY County;";
+//        echo $query;
+        $query = $this->dbConnection->doQuery($query);
+        if (count($query) > 0) {
+            for ($i = 0; $i < sizeof($query); $i++) {
+
+                $where['CountyID'] = $query[$i]['name'];
+                $countyDetails = $this->returnValueWhere($where, 'rep_counties');
+                $query[$i]['name'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
+                $tempData = array();
+                array_push($tempData, (int) $query[$i]['data']);
+                $query[$i]['data'] = $tempData;
+                $tempData = array();
+            }
+        }
+        echo json_encode($query);
+        exit();
+    }
+
     public function providervslabsAction() {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
@@ -189,6 +272,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 $tempData = array();
             }
         }
+
         echo json_encode($query);
         exit();
     }
@@ -438,7 +522,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
 
         $query .= " GROUP BY LabID order by LabID";
-        
+
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
