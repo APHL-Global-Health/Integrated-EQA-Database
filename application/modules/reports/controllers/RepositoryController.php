@@ -407,6 +407,98 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function participantlabsresultsAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        $query = "select LabID "
+                . "from rep_repository  ";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+//        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+
+        $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+//        }
+//        echo $query;
+//        exit;
+//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+//
+//        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+
+        $query .= " GROUP BY LabID order by LabID";
+        
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $_SESSION['currentRepoData'] = $jsonData;
+        $_SESSION['filterData'] = $whereArray;
+        if (count($jsonData) > 0) {
+            foreach ($jsonData as $key => $value) {
+
+                $where['LabName'] = $value['LabID'];
+                $selectLabDetails = $this->returnValueWhere($where, 'rep_labs');
+//                var_dump($selectLabDetails);
+                $jsonData[$key]['address'] = isset($selectLabDetails['Address']) ? $selectLabDetails['Address'] : '';
+                $jsonData[$key]['contactName'] = isset($selectLabDetails['ContactName']) ? $selectLabDetails['ContactName'] : '';
+                $jsonData[$key]['telephone'] = isset($selectLabDetails['Telephone']) ? $selectLabDetails['Telephone'] : '';
+                $jsonData[$key]['contactEmail'] = isset($selectLabDetails['contactEmail']) ? $selectLabDetails['contactEmail'] : '';
+                $jsonData[$key]['county'] = isset($selectLabDetails['county']) ? $selectLabDetails['county'] : '';
+            }
+        }
+        echo json_encode($jsonData);
+
+        exit;
+    }
+
+    public function returnValueWhere($id, $tableName) {
+        $returnArray = array();
+        if (!is_array($id)) {
+            if ($tableName == 'data_manager') {
+                $whereId['dm_id'] = $id;
+            } else if ($tableName == 'participant') {
+                $whereId['participant_id'] = $id;
+            } else if ($tableName == 'rep_labs') {
+                $whereId['labID'] = $id;
+            } else if ($tableName == 'participant_manager_map') {
+                $whereId['dm_id'] = $id;
+            } else {
+                $whereId['id'] = $id;
+            }
+        } else {
+            $whereId = $id;
+        }
+        if (is_array($whereId)) {
+            $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
+//            echo($dataDB);
+//            exit;
+            if ($dataDB != false) {
+                try {
+
+                    foreach ($dataDB as $key => $value) {
+                        // array_push($returnArray,$value);
+                        $returnArray = $value;
+                    }
+                } catch (Exception $e) {
+                    return '';
+                }
+            } else {
+                
+            }
+        }
+        return (array) $returnArray;
+        exit();
+    }
+
     public function resultsAction() {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
@@ -490,7 +582,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
     public function returnUserCountStatement($county) {
-        $sql='';
+        $sql = '';
         if (isset($county) && !empty($county)) {
             $sql = " and labID in (select labName from rep_labs where  County ='" . $county . "')";
         }

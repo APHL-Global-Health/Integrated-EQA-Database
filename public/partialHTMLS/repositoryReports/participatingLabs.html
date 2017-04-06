@@ -4,7 +4,7 @@
               media="all">
         <legend>
             <h3>Participating Report
-                <small class="text-gray">{{reports.repositoryData.length}} Records</small>
+                <small class="text-gray">{{reports.participantingLabs.length}} Records</small>
             </h3>
         </legend>
 
@@ -27,99 +27,84 @@
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Provider" ng-model='reports.stringSearch.ProviderID'>
+
+                                   placeholder="Search lab name" ng-model='reports.stringSearch.LabID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Program" ng-model='reports.stringSearch.ProgramID'>
+
+                                   placeholder="Search county" ng-model='reports.stringSearch.county'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Lab" ng-model='reports.stringSearch.LabID'>
+
+                                   placeholder="Search contact name" ng-model='reports.stringSearch.contactName'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Round" ng-model='reports.stringSearch.RoundID'>
+
+                                   placeholder="Search email" ng-model='reports.stringSearch.contactEmail'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Date" ng-model='reports.stringSearch.DateSampleReceived'>
+
+                                   placeholder="Search tel." ng-model='reports.stringSearch.telephone'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search Grade" ng-model='reports.stringSearch.Grade'>
-                        </th>
-                        <th style="text-align: center;">
-                            <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.AnalyteID)"
-                                   placeholder="Search Analyte" ng-model='reports.stringSearch.AnalyteID'>
-                        </th>
-                        <th style="text-align: center;">
-                            <input class="form-control col-md-12 input-sm"
-                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                   placeholder="Search sample" ng-model='reports.stringSearch.SampleCode'>
+
+                                   placeholder="Search status" ng-model='reports.stringSearch.status'>
                         </th>
                     </tr>
                 </thead>
                 <thead>
                     <tr>
                         <th style="text-align: center;"> #</th>
-                        <th style="text-align: center;">Provider Name</th>
-                        <th style="text-align: center;">Program</th>
-                        <th style="text-align: center;">Lab</th>
+                        <th style="text-align: center;">Lab Name</th>
+                        <th style="text-align: center;">County</th>
+                        <th style="text-align: center;">Contact Name</th>
                         <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
-                        <th style="text-align: center;">PT Round Code</th>
-                        <th style="text-align: center;">Release Date</th>
-                        <th style="text-align: center;">Grade</th>
-                        <th style="text-align: center;">Analyte ID</th>
-                        <th style="text-align: center;">Sample Code</th>
+                        <th style="text-align: center;">Contact Email</th>
+                        <th style="text-align: center;">Telephone</th>
+                        <th style="text-align: center;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="record in reports.repositoryData| itemsPerPage: reports.itemsPerPage | filter :reports.search"
+                    <tr dir-paginate="record in reports.participantingLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
                         >
                         <td>{{$index + 1}}</td>
                         <td>
 
-                            {{record.ProviderID}}
-                        </td>
-                        <td>
-                            {{record.ProgramID}}
-                        </td>
-                        <td>
                             {{record.LabID}}
+                        </td>
+                        <td>
+                            {{record.county}}
+                        </td>
+                        <td>
+                            {{record.contactName}}
                         </td>
                         <!--<td>
                             Inclassified
                         </td>-->
                         <td>
-                            {{record.RoundID}}
+                            {{record.contactEmail}}
                         </td>
                         <td>
-                            {{record.ReleaseDate}}
+                            {{record.telephone}}
                         </td>
                         <td>
-                            {{record.Grade}}
+                            {{record.status}}
                         </td>
-                        <td>
-                            {{record.AnalyteID}}
-                        </td>
-                        <td>
-                            {{record.SampleCode}}
-                        </td>
+
 
                     </tr>
                 </tbody>
             </table>
-            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
-                                     boundary-links="true">
-            </dir-pagination-controls>
+            <div ng-if="clickedTab == 'participants'">
+                <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+            </div>
         </div>
     </div>
 </div>

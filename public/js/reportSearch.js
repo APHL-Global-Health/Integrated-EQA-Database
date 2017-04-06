@@ -65,21 +65,21 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
 //            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
-                $scope.reports.showLoader = true;
-                updateGraphMessages("No records found", false, 'btn-warning');
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
 
-                var url = serverURL + 'results';
-                $http
-                        .post(url, searchColumns)
-                        .success(function (data) {
-                            $scope.reports.createDataTable(data)
+            var url = serverURL + 'results';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.createDataTable(data)
 
-                            console.log(data);
+                        console.log(data);
 
-                        })
-                        .error(function (error) {
-                            $scope.reports.showLoader = false;
-                        })
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
 
 
 //            } else {
@@ -88,6 +88,58 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         }
     }
+
+    $scope.reports.participantingLabs = {};
+
+    $scope.reports.getParticipants = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+
+        $scope.reports.countyChange(searchColumns.county);
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'participantlabsresults';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.participantingLabs = data;
+                        } else {
+                            $scope.reports.participantingLabs = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
     $scope.reports.stringSearch = {}
     $scope.reports.clearSearch = function () {
         $scope.reports.stringSearch = {};
@@ -653,7 +705,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             filterData.ProviderId = reportFilter.providerID;
             filterData.dateRange = $scope.reports.dateRange;
             filterData.county = $("#county").val();
-            
+
             console.log(filterData);
             if (filterData.ProgramId != '' && angular.isDefined(filterData.ProgramId)) {
                 updateGraphMessages("please select a program to proceed", false, 'btn-danger')

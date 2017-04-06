@@ -157,7 +157,7 @@
                                     </option>
 
                                 </select>
-                                <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports'"
+                                <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports' || clickedTab == 'participants'"
                                         name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
                                     <option value=""> -- Select Program --</option>
                                     <!--                <option value="network">Network Tier</option>
@@ -171,6 +171,12 @@
                             <td class="dontPrint">
                                 <button class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
                                         ng-click="reports.doAjaxRequest()"><span>Get Report</span></button>
+
+                                <button class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
+                                        ng-click="reports.getParticipants()"><span>Get Report</span>
+                                </button>
+
+
                                 <button class="btn btn-success btn-sm"
                                         ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"
                                         ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span></button>
@@ -190,7 +196,7 @@
                         Program : <strong>{{reports.searchFilters.ProgramID}}{{reports.searchFilters.ProgramId}} |</strong>
                         County : <strong>{{reports.searchFilters.countyName}}</strong>
                     </div>
-                    <div ng-show="clickedTab == 'reports'">
+                    <div ng-if="clickedTab == 'reports'">
                         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
                               media="all">
                         <legend>
@@ -248,7 +254,7 @@
                                     </th>
                                     <th style="text-align: center;">
                                         <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.AnalyteID)"
+                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
                                                placeholder="Search Analyte" ng-model='reports.stringSearch.AnalyteID'>
                                     </th>
                                     <th style="text-align: center;">
@@ -308,14 +314,16 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
-                                                 boundary-links="true">
-                        </dir-pagination-controls>
+                       
+                            <dir-pagination-controls  on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
+                                                     boundary-links="true">
+                            </dir-pagination-controls>
+                       
                     </div>
                 </div>
-                <div ng-show="clickedTab == 'participants'">
+                <div ng-if="clickedTab == 'participants'">
                     <div ng-include="'../partialHTMLS/repositoryReports/participatingLabs.html'">
-                        
+
                     </div>
                 </div>
                 <div ng-show="clickedTab == 'graphs'">
