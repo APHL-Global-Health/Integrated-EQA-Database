@@ -160,7 +160,8 @@
                                     </option>
 
                                 </select>
-                                <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports' || clickedTab == 'participants'"
+                                <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports'
+                                            || clickedTab == 'participants' || clickedTab == 'summary'"
                                         name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
                                     <option value=""> -- Select Program --</option>
                                     <!--                <option value="network">Network Tier</option>
@@ -178,11 +179,14 @@
                                 <button class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
                                         ng-click="reports.getParticipants()"><span>Get Report</span>
                                 </button>
-
+                                <button class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"
+                                        ng-click="reports.getLabPerformance()"><span>Get Report</span>
+                                </button>
 
                                 <button class="btn btn-success btn-sm"
                                         ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"
-                                        ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span></button>
+                                        ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span>
+                                </button>
 
                                 <button class="btn btn-info btn-sm"
                                         ng-show="clickedTab == 'graphs' && reports.reportType != 'Program-Results Graph'"
@@ -199,7 +203,7 @@
                         Program : <strong>{{reports.searchFilters.ProgramID}}{{reports.searchFilters.ProgramId}} |</strong>
                         County : <strong>{{reports.searchFilters.countyName}}</strong>
                     </div>
-                    <div ng-if="clickedTab == 'reports'">
+                    <div ng-if="clickedTab == 'reports'" ng-init="reports.stringSearch={}">
                         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
                               media="all">
                         <legend>
@@ -248,7 +252,7 @@
                                     <th style="text-align: center;">
                                         <input class="form-control col-md-12 input-sm"
                                                ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Date" ng-model='reports.stringSearch.DateSampleReceived'>
+                                               placeholder="Search Date" ng-model='reports.stringSearch.ReleaseDate'>
                                     </th>
                                     <th style="text-align: center;">
                                         <input class="form-control col-md-12 input-sm"
@@ -317,15 +321,20 @@
                                 </tr>
                             </tbody>
                         </table>
-                       
-                            <dir-pagination-controls  on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
-                                                     boundary-links="true">
-                            </dir-pagination-controls>
-                       
+
+                        <dir-pagination-controls  on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
+                                                  boundary-links="true">
+                        </dir-pagination-controls>
+
                     </div>
                 </div>
                 <div ng-if="clickedTab == 'participants'">
                     <div ng-include="'../partialHTMLS/repositoryReports/participatingLabs.html'">
+
+                    </div>
+                </div>
+                <div ng-if="clickedTab == 'summary'">
+                    <div ng-include="'../partialHTMLS/repositoryReports/performanceSummary.html'">
 
                     </div>
                 </div>
@@ -362,8 +371,8 @@
                                             <highchart id="chart1" config="reports.chartProgramResults"></highchart>
                                         </div>
                                         <div ng-include="'<?php echo $this->baseUrl('partialHTMLS/graphs.html'); ?>'"
-                                             ng-if="reports.graphType == 'pie'"
-                                             ></div>
+                                             ng-if="reports.graphType == 'pie'">
+                                        </div>
 
                                     </div>
                                     <div class="col-md-3 pull-right pre-scrollable">
