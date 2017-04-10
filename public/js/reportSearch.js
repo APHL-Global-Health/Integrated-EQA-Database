@@ -162,9 +162,9 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         return dateTime;
     }
-    $scope.reports.generateRepositoryPdf = function (reportData) {
+    $scope.reports.generateRepositoryGenPdf = function (reportData) {
     var reportData = new Array();
-        var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
+        var tableWidth = ['auto', '*', 'auto', 'auto', '*']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
@@ -172,32 +172,22 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     {text: 'Lab Code', style: 'subHeader'},
                     {text: 'County', style: 'subHeader'},
                     {text: 'Sample', style: 'subHeader'},
-                    {text: 'Round', style: 'subHeader'},
-                    {text: 'Micro', style: 'subHeader'},
-                    {text: 'Agents', style: 'subHeader'},
-                    {text: 'Remarks', style: 'subHeader'},
-                    {text: 'Grade', style: 'subHeader'},
-                    {text: 'Total', style: 'subHeader'}
+                   
 
                 ];
 
         reportData.push(reportHeader);
-        console.log(data)
-        if (data.length > 0) {
-            for (var i = 0; i < data.length; i++) {
-                var lab = data[i];
+       
+        if (reportData.length > 0) {
+            for (var i = 0; i < 5; i++) {
+               
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
-                    {text: ' ' + lab.labName, style: ['content']},
-                    {text: ' ' + lab.unique_identifier, style: ['content']},
-                    {text: ' ' + lab.county, style: ['content']},
-                    {text: ' ' + lab.batchName, style: ['content']},
-                    {text: ' ' + lab.roundCode, style: ['content']},
-                    {text: ' ' + lab.finalScore, style: ['content']},
-                    {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
-                    {text: ' ' + lab.remarks, style: ['content']},
-                    {text: ' ' + lab.grade, style: ['content']},
-                    {text: ' ' + (Number(lab.finalScore) + Number(lab.totalMicroAgentsScore)), style: ['content']}
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']}
+                    
                 ];
 
                 reportData.push(rowData);
@@ -206,7 +196,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var reportSubHeader = 'ROUND PERFORMANCE REPORT';
             var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
-            $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+            $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }

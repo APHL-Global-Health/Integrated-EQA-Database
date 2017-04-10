@@ -43,7 +43,7 @@
                                         <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'participants'}">
-                                        <a href="#" ng-click="clickedTab = 'participants'">Participating Reports</a>
+                                        <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'summary'}">
                                         <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
@@ -62,13 +62,17 @@
                         <li class='pull-right'>
 
 
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'"
-                                 ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
+                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
+                                 ng-click="reports.generateRepositoryGenPdf(reports.repositoryData)">
                                 <i class="fa fa-pdf"></i> PDF
                             </div>
 
-                             <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'"
-                                 ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
+                             <div class="btn btn-success btn-sm" ng-show="clickedTab == 'participants'"
+                                 ng-click="reports.generateRepositoryParticipantPdf(reports.repositoryData)">
+                                <i class="fa fa-pdf"></i> PDF
+                            </div>
+                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'summary'"
+                                 ng-click="reports.generateRepositorySummaryPdf(reports.repositoryData)">
                                 <i class="fa fa-pdf"></i> PDF
                             </div>
                             
