@@ -222,7 +222,18 @@ if ($auth->hasIdentity()) {
 
 <?php } ?>
 <?php if ($vl == 3) { ?>
-
+<?php if ($role == 1) { ?>
+            <div class="jumbotron">
+                <h1>MICROBIOLOGY ADMIN MODULE</h1> 
+                  <small>Welcome Back,<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+                <p>On this module you will be able to add other Microbiology Users,create rounds,create tests and views reports.</p> 
+            </div>
+            <p class="lead">To add a module add click here 
+                <a class="btn btn-primary" 
+                   href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'add'), 'default', true); ?>">
+                    Add Microbiology Users </a>
+            </p> 
+        <?php } ?>
 <?php } ?>
 <?php if ($vl == 2) { ?>
     <div class="container">

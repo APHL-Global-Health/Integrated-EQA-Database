@@ -233,8 +233,8 @@ Class Main extends pdfCreator {
             }
         }
 //
-//        echo $sql;
-//        exit;
+        echo $sql;
+        exit;
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
