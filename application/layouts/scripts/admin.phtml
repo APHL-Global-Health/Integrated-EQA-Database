@@ -185,11 +185,11 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">
                                             <i class="icon-list"></i> Participatory Reports</a>
                                     </li>
-                                    <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                    <li>
                                         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">
                                             <i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a>
                                     </li>
-                                    <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                    <li >
                                         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
                                         </a>
                                     </li>
