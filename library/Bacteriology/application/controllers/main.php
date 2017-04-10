@@ -6,14 +6,10 @@ require_once 'pdfCreator.php';
 
 Class Main extends pdfCreator {
 
-    public $username = 'root';
-    public $password = '';
-    public $db = 'eanalyze';
-    public $host = 'localhost';
     public $connect_db;
 
     public function __construct() {
-        $this->connect_db = new mysqli($this->host, $this->username, $this->password, $this->db);
+        $this->connect_db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
         if (mysqli_connect_errno()) {
             printf("Connection failed: %s", mysqli_connect_error());
