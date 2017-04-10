@@ -2,11 +2,9 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'highcharts-ng', 'nvd3ChartDirectives', 'ui.calendar',
     'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
-
-ReportModule.constant('serverURL', 'http://localhost:8088/reports/repository/');
-ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
+ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
         graphDataCache, $filter, filterFilter) {
-
+    var serverURL = SERVER_API_URL.repositoryURL;
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
         if (cache) {
@@ -586,7 +584,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 if (graphType == 'Round-results Graph') {
                     $scope.reports.getRoundAgainstResults(filterData);
                 }
-                 if (graphType == 'County-labs Graph') {
+                if (graphType == 'County-labs Graph') {
                     $scope.reports.getCountyAgainstLabs(filterData);
                 }
                 if (graphType == 'County-Results Graph') {
@@ -598,7 +596,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             updateGraphMessages("Select graph type from the downdrop", true, 'btn-danger');
         }
     }
-    
+
     $scope.reports.getCountyAgainstLabs = function (filterData) {
         try {
             $scope.reports.showGraphLoader = true;
@@ -607,10 +605,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .post(url, filterData)
                     .success(function (data) {
                         $scope.reports.showGraph = true;
-console.log(data);
+                        console.log(data);
                         $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
                         $scope.reports.showGraphLoader = false;
-                        
+
 
                     })
                     .error(function (error) {
@@ -622,7 +620,7 @@ console.log(data);
             console.log(e)
         }
     }
-    
+
     $scope.reports.reportFilter = {};
 
 

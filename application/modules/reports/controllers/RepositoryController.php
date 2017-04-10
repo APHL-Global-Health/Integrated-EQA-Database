@@ -18,15 +18,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 ->initContext();
         $this->_helper->layout()->pageName = 'report';
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
-        if (!class_exists('databases' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'mysql' . DIRECTORY_SEPARATOR . 'DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'core-apis' . DIRECTORY_SEPARATOR . 'DatabaseUtils.php';
-        }
-        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin.php';
-        }
-        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository.php';
-        }
+    
         $this->dbConnection = new Main();
     }
 

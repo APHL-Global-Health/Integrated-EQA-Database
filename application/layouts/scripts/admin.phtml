@@ -70,7 +70,8 @@ if ($auth->hasIdentity()) {
         <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
         <![endif]-->
-
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
+              media="all">
         <!--s<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 
     <!--s<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
@@ -171,7 +172,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);             ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);              ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -359,7 +360,7 @@ if ($auth->hasIdentity()) {
     </div>
 
     <div class="container">
-       <?php // print_r($_SESSION['loggedInDetails']); ?>
+        <?php // print_r($_SESSION['loggedInDetails']); ?>
         <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 

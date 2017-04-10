@@ -1,5 +1,7 @@
+const BASE_URL = "http://localhost:8088/"
 const SERVER_API_URL = {
-    sampleURL: 'http://localhost:8088/admin/Bacteriologydbci/',
-    bacteriologyURL: 'http://localhost:8088/Bacteriologydbci/',
-    reportsURL: 'http://localhost:8088/admin/reports/'
+    sampleURL: BASE_URL + 'admin/Bacteriologydbci/',
+    bacteriologyURL: BASE_URL + 'admin/Bacteriologydbci/',
+    reportsURL: BASE_URL + 'admin/reports/',
+    repositoryURL: BASE_URL + 'reports/repository/'
 }
