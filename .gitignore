@@ -1,5 +1,5 @@
 application/cache
-application/cache
+application/configs
 database/core-apis
 public/files
 *.hgignore
