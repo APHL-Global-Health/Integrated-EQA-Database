@@ -9,7 +9,10 @@ Class Main extends pdfCreator {
     public $connect_db;
 
     public function __construct() {
-        $this->connect_db = Zend_Db_Table_Abstract::getDefaultAdapter();
+
+        $conf = parse_ini_file(APPLICATION_PATH . "/configs/application.ini");
+
+        $this->connect_db = new mysqli($conf['resources.db.params.host'], $conf['resources.db.params.username'], $conf['resources.db.params.password'], $conf['resources.db.params.dbname']);
 
         if (mysqli_connect_errno()) {
             printf("Connection failed: %s", mysqli_connect_error());
