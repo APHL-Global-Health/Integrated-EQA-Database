@@ -165,7 +165,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.reports.generateRepositoryParticipantPdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', 'auto', 'auto','*','*', 'auto', 'auto']
+        var tableWidth = ['auto', 'auto', 'auto', '*', '*', 'auto', 'auto']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
@@ -206,7 +206,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
     $scope.reports.generateRepositorySummaryPdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', 'auto', 'auto', 'auto', 'auto','auto', 'auto', 'auto']
+        var tableWidth = ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
@@ -233,7 +233,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     {text: ' ' + lab.ReleaseDate, style: ['content']},
                     {text: ' ' + lab.acceptable, style: ['content']},
                     {text: ' ' + lab.unacceptable, style: ['content']},
-                    {text: ' ' + lab.percent+'%', style: ['content']}
+                    {text: ' ' + lab.percent + '%', style: ['content']}
                 ];
 
                 reportData.push(rowData);
@@ -592,6 +592,116 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     }
 
+
+//-------------------------generate excel data from file---------------------------------------------//
+
+    function returnSummaryExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Lab Name': excelData[i].LID,
+                    'County': excelData[i].county,
+                    'Round': excelData[i].RoundID,
+                    'Date': excelData[i].ReleaseDate,
+                    'Acceptable': excelData[i].acceptable,
+                    'Not Accepted': excelData[i].unacceptable,
+                    'Percentage': excelData[i].percent
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+    $scope.reports.generateSummaryExcel = function (data) {
+        if (data.length > 0) {
+            var excelData = returnSummaryExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'PERFORMANCE SUMMARY SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'PERFORMANCE SUMMARY',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                    ;
+            var res = alasql('SELECT INTO XLSX("PERFORMANCE SUMMARY REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//-------------------------generate excel data from file---------------------------------------------//
+
+    function returnParticpantsExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Lab Name': excelData[i].LabID,
+                    'County': excelData[i].county,
+                    'Contact name': excelData[i].contactName,
+                    'Contact Email': excelData[i].contactEmail,
+                    'Telephone': excelData[i].telephone,
+                    'status':'Active'
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+
+    $scope.reports.generateParticipantsExcel = function (data) {
+        if (data.length > 0) {
+            var excelData = returnParticpantsExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'PARTICIPANTS SUMMARY SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'PARTICIPANTS SUMMARY',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                    ;
+            var res = alasql('SELECT INTO XLSX("PARTICIPANTS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $scope.reports.showGraph = false;
 

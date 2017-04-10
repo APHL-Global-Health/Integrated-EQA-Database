@@ -77,8 +77,15 @@
                             </div>
                             
                             
-                            <div class="btn btn-info btn-sm" ng-show="clickedTab != 'graphs'" ng-click="reports.exportToExcelFile()">
+                            <div class="btn btn-info btn-sm" ng-show="clickedTab == 'reports'" ng-click="reports.exportToExcelFile()">
                                 <i class="fa fa-excel"></i> CSV
+                            </div>
+                            
+                             <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'summary'" ng-click="reports.generateSummaryExcel(reports.performanceLabs)">
+                                <i class="fa fa-excel"></i> Excel
+                            </div>
+                             <div class="btn btn-success btn-sm" ng-show="clickedTab == 'participants'" ng-click="reports.generateParticipantsExcel(reports.participantingLabs)">
+                                <i class="fa fa-excel"></i> Excel
                             </div>
 
 
