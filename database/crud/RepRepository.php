@@ -1097,7 +1097,7 @@ class RepRepository {
 	*/
 	public function insert_prepared_records($ImpID,$ProviderID,$LabID,$RoundID,$ProgramID,$ReleaseDate,$SampleCode,$AnalyteID,$SampleCondition,$DateSampleReceived,$Result,$ResultCode,$Grade,$TestKitID,$DateSampleShipped,$FailReasonCode,$Frequency,$StCount,$TragetValue,$UpperLimit,$LowerLimit,$redundancy_check= false, $printSQL = false) {
 		$columns = array('ImpID','ProviderID','LabID','RoundID','ProgramID','ReleaseDate','SampleCode','AnalyteID','SampleCondition','DateSampleReceived','Result','ResultCode','Grade','TestKitID','DateSampleShipped','FailReasonCode','Frequency','StCount','TragetValue','UpperLimit','LowerLimit');
-		$records = array($ImpID,$ProviderID,$LabID,$RoundID,$ProgramID,$ReleaseDate,$SampleCode,$AnalyteID,$SampleCondition,$DateSampleReceived,$Result,$ResultCode,$Grade,$TestKitID,$DateSampleShipped,$FailReasonCode,$Frequency,$StCount,$TragetValue,$UpperLimit,$LowerLimit);
+		$records = array($ImpID,$ProviderID,$LabID,$RoundID,$ProgramID,$ReleaseDate,$SampleCode,$AnalyteID,$SampleCondition,'2016-12-01 00:00:00',$Result,$ResultCode,$Grade,$TestKitID,$DateSampleShipped,$FailReasonCode,$Frequency,$StCount,$TragetValue,$UpperLimit,$LowerLimit);
 		return $this->insert_records_to_rep_repository ( $columns, $records,$redundancy_check, $printSQL );
 	}
 

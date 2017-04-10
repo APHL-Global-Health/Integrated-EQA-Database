@@ -7,9 +7,9 @@
  */
 class Application_Service_Importcsv {
 	
-	public function getAllData($params){
+	public function getAllData($params,$pname){
 		$adminDb = new Application_Model_DbTable_Importcsv();
-		return $adminDb->getAllData($params);
+		return $adminDb->getAllData($params,$pname);
 	}
 	public function addData($params,$provider,$program,$period){
 		$adminDb = new Application_Model_DbTable_Importcsv();

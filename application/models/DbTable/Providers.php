@@ -1,23 +1,23 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract
-{
+
+class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
+
     protected $_name = 'rep_providers';
     protected $_primary = 'ProviderID';
-    
-    public function getAllProviders($parameters)
-    {
+
+    public function getAllProviders($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ProviderName','Email','Telephone', 'ContactName', 'ContactEmail', 'ContactTelephone','Status');
+        $aColumns = array('ProviderName', 'Email', 'Telephone', 'ContactName', 'ContactEmail', 'ContactTelephone', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -96,7 +96,7 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-	
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -140,59 +140,75 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract
             $row = array();
             $row[] = $aRow['ProviderName'];
             $row[] = $aRow['Email'];
-            //$row[] = $aRow['Address'];
             $row[] = $aRow['Telephone'];
-            //$row[] = $aRow['PostalCode'];
-            $row[] = $aRow['ContactName'];
-            $row[] = $aRow['ContactEmail'];
-            $row[] = $aRow['ContactTelephone'];
             $row[] = $aRow['Status'];
-            $row[] = '<a href="/admin/providers/edit/id/' . $aRow['ProviderID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $row[] = '<a href="/admin/providers/edit/id/' . $aRow['ProviderID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> ';
 
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
-    public function getProviders(){
-		return $this->fetchAll($this->select()->where("Status='active'")->order("ProviderName"));
-	}
-    public function addProviders($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
-        $data = array(
-                      'ProviderName'=>$params['ProviderName'],
-                      'Email'=>$params['Email'],
-                      'Address'=>$params['Address'],
-                      'Telephone'=>$params['Telephone'],
-                      'PostalCode'=>$params['PostalCode'],
-                      'ContactName'=>$params['ContactName'],
-                      'ContactTelephone'=>$params['ContactTelephone'],
-                      'ContactEmail'=>$params['ContactEmail'],
-                      'Status'=>$params['Status'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
-        return $this->insert($data);
-    }
-    public function getProviderDetails($adminId){
-        return $this->fetchRow($this->select()->where("ProviderID = ? ",$adminId));
-    }
     
-    public function updateProviders($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
-        $data = array(
-                      'ProviderName'=>$params['ProviderName'],
-                      'Email'=>$params['Email'],
-                      'Address'=>$params['Address'],
-                      'Telephone'=>$params['Telephone'],
-                      'PostalCode'=>$params['PostalCode'],
-                      'ContactName'=>$params['ContactName'],
-                      'ContactTelephone'=>$params['ContactTelephone'],
-                      'ContactEmail'=>$params['ContactEmail'],
-                      'Status'=>$params['Status'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
-        return $this->update($data,"ProviderID=".$params['ProviderID']);
+    public function getProviders() {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $pname = $auth->getIdentity()->ProviderName;
+        }
+        if($pname){
+        return $this->fetchAll($this->select()->where("Status='active'")->where("ProviderName='$pname'")->order("ProviderName"));
+        }else{
+            return $this->fetchAll($this->select()->where("Status='active'")->order("ProviderName"));
+        }
     }
+    public function getProvider($partSysId) {
+        return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
+                                ->joinLeft(array('pr' => 'rep_providerprograms'), 'pr.ProviderID=p.ProviderID')
+                                ->joinLeft(array('rp' => 'rep_programs'), 'rp.ProgramID=pr.ProgramID', array('ProgramID' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT rp.Description SEPARATOR ', ')")))
+                                ->where("p.ProviderID = ?", $partSysId)
+                                ->group('p.ProviderID'));
+        
+    }
+    public function addProviders($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $data = array(
+            'ProviderName' => $params['ProviderName'],
+            'Email' => $params['Email'],
+            'Address' => $params['Address'],
+            'Telephone' => $params['ContactTelephone'],
+            'PostalCode' => $params['PostalCode'],
+//            'ContactName' => $params['ContactName'],
+//            'ContactTelephone' => $params['ContactTelephone'],
+//            'ContactEmail' => $params['ContactEmail'],
+            'Status' => $params['Status'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
+        $saved = $this->insert($data);
+        return $saved;
+    }
+
+    public function getProviderDetails($adminId) {
+        return $this->fetchRow($this->select()->where("ProviderID = ? ", $adminId));
+    }
+
+    public function updateProviders($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $data = array(
+            'ProviderName' => $params['ProviderName'],
+            'Email' => $params['Email'],
+            'Address' => $params['Address'],
+            'Telephone' => $params['Telephone'],
+            'PostalCode' => $params['PostalCode'],
+            'ContactName' => $params['ContactName'],
+            'ContactTelephone' => $params['ContactTelephone'],
+            'ContactEmail' => $params['ContactEmail'],
+            'Status' => $params['Status'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
+        return $this->update($data, "ProviderID=" . $params['ProviderID']);
+    }
+
 }
