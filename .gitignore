@@ -1,8 +1,15 @@
 application/cache
+<<<<<<< HEAD
 application/configs
+=======
+public/files
+>>>>>>> 06df88992b2cf01d8b7f8d77b53409fd91639e1f
 database/core-apis
 public/files
 *.hgignore
 .idea/workspace.xml
 *.log
+<<<<<<< HEAD
 public/angularMain/constants.js
+=======
+>>>>>>> 06df88992b2cf01d8b7f8d77b53409fd91639e1f

@@ -56,6 +56,7 @@ class Application_Service_Common {
             $systemMail->send($smtpTransportObj);
             return true;
         } catch (Exception $exc) {
+            
             error_log("===== MAIL SENDING FAILED - START =====");
             error_log($exc->getMessage());
             error_log($exc->getTraceAsString());
