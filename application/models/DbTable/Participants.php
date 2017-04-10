@@ -307,6 +307,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'lat' => $params['lat'],
             'shipping_address' => $params['shippingAddress'],
             'first_name' => $params['pfname'],
+            'lab_name' => $params['pfname'],
             'last_name' => $params['plname'],
             'mobile' => $params['pphone2'],
             'phone' => $params['pphone1'],
@@ -320,7 +321,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
             'created_by' => $authNameSpace->primary_email,
-            'status' => $params['status']
+            'ModuleID'=>1,
+            'status' => 'active'
         );
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {
             $data['individual'] = 'yes';
@@ -328,7 +330,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $data['individual'] = 'no';
         }
 
-
+        $participantName=$params['instituteName'];
         $participantId = $this->insert($data);
 
         $db = Zend_Db_Table_Abstract::getAdapter();
@@ -341,7 +343,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                 $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
             }
         }
-
+        $common = new Application_Service_Common();
+        $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        $fromMail="brianonyi@gmail.com";
+        $fromName = Application_Service_Common::getConfig('admin-name');			
+        $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
         return $participantId;
     }
 
