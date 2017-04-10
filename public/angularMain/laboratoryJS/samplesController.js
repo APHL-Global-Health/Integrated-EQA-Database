@@ -923,7 +923,7 @@
             }
         }
         $scope.samples.getLoggedInUserSessionInfo();
-        alert($scope.samples.loginDetails);
+       
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
         $scope.samples.panelArrowDown = false;

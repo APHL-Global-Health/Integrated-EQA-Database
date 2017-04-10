@@ -3,7 +3,7 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
-        graphDataCache, $filter, filterFilter) {
+        graphDataCache, $filter, filterFilter,EptServices) {
     var serverURL = SERVER_API_URL.repositoryURL;
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
@@ -43,6 +43,173 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             }
         }
 
+    }
+
+    $scope.reports.generatePdfMainFunction = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader) {
+        // var schoolName = '@Session["SchoolName"]';
+
+        var docDefinition = {
+            styles: {
+                header: {
+                    fontSize: 12,
+                    bold: true,
+                },
+
+                subHeader: {
+                    fontSize: 10,
+                    bold: true,
+
+                },
+
+                content: {
+                    fontSize: 8,
+                    bold: false,
+                },
+
+                numeric: {
+                    alignment: 'right'
+                },
+
+                centerData: {
+                    alignment: 'center'
+                }
+            },
+
+            content: [
+                //{
+                //    image: schoolLogo,
+                //    width: 60,
+                //    style: ['centerData'],
+                //    margin: [0, 0, 0, 5]
+                //},
+                {text: 'Nation Public Health Laboratories'.toUpperCase(), style: ['header', 'centerData']},
+                {text: reportHeader, style: ['content', 'centerData'], margin: [0, 0, 0, 5]},
+
+                {text: 'P.O BOX 145-00100,Nairobi', style: ['content', 'centerData']},
+                {text: 'info@nphl.co.ke', style: ['content', 'centerData']},
+                {
+                    text: 'www.nphl.or.ke',
+                    link: "http://www.nphl.or.ke",
+                    style: ['content', 'centerData'],
+                    fillColor: 'yellow',
+                    decoration: "underline"
+                },
+                {text: reportTitle, style: ['subHeader', 'centerData'], margin: [0, 5, 0, 0]},
+                // {text:"Google", link:"http://www.google.com", decoration:"underline",fillColor: 'blue', margin: [0, 5, 0, 0]},
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: tableWidth,
+                        body: reportData,
+                    },
+                    layout: {
+                        hLineWidth: function (i, node) {
+                            return (i === 0 || i === node.table.body.length) ? 0.5 : 0.5;
+                        },
+                        vLineWidth: function (i, node) {
+                            return (i === 0 || i === node.table.widths.length) ? 0.5 : 0.5;
+                        },
+                        hLineColor: function (i, node) {
+                            return (i === 0 || i === node.table.body.length) ? 'black' : 'black';
+                        },
+                        vLineColor: function (i, node) {
+                            return (i === 0 || i === node.table.widths.length) ? 'black' : 'black';
+                        },
+                        paddingLeft: function (i, node) {
+                            return 1;
+                        },
+                        paddingRight: function (i, node) {
+                            return 1;
+                        }
+                        // paddingTop: function(i, node) { return 2; },
+                        // paddingBottom: function(i, node) { return 2; }
+                    }
+                },
+            ],
+
+            footer: function (page, pages) {
+                return {
+                    columns: [
+                        {
+                            text: 'ABNO Softwares International',
+                            style: ['content']
+                        },
+                        {
+                            alignment: 'right',
+                            text: [
+                                {text: 'Page: ' + page.toString(), style: ['content']},
+                                {text: ' of ', italics: true, style: ['content']},
+                                {text: pages.toString(), style: ['content']},
+                            ],
+                        },
+                    ],
+                    margin: [40, 10, 40, 0]
+                }
+            },
+        }
+
+        pdfMake.createPdf(docDefinition).open();
+    }
+  function today() {
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+        var dateTime = date + ' ' + time;
+
+        return dateTime;
+    }
+    $scope.reports.generateRepositoryPdf = function (reportData) {
+    var reportData = new Array();
+        var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Lab Code', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Sample', style: 'subHeader'},
+                    {text: 'Round', style: 'subHeader'},
+                    {text: 'Micro', style: 'subHeader'},
+                    {text: 'Agents', style: 'subHeader'},
+                    {text: 'Remarks', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'},
+                    {text: 'Total', style: 'subHeader'}
+
+                ];
+
+        reportData.push(reportHeader);
+        console.log(data)
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var lab = data[i];
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + lab.labName, style: ['content']},
+                    {text: ' ' + lab.unique_identifier, style: ['content']},
+                    {text: ' ' + lab.county, style: ['content']},
+                    {text: ' ' + lab.batchName, style: ['content']},
+                    {text: ' ' + lab.roundCode, style: ['content']},
+                    {text: ' ' + lab.finalScore, style: ['content']},
+                    {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
+                    {text: ' ' + lab.remarks, style: ['content']},
+                    {text: ' ' + lab.grade, style: ['content']},
+                    {text: ' ' + (Number(lab.finalScore) + Number(lab.totalMicroAgentsScore)), style: ['content']}
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'ROUND PERFORMANCE REPORT';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
     }
     $scope.reports.doAjaxRequest = function () {
 

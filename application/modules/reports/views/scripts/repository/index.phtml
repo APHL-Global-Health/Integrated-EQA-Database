@@ -6,6 +6,7 @@
 
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <style>
@@ -61,10 +62,17 @@
                         <li class='pull-right'>
 
 
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'" ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
+                            <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'"
+                                 ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
                                 <i class="fa fa-pdf"></i> PDF
                             </div>
 
+                             <div class="btn btn-success btn-sm" ng-show="clickedTab != 'graphs'"
+                                 ng-click="pdfMake.generateRepositoryPdf(reports.repositoryData)">
+                                <i class="fa fa-pdf"></i> PDF
+                            </div>
+                            
+                            
                             <div class="btn btn-primary btn-sm" ng-show="clickedTab != 'graphs'" ng-click="reports.exportToExcelFile()">
                                 <i class="fa fa-excel"></i> CSV
                             </div>
