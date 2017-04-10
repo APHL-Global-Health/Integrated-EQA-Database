@@ -4,11 +4,11 @@
 
 (function () {
     var samplesModule = angular.module('ReportModule');
-    ReportModule.constant('serverSamplesURL', 'http://localhost:8082/Bacteriologydbci/');
+  
     samplesModule.controller('samplesController', function ($scope, $http, $location, EptServices, EptFactory, $timeout, loginDataCache) {
-        var serverSamplesURL = SERVER_API_URL.bacteriologyURL;
+        var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
 //        var serverReportURL = SERVER_API_URL.reportsURL;
-        var serverReportURL = SERVER_API_URL.bacteriologyURL;
+        var serverReportURL = SERVER_API_URL.bacteriologyParticipant;
         $scope.samples = {};
         $scope.samples.menuLength = 2;
 
@@ -923,11 +923,7 @@
             }
         }
         $scope.samples.getLoggedInUserSessionInfo();
-<<<<<<< HEAD
-        //alert($scope.samples.loginDetails);
-=======
-       
->>>>>>> 3f7c1f4cde18d153c241880d1f8ff5aedf04f5c1
+
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
         $scope.samples.panelArrowDown = false;
