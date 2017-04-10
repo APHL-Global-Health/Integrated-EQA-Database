@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
               media="all">
         <legend>
-            <h3>Participating Report
+            <h3>Lab Performance Summary
                 <small class="text-gray">{{reports.participantingLabs.length}} Records</small>
             </h3>
         </legend>
@@ -28,7 +28,7 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search lab name" ng-model='reports.stringSearch.LabID'>
+                                   placeholder="Search lab name" ng-model='reports.stringSearch.LID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
@@ -38,22 +38,27 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search contact name" ng-model='reports.stringSearch.contactName'>
+                                   placeholder="Search contact name" ng-model='reports.stringSearch.RoundID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search email" ng-model='reports.stringSearch.contactEmail'>
+                                   placeholder="Search email" ng-model='reports.stringSearch.ReleaseDate'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search tel." ng-model='reports.stringSearch.telephone'>
+                                   placeholder="Search tel." ng-model='reports.stringSearch.acceptable'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search status" ng-model='reports.stringSearch.status'>
+                                   placeholder="Search status" ng-model='reports.stringSearch.unacceptable'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+
+                                   placeholder="Search status" ng-model='reports.stringSearch.percent'>
                         </th>
                     </tr>
                 </thead>
@@ -62,45 +67,48 @@
                         <th style="text-align: center;"> #</th>
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
-                        <th style="text-align: center;">Contact Name</th>
+                        <th style="text-align: center;">Round</th>
                         <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
-                        <th style="text-align: center;">Contact Email</th>
-                        <th style="text-align: center;">Telephone</th>
-                        <th style="text-align: center;">Status</th>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Acceptable</th>
+                        <th style="text-align: center;">Not Accepted</th>
+                        <th style="text-align: center;">Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="record in reports.participantingLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
+                    <tr dir-paginate="record in reports.performanceLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
                         >
                         <td>{{$index + 1}}</td>
                         <td>
 
-                            {{record.LabID}}
+                            {{record.LID}}
                         </td>
                         <td>
                             {{record.county}}
                         </td>
                         <td>
-                            {{record.contactName}}
+                            {{record.RoundID}}
                         </td>
                         <!--<td>
                             Inclassified
                         </td>-->
                         <td>
-                            {{record.contactEmail}}
+                            {{record.ReleaseDate}}
                         </td>
                         <td>
-                            {{record.telephone}}
+                            {{record.acceptable}}
                         </td>
                         <td>
-                            {{record.status}}
+                            {{record.unacceptable}}
                         </td>
-
+                        <td>
+                            {{record.percent}}%
+                        </td>
 
                     </tr>
                 </tbody>
             </table>
-            <div ng-if="clickedTab == 'participants'">
+            <div ng-if="clickedTab == 'summary'">
                 <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
                                          boundary-links="true">
                 </dir-pagination-controls>

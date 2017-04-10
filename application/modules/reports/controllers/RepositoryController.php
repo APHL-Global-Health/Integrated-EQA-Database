@@ -1,7 +1,7 @@
 <?php
 
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-        . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+        . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
         . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
 class Reports_RepositoryController extends Zend_Controller_Action {
@@ -18,15 +18,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 ->initContext();
         $this->_helper->layout()->pageName = 'report';
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
-        if (!class_exists('databases' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'mysql' . DIRECTORY_SEPARATOR . 'DatabaseUtils')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'core-apis' . DIRECTORY_SEPARATOR . 'DatabaseUtils.php';
-        }
-        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'SystemAdmin.php';
-        }
-        if (!class_exists('database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository')) {
-            require_once $this->homeDir . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'crud' . DIRECTORY_SEPARATOR . 'RepRepository.php';
-        }
+    
         $this->dbConnection = new Main();
     }
 
@@ -58,7 +50,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         //if(isset())
@@ -84,7 +76,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -124,7 +116,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select labID as name,count(SampleCode) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -155,6 +147,106 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function getlabperformanceAction() {
+
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+
+        $query = "select labId as LID,RoundID,ReleaseDate,(select count(grade) from rep_repository where grade='acceptable'
+                and labid=LID) as acceptable,
+                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID) as unacceptable
+                 from rep_repository ";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+//        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+
+        $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+//        }
+//        echo $query;
+//        exit;
+//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+//
+//        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+        $query .= " GROUP BY LabID,RoundID order by LID asc";
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $_SESSION['currentRepoData'] = $jsonData;
+        $_SESSION['filterData'] = $whereArray;
+        if (count($jsonData) > 0) {
+            for ($i = 0; $i < sizeof($jsonData); $i++) {
+
+                $jsonData[$i]['percent'] = ($jsonData[$i]['acceptable'] / ($jsonData[$i]['acceptable'] + $jsonData[$i]['unacceptable']) * 100);
+                $where['LabName'] = $jsonData[$i]['LID'];
+
+                $labDetails = $this->returnValueWhere($where, 'rep_labs');
+
+                $whereCounty['CountyID'] = isset($labDetails['County']) ? $labDetails['County'] : '';
+
+                $countyDetails = $this->returnValueWhere($whereCounty, 'rep_counties');
+
+                $jsonData[$i]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
+            }
+        }
+
+
+        echo json_encode($jsonData);
+
+        exit;
+    }
+
+    public function countyagainstlabsAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+        $query = "select County as name,count(DISTINCT rep_repository.LabID) as data"
+                . "  from rep_repository join rep_labs on rep_labs.LabName=rep_repository.LabID";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+            $query .= " and rep_repository.labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+        }
+        //if(isset())
+        $query .= " GROUP BY County;";
+//        echo $query;
+        $query = $this->dbConnection->doQuery($query);
+        if (count($query) > 0) {
+            for ($i = 0; $i < sizeof($query); $i++) {
+
+                $where['CountyID'] = $query[$i]['name'];
+                $countyDetails = $this->returnValueWhere($where, 'rep_counties');
+                $query[$i]['name'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
+                $tempData = array();
+                array_push($tempData, (int) $query[$i]['data']);
+                $query[$i]['data'] = $tempData;
+                $tempData = array();
+            }
+        }
+        echo json_encode($query);
+        exit();
+    }
+
     public function providervslabsAction() {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
@@ -163,7 +255,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select ProviderID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -189,23 +281,24 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 $tempData = array();
             }
         }
+
         echo json_encode($query);
         exit();
     }
 
     public function getcountiesAction() {
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "Select*from rep_counties";
-        echo json_encode($databaseUtils->rawQuery($query));
+        echo json_encode($this->dbConnection->doQuery($query));
         exit();
     }
 
     public function getprogramsAction() {
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "Select*from rep_programs";
-        echo json_encode($databaseUtils->rawQuery($query));
+        echo json_encode($this->dbConnection->doQuery($query));
         exit();
     }
 
@@ -217,7 +310,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select DISTINCT RoundID as name,count(SampleCode)  as data";
         $query .= "";
         $query .= "  from rep_repository ";
@@ -256,7 +349,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select RoundID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -300,7 +393,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select LabID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -339,7 +432,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function dumpAction() {
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $repRepository = new database\crud\RepRepository($databaseUtils);
         $tests = array('Malaria', 'HIV', 'Bacteriology', 'Bio-Chemisty');
         $providers = array('HuQas Provider', 'Hiv PT', 'Amref Provider');
@@ -369,7 +462,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select ProgramID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -407,6 +500,110 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function participantlabsresultsAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+        
+        $query = "select LabID "
+                . "from rep_repository  ";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+//        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
+
+        $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
+//        }
+//        echo $query;
+//        exit;
+//        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
+//
+//        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
+
+        $query .= " GROUP BY LabID order by LabID";
+
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $_SESSION['currentRepoData'] = $jsonData;
+        $_SESSION['filterData'] = $whereArray;
+        if (count($jsonData) > 0) {
+            foreach ($jsonData as $key => $value) {
+
+                $where['LabName'] = $value['LabID'];
+                $selectLabDetails = $this->returnValueWhere($where, 'rep_labs');
+//                var_dump($selectLabDetails);
+                $jsonData[$key]['address'] = isset($selectLabDetails['Address']) ? $selectLabDetails['Address'] : '';
+                $jsonData[$key]['contactName'] = isset($selectLabDetails['ContactName']) ? $selectLabDetails['ContactName'] : '';
+                $jsonData[$key]['telephone'] = isset($selectLabDetails['Telephone']) ? $selectLabDetails['Telephone'] : '';
+                $jsonData[$key]['contactEmail'] = isset($selectLabDetails['contactEmail']) ? $selectLabDetails['contactEmail'] : '';
+                
+                $where['LabName'] = $jsonData[$key]['LabID'];
+
+                $labDetails = $this->returnValueWhere($where, 'rep_labs');
+
+                $whereCounty['CountyID'] = isset($labDetails['County']) ? $labDetails['County'] : '';
+
+                $countyDetails = $this->returnValueWhere($whereCounty, 'rep_counties');
+
+//                $jsonData[$i]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
+                
+                $jsonData[$key]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "Not Defined";
+                
+            }
+        }
+        echo json_encode($jsonData);
+
+        exit;
+    }
+
+    public function returnValueWhere($id, $tableName) {
+        $returnArray = array();
+        if (!is_array($id)) {
+            if ($tableName == 'data_manager') {
+                $whereId['dm_id'] = $id;
+            } else if ($tableName == 'participant') {
+                $whereId['participant_id'] = $id;
+            } else if ($tableName == 'rep_labs') {
+                $whereId['labID'] = $id;
+            } else if ($tableName == 'participant_manager_map') {
+                $whereId['dm_id'] = $id;
+            } else {
+                $whereId['id'] = $id;
+            }
+        } else {
+            $whereId = $id;
+        }
+        if (is_array($whereId)) {
+            $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
+//            echo($dataDB);
+//            exit;
+            if ($dataDB != false) {
+                try {
+
+                    foreach ($dataDB as $key => $value) {
+                        // array_push($returnArray,$value);
+                        $returnArray = $value;
+                    }
+                } catch (Exception $e) {
+                    return '';
+                }
+            } else {
+                
+            }
+        }
+        return (array) $returnArray;
+        exit();
+    }
+
     public function resultsAction() {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
@@ -415,7 +612,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        $databaseUtils = new \database\core\mysql\DatabaseUtils();
+        
         $query = "select * "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -490,7 +687,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
     public function returnUserCountStatement($county) {
-        $sql='';
+        $sql = '';
         if (isset($county) && !empty($county)) {
             $sql = " and labID in (select labName from rep_labs where  County ='" . $county . "')";
         }

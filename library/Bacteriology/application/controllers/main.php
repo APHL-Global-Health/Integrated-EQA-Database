@@ -1,13 +1,13 @@
 <?php
 
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-        . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
+        . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
 require_once 'pdfCreator.php';
 
 Class Main extends pdfCreator {
 
     public $username = 'root';
-    public $password = '';
+    public $password = 'root';
     public $db = 'eanalyze';
     public $host = 'localhost';
     public $connect_db;
@@ -24,7 +24,7 @@ Class Main extends pdfCreator {
 
     public function returnFileImagePath($imageName) {
         return substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-                . 'Library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
+                . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
     }
 
     public function createInsertStatement($tableName, $dataArray) {

@@ -70,7 +70,8 @@ if ($auth->hasIdentity()) {
         <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
         <![endif]-->
-
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
+              media="all">
         <!--s<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 
     <!--s<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
@@ -171,7 +172,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);             ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);               ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -181,15 +182,31 @@ if ($auth->hasIdentity()) {
                             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repositoryreports') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i>&nbsp;&nbsp; Reports <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Participatory Reports</a></li>
-                                    <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
+                                    <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">
+                                            <i class="icon-list"></i> Participatory Reports</a>
+                                    </li>
+                                    <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">
+                                            <i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a>
+                                    </li>
+                                    <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
+                                        </a>
+                                    </li>
+                                            <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
                                 </ul>
                             </li>
                         </ul>
                     <?php } else if ($role == 2) { ?>
                         <ul class="nav navbar-nav">
-                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>"><i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a></li>
-                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data</a></li>
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">
+                                    <i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a>
+                            </li>
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active'" : ""; ?> >
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
+                                </a>
+                            </li>
                         </ul>
                         <?php
                     } else if ($role == 3) {
@@ -359,7 +376,7 @@ if ($auth->hasIdentity()) {
     </div>
 
     <div class="container">
-       <?php // print_r($_SESSION['loggedInDetails']); ?>
+        <?php // print_r($_SESSION['loggedInDetails']); ?>
         <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 

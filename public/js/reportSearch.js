@@ -2,11 +2,9 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'highcharts-ng', 'nvd3ChartDirectives', 'ui.calendar',
     'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
-
-ReportModule.constant('serverURL', 'http://localhost:8088/reports/repository/');
-ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, serverURL, reportCache,
-        graphDataCache, $filter, filterFilter) {
-
+ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
+        graphDataCache, $filter, filterFilter,EptServices) {
+    var serverURL = SERVER_API_URL.repositoryURL;
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
         if (cache) {
@@ -46,6 +44,163 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
 
     }
+
+    $scope.reports.generatePdfMainFunction = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader) {
+        // var schoolName = '@Session["SchoolName"]';
+
+        var docDefinition = {
+            styles: {
+                header: {
+                    fontSize: 12,
+                    bold: true,
+                },
+
+                subHeader: {
+                    fontSize: 10,
+                    bold: true,
+
+                },
+
+                content: {
+                    fontSize: 8,
+                    bold: false,
+                },
+
+                numeric: {
+                    alignment: 'right'
+                },
+
+                centerData: {
+                    alignment: 'center'
+                }
+            },
+
+            content: [
+                //{
+                //    image: schoolLogo,
+                //    width: 60,
+                //    style: ['centerData'],
+                //    margin: [0, 0, 0, 5]
+                //},
+                {text: 'Nation Public Health Laboratories'.toUpperCase(), style: ['header', 'centerData']},
+                {text: reportHeader, style: ['content', 'centerData'], margin: [0, 0, 0, 5]},
+
+                {text: 'P.O BOX 145-00100,Nairobi', style: ['content', 'centerData']},
+                {text: 'info@nphl.co.ke', style: ['content', 'centerData']},
+                {
+                    text: 'www.nphl.or.ke',
+                    link: "http://www.nphl.or.ke",
+                    style: ['content', 'centerData'],
+                    fillColor: 'yellow',
+                    decoration: "underline"
+                },
+                {text: reportTitle, style: ['subHeader', 'centerData'], margin: [0, 5, 0, 0]},
+                // {text:"Google", link:"http://www.google.com", decoration:"underline",fillColor: 'blue', margin: [0, 5, 0, 0]},
+                {
+                    text: "_______________________________________________________________________________________________",
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: tableWidth,
+                        body: reportData,
+                    },
+                    layout: {
+                        hLineWidth: function (i, node) {
+                            return (i === 0 || i === node.table.body.length) ? 0.5 : 0.5;
+                        },
+                        vLineWidth: function (i, node) {
+                            return (i === 0 || i === node.table.widths.length) ? 0.5 : 0.5;
+                        },
+                        hLineColor: function (i, node) {
+                            return (i === 0 || i === node.table.body.length) ? 'black' : 'black';
+                        },
+                        vLineColor: function (i, node) {
+                            return (i === 0 || i === node.table.widths.length) ? 'black' : 'black';
+                        },
+                        paddingLeft: function (i, node) {
+                            return 1;
+                        },
+                        paddingRight: function (i, node) {
+                            return 1;
+                        }
+                        // paddingTop: function(i, node) { return 2; },
+                        // paddingBottom: function(i, node) { return 2; }
+                    }
+                },
+            ],
+
+            footer: function (page, pages) {
+                return {
+                    columns: [
+                        {
+                            text: 'ABNO Softwares International',
+                            style: ['content']
+                        },
+                        {
+                            alignment: 'right',
+                            text: [
+                                {text: 'Page: ' + page.toString(), style: ['content']},
+                                {text: ' of ', italics: true, style: ['content']},
+                                {text: pages.toString(), style: ['content']},
+                            ],
+                        },
+                    ],
+                    margin: [40, 10, 40, 0]
+                }
+            },
+        }
+
+        pdfMake.createPdf(docDefinition).open();
+    }
+  function today() {
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+        var dateTime = date + ' ' + time;
+
+        return dateTime;
+    }
+    $scope.reports.generateRepositoryGenPdf = function (reportData) {
+    var reportData = new Array();
+        var tableWidth = ['auto', '*', 'auto', 'auto', '*']
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Lab Code', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Sample', style: 'subHeader'},
+                   
+
+                ];
+
+        reportData.push(reportHeader);
+       
+        if (reportData.length > 0) {
+            for (var i = 0; i < 5; i++) {
+               
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']},
+                    {text: ' ' + (i + 1), style: ['content']}
+                    
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'ROUND PERFORMANCE REPORT';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
     $scope.reports.doAjaxRequest = function () {
 
 
@@ -65,21 +220,21 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
 //            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
-                $scope.reports.showLoader = true;
-                updateGraphMessages("No records found", false, 'btn-warning');
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
 
-                var url = serverURL + 'results';
-                $http
-                        .post(url, searchColumns)
-                        .success(function (data) {
-                            $scope.reports.createDataTable(data)
+            var url = serverURL + 'results';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.createDataTable(data)
 
-                            console.log(data);
+                        console.log(data);
 
-                        })
-                        .error(function (error) {
-                            $scope.reports.showLoader = false;
-                        })
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
 
 
 //            } else {
@@ -88,6 +243,114 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         }
     }
+
+    $scope.reports.participantingLabs = {};
+
+    $scope.reports.getParticipants = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+
+        $scope.reports.countyChange(searchColumns.county);
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'participantlabsresults';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.participantingLabs = data;
+                        } else {
+                            $scope.reports.participantingLabs = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+    $scope.reports.performanceLabs = {};
+
+    $scope.reports.getLabPerformance = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+
+        $scope.reports.countyChange(searchColumns.county);
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getlabperformance';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.performanceLabs = data;
+                        } else {
+                            $scope.reports.performanceLabs = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
+
+
+
+
     $scope.reports.stringSearch = {}
     $scope.reports.clearSearch = function () {
         $scope.reports.stringSearch = {};
@@ -478,12 +741,43 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 if (graphType == 'Round-results Graph') {
                     $scope.reports.getRoundAgainstResults(filterData);
                 }
+                if (graphType == 'County-labs Graph') {
+                    $scope.reports.getCountyAgainstLabs(filterData);
+                }
+                if (graphType == 'County-Results Graph') {
+                    $scope.reports.getCountyAgainstLabs(filterData);
+                }
 
             }
         } else {
             updateGraphMessages("Select graph type from the downdrop", true, 'btn-danger');
         }
     }
+
+    $scope.reports.getCountyAgainstLabs = function (filterData) {
+        try {
+            $scope.reports.showGraphLoader = true;
+            var url = serverURL + 'countyagainstlabs';
+            $http
+                    .post(url, filterData)
+                    .success(function (data) {
+                        $scope.reports.showGraph = true;
+                        console.log(data);
+                        $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
+                        $scope.reports.showGraphLoader = false;
+
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showGraphLoader = false;
+                        $scope.reports.showGraph = false;
+                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     $scope.reports.reportFilter = {};
 
 
@@ -653,7 +947,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             filterData.ProviderId = reportFilter.providerID;
             filterData.dateRange = $scope.reports.dateRange;
             filterData.county = $("#county").val();
-            
+
             console.log(filterData);
             if (filterData.ProgramId != '' && angular.isDefined(filterData.ProgramId)) {
                 updateGraphMessages("please select a program to proceed", false, 'btn-danger')

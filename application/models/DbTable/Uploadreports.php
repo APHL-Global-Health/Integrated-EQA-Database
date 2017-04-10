@@ -20,8 +20,9 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
         if ($auth->hasIdentity()) {
             $pname = $auth->getIdentity()->ProviderName;
         }
-        
-        $aColumns = array('ID', 'ProviderName', 'ProgramCode', 'PeriodDescription', 'FileName', 'FileType', 'FileSize', 'Url');
+
+
+        $aColumns = array('ID', 'ProviderID', 'ProgramID', 'PeriodID', 'FileName', 'FileType', 'FileSize', 'Url');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -97,47 +98,23 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
          * SQL queries
          * Get data to display
          */
-        
-//        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
-//                ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
-//                ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
-//                ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
-//                ->where("ps.ProviderName='$pname'")
-//                ->group("a.ID");
-             if($_SESSION['loggedInDetails']["IsVl"]==2 && $_SESSION['loggedInDetails']["IsProvider"]==1){
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
-                array('ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
-                ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
-                ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
-                ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID');
-//                ->where("ps.ProviderName='$pname'")
-//                ->group("a.ID");
-      }else{
-          $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
-                  array('ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
-                ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
-                ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
-                ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
-                ->where("ps.ProviderName='$pname'")
-                ->group("a.ID");
-      }
-//        $pname=$_SESSION['loggedInDetails']['ProviderName'];
-//        if ($pname=="") {
-//            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
-//                    array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
-//                    ->join(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
-//                    ->join(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
-//                    ->join(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID');
-//                    //->group("a.ID");
-//            
-//        } else {
-//            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
-//                    ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
-//                    ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
-//                    ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
-//                    ->where("ps.ProviderName = $pname");
-//                    //->group("a.ID");
-//        }
+
+        if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
+                    array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
+                    ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
+                    ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
+                    ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID');
+
+        } else {
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
+                    array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
+                    ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
+                    ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
+                    ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
+                    ->where("ps.ProviderName='$pname'")
+                    ->group("a.ID");
+        }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -150,12 +127,8 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-        //error_log($sQuery);
-
         $rResult = $this->getAdapter()->fetchAll($sQuery);
-        
-//        echo $sQuery;
-//        exit;
+
         /* Data set length after filtering */
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
@@ -180,7 +153,6 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
 
         foreach ($rResult as $aRow) {
             $row = array();
-            $row[] = $aRow['pfid'];
             $row[] = $aRow['ProviderName'];
             $row[] = $aRow['ProgramCode'];
             $row[] = $aRow['PeriodDescription'];
