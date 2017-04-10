@@ -1,4 +1,5 @@
 application/cache
+public/files
 database/core-apis
 *.hgignore
 .idea/workspace.xml
