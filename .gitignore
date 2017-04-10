@@ -5,3 +5,4 @@ public/files
 *.hgignore
 .idea/workspace.xml
 *.log
+public/angularMain/constants.js
