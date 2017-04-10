@@ -75,23 +75,4 @@ class Admin_UploadreportsController extends Zend_Controller_Action {
         $this->view->periodList = $commonService->getperiodList();
     }
 
-    public function downloadAction() {
-        $adminService = new Application_Service_Uploadreports();
-        if($this->_hasParam('id')){
-                $id = (int)$this->_getParam('id');
-                
-            }
-        $details = $adminService->getFileDetails($id);
-        $filename = $details['FileName'];
-        $url = $details['Url'];
-        
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
-        readfile("'$url'");
-        
-        // disable layout and view
-        $this->view->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-    }
-
 }
