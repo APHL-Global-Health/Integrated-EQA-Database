@@ -153,6 +153,7 @@ if ($auth->hasIdentity()) {
                     if ($role == 1) {
                         ?>
                         <ul class="nav navbar-nav">
+                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
 
                             <ul class="nav navbar-nav">
                                 <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -163,7 +164,6 @@ if ($auth->hasIdentity()) {
                                 </li>
                             </ul>
 
-                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                             <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'repository') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-upload"></i>&nbsp;&nbsp;Repository <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -172,7 +172,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);               ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>

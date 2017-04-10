@@ -64,20 +64,20 @@
 
                             <div class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
                                  ng-click="reports.generateRepositoryGenPdf(reports.repositoryData)">
-                                <i class="fa fa-pdf"></i> PDF
+                                <i class="fa fa-file-pdf-o"></i> PDF
                             </div>
 
-                             <div class="btn btn-success btn-sm" ng-show="clickedTab == 'participants'"
-                                 ng-click="reports.generateRepositoryParticipantPdf(reports.repositoryData)">
-                                <i class="fa fa-pdf"></i> PDF
+                             <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
+                                 ng-click="reports.generateRepositoryParticipantPdf(reports.participantingLabs)">
+                                <i class="fa fa-file-pdf-o"></i> PDF
                             </div>
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'summary'"
-                                 ng-click="reports.generateRepositorySummaryPdf(reports.repositoryData)">
-                                <i class="fa fa-pdf"></i> PDF
+                            <div class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"
+                                 ng-click="reports.generateRepositorySummaryPdf(reports.performanceLabs)">
+                                <i class="fa fa-file-pdf-o"></i> PDF
                             </div>
                             
                             
-                            <div class="btn btn-primary btn-sm" ng-show="clickedTab != 'graphs'" ng-click="reports.exportToExcelFile()">
+                            <div class="btn btn-info btn-sm" ng-show="clickedTab != 'graphs'" ng-click="reports.exportToExcelFile()">
                                 <i class="fa fa-excel"></i> CSV
                             </div>
 

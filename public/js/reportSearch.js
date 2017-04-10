@@ -3,7 +3,7 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
-        graphDataCache, $filter, filterFilter,EptServices) {
+        graphDataCache, $filter, filterFilter, EptServices) {
     var serverURL = SERVER_API_URL.repositoryURL;
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
@@ -154,7 +154,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         pdfMake.createPdf(docDefinition).open();
     }
-  function today() {
+    function today() {
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
@@ -162,8 +162,95 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         return dateTime;
     }
+
+    $scope.reports.generateRepositoryParticipantPdf = function (data) {
+        var reportData = new Array();
+        var tableWidth = ['auto', 'auto', 'auto','*','*', 'auto', 'auto']
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Contact Name', style: 'subHeader'},
+                    {text: 'Contact Email', style: 'subHeader'},
+                    {text: 'Telephone', style: 'subHeader'},
+                    {text: 'Status', style: 'subHeader'}
+
+                ];
+
+        reportData.push(reportHeader);
+
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var lab = data[i];
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + lab.LabID, style: ['content']},
+                    {text: ' ' + lab.county, style: ['content']},
+                    {text: ' ' + lab.contactName, style: ['content']},
+                    {text: ' ' + lab.contactEmail, style: ['content']},
+                    {text: ' ' + lab.telephone, style: ['content']},
+                    {text: ' Active ', style: ['content']}
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'PARTICIPANTS REPORT';
+            var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+    $scope.reports.generateRepositorySummaryPdf = function (data) {
+        var reportData = new Array();
+        var tableWidth = ['auto', 'auto', 'auto', 'auto', 'auto','auto', 'auto', 'auto']
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Round', style: 'subHeader'},
+                    {text: 'Date', style: 'subHeader'},
+                    {text: 'Acceptable', style: 'subHeader'},
+                    {text: 'Not Accepted', style: 'subHeader'},
+                    {text: 'Percentage', style: 'subHeader'}
+
+                ];
+
+        reportData.push(reportHeader);
+
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var lab = data[i];
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + lab.LID, style: ['content']},
+                    {text: ' ' + lab.county, style: ['content']},
+                    {text: ' ' + lab.RoundID, style: ['content']},
+                    {text: ' ' + lab.ReleaseDate, style: ['content']},
+                    {text: ' ' + lab.acceptable, style: ['content']},
+                    {text: ' ' + lab.unacceptable, style: ['content']},
+                    {text: ' ' + lab.percent+'%', style: ['content']}
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'PERFORMANCE SUMMARY REPORT';
+            var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
+
     $scope.reports.generateRepositoryGenPdf = function (data) {
-    var reportData = new Array();
+        var reportData = new Array();
         var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*', 'auto', 'auto', '*']
         var reportHeader =
                 [
@@ -172,18 +259,18 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     {text: 'Program', style: 'subHeader'},
                     {text: 'Lab', style: 'subHeader'},
                     {text: 'PT Round Code', style: 'subHeader'},
-                   {text: 'Release Date', style: 'subHeader'},
-                   {text: 'Grade', style: 'subHeader'},
-                   {text: 'Analyte ID', style: 'subHeader'},
-                   {text: 'Sample Code', style: 'subHeader'}
+                    {text: 'Release Date', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'},
+                    {text: 'Analyte ID', style: 'subHeader'},
+                    {text: 'Sample Code', style: 'subHeader'}
 
                 ];
 
         reportData.push(reportHeader);
-       
+
         if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
-             var lab = data[i];
+                var lab = data[i];
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
                     {text: ' ' + lab.ProviderID, style: ['content']},
@@ -201,7 +288,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
 
             var reportSubHeader = 'REPOSITORY REPORT';
-            var reportTitle = 'NATIONAL HOSTPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
+            var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
