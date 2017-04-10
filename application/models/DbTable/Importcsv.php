@@ -99,9 +99,12 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
          * SQL queries
          * Get data to display
          */
+        if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
+            }else{
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
                 ->where("a.ProviderID='$pname'");
-
+            }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }

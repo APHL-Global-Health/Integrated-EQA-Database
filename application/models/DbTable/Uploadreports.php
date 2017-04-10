@@ -159,7 +159,7 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ProgramCode'];
             $row[] = $aRow['PeriodDescription'];
             $row[] = $aRow['FileName'];
-            $row[] = '<a href="/admin/uploadreports/download/id/' . $aRow['pfid'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;" target="_blank"><i class="icon-download"></i> Download</a>';
+            $row[] = '<a href="/files/' . $aRow['FileName'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;" target="_blank"><i class="icon-download"></i> Download</a>';
             $output['aaData'][] = $row;
         }
 
