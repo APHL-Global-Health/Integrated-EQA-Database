@@ -18,7 +18,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 ->initContext();
         $this->_helper->layout()->pageName = 'report';
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
-    
+
         $this->dbConnection = new Main();
     }
 
@@ -50,7 +50,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
-        
+
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         //if(isset())
@@ -76,7 +76,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -116,7 +116,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select labID as name,count(SampleCode) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -157,10 +157,11 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select labId as LID,RoundID,ReleaseDate,(select count(grade) from rep_repository where grade='acceptable'
-                and labid=LID) as acceptable,
-                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID) as unacceptable
+        $query = "select labId as LID,RoundID as RoundID,ReleaseDate,(select count(grade) from rep_repository where grade='acceptable'
+                and labid=LID  and RoundID=RoundID) as acceptable,
+                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID and RoundID=RoundID) as unacceptable
                  from rep_repository ";
+
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
@@ -255,7 +256,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select ProviderID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         if (isset($whereArray['dateFrom'])) {
@@ -288,7 +289,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function getcountiesAction() {
 
-        
+
         $query = "Select*from rep_counties";
         echo json_encode($this->dbConnection->doQuery($query));
         exit();
@@ -296,7 +297,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function getprogramsAction() {
 
-        
+
         $query = "Select*from rep_programs";
         echo json_encode($this->dbConnection->doQuery($query));
         exit();
@@ -310,7 +311,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select DISTINCT RoundID as name,count(SampleCode)  as data";
         $query .= "";
         $query .= "  from rep_repository ";
@@ -349,7 +350,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select RoundID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -393,7 +394,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select LabID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -432,7 +433,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     public function dumpAction() {
 
-        
+
         $repRepository = new database\crud\RepRepository($databaseUtils);
         $tests = array('Malaria', 'HIV', 'Bacteriology', 'Bio-Chemisty');
         $providers = array('HuQas Provider', 'Hiv PT', 'Amref Provider');
@@ -462,7 +463,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select ProgramID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
@@ -508,7 +509,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select LabID "
                 . "from rep_repository  ";
         if (isset($whereArray['dateFrom'])) {
@@ -545,7 +546,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 $jsonData[$key]['contactName'] = isset($selectLabDetails['ContactName']) ? $selectLabDetails['ContactName'] : '';
                 $jsonData[$key]['telephone'] = isset($selectLabDetails['Telephone']) ? $selectLabDetails['Telephone'] : '';
                 $jsonData[$key]['contactEmail'] = isset($selectLabDetails['contactEmail']) ? $selectLabDetails['contactEmail'] : '';
-                
+
                 $where['LabName'] = $jsonData[$key]['LabID'];
 
                 $labDetails = $this->returnValueWhere($where, 'rep_labs');
@@ -555,9 +556,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 $countyDetails = $this->returnValueWhere($whereCounty, 'rep_counties');
 
 //                $jsonData[$i]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
-                
+
                 $jsonData[$key]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "Not Defined";
-                
             }
         }
         echo json_encode($jsonData);
@@ -612,7 +612,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
         }
 
-        
+
         $query = "select * "
                 . "from rep_repository ";
         if (isset($whereArray['dateFrom'])) {
