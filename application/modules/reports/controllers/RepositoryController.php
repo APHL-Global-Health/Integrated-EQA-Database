@@ -157,10 +157,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select labId as LID,RoundID as RoundID,ReleaseDate,(select count(grade) from rep_repository where grade='acceptable'
-                and labid=LID  and RoundID=RoundID) as acceptable,
-                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID and RoundID=RoundID) as unacceptable
-                 from rep_repository ";
+        $query ="";
 
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
@@ -171,6 +168,10 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
         }
+          if (isset($whereArray['sample']) && !empty($whereArray['sample'])) {
+            $query .= " and SampleCode ='" . $whereArray['sample'] . "'";
+        }
+        
 //        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
 
         $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
@@ -180,14 +181,19 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
-        $query .= " GROUP BY LabID,RoundID order by LID asc";
-        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $innerWhere = str_replace('where', ' and ', $query);
+        $select= "select labId as LID,RoundID as RoundID,SampleCode,ReleaseDate,
+            (select count(grade) from rep_repository where grade='acceptable' and labid=LID  and RoundID=RoundID $innerWhere) as acceptable,
+                (select count(grade) from rep_repository where grade='not acceptable' and labid=LID and RoundID=RoundID $innerWhere) as unacceptable
+                 from rep_repository $query ";
+        $select .= " GROUP BY LabID,RoundID order by LID asc ";
+        $jsonData = $this->dbConnection->doQuery($select); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
         if (count($jsonData) > 0) {
             for ($i = 0; $i < sizeof($jsonData); $i++) {
 
-                $jsonData[$i]['percent'] = ($jsonData[$i]['acceptable'] / ($jsonData[$i]['acceptable'] + $jsonData[$i]['unacceptable']) * 100);
+                $jsonData[$i]['percent'] = round(($jsonData[$i]['acceptable'] / ($jsonData[$i]['acceptable'] + $jsonData[$i]['unacceptable']) * 100),2);
                 $where['LabName'] = $jsonData[$i]['LID'];
 
                 $labDetails = $this->returnValueWhere($where, 'rep_labs');
@@ -520,6 +526,9 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
         if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
             $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+         if (isset($whereArray['AnalyteID']) && !empty($whereArray['AnalyteID'])) {
+            $query .= " and AnalyteID ='" . $whereArray['AnalyteID'] . "'";
         }
 //        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
 

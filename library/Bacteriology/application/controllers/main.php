@@ -163,6 +163,8 @@ Class Main extends pdfCreator {
 //        echo$sql;
 //        exit;
         $result = $this->connect_db->query($sql);
+        
+//        var_dump($this->connect_db->error);
         $results = array();
         if ($result->num_rows > 0) {
             // output data of each row

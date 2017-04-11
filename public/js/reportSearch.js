@@ -348,10 +348,11 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
         searchColumns.ProgramId = $("#program").val();
         searchColumns.county = $("#county").val();
+        searchColumns.AnalyteID = $scope.reports.reportFilter.AnalyteID;
         $scope.reports.searchFilters = searchColumns;
 
         $scope.reports.countyChange(searchColumns.county);
-//        console.log(searchColumns);
+
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
@@ -400,7 +401,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.ProgramId = $("#program").val();
         searchColumns.county = $("#county").val();
         $scope.reports.searchFilters = searchColumns;
-
+        searchColumns.sample = $scope.reports.reportFilter.sample;
         $scope.reports.countyChange(searchColumns.county);
 //        console.log(searchColumns);
         console.log(searchColumns);
@@ -662,7 +663,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     'Contact name': excelData[i].contactName,
                     'Contact Email': excelData[i].contactEmail,
                     'Telephone': excelData[i].telephone,
-                    'status':'Active'
+                    'status': 'Active'
 
                 }
                 returnArray.push(tempArray);

@@ -4,7 +4,7 @@
               media="all">
         <legend>
             <h3>Lab Performance Summary
-                <small class="text-gray">{{reports.participantingLabs.length}} Records</small>
+                <small class="text-gray">{{reports.performanceLabs.length}} Records</small>
             </h3>
         </legend>
 
@@ -38,8 +38,13 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search contact name" ng-model='reports.stringSearch.RoundID'>
+                                   placeholder="Search round name" ng-model='reports.stringSearch.RoundID'>
                         </th>
+<!--                        <th style="text-align: center;" >
+                            <input class="form-control col-md-12 input-sm"
+
+                                   placeholder="Search sample name" ng-model='reports.stringSearch.SampleCode'>
+                        </th>-->
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
@@ -68,6 +73,7 @@
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
                         <th style="text-align: center;">Round</th>
+                        <!--<th style="text-align: center;">Sample</th>-->
                         <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
                         <th style="text-align: center;">Date</th>
                         <th style="text-align: center;">Acceptable</th>
@@ -89,6 +95,9 @@
                         <td>
                             {{record.RoundID}}
                         </td>
+<!--                        <td>
+                            {{record.SampleCode}}
+                        </td>-->
                         <!--<td>
                             Inclassified
                         </td>-->
