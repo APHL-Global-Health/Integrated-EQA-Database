@@ -14,6 +14,13 @@ $auth = Zend_Auth::getInstance();
 
 //  echo($_SESSION['loggedInDetails']["IsVl"]);
 //  exit;
+
+$schemeService = new Application_Service_Schemes();
+if ($schemeService->checkResetPassword()) {
+    
+}
+
+
 if ($auth->hasIdentity()) {
     $role = $_SESSION['loggedInDetails']["IsProvider"];
     $vl = $_SESSION['loggedInDetails']["IsVl"];
@@ -59,7 +66,7 @@ if ($auth->hasIdentity()) {
 
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
         <!--    <link rel="stylesheet" href="-->
-        <?php //echo $this->baseUrl("css/DT_bootstrap.css");  ?><!--" type="text/css" media="all">-->
+        <?php //echo $this->baseUrl("css/DT_bootstrap.css");   ?><!--" type="text/css" media="all">-->
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
@@ -129,7 +136,7 @@ if ($auth->hasIdentity()) {
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
         <!--    <script type="text/javascript" src="-->
-        <?php //echo $this->baseUrl('angularMain/calendar/.js');  ?><!--"></script>-->
+        <?php //echo $this->baseUrl('angularMain/calendar/.js');   ?><!--"></script>-->
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
         <script type="text/javascript"
@@ -172,7 +179,7 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                ?>">Test Kits</a></li>-->
+                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                    ?>">Test Kits</a></li>-->
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
@@ -369,14 +376,28 @@ if ($auth->hasIdentity()) {
 
                 <?php } ?>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;&nbsp;Account
+                            <b class="caret"></b></a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
+                                    <i class="icon-signout"></i> Logout</a>
+                            </li>
+                            <li>
+                                <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
+                                    <i class="icon-user"></i> Profile</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
 
     <div class="container">
-        <?php // print_r($_SESSION['loggedInDetails']); ?>
+        <?php // print_r($_SESSION['loggedInDetails']);  ?>
         <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 
