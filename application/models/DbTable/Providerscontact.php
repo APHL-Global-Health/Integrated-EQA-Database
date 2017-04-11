@@ -17,7 +17,7 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ContactID','ProviderID','ProviderName', 'ContactName', 'ContactEmail', 'ContactTelephone', 'Status');
+        $aColumns = array('ContactID','pname', 'ContactName', 'ContactEmail', 'ContactTelephone', 'sts');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -95,10 +95,12 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('c.ProviderName','a.ContactID','a.ContactName','a.ContactEmail','a.ContactTelephone'))
-                ->join(array('c' => 'rep_providers'), 'c.ProviderID=a.ProviderID')
-                ->group("a.ProviderID");
-
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pname'=>'c.ProviderName','a.ContactID','a.ContactName','a.ContactEmail','a.ContactTelephone','sts'=>'a.Status'))
+                //->join(array('c' => 'rep_providers'), 'c.ProviderID=a.ProviderID');
+                ->joinLeft(array('c' => 'rep_providers'),'c.ProviderID=a.ProviderID',array('ProviderName'));
+                //->group("a.ContactID");
+        //echo $sQuery;
+        //exit;
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -110,11 +112,12 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-
+        
         //error_log($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
-
+//        print_r($rResult);
+//        exit;
 
         /* Data set length after filtering */
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
@@ -140,11 +143,11 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
 
         foreach ($rResult as $aRow) {
             $row = array();
-            $row[] = $aRow['ProviderName'];
+            $row[] = $aRow['pname'];
             $row[] = $aRow['ContactName'];
             $row[] = $aRow['ContactEmail'];
             $row[] = $aRow['ContactTelephone'];
-            $row[] = $aRow['Status'];
+            $row[] = $aRow['sts'];
             $row[] = '<a href="/admin/providerscontact/edit/id/' . $aRow['ContactID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
 
             $output['aaData'][] = $row;
@@ -220,7 +223,9 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
             'ContactEmail' => $params['ContactEmail'],
             'Status' => $params['Status']
         );
-        return $this->update($data, "ContactID=" . $params['ContactID']);
+        //print_r($data);
+       // exit;
+        return $this->update($data, "ContactID=".$params['ContactID']);
     }
 
 }
