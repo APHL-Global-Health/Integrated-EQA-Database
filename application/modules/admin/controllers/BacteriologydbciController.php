@@ -269,6 +269,41 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         }
     }
 
+    public function getroundwherelabAction()
+    {
+        $whereRound['evaluated'] = 0;
+        $whereLab = $this->returnUserLabDetails();
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds', $whereRound);
+//        var_dump($whereLab);
+        if ($round != false) {
+            foreach ($round as $key => $value) {
+                $where['labId'] = $whereLab['participant_id'];
+                $where['roundId'] = $value->id;
+
+                $readyLabs = $this->returnValueWhere($where, 'tbl_bac_ready_labs');
+                $round[$key]->enrolled = sizeof($readyLabs) > 0 ? 1 : 0;
+                $round[$key]->enrolledStatus = sizeof($readyLabs) > 0 ? 'Enrolled for the round' : 'Not Enrolled';
+                $round[$key]->daysLeft = $this->converttodays($round[$key]->endDate);
+                $round[$key]->participantId = $whereLab['participant_id'];
+
+            }
+            echo $this->returnJson(array('data' => $round, 'status' => 1));
+        }
+
+        exit;
+    }
+
+    public function saveenrollinglabAction()
+    {
+        $jsPostData = file_get_contents('php://input');
+
+        $jsPostData = (array)(json_decode($jsPostData));
+
+        $response = $this->dbConnection->insertData('tbl_bac_ready_labs', $jsPostData);
+        echo $this->returnJson($response);
+        exit;
+    }
+
     public function savelabstoroundAction()
     {
         try {

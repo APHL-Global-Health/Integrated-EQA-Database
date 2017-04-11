@@ -246,6 +246,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         }
     }
 
+    $scope.reports.whereLabGenStatResults = {};
+    $scope.reports.genStatPerformance = {};
+    $scope.reports.genStatPerformanceStat ={};
+    $scope.reports.getGenStatPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getgenstatperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.genStatPerformance = response.data;
+                        $scope.reports.genStatPerformanceStat = response.stat;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                        $scope.reports.genStatPerformance = {};
+                        $scope.reports.genStatPerformanceStat = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (exc) {
+
+        }
+    }
+
+
 
     var alertStartRound = '';
     $scope.reports.evaluateRound = function () {
@@ -287,6 +318,52 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
 
 
         $scope.reports.confirmDialog(message, evaluateRound)
+    }
+
+
+    $scope.reports.saveEnrolled = function (round, participant) {
+
+        function insertEnrolled() {
+            var dataLab = {
+                roundId: round,
+                labId: participant
+            }
+            var url = serverSamplesURL + 'saveenrollinglab';
+            try {
+                alertStartRound = $.alert({
+                    title: '<i class="fa fa-spin fa-spinner  text-danger"></i> Enrolling..',
+                    content: 'Enrolling,please wait ....'
+                });
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                $http
+                    .post(url, dataLab)
+                    .success(function (data) {
+                        console.log(data)
+                        alertStartRound.close();
+                        if (data.status == 0) {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-remove  text-danger"></i> Error',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                        } else {
+                            alertStartRound = $.alert({
+                                title: '<i class="fa fa-check-circle  text-success"></i> Success',
+                                content: 'You have successfully enrolled for the round.'
+                            });
+                            $scope.samples.getCurrentActiveRound();
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error)
+
+                    })
+
+            } catch (Exception) {
+
+            }
+        }
+
+        $scope.reports.confirmDialog('Are you sure you want to enroll for this round,action cannot be undone', insertEnrolled);
     }
     $scope.reports.evaluateShipment = function (shipment) {
         function evaluateShipment() {
@@ -597,7 +674,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
                 // delete data.update.sampleInstructions;
                 // delete data.update.labDetails;
                 // delete data.update.evaluatedStatus;
-                console.log(individualResults);
+                console.log(data);
                 var url = serverReportURL + 'updatefunction';
                 $http
                     .post(url, data)
@@ -633,7 +710,10 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, ser
         return Math.round((Number(num1) + Number(num2)), 2);
     }
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
+        delete primaryEvaluation.daysLeft;
+        delete primaryEvaluation.daysLeftOnTen;
 
+        console.log(microEvaluation)
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 

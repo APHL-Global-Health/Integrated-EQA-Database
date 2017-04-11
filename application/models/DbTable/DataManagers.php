@@ -194,8 +194,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 			'institute' => $params['institute'],
             'secondary_email' => $params['semail'],
 			'updated_by' => $authNameSpace->admin_id,
-			'enable_adding_test_response_date' => $params['receiptDateOption'],
-			'qc_access' => $params['qcAccess'],
+//			'enable_adding_test_response_date' => $params['receiptDateOption'],
+//			'qc_access' => $params['qcAccess'],
             'updated_on' => new Zend_Db_Expr('now()')
         );
         

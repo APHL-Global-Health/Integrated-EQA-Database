@@ -93,46 +93,54 @@
                                 Results
                             </th>
                             <th>
+                                Expected Results
+                            </th>
+                            <th>
                                 score
                             </th>
-
                         </tr>
                         </thead>
                         <tbody ng-form novalidate="" name="resultsData">
                         <tr>
                             <td width="30%">Gram stain reaction and morphology</td>
-                            <td width="60%">
+                            <td width="30%">
                                 {{reports.userResults.results.grainStainReaction}}
                             </td>
+                            <td width="30%">{{reports.userResults.expectedResults.expectedResults.grainStainReaction}}</td>
                             <td class="10%">
                                 {{reports.userResults.results.grainStainReactionScore}}
                             </td>
 
+
                         </tr>
                         <tr>
                             <td width="30%">Details of primary media used for isolation and manufacturer</td>
-                            <td width="60%"> {{reports.userResults.results.primaryMedia}}</td>
+                            <td width="30%"> {{reports.userResults.results.primaryMedia}}</td>
+                            <td></td>
                             <td class="10%"> --
                             </td>
 
                         </tr>
                         <tr>
                             <td width="30%">Incubation conditions</td>
-                            <td width="60%"> {{reports.userResults.results.incubationConditions}}</td>
+                            <td width="30%"> {{reports.userResults.results.incubationConditions}}</td>
+                            <td></td>
                             <td class="10%"> --
                             </td>
 
                         </tr>
                         <tr>
                             <td width="30%">Colonial morphology (colony appearance on media)</td>
-                            <td width="60%"> {{reports.userResults.results.colonialMorphology}}</td>
+                            <td width="30%"> {{reports.userResults.results.colonialMorphology}}</td>
+                            <td></td>
                             <td class="10%"> --
                             </td>
 
                         </tr>
                         <tr>
                             <td width="30%">Bacterial quantification (if applicable)</td>
-                            <td width="60%"> {{reports.userResults.results.bacterialQualification}}</td>
+                            <td width="30%"> {{reports.userResults.results.bacterialQualification}}</td>
+                            <td></td>
                             <td class="10%"> --
                             </td>
 
@@ -144,14 +152,16 @@
                                 the reaction observed.
                             </td>
 
-                            <td width="60%"> {{reports.userResults.results.bacterialReagents}}</td>
+                            <td width="30%"> {{reports.userResults.results.bacterialReagents}}</td>
+                            <td></td>
                             <td class="10%"> --
                             </td>
 
                         </tr>
                         <tr>
                             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
-                            <td width="60%"> {{reports.userResults.results.isolateProcessing}}</td>
+                            <td width="30%"> {{reports.userResults.results.isolateProcessing}}</td>
+                            <td></td>
                             <td class="10%"> --
 
                             </td>
@@ -160,7 +170,8 @@
 
                         <tr>
                             <td width="30%">Final identification (i.e. report given to clinician)</td>
-                            <td width="60%"> {{reports.userResults.results.finalIdentification}}</td>
+                            <td width="30%"> {{reports.userResults.results.finalIdentification}}</td>
+                            <td width="30%">{{reports.userResults.expectedResults.expectedResults.finalIdentification}}</td>
                             <td class="10%"> {{reports.userResults.results.finalIdentificationScore}}
                             </td>
 
@@ -169,7 +180,8 @@
                             <td width="30% ">
                                 TOTAL SCORE
                             </td>
-                            <td width="60%"> {{reports.userResults.results.finalScore}}</td>
+                            <td width="00%"> {{reports.userResults.results.finalScore}}</td>
+                            <td></td>
                             <td class="10%">
 
                             </td>
@@ -178,7 +190,8 @@
                             <td width="30%">
                                 Remarks
                             </td>
-                            <td width="60%"> {{reports.userResults.results.remarks}}</td>
+                            <td width="30%"> {{reports.userResults.results.remarks}}</td>
+                            <td></td>
                             <td class="10%">
 
                             </td>

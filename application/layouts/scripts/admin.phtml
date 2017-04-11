@@ -4,6 +4,7 @@ $adminSession = new Zend_Session_Namespace('administrators');
 $controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
 $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 
+
   $adminSession = new Zend_Session_Namespace('administrators');
   $auth = Zend_Auth::getInstance();
   if ($auth->hasIdentity()) {
@@ -11,6 +12,7 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
   }
   $controllerName=Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
   $actionName=Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+
 
 ?>
 
@@ -29,12 +31,13 @@ $actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName(
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/admin.css"); ?>" type="text/css" media="all">
 
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
+<!--    <link rel="stylesheet" href="--><?php //echo $this->baseUrl("css/DT_bootstrap.css"); ?><!--" type="text/css" media="all">-->
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
     <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
+
     <!--[if IE 7]>
     <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
@@ -360,6 +363,9 @@ if ($controllerName . $actionName != 'distributionsindex') {
       media="all">
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
 <script type="text/javascript">
     $(function () {
 

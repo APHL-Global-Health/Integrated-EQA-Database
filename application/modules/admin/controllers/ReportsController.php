@@ -233,6 +233,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $where['roundId'] = $arr['roundId'];
 
                 $update['score'] = $arr['score'];
+                $update['diskContent'] = $arr['diskContent'];
+                $update['finalScore'] = $arr['finalScore'];
+                $update['reportedToStatus'] = $arr['reportedToStatus'];
+                $update['score'] = $arr['score'];
                 if (is_float($update['score']) || is_numeric($update['score'])) {
                     $update['adminMarked'] = 1;
                     $microSum += $arr['score'];
@@ -269,6 +273,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         unset($updateEval['evaluatedStatus']);
         unset($updateEval['finalScore']);
         unset($updateEval['totalMicroAgentsScore']);
+        unset($updateEval['allowedOnTenDays']);
 
 //        print_r($updateEval);
 //        exit;
@@ -675,6 +680,211 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         echo $this->returnJson(array('status' => 1, 'data' => $data));
 
         exit;
+    }
+
+    public function returnCompressedArray($lab, $samples)
+    {
+        $collectiveArray = [];
+        $tempArray = [];
+        for ($j = 0; $j < sizeof($lab); $j++) {
+            $allSamples = [];
+
+            for ($i = 0; $i < sizeof($samples); $i++) {
+
+                if ($samples[$i]['labId'] == $lab[$j]) {
+//                    !is_array($tempArray[$j]) ? (array)$tempArray[$j]:'';
+//                    $tempArray[$j]['info']=array();
+
+                    array_push($tempArray, $samples[$i]['sampleInfo']);
+
+                }
+
+            }
+            $labInfo = $this->returnValueWhere($lab[$j], 'participant');
+
+            $tempArrays['labName'] = $labInfo['institute_name'];
+            $tempArrays['labId'] = $lab[$j];
+            $tempArrays['sampleInfo'] = $tempArray;
+            array_push($collectiveArray, ($tempArrays));
+            $tempArray = [];
+        }
+        if (sizeof($tempArray) > 0) {
+            for ($i = 0; sizeof($tempArray); $i++) {
+
+            }
+        }
+        return $collectiveArray;
+    }
+
+    public function getgenstatperformanceAction()
+    {
+        $postedData = $this->returnArrayFromInput();
+
+
+        if (isset($postedData['grade'])) {
+            if ($postedData['grade'] == '') {
+                unset($postedData['grade']);
+            } else {
+                $whereSearch['grade'] = $postedData['grade'];
+            }
+        }
+
+
+        if (isset($postedData['region'])) {
+            if ($postedData['region'] == '') {
+                unset($postedData['region']);
+            } else {
+                $whereCounty['region'] = $postedData['region'];
+                $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+
+            }
+        }
+
+        $where['roundName'] = $postedData['round'];
+
+        $roundDetails = $this->returnValueWhere($where, 'tbl_bac_rounds');
+
+        $whereSearch['roundId'] = $roundDetails['id'];
+        $sum = 0;
+        $samples = [];
+        $report = [];
+        $lab = [];
+        $samples = [];
+        if ($roundDetails != false) {
+
+            if (isset($labs) && $labs != false) {
+//                print_r($roundDetails);
+//                exit;
+
+                foreach ($labs as $key => $value) {
+
+                    $whereSearch['participantId'] = $value->participant_id;
+                    $orderArray = ['id', 'dateCreated'];
+                    $col = ['*'];
+
+                    $groupArray = ['id'];
+                    $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
+//                    print_r($reportData);
+//                    exit;
+                    if ($reportData != false) {
+                        $exist = false;
+                        $labId = '';
+
+                        foreach ($reportData as $keys => $val) {
+                            $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
+
+                            $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
+                                'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
+                                'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
+//                            print_r($reportData[$key]);
+                            array_push($samples, $score);
+
+                            if (sizeof($lab) > 0) {
+                                $labId = $reportData[$keys]->participantId;
+                                for ($i = 0; $i < sizeof($lab); $i++) {
+
+
+                                    if ($reportData[$keys]->participantId == $lab[$i]) {
+
+                                        $exist = true;
+//
+//                                        break;
+                                    }
+                                }
+
+                            }
+                            if (!$exist) {
+                                array_push($lab, $reportData[$key]->participantId);
+
+                            } else {
+
+                            }
+                        }
+
+
+                    }
+
+
+                }
+
+//                $stat['total'] = $sum;
+//                $stat['mean'] = round($sum / sizeof($report), 4);
+//                $stat['labs'] = sizeof($report);
+//                $stat['sd'] = $this->standard_deviation($samples);
+
+                if (sizeof($lab) > 0) {
+                    $lab = $this->returnCompressedArray($lab, $samples);
+                    echo $this->returnJson(array('status' => 1, 'data' => $lab));
+                }else{
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                }
+            } else {
+                if (isset($labs)) {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                    exit;
+                }
+                $orderArray = ['id', 'dateCreated'];
+                $col = ['*'];
+
+                $groupArray = ['id'];
+                $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
+                if ($reportData != false) {
+
+                    foreach ($reportData as $keys => $val) {
+                        $exist = false;
+                        $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
+
+                        $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
+                            'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
+                            'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
+
+                        array_push($samples, $score);
+
+                        if (sizeof($lab) > 0) {
+                            $labId = $reportData[$keys]->participantId;
+                            for ($i = 0; $i < sizeof($lab); $i++) {
+
+
+                                if ($reportData[$keys]->participantId == $lab[$i]) {
+
+                                    $exist = true;
+//
+//                                        break;
+                                }
+                            }
+
+                        }
+                        if (!$exist) {
+                            array_push($lab, $reportData[$keys]->participantId);
+
+                        } else {
+
+                        }
+
+                    }
+//                    $stat['total'] = $sum;
+//                    $stat['mean'] = round($sum / sizeof($reportData), 4);
+//                    $stat['sd'] = $this->standard_deviation($samples);
+//                    $stat['labs'] = sizeof($reportData);
+
+                    if (sizeof($lab) > 0) {
+                        $lab = $this->returnCompressedArray($lab, $samples);
+                        echo $this->returnJson(array('status' => 1, 'data' => $lab));
+                    }else{
+                        echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                    }
+
+                } else {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                }
+//                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+        }
+
+        exit;
+
     }
 
     public function getroundperformanceAction()

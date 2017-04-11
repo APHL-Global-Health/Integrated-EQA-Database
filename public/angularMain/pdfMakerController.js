@@ -1,6 +1,6 @@
 var pdfModule = angular.module('ReportModule')
 
-pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL) {
+pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL, $timeout) {
     $scope.pdfMake = {};
 
 
@@ -167,9 +167,9 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
     }
     $scope.pdfMake.userFeedbackResults = {};
     var alerts = '';
-    $scope.pdfMake.userResponseGeneratorPdf = function GenerateReport(reportTitle, reportData, tableWidth, reportHeader, dataDetails) {
+    $scope.pdfMake.userResponseGeneratorPdf = function (reportTitle, reportData, tableWidth, reportHeader, dataDetails, microAgents, expectedResults) {
         // var schoolName = '@Session["SchoolName"]';
-
+        console.log(expectedResults);
         var docDefinition = {
             styles: {
                 header: {
@@ -191,7 +191,11 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     fontSize: 8,
                     bold: false,
                 },
-
+                contentBold: {
+                    fontSize: 8,
+                    bold: true,
+                    italic:true,
+                },
                 numeric: {
                     alignment: 'right'
                 },
@@ -271,21 +275,38 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ',Your score ' + dataDetails.results.grainStainReactionScore,
+                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ' | Your score ' + dataDetails.results.grainStainReactionScore,
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ',Your score ' + dataDetails.results.finalIdentificationScore,
+                    text: 'Expected Gram Stain : ' + expectedResults.expectedBacterialResults.grainStainReaction
+                    + ' | Possible score ' +  expectedResults.expectedBacterialResults.grainStainReactionScore,
+                    style: ['content', 'leftData','contentBold'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ' | Your score ' + dataDetails.results.finalIdentificationScore,
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Micro Agents Used : ' + dataDetails.microAgents.length + ',Your score ' + dataDetails.results.totalMicroAgentsScore,
-                    style: ['content', 'leftData'],
+                    text: 'Expected Final identification : ' + expectedResults.expectedBacterialResults.finalIdentification
+                    + ' : Possible score ' +  expectedResults.expectedBacterialResults.finalIdentificationScore,
+                    style: ['content', 'leftData','contentBold'],
                     margin: [0, 0, 0, 5]
                 },
 
+                {
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() + ' | Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Expected Micro Agents : ' + expectedResults.microAst.length + ' : ' + expectedResults.microAst.toString() + ' | Total Possible score ' + expectedResults.totalScore,
+                    style: ['content', 'leftData','contentBold'],
+                    margin: [0, 0, 0, 5]
+                },
                 {
                     text: "_______________________________________________________________________________________________",
                     margin: [0, 0, 0, 5]
@@ -329,12 +350,6 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             footer: function (page, pages) {
                 return {
 
-                    text: [{
-                        
-                        text: "_______________________________________________________________________________________________",
-                        margin: [0, 0, 0, 5]
-
-                    }],
                     columns: [
                         {
                             text: 'ABNO Softwares International',
@@ -384,7 +399,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         }
     }
     //Sample Report
-    function returnGradeDetails(microScore) {
+    function returnGradeDetails(microScore, microAgents) {
         var reportData = new Array();
 
         var reportHeader =
@@ -409,20 +424,54 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             ];
 
             reportData.push(rowData);
-            return reportData;
+
         }
+
+        var allData = {}
+        allData.reportData = reportData;
+        var microAst = [];
+
+        for (var j = 0; j < microAgents.length; j++) {
+
+            microAst.push(microAgents[j].antiMicroAgent + ' - ' + microAgents[j].finalScore);
+
+        }
+        allData.reportData = reportData;
+        allData.microAgents = microAst;
+        return allData;
+    }
+
+    function returnExpectedAsts(expectedResutls) {
+
+        var microAst = [];
+        var totalScore = 0;
+        for (var j = 0; j < expectedResutls.length; j++) {
+            totalScore = expectedResutls[j].agentScore;
+            microAst.push(expectedResutls[j].antiMicroAgent + ' - ' + expectedResutls[j].finalScore);
+
+        }
+
+
+        var result = {
+            microAst: microAst, totalScore: totalScore
+        };
+        return result;
     }
 
     function createUserResponseData(data, labDetails) {
         var tableWidth1 = ['auto', '*', '*', '*']
 
-        var reportData = returnGradeDetails(data.results);
-        console.log(reportData)
+        var allData = returnGradeDetails(data.results, data.microAgents);
+        console.log(allData)
+        var reportData = allData.reportData;
+        var microAgents = allData.microAgents;
+        var expectedResults = returnExpectedAsts(data.expectedResults.expectedASTs);
+        expectedResults.expectedBacterialResults = data.expectedResults.expectedResults;
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
         data.lab = labDetails
-        $scope.pdfMake.userResponseGeneratorPdf(reportSubHeader, reportData, tableWidth1, reportTitle, data);
+        $scope.pdfMake.userResponseGeneratorPdf(reportSubHeader, reportData, tableWidth1, reportTitle, data, microAgents, expectedResults);
         alerts = $.alert({
             title: "<i class='fa fa-check text-success'></i> Success",
             content: "PDF Generated successfully"
@@ -619,6 +668,8 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
+
+
     function returnRoundExcelData(excelData) {
 
         if (excelData.length > 0) {
@@ -648,7 +699,27 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         }
     }
 
+    $scope.pdfMake.exportToExcel = function (filename, id) {
+        alert("called");
+        $scope.reports.actionMenu = 0;
+        var date = new Date();
+        $timeout(function () {
 
+
+            filename += '-' + date;
+            $("#" + id).table2excel({
+                exclude: ".noExl",
+                name: "Excel Document Name",
+                filename: filename,
+                fileext: ".xls",
+                exclude_img: true,
+                exclude_links: true,
+                exclude_inputs: true
+            });
+            $scope.reports.actionMenu = 1;
+        }, 100)
+
+    }
     $scope.pdfMake.generateSurveyReportExcel = function (data, searchData) {
         if (data.length > 0) {
             var excelData = returnRoundExcelData(data);
@@ -670,7 +741,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-                ;
+            ;
             var res = alasql('SELECT INTO XLSX("ROUNDS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -729,7 +800,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-                ;
+            ;
             var res = alasql('SELECT INTO XLSX("LABORATORY PERFORMANCE REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -786,7 +857,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-                ;
+            ;
             var res = alasql('SELECT INTO XLSX("PARTICIPATORY REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -843,7 +914,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-                ;
+            ;
             var res = alasql('SELECT INTO XLSX("SHIPMENT REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -898,7 +969,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-                ;
+            ;
             var res = alasql('SELECT INTO XLSX("CORRECTIVE ACTION REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();

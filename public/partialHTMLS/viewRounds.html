@@ -73,7 +73,7 @@
                     <td nowrap>{{samples.roundStatus(round.daysLeft,round.startRoundFlag)}}</td>
 
                     <td nowrap>
-                        <a class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0"
+                        <button class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0 || round.startRoundFlag==1"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
@@ -81,8 +81,8 @@
 
                            ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
                                 class="fa fa-edit"></i>
-                        </a>
-                        <a class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0"
+                        </button>
+                        <button class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0|| round.startRoundFlag==1"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
@@ -90,16 +90,17 @@
 
                            ng-click="samples.addShipmentsToRound(round)"><i
                                 class="fa fa-plus"></i>
-                        </a>
+                        </button>
 
-                        <a class="btn btn-success btn-sm" ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0"
+                        <button class="btn btn-success btn-sm"
+                                ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0|| round.startRoundFlag==1"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
                            data-trigger="hover" data-type="success" data-title="Enroll lab" bs-tooltip
 
                            ng-click="samples.addLabsToRound(round)"><i class="fa fa-hospital-o"></i>
-                        </a>
+                        </button>
 
                     </td>
                 </tr>

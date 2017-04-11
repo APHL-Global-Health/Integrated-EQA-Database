@@ -315,6 +315,27 @@ Class Main extends pdfCreator
 
     }
 
+    function selectFromDStatusTableSamples($tableName, $where = "", $participantId)
+    {
+        $col = $where['column'];
+        $status = $where['status'];
+        $sql = "SELECT * FROM $tableName where $col in ($status) and roundId is not NULL and participantId=$participantId";
+//echo $sql;exit;
+        $result = $this->connect_db->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_object()) {
+                $user_arr[] = $row;
+            }
+
+            return $user_arr;
+        } else {
+            return false;
+        }
+
+    }
+
 
     public
     function deleteFromWhere($tableName, $where)
@@ -435,7 +456,12 @@ Class Main extends pdfCreator
     function getUserSession()
     {
         if (isset($_SESSION)) {
-            return $_SESSION['administrators']['admin_id'];
+            if (isset($_SESSION['administrators'])) {
+                return $_SESSION['administrators']['admin_id'];
+            }
+            if ($_SESSION['datamanagers']) {
+                return $_SESSION['datamanagers']["dm_id"];
+            }
         } else {
             return null;
         }
