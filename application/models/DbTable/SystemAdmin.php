@@ -150,14 +150,58 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
+    public function generateRandomPassword($len) {
+
+        $min_lenght = 0;
+        $max_lenght = 100;
+        $bigL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789&$@";
+        $number = "0123456789&$@";
+        $bigB = str_shuffle($bigL);
+        $smallS = str_shuffle($smallL);
+        $numberS = str_shuffle($number);
+        $subA = substr($bigB, 0, 5);
+        $subB = substr($bigB, 6, 5);
+        $subC = substr($bigB, 10, 5);
+        $subD = substr($smallS, 0, 5);
+        $subE = substr($smallS, 6, 5);
+        $subF = substr($smallS, 10, 5);
+        $subG = substr($numberS, 0, 5);
+        $subH = substr($numberS, 6, 5);
+        $subI = substr($numberS, 10, 5);
+        $RandCode1 = str_shuffle($subA . $subD . $subB . $subF . $subC . $subE);
+        $RandCode2 = str_shuffle($RandCode1);
+        $RandCode = $RandCode1 . $RandCode2;
+        if ($len > $min_lenght && $len < $max_lenght) {
+            $CodeEX = substr($RandCode, 0, $len);
+        } else {
+            $CodeEX = $RandCode;
+        }
+        return $CodeEX;
+    }
+
+    public function sendEmailToUser($sendTo, $password, $fullname) {
+        $common = new Application_Service_Common();
+        $message = "Hi $fullname,"
+                . "Kindly log in with below to be able to access the system <br>"
+                . "<br>Username : $sendTo <br>"
+                . "Password : $password <br>"
+                . "<br><small>This is a system generated email. Please do not reply.</small>";
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        //$fromName = Application_Service_Common::getConfig('admin-name');			
+        $common->sendMail($sendTo, null, null, "Login Credentials", $message, null, "ePT Admin Credentials");
+    }
+
     public function addSystemAdmin($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        $email = $params['primaryEmail'];
+        $password = $this->generateRandomPassword(6);
         $data = array(
             'first_name' => $params['firstName'],
             'last_name' => $params['lastName'],
             'primary_email' => $params['primaryEmail'],
             'secondary_email' => $params['secondaryEmail'],
-            'password' => $params['password'],
+            'password' => MD5($password), // $params['password'],
             'phone' => $params['phone'],
             'IsVl' => $params['IsVl'],
             'IsProvider' => $params['IsProvider'],
@@ -182,8 +226,9 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 $data['IsProvider'] = 1;
             }
         }
-        
-        
+
+        $fullname = $params['firstName'] . ' ' . $params['lastName'];
+        $this->sendEmailToUser($email, $password, $fullname);
         
         return $this->insert($data);
     }
@@ -207,16 +252,17 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')
         );
-        if (isset($params['password']) && $params['password'] != "") {
-            $data['password'] = $params['password'];
-            $data['force_password_reset'] = 1;
-        }
+//        if (isset($params['password']) && $params['password'] != "") {
+//            $data['password'] = $params['password'];
+//            $data['force_password_reset'] = 1;
+//        }
+
         if ($data['IsVl'] == 4) {
             $data['AssignModule'] = 1;
         }
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
-             if ($data['IsVl'] == 2) {
+            if ($data['IsVl'] == 2) {
                 $data['County'] = $params['County'];
             }
         }

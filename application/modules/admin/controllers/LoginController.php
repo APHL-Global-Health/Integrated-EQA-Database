@@ -19,7 +19,7 @@ class Admin_LoginController extends Zend_Controller_Action
             $select->where('status = "active"');
             
     		$adapter->setIdentity($params['username']);
-    		$adapter->setCredential($params['password']);
+    		$adapter->setCredential(MD5($params['password']));
     		
     		$auth = Zend_Auth::getInstance();
     		$res = $auth->authenticate($adapter);
