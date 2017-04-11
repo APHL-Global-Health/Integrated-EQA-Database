@@ -13,6 +13,7 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $clientsServices = new Application_Service_SystemAdmin();
+            
             $clientsServices->getAllAdmin($params);
         }
     }
@@ -30,7 +31,9 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->addSystemAdmin($params);
+            
             $this->_redirect("/admin/system-admins");
+            
         }
         $this->view->countyList = $commonService->getCountiesList();
     }
@@ -41,7 +44,12 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $adminService->updateSystemAdmin($params);
+            if(in_array($_SESSION['loggedInDetails']["IsProvider"],array(2,3))){
+                 $this->_redirect("/admin/system-admins/edit/id/".$_SESSION['loggedInDetails']['admin_id']."?status=success");
+            }else{
             $this->_redirect("/admin/system-admins");
+            }
+            
         } else {
             if ($this->_hasParam('id')) {
                 $adminId = (int) $this->_getParam('id');

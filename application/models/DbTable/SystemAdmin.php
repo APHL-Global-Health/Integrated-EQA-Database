@@ -182,14 +182,19 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
     public function sendEmailToUser($sendTo, $password, $fullname) {
         $common = new Application_Service_Common();
-        $message = "Hi $fullname,"
-                . "Kindly log in with below to be able to access the system <br>"
+        $message = "Dear $fullname,"
+                . "You have been granted access to the NPHL Integrated EQA Database application."
+                . "Please click the following link to access the application in your computer browser."
+                . "Kindly log in with below credentials to access the system <br>"
                 . "<br>Username : $sendTo <br>"
                 . "Password : $password <br>"
-                . "<br><small>This is a system generated email. Please do not reply.</small>";
+                . "If you have received this email in error or have any other queries, "
+                . "please notify the system administrator at info@nphl.or.ke."
+                . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
+                . "<small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
-        $common->sendMail($sendTo, null, null, "Login Credentials", $message, null, "ePT Admin Credentials");
+        $common->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
 
     public function addSystemAdmin($params) {
@@ -229,7 +234,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
         $fullname = $params['firstName'] . ' ' . $params['lastName'];
         $this->sendEmailToUser($email, $password, $fullname);
-        
+
         return $this->insert($data);
     }
 
@@ -247,24 +252,32 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             'phone' => $params['phone'],
             'status' => $params['status'],
             'IsVl' => $params['IsVl'],
-            'IsProvider' => $params['IsProvider'],
             'AssignModule' => 0,
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')
         );
-//        if (isset($params['password']) && $params['password'] != "") {
-//            $data['password'] = $params['password'];
+        if (isset($params['IsProvider'])) {
+            $data['IsProvider'] = $params['IsProvider'];
+        }
+        if (isset($params['password']) && $params['password'] != "") {
+            $data['password'] = MD5($params['password']);
 //            $data['force_password_reset'] = 1;
-//        }
-
+        }
+        if (isset($params['force_password_reset'])) {
+            $data['force_password_reset'] = 0;
+            $_SESSION['loggedInDetails']['force_password_reset'] = 0;
+        }
         if ($data['IsVl'] == 4) {
             $data['AssignModule'] = 1;
         }
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
             if ($data['IsVl'] == 2) {
-                $data['County'] = $params['County'];
+                if (isset($data['County'])) {
+                    $data['County'] = $params['County'];
+                }
             }
+        }
         }
         return $this->update($data, "admin_id=" . $params['adminId']);
     }

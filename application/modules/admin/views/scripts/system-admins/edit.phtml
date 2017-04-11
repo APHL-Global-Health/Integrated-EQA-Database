@@ -2,10 +2,22 @@
     <form name="editSystemAdminForm" id="editSystemAdminForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "system-admins", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
         <fieldset>
             <legend>Update PT Manager</legend>
-            <?php if ($_SESSION['loggedInDetails']['force_password_reset'] == 1&&
-                    $_SESSION['loggedInDetails']['admin_id'] == $this->admin['admin_id']) { ?>
+            <?php
+//            var_dump($_SESSION['loggedInDetails']);
+            if ($_SESSION['loggedInDetails']['force_password_reset'] == 1 &&
+                    $_SESSION['loggedInDetails']['admin_id'] == $this->admin['admin_id']) {
+                ?>
                 <div class="alert alert-warning col-md-12">You have not reset you password,kindly do so.</div>
             <?php } ?>
+            <?php
+            if (isset($_GET)) {
+                if (isset($_GET['status'])) {
+                    ?>
+                    <div class="alert alert-success col-md-12">Profile Updated successfully.</div>
+                <?php
+                }
+            }
+            ?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">First Name <span class="mandatory">*</span></label>
 
@@ -55,9 +67,11 @@
                     <label class="col-lg-3 control-label">Confirm Password <br/> <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small></label>
                     <div class="col-lg-5">
                         <input type="password" id="confirmPassword" name="password"  size="50" value="" class="form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
+                        <input type="hidden" id="force_password_reset" name="force_password_reset"  size="50" value="0" />
+
                     </div>
                 </div>
-            <?php } ?>
+<?php } ?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Cell/Mobile Number <span class="mandatory">*</span></label>
 
@@ -74,7 +88,7 @@
                     <input  type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45" value="<?php echo $this->admin['secondary_email']; ?>" placeholder="Please enter secondary email here" class="form-control isEmail" onblur="cheackEmailId()" />
                 </div>
             </div>
-            <?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
+<?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Module <span class="mandatory">*</span></label>
 
@@ -91,7 +105,7 @@
                     </div>
                 </div>
             <?php } ?>
-            <?php if ($_SESSION['loggedInDetails']['IsVl'] == 2) { ?>
+<?php if ($_SESSION['loggedInDetails']['IsVl'] == 2 && !in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Sub Module <span class="mandatory">*</span></label>
 
@@ -99,7 +113,7 @@
                         <select type="text" id="IsProvider" name="IsProvider" class="isRequired form-control"
                                 title="Please select user sub module here">
 
-                                 <!--<option value="2" <?php echo ($this->admin['IsProvider'] == "2") ? "selected='selected'" : ""; ?>>Provider</option>-->
+                                                         <!--<option value="2" <?php echo ($this->admin['IsProvider'] == "2") ? "selected='selected'" : ""; ?>>Provider</option>-->
                             <option value="3" <?php echo ($this->admin['IsProvider'] == "3") ? "selected='selected'" : ""; ?>>QA Manager</option>
                             <option value="1" <?php echo ($this->admin['IsProvider'] == "1") ? "selected='selected'" : ""; ?>>System Admin</option>
                         </select>
@@ -121,7 +135,7 @@
                         </select>
                     </div>
                 </div>
-            <?php } ?>
+<?php } ?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>
 
@@ -146,13 +160,14 @@
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"/>
-                <?php if (in_array($_SESSION['loggedInDetails']['IsVl'], array(1,2,3,4))) { ?>
-                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/system-admins';"
-                       tabindex="8" value="Cancel"/>
-                <?php } else{?>
-                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/';"
-                       tabindex="8" value="Cancel"/>
-                <?php } ?>
+                <?php if (!in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) {
+                    ?>
+                    <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/system-admins';"
+                           tabindex="8" value="Cancel"/>
+<?php } else { ?>
+                    <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/';"
+                           tabindex="8" value="Cancel Save"/>
+<?php } ?>
             </div>
         </fieldset>
     </form>
