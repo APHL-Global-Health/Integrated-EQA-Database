@@ -23,7 +23,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 //        print_r($auth);
 //        exit;
         //echo $pname;
-        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode');
+        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode', 'BatchID');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -106,7 +106,15 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
                     ->where("a.ProviderID='$pname'");
         }
-
+        if (isset($validity)) {
+            if ($validity == 0) {
+                if ($sWhere == "") {
+                    $sWhere .= " valid='0' ";
+                } else {
+                    $sWhere .= " and  valid='0' ";
+                }
+            }
+        }
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -158,8 +166,19 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ResultCode'];
             $row[] = $aRow['Grade'];
             $row[] = $aRow['FailReasonCode'];
-            //$row[] = '<a href="/admin/periods/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+//            if (isset($validity)) {
+//                if ($validity == 0) {
+            $batchID = (string)$aRow['BatchID'];
+            $row[] = '<a href="#" class="btn btn-danger btn-xs" '
+                    . 'onclick="deleteRecord(' . $aRow['ImpID'] . ')" style="margin-right: 2px;"><i class="fa fa-close"></i> delete</a>';
+            $row[] = '<a href="#" class="btn btn-warning btn-xs" '
+                    . 'onclick="deleteBatch(' . $batchID . ' )"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
 
+            $row[] = '<a href="#" class="btn btn-success btn-xs" '
+                    . 'onclick="approveBatch("' . $batchID . '")" style="margin-right: 2px;"><i class="fa fa-check"></i>Approve </a>';
+//               
+//                }
+//            }
             $output['aaData'][] = $row;
         }
 

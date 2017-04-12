@@ -508,7 +508,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     }
 
     public function getparticipantionresultcodeAction() {
-              $whereArray = file_get_contents("php://input");
+        $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
         if (isset($whereArray['dateRange'])) {
             $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
@@ -760,6 +760,36 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         fclose($output);
         exit();
+    }
+
+    public function deleteinvalidAction() {
+        $data = $params = $this->_getAllParams();
+
+        $sql = "delete from rep_repository where ImpId = " . $data['id'] . "";
+
+        $query = $this->dbConnection->updateAndDelete($sql);
+        echo json_encode(array('status' => 1, 'message' => 'success'));
+        exit;
+    }
+
+    public function deletebatchAction() {
+        $data = $params = $this->_getAllParams();
+
+        $sql = "delete from rep_repository where BatchID = " . $data['BatchID'] . "";
+
+        $query = $this->dbConnection->updateAndDelete($sql);
+        echo json_encode(array('status' => 1, 'message' => 'success'));
+        exit;
+    }
+
+    public function updatebatchAction() {
+        $data = $params = $this->_getAllParams();
+
+        $sql = "update  rep_repository set status = 1 where BatchID = " . $data['BatchID'] . " and valid=1";
+
+        $query = $this->dbConnection->updateAndDelete($sql);
+        echo json_encode(array('status' => 1, 'message' => 'success'));
+        exit;
     }
 
     public function returnUserCountStatement($county) {

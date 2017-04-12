@@ -326,6 +326,7 @@
         }
     }
     function convertArrayToString(arrayWithExcelLabelValue, model) {
+        
         var length = arrayWithExcelLabelValue.length,
                 json = [];
         for (var i = 0; i < length; i++) {
@@ -345,5 +346,7 @@
         }
         json.push(model)
         return JSON.stringify(json);
+        
+        
     }
 </script>

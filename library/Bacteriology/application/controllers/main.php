@@ -158,7 +158,12 @@ Class Main extends pdfCreator {
             return false;
         }
     }
-
+public function updateAndDelete($sql){
+    
+    $result = $this->connect_db->query($sql);
+    
+    return true;
+}
     public function doQuery($sql) {
 //        echo$sql;
 //        exit;

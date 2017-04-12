@@ -24,12 +24,13 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $params = $this->_getAllParams();
 
             $clientsServices = new Application_Service_Importcsv();
-            $clientsServices->getAllData($params, $pname);
+            $validity = isset($_GET['validity']) ? 0 : 1;
+            $clientsServices->getAllData($params, $pname, $validity);
         }
     }
 
     public function invaliddataAction() {
-        
+
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $pname = $auth->getIdentity()->ProviderName;
@@ -38,7 +39,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $params = $this->_getAllParams();
 
             $clientsServices = new Application_Service_Importcsv();
-            $clientsServices->getAllData($params, $pname,0);
+            $clientsServices->getAllData($params, $pname);
         }
     }
 
@@ -267,6 +268,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $mappedColumnNames = array();
         $excelHeaders = $this->getUploadedExcelFileHeaders();
         $extraInfo = end($data);
+        $extraInfo['BatchID'] = $this->generateRandom(8);
         //$name=  explode($delimiter, $string);
         foreach ($data as $item) {
             if (isset($item['value'])) {
@@ -281,6 +283,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
         $finalTableColumns = array_merge($mappedColumnNames, $newTableColumn);
 
+
         $excelData = $this->getUploadedExcelFileData();
 
         $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo);
@@ -292,9 +295,38 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         return "yes";
     }
 
+    public function generateRandom($len) {
+        $min_lenght = 0;
+        $max_lenght = 100;
+        $bigL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789";
+        $number = "0123456789";
+        $bigB = str_shuffle($bigL);
+        $smallS = str_shuffle($smallL);
+        $numberS = str_shuffle($number);
+        $subA = substr($bigB, 0, 5);
+        $subB = substr($bigB, 6, 5);
+        $subC = substr($bigB, 10, 5);
+        $subD = substr($smallS, 0, 5);
+        $subE = substr($smallS, 6, 5);
+        $subF = substr($smallS, 10, 5);
+        $subG = substr($numberS, 0, 5);
+        $subH = substr($numberS, 6, 5);
+        $subI = substr($numberS, 10, 5);
+        $RandCode1 = str_shuffle($subA . $subD . $subB . $subF . $subC . $subE);
+        $RandCode2 = str_shuffle($RandCode1);
+        $RandCode = $RandCode1 . $RandCode2;
+        if ($len > $min_lenght && $len < $max_lenght) {
+            $CodeEX = substr($RandCode, 0, $len);
+        } else {
+            $CodeEX = $RandCode;
+        }
+        return $CodeEX;
+    }
+
     public function createBulkInsert($table, Array $columns, Array $records, $extraInfo) {
         $query = " INSERT INTO `" . $table . "` (";
-        $query .= " `ProviderID`,`ProgramID`,`RoundID`,";
+        $query .= " `ProviderID`,`ProgramID`,`RoundID`,`BatchID`,";
         for ($x = 0; $x < count($columns); $x++) {
 
             $query .= " `" . $columns [$x] . "` ";
@@ -315,7 +347,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $query .= " ('";
             $query .= $extraInfo['ProviderID'] . "','";
             $query .= $extraInfo['ProgramID'] . "','";
-            $query .= $extraInfo['RoundID'] . "',";
+            $query .= $extraInfo['RoundID'] . "','";
+            $query .= $extraInfo['BatchID'] . "',";
 
             for ($i = 0; $i < count($columns); $i++) {
                 $query .= " '" . $records [$x][$i] . "' ";

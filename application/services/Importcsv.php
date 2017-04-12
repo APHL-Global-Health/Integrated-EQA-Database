@@ -13,10 +13,6 @@ class Application_Service_Importcsv {
         return $adminDb->getAllData($params, $pname, $validity);
     }
 
-    public function invaliddataData($params, $pname) {
-        $adminDb = new Application_Model_DbTable_Importcsv();
-        return $adminDb->getAllData($params, $pname, $validity);
-    }
 
     public function addData($params, $provider, $program, $period) {
         $adminDb = new Application_Model_DbTable_Importcsv();
