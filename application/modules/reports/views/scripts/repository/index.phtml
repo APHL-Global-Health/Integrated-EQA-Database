@@ -45,7 +45,7 @@
                                     <li ng-class="{'active' : clickedTab == 'participants'}">
                                         <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
                                     </li>
-                                     <li ng-class="{'active' : clickedTab == 'resultcode'}">
+                                    <li ng-class="{'active' : clickedTab == 'resultcode'}">
                                         <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'summary'}">
@@ -118,7 +118,7 @@
                                 County
                             </td>
                             <td style="width:200px;text-align: center;font-weight:bold;">
-                                 
+
                         <x ng-if="clickedTab == 'participants'">  Analyte and</x>
                         <x ng-if="clickedTab == 'graphs'"> Graphs and </x>
                         <x ng-if="clickedTab == 'summary'"> Sample name and </x>
@@ -188,21 +188,22 @@
                                         </option>
 
                                     </select>
-                                    
-                                    
+
+
                                     <input type="text" id="AnalyteID" name="AnalyteID" ng-model="reports.reportFilter.AnalyteID"
-                                           ng-if="clickedTab == 'participants'"
+                                           ng-if="clickedTab == 'participants' || clickedTab == 'resultcode"
                                            class="form-control input-sm" required=""
                                            style="background: #fff" placeholder="fill analyte id/name"/>
                                     
-                                    <input type="text" id="AnalyteID" name="sample" ng-model="reports.reportFilter.sample"
+
+                                    <input type="text" id="sample" name="sample" ng-model="reports.reportFilter.sample"
                                            ng-if="clickedTab == 'summary'"
                                            class="form-control input-sm" 
                                            style="background: #fff" placeholder="sample code/sample name"/>
-                                    
+
 
                                     <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports'
-                                                || clickedTab == 'participants' || clickedTab == 'summary'"
+                                                || clickedTab == 'participants' || clickedTab == 'summary' || clickedTab == 'resultcode'"
                                             name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
                                         <option value=""> -- Select Program --</option>
                                         <!--                <option value="network">Network Tier</option>
@@ -225,6 +226,10 @@
                                     <button class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"  ng-disabled="search.$invalid"
                                             ng-click="reports.getLabPerformance()"><span>Get Report</span>
                                     </button>
+                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
+                                            ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
+                                    </button>
+
 
                                     <button class="btn btn-success btn-sm"  ng-disabled="search.$invalid"
                                             ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"

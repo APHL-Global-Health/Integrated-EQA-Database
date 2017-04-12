@@ -28,6 +28,20 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         }
     }
 
+    public function invaliddataAction() {
+        
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $pname = $auth->getIdentity()->ProviderName;
+        }
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+
+            $clientsServices = new Application_Service_Importcsv();
+            $clientsServices->getAllData($params, $pname,0);
+        }
+    }
+
     public function addAction() {
 
         $program = $this->getRequest()->getPost('ProgramID');
@@ -115,12 +129,12 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             // Returns all known internal file information
             $files = $adapter->getFileInfo();
             $names = $adapter->getFileName();
-            
+
             $extensionArray = explode('.', $names);
             $lastElement = count($extensionArray) - 1;
             $sxt = $extensionArray[$lastElement];
-            $newname = $provider.'-'.$program.'.'.$sxt;
-            
+            $newname = $provider . '-' . $program . '.' . $sxt;
+
             $adapter->addFilter('rename', $newname);
             $adapter->setDestination('../public/files');
             foreach ($files as $file => $info) {

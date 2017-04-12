@@ -11,7 +11,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
     protected $_name = 'rep_repository';
     protected $_primary = 'ImpID';
 
-    public function getAllData($parameters,$pname) {
+    public function getAllData($parameters, $pname, $validity = null) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -100,11 +100,14 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
          * Get data to display
          */
         if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-            }else{
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
-                ->where("a.ProviderID='$pname'");
-            }
+
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
+        } else {
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
+                    ->where("a.ProviderID='$pname'");
+        }
+
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -165,7 +168,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 
     public function addData($params, $provider, $program, $period) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
-        
+
         $labid = $this->getLabID($params[0]);
         $county = $this->getCountyID($params[1]);
         $country = $this->getCountryID($params[2]);

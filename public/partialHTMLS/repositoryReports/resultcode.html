@@ -4,7 +4,7 @@
               media="all">
         <legend>
             <h3>Participation Report Based on Result Code
-                <small class="text-gray">{{reports.participantingLabs.length}} Records</small>
+                <small class="text-gray">{{reports.participantionResultCode.length}} Records</small>
             </h3>
         </legend>
 
@@ -70,7 +70,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="record in reports.participantingLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
+                    <tr dir-paginate="record in reports.participantionResultCode| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
                         >
                         <td>{{$index + 1}}</td>
                         <td>

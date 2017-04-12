@@ -389,7 +389,59 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
     }
 
-    $scope.reports.performanceLabs = {};
+    $scope.reports.participantionResultCode = {};
+
+  $scope.reports.getParticipantionResultCode = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+        searchColumns.AnalyteID = $scope.reports.reportFilter.AnalyteID;
+        $scope.reports.countyChange(searchColumns.county);
+        
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getparticipantionresultcode';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.participantionResultCode = data;
+                        } else {
+                            $scope.reports.participantionResultCode = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
 
     $scope.reports.getLabPerformance = function () {
         $scope.reports.reportShowTable = false;

@@ -278,7 +278,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 }
             }
         }
-        }
+        
         return $this->update($data, "admin_id=" . $params['adminId']);
     }
 
