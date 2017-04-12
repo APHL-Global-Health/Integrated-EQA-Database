@@ -321,8 +321,7 @@ public function updateAndDelete($sql){
         }
     }
 
-    public
-            function deleteFromWhere($tableName, $where) {
+    public function deleteFromWhere($tableName, $where) {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {

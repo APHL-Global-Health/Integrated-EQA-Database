@@ -21,9 +21,9 @@
                 <th>Result Code</th>
                 <th>Grade</th>
                 <th>Fail Reason</th>
+                <th>Batch</th>
                 <th>Delete</th>
                 <th>Delete Batch</th>
-                <th>Approve Batch</th>
             </tr>
         </thead>
         <tbody>
@@ -48,15 +48,16 @@
                     dataType: 'text',
                     data: {id: id},
                     success: function (data) {
-                        //                        console.log(data)
-                        //                        if (data === '1') {
-                        $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: '1 Invalid Record deleted'});
-                        //.$('#loader').hide();
-                        window.location = '/admin/importcsv/invaliddata/';
-                        console.log('deleted');
-                        //                        } else {
-                        //                            $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
-                        //                        }
+                        data = JSON.parse(data);
+
+                        if (data.status == '1') {
+                            $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: '1 Invalid Record deleted'});
+                            //.$('#loader').hide();
+                            window.location = '/admin/importcsv/invaliddata/';
+                            console.log('deleted');
+                        } else {
+                            $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
+                        }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         $('#loader').hide();
@@ -76,17 +77,17 @@
     }
     var alertStartRound = '';
     function deleteBatch(BatchID) {
-   
+
         $.confirm({
             title: 'Confirm Delete!',
             theme: 'supervan',
-            content: 'Are you want to delete this batch,this action can not be undone ' ,
+            content: 'Are you want to delete this batch,this action can not be undone ',
             buttons: {
                 'Evaluate': {
                     btnClass: 'btn-blue',
                     action: function () {
 
-                        alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"></i> Deleting batch,please wait...!');
+                        alertStartRound = $.alert({title: '<i class="fa fa-spin fa-spinner"></i>', content: ' Deleting batch,please wait...!'});
                         deleteBatchFinal(BatchID)
 
                     }
@@ -104,44 +105,46 @@
     }
     function deleteBatchFinal(BatchID) {
         try {
-           
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'deletebatch', 'format' => 'html')); ?>',
-                    dataType: 'text',
-                    data: {BatchID: BatchID},
-                    success: function (data) {
-                        //                        console.log(data)
-                        //                        if (data === '1') {
-                        alertStartRound.close();
+
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'deletebatch', 'format' => 'html')); ?>',
+                dataType: 'text',
+                data: {BatchID: BatchID},
+                success: function (data) {
+                    console.log(data)
+                    data = JSON.parse(data);
+                    alertStartRound.close();
+                    if (data.status == '1') {
+
                         $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: 'All records in batch deleted'});
                         //.$('#loader').hide();
                         window.location = '/admin/importcsv/invaliddata/';
                         console.log('deleted');
-                        //                        } else {
-                        //                            $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
-                        //                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('#loader').hide();
-                        //alert(data);
-                        alert(xhr.responseText);
-                        //alert(thrownError);
+                    } else {
+                        $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
                     }
-                });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#loader').hide();
+                    //alert(data);
+                    alert(xhr.responseText);
+                    //alert(thrownError);
+                }
+            });
 
-          
+
         } catch (Exception) {
             console.log(Exception);
         }
     }
-    
+
     function approveBatch(BatchID) {
-   
+
         $.confirm({
             title: 'Confirm Delete!',
             theme: 'supervan',
-            content: 'Are you want to approve this batch,this action can not be undone ' ,
+            content: 'Are you want to approve this batch,this action can not be undone ',
             buttons: {
                 'Evaluate': {
                     btnClass: 'btn-blue',
@@ -165,40 +168,40 @@
     }
     function approveBatchFinal(BatchID) {
         try {
-           
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'deletebatch', 'format' => 'html')); ?>',
-                    dataType: 'text',
-                    data: {BatchID: BatchID},
-                    success: function (data) {
-                        //                        console.log(data)
-                        //                        if (data === '1') {
-                        alertStartRound.close();
-                        $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: '1 Invalid Record deleted'});
-                        //.$('#loader').hide();
-                        window.location = '/admin/importcsv/invaliddata/';
-                        console.log('deleted');
-                        //                        } else {
-                        //                            $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
-                        //                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('#loader').hide();
-                        //alert(data);
-                        alert(xhr.responseText);
-                        //alert(thrownError);
-                    }
-                });
 
-          
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'updatebatch', 'format' => 'html')); ?>',
+                dataType: 'text',
+                data: {BatchID: BatchID},
+                success: function (data) {
+                    //                        console.log(data)
+                    //                        if (data === '1') {
+                    alertStartRound.close();
+                    $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: '1 Invalid Record deleted'});
+                    //.$('#loader').hide();
+                    window.location = '/admin/importcsv/invaliddata/';
+                    console.log('deleted');
+                    //                        } else {
+                    //                            $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
+                    //                        }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#loader').hide();
+                    //alert(data);
+                    alert(xhr.responseText);
+                    //alert(thrownError);
+                }
+            });
+
+
         } catch (Exception) {
             console.log(Exception);
         }
     }
-    
-    
-    
+
+
+
     $(document).ready(function () {
 
 

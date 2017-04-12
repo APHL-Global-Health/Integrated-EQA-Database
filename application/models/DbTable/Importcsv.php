@@ -23,7 +23,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 //        print_r($auth);
 //        exit;
         //echo $pname;
-        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode', 'BatchID');
+        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode', 'BatchID', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -166,16 +166,33 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ResultCode'];
             $row[] = $aRow['Grade'];
             $row[] = $aRow['FailReasonCode'];
-//            if (isset($validity)) {
-//                if ($validity == 0) {
-            $batchID = (string)$aRow['BatchID'];
-            $row[] = '<a href="#" class="btn btn-danger btn-xs" '
-                    . 'onclick="deleteRecord(' . $aRow['ImpID'] . ')" style="margin-right: 2px;"><i class="fa fa-close"></i> delete</a>';
-            $row[] = '<a href="#" class="btn btn-warning btn-xs" '
-                    . 'onclick="deleteBatch(' . $batchID . ' )"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
+            $row[] = $aRow['BatchID'];
+            $batchID = "'" . $aRow['BatchID'] . "'";
+            if (isset($validity)) {
+                if ($validity == 0) {
 
-            $row[] = '<a href="#" class="btn btn-success btn-xs" '
-                    . 'onclick="approveBatch("' . $batchID . '")" style="margin-right: 2px;"><i class="fa fa-check"></i>Approve </a>';
+                    $row[] = '<a href="#" class="btn btn-danger btn-xs" '
+                            . 'onclick="deleteRecord(' . $aRow['ImpID'] . ')" style="margin-right: 2px;"><i class="fa fa-close"></i> delete</a>';
+                    $row[] = '<a href="#" class="btn btn-warning btn-xs" '
+                            . 'onclick="deleteBatch(' . $batchID . ')"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
+                }
+            } //else {
+            if ($aRow['Status'] == 0) {
+                $row[] = '<a href="#" class="btn btn-danger btn-xs" '
+                        . 'onclick="deleteBatch(' . $batchID . ')"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
+            } else {
+                $row[] = '<x class="btn btn-danger btn-xs disabled" style="margin-right: 2px;"><i class="fa fa-check"></i>Approved</x>';
+            }
+            if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
+                if ($aRow['Status'] == 0) {
+                    $row[] = '<a href="#" class="btn btn-success btn-xs" '
+                            . 'onclick="approveBatch(' . $batchID . ')" style="margin-right: 2px;"><i class="fa fa-check"></i>Approve Batch</a>';
+                } else {
+                    $row[] = '<x class="btn btn-success btn-xs disabled" style="margin-right: 2px;"><i class="fa fa-check"></i>Approved</x>';
+                }
+            }
+
+            //}
 //               
 //                }
 //            }
@@ -254,7 +271,9 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
     public function getAllColumns() {
         $db = Zend_Db_Table::getDefaultAdapter();
         $result = $db->fetchAll(
-                "SHOW FULL COLUMNS IN rep_repository where Field NOT IN('ProviderID','RoundID','ProgramID','ImpID')"
+                "SHOW FULL COLUMNS IN rep_repository where "
+                . "Field NOT IN('ProviderID','Status','BatchID','valid','UserApproved','RoundID','ProgramID','ImpID','lastUpdatePerson')"
+                . ""
         );
         return $result;
     }

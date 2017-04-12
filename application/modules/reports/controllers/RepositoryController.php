@@ -765,30 +765,54 @@ class Reports_RepositoryController extends Zend_Controller_Action {
     public function deleteinvalidAction() {
         $data = $params = $this->_getAllParams();
 
-        $sql = "delete from rep_repository where ImpId = " . $data['id'] . "";
 
-        $query = $this->dbConnection->updateAndDelete($sql);
-        echo json_encode(array('status' => 1, 'message' => 'success'));
+        $where['ImpId'] = $data['id'];
+        $deleteStatus = $this->dbConnection->deleteFromWhere('rep_repository', $where);
+
+        if ($deleteStatus['status'] == 1) {
+            echo json_encode(array('status' => 1, 'message' => 'success'));
+        } else {
+            echo json_encode(array('status' => 0, 'message' => 'Record could not be deleted'));
+        }
+
         exit;
     }
 
     public function deletebatchAction() {
         $data = $params = $this->_getAllParams();
+        $where['BatchID'] = $data['BatchID'];
+        $deleteStatus = $this->dbConnection->deleteFromWhere('rep_repository', $where);
 
-        $sql = "delete from rep_repository where BatchID = " . $data['BatchID'] . "";
-
-        $query = $this->dbConnection->updateAndDelete($sql);
-        echo json_encode(array('status' => 1, 'message' => 'success'));
+        if ($deleteStatus['status'] == 1) {
+            echo json_encode(array('status' => 1, 'message' => 'success'));
+        } else {
+            echo json_encode(array('status' => 0, 'message' => 'Record could not be deleted'));
+        }
         exit;
     }
 
     public function updatebatchAction() {
         $data = $params = $this->_getAllParams();
+        $batchID = $data['BatchID'];
+        $whereCount['BatchID'] = $batchID;
+        $whereCount['valid'] = 0;
+        $col = 'valid';
+        $getCount = $this->dbConnection->selectCount('rep_repository', $whereCount, $col);
 
-        $sql = "update  rep_repository set status = 1 where BatchID = " . $data['BatchID'] . " and valid=1";
+//doQuery("select count(valid) as VCount from rep_repository where valid = 0 and BatchID = '" . $batchID . "'");
+        if ($getCount == 0) {
+            
+            $updateData['Status'] = 1;
+            $where['BatchID'] = $batchID;
+            $where['valid'] = 1;
+            $update = $this->dbConnection->updateTable('rep_repository', $where, $updateData);
 
-        $query = $this->dbConnection->updateAndDelete($sql);
-        echo json_encode(array('status' => 1, 'message' => 'success'));
+            echo json_encode(array('status' => 1, 'message' => 'success'));
+        } else {
+            echo json_encode(array('status' => 0, 'message' => 'The batch has invalid records,please corrent'));
+        }
+
+
         exit;
     }
 
