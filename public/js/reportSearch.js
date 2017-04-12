@@ -287,7 +287,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             }
 
 
-            var reportSubHeader = 'REPOSITORY REPORT';
+            var reportSubHeader = 'REPOSITORY MAIN REPORT';
             var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
