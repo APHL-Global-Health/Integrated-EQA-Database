@@ -53,7 +53,7 @@
                                         <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'validData'}">
-                                        <a href="#" ng-click="clickedTab = 'validData'">Valid Data</a>
+                                        <a href="#" ng-click="clickedTab = 'validData'">Validate Data</a>
                                     </li>
                                 </ul>
                             </div>
@@ -156,14 +156,14 @@
                                                 ng-change="reports.countyChange(county)"
                                                 >
                                             <option value="">--Select County--</option>
-                                            <option ng-repeat="county in reports.allCounties" value="{{county.CountyID}}">
+                                            <option ng-repeat="county in reports.allCounties" value="{{county.Description}}">
                                                 {{county.Description}}
                                             </option>
                                         </select>
                                     <?php } if ($_SESSION['loggedInDetails']['IsProvider'] == 3) { ?>
                                         County : 
                                         <b ng-repeat="county in reports.allCounties" ng-if="county.CountyID ==<?php echo $_SESSION['loggedInDetails']['County']; ?>">
-                                            <input type="text" id="county" name="county" ng-hide="true" value="<?php echo $_SESSION['loggedInDetails']['County']; ?>"/>
+                                            <input type="text" id="county" name="county" ng-hide="true" value="{{county.Description}}"/>
 
                                             {{county.Description}}
                                         </b>
@@ -195,7 +195,7 @@
 
 
                                     <input type="text" id="AnalyteID" name="AnalyteID" ng-model="reports.reportFilter.AnalyteID"
-                                           ng-if="clickedTab == 'participants' || clickedTab == 'resultcode"
+                                           ng-if="clickedTab == 'participants' || clickedTab == 'resultcode'"
                                            class="form-control input-sm" required=""
                                            style="background: #fff" placeholder="fill analyte id/name"/>
                                     
@@ -389,7 +389,7 @@
                     <div ng-include="'../partialHTMLS/repositoryReports/performanceSummary.html'">
 
                     </div>
-                </div>resultcode
+                </div>
                 <div ng-if="clickedTab == 'resultcode'">
                     <div ng-include="'../partialHTMLS/repositoryReports/resultcode.html'">
 
