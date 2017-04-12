@@ -225,7 +225,7 @@ if ($auth->hasIdentity()) {
 <?php if ($role == 1) { ?>
             <div class="jumbotron">
                 <h1>MICROBIOLOGY ADMIN MODULE</h1> 
-                  <small>Welcome Back,<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+                  <small>Welcome back, f<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
                 <p>On this module you will be able to add other Microbiology Users,create rounds,create tests and views reports.</p> 
             </div>
             <p class="lead">To add a module add click here 
@@ -240,10 +240,10 @@ if ($auth->hasIdentity()) {
         <?php if ($role == 1) { ?>
             <div class="jumbotron">
                 <h1>REPOSITORY ADMIN MODULE</h1> 
-                  <small>Welcome Back,<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+                  <small>Welcome back, <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
                 <p>On this module you will be able to add other Repository Users and views reports.</p> 
             </div>
-            <p class="lead">To add a module add click here 
+            <p class="lead hide">To add a module add click here 
                 <a class="btn btn-primary" 
                    href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'add'), 'default', true); ?>">
                     Add Repository Users </a>
@@ -252,7 +252,7 @@ if ($auth->hasIdentity()) {
             <?php if ($role == 3) { ?>
             <div class="jumbotron">
                 <h1>REPOSITORY QA MANAGER MODULE</h1> 
-                  <small>Welcome Back,<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+                  <small>Welcome back, <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
                 <p>On this module you will be able to view Repository reports.</p> 
             </div>
             <p class="lead">To add a module add click here 
@@ -264,7 +264,7 @@ if ($auth->hasIdentity()) {
               <?php if ($role == 2) { ?>
             <div class="jumbotron">
                 <h1>REPOSITORY DATA UPLOAD MODULE</h1> 
-                  <small>Welcome Back,<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+                  <small>Welcome back, <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
                 <p>On this module you will to be able to upload and view uploaded data.</p> 
             </div>
             <p class="lead">To add a upload data click here 
@@ -281,7 +281,7 @@ if ($auth->hasIdentity()) {
         <div class="jumbotron">
           
             <h1>SYSTEM ADMIN MODULE</h1> 
-              <small>Welcome Back, <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+              <small>Welcome back,  <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
             <p>On this module you will be able to add Viral Load,Microbiology and Repository Users.</p> 
         </div>
         <p class="lead">To add a module add click here 

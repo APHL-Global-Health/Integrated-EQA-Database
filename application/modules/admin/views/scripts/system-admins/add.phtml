@@ -1,7 +1,7 @@
 <div class="well">
     <form name="addSystemAdminForm" id="addSystemAdminForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "system-admins", "action" => "add"),'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
         <fieldset>
-            <legend>Add New PT Manager</legend>
+            <legend>Add New User</legend>
 
 
             <div class="form-group">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             
-            <!----   remove passwords  ---->
+            <!--   remove passwords  -->
 <!--	    <div class="form-group">
 		<label class="col-lg-3 control-label">Password <span class="mandatory">*</span></label>
 		<div class="col-lg-5">
@@ -40,8 +40,8 @@
 			    <input type="password" id="confirmPassword" name="password"  size="50" value="" class="isRequired form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
 		    </div>
 	    </div>
-            -->
-            <!---------------------confirm password--------------------------->
+-->
+            <!-- _____________ confirm password ______________ -->
             
             <div class="form-group">
                 <label class="col-lg-3 control-label">Cell/Mobile Number <span class="mandatory">*</span></label>
@@ -75,7 +75,7 @@
             <?php } ?>
             <?php if($_SESSION['loggedInDetails']['IsVl']==2){?>
             <div class="form-group submodule">
-                <label class="col-lg-3 control-label">Sub Module <span class="mandatory">*</span></label>
+                <label class="col-lg-3 control-label">User Role <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
                     <select type="text" id="IsProvider" name="IsProvider" class="isRequired form-control" title="Please select sub module here">
                         <option selected value="0">--Select--</option>
@@ -157,18 +157,18 @@
     }
     
     function cheackEmailId(){
-	primaryEmail=document.getElementById("primaryEmail").value;
-	secondaryEmail=document.getElementById("secondaryEmail").value;
-	if (secondaryEmail!="") {
-	    if (primaryEmail==secondaryEmail) {
-	    alert("Please check your primary email and secondary email");
-	    document.getElementById("secondaryEmail").value="";
-	    $( "#secondaryEmail" ).focus();
-	    duplicated = true;
-	    }else{
-		duplicated = false;
-	    }
-	}
+    	primaryEmail=document.getElementById("primaryEmail").value;
+    	secondaryEmail=document.getElementById("secondaryEmail").value;
+    	if (secondaryEmail!="") {
+    	    if (primaryEmail==secondaryEmail) {
+    	    alert("Please check your primary email and secondary email");
+    	    document.getElementById("secondaryEmail").value="";
+    	    $( "#secondaryEmail" ).focus();
+    	    duplicated = true;
+    	    }else{
+    		duplicated = false;
+    	    }
+    	}
     }
     
     
