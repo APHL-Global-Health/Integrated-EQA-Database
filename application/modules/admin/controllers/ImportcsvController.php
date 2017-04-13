@@ -191,7 +191,32 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
                 //$this->_redirect("/admin/mapcolumns");
 
                 $repColumnList = $commonService->getRepositoryColumns();
-                return $this->_helper->json->sendJson(array('excel-headers' => $headers, 'schemas-headers' => $repColumnList,'status'=>1));
+                $columnsArray = (array) $repColumnList;
+
+                $finalColArr = array();
+                for ($i = 0; $i < count($columnsArray); $i++) {
+                    $finalColArr[$i]['Field'] = $columnsArray[$i]['Field'];
+                    $finalColArr[$i]['Comment'] = $columnsArray[$i]['Comment'];
+                }
+
+//sort column array
+                function aasort(&$array, $key) {
+                    $sorter = array();
+                    $ret = array();
+                    reset($array);
+                    foreach ($array as $ii => $va) {
+                        $sorter[$ii] = $va[$key];
+                    }
+                    asort($sorter);
+                    foreach ($sorter as $ii => $va) {
+                        $ret[$ii] = $array[$ii];
+                    }
+                    $array = $ret;
+                }
+////
+                aasort($finalColArr, "Comment");
+
+                return $this->_helper->json->sendJson(array('excel-headers' => $headers, 'schemas-headers' => $finalColArr, 'status' => 1));
             } else {
                 return $this->_helper->json->sendJson(array('status' => '0', 'message' => 'please convert your file to CSV'));
             }
@@ -259,6 +284,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     public function saveAction() {
         $data = file_get_contents('php://input');
         $data = json_decode($data, true);
+
+
         $adminService = new Application_Service_Savecsv();
         $db = Zend_Db_Table::getDefaultAdapter();
 //
@@ -271,8 +298,12 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
         $mappedColumn = array();
         $mappedColumnNames = array();
+
         $excelHeaders = $this->getUploadedExcelFileHeaders();
+
         $extraInfo = end($data);
+
+
         $extraInfo['BatchID'] = $this->generateRandom(8);
         //$name=  explode($delimiter, $string);
         foreach ($data as $item) {
@@ -282,16 +313,16 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             }
         }
 
-        $newColumns = $this->getNewExcelColumns($mappedColumn, $excelHeaders);
+//        $newColumns = $this->getNewExcelColumns($mappedColumn, $excelHeaders);
+//        $newTableColumn = $adminService->saveData($newColumns, $extraInfo);
 
-        $newTableColumn =  $adminService->saveData($newColumns, $extraInfo);
+        $finalTableColumns = $mappedColumnNames;
 
-        $finalTableColumns = array_merge($mappedColumnNames, $newTableColumn);
 
 
         $excelData = $this->getUploadedExcelFileData();
 
-        $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo);
+        $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo, $mappedColumn);
         $db->query($insertStatement);
         $filedetails = new Zend_Session_Namespace('filename');
         $filedetails->filename = '';
@@ -329,7 +360,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         return $CodeEX;
     }
 
-    public function createBulkInsert($table, Array $columns, Array $records, $extraInfo) {
+    public function createBulkInsert($table, Array $columns, Array $records, $extraInfo, Array $mappedExcelColumns) {
         $query = " INSERT INTO `" . $table . "` (";
         $query .= " `ProviderID`,`ProgramID`,`RoundID`,`BatchID`,";
         for ($x = 0; $x < count($columns); $x++) {
@@ -356,7 +387,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $query .= $extraInfo['BatchID'] . "',";
 
             for ($i = 0; $i < count($columns); $i++) {
-                $query .= " '" . $records [$x][$i] . "' ";
+
+                $query .= " '" . $records [$x][$mappedExcelColumns[$i]] . "' ";
                 if (($i != count($columns) - 1)) {
                     $query .= ",";
                 }

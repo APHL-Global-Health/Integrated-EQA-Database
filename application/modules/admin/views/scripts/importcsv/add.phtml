@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                           ?></p>
+                                        <p><?php //echo $eh;                                            ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                           ?></option>
+                                            <option><?php //echo $rh['Field'];                                            ?></option>
                             <?php
                             //}
                             ?>
@@ -164,6 +164,7 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    console.log(data);
                     $("#loader").hide();
                     if (data.status == 1) {
                         $("#mapTableH").show();
@@ -178,9 +179,9 @@
                     $.alert(
                             {title: 'ERROR',
                                 content: '<i class= "fa fa-close fa-2x text-danger"></i> Server Error :\n\
-                     Please check that you have uploaded the CSV,if so reload the page' 
+                     Please check that you have uploaded the CSV,if so reload the page'
                             });
-                            console.log(xhr.responseText + " " + thrownError);
+                    console.log(xhr.responseText + " " + thrownError);
 //                    alert(xhr.responseText);
 //                    alert(thrownError);
                 }
@@ -208,10 +209,13 @@
                     tblComments[tblComments.length] = schemasHeaders[index][value];
             }
         }
+       
         //alert(tblComments);
         var tableContents = "<tbody>";
         for (var i = 0; i < excelHeaders.length; i++) {
-            tableContents += "<tr onClick='getExcelHeader(" + i + ")'><td>" + (i + 1) + "</td><td><label id='label_" + i + "'>" + excelHeaders[i] + "</label></td><td>" + mockDropDown(tblColumns, tblComments, i) + "</td></tr>";
+            tableContents += "<tr onClick='getExcelHeader(" + i + ")'><td>" +
+                    (i + 1) + "</td><td><label id='label_" + i + "'>" + excelHeaders[i] + "</label></td><td>"
+                    + mockDropDown(tblColumns, tblComments, i) + "</td></tr>";
         }
         document.getElementById('mapTable').innerHTML = tableContents + "</tbody>";
     }
@@ -286,9 +290,11 @@
                     $("#error").hide();
                     $(".selectedVal_" + key).css("border-color", "lightgray");
                 } else {
+                    
                     $("#error").show();
                     $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
                     $(".selectedVal_" + key).css("border-color", "red");
+                    
                     document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
                 }
                 //console.log(arrayWithExcelLabelValue);
@@ -331,7 +337,7 @@
                 success: function (data) {
                     alert(data);
                     //.$('#loader').hide();
-                    window.location = '/admin/importcsv/index';
+//                    window.location = '/admin/importcsv/index';
 
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -342,7 +348,7 @@
                 }
             });
         } else {
-           $("#error").show();
+            $("#error").show();
             document.getElementById('error').innerHTML = "Please select atleast 5 fields";
         }
     }
