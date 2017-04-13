@@ -196,6 +196,10 @@ if ($auth->hasIdentity()) {
                                         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">
                                             <i class="icon-download"></i>&nbsp;&nbsp;Uploaded Files</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository','action'=>'validate'), 'default', true); ?>">
+                                            <i class="fa fa-check"></i>&nbsp;&nbsp;Validate Data</a>
+                                    </li>
                                             <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
                                 </ul>
                             </li>

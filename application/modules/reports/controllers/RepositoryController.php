@@ -22,6 +22,18 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $this->dbConnection = new Main();
     }
 
+    public function validateAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            $reportService = new Application_Service_Reports();
+            $response = $reportService->getParticipantDetailedReport($params);
+            $this->view->response = $response;
+            $this->view->type = $params['reportType'];
+        }
+        $provider = new Application_Service_Providers();
+        $this->view->providers = $provider->getProviders();
+    }
+
     public function indexAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
@@ -183,11 +195,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
         $innerWhere = str_replace('where', ' and ', $query);
-        $select = "select rep_repository.MflCode as LID,RoundID as RoundID,SampleCode,ReleaseDate,County,
-            (select count(grade) from rep_repository where grade='acceptable' and rep_repository.MflCode=LID  and RoundID=RoundID $innerWhere) as acceptable,
-                (select count(grade) from rep_repository where grade='not acceptable' and rep_repository.MflCode=LID and RoundID=RoundID $innerWhere) as unacceptable
-                 from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  $query ";
+        $select = "select rep_repository.MflCode as LID,Name,RoundID as RoundID,SampleCode,ReleaseDate,County,count(if(grade='acceptable',1,null))
+            as acceptable,
+            count(if(grade='not acceptable',1,null))  as unacceptable 
+            from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  $query ";
         $select .= " GROUP BY rep_repository.MflCode,RoundID order by LID asc ";
+//        echo $select;
+//        exit;
         $jsonData = $this->dbConnection->doQuery($select); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
@@ -590,7 +604,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select LabID "
+        $query = "select mfl_facility_codes.MflCode,County "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
@@ -614,7 +628,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
 
-        $query .= " GROUP BY LabID order by LabID";
+        $query .= " GROUP BY mfl_facility_codes.MflCode order by mfl_facility_codes.MflCode";
 
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
@@ -752,6 +766,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query .= " and rep_repository.valid ='1' and Status = '1' ";
 
         $query .= $this->returnUserCountStatement($whereArray['county']);
+
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;

@@ -29,7 +29,7 @@
 
             <div ng-controller="ReportController">
                 <div class="">
-                    <ul class="nav nav-tabs" ng-init="clickedTab = 'validateData'">
+                    <ul class="nav nav-tabs" ng-init="clickedTab = 'reports'">
 
                         <li class="pull-left">
                             <div class="dropdown">
@@ -37,26 +37,24 @@
                                     <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
 
-                                    <li ng-class="{'active' : clickedTab == 'validateData'}">
-                                        <a href="#" ng-click="clickedTab = 'validateData'">Validate Data</a>
-                                    </li>
 
-                                    <li ng-class="{'active' : clickedTab == 'participants'}">
-                                        <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
-                                    </li>
-                                    <li ng-class="{'active' : clickedTab == 'resultcode'}">
-                                        <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
-                                    </li>
+
+                                    <!--                                    <li ng-class="{'active' : clickedTab == 'participants'}">
+                                                                            <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
+                                                                        </li>
+                                                                        <li ng-class="{'active' : clickedTab == 'resultcode'}">
+                                                                            <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
+                                                                        </li>-->
                                     <li ng-class="{'active' : clickedTab == 'reports'}">
 
                                         <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
                                     </li>
-                                    <li ng-class="{'active' : clickedTab == 'graphs'}">
-                                        <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
-                                    </li>
-
                                     <li ng-class="{'active' : clickedTab == 'summary'}">
                                         <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
+                                    </li>
+
+                                    <li ng-class="{'active' : clickedTab == 'graphs'}">
+                                        <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
                                     </li>
 
                                 </ul>

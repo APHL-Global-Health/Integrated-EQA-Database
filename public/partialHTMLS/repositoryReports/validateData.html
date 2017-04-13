@@ -1,12 +1,6 @@
 <div  ng-init="reports.stringSearch = {}">
 
-    <legend>
-        <h3>Validate User Uploaded Data
-            <small class="text-gray">{{reports.validationData.length}} Records</small>
-        </h3>
-    </legend>
-
-    <br>
+ 
     <div>
 
 
@@ -107,7 +101,7 @@
                     </td>
                     <td>
                         <button class="btn btn-success btn-xs" 
-                                ng-click="reports.qaApproveUserData(record.BatchID)" ng-disabled="record.AdminApproved == 1">
+                                ng-click="reports.qaApproveUserData(record.BatchID)" ng-hide="true">
                             Approve
                         </button>
                         <button class="btn btn-danger btn-xs" 
