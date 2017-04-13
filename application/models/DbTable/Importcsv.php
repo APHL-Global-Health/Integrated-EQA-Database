@@ -272,7 +272,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table::getDefaultAdapter();
         $result = $db->fetchAll(
                 "SHOW FULL COLUMNS IN rep_repository where "
-                . "Field NOT IN('ProviderID','Status','BatchID','valid','UserApproved','RoundID','ProgramID','ImpID','lastUpdatePerson')"
+                . "Field NOT IN('ProviderID','Status','BatchID','valid','UserApproved','RoundID','ProgramID','ImpID','lastUpdatePerson','AdminApproved')"
                 . ""
         );
         return $result;

@@ -134,63 +134,68 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $extensionArray = explode('.', $names);
             $lastElement = count($extensionArray) - 1;
             $sxt = $extensionArray[$lastElement];
-            $newname = $provider . '-' . $program . '.' . $sxt;
+            if ($sxt == 'csv') {
+                $newname = $provider . '-' . $program . '.' . $sxt;
 
-            $adapter->addFilter('rename', $newname);
-            $adapter->setDestination('../public/files');
-            foreach ($files as $file => $info) {
-                // file uploaded ?
-                if (!$adapter->isUploaded($file)) {
-                    print "Why havn't you uploaded the file ?";
-                    continue;
+                $adapter->addFilter('rename', $newname);
+                $adapter->setDestination('../public/files');
+                foreach ($files as $file => $info) {
+                    // file uploaded ?
+                    if (!$adapter->isUploaded($file)) {
+                        print "Why havn't you uploaded the file ?";
+                        continue;
+                    }
+                    // validators are ok ?
+                    if (!$adapter->isValid($file)) {
+                        print "Sorry but $file is not what we wanted";
+                        continue;
+                    }
                 }
-                // validators are ok ?
-                if (!$adapter->isValid($file)) {
-                    print "Sorry but $file is not what we wanted";
-                    continue;
+                $adapter->receive();
+                if (!$adapter->receive()) {
+                    $messages = $adapter->getMessages();
+                    echo implode("\n", $messages);
                 }
-            }
-            $adapter->receive();
-            if (!$adapter->receive()) {
-                $messages = $adapter->getMessages();
-                echo implode("\n", $messages);
-            }
 
-            $file_handle = NULL;
-            $data = NULL;
-            $keys = NULL;
-            $record = NULL;
-            //Get the filename
-            $filename = '../public/files/' . $newname;
-            $filedetails = new Zend_Session_Namespace('filename');
-            $filedetails->filename = $filename;
-            if (file_exists($filename)) {
-                $file_handle = fopen($filename, "r");
+                $file_handle = NULL;
+                $data = NULL;
+                $keys = NULL;
+                $record = NULL;
+                //Get the filename
+                $filename = '../public/files/' . $newname;
+                $filedetails = new Zend_Session_Namespace('filename');
+                $filedetails->filename = $filename;
+                if (file_exists($filename)) {
+                    $file_handle = fopen($filename, "r");
+                } else {
+                    throw new Exception("File not found: " . $filename, null);
+                }
+                $row = 0;
+                //$headers = [];
+                if ($file_handle) {
+                    while (($data = fgetcsv($file_handle, 1024, ",")) !== FALSE) {
+                        $num = count($data);
+                        for ($c = 0; $c < $num; $c++) {
+                            $params = explode(",", $data[$c]);
+                        }
+                        if ($row == 0) {
+                            $headers = $data;
+                        }
+                        $row++;
+
+                        //$adminService->addData($data,$provider,$program,$period);
+                    }
+
+                    fclose($file_handle);
+                }
+                //$this->_redirect("/admin/mapcolumns");
+
+                $repColumnList = $commonService->getRepositoryColumns();
+                return $this->_helper->json->sendJson(array('excel-headers' => $headers, 'schemas-headers' => $repColumnList,'status'=>1));
             } else {
-                throw new Exception("File not found: " . $filename, null);
+                return $this->_helper->json->sendJson(array('status' => '0', 'message' => 'please convert your file to CSV'));
             }
-            $row = 0;
-            //$headers = [];
-            if ($file_handle) {
-                while (($data = fgetcsv($file_handle, 1024, ",")) !== FALSE) {
-                    $num = count($data);
-                    for ($c = 0; $c < $num; $c++) {
-                        $params = explode(",", $data[$c]);
-                    }
-                    if ($row == 0) {
-                        $headers = $data;
-                    }
-                    $row++;
-
-                    //$adminService->addData($data,$provider,$program,$period);
-                }
-
-                fclose($file_handle);
-            }
-            //$this->_redirect("/admin/mapcolumns");
         }
-        $repColumnList = $commonService->getRepositoryColumns();
-        return $this->_helper->json->sendJson(array('excel-headers' => $headers, 'schemas-headers' => $repColumnList));
         //return $this->_helper->json->sendJson($headers);
     }
 
@@ -279,7 +284,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
         $newColumns = $this->getNewExcelColumns($mappedColumn, $excelHeaders);
 
-        $newTableColumn = $adminService->saveData($newColumns, $extraInfo);
+        $newTableColumn =  $adminService->saveData($newColumns, $extraInfo);
 
         $finalTableColumns = array_merge($mappedColumnNames, $newTableColumn);
 
