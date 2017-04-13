@@ -725,6 +725,41 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit;
     }
 
+    public function getvalidationdataAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+        if (isset($whereArray['dateRange'])) {
+            $whereArray['dateFrom'] = $this->convertdate(substr($whereArray['dateRange'], 0, 11));
+            $whereArray['dateTo'] = $this->convertdate(substr($whereArray['dateRange'], 13));
+        }
+
+
+        $query = "select * "
+                . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
+        if (isset($whereArray['dateFrom'])) {
+            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+        }
+        if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
+            $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
+        }
+        if (isset($whereArray['ProviderId']) && !empty($whereArray['ProviderId'])) {
+            $query .= " and ProviderId ='" . $whereArray['ProviderId'] . "'";
+        }
+        if (isset($whereArray['MflCode']) && !empty($whereArray['MflCode'])) {
+            $query .= " and rep_repository.MflCode ='" . $whereArray['MflCode'] . "'";
+        }
+
+        $query .= " and rep_repository.valid ='1' and Status = '1' ";
+
+        $query .= $this->returnUserCountStatement($whereArray['county']);
+        $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
+        $_SESSION['currentRepoData'] = $jsonData;
+        $_SESSION['filterData'] = $whereArray;
+        echo json_encode($jsonData);
+
+        exit;
+    }
+
     public function generatecsvAction() {
         $data = $_SESSION['currentRepoData'];
 
@@ -820,6 +855,20 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
+        exit;
+    }
+
+    public function qaapprovevalidationdataAction() {
+        $whereArray = file_get_contents("php://input");
+        $whereArray = (array) json_decode($whereArray);
+
+        $updateData['AdminApproved'] = 1;
+        $where['BatchID'] = $whereArray['BatchID'];
+        $where['valid'] = 1;
+        $where['Status'] = 1;
+        $update = $this->dbConnection->updateTable('rep_repository', $where, $updateData);
+
+        echo json_encode(array('status' => 1, 'message' => 'success'));
         exit;
     }
 

@@ -391,7 +391,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.reports.participantionResultCode = {};
 
-  $scope.reports.getParticipantionResultCode = function () {
+    $scope.reports.getParticipantionResultCode = function () {
         $scope.reports.reportShowTable = false;
         var searchColumns = {};
 
@@ -403,7 +403,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         $scope.reports.searchFilters = searchColumns;
         searchColumns.AnalyteID = $scope.reports.reportFilter.AnalyteID;
         $scope.reports.countyChange(searchColumns.county);
-        
+
 //        console.log(searchColumns);
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
@@ -441,6 +441,113 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
     }
 
+
+    $scope.reports.validationData = {};
+
+    $scope.reports.getValidationData = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+        searchColumns.MflCode = $scope.reports.reportFilter.MflCode;
+        $scope.reports.countyChange(searchColumns.county);
+
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getvalidationdata';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.validationData = data;
+                        } else {
+                            $scope.reports.validationData = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
+    $scope.reports.qaApproveUserData = function (BID) {
+        var BatchID = {BatchID: BID}
+        var alertStartRound = {};
+        $.confirm({
+            title: 'Confirm Delete!',
+            theme: 'supervan',
+            content: 'Are you want to approve this batch,this action can not be undone ',
+            buttons: {
+                'Evaluate': {
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                        alertStartRound = $.alert({title: 'Progess', content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Approving batch,please wait...!'});
+                        qaAproveBatchFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+        function qaAproveBatchFinal(BatchID) {
+            var url = serverURL + 'qaapprovevalidationdata';
+            $http
+                    .post(url, BatchID)
+                    .success(function (data) {
+                        
+                        console.log(data);
+                        alertStartRound.close();
+                        if (data.status == 1) {
+                            $scope.reports.getValidationData();
+                            EptServices.EptServiceObject.returnActionSuccessAlert();
+                            
+                        } else {
+                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        console.log(error);
+                        alertStartRound.close();
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        }
+
+    }
 
 
     $scope.reports.getLabPerformance = function () {

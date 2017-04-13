@@ -1,1 +1,8 @@
-{"elements":{},"attributes":{"dir-paginate":{}}}
+{
+    "elements": {
+        "dir-pagination-controls": {}
+    },
+    "attributes": {
+        "dir-paginate": {}
+    }
+}

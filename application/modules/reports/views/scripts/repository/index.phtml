@@ -36,25 +36,29 @@
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reports & Graphs
                                     <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    
-                                    <li ng-class="{'active' : clickedTab == 'reports'}">
-                                        <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
+
+                                    <li ng-class="{'active' : clickedTab == 'validateData'}">
+                                        <a href="#" ng-click="clickedTab = 'validateData'">Validate Data</a>
                                     </li>
-                                    <li ng-class="{'active' : clickedTab == 'graphs'}">
-                                        <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
-                                    </li>
+
                                     <li ng-class="{'active' : clickedTab == 'participants'}">
                                         <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'resultcode'}">
                                         <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
                                     </li>
+                                    <li ng-class="{'active' : clickedTab == 'reports'}">
+
+                                        <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
+                                    </li>
+                                    <li ng-class="{'active' : clickedTab == 'graphs'}">
+                                        <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
+                                    </li>
+
                                     <li ng-class="{'active' : clickedTab == 'summary'}">
                                         <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
                                     </li>
-                                    <li ng-class="{'active' : clickedTab == 'validData'}">
-                                        <a href="#" ng-click="clickedTab = 'validData'">Validate Data</a>
-                                    </li>
+
                                 </ul>
                             </div>
                         </li>
@@ -198,16 +202,21 @@
                                            ng-if="clickedTab == 'participants' || clickedTab == 'resultcode'"
                                            class="form-control input-sm" required=""
                                            style="background: #fff" placeholder="fill analyte id/name"/>
-                                    
+
 
                                     <input type="text" id="sample" name="sample" ng-model="reports.reportFilter.sample"
                                            ng-if="clickedTab == 'summary'"
                                            class="form-control input-sm" 
                                            style="background: #fff" placeholder="sample code/sample name"/>
+                                    <input type="text" id="MflCode" name="MflCode" ng-model="reports.reportFilter.MflCode"
+                                           ng-if="clickedTab == 'validateData'"
+                                           class="form-control input-sm" 
+                                           style="background: #fff" placeholder="MFL Code"/>
 
 
-                                    <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'reports'
-                                                || clickedTab == 'participants' || clickedTab == 'summary' || clickedTab == 'resultcode'"
+                                    <select id="program" ng-init="reports.getPrograms()" 
+                                            ng-if="clickedTab == 'reports' || clickedTab == 'validateData'
+                                                        || clickedTab == 'participants' || clickedTab == 'summary' || clickedTab == 'resultcode'"
                                             name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
                                         <option value=""> -- Select Program --</option>
                                         <!--                <option value="network">Network Tier</option>
@@ -233,7 +242,13 @@
                                     <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
                                             ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
                                     </button>
+                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
+                                            ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
+                                    </button>
 
+                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'validateData'"  ng-disabled="search.$invalid"
+                                            ng-click="reports.getValidationData()"><span>Get Data</span>
+                                    </button>
 
                                     <button class="btn btn-success btn-sm"  ng-disabled="search.$invalid"
                                             ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"
@@ -395,6 +410,12 @@
 
                     </div>
                 </div>
+                <div ng-if="clickedTab == 'validateData'">
+                    <div ng-include="'../partialHTMLS/repositoryReports/validateData.html'">
+
+                    </div>
+                </div>
+
                 <div ng-show="clickedTab == 'graphs'">
                     <legend>
                         <h3 class="text-capitalize">{{reports.reportType}} {{reports.searchedReport}}
