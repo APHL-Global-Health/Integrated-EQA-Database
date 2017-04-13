@@ -862,9 +862,14 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $whereArray = file_get_contents("php://input");
         $whereArray = (array) json_decode($whereArray);
 
-        $updateData['AdminApproved'] = 1;
+        if (isset($whereArray['Status'])) {
+            $updateData['Status'] = $whereArray['Status'];
+        } else {
+            $updateData['AdminApproved'] = 1;
+        }
         $where['BatchID'] = $whereArray['BatchID'];
         $where['valid'] = 1;
+
         $where['Status'] = 1;
         $update = $this->dbConnection->updateTable('rep_repository', $where, $updateData);
 

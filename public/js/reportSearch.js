@@ -525,13 +525,13 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $http
                     .post(url, BatchID)
                     .success(function (data) {
-                        
+
                         console.log(data);
                         alertStartRound.close();
                         if (data.status == 1) {
                             $scope.reports.getValidationData();
                             EptServices.EptServiceObject.returnActionSuccessAlert();
-                            
+
                         } else {
                             EptServices.EptServiceObject.returnActionUnSuccessAlert();
                         }
@@ -548,7 +548,63 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
 
     }
+    $scope.reports.qaRevokeUserData = function (BID) {
+        var BatchID = {BatchID: BID}
+        var alertStartRound = {};
+        $.confirm({
+            title: 'Confirm Delete!',
+            theme: 'supervan',
+            content: 'Are you want to revoke records in this batch,this action can not be undone ',
+            buttons: {
+                'Evaluate': {
+                    btnClass: 'btn-blue',
+                    action: function () {
 
+                        alertStartRound = $.alert(
+                                {
+                                    title: 'Progess',
+                                    content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Revoking batch,please wait...!'
+                                });
+                        qaRevokeUserDataFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+        function qaRevokeUserDataFinal(BatchID) {
+            BatchID.Status = 0;
+            var url = serverURL + 'qaapprovevalidationdata';
+            $http
+                    .post(url, BatchID)
+                    .success(function (data) {
+
+                        console.log(data);
+                        alertStartRound.close();
+                        if (data.status == 1) {
+                            $scope.reports.getValidationData();
+                            EptServices.EptServiceObject.returnActionSuccessAlert();
+
+                        } else {
+                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        console.log(error);
+                        alertStartRound.close();
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        }
+    }
 
     $scope.reports.getLabPerformance = function () {
         $scope.reports.reportShowTable = false;

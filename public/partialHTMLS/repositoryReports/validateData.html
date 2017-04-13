@@ -110,6 +110,10 @@
                                 ng-click="reports.qaApproveUserData(record.BatchID)" ng-disabled="record.AdminApproved == 1">
                             Approve
                         </button>
+                        <button class="btn btn-danger btn-xs" 
+                                ng-click="reports.qaRevokeUserData(record.BatchID)" ng-disabled="record.AdminApproved == 1">
+                            Revoke
+                        </button>
                     </td>
 
                 </tr>
