@@ -213,6 +213,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
                     }
                     $array = $ret;
                 }
+
 ////
                 aasort($finalColArr, "Comment");
 
@@ -285,50 +286,57 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         $data = file_get_contents('php://input');
         $data = json_decode($data, true);
 
+        if (count($data) > 1) {
 
-        $adminService = new Application_Service_Savecsv();
-        $db = Zend_Db_Table::getDefaultAdapter();
+            $adminService = new Application_Service_Savecsv();
+            $db = Zend_Db_Table::getDefaultAdapter();
 //
 //        $program = $this->getRequest()->getPost('ProgramID');
 //        $provider = $this->getRequest()->getPost('ProviderID');
 //        $period = $this->getRequest()->getPost('RoundID');
 //        $excelmapping = $this->getRequest()->getPost('excelMapping');
 //        $filetoupload = $this->getRequest()->getPost('fileToUpload');
-        //$filename = strrpos($filetoupload, DIRECTORY_SEPARATOR);
+            //$filename = strrpos($filetoupload, DIRECTORY_SEPARATOR);
 
-        $mappedColumn = array();
-        $mappedColumnNames = array();
+            $mappedColumn = array();
+            $mappedColumnNames = array();
 
-        $excelHeaders = $this->getUploadedExcelFileHeaders();
+            $excelHeaders = $this->getUploadedExcelFileHeaders();
 
-        $extraInfo = end($data);
+            $extraInfo = end($data);
 
 
-        $extraInfo['BatchID'] = $this->generateRandom(8);
-        //$name=  explode($delimiter, $string);
-        foreach ($data as $item) {
-            if (isset($item['value'])) {
-                $mappedColumn[count($mappedColumn)] = $item['key'];
-                $mappedColumnNames[count($mappedColumnNames)] = $item['value'];
+            $extraInfo['BatchID'] = $this->generateRandom(10);
+            //$name=  explode($delimiter, $string);
+            foreach ($data as $item) {
+                if (isset($item['value'])) {
+                    $mappedColumn[count($mappedColumn)] = $item['key'];
+                    $mappedColumnNames[count($mappedColumnNames)] = $item['value'];
+                }
             }
-        }
 
 //        $newColumns = $this->getNewExcelColumns($mappedColumn, $excelHeaders);
 //        $newTableColumn = $adminService->saveData($newColumns, $extraInfo);
 
-        $finalTableColumns = $mappedColumnNames;
+            $finalTableColumns = $mappedColumnNames;
 
 
 
-        $excelData = $this->getUploadedExcelFileData();
+            $excelData = $this->getUploadedExcelFileData();
 
-        $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo, $mappedColumn);
-        $db->query($insertStatement);
-        $filedetails = new Zend_Session_Namespace('filename');
-        $filedetails->filename = '';
-        $this->view->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-        return "yes";
+            $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo, $mappedColumn);
+            $db->query($insertStatement);
+            $filedetails = new Zend_Session_Namespace('filename');
+            $filedetails->filename = '';
+            $this->view->layout()->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+            return "yes";
+        } else {
+            echo json_encode(array('status' => '0'));
+            return '0';
+         
+        }
+           exit;
     }
 
     public function generateRandom($len) {

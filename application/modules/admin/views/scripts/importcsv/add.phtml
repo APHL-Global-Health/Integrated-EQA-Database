@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                                           ?></p>
+                                        <p><?php //echo $eh;                                                              ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                                           ?></option>
+                                            <option><?php //echo $rh['Field'];                                                              ?></option>
                             <?php
                             //}
                             ?>
@@ -93,8 +93,12 @@
             </div>
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Next Step" id="submitValues"
-                       onclick="postSelectedKeysAndValue()"
+
                        id="btnnext"/>
+
+                <button name="submitbtn" style="display: none" class="btn btn-success" tabindex="7" value="Next Step" id="showUploadData"
+                        onclick="postSelectedKeysAndValue()"
+                        id="btnnext">Import Data</button>
                 <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/importcsv';"
                        tabindex="8" value="Cancel"/>
             </div>
@@ -150,6 +154,8 @@
             period = $("#RoundID").val();
             files = $("#fileToUpload").val();
             $("#loader").show();
+
+
             model = {
                 "ProviderID": provider,
                 "ProgramID": program,
@@ -165,6 +171,10 @@
                 contentType: false,
                 success: function (data) {
                     console.log(data);
+
+                    $("#showUploadData").show();
+                    $("#submitValues").hide();
+
                     $("#loader").hide();
                     if (data.status == 1) {
                         $("#mapTableH").show();
@@ -268,7 +278,7 @@
                                 arrayWithExcelLabelValue[j]['value'] = value;
                                 clickedLabel[i] = value;
                                 changed = true;
-                                indexPos = j;
+
 
                             } else {
                                 usedPosition = clickedLabel[i];
@@ -288,9 +298,9 @@
 
                 }
                 if (indexPos >= 0) {
-//                    clickedLabel.splice(indexPos, 1);
-//                    arrayWithExcelLabelValue.splice(indexPos, 1);
-                    //console.log(indexPos)
+                    clickedLabel.splice(indexPos, 1);
+                    arrayWithExcelLabelValue.splice(indexPos, 1);
+                    console.log(indexPos)
                 }
 
                 if (!exists) {
@@ -359,12 +369,13 @@
                 dataType: 'text',
                 data: convertArrayToString(arrayWithExcelLabelValue, model),
                 success: function (data) {
-//                    alert(data);
+//                    $("#showUploadData").hide();
+//                    $("#submitValues").show();
 
                     $.alert(
                             {
                                 title: 'Success',
-                                content: '<i class= "fa fa-close fa-2x text-success"></i> Data Upload Successfully'
+                                content: '<i class= "fa fa-check fa-2x text-success"></i> Data Upload Successfully'
                             }
                     );
                     //.$('#loader').hide();
@@ -385,8 +396,8 @@
                 }
             });
         } else {
-            $("#error").show();
-            document.getElementById('error').innerHTML = "Please select atleast 5 fields";
+//            $("#error").show();
+//            document.getElementById('error').innerHTML = "Please select atleast 5 fields";
         }
     }
     function convertArrayToString(arrayWithExcelLabelValue, model) {
