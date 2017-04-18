@@ -2027,21 +2027,36 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateTime_valid_rep` BEFORE INSERT ON `rep_repository` FOR EACH ROW 
-BEGIN
-
-declare mflcount int default 0;
-select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
-
-if mflcount=0 then
-  set new.valid=0 ;
-end if;
-
-
-if ( isnull(new.ReleaseDate) ) then
- set new.ReleaseDate=curdate();
-end if;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateTime_valid_rep` BEFORE INSERT ON `rep_repository` FOR EACH ROW 
+
+BEGIN
+
+
+
+declare mflcount int default 0;
+
+select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
+
+
+
+if mflcount=0 then
+
+  set new.valid=0 ;
+
+end if;
+
+
+
+
+
+if ( isnull(new.ReleaseDate) ) then
+
+ set new.ReleaseDate=curdate();
+
+end if;
+
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2488,7 +2503,7 @@ CREATE TABLE `system_admin` (
   `updated_by` varchar(255) DEFAULT NULL,
   `IsVl` int(11) DEFAULT NULL,
   `IsProvider` varchar(11) DEFAULT '0',
-  `ProviderName` varchar(100) NOT NULL,
+  `ProviderName` varchar(100) DEFAULT NULL,
   `AssignModule` int(11) DEFAULT '0',
   `County` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
@@ -2502,7 +2517,8 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (2,'system','admin','admin@gmail.com','admin','','0727547388',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(14,'VIRAL','load','viralload@gmail.com','viralload@17','viralload@yahoo.com','0711560619',1,'active','2017-04-05 11:59:01','2','2017-04-05 14:24:26','14',1,NULL,'',0,NULL),(15,'viralload','two','viraltwo@gmail.com','viralload@17','','0712560619',1,'active','2017-04-05 12:07:18','14',NULL,NULL,1,NULL,'',0,NULL),(17,'repo','sitory','repository@gmail.com','repository@17','','0712560619',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30'),(18,'QA','Manager','qamanager@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0714560619',0,'active','2017-04-05 12:41:12','17','2017-04-11 20:20:17','18',2,'3','',0,'3'),(19,'repo','provider','repoprovider@gmail.com','repoprovider@17','','0716560619',1,'active','2017-04-05 12:52:33','17',NULL,NULL,2,'2','',0,NULL),(20,'aq','county','qacounty@gmail.com','qacounty@17','','0717560619',1,'active','2017-04-05 14:06:26','17','2017-04-05 18:44:47','17',2,'3','',0,'1'),(21,'test','test','test@gmail.com','test@2017','test@gmail.com','0711560619',0,'active','2017-04-06 08:41:45','17',NULL,NULL,2,'1','Amref Provider',0,NULL),(22,'micro','biology','osoromic@gmail.com','micro@17',NULL,NULL,NULL,'active',NULL,NULL,NULL,NULL,3,'1','',0,'1'),(23,'test','osoro','osoro@gmail.com','cd7b4dce1adf04edb3215d4b5f1a855e','','0711560619',1,'active','2017-04-11 11:49:31','17',NULL,NULL,2,'1','',0,'30'),(26,'osoro','michael','osoromichael2@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0711560619',0,'active','2017-04-11 17:21:12','17','2017-04-12 21:13:38','26',2,'1','',0,'30'),(30,'osoro','osoro','osoromichael@gmail.com','12851b46550ab31a3f14e268499f899b','osoromichael@gmail.com','0711560619',1,'active','2017-04-18 12:01:20','26',NULL,NULL,2,'2','Micro Provider',0,NULL);
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org','system@17','','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','mapesa@gmail.com','repository@17','','0788492586',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30');
+
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2689,10 +2705,14 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `tbl_bac_update_samples_after_insert` AFTER INSERT ON `tbl_bac_expected_results` FOR EACH ROW BEGIN
-
-update tbl_bac_samples set expectedResults=1 where id=new.sampleId;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `tbl_bac_update_samples_after_insert` AFTER INSERT ON `tbl_bac_expected_results` FOR EACH ROW BEGIN
+
+
+
+update tbl_bac_samples set expectedResults=1 where id=new.sampleId;
+
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
