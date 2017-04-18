@@ -537,8 +537,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select LabID ,ResultCode"
-                . "from rep_repository  ";
+        $query = "select rep_repository.MflCode,Name,County,Constituency ,ResultCode,count(ResultCode) as Count "
+                . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
@@ -551,45 +551,25 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['AnalyteID']) && !empty($whereArray['AnalyteID'])) {
             $query .= " and AnalyteID ='" . $whereArray['AnalyteID'] . "'";
         }
+         if (isset($whereArray['ResultCode']) && !empty($whereArray['ResultCode'])) {
+            $query .= " and ResultCode ='" . $whereArray['ResultCode'] . "'";
+        }
 //        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
 
         $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
 //        }
-//        echo $query;
-//        exit;
+       
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
 
-        $query .= " GROUP BY LabID,ResultCode order by LabID";
-
+        $query .= " GROUP BY rep_repository.MflCode,ResultCode order by Name ";
+// echo $query;
+//        exit;
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
-        if (count($jsonData) > 0) {
-            foreach ($jsonData as $key => $value) {
-
-                $where['LabName'] = $value['LabID'];
-                $selectLabDetails = $this->returnValueWhere($where, 'rep_labs');
-//                var_dump($selectLabDetails);
-                $jsonData[$key]['address'] = isset($selectLabDetails['Address']) ? $selectLabDetails['Address'] : '';
-                $jsonData[$key]['contactName'] = isset($selectLabDetails['ContactName']) ? $selectLabDetails['ContactName'] : '';
-                $jsonData[$key]['telephone'] = isset($selectLabDetails['Telephone']) ? $selectLabDetails['Telephone'] : '';
-                $jsonData[$key]['contactEmail'] = isset($selectLabDetails['contactEmail']) ? $selectLabDetails['contactEmail'] : '';
-
-                $where['LabName'] = $jsonData[$key]['LabID'];
-
-                $labDetails = $this->returnValueWhere($where, 'rep_labs');
-
-                $whereCounty['CountyID'] = isset($labDetails['County']) ? $labDetails['County'] : '';
-
-                $countyDetails = $this->returnValueWhere($whereCounty, 'rep_counties');
-
-//                $jsonData[$i]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
-
-                $jsonData[$key]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "Not Defined";
-            }
-        }
+       
         echo json_encode($jsonData);
 
         exit;
@@ -604,7 +584,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select mfl_facility_codes.MflCode,County "
+        $query = "select mfl_facility_codes.MflCode,Name,Constituency,County,Approved,AnalyteID "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
@@ -633,30 +613,6 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
-        if (count($jsonData) > 0) {
-            foreach ($jsonData as $key => $value) {
-
-                $where['LabName'] = $value['LabID'];
-                $selectLabDetails = $this->returnValueWhere($where, 'rep_labs');
-//                var_dump($selectLabDetails);
-                $jsonData[$key]['address'] = isset($selectLabDetails['Address']) ? $selectLabDetails['Address'] : '';
-                $jsonData[$key]['contactName'] = isset($selectLabDetails['ContactName']) ? $selectLabDetails['ContactName'] : '';
-                $jsonData[$key]['telephone'] = isset($selectLabDetails['Telephone']) ? $selectLabDetails['Telephone'] : '';
-                $jsonData[$key]['contactEmail'] = isset($selectLabDetails['contactEmail']) ? $selectLabDetails['contactEmail'] : '';
-
-                $where['LabName'] = $jsonData[$key]['LabID'];
-
-                $labDetails = $this->returnValueWhere($where, 'rep_labs');
-
-                $whereCounty['CountyID'] = isset($labDetails['County']) ? $labDetails['County'] : '';
-
-                $countyDetails = $this->returnValueWhere($whereCounty, 'rep_counties');
-
-//                $jsonData[$i]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "NOT SET";
-
-                $jsonData[$key]['county'] = isset($countyDetails['Description']) ? $countyDetails['Description'] : "Not Defined";
-            }
-        }
         echo json_encode($jsonData);
 
         exit;
@@ -908,7 +864,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 }
             }
         }
-//        $query .= $sql;
+       $sql .= " and rep_repository.Status ='1'";
         return $sql;
     }
 

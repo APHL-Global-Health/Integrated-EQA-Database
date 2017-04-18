@@ -39,15 +39,16 @@
 
 
 
-                                    <!--                                    <li ng-class="{'active' : clickedTab == 'participants'}">
-                                                                            <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
-                                                                        </li>
-                                                                        <li ng-class="{'active' : clickedTab == 'resultcode'}">
-                                                                            <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
-                                                                        </li>-->
+
                                     <li ng-class="{'active' : clickedTab == 'reports'}">
 
                                         <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
+                                    </li>
+                                    <li ng-class="{'active' : clickedTab == 'participants'}">
+                                        <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
+                                    </li>
+                                    <li ng-class="{'active' : clickedTab == 'resultcode'}">
+                                        <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
                                     </li>
                                     <li ng-class="{'active' : clickedTab == 'summary'}">
                                         <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
@@ -89,6 +90,23 @@
                             <div class="btn btn-info btn-sm" ng-show="clickedTab == 'reports'" ng-click="reports.exportToExcelFile()">
                                 <i class="fa fa-excel"></i> CSV
                             </div>
+                            
+                            
+                            <div class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"
+                                 ng-click="reports.generateParticipationRCPdf(reports.participantionResultCode)">
+                                <i class="fa fa-file-pdf-o"></i> PDF
+                            </div>
+
+
+                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'resultcode'" 
+                                 ng-click="reports.generateParticipantRCExcel(reports.participantionResultCode)">
+                                <i class="fa fa-excel"></i> CSV
+                            </div>
+                            
+                            
+                            
+                            
+                            
 
                             <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'summary'" ng-click="reports.generateSummaryExcel(reports.performanceLabs)">
                                 <i class="fa fa-excel"></i> Excel
@@ -198,9 +216,12 @@
 
                                     <input type="text" id="AnalyteID" name="AnalyteID" ng-model="reports.reportFilter.AnalyteID"
                                            ng-if="clickedTab == 'participants' || clickedTab == 'resultcode'"
-                                           class="form-control input-sm" required=""
+                                           class="form-control input-sm"
                                            style="background: #fff" placeholder="fill analyte id/name"/>
-
+                                    <input type="text" id="AnalyteID" name="ResultCode" ng-model="reports.reportFilter.ResultCode"
+                                           ng-if="clickedTab == 'resultcode'"
+                                           class="form-control input-sm"
+                                           style="background: #fff" placeholder="fill Result Code"/>
 
                                     <input type="text" id="sample" name="sample" ng-model="reports.reportFilter.sample"
                                            ng-if="clickedTab == 'summary'"
@@ -240,9 +261,9 @@
                                     <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
                                             ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
                                     </button>
-                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
-                                    </button>
+                                    <!--                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
+                                                                                ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
+                                                                        </button>-->
 
                                     <button class="btn btn-info btn-sm" ng-show="clickedTab == 'validateData'"  ng-disabled="search.$invalid"
                                             ng-click="reports.getValidationData()"><span>Get Data</span>

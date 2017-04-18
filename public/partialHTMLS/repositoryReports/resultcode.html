@@ -28,45 +28,45 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search lab name" ng-model='reports.stringSearch.LabID'>
+                                   placeholder="Search lab name" ng-model='reports.stringSearch.MflCode'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search county" ng-model='reports.stringSearch.county'>
+                                   placeholder="Search county" ng-model='reports.stringSearch.Name'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search contact name" ng-model='reports.stringSearch.contactName'>
+                                   placeholder="Search contact name" ng-model='reports.stringSearch.County'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search email" ng-model='reports.stringSearch.contactEmail'>
+                                   placeholder="Search email" ng-model='reports.stringSearch.Constituency'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search tel." ng-model='reports.stringSearch.telephone'>
+                                   placeholder="Search tel." ng-model='reports.stringSearch.ResultCode'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search status" ng-model='reports.stringSearch.status'>
+                                   placeholder="Search status" ng-model='reports.stringSearch.Count'>
                         </th>
                     </tr>
                 </thead>
                 <thead>
                     <tr>
                         <th style="text-align: center;"> #</th>
+                        <th style="text-align: center;">MFL Code</th>
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
-                        <th style="text-align: center;">Contact Name</th>
+                        <th style="text-align: center;">Constituency</th>
                         <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
-                        <th style="text-align: center;">Contact Email</th>
-                        <th style="text-align: center;">Telephone</th>
-                        <th style="text-align: center;">Status</th>
+                        <th style="text-align: center;">Result Code</th>
+                        <th style="text-align: center;">Count</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,25 +75,26 @@
                         <td>{{$index + 1}}</td>
                         <td>
 
-                            {{record.LabID}}
+                            {{record.MflCode}}
                         </td>
                         <td>
-                            {{record.county}}
+
+                            {{record.Name}}
                         </td>
                         <td>
-                            {{record.contactName}}
+                            {{record.County}}
+                        </td>
+                        <td>
+                            {{record.Constituency}}
                         </td>
                         <!--<td>
                             Inclassified
                         </td>-->
                         <td>
-                            {{record.contactEmail}}
+                            {{record.ResultCode}}
                         </td>
                         <td>
-                            {{record.telephone}}
-                        </td>
-                        <td>
-                            {{record.status}}
+                            {{record.Count}}
                         </td>
 
 
