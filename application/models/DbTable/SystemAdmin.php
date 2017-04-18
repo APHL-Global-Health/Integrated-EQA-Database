@@ -200,7 +200,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
     public function addSystemAdmin($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $email = $params['primaryEmail'];
-        $password = $this->generateRandomPassword(6);
+        $password = $this->generateRandomPassword(9);
         $data = array(
             'first_name' => $params['firstName'],
             'last_name' => $params['lastName'],

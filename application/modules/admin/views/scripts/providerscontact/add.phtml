@@ -24,16 +24,25 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Contact Name <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input type="text" id="ContactName" name="ContactName" size="50" maxlength="45"
-                                             class="isRequired form-control"
-                                             title="Please enter contact name here"
-                                             placeholder="Please enter contact name here"/></div>
+                <div class="col-lg-5">
+                    <input type="text" id="ContactName" name="ContactName" size="50" maxlength="45"
+                           class="isRequired form-control"
+                           title="Please enter contact name here"
+                           placeholder="Please enter contact name here"/>
+
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Contact Email <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <input type="text" id="ContactEmail" name="ContactEmail" size="50" maxlength="45" placeholder="Please enter contact email here" class="isRequired form-control isEmail" 
+                    <input type="email" id="ContactEmail" name="ContactEmail" size="50" maxlength="45" placeholder="Please enter contact email here" class="isRequired form-control isEmail" 
                            onblur="checkDuplicate('rep_providercontacts', 'ContactEmail', 'ContactEmail', null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/>
+                    <div id="emailError" class="alert alert-danger" style="display: none;">
+                        Email is already being used by another provider,please change
+                    </div>
+                    <div id="emailErrorSA" class="alert alert-danger" style="display: none;">
+                        Email is already being used by another login user,please change
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -42,18 +51,18 @@
                     <input type="text" id="ContactTelephone" name="ContactTelephone" size="50" maxlength="45" placeholder="Please enter contact telephone here" class="form-control"/>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Password <span class="mandatory">*</span></label>
-                <div class="col-lg-5">
-                    <input type="password" id="password" name="password" size="50" value="" class="isRequired form-control" title="Please enter a password" placeholder="Please enter a password" onchange="validatePassword(this)"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Confirm Password <span class="mandatory">*</span></label>
-                <div class="col-lg-5">
-                    <input type="password" id="confirmPassword" name="password"  size="50" value="" class="isRequired form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
-                </div>
-            </div>
+            <!--            <div class="form-group">
+                            <label class="col-lg-3 control-label">Password <span class="mandatory">*</span></label>
+                            <div class="col-lg-5">
+                                <input type="password" id="password" name="password" size="50" value="" class="isRequired form-control" title="Please enter a password" placeholder="Please enter a password" onchange="validatePassword(this)"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Confirm Password <span class="mandatory">*</span></label>
+                            <div class="col-lg-5">
+                                <input type="password" id="confirmPassword" name="password"  size="50" value="" class="isRequired form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
+                            </div>
+                        </div>-->
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>
 
@@ -79,63 +88,77 @@
 </div>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
 <script type="text/javascript">
-    var duplicated = false;
-    $(document).ready(function () {
-        $('#enrolledProgram').selectpicker();
-          var mytextbox = document.getElementById('ProviderName');
-          var mydropdown = document.getElementById('ProviderID');
+                    var duplicated = false;
+                    $(document).ready(function () {
+                        $('#enrolledProgram').selectpicker();
+                        var mytextbox = document.getElementById('ProviderName');
+                        var mydropdown = document.getElementById('ProviderID');
 
-          mydropdown.onchange = function(){
-              var txt=$('#ProviderID').find('option:selected').text();
-              mytextbox.value = txt; //to appened
-          
-          //$("[id*='ProviderID'] :selected");
-         //mytextbox.innerHTML = this.value;
-        }
-    });
-    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
-        objValue = document.getElementById(obj).value;
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
-        function (data) {
-            if (data > 0) {
-                alert(msg, "err");
-                duplicated = true;
-                $("#" + obj).focus();
-            }
-            else {
-                duplicated = false;
-            }
-            return duplicated;
-        });
-    }
+                        mydropdown.onchange = function () {
+                            var txt = $('#ProviderID').find('option:selected').text();
+                            mytextbox.value = txt; //to appened
 
-    function validateNow() {
-        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
-        //if (!checkDduplicateId) {
-        flag = deforayValidator.init({
-            formId: 'addProvidersForm'
-        });
-        if (flag && !duplicated) {
-            $.blockUI();
-            document.getElementById('addProvidersForm').submit();
-        }
-        //}
-    }
+                            //$("[id*='ProviderID'] :selected");
+                            //mytextbox.innerHTML = this.value;
+                        }
+                    });
+                    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                        objValue = $("#ContactEmail").val();//document.getElementById(obj).value;
+                        console.log(objValue)
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
+                                function (data) {
+                                    console.log(data)
+                                    if (data > 0) {
+//                alert(msg, "err");
+                                        duplicated = true;
+                                        $("#" + obj).focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                    if (duplicated) {
+                                        $("#emailError").show();
+                                    } else {
+                                        $("#emailError").hide();
+                                    }
+                                    return duplicated;
+                                });
+                    }
 
-    function cheackEmailId() {
-        primaryEmail = document.getElementById("primaryEmail").value;
-        secondaryEmail = document.getElementById("secondaryEmail").value;
-        if (secondaryEmail != "") {
-            if (primaryEmail == secondaryEmail) {
-                alert("Please check your primary email and secondary email");
-                document.getElementById("secondaryEmail").value = "";
-                $("#secondaryEmail").focus();
-                duplicated = true;
-            } else {
-                duplicated = false;
-            }
-        }
-    }
+                    function validateNow() {
+                        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
+                        //if (!checkDduplicateId) {
+                        flag = deforayValidator.init({
+                            formId: 'addProvidersForm'
+                        });
+                        if (flag && !duplicated) {
+                            $.blockUI();
+                            document.getElementById('addProvidersForm').submit();
+                        }
+                        //}
+                    }
+
+                    function cheackEmailId() {
+                        objValue = $("#ContactEmail").val();//document.getElementById(obj).value;
+                        console.log(objValue)
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>",
+                                {tableName: 'system_admin', fieldName: 'primary_email', value: objValue, fnct: null, format: "html"},
+                                function (data) {
+                                    console.log(data)
+                                    if (data > 0) {
+//                alert(msg, "err");
+                                        duplicated = true;
+                                        $("#ContactEmail").focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                    if (duplicated) {
+                                        $("#emailErrorSA").show();
+                                    } else {
+                                        $("#emailErrorSA").hide();
+                                    }
+                                    return duplicated;
+                                });
+                    }
 
 
 </script>
