@@ -199,6 +199,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
     public function addSystemAdmin($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        $common = new Application_Service_Common();
         $email = $params['primaryEmail'];
         $password = $this->generateRandomPassword(9);
         $data = array(
@@ -233,7 +234,8 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         }
 
         $fullname = $params['firstName'] . ' ' . $params['lastName'];
-        $this->sendEmailToUser($email, $password, $fullname);
+
+        $common->sendPasswordEmailToUser($email, $password, $fullname);
 
         return $this->insert($data);
     }
@@ -278,7 +280,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 }
             }
         }
-        
+
         return $this->update($data, "admin_id=" . $params['adminId']);
     }
 

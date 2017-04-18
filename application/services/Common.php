@@ -78,16 +78,12 @@ class Application_Service_Common {
 
     public function sendPasswordEmailToUser($sendTo, $password, $fullname) {
 //        $common = new Application_Service_Common();
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
-                . "You have been granted access to the NPHL Integrated EQA Database application."
-                . "Please click the following link to access the application in your computer browser."
-                . "Kindly log in with below credentials to access the system <br>"
+                . $config->emailRegistrationBody
                 . "<br>Username : $sendTo <br>"
                 . "Password : $password <br>"
-                . "If you have received this email in error or have any other queries, "
-                . "please notify the system administrator at info@nphl.or.ke."
-                . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
-                . "<small>This is a system generated email. Please do not reply.</small>";
+                . $config->emailRegistrationSignature;
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
