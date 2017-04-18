@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="ProviderID" id="ProviderID" title="Please choose the provider here">
+                    <select class="form-control isRequired" required="" name="ProviderID" id="ProviderID" title="Please choose the provider here">
                         <option value=""></option>
                         <?php foreach ($this->providerList as $prov) {
                             ?>
@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Program <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="ProgramID" id="ProgramID" title="Please choose the program here">
+                    <select class="form-control isRequired"  required="" name="ProgramID" id="ProgramID" title="Please choose the program here">
                         <option value=""></option>
                         <?php foreach ($this->programList as $prog) {
                             ?>
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Period <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="RoundID" id="RoundID" title="Please choose the period here">
+                    <select class="form-control isRequired"  required="" name="RoundID" id="RoundID" title="Please choose the period here">
                         <option value=""></option>
                         <?php foreach ($this->periodList as $pd) {
                             ?>
@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                                              ?></p>
+                                        <p><?php //echo $eh;                                                                       ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                                              ?></option>
+                                            <option><?php //echo $rh['Field'];                                                                       ?></option>
                             <?php
                             //}
                             ?>
@@ -350,54 +350,68 @@
 
     function postSelectedKeysAndValue() {
 
-        if (arrayWithExcelLabelValue.length > 0) {
+        if (arrayWithExcelLabelValue.length > 1) {
             $("#error").hide();
             provider = $("#ProviderID").val();
             program = $("#ProgramID").val();
             period = $("#RoundID").val();
             files = $("#fileToUpload").val();
             var model = {};
-            model.ProviderID = provider,
-                    model.ProgramID = program,
-                    model.RoundID = period,
-                    model.fileToUpload = files
 
-            $('#loader').show();
-            $.ajax({
-                type: 'POST',
-                url: 'save',
-                dataType: 'text',
-                data: convertArrayToString(arrayWithExcelLabelValue, model),
-                success: function (data) {
+            model.ProviderID = provider;
+            model.ProgramID = program;
+            model.RoundID = period;
+            model.fileToUpload = files;
+            if (model.ProviderID == '' || model.ProgramID == '' || model.RoundID == '') {
+                $.alert(
+                        {
+                            title: 'Error',
+                            content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + "Please make sure that provider,program and survey are filled"
+                        }
+                );
+                arrayWithExcelLabelValue = [];
+            } else {
+                $('#loader').show();
+                $.ajax({
+                    type: 'POST',
+                    url: 'save',
+                    dataType: 'text',
+                    data: convertArrayToString(arrayWithExcelLabelValue, model),
+                    success: function (data) {
 //                    $("#showUploadData").hide();
 //                    $("#submitValues").show();
 
-                    $.alert(
-                            {
-                                title: 'Success',
-                                content: '<i class= "fa fa-check fa-2x text-success"></i> Data Upload Successfully'
-                            }
-                    );
-                    //.$('#loader').hide();
-                    window.location = '/admin/importcsv/index';
+                        $.alert(
+                                {
+                                    title: 'Success',
+                                    content: '<i class= "fa fa-check fa-2x text-success"></i> Data Upload Successfully'
+                                }
+                        );
+                        //.$('#loader').hide();
+                        window.location = '/admin/importcsv/index';
 
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    $('#loader').hide();
-                    $.alert(
-                            {
-                                title: 'Server Error',
-                                content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + xhr.responseText
-                            }
-                    );
-                    //alert(data);
-                    console.log(xhr.responseText);
-                    console.log(thrownError);
-                }
-            });
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('#loader').hide();
+                        $.alert(
+                                {
+                                    title: 'Server Error',
+                                    content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + xhr.responseText
+                                }
+                        );
+                        //alert(data);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+                });
+            }
         } else {
-//            $("#error").show();
-//            document.getElementById('error').innerHTML = "Please select atleast 5 fields";
+            $.alert(
+                    {
+                        title: 'Error',
+                        content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + "Please select atleat 2 mapping columns"
+                    }
+            );
         }
     }
     function convertArrayToString(arrayWithExcelLabelValue, model) {
