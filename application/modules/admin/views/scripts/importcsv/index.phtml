@@ -4,6 +4,9 @@
         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;">
             <i class="icon-download"></i>&nbsp;&nbsp;Import Data</a>
     </div>
+    <div style="float:right;">
+        &nbsp;&nbsp;
+    </div>
     <div style="margin-top:10px;">       
         &nbsp; <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv', 'action' => 'invaliddata'), 'default', true); ?>"
                   class="btn btn-danger" style="float:right;">
@@ -41,11 +44,11 @@
     function approveBatch(BatchID) {
 
         $.confirm({
-            title: 'Confirm Delete!',
+            title: 'Confirm Approval!',
             theme: 'supervan',
-            content: 'Are you want to approve this batch,this action can not be undone ',
+            content: 'Are you sure want to approve this batch,this action can not be undone ',
             buttons: {
-                'Evaluate': {
+                'Approve': {
                     btnClass: 'btn-blue',
                     action: function () {
 
@@ -107,9 +110,9 @@
         $.confirm({
             title: 'Confirm Delete!',
             theme: 'supervan',
-            content: 'Are you want to delete this batch,this action can not be undone ',
+            content: 'Are you sure want to delete this batch,this action can not be undone ',
             buttons: {
-                'Evaluate': {
+                'Delete': {
                     btnClass: 'btn-blue',
                     action: function () {
 

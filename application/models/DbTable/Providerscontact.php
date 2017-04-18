@@ -17,7 +17,7 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ContactID','pname', 'ContactName', 'ContactEmail', 'ContactTelephone', 'sts');
+        $aColumns = array('ContactID', 'pname', 'ContactName', 'ContactEmail', 'ContactTelephone', 'sts');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -95,10 +95,10 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pname'=>'c.ProviderName','a.ContactID','a.ContactName','a.ContactEmail','a.ContactTelephone','sts'=>'a.Status'))
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pname' => 'c.ProviderName', 'a.ContactID', 'a.ContactName', 'a.ContactEmail', 'a.ContactTelephone', 'sts' => 'a.Status'))
                 //->join(array('c' => 'rep_providers'), 'c.ProviderID=a.ProviderID');
-                ->joinLeft(array('c' => 'rep_providers'),'c.ProviderID=a.ProviderID',array('ProviderName'));
-                //->group("a.ContactID");
+                ->joinLeft(array('c' => 'rep_providers'), 'c.ProviderID=a.ProviderID', array('ProviderName'));
+        //->group("a.ContactID");
         //echo $sQuery;
         //exit;
         if (isset($sWhere) && $sWhere != "") {
@@ -112,7 +112,7 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        
+
         //error_log($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
@@ -155,27 +155,29 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
 
         echo json_encode($output);
     }
-    
+
     public function getProviders() {
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $pname = $auth->getIdentity()->ProviderName;
         }
-        if($pname){
-        return $this->fetchAll($this->select()->where("Status='active'")->where("ProviderName='$pname'")->order("ProviderName"));
-        }else{
+        if ($pname) {
+            return $this->fetchAll($this->select()->where("Status='active'")->where("ProviderName='$pname'")->order("ProviderName"));
+        } else {
             return $this->fetchAll($this->select()->where("Status='active'")->order("ProviderName"));
         }
     }
+
     public function getProvider($partSysId) {
         return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
                                 ->joinLeft(array('pr' => 'rep_providerprograms'), 'pr.ProviderID=p.ProviderID')
                                 ->joinLeft(array('rp' => 'rep_programs'), 'rp.ProgramID=pr.ProgramID', array('ProgramID' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT rp.Description SEPARATOR ', ')")))
                                 ->where("p.ProviderID = ?", $partSysId)
                                 ->group('p.ProviderID'));
-        
     }
+
     public function addProviderscontact($params) {
+         $common = new Application_Service_Common();
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
@@ -186,7 +188,9 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
             'Status' => $params['Status']
         );
         $saved = $this->insert($data);
+        $password = $common->generateRandomPassword(9);
         if ($saved) {
+            $common = new Application_Service_Common();
             $table = new Application_Model_DbTable_SystemAdmin();
             $datas = array(
                 'first_name' => $params['ContactName'],
@@ -194,18 +198,22 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
                 'phone' => $params['ContactTelephone'],
                 'secondary_email' => $params['ContactEmail'],
                 'primary_email' => $params['ContactEmail'],
-                'password' => $params['password'],
+                'password' => MD5($password),
                 'status' => $params['Status'],
-                'force_password_reset' => 0,
-                'IsProvider' => 1,
+                'force_password_reset' => 1,
+                'IsProvider' => 2,
                 'ProviderName' => $params['ProviderName'],
                 'created_by' => $authNameSpace->admin_id,
                 'created_on' => new Zend_Db_Expr('now()')
             );
-            if(isset($_SESSION['loggedInDetails']["IsVl"])){
-                $datas['IsVl']=$_SESSION['loggedInDetails']["IsVl"];
+
+            if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+                $datas['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
             }
-            return $table->insert($datas);
+
+            if ($table->insert($datas)) {
+                $common->sendPasswordEmailToUser($params['ContactEmail'], $password, $params['ContactName']);
+            }
         }
         return $saved;
     }
@@ -224,8 +232,8 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
             'Status' => $params['Status']
         );
         //print_r($data);
-       // exit;
-        return $this->update($data, "ContactID=".$params['ContactID']);
+        // exit;
+        return $this->update($data, "ContactID=" . $params['ContactID']);
     }
 
 }
