@@ -2281,3 +2281,6 @@ ALTER TABLE `response_vl_not_tested_reason`
   
 --Pal 24th-DEC-2016
 ALTER TABLE `shipment_participant_map` ADD `pt_support_comments` TEXT NULL DEFAULT NULL AFTER `pt_test_not_performed_comments`;
+
+--mapesa 12th-APR-2017: Change from using plain text passwords
+UPDATE system_admin SET password = md5(password);
