@@ -129,7 +129,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select rep_repository.MflCode as name,count(SampleCode) as data"
+        $query = "select mfl_facility_codes.Name as name,rep_repository.MflCode,count(SampleCode) as data"
                 . "  from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
             $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
@@ -421,7 +421,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         }
 
 
-        $query = "select rep_repository.MflCode as title,Grade as name, count(Grade) as data "
+        $query = "select mfl_facility_codes.Name as title,rep_repository.MflCode,Grade as name, count(Grade) as data "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
             $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
