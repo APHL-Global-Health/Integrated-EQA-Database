@@ -1,7 +1,8 @@
 application/cache
+application/configs
 public/files
 
-database/core-apis
+database
 public/files
 *.hgignore
 .idea/workspace.xml
