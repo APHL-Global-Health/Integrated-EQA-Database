@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                                   ?></p>
+                                        <p><?php //echo $eh;                                                     ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                                   ?></option>
+                                            <option><?php //echo $rh['Field'];                                                     ?></option>
                             <?php
                             //}
                             ?>
@@ -236,8 +236,10 @@
     var clickedExcelLabel = [];
     var arrayWithExcelLabelValue = [];
     function appendFormParams(key, value) {
+        $("#error").hide();
+        $(".selectedVal_" + key).css("border-color", "lightgray");
         console.log(key);
-        console.log(value);  
+        console.log(value);
         if (value != 1) {
             var singleArray = new Array();
             var usedPosition = '';
@@ -251,6 +253,12 @@
                 var indexPos = -1;
                 for (var i = 0; i < clickedLabel.length; i++) {
                     for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
+                        if (key == arrayWithExcelLabelValue[j]['key']) {
+                            arrayWithExcelLabelValue[j]['value'] = value;
+                            exists = true;
+                            indexPos = j;
+                            break;
+                        }
                         if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
 
                             indexPos = j;
@@ -263,14 +271,14 @@
 
                         usedPosition = clickedLabel[i];
                         exists = true; // 
-                        
+
                         break;
-                    } 
+                    }
 
                 }
                 if (indexPos >= 0) {
-                    clickedLabel.splice(indexPos, 1);
-                    arrayWithExcelLabelValue.splice(indexPos, 1);
+//                    clickedLabel.splice(indexPos, 1);
+//                    arrayWithExcelLabelValue.splice(indexPos, 1);
                     //console.log(indexPos)
                 }
                 if (!exists) {
