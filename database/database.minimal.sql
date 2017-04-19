@@ -112,16 +112,6 @@ CREATE TABLE `data_manager` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `data_manager`
---
-
-LOCK TABLES `data_manager` WRITE;
-/*!40000 ALTER TABLE `data_manager` DISABLE KEYS */;
-INSERT INTO `data_manager` VALUES (1,'osoromichael@gmail.com','123456','KNH','osoro','michael','','okarmikell@gmail.com',NULL,NULL,NULL,'0711560619',0,'no','no',NULL,NULL,'active','2017-04-10 22:52:39','22',NULL,NULL,'2017-04-11 08:39:12','3');
-/*!40000 ALTER TABLE `data_manager` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `distributions`
 --
 
@@ -237,7 +227,7 @@ CREATE TABLE `facility` (
   `FacilityName` varchar(100) DEFAULT NULL,
   `MFLCode` varchar(50) DEFAULT NULL,
   `Department` int(11) DEFAULT NULL,
-  `PhysicalAddress` varchar(50) DEFAULT NULL,
+  `PhysicalAddress` varchar(255) DEFAULT NULL,
   `PostalAddress` varchar(50) DEFAULT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `Town` varchar(20) DEFAULT NULL,
@@ -255,16 +245,6 @@ CREATE TABLE `facility` (
   CONSTRAINT `facility_ibfk_2` FOREIGN KEY (`County`) REFERENCES `rep_counties` (`CountyID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `facility`
---
-
-LOCK TABLES `facility` WRITE;
-/*!40000 ALTER TABLE `facility` DISABLE KEYS */;
-INSERT INTO `facility` VALUES (2,'Kenyatta','001',1,'4465','fvg','boblacaster@yahoo.com','Nairobi','739273',20,17,'Test','brian','brianonyi@gmail.com','45656',''),(7,'Kenyatta Hospital','F001',1,'Upperhill','47074','boblacaster@yahoo.com','Nairobi','0727547388',30,116,'1','Brian Vidolo','brianonyi@gmail.com','0727547388','welccome'),(8,'Kenyatta Hospital','F001',1,'Upperhill','5454','boblacaster@yahoo.com','Nairobi','5334',30,116,'1','Brian Vidolo','brianonyi@gmail.com','64533','welcome'),(9,'Kenyatta Hospital','F001',1,'Upperhill','5454','boblacaster@yahoo.com','Nairobi','5334',30,116,'1','Brian Vidolo','brianonyi@gmail.com','64533','welcome'),(10,'Kenyatta Hospital','F001',1,'Upperhill','5454','boblacaster@yahoo.com','Nairobi','5334',30,116,'1','Brian Vidolo','brianonyi@gmail.com','64533','welcome'),(11,'Kenyatta Hospital','F001',1,'Upperhill','5454','boblacaster@yahoo.com','Nairobi','5334',30,116,'1','Brian Vidolo','brianonyi@gmail.com','64533','welcome'),(12,'Kenyatta Hospital','F001',1,'Upperhill','47074','boblacaster@yahoo.com','Nairobi','064545',30,116,'1','Brian Vidolo','brianonyi@gmail.com','324243',''),(13,'Kenyatta Hospital','F001',1,'Upperhill','47074','boblacaster@yahoo.com','Nairobi','064545',30,116,'1','Brian Vidolo','brianonyi@gmail.com','324243','');
-/*!40000 ALTER TABLE `facility` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `facilityplatform`
@@ -286,16 +266,6 @@ CREATE TABLE `facilityplatform` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `facilityplatform`
---
-
-LOCK TABLES `facilityplatform` WRITE;
-/*!40000 ALTER TABLE `facilityplatform` DISABLE KEYS */;
-INSERT INTO `facilityplatform` VALUES (1,8,1),(2,8,4);
-/*!40000 ALTER TABLE `facilityplatform` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `facilityscheme`
 --
 
@@ -313,16 +283,6 @@ CREATE TABLE `facilityscheme` (
   CONSTRAINT `facilityscheme_ibfk_2` FOREIGN KEY (`SchemeID`) REFERENCES `vl_scheme` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `facilityscheme`
---
-
-LOCK TABLES `facilityscheme` WRITE;
-/*!40000 ALTER TABLE `facilityscheme` DISABLE KEYS */;
-INSERT INTO `facilityscheme` VALUES (2,8,1),(3,8,2);
-/*!40000 ALTER TABLE `facilityscheme` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `global_config`
@@ -494,16 +454,6 @@ CREATE TABLE `participant` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `participant`
---
-
-LOCK TABLES `participant` WRITE;
-/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
-INSERT INTO `participant` VALUES (1,'P001','yes',NULL,'bvidolo Lab','lab','','Nairobi','',116,'','','','','','',NULL,'7','Nairobi','busia ','lab','','','','brianonyi@gmail.com','Hospital',1,'2017-02-01 10:20:59','eptmanager@gmail.com',NULL,NULL,'active'),(2,'P002','yes',NULL,'Kenyatta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'kakamega','lab',NULL,'0727547388',NULL,'brianonyi2@gmail.com',NULL,NULL,'2017-02-22 08:20:54','eptmanager@gmail.com',NULL,NULL,'active'),(8,'F001','no','Kenyatta Hospital','Kenyatta Hospital','Labaratory','upperhill','Nairobi','',116,'00100-47438','','','47676 Nairobi, Kenya','',NULL,NULL,NULL,'BARINGO','Kenyatta Hospital','','4354545','5454545','Brian Vidolo','brianonyi@gmail.com',NULL,0,'2017-03-19 20:11:33','eptmanager@gmail.com','2017-04-04 08:01:01','eptmanager@gmail.com','active'),(9,'P003','yes',NULL,'Kenyatta Hospital',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Victor','Vidal',NULL,'073923829',NULL,'vvidal@gmail.com',NULL,NULL,'2017-03-19 21:15:18','eptmanager@gmail.com',NULL,NULL,'active'),(10,'TEST001','no','TEST 001','TEST LAB','BATCERIAL','175 KISII','NAIAROBI','N/A',116,'','','','','','',NULL,'','KISII','TEST 001','','','','','TEST@GMAIL.COM','Hospital',3,'2017-04-03 22:03:28','TEST@GMAIL.COM',NULL,NULL,'active'),(11,'pop','no',NULL,'opo','po','opop','po','po',116,'','','','',NULL,NULL,NULL,NULL,'BARINGO','opo','','','','','test@gmail.com',NULL,0,'2017-04-03 23:29:07','eptmanager@gmail.com',NULL,NULL,'active'),(12,'xxxxx','no',NULL,'xxxxx',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'xxxxx','xxxxx',NULL,'0711560619',NULL,'xxxxx@gmail.com',NULL,NULL,'2017-04-04 11:54:35','osoro@gmail.com',NULL,NULL,'pending');
-/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `participant_enrolled_programs_map`
 --
 
@@ -540,16 +490,6 @@ CREATE TABLE `participant_manager_map` (
   PRIMARY KEY (`participant_id`,`dm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `participant_manager_map`
---
-
-LOCK TABLES `participant_manager_map` WRITE;
-/*!40000 ALTER TABLE `participant_manager_map` DISABLE KEYS */;
-INSERT INTO `participant_manager_map` VALUES (1,2,'1'),(1,4,'1');
-/*!40000 ALTER TABLE `participant_manager_map` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `participantassays`
@@ -593,16 +533,6 @@ CREATE TABLE `partners` (
   PRIMARY KEY (`partner_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `partners`
---
-
-LOCK TABLES `partners` WRITE;
-/*!40000 ALTER TABLE `partners` DISABLE KEYS */;
-INSERT INTO `partners` VALUES (1,'Partner One','',1,1,'2017-03-19 12:09:18','active'),(2,'Partner two','',2,1,'2017-03-19 12:09:27','active');
-/*!40000 ALTER TABLE `partners` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `publications`
@@ -1567,16 +1497,6 @@ CREATE TABLE `rep_customfields` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_customfields`
---
-
-LOCK TABLES `rep_customfields` WRITE;
-/*!40000 ALTER TABLE `rep_customfields` DISABLE KEYS */;
-INSERT INTO `rep_customfields` VALUES (55,'HuQas Provider','Malaria','Frequency','Frequency',NULL,NULL,NULL,NULL,NULL),(56,'HuQas Provider','Malaria','StCount','St. Count',NULL,NULL,NULL,NULL,NULL),(57,'HuQas Provider','Malaria','TragetValue','Traget Value',NULL,NULL,NULL,NULL,NULL),(58,'HuQas Provider','Malaria','UpperLimit','Upper Limit',NULL,NULL,NULL,NULL,NULL),(59,'HuQas Provider','Malaria','LowerLimit','Lower Limit',NULL,NULL,NULL,NULL,NULL),(61,'HuQas Provider','Malaria','OverallScore','Overall Score','NULL','varchar',100,'1','0000-00-00 00:00:00'),(62,'Micro Provider','Malaria','Results','Result(s)',NULL,NULL,NULL,NULL,NULL),(63,'Amref Provider','Bio Chemistry','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(64,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(65,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(66,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(67,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(68,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(69,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(70,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(71,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(72,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(73,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(74,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(75,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(76,'Amref Provider','Bio Chemistry','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(77,'Amref Provider','Bio Chemistry','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(78,'Amref Provider','Bio Chemistry','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(79,'Amref Provider','Bio Chemistry','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(80,'Amref Provider','Bio Chemistry','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(81,'Amref Provider','Bio Chemistry','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(82,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(83,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(84,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(85,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(86,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(87,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(88,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(89,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(90,'Amref Provider','Malaria','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(91,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(92,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(93,'Hiv PT','Bio Chemistry','Lab','Lab',NULL,NULL,NULL,NULL,NULL),(94,'Hiv PT','Bio Chemistry','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(95,'Hiv PT','Bio Chemistry','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(96,'Amref Provider','Malaria','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(97,'Amref Provider','Malaria','Sample','Sample',NULL,NULL,NULL,NULL,NULL),(98,'Hiv PT','Bio Chemistry','Analyte','Analyte',NULL,NULL,NULL,NULL,NULL),(99,'Hiv PT','Bio Chemistry','Sample','Sample',NULL,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `rep_customfields` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_failreasons`
 --
 
@@ -1595,16 +1515,6 @@ CREATE TABLE `rep_failreasons` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_failreasons`
---
-
-LOCK TABLES `rep_failreasons` WRITE;
-/*!40000 ALTER TABLE `rep_failreasons` DISABLE KEYS */;
-INSERT INTO `rep_failreasons` VALUES (1,'Poor Slide Smear','Malaria','HuQas Provider','26','2017-04-19 12:44:13');
-/*!40000 ALTER TABLE `rep_failreasons` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_grading`
 --
 
@@ -1621,16 +1531,6 @@ CREATE TABLE `rep_grading` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_grading`
---
-
-LOCK TABLES `rep_grading` WRITE;
-/*!40000 ALTER TABLE `rep_grading` DISABLE KEYS */;
-INSERT INTO `rep_grading` VALUES (1,'ACCEPTABLE','Malaria','HuQas Provider','2016-12-08 10:12:52','1'),(2,'NOT ACCEPTABLE','Malaria','HuQas Provider','2016-12-08 10:00:25','1');
-/*!40000 ALTER TABLE `rep_grading` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_labcontacts`
@@ -1653,16 +1553,6 @@ CREATE TABLE `rep_labcontacts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_labcontacts`
---
-
-LOCK TABLES `rep_labcontacts` WRITE;
-/*!40000 ALTER TABLE `rep_labcontacts` DISABLE KEYS */;
-INSERT INTO `rep_labcontacts` VALUES (5,1,'Brian Vidolo','brianonyi@gmail.com','037293972993','active'),(6,2,'Brian Kamau','dkamau@abnosoftwares.co.ke','32434343','active');
-/*!40000 ALTER TABLE `rep_labcontacts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_labs`
 --
 
@@ -1673,7 +1563,7 @@ CREATE TABLE `rep_labs` (
   `LabID` int(11) NOT NULL AUTO_INCREMENT,
   `LabName` varchar(200) NOT NULL,
   `County` int(11) DEFAULT NULL,
-  `Address` varchar(20) DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
   `PostalCode` int(11) DEFAULT NULL,
   `Telephone` varchar(20) DEFAULT NULL,
   `ContactName` varchar(50) DEFAULT NULL,
@@ -1687,16 +1577,6 @@ CREATE TABLE `rep_labs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_labs`
---
-
-LOCK TABLES `rep_labs` WRITE;
-/*!40000 ALTER TABLE `rep_labs` DISABLE KEYS */;
-INSERT INTO `rep_labs` VALUES (1,'Coast Provincial General Hospital',1,'470741',100,'0737547388','dennis kamau','dkamau@abnosoftwares.co.ke','07323243422','active','1','2017-01-18 12:50:50'),(2,'Kenyatta National Hospital',2,'894304',100,'08984743','brian vidoloo','bvidolo@abnosoftwares.co.ke','0839289','active','1','2016-12-08 14:44:07'),(3,'Friends Lugulu Mission Hospital',3,'175',4500,'0711560619',NULL,NULL,NULL,'active','17','2017-04-06 15:06:57'),(4,'Bungoma District Hospital',3,'bungoma',1001,'0722560619',NULL,NULL,NULL,'active','17','2017-04-06 15:07:31');
-/*!40000 ALTER TABLE `rep_labs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_programs`
 --
 
@@ -1705,25 +1585,15 @@ DROP TABLE IF EXISTS `rep_programs`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rep_programs` (
   `ProgramID` int(11) NOT NULL AUTO_INCREMENT,
-  `ProgramCode` varchar(50) DEFAULT NULL,
-  `Description` varchar(100) DEFAULT NULL,
+  `ProgramCode` varchar(100) DEFAULT NULL,
+  `Description` varchar(128) DEFAULT NULL,
   `Status` varchar(100) DEFAULT NULL,
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   `Comments` text,
   PRIMARY KEY (`ProgramID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_programs`
---
-
-LOCK TABLES `rep_programs` WRITE;
-/*!40000 ALTER TABLE `rep_programs` DISABLE KEYS */;
-INSERT INTO `rep_programs` VALUES (1,'MLR','Malaria','active','1','2016-11-23 16:16:23',NULL),(2,'Bio Chem','Bio Chemistry','active','26','2017-04-19 11:07:00',''),(3,'HIV progra','HIV program for the year 2017','active','26','2017-04-19 11:11:49','');
-/*!40000 ALTER TABLE `rep_programs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providercontacts`
@@ -1743,18 +1613,8 @@ CREATE TABLE `rep_providercontacts` (
   UNIQUE KEY `UN_KEY_EMAIL` (`ContactEmail`),
   KEY `ProviderID` (`ProviderID`),
   CONSTRAINT `rep_providercontacts_ibfk_1` FOREIGN KEY (`ProviderID`) REFERENCES `rep_providers` (`ProviderID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_providercontacts`
---
-
-LOCK TABLES `rep_providercontacts` WRITE;
-/*!40000 ALTER TABLE `rep_providercontacts` DISABLE KEYS */;
-INSERT INTO `rep_providercontacts` VALUES (1,1,'Brian Vidolo','brianonyi@gmail.com','0727547388','active'),(4,8,'Dennis Kamau','dkamau@gmail.com','0727547388','inactive'),(5,NULL,'Brian Kamau','dkamau@abnosoftwares.co.ke','23829380','active'),(6,8,'Victor Mwenda','vmwenda@gmail.com','0722339993','active'),(7,8,'Victor Mwendwa','vmwesh@gmail.com','0722339993','active'),(8,2,'test provider','test@gmail.com','0711560619','active'),(15,12,'okar mikell','osoromichael@gmail.com','0711560619','active');
-/*!40000 ALTER TABLE `rep_providercontacts` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerfiles`
@@ -1779,16 +1639,6 @@ CREATE TABLE `rep_providerfiles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_providerfiles`
---
-
-LOCK TABLES `rep_providerfiles` WRITE;
-/*!40000 ALTER TABLE `rep_providerfiles` DISABLE KEYS */;
-INSERT INTO `rep_providerfiles` VALUES (1,'1','1','1','Malaria.pdf','application/pdf',142838,'C:\\temp\\Malaria.pdf','1','2016-12-08 11:10:08'),(2,'1','2','2','EQA Process Workflow.pdf','application/pdf',592200,'C:\\temp\\EQA Process Workflow.pdf','1','2016-12-08 14:57:43'),(3,'2','1','1','Malaria.pdf','application/pdf',142838,'C:\\temp\\Malaria.pdf','1','2016-12-15 10:43:56'),(4,'2','1','1','Malaria.pdf','application/pdf',142838,'C:\\temp\\Malaria.pdf','1','2016-12-15 10:55:01'),(5,'8','1','1','Malaria.pdf','application/pdf',142838,'C:\\temp\\Malaria.pdf','7','2016-12-15 13:30:09'),(6,'8','1','2','Basic_Chemistry.pdf','application/pdf',283843,'C:\\temp\\Basic_Chemistry.pdf','7','2016-12-20 15:50:43'),(7,'8','1','1','Malaria.pdf','text/plain',218,'C:\\temp\\Malaria.pdf','10','2017-04-04 17:14:32'),(8,'8','1','1','cover_letter.pdf','application/pdf',14183,'C:\\xampp\\htdocs\\EPTR\\public\\files\\cover_letter.pdf','17','2017-04-10 13:33:23'),(9,'8','1','1','Osoro Michael CV.pdf','application/pdf',140967,'C:\\xampp\\htdocs\\EPTR\\public\\files\\Osoro Michael CV.pdf','17','2017-04-10 13:34:12'),(10,'8','1','1','UAT DOCUMENT.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',13876,'C:\\xampp\\htdocs\\EPTR\\public\\files\\UAT DOCUMENT.xlsx','17','2017-04-10 14:33:02');
-/*!40000 ALTER TABLE `rep_providerfiles` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_providerlabs`
 --
 
@@ -1804,16 +1654,6 @@ CREATE TABLE `rep_providerlabs` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_providerlabs`
---
-
-LOCK TABLES `rep_providerlabs` WRITE;
-/*!40000 ALTER TABLE `rep_providerlabs` DISABLE KEYS */;
-INSERT INTO `rep_providerlabs` VALUES (1,1,1,NULL,NULL);
-/*!40000 ALTER TABLE `rep_providerlabs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerprograms`
@@ -1833,16 +1673,6 @@ CREATE TABLE `rep_providerprograms` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_providerprograms`
---
-
-LOCK TABLES `rep_providerprograms` WRITE;
-/*!40000 ALTER TABLE `rep_providerprograms` DISABLE KEYS */;
-INSERT INTO `rep_providerprograms` VALUES (5,12,1,'1','2016-12-16 12:27:50'),(6,12,2,'1','2016-12-16 12:27:50');
-/*!40000 ALTER TABLE `rep_providerprograms` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_providerresultcodes`
 --
 
@@ -1860,16 +1690,6 @@ CREATE TABLE `rep_providerresultcodes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rep_providerresultcodes`
---
-
-LOCK TABLES `rep_providerresultcodes` WRITE;
-/*!40000 ALTER TABLE `rep_providerresultcodes` DISABLE KEYS */;
-INSERT INTO `rep_providerresultcodes` VALUES (1,'OK','HuQas Provider','1','2016-12-01 11:08:08'),(2,'REAGENT UNAVAILABLE\r\n','HuQas Provider','1','2016-12-01 11:09:33'),(3,'PENDING\r\n','HuQas Provider','1','2016-12-01 11:09:59'),(4,'ANALYZER OUT OF SERVICE\r\n','HuQas Provider','1','2016-12-01 11:10:26'),(5,'FAILURE TO PARTICIPATE\r\n','HuQas Provider','1','2016-12-01 11:10:53'),(6,'TESTING SUSPENDED DURING TEST EVENT\r\n','HuQas Provider','1','2016-12-01 11:11:13'),(7,'BELOW LINEAR/DETECTION LIMIT\r\n','HuQas Provider','1','2016-12-01 11:11:40');
-/*!40000 ALTER TABLE `rep_providerresultcodes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rep_providerrounds`
 --
 
@@ -1881,23 +1701,13 @@ CREATE TABLE `rep_providerrounds` (
   `PeriodDescription` varchar(128) NOT NULL,
   `ProviderID` varchar(128) DEFAULT NULL,
   `EnrolledLabs` int(11) DEFAULT NULL,
-  `CreatedBy` varchar(50) DEFAULT NULL,
-  `CreatedDate` datetime DEFAULT NULL,
   `StartDate` date DEFAULT NULL,
   `EndDate` date DEFAULT NULL,
+  `CreatedBy` varchar(50) DEFAULT NULL,
+  `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_providerrounds`
---
-
-LOCK TABLES `rep_providerrounds` WRITE;
-/*!40000 ALTER TABLE `rep_providerrounds` DISABLE KEYS */;
-INSERT INTO `rep_providerrounds` VALUES (1,'2nd Round Event 2016','HuQas Provider',30,'26','2017-04-19 12:39:40','2017-03-01','2017-08-31'),(2,'3rd Test Event 2016','HuQas Provider',40,'1','2016-12-08 10:07:27','2017-04-01','2017-04-27'),(8,'4th Round 2017','Micro Provider',40,'26','2017-04-19 12:21:55','2017-04-01','2017-04-27'),(9,'5Th round 2018','HuQas Provider',30,'26','2017-04-19 12:35:07','2017-03-06','2017-04-29');
-/*!40000 ALTER TABLE `rep_providerrounds` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providers`
@@ -1920,18 +1730,8 @@ CREATE TABLE `rep_providers` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ProviderID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_providers`
---
-
-LOCK TABLES `rep_providers` WRITE;
-/*!40000 ALTER TABLE `rep_providers` DISABLE KEYS */;
-INSERT INTO `rep_providers` VALUES (1,'HuQas Provider','brianonyi@gmail.com','Hello, how I do formate date in format dd/mm/yyyy using DataPicker? IÂ´m using $(\".selector\").datepic','0737547388',100,'Dennis Kamau','0727368823','dkamau@abnosoftwares','active','26','2017-04-19 12:42:46'),(2,'Hiv PT','vmwenda@gmail.com','73827','078327393',100,'Victor Mwenda','0722339993','bvidolo@abnosoftwares.co.ke','active','1','2016-12-14 09:06:27'),(8,'Amref Provider','info@amref.co.ke','656555','0722339993',100,'Brian Vidolo','0722339993','brianonyi@gmail.com','active','1','2016-12-14 09:41:12'),(12,'Micro Provider','brianonyi@gmail.com','97765','0722339993',100,'Brian Vidolo','0722339993','bvidolo@abnosoftwares.co.ke','active','1','2016-12-16 12:27:50'),(13,'Victor Vidal','vvidal@gmail.com','47074 <?php echo $this->editId; ?>asdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','0722339993',100,NULL,NULL,NULL,'active','26','2017-04-19 11:52:57'),(14,'test edittted','test@gmail.com','175-110200 nairobi ,','0711560619',402500,NULL,NULL,NULL,'active','26','2017-04-19 11:49:48');
-/*!40000 ALTER TABLE `rep_providers` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providersamples`
@@ -1952,16 +1752,6 @@ CREATE TABLE `rep_providersamples` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_providersamples`
---
-
-LOCK TABLES `rep_providersamples` WRITE;
-/*!40000 ALTER TABLE `rep_providersamples` DISABLE KEYS */;
-INSERT INTO `rep_providersamples` VALUES (1,'A','HuQas Provider','Malaria','2nd Test Event 2016','Lab-001','1','2016-12-01 10:17:09'),(2,'B','HuQas Provider','Malaria','2nd Test Event 2016','Lab-001','1','2016-12-01 10:17:19'),(3,'C','HuQas Provider','Malaria','2nd Test Event 2016','Lab-001','1','2016-12-01 10:17:30'),(4,'D','HuQas Provider','Malaria','2nd Test Event 2016','Lab-001','1','2016-12-01 10:17:40');
-/*!40000 ALTER TABLE `rep_providersamples` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_repository`
@@ -2009,16 +1799,9 @@ CREATE TABLE `rep_repository` (
   KEY `AnalyteID` (`AnalyteID`),
   KEY `Grade` (`Grade`),
   KEY `TestKitID` (`TestKitID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1914 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1843 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `rep_repository`
---
-
-LOCK TABLES `rep_repository` WRITE;
-/*!40000 ALTER TABLE `rep_repository` DISABLE KEYS */;
-INSERT INTO `rep_repository` VALUES (1907,'Amref Provider','NPHL Microbiology Lab','4th Round 2017','HIV program for the year 2017','2017-04-19','A','Gram Stain',NULL,NULL,'Gram-negative rod','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'10323','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1908,'Amref Provider','NPHL Microbiology Lab','4th Round 2017','HIV program for the year 2017','2017-04-19','A','Bacterial Identification',NULL,NULL,'Klebsiella pneumoniae','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'10323','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1909,'Amref Provider','NPHL Microbiology Lab','4th Round 2017','HIV program for the year 2017','2017-04-19','B','Bacterial Identification',NULL,NULL,'normal flora only isolated','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'10323','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1910,'Amref Provider','NPHL Microbiology Lab','4th Round 2017','HIV program for the year 2017','2017-04-19','A','Antimicrobial Susceptibility',NULL,NULL,'Amikacin, Ampicillin, Cefazolin, Cefotaxime, Ceftazidime, Ciprofloxacin, Gentamicin, Imipenem, Ticarcillin-clavulanic acid, Trimethoprim/Sulfameth','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'10323','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1911,'Amref Provider','Bungoma District Hospital','4th Round 2017','HIV program for the year 2017','2017-04-19','A','Bacterial Identification',NULL,NULL,'Escherichia coli','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'15828','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1912,'Amref Provider','Bungoma District Hospital','4th Round 2017','HIV program for the year 2017','2017-04-19','B','Bacterial Identification',NULL,NULL,'Klebsiella species','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'15828','1','SJ2Veo0SQO','1','0','26','2017-04-27'),(1913,'Amref Provider','Bungoma District Hospital','4th Round 2017','HIV program for the year 2017','2017-04-19','A','Antimicrobial Susceptibility',NULL,NULL,'','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'15828','1','SJ2Veo0SQO','1','0','26','2017-04-27');
 /*!40000 ALTER TABLE `rep_repository` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -2030,30 +1813,28 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateTime_valid_rep` BEFORE INSERT ON `rep_repository` FOR EACH ROW BEGIN
-
-declare mflcount int default 0;
-declare EventDate date default null;
-
-declare EventDateCount int default 0;
-
-select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
-select EndDate into EventDate from rep_providerrounds where PeriodDescription = new.RoundID;
-
-
-  set new.EventDate=EventDate ;
-
-
-
-if mflcount=0 then
-  set new.valid=0 ;
-end if;
-
-
-if ( isnull(new.ReleaseDate) ) then
- set new.ReleaseDate=curdate();
-end if;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateTime_valid_rep` BEFORE INSERT ON `rep_repository` FOR EACH ROW 
+declare mflcount int default 0;
+declare EventDate date default null;
+
+declare EventDateCount int default 0;
+
+select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
+select EndDate into EventDate from rep_providerrounds where PeriodDescription = new.RoundID;
+
+
+  set new.EventDate=EventDate ;
+
+
+if mflcount=0 then
+  set new.valid=0 ;
+end if;
+
+
+if ( isnull(new.ReleaseDate) ) then
+ set new.ReleaseDate=curdate();
+end if;
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2078,16 +1859,6 @@ CREATE TABLE `rep_testkits` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rep_testkits`
---
-
-LOCK TABLES `rep_testkits` WRITE;
-/*!40000 ALTER TABLE `rep_testkits` DISABLE KEYS */;
-INSERT INTO `rep_testkits` VALUES (1,'TestKit 1','Malaria','HuQas Provider','1','2016-12-08 10:12:36'),(2,'TestKit 2','Malaria','HuQas Provider','1','2016-12-08 10:14:54');
-/*!40000 ALTER TABLE `rep_testkits` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `report_config`
@@ -2302,16 +2073,6 @@ CREATE TABLE `response_result_vl` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `response_result_vl`
---
-
-LOCK TABLES `response_result_vl` WRITE;
-/*!40000 ALTER TABLE `response_result_vl` DISABLE KEYS */;
-INSERT INTO `response_result_vl` VALUES (1,'1','3','fail',NULL,'1','2017-02-01 10:48:03','osoro@gmail.com','2017-04-04 11:45:42'),(1,'2','4','fail',NULL,'1','2017-02-01 10:48:03','osoro@gmail.com','2017-04-04 11:45:42'),(1,'3','5','fail',NULL,'1','2017-02-01 10:48:03','osoro@gmail.com','2017-04-04 11:45:42'),(2,'1','1','pass',NULL,'1','2017-03-19 23:10:40','eptmanager@gmail.com','2017-03-20 08:57:49'),(2,'2','1','pass',NULL,'1','2017-03-19 23:10:40','eptmanager@gmail.com','2017-03-20 08:57:49'),(2,'3','1','pass',NULL,'1','2017-03-19 23:10:41','eptmanager@gmail.com','2017-03-20 08:57:49');
-/*!40000 ALTER TABLE `response_result_vl` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `response_vl_not_tested_reason`
 --
 
@@ -2398,16 +2159,6 @@ CREATE TABLE `shipment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `shipment`
---
-
-LOCK TABLES `shipment` WRITE;
-/*!40000 ALTER TABLE `shipment` DISABLE KEYS */;
-INSERT INTO `shipment` VALUES (1,'VL0217-1','vl','2017-02-15','2017-02-28',1,0,3,'on',3,'0',NULL,'eptmanager@gmail.com','2017-02-01 10:25:31',NULL,NULL,'evaluated'),(2,'VL0317-1','vl','2017-04-01','2017-04-30',2,3,0,'on',3,'0',NULL,'eptmanager@gmail.com','2017-03-19 20:35:07','eptmanager@gmail.com','2017-03-20 12:52:14','finalized'),(3,'VL0317-2','vl','2017-03-16','2017-03-31',3,4,0,'on',NULL,'0',NULL,'eptmanager@gmail.com','2017-03-27 22:03:20',NULL,NULL,'shipped');
-/*!40000 ALTER TABLE `shipment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `shipment_participant_map`
 --
 
@@ -2468,16 +2219,6 @@ CREATE TABLE `shipment_participant_map` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `shipment_participant_map`
---
-
-LOCK TABLES `shipment_participant_map` WRITE;
-/*!40000 ALTER TABLE `shipment_participant_map` DISABLE KEYS */;
-INSERT INTO `shipment_participant_map` VALUES (1,1,1,'{\"sample_rehydration_date\":\"2017-02-16\",\"vl_assay\":\"1\",\"assay_lot_number\":\"4\",\"assay_expiration_date\":\"2017-02-18\",\"specimen_volume\":\"15\",\"uploaded_file\":\"\"}','19121190',0.00,0.00,'2017-02-16',NULL,NULL,NULL,NULL,'2017-02-15','2017-02-01 00:00:00',NULL,NULL,NULL,4,'[{\"warning\":\"Sample <strong>A<\\/strong> was reported wrongly\"},{\"warning\":\"Sample <strong>B<\\/strong> was reported wrongly\"},{\"warning\":\"Sample <strong>C<\\/strong> was reported wrongly\"},{\"warning\":\"Could not determine score. Not enough responses found in the chosen VL Assay.\"}]',0,'','no','no','',NULL,NULL,'2017-02-01 10:26:06','2017-03-20 08:56:32','eptmanager@gmail.com','2017-04-04 11:45:42','2','1','2017-02-01 10:48:03','yes',NULL,0,NULL,0,'yes','2017-02-16','brian','2017-02-01 10:50:44',1),(2,2,1,'{\"sample_rehydration_date\":\"2017-04-04\",\"vl_assay\":\"1\",\"assay_lot_number\":\"2\",\"assay_expiration_date\":\"2017-04-30\",\"specimen_volume\":\"2\"}','19111190',100.00,0.00,'2017-03-09',NULL,NULL,NULL,NULL,'2017-04-05','2017-03-19 00:00:00','','',NULL,1,'[]',0,'','no','no','',NULL,NULL,'2017-03-19 23:05:22','2017-03-20 08:57:49','eptmanager@gmail.com','2017-03-19 23:15:40','1','1','2017-03-19 23:10:40','yes',NULL,0,NULL,0,'',NULL,NULL,NULL,1),(3,2,8,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-19 23:05:22',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL),(4,2,9,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-19 23:05:22',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL),(5,3,1,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-27 22:09:05',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL),(6,3,8,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-27 22:09:05',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL),(7,3,9,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-27 22:09:05',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL),(8,3,2,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2017-03-27 22:09:05',NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `shipment_participant_map` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_admin`
 --
 
@@ -2500,12 +2241,12 @@ CREATE TABLE `system_admin` (
   `updated_by` varchar(255) DEFAULT NULL,
   `IsVl` int(11) DEFAULT NULL,
   `IsProvider` varchar(11) DEFAULT '0',
-  `ProviderName` varchar(100) NOT NULL,
+  `ProviderName` varchar(100) DEFAULT NULL,
   `AssignModule` int(11) DEFAULT '0',
   `County` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `UN_KEY_EMAIL` (`primary_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2514,7 +2255,8 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (2,'system','admin','admin@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0727547388',0,'active','2017-04-01 10:27:00','1','2017-04-19 09:26:59','2',4,'1','',1,NULL),(14,'VIRAL','load','viralload@gmail.com','viralload@17','viralload@yahoo.com','0711560619',1,'active','2017-04-05 11:59:01','2','2017-04-05 14:24:26','14',1,NULL,'',0,NULL),(15,'viralload','two','viraltwo@gmail.com','viralload@17','','0712560619',1,'active','2017-04-05 12:07:18','14',NULL,NULL,1,NULL,'',0,NULL),(17,'repo','sitory','repository@gmail.com','repository@17','','0712560619',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30'),(18,'QA','Manager','qamanager@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0714560619',0,'active','2017-04-05 12:41:12','17','2017-04-11 20:20:17','18',2,'3','',0,'3'),(19,'repo','provider','repoprovider@gmail.com','repoprovider@17','','0716560619',1,'active','2017-04-05 12:52:33','17',NULL,NULL,2,'2','',0,NULL),(20,'aq','county','qacounty@gmail.com','qacounty@17','','0717560619',1,'active','2017-04-05 14:06:26','17','2017-04-05 18:44:47','17',2,'3','',0,'1'),(21,'test','test','test@gmail.com','test@2017','test@gmail.com','0711560619',0,'active','2017-04-06 08:41:45','17',NULL,NULL,2,'1','Amref Provider',0,NULL),(22,'micro','biology','osoromic@gmail.com','micro@17',NULL,NULL,NULL,'active',NULL,NULL,NULL,NULL,3,'1','',0,'1'),(23,'test','osoro','osoro@gmail.com','cd7b4dce1adf04edb3215d4b5f1a855e','','0711560619',1,'active','2017-04-11 11:49:31','17',NULL,NULL,2,'1','',0,'30'),(26,'osoro','michael','osoromichael2@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0711560619',0,'active','2017-04-11 17:21:12','17','2017-04-12 21:13:38','26',2,'1','',0,'30'),(31,'ototo','ototo','osoromich@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0711560619',1,'active','2017-04-18 16:01:05','26',NULL,NULL,2,'3','',0,'30'),(33,'Osoro','michael','okarmikell@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0711560619',1,'active','2017-04-19 09:49:11','2',NULL,NULL,4,'1','',1,NULL),(35,'osoro','michael','osoromichael@gmail.com','696bbd006c52c530c797e8aff4ffec12','','0721671211',0,'active','2017-04-19 10:34:05','2','2017-04-19 10:35:06','35',3,NULL,'',0,NULL);
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org',md5('system@17'),'','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','mapesa@gmail.com',md5('repository@17'),'','0788492586',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30');
+
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2588,7 +2330,7 @@ CREATE TABLE `tbl_bac_couriers` (
   `mobile` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `tel` varchar(45) DEFAULT NULL,
-  `physicalAddress` varchar(45) DEFAULT NULL,
+  `physicalAddress` varchar(255) DEFAULT NULL,
   `status` varchar(45) DEFAULT '1',
   `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `createdBy` varchar(45) DEFAULT NULL,
@@ -2633,7 +2375,7 @@ CREATE TABLE `tbl_bac_expected_micro_bacterial_agents` (
   `agentScore` decimal(10,0) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SAMPLE_ANTI_UK` (`sampleId`,`antiMicroAgent`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2642,7 +2384,7 @@ CREATE TABLE `tbl_bac_expected_micro_bacterial_agents` (
 
 LOCK TABLES `tbl_bac_expected_micro_bacterial_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_expected_micro_bacterial_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_expected_micro_bacterial_agents` VALUES (7,'3','amikacin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(11,'3','ampicilin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(20,'2','amikacin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(21,'2','ampicilin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(22,'2','colistin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(23,'1','amikacin','yes',15,1,35,NULL,NULL,NULL,'I',NULL,4),(24,'1','colistin','yes',22,1,35,NULL,NULL,NULL,'I',NULL,4),(25,'1','cloxacilin','yes',25,1,35,NULL,NULL,NULL,'I',NULL,4),(26,'1','ampicilin','yes',555,1,35,NULL,NULL,NULL,'I',NULL,4);
+INSERT INTO `tbl_bac_expected_micro_bacterial_agents` VALUES (7,'3','amikacin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(11,'3','ampicilin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(16,'1','amikacin','yes',15,1,1,NULL,NULL,NULL,'I',NULL,4),(17,'1','colistin','yes',22,1,1,NULL,NULL,NULL,'I',NULL,4),(18,'1','cloxacilin','yes',25,1,1,NULL,NULL,NULL,'I',NULL,4),(19,'1','ampicilin','yes',555,1,1,NULL,NULL,NULL,'I',NULL,4),(20,'2','amikacin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(21,'2','ampicilin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(22,'2','colistin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10);
 /*!40000 ALTER TABLE `tbl_bac_expected_micro_bacterial_agents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2689,7 +2431,7 @@ CREATE TABLE `tbl_bac_expected_results` (
 
 LOCK TABLES `tbl_bac_expected_results` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_expected_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_expected_results` VALUES (1,'1','','2017-03-15 14:59:19',1,35,'0000-00-00 00:00:00','Abiotrophia adiacens',4,'slide',1,'27',1,'grey',1,'Acanthamoeba',1,'amoxicilin',1,'serotypomg',1,'Abiotrophia adiacens',4,'1'),(2,'2','','2017-03-15 15:02:30',1,1,'0000-00-00 00:00:00','Achromobacter ruhlandii',4,'slide',2,'30',2,'30',2,'Achromobacter',2,'amikacilin',2,'serotyping',2,'Achromobacter ruhlandii',4,'1');
+INSERT INTO `tbl_bac_expected_results` VALUES (1,'1','','2017-03-15 14:59:19',1,1,'0000-00-00 00:00:00','Abiotrophia adiacens',4,'slide',1,'27',1,'grey',1,'Acanthamoeba',1,'amoxicilin',1,'serotypomg',1,'Abiotrophia adiacens',4,'1'),(2,'2','','2017-03-15 15:02:30',1,1,'0000-00-00 00:00:00','Achromobacter ruhlandii',4,'slide',2,'30',2,'30',2,'Achromobacter',2,'amikacilin',2,'serotyping',2,'Achromobacter ruhlandii',4,'1');
 /*!40000 ALTER TABLE `tbl_bac_expected_results` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -2701,10 +2443,14 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `tbl_bac_update_samples_after_insert` AFTER INSERT ON `tbl_bac_expected_results` FOR EACH ROW BEGIN
-
-update tbl_bac_samples set expectedResults=1 where id=new.sampleId;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `tbl_bac_update_samples_after_insert` AFTER INSERT ON `tbl_bac_expected_results` FOR EACH ROW BEGIN
+
+
+
+update tbl_bac_samples set expectedResults=1 where id=new.sampleId;
+
+
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2870,16 +2616,6 @@ CREATE TABLE `tbl_bac_panels_shipments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_panels_shipments`
---
-
-LOCK TABLES `tbl_bac_panels_shipments` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_panels_shipments` DISABLE KEYS */;
-INSERT INTO `tbl_bac_panels_shipments` VALUES (1,1,1,'2017-03-15 15:34:00','1','3','1',NULL,'2017-03-15 15:34:00',NULL,NULL,1,'2017-03-17 15:49:34',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0'),(2,1,1,'2017-03-15 16:57:07','1','4','1',1,'2017-03-15 16:57:07','wet',NULL,1,'2017-03-28 15:27:44',NULL,NULL,NULL,NULL,'1','okay',1,'1'),(3,1,2,'2017-03-25 02:30:58','1','0','1',NULL,'2017-03-25 02:30:58',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
-/*!40000 ALTER TABLE `tbl_bac_panels_shipments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_programs`
 --
 
@@ -2933,16 +2669,6 @@ CREATE TABLE `tbl_bac_ready_labs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_ready_labs`
---
-
-LOCK TABLES `tbl_bac_ready_labs` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_ready_labs` DISABLE KEYS */;
-INSERT INTO `tbl_bac_ready_labs` VALUES (2,'2','2017-02-22 11:45:33',NULL,NULL,'1','2',33,0),(4,'2','2017-02-22 11:45:33',NULL,NULL,'1','2',35,0),(5,'1','2017-02-22 11:45:33',NULL,NULL,'1','2',1,0),(11,'1','2017-03-28 15:30:58','1',NULL,NULL,'1',2,0);
-/*!40000 ALTER TABLE `tbl_bac_ready_labs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_response_results`
 --
 
@@ -2993,13 +2719,6 @@ CREATE TABLE `tbl_bac_response_results` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `tbl_bac_response_results`
---
-
-LOCK TABLES `tbl_bac_response_results` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_response_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_response_results` VALUES (1,'1','1','1','1','3','2017-03-16 12:07:07',1,1,'0000-00-00 00:00:00','qwe',0,'0',0,'0',0,'0',0,'0',0,'0',0,'27',0,'qwe',0,0.00,'1','1','1',0,1,0.00,'UNACCEPTABLE','UNACCEPTABLE','Well Done',0,'0'),(5,'2','1','1','1','4','2017-03-16 17:31:10',1,1,'0000-00-00 00:00:00','hotter',0,'27',0,'27',0,'27',0,'27',0,'27',0,'27',0,'cools',0,0.00,'1','1','1',0,1,0.00,'UNACCEPTABLE','UNACCEPTABLE','',1,'0');
 /*!40000 ALTER TABLE `tbl_bac_response_results` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -3068,16 +2787,6 @@ CREATE TABLE `tbl_bac_rounds` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_rounds`
---
-
-LOCK TABLES `tbl_bac_rounds` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_rounds` DISABLE KEYS */;
-INSERT INTO `tbl_bac_rounds` VALUES (1,'ROUND A 2017','ROUND/1/17','2017-03-14','2017-07-16',1,1,1,'2017-03-15 15:25:28',1,'2017-03-15 15:25:28','FIRST ROUND 2017',0,0,0,'1',NULL,1,1),(2,'second quarter','round 0002','2017-03-26','2017-04-30',1,1,1,'2017-03-27 04:27:28',NULL,'2017-03-27 04:27:28','bacterial',0,0,0,'0',NULL,0,0);
-/*!40000 ALTER TABLE `tbl_bac_rounds` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_rounds_labs`
 --
 
@@ -3097,16 +2806,6 @@ CREATE TABLE `tbl_bac_rounds_labs` (
   UNIQUE KEY `UK_LAB_ROUND` (`roundId`,`labId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_rounds_labs`
---
-
-LOCK TABLES `tbl_bac_rounds_labs` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_rounds_labs` DISABLE KEYS */;
-INSERT INTO `tbl_bac_rounds_labs` VALUES (1,'1','1','2017-03-15 16:57:07','1',NULL,NULL,NULL);
-/*!40000 ALTER TABLE `tbl_bac_rounds_labs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_sample_instructions`
@@ -3191,16 +2890,6 @@ CREATE TABLE `tbl_bac_sample_to_panel` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_sample_to_panel`
---
-
-LOCK TABLES `tbl_bac_sample_to_panel` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` DISABLE KEYS */;
-INSERT INTO `tbl_bac_sample_to_panel` VALUES (1,1,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-17',NULL,0,NULL,1,1,0,NULL,NULL,'null','0','0'),(2,2,'1','1','2017-03-15 15:13:22','1',NULL,'2017-03-15 15:13:22',NULL,NULL,NULL,1,'2017-03-19',NULL,0,NULL,1,1,0,NULL,NULL,'null','0','0'),(3,1,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-28',1,0,1,1,1,1,'wet','nice condition','1','0','1'),(4,2,'1','1','2017-03-15 16:57:07','1',1,'2017-03-15 16:57:07',4,NULL,'okay',1,'2017-03-28',1,0,1,1,1,1,'wet','nice condition','1','0','1');
-/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_samples`
 --
 
@@ -3246,16 +2935,6 @@ CREATE TABLE `tbl_bac_samples` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_samples`
---
-
-LOCK TABLES `tbl_bac_samples` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_samples` DISABLE KEYS */;
-INSERT INTO `tbl_bac_samples` VALUES (1,'EQA/NPHL/A/17','2017-03-15','','','0000-00-00','osoro','NPHL','stool',1,'2017-03-15 14:34:48','0','0000-00-00','1','knh','10','',0,'5','null','0000-00-00','22549100794003607',1,'2017-03-15 14:34:48',1,0,0,'sample isolates','Please check the stool for ant organisms','2','add the reagents and identify the organism',1),(2,'EQA/NPHL/B/17','2017-03-15','','','0000-00-00','OMOLLO','NPHL','MUCUS',1,'2017-03-15 14:55:09','0','0000-00-00','1','KNH','10','',0,'5','null','0000-00-00','45727664592903094',1,'2017-03-15 14:55:09',1,0,0,'standard organisms','bacteria','2','Identify the bacteria',1);
-/*!40000 ALTER TABLE `tbl_bac_samples` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_samples_to_users`
 --
 
@@ -3289,16 +2968,6 @@ CREATE TABLE `tbl_bac_samples_to_users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_samples_to_users`
---
-
-LOCK TABLES `tbl_bac_samples_to_users` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_samples_to_users` DISABLE KEYS */;
-INSERT INTO `tbl_bac_samples_to_users` VALUES (1,1,1,3,'2017-03-16 11:28:38','2017-03-16 11:28:38','1','1',NULL,NULL,1,'1','1',NULL,NULL,1,1,0,0,'UNACCEPTABLE','UNACCEPTABLE',1,'0'),(2,1,2,4,'2017-03-16 17:29:50','2017-03-16 17:29:50','1','2',NULL,NULL,1,'1','1',NULL,NULL,1,1,0,0,'UNACCEPTABLE','UNACCEPTABLE',1,'0');
-/*!40000 ALTER TABLE `tbl_bac_samples_to_users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_saved_email_notifications`
@@ -3356,16 +3025,6 @@ CREATE TABLE `tbl_bac_shipment_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_shipment_logs`
---
-
-LOCK TABLES `tbl_bac_shipment_logs` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_shipment_logs` DISABLE KEYS */;
-INSERT INTO `tbl_bac_shipment_logs` VALUES (1,NULL,NULL,'0',NULL,NULL,'1',NULL,'1','2017-03-15 16:18:02',NULL),(2,NULL,NULL,'0',NULL,NULL,'1',NULL,'1','2017-03-15 16:20:07',NULL),(3,NULL,NULL,'0',NULL,NULL,'1',NULL,'1','2017-03-15 16:20:43',NULL),(4,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 10:36:31',NULL),(5,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 10:36:49',NULL),(6,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 10:37:18',NULL),(7,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 10:37:38',NULL),(8,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 12:51:48',NULL),(9,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 13:33:29',NULL),(10,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 13:34:54',NULL),(11,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 14:29:32',NULL),(12,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 14:41:01',NULL),(13,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 14:43:56',NULL),(14,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 18:09:42',NULL),(15,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 18:18:12',NULL),(16,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-16 18:18:17',NULL),(17,NULL,NULL,'2',NULL,NULL,'1','Osoro Michael','1','2017-03-17 14:19:16',NULL),(18,'2017-03-17 00:00:00','10','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 14:56:02',NULL),(19,'2017-03-17 00:00:00','10','2',NULL,NULL,'1','Osoro Michael','1','2017-03-17 14:56:42',NULL),(20,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:28:37',NULL),(21,'2017-01-29 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:28:53',NULL),(22,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:36:37',NULL),(23,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:37:57',NULL),(24,'2017-02-25 00:00:00','23','2',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:44:05',NULL),(25,'2017-02-25 00:00:00','2','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:44:39',NULL),(26,'2017-02-26 00:00:00','12','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:49:34',NULL),(27,'2017-02-26 00:00:00','12','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 15:50:43',NULL),(28,'2017-02-26 00:00:00','12','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:02:51',NULL),(29,'2017-02-26 00:00:00','12','2',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:07:38',NULL),(30,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:08:42',NULL),(31,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:09:56',NULL),(32,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:10:46',NULL),(33,'2017-02-25 00:00:00','12','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:14:48',NULL),(34,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:18:03',NULL),(35,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-17 16:18:54',NULL),(36,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-18 16:42:10',NULL),(37,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-18 16:42:16',NULL),(38,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 12:14:25',NULL),(39,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 12:23:04',NULL),(40,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 12:30:52',NULL),(41,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 12:30:55',NULL),(42,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 19:11:19',NULL),(43,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 19:11:25',NULL),(44,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 19:11:29',NULL),(45,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-20 19:11:33',NULL),(46,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:20:41',NULL),(47,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:23:10',NULL),(48,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:25:17',NULL),(49,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:26:02',NULL),(50,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:30:04',NULL),(51,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:34:32',NULL),(52,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:35:13',NULL),(53,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:36:05',NULL),(54,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:36:34',NULL),(55,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:41:18',NULL),(56,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:42:01',NULL),(57,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:42:55',NULL),(58,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:43:36',NULL),(59,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:45:02',NULL),(60,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:46:11',NULL),(61,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:46:31',NULL),(62,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:48:29',NULL),(63,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:48:58',NULL),(64,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:50:53',NULL),(65,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:52:04',NULL),(66,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:52:25',NULL),(67,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:53:21',NULL),(68,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:54:59',NULL),(69,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 09:55:27',NULL),(70,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 10:01:00',NULL),(71,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 10:02:51',NULL),(72,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 10:07:37',NULL),(73,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 10:09:42',NULL),(74,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-21 14:22:46',NULL),(75,'2017-02-25 00:00:00','23','2',NULL,NULL,'1','Osoro Michael','1','2017-03-28 15:21:16',NULL),(76,'2017-02-25 00:00:00','23','4',NULL,NULL,'1','Osoro Michael','1','2017-03-28 15:22:55',NULL),(77,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-03-28 15:27:44',NULL),(78,'2017-02-25 00:00:00','23','3',NULL,NULL,'1','Osoro Michael','1','2017-04-03 12:57:43',NULL);
-/*!40000 ALTER TABLE `tbl_bac_shipment_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_shipments`
 --
 
@@ -3416,15 +3075,6 @@ CREATE TABLE `tbl_bac_shipments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `tbl_bac_shipments`
---
-
-LOCK TABLES `tbl_bac_shipments` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_shipments` DISABLE KEYS */;
-INSERT INTO `tbl_bac_shipments` VALUES (1,'SHIPMENT/A/17','2017-03-15 15:14:57',1,1,'2017-03-15 15:14:57',NULL,'100',NULL,NULL,NULL,NULL,'1',NULL,'carries panels with samples one to kajiado',NULL,NULL,'23','SHIPMENT/1/17','1','2017-03-15','OSORO','3',23,'2017-02-25','23','23','2017-03-15','20','10 panels','G4S','Osoro Michael','Lorry',0,NULL,'1',1),(2,'shipment 002','2017-03-25 02:30:28',1,NULL,'2017-03-25 02:30:28',NULL,'10',NULL,NULL,NULL,NULL,'1',NULL,'s001',NULL,NULL,NULL,'soo1',NULL,'2017-03-25','osor michael','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,'0',0);
-/*!40000 ALTER TABLE `tbl_bac_shipments` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -3551,16 +3201,6 @@ CREATE TABLE `tbl_bac_suscepitibility` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_suscepitibility`
---
-
-LOCK TABLES `tbl_bac_suscepitibility` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_suscepitibility` DISABLE KEYS */;
-INSERT INTO `tbl_bac_suscepitibility` VALUES (1,1,1,1,3,'2017-03-16 12:16:32','1','1','0000-00-00 00:00:00',1,'0','0','0','0','0','CLSI',1),(4,1,1,2,4,'2017-03-16 17:31:21','1','1','0000-00-00 00:00:00',1,'amikacin','slide','glass','smk','smk','HUQAS',1);
-/*!40000 ALTER TABLE `tbl_bac_suscepitibility` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_test_agents`
 --
 
@@ -3669,16 +3309,6 @@ CREATE TABLE `vl_department` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `vl_department`
---
-
-LOCK TABLES `vl_department` WRITE;
-/*!40000 ALTER TABLE `vl_department` DISABLE KEYS */;
-INSERT INTO `vl_department` VALUES (1,'Testing');
-/*!40000 ALTER TABLE `vl_department` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vl_mfl`
 --
 
@@ -3692,16 +3322,6 @@ CREATE TABLE `vl_mfl` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vl_mfl`
---
-
-LOCK TABLES `vl_mfl` WRITE;
-/*!40000 ALTER TABLE `vl_mfl` DISABLE KEYS */;
-INSERT INTO `vl_mfl` VALUES (1,'001','Test');
-/*!40000 ALTER TABLE `vl_mfl` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vl_platform`
@@ -3768,4 +3388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-19 12:53:16
+-- Dump completed on 2017-04-18 13:23:04
