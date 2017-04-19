@@ -222,7 +222,7 @@ if ($auth->hasIdentity()) {
 
 <?php } ?>
 <?php if ($vl == 3) { ?>
-<?php if ($role == 1) { ?>
+
             <div class="jumbotron">
                 <h1>MICROBIOLOGY ADMIN MODULE</h1> 
                   <small>Welcome back, f<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
@@ -233,7 +233,7 @@ if ($auth->hasIdentity()) {
                    href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'add'), 'default', true); ?>">
                     Add Microbiology Users </a>
             </p> 
-        <?php } ?>
+        
 <?php } ?>
 <?php if ($vl == 2) { ?>
     <div class="container">
