@@ -220,6 +220,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
         if ($data['IsVl'] == 4) {
             $data['AssignModule'] = 1;
+            $data['IsProvider'] = 1;
         }
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];

@@ -51,7 +51,7 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
         } else {
             if ($this->_hasParam('id')) {
                 if (in_array($_SESSION['loggedInDetails']["IsProvider"], array(2, 3))) {
-                    $adminId = $_SESSION['loggedInDetails']['admin_id'];
+                    $adminId =(int) $_SESSION['loggedInDetails']['admin_id'];
                 } else {
                     $adminId = (int) $this->_getParam('id');
                 }
