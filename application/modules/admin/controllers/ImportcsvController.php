@@ -334,9 +334,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         } else {
             echo json_encode(array('status' => '0'));
             return '0';
-         
         }
-           exit;
+        exit;
     }
 
     public function generateRandom($len) {
@@ -369,18 +368,21 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
     }
 
     public function createBulkInsert($table, Array $columns, Array $records, $extraInfo, Array $mappedExcelColumns) {
-        $query = " INSERT INTO `" . $table . "` (";
-        $query .= " `ProviderID`,`ProgramID`,`RoundID`,`BatchID`,";
+
+
+        $insert_query_head = " INSERT INTO `" . $table . "` (";
+        $insert_query_head .= " `ProviderID`,`ProgramID`,`RoundID`,`BatchID`,";
         for ($x = 0; $x < count($columns); $x++) {
 
-            $query .= " `" . $columns [$x] . "` ";
+            $insert_query_head .= " `" . $columns [$x] . "` ";
 
             if (($x != count($columns) - 1)) {
-                $query .= ",";
+                $insert_query_head .= ",";
             }
         }
 
-        $query .= ") VALUES  ";
+        $insert_query_head .= ") VALUES  ";
+        $query = $insert_query_head;
 
         for ($x = 0; $x < count($records); $x ++) {
 
@@ -402,8 +404,12 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
                 }
             }
             $query .= ")";
-
-            if ($x != count($records) - 1) {
+            if ($x % 100 == 0) {
+                $query .= ";";
+                 $query .= $insert_query_head;
+            }
+            
+            elseif ($x != count($records) - 1) {
                 $query .= ",";
             }
         }
