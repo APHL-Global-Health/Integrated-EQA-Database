@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                                                       ?></p>
+                                        <p><?php //echo $eh;                                                                                               ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                                                       ?></option>
+                                            <option><?php //echo $rh['Field'];                                                                                               ?></option>
                             <?php
                             //}
                             ?>
@@ -239,111 +239,175 @@
     var postParams = "";
     $('body').on('change', '.sel', function () {
         //alert(excelRepArray)
-        appendFormParams(excelRepArray, $(this).val());
+        createPostedExcel(excelRepArray, $(this).val());
+
     });
+    var excelHeadDbColumns = [];
+    var dbColumnsStr = '';
+    
     var excelHeaderI = '';
     var clickedLabel = [];
     var clickedExcelLabel = [];
     var arrayWithExcelLabelValue = [];
+    function createPostedExcel(excelIndex, dbColumn) {
+        var tempArry = [];
+
+        tempArry.key = excelIndex;
+        tempArry.value = dbColumn;
+        var dbColumnExists = false;
+
+        if (dbColumnsStr.indexOf(dbColumn) < 0) {
+
+            dbColumnsStr += ',' + dbColumn;
+        } else {
+            dbColumnExists = true;
+
+            alert('column used');
+            return false;
+        }
+        dbColumnsStr = '';
+        if (excelHeadDbColumns.length > 0) {
+
+            var excelExists = false;
+            for (var i = 0; i < excelHeadDbColumns.length; i++) {
+
+                if (excelHeadDbColumns[i]['key'] == excelIndex) {
+
+                    excelHeadDbColumns[i]['value'] = dbColumn;
+                    excelExists = true;
+
+                }
+
+
+            }
+            if (!excelExists) {
+
+                excelHeadDbColumns.push(tempArry);
+            }
+        } else {
+            excelHeadDbColumns.push(tempArry);
+        }
+        for (var i = 0; i < excelHeadDbColumns.length; i++) {
+            dbColumnsStr += ',' + excelHeadDbColumns[i]['value'];
+        }
+
+        arrayWithExcelLabelValue = excelHeadDbColumns;
+        
+        console.log(excelHeadDbColumns);
+        console.log(dbColumnsStr.indexOf(dbColumn));
+        console.log(dbColumnsStr);
+
+    }
+
+
+
     function appendFormParams(key, value) {
         $("#error").hide();
         $(".selectedVal_" + key).css("border-color", "lightgray");
         console.log(key);
         console.log(value);
-        if (value != 1) {
-            var singleArray = new Array();
-            var usedPosition = '';
-            var changed = false;
-            if (clickedLabel.length == 1 && value == '0') {
-                clickedLabel = [];
-                arrayWithExcelLabelValue = [];
-            }
-            if (clickedLabel.length > 0) {
+//        if (value != 1) {
+        var singleArray = new Array();
 
-                var exists = false;
-                var indexPos = -1;
-                for (var i = 0; i < clickedLabel.length; i++) {
-                    for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
+        var usedPosition = '';
+        var changed = false;
 
-                        if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
+//        if (clickedLabel.length == 1 && value == '0') {
+//            clickedLabel = [];
+//            arrayWithExcelLabelValue = [];
+//        }
+        if (clickedLabel.length > 0) {
 
-                            indexPos = j;
-                            break;
-                        }
+            var exists = false;
+            var indexPos = -1;
 
+            for (var i = 0; i < clickedLabel.length; i++) {
+                for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
 
+                    if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
 
-                        if (key == arrayWithExcelLabelValue[j]['key']) {
-                            if (clickedLabel[i] != value) {
-                                arrayWithExcelLabelValue[j]['value'] = value;
-                                clickedLabel[i] = value;
-                                changed = true;
-
-
-                            } else {
-                                usedPosition = clickedLabel[i];
-                                exists = true; // 
-
-                                break;
-                            }
-                        }
-                    }
-                    if (clickedLabel[i] == value) {
-
-                        usedPosition = clickedLabel[i];
-                        exists = true; // 
-
+                        indexPos = j;
                         break;
                     }
 
-                }
-                if (indexPos >= 0) {
-                    clickedLabel.splice(indexPos, 1);
-                    arrayWithExcelLabelValue.splice(indexPos, 1);
-                    console.log(indexPos)
-                }
 
-                if (!exists) {
-                    singleArray.key = key;
-                    singleArray.value = value;
-                    if (value != '0') {
-                        if (!changed) {
-                            clickedLabel.push(value);
-                            arrayWithExcelLabelValue.push(singleArray);
+
+                    if (key == arrayWithExcelLabelValue[j]['key']) {
+
+                        if (clickedLabel[j] != value) {
+                            arrayWithExcelLabelValue[j]['value'] = value;
+
+                            clickedLabel[i] = value;
+                            changed = true;
+
+
+                        } else {
+                            usedPosition = clickedLabel[i];
+                            exists = true; // 
+
+                            break;
                         }
                     }
-
-                    if (postParams === "") {
-                        postParams = key + "=" + value;
-                    } else {
-                        postParams += "&" + key + "=" + value;
-                    }
-                    $("#error").hide();
-                    $(".selectedVal_" + key).css("border-color", "lightgray");
-                } else {
-                    if (!changed) {
-                        $("#error").show();
-                        $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
-                        $(".selectedVal_" + key).css("border-color", "red");
-
-                        document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
-                    }
                 }
-                //console.log(arrayWithExcelLabelValue);
-                //console.log(clickedLabel);
-            } else {
 
-                //console.log(clickedLabel);
-                postParams = key + "=" + value;
-                clickedLabel.push(value);
+                if (clickedLabel[i] == value) {
+
+                    usedPosition = clickedLabel[i];
+                    exists = true; // 
+
+                    break;
+                }
+
+            }
+            if (indexPos >= 0) {
+                clickedLabel.splice(indexPos, 1);
+                arrayWithExcelLabelValue.splice(indexPos, 1);
+                console.log(indexPos)
+            }
+
+            if (!exists) {
                 singleArray.key = key;
                 singleArray.value = value;
                 if (value != '0') {
-                    arrayWithExcelLabelValue.push(singleArray);
+                    if (!changed) {
+                        clickedLabel.push(value);
+                        arrayWithExcelLabelValue.push(singleArray);
+                    }
+                }
+
+                if (postParams === "") {
+                    postParams = key + "=" + value;
+                } else {
+                    postParams += "&" + key + "=" + value;
+                }
+                $("#error").hide();
+                $(".selectedVal_" + key).css("border-color", "lightgray");
+            } else {
+                if (!changed) {
+                    $("#error").show();
+                    $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
+                    $(".selectedVal_" + key).css("border-color", "red");
+
+                    document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
                 }
             }
-            // alert(postParams);
+            //console.log(arrayWithExcelLabelValue);
+            //console.log(clickedLabel);
+        } else {
+
+            //console.log(clickedLabel);
+            postParams = key + "=" + value;
+            clickedLabel.push(value);
+
+            singleArray.key = key;
+            singleArray.value = value;
+
+            if (value != '0') {
+                arrayWithExcelLabelValue.push(singleArray);
+            }
         }
+        // alert(postParams);
+//        }
         console.log(clickedLabel);
         console.log(arrayWithExcelLabelValue);
     }

@@ -415,7 +415,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         }
 
         $query .= ";";
-
+      
         return $query;
     }
 
