@@ -398,7 +398,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
 
             for ($i = 0; $i < count($columns); $i++) {
 
-                $query .= " '" . $records [$x][$mappedExcelColumns[$i]] . "' ";
+                $query .= " '" . addslashes($records [$x][$mappedExcelColumns[$i]]) . "' ";
                 if (($i != count($columns) - 1)) {
                     $query .= ",";
                 }
