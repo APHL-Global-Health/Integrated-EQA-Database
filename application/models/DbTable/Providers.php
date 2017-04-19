@@ -202,9 +202,9 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
             'Address' => $params['Address'],
             'Telephone' => $params['Telephone'],
             'PostalCode' => $params['PostalCode'],
-            'ContactName' => $params['ContactName'],
-            'ContactTelephone' => $params['ContactTelephone'],
-            'ContactEmail' => $params['ContactEmail'],
+//            'ContactName' => $params['ContactName'],
+//            'ContactTelephone' => $params['ContactTelephone'],
+//            'ContactEmail' => $params['ContactEmail'],
             'Status' => $params['Status'],
             'CreatedBy' => $authNameSpace->admin_id,
             'CreatedDate' => new Zend_Db_Expr('now()')

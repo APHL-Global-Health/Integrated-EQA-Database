@@ -22,8 +22,7 @@ if ($auth->hasIdentity()) {
     $vl = $_SESSION['loggedInDetails']["IsVl"];
     $rep = $_SESSION['loggedInDetails']["AssignModule"];
 }
-$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini",APPLICATION_ENV);
-
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +63,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
         <!--    <link rel="stylesheet" href="-->
-        <?php //echo $this->baseUrl("css/DT_bootstrap.css");   ?><!--" type="text/css" media="all">-->
+        <?php //echo $this->baseUrl("css/DT_bootstrap.css");    ?><!--" type="text/css" media="all">-->
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
@@ -178,10 +177,10 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <?php if ($vl != 2) { ?>
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                    ?>">Test Kits</a></li>-->
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
+                        <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                     ?>">Test Kits</a></li>-->
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <?php } ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'repcustomfields'), 'default', true); ?>">Custom Fields</a></li>
@@ -198,7 +197,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                             <i class="icon-download"></i>&nbsp;&nbsp;Uploaded Files</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository','action'=>'validate'), 'default', true); ?>">
+                                        <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'validate'), 'default', true); ?>">
                                             <i class="fa fa-check"></i>&nbsp;&nbsp;Validate Data</a>
                                     </li>
                                             <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
@@ -351,18 +350,16 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-                    ?>">
+                ?>">
                                         Lab & User Mapping
                                     </a></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'pending'), 'default', true); ?>">Pending
-                                        PT Participants</a></li>
+
 
                             </ul>
                         </li>
 
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze & reports
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
@@ -398,7 +395,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
     </div>
 
     <div class="container">
-        <?php // print_r($_SESSION['loggedInDetails']);  ?>
+        <?php // print_r($_SESSION['loggedInDetails']);   ?>
         <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 

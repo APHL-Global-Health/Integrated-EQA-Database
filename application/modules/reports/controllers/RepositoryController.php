@@ -92,7 +92,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select DISTINCT ProgramID as name,count(DISTINCT rep_repository.MflCode) as data"
                 . "  from rep_repository  left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= " where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -132,7 +132,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select mfl_facility_codes.Name as name,rep_repository.MflCode,count(SampleCode) as data"
                 . "  from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= " where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -173,7 +173,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "";
 
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -195,7 +195,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
         $innerWhere = str_replace('where', ' and ', $query);
-        $select = "select rep_repository.MflCode as LID,Name,RoundID as RoundID,SampleCode,ReleaseDate,County,count(if(grade='acceptable',1,null))
+        $select = "select rep_repository.MflCode as LID,Name,RoundID as RoundID,SampleCode,EventDate,County,count(if(grade='acceptable',1,null))
             as acceptable,
             count(if(grade='not acceptable',1,null))  as unacceptable 
             from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  $query ";
@@ -239,7 +239,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select County as name,count(DISTINCT rep_repository.MflCode) as data"
                 . "  from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= " where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -283,7 +283,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select ProviderID as name,count(DISTINCT rep_repository.MflCode) as data"
                 . "  from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= " where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= " where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -340,7 +340,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query .= "";
         $query .= "  from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -379,7 +379,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select RoundID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -424,7 +424,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select mfl_facility_codes.Name as title,rep_repository.MflCode,Grade as name, count(Grade) as data "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramID']) && !empty($whereArray['ProgramID'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramID'] . "'";
@@ -474,7 +474,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $testEvent = $testEvents[rand(0, count($testEvents) - 1)];
             $grade = $grades[rand(0, count($grades) - 1)];
             $result = $results[rand(0, count($results) - 1)];
-            echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `ReleaseDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', '$test', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL);";
+            echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `EventDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', '$test', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL);";
             echo "<br /><br />";
         }
         echo "Done dumping";
@@ -493,7 +493,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select ProgramID as title,Grade as name, count(Grade) as data "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -540,7 +540,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select rep_repository.MflCode,Name,County,Constituency ,ResultCode,count(ResultCode) as Count "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -587,7 +587,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select mfl_facility_codes.MflCode,Name,Constituency,County,Approved,AnalyteID "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode  ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -669,7 +669,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select * "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -707,7 +707,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select * "
                 . "from rep_repository left join mfl_facility_codes on mfl_facility_codes.MflCode= rep_repository.MflCode ";
         if (isset($whereArray['dateFrom'])) {
-            $query .= "where ReleaseDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
+            $query .= "where EventDate  between '" . $whereArray['dateFrom'] . "' and '" . $whereArray['dateTo'] . "'";
         }
         if (isset($whereArray['ProgramId']) && !empty($whereArray['ProgramId'])) {
             $query .= " and ProgramID ='" . $whereArray['ProgramId'] . "'";
@@ -742,7 +742,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $headers = array('ImpID',
             'ProviderID', 'LabID',
             'RoundID', 'ProgramID',
-            'ReleaseDate', 'SampleCode',
+            'EventDate', 'SampleCode',
             'AnalyteID', 'SampleCondition',
             'DateSampleReceived', 'Result',
             'ResultCode', 'Grade',

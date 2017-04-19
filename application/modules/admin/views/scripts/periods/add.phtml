@@ -1,5 +1,5 @@
 <div class="well">
-    <form name="addPeriodsForm" id="addPeriodsForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "periods", "action" => "add"),'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
+    <form name="addPeriodsForm" id="addPeriodsForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "periods", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
         <fieldset>
             <legend>Add New Test Event</legend>
 
@@ -8,8 +8,8 @@
                 <label class="col-lg-3 control-label">Period Description <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
                     <input id="pname" type="text" id="PeriodDescription" name="PeriodDescription" size="50" maxlength="45"
-                                             class="isRequired form-control" title="Please enter the period name here"
-                                             placeholder="Please enter the period name here"/>
+                           class="isRequired form-control" title="Please enter the period name here"
+                           placeholder="Please enter the period name here"/>
                 </div>
             </div>
             <div class="form-group">
@@ -26,54 +26,79 @@
                     </select>
                 </div>
             </div>
-	    <div class="form-group">
+            <div class="form-group">
                 <label class="col-lg-3 control-label">Total Enrolled Labs <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <input type="text" id="EnrolledLabs" name="EnrolledLabs" size="50" maxlength="45"
-                                             class="isRequired form-control" title="Please enter the total enrolled labs"
-                                             placeholder="Please enter the total enrolled labs"/>
+                    <input type="number" id="EnrolledLabs" name="EnrolledLabs" size="50" maxlength="45"
+                           class="isRequired form-control" title="Please enter the total enrolled labs"
+                           placeholder="Please enter the total enrolled labs"/>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Start Date<span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="text" id="StartDate" name="StartDate" size="50" maxlength="45"
+                           class="isRequired form-control disabled"  title="Please enter Start Date"
+                           placeholder="Please enter Start Date"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">End Date<span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="text" id="EndDate" name="EndDate" size="50" maxlength="45"
+                           class="isRequired form-control disabled" title="Please enter End Date"
+                           placeholder="Please enter End Date"/>
+                </div>
+            </div>
+
+
             </table>
             <br>
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"/>
-                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/periods';"
+                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/periods';"
                        tabindex="8" value="Cancel"/>
             </div>
         </fieldset>
     </form>
 </div>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
 <script type="text/javascript">
-    var duplicated = false;
-    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
-	objValue=document.getElementById(obj).value;
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
-            function (data) {
-                if (data > 0) {
-                    alert(msg, "err");
-                    duplicated = true;
-		    $("#"+obj).focus();
-                }
-                else {
-                    duplicated = false;
-                }
-		return duplicated;
-            });
-    }
+                    var duplicated = false;
+                    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                        objValue = document.getElementById(obj).value;
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        $("#" + obj).focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                    return duplicated;
+                                });
+                    }
 
-    function validateNow() {
-        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
-	//if (!checkDduplicateId) {
-	    flag = deforayValidator.init({
-		formId: 'addPeriodsForm'
-	    });
-	    if (flag && !duplicated) {
-		$.blockUI();
-		document.getElementById('addPeriodsForm').submit();
-	    }
-	//}
-    }    
-    
+                    function validateNow() {
+                        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', null, 'This Email already exists for another Admin. Please try something else.')
+                        //if (!checkDduplicateId) {
+                        flag = deforayValidator.init({
+                            formId: 'addPeriodsForm'
+                        });
+                        if (flag && !duplicated) {
+                            $.blockUI();
+                            document.getElementById('addPeriodsForm').submit();
+                        }
+                        //}
+                    }
+
+                    $(document).ready(function () {
+                        $('#StartDate').datepicker({dateFormat: 'yy-mm-dd'});
+
+                        $('#EndDate').datepicker({dateFormat: 'yy-mm-dd'});
+                    })
+
 </script>
