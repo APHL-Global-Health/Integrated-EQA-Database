@@ -324,7 +324,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Total Score : ' + Number(dataDetails.results.finalScore) + '%',
+                    text: 'Total Average Score : ' + Number(dataDetails.results.finalScore) + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },

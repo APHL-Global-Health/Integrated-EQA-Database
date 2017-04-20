@@ -497,7 +497,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         $update['feedBack'] = 1;
 
 
-                        $update['totalCorrectScore'] = $score['finalScore'];
+                        $update['totalCorrectScore'] = round(($score['finalIdentificationScore'] + $score['grainStainReactionScore']) / 2, 2);
                         $update['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
 
                         $score['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
