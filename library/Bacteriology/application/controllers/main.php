@@ -158,11 +158,18 @@ Class Main extends pdfCreator {
             return false;
         }
     }
-
+public function updateAndDelete($sql){
+    
+    $result = $this->connect_db->query($sql);
+    
+    return true;
+}
     public function doQuery($sql) {
 //        echo$sql;
 //        exit;
         $result = $this->connect_db->query($sql);
+        
+//        var_dump($this->connect_db->error);
         $results = array();
         if ($result->num_rows > 0) {
             // output data of each row
@@ -314,8 +321,7 @@ Class Main extends pdfCreator {
         }
     }
 
-    public
-            function deleteFromWhere($tableName, $where) {
+    public function deleteFromWhere($tableName, $where) {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {

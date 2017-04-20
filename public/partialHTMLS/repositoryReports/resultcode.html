@@ -1,10 +1,10 @@
 <div>
-    <div ng-init="reports.stringSearch = {}">
+    <div ng-init="reports.stringSearch={}">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css"
               media="all">
         <legend>
-            <h3>Participation Report
-                <small class="text-gray">{{reports.participantingLabs.length}} Records</small>
+            <h3>Participation Report Based on Result Code
+                <small class="text-gray">{{reports.participantionResultCode.length}} Records</small>
             </h3>
         </legend>
 
@@ -48,12 +48,12 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search tel." ng-model='reports.stringSearch.Approved'>
+                                   placeholder="Search tel." ng-model='reports.stringSearch.ResultCode'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search status" ng-model='reports.stringSearch.AnalyteID'>
+                                   placeholder="Search status" ng-model='reports.stringSearch.Count'>
                         </th>
                     </tr>
                 </thead>
@@ -64,12 +64,13 @@
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
                         <th style="text-align: center;">Constituency</th>
-                        <th style="text-align: center;">Approved</th>
-                        <th style="text-align: center;">Analyte</th>
+                        <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
+                        <th style="text-align: center;">Result Code</th>
+                        <th style="text-align: center;">Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="record in reports.participantingLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
+                    <tr dir-paginate="record in reports.participantionResultCode| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
                         >
                         <td>{{$index + 1}}</td>
                         <td>
@@ -90,11 +91,12 @@
                             Inclassified
                         </td>-->
                         <td>
-                            {{record.Approved}}
+                            {{record.ResultCode}}
                         </td>
                         <td>
-                            {{record.AnalyteID}}
+                            {{record.Count}}
                         </td>
+
 
                     </tr>
                 </tbody>

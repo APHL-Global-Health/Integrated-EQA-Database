@@ -7,7 +7,7 @@
  * Time: 16:40
  */
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-    . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
     . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
 class BacteriologydbciController extends Zend_Controller_Action
@@ -1107,7 +1107,9 @@ class BacteriologydbciController extends Zend_Controller_Action
             $where['userId'] = $this->dbConnection->getUserSession();
 
             if (count($where) > 0) {
+                
                 $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
+                
                 if ($dataDB != false) {
                     foreach ($dataDB as $key => $value) {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');

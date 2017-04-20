@@ -6,6 +6,11 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     protected $_primary = array('dm_id');
 
     public function addUser($params) {
+
+        $common = new Application_Service_Common();
+        $email = $params['userId'];
+        $password = $common->generateRandomPassword(9);
+
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'first_name' => $params['fname'],
@@ -15,7 +20,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             'mobile' => $params['phone1'],
             'secondary_email' => $params['semail'],
             'primary_email' => $params['userId'],
-            'password' => $params['password'],
+            'password' => $password,
             'force_password_reset' => 1,
             'qc_access' => $params['qcAccess'],
             'enable_adding_test_response_date' => $params['receiptDateOption'],
@@ -28,6 +33,10 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         if (isset($_SESSION['loggedInDetails']["IsVl"])) {
             $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
         }
+
+        $fullname = $data['first_name'] . ' ' . $data['last_name'];
+        
+        $common->sendPasswordEmailToUser($email, $password, $fullname);
         return $this->insert($data);
     }
 
@@ -37,7 +46,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status');
+        $aColumns = array('u.institute', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'p.first_name', 'u.status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "dm_id";
@@ -116,16 +125,16 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('u' => $this->_name))
-				    ->joinLeft(array('pmm'=>'participant_manager_map'),'pmm.dm_id=u.dm_id',array())
-				    ->joinLeft(array('p'=>'participant'),'p.participant_id = pmm.participant_id',array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"),'p.participant_id'))
-				    ->group('u.dm_id');
+                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array())
+                ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"), 'p.participant_id'))
+                ->group('u.dm_id');
 
         if ($sWhere == "") {
             $sWhere .= "IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
         } else {
             $sWhere .= "and (IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
         }
-        
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -163,24 +172,24 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-        
+
         foreach ($rResult as $aRow) {
             $row = array();
-	    //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
-	    //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
-	    //}else{
-	    //$participantDetails='';
-	    //}
+            //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
+            //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
+            //}else{
+            //$participantDetails='';
+            //}
             $row[] = $aRow['institute'];
-	   // $row[] = $participantDetails.' '.$aRow['institute'];
-            $row[] = $aRow['first_name']; 
-            $row[] = $aRow['last_name']; 
+            // $row[] = $participantDetails.' '.$aRow['institute'];
+            $row[] = $aRow['first_name'];
+            $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
+            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/' . $aRow['dm_id'] . '\',\'980\',\'500\');" >' . $aRow['participantCount'] . '</a>';
             $row[] = $aRow['status'];
-            
-              if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+
+            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             } else {
                 $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
@@ -189,7 +198,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         }
 
         echo json_encode($output);
-    }    
+    }
 
     public function getUserDetails($userId) {
         return $this->fetchRow("primary_email = '" . $userId . "'")->toArray();

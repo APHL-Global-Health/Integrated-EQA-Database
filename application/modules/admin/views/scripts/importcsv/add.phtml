@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="ProviderID" id="ProviderID" title="Please choose the provider here">
+                    <select class="form-control isRequired" required="" name="ProviderID" id="ProviderID" title="Please choose the provider here">
                         <option value=""></option>
                         <?php foreach ($this->providerList as $prov) {
                             ?>
@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Program <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="ProgramID" id="ProgramID" title="Please choose the program here">
+                    <select class="form-control isRequired"  required="" name="ProgramID" id="ProgramID" title="Please choose the program here">
                         <option value=""></option>
                         <?php foreach ($this->programList as $prog) {
                             ?>
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Period <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" name="RoundID" id="RoundID" title="Please choose the period here">
+                    <select class="form-control isRequired"  required="" name="RoundID" id="RoundID" title="Please choose the period here">
                         <option value=""></option>
                         <?php foreach ($this->periodList as $pd) {
                             ?>
@@ -47,8 +47,8 @@
 
             <div class="form-group">
                 <label class="col-lg-3 control-label">File Upload <span class="mandatory">*</span></label>
-                <div class="col-lg-5">
-                    <input type="file" name="fileToUpload" id="fileToUpload" class="isRequired form-control">
+                <div class="col-lg-5" onclick="hideMapping()">
+                    <input type="file"  name="fileToUpload" id="fileToUpload" class="isRequired form-control">
                 </div>
             </div>
 
@@ -67,7 +67,7 @@
                                 <td>
                             <?php //foreach ($this->importHeadersList as $eh) {
                             ?>
-                                        <p><?php //echo $eh;                                     ?></p>
+                                        <p><?php //echo $eh;                                                                                               ?></p>
                             <?php
                             //}
                             ?>
@@ -77,7 +77,7 @@
                                         <option value=""></option>
                             <?php //foreach ($this->repColumnList as $rh) {
                             ?>
-                                            <option><?php //echo $rh['Field'];                                     ?></option>
+                                            <option><?php //echo $rh['Field'];                                                                                               ?></option>
                             <?php
                             //}
                             ?>
@@ -88,17 +88,25 @@
                     </table>
                 </div>
             </div>
-            <div class="alert alert-danger col-lg-12 text-center" id="error" style="display: none;"></div>
+            <div class="alert alert-danger col-lg-12 text-center" id="error" style="display: none;">
+
+            </div>
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Next Step" id="submitValues"
-                       onclick="postSelectedKeysAndValue()"
+
                        id="btnnext"/>
+
+                <button name="submitbtn" style="display: none" class="btn btn-success" tabindex="7" value="Next Step" id="showUploadData"
+                        onclick="postSelectedKeysAndValue()"
+                        id="btnnext">Import Data</button>
                 <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/importcsv';"
                        tabindex="8" value="Cancel"/>
             </div>
             <br>
-            <img id="loader" src="/public/images/loading.gif" />
-
+            <div class="text-center" id="loader"style="display:none;">
+                <i class="fa fa-spin fa-spinner fa-2x"></i><br>
+                Reading file,please wait...
+            </div>
         </fieldset>
     </form>
 
@@ -108,17 +116,16 @@
     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
         objValue = document.getElementById(obj).value;
         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
-        function (data) {
-            if (data > 0) {
-                alert(msg, "err");
-                duplicated = true;
-                $("#" + obj).focus();
-            }
-            else {
-                duplicated = false;
-            }
-            return duplicated;
-        });
+                function (data) {
+                    if (data > 0) {
+                        alert(msg, "err");
+                        duplicated = true;
+                        $("#" + obj).focus();
+                    } else {
+                        duplicated = false;
+                    }
+                    return duplicated;
+                });
     }
 
     function validateNow() {
@@ -133,14 +140,22 @@
         }
         //}
     }
+    function hideMapping() {
+        $("#mapTable").hide();
+    }
     $(document).ready(function () {
+
         $("#mapTable").hide();
         $("#mapTableH").hide();
+
         $("#addCsvForm").submit(function (e) {
             provider = $("#ProviderID").val();
             program = $("#ProgramID").val();
             period = $("#RoundID").val();
             files = $("#fileToUpload").val();
+            $("#loader").show();
+
+
             model = {
                 "ProviderID": provider,
                 "ProgramID": program,
@@ -155,13 +170,30 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    $("#mapTableH").show();
-                    $("#mapTable").show();
-                    onReceivedResponse(JSON.stringify(data));
+                    console.log(data);
+
+                    $("#showUploadData").show();
+                    $("#submitValues").hide();
+
+                    $("#loader").hide();
+                    if (data.status == 1) {
+                        $("#mapTableH").show();
+                        $("#mapTable").show();
+                        onReceivedResponse(JSON.stringify(data));
+                    } else {
+                        $.alert({title: 'ERROR', content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + data.message});
+                    }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.responseText);
-                    alert(thrownError);
+                    $("#loader").hide();
+                    $.alert(
+                            {title: 'ERROR',
+                                content: '<i class= "fa fa-close fa-2x text-danger"></i> Server Error :\n\
+                     Please check that you have uploaded the CSV,if so reload the page'
+                            });
+                    console.log(xhr.responseText + " " + thrownError);
+//                    alert(xhr.responseText);
+//                    alert(thrownError);
                 }
             });
             e.preventDefault();
@@ -187,10 +219,13 @@
                     tblComments[tblComments.length] = schemasHeaders[index][value];
             }
         }
+
         //alert(tblComments);
         var tableContents = "<tbody>";
         for (var i = 0; i < excelHeaders.length; i++) {
-            tableContents += "<tr onClick='getExcelHeader(" + i + ")'><td>" + (i + 1) + "</td><td><label id='label_" + i + "'>" + excelHeaders[i] + "</label></td><td>" + mockDropDown(tblColumns, tblComments, i) + "</td></tr>";
+            tableContents += "<tr onClick='getExcelHeader(" + i + ")'><td>" +
+                    (i + 1) + "</td><td><label id='label_" + i + "'>" + excelHeaders[i] + "</label></td><td>"
+                    + mockDropDown(tblColumns, tblComments, i) + "</td></tr>";
         }
         document.getElementById('mapTable').innerHTML = tableContents + "</tbody>";
     }
@@ -204,128 +239,247 @@
     var postParams = "";
     $('body').on('change', '.sel', function () {
         //alert(excelRepArray)
-        appendFormParams(excelRepArray, $(this).val());
+        createPostedExcel(excelRepArray, $(this).val());
+
     });
+    var excelHeadDbColumns = [];
+    var dbColumnsStr = '';
+    
     var excelHeaderI = '';
     var clickedLabel = [];
     var clickedExcelLabel = [];
     var arrayWithExcelLabelValue = [];
-    function appendFormParams(key, value) {
-        if (value != 1) {
-            var singleArray = new Array();
-            var usedPosition = '';
-            if (clickedLabel.length == 1 && value == '0') {
-                clickedLabel = [];
-                arrayWithExcelLabelValue = [];
+    function createPostedExcel(excelIndex, dbColumn) {
+        var tempArry = [];
+
+        tempArry.key = excelIndex;
+        tempArry.value = dbColumn;
+        var dbColumnExists = false;
+
+        if (dbColumnsStr.indexOf(dbColumn) < 0) {
+
+            dbColumnsStr += ',' + dbColumn;
+        } else {
+            dbColumnExists = true;
+
+            alert('column used');
+            return false;
+        }
+        dbColumnsStr = '';
+        if (excelHeadDbColumns.length > 0) {
+
+            var excelExists = false;
+            for (var i = 0; i < excelHeadDbColumns.length; i++) {
+
+                if (excelHeadDbColumns[i]['key'] == excelIndex) {
+
+                    excelHeadDbColumns[i]['value'] = dbColumn;
+                    excelExists = true;
+
+                }
+
+
             }
-            if (clickedLabel.length > 0) {
+            if (!excelExists) {
 
-                var exists = false;
-                var indexPos = -1;
-                for (var i = 0; i < clickedLabel.length; i++) {
-                    for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
-                        if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
+                excelHeadDbColumns.push(tempArry);
+            }
+        } else {
+            excelHeadDbColumns.push(tempArry);
+        }
+        for (var i = 0; i < excelHeadDbColumns.length; i++) {
+            dbColumnsStr += ',' + excelHeadDbColumns[i]['value'];
+        }
 
-                            indexPos = j;
+        arrayWithExcelLabelValue = excelHeadDbColumns;
+        
+        console.log(excelHeadDbColumns);
+        console.log(dbColumnsStr.indexOf(dbColumn));
+        console.log(dbColumnsStr);
+
+    }
+
+
+
+    function appendFormParams(key, value) {
+        $("#error").hide();
+        $(".selectedVal_" + key).css("border-color", "lightgray");
+        console.log(key);
+        console.log(value);
+//        if (value != 1) {
+        var singleArray = new Array();
+
+        var usedPosition = '';
+        var changed = false;
+
+//        if (clickedLabel.length == 1 && value == '0') {
+//            clickedLabel = [];
+//            arrayWithExcelLabelValue = [];
+//        }
+        if (clickedLabel.length > 0) {
+
+            var exists = false;
+            var indexPos = -1;
+
+            for (var i = 0; i < clickedLabel.length; i++) {
+                for (var j = 0; j < arrayWithExcelLabelValue.length; j++) {
+
+                    if (key == arrayWithExcelLabelValue[j]['key'] && value == '0') {
+
+                        indexPos = j;
+                        break;
+                    }
+
+
+
+                    if (key == arrayWithExcelLabelValue[j]['key']) {
+
+                        if (clickedLabel[j] != value) {
+                            arrayWithExcelLabelValue[j]['value'] = value;
+
+                            clickedLabel[i] = value;
+                            changed = true;
+
+
+                        } else {
+                            usedPosition = clickedLabel[i];
+                            exists = true; // 
+
                             break;
                         }
-
                     }
-
-                    if (clickedLabel[i] == value) {
-
-                        usedPosition = clickedLabel[i];
-                        exists = true; //   
-                        break;
-                    } else {
-
-                        exists = false
-
-                    }
-
                 }
-                if (indexPos >= 0) {
-                    clickedLabel.splice(indexPos, 1);
-                    arrayWithExcelLabelValue.splice(indexPos, 1);
-                    //console.log(indexPos)
-                }
-                if (!exists) {
-                    singleArray.key = key;
-                    singleArray.value = value;
-                    if (value != '0') {
-                        clickedLabel.push(value);
-                        arrayWithExcelLabelValue.push(singleArray);
-                    }
 
-                    if (postParams === "") {
-                        postParams = key + "=" + value;
-                    } else {
-                        postParams += "&" + key + "=" + value;
-                    }
-                    $("#error").hide();
-                    $(".selectedVal_" + key).css("border-color", "lightgray");
-                } else {
-                    $("#error").show();
-                    $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
-                    $(".selectedVal_" + key).css("border-color", "red");
-                    document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
-                }
-                //console.log(arrayWithExcelLabelValue);
-                //console.log(clickedLabel);
-            } else {
+                if (clickedLabel[i] == value) {
 
-                //console.log(clickedLabel);
-                postParams = key + "=" + value;
-                clickedLabel.push(value);
+                    usedPosition = clickedLabel[i];
+                    exists = true; // 
+
+                    break;
+                }
+
+            }
+            if (indexPos >= 0) {
+                clickedLabel.splice(indexPos, 1);
+                arrayWithExcelLabelValue.splice(indexPos, 1);
+                console.log(indexPos)
+            }
+
+            if (!exists) {
                 singleArray.key = key;
                 singleArray.value = value;
                 if (value != '0') {
-                    arrayWithExcelLabelValue.push(singleArray);
+                    if (!changed) {
+                        clickedLabel.push(value);
+                        arrayWithExcelLabelValue.push(singleArray);
+                    }
+                }
+
+                if (postParams === "") {
+                    postParams = key + "=" + value;
+                } else {
+                    postParams += "&" + key + "=" + value;
+                }
+                $("#error").hide();
+                $(".selectedVal_" + key).css("border-color", "lightgray");
+            } else {
+                if (!changed) {
+                    $("#error").show();
+                    $(".selectedVal_" + key + " option[value=0]").attr('selected', 'selected');
+                    $(".selectedVal_" + key).css("border-color", "red");
+
+                    document.getElementById('error').innerHTML = "This value at row " + (key + 1) + " has been used  ";
                 }
             }
-            // alert(postParams);
+            //console.log(arrayWithExcelLabelValue);
+            //console.log(clickedLabel);
+        } else {
+
+            //console.log(clickedLabel);
+            postParams = key + "=" + value;
+            clickedLabel.push(value);
+
+            singleArray.key = key;
+            singleArray.value = value;
+
+            if (value != '0') {
+                arrayWithExcelLabelValue.push(singleArray);
+            }
         }
+        // alert(postParams);
+//        }
+        console.log(clickedLabel);
+        console.log(arrayWithExcelLabelValue);
     }
 
     function postSelectedKeysAndValue() {
 
-        if (arrayWithExcelLabelValue.length > 0) {
+        if (arrayWithExcelLabelValue.length > 1) {
             $("#error").hide();
             provider = $("#ProviderID").val();
             program = $("#ProgramID").val();
             period = $("#RoundID").val();
             files = $("#fileToUpload").val();
             var model = {};
-            model.ProviderID = provider,
-                    model.ProgramID = program,
-                    model.RoundID = period,
-                    model.fileToUpload = files
 
-            $('#loader').show();       
-            $.ajax({
-                type: 'POST',
-                url: 'save',
-                dataType: 'text',
-                data: convertArrayToString(arrayWithExcelLabelValue, model),
-                success: function (data) {
-                    alert(data);
-                    //.$('#loader').hide();
-                    window.location='/admin/importcsv/index';
-                    
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    $('#loader').hide();
-                    //alert(data);
-                    //alert(xhr.responseText);
-                    //alert(thrownError);
-                }
-            });
+            model.ProviderID = provider;
+            model.ProgramID = program;
+            model.RoundID = period;
+            model.fileToUpload = files;
+            if (model.ProviderID == '' || model.ProgramID == '' || model.RoundID == '') {
+                $.alert(
+                        {
+                            title: 'Error',
+                            content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + "Please make sure that provider,program and survey are filled"
+                        }
+                );
+                arrayWithExcelLabelValue = [];
+            } else {
+                $('#loader').show();
+                $.ajax({
+                    type: 'POST',
+                    url: 'save',
+                    dataType: 'text',
+                    data: convertArrayToString(arrayWithExcelLabelValue, model),
+                    success: function (data) {
+//                    $("#showUploadData").hide();
+//                    $("#submitValues").show();
+
+                        $.alert(
+                                {
+                                    title: 'Success',
+                                    content: '<i class= "fa fa-check fa-2x text-success"></i> Data Upload Successfully'
+                                }
+                        );
+                        //.$('#loader').hide();
+                        window.location = '/admin/importcsv/index';
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('#loader').hide();
+                        $.alert(
+                                {
+                                    title: 'Server Error',
+                                    content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + xhr.responseText
+                                }
+                        );
+                        //alert(data);
+                        console.log(xhr.responseText);
+                        console.log(thrownError);
+                    }
+                });
+            }
         } else {
-            $("#error").show();
-            document.getElementById('error').innerHTML = "Please select atleast 5 fields";
+            $.alert(
+                    {
+                        title: 'Error',
+                        content: '<i class= "fa fa-close fa-2x text-danger"></i> ' + "Please select atleat 2 mapping columns"
+                    }
+            );
         }
     }
     function convertArrayToString(arrayWithExcelLabelValue, model) {
+
         var length = arrayWithExcelLabelValue.length,
                 json = [];
         for (var i = 0; i < length; i++) {
@@ -345,5 +499,7 @@
         }
         json.push(model)
         return JSON.stringify(json);
+
+
     }
 </script>

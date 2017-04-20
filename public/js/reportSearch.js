@@ -169,12 +169,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
+                    {text: 'MFL Code', style: 'subHeader'},
                     {text: 'Lab Name', style: 'subHeader'},
                     {text: 'County', style: 'subHeader'},
-                    {text: 'Contact Name', style: 'subHeader'},
-                    {text: 'Contact Email', style: 'subHeader'},
-                    {text: 'Telephone', style: 'subHeader'},
-                    {text: 'Status', style: 'subHeader'}
+                    {text: 'Constituency', style: 'subHeader'},
+                    {text: 'Approved', style: 'subHeader'},
+                    {text: 'Analyte', style: 'subHeader'}
 
                 ];
 
@@ -185,12 +185,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 var lab = data[i];
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
-                    {text: ' ' + lab.LabID, style: ['content']},
-                    {text: ' ' + lab.county, style: ['content']},
-                    {text: ' ' + lab.contactName, style: ['content']},
-                    {text: ' ' + lab.contactEmail, style: ['content']},
-                    {text: ' ' + lab.telephone, style: ['content']},
-                    {text: ' Active ', style: ['content']}
+                    {text: ' ' + lab.MflCode, style: ['content']},
+                    {text: ' ' + lab.Name, style: ['content']},
+                    {text: ' ' + lab.County, style: ['content']},
+                    {text: ' ' + lab.Constituency, style: ['content']},
+                    {text: ' ' + lab.Approved, style: ['content']},
+                    {text: ' ' + lab.AnalyteID, style: ['content']}
                 ];
 
                 reportData.push(rowData);
@@ -204,6 +204,49 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
+
+    $scope.reports.generateParticipationRCPdf = function (data) {
+        var reportData = new Array();
+        var tableWidth = ['auto', 'auto', 'auto', '*', '*', 'auto', 'auto']
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'MFL Code', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Constituency', style: 'subHeader'},
+                    {text: 'Result Code', style: 'subHeader'},
+                    {text: 'Count', style: 'subHeader'}
+
+                ];
+
+        reportData.push(reportHeader);
+
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var lab = data[i];
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + lab.MflCode, style: ['content']},
+                    {text: ' ' + lab.Name, style: ['content']},
+                    {text: ' ' + lab.County, style: ['content']},
+                    {text: ' ' + lab.Constituency, style: ['content']},
+                    {text: ' ' + lab.ResultCode, style: ['content']},
+                    {text: ' ' + lab.Count, style: ['content']}
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'PARTICIPANTS REPORT BASED ON RESULT CODE';
+            var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
     $scope.reports.generateRepositorySummaryPdf = function (data) {
         var reportData = new Array();
         var tableWidth = ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']
@@ -227,7 +270,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 var lab = data[i];
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
-                    {text: ' ' + lab.LID, style: ['content']},
+                    {text: ' ' + lab.Name, style: ['content']},
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.RoundID, style: ['content']},
                     {text: ' ' + lab.ReleaseDate, style: ['content']},
@@ -275,7 +318,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     {text: '' + (i + 1), style: ['content']},
                     {text: ' ' + lab.ProviderID, style: ['content']},
                     {text: ' ' + lab.ProgramID, style: ['content']},
-                    {text: ' ' + lab.LabID, style: ['content']},
+                    {text: ' ' + lab.Name, style: ['content']},
                     {text: ' ' + lab.RoundID, style: ['content']},
                     {text: ' ' + lab.ReleaseDate, style: ['content']},
                     {text: ' ' + lab.Grade, style: ['content']},
@@ -287,7 +330,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             }
 
 
-            var reportSubHeader = 'REPOSITORY REPORT';
+            var reportSubHeader = 'REPOSITORY MAIN REPORT';
             var reportTitle = 'NATIONAL HOSPITAL REFERENCE LABORATORY - NAIROBI, KENYA';
             $scope.reports.generatePdfMainFunction(reportSubHeader, reportData, tableWidth, reportTitle);
         } else {
@@ -348,10 +391,11 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
         searchColumns.ProgramId = $("#program").val();
         searchColumns.county = $("#county").val();
+        searchColumns.AnalyteID = $scope.reports.reportFilter.AnalyteID;
         $scope.reports.searchFilters = searchColumns;
 
         $scope.reports.countyChange(searchColumns.county);
-//        console.log(searchColumns);
+
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
@@ -388,7 +432,223 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
     }
 
-    $scope.reports.performanceLabs = {};
+    $scope.reports.participantionResultCode = {};
+
+    $scope.reports.getParticipantionResultCode = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+        searchColumns.AnalyteID = $scope.reports.reportFilter.AnalyteID;
+        searchColumns.ResultCode = $scope.reports.reportFilter.ResultCode;
+        $scope.reports.countyChange(searchColumns.county);
+
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getparticipantionresultcode';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.participantionResultCode = data;
+                        } else {
+                            $scope.reports.participantionResultCode = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
+    $scope.reports.validationData = {};
+
+    $scope.reports.getValidationData = function () {
+        $scope.reports.reportShowTable = false;
+        var searchColumns = {};
+
+        searchColumns.dateRange = angular.isDefined($("#dateRange").val()) ? $("#dateRange").val() : null;
+        searchColumns.reportType = angular.isDefined($("#reportType").val()) ? $("#reportType").val() : null;
+        searchColumns.ProviderId = angular.isDefined($("#provider").val()) ? $("#provider").val() : null;
+        searchColumns.ProgramId = $("#program").val();
+        searchColumns.county = $("#county").val();
+        $scope.reports.searchFilters = searchColumns;
+        searchColumns.MflCode = $scope.reports.reportFilter.MflCode;
+        $scope.reports.countyChange(searchColumns.county);
+
+//        console.log(searchColumns);
+        console.log(searchColumns);
+        if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
+            updateGraphMessages("Please choose date range", true, 'btn-danger');
+        } else {
+//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
+            $scope.reports.showLoader = true;
+            updateGraphMessages("No records found", false, 'btn-warning');
+
+            var url = serverURL + 'getvalidationdata';
+            $http
+                    .post(url, searchColumns)
+                    .success(function (data) {
+                        $scope.reports.showLoader = false;
+                        $scope.reports.reportShowTable = true;
+                        if (data.length > 0) {
+                            $scope.reports.validationData = data;
+                        } else {
+                            $scope.reports.validationData = {};
+                            updateGraphMessages("No records found", true, 'btn-warning');
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        $scope.reports.showLoader = false;
+                    })
+
+
+//            } else {
+//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
+//            }
+
+        }
+    }
+
+
+    $scope.reports.qaApproveUserData = function (BID) {
+        var BatchID = {BatchID: BID}
+        var alertStartRound = {};
+        $.confirm({
+            title: 'Confirm Delete!',
+            theme: 'supervan',
+            content: 'Are you want to approve this batch,this action can not be undone ',
+            buttons: {
+                'Evaluate': {
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                        alertStartRound = $.alert({title: 'Progess', content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Approving batch,please wait...!'});
+                        qaAproveBatchFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+        function qaAproveBatchFinal(BatchID) {
+            var url = serverURL + 'qaapprovevalidationdata';
+            $http
+                    .post(url, BatchID)
+                    .success(function (data) {
+
+                        console.log(data);
+                        alertStartRound.close();
+                        if (data.status == 1) {
+                            $scope.reports.getValidationData();
+                            EptServices.EptServiceObject.returnActionSuccessAlert();
+
+                        } else {
+                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        console.log(error);
+                        alertStartRound.close();
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        }
+
+    }
+    $scope.reports.qaRevokeUserData = function (BID) {
+        var BatchID = {BatchID: BID}
+        var alertStartRound = {};
+        $.confirm({
+            title: 'Confirm Delete!',
+            theme: 'supervan',
+            content: 'Are you want to revoke records in this batch,this action can not be undone ',
+            buttons: {
+                'Evaluate': {
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                        alertStartRound = $.alert(
+                                {
+                                    title: 'Progess',
+                                    content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Revoking batch,please wait...!'
+                                });
+                        qaRevokeUserDataFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+        function qaRevokeUserDataFinal(BatchID) {
+            BatchID.Status = 0;
+            var url = serverURL + 'qaapprovevalidationdata';
+            $http
+                    .post(url, BatchID)
+                    .success(function (data) {
+
+                        console.log(data);
+                        alertStartRound.close();
+                        if (data.status == 1) {
+                            $scope.reports.getValidationData();
+                            EptServices.EptServiceObject.returnActionSuccessAlert();
+
+                        } else {
+                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                        }
+
+                        console.log(data);
+
+                    })
+                    .error(function (error) {
+                        console.log(error);
+                        alertStartRound.close();
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                    })
+        }
+    }
 
     $scope.reports.getLabPerformance = function () {
         $scope.reports.reportShowTable = false;
@@ -400,7 +660,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.ProgramId = $("#program").val();
         searchColumns.county = $("#county").val();
         $scope.reports.searchFilters = searchColumns;
-
+        searchColumns.sample = $scope.reports.reportFilter.sample;
         $scope.reports.countyChange(searchColumns.county);
 //        console.log(searchColumns);
         console.log(searchColumns);
@@ -657,12 +917,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             for (var i = 0; i < excelData.length; i++) {
                 var tempArray = {
-                    'Lab Name': excelData[i].LabID,
-                    'County': excelData[i].county,
-                    'Contact name': excelData[i].contactName,
-                    'Contact Email': excelData[i].contactEmail,
-                    'Telephone': excelData[i].telephone,
-                    'status':'Active'
+                    'MFL Code': excelData[i].MflCode,
+                    'Lab Name': excelData[i].Name,
+                    'County': excelData[i].County,
+                    'Constituency': excelData[i].Constituency,
+                    'Approved': excelData[i].Approved,
+                    'Analyte': excelData[i].AnalyteID
 
                 }
                 returnArray.push(tempArray);
@@ -673,6 +933,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             return {};
         }
     }
+
 
     $scope.reports.generateParticipantsExcel = function (data) {
         if (data.length > 0) {
@@ -697,6 +958,59 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 }]
                     ;
             var res = alasql('SELECT INTO XLSX("PARTICIPANTS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
+
+
+    function returnParticpantsRCExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'MFL Code': excelData[i].MflCode,
+                    'Lab Name': excelData[i].Name,
+                    'County': excelData[i].County,
+                    'Constituency': excelData[i].Constituency,
+                    'Result Code': excelData[i].ResultCode,
+                    'Count': excelData[i].Count
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+    $scope.reports.generateParticipantRCExcel = function (data) {
+        if (data.length > 0) {
+            var excelData = returnParticpantsRCExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'PARTICIPATION ON RESULT CODE COUNT REPORTS SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'PARTICIPATION ON RESULT CODE COUNT REPORTS',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                    ;
+            var res = alasql('SELECT INTO XLSX("PARTICIPATION ON RESULT CODE COUNT REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }

@@ -9,6 +9,8 @@
                 <input type="text" id="userId" name="userId"  size="50" class="isRequired isEmail form-control" title="Please enter the primary email id here" placeholder="Please enter the primary email id here" onblur="checkDuplicate('data_manager','primary_email','userId',null,'This email already exists as a primary email for another user. Please choose another email.')" value="<?php echo (isset($this->contact['email'])) ? $this->contact['email'] : "" ?>"/>
             </div>
         </div>
+                  
+       <!--           
         <div class="form-group">
             <label class="col-lg-3 control-label">Password <span class="mandatory">*</span></label>
             <div class="col-lg-5">
@@ -21,6 +23,9 @@
                 <input type="password" id="confirmPassword" name="password"  size="50" value="" class="isRequired form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
             </div>
         </div>
+        -->          
+                  
+                  
         <div class="form-group">
             <label class="col-lg-3 control-label">Institute <span class="mandatory">*</span></label>
             <div class="col-lg-5"><input type="text" id="institute" name="institute" size="50" maxlength="255" class="isRequired form-control"  title="Please enter the institute name here" placeholder="Please enter the institute name here"  value="<?php echo (isset($this->contact['lab'])) ? $this->contact['lab'] : "" ?>"/></div>

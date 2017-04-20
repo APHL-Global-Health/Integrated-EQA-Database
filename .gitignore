@@ -1,0 +1,10 @@
+application/cache
+application/configs
+public/files
+
+nbproject
+*.hgignore
+.idea/workspace.xml
+*.log
+public/angularMain/constants.js
+

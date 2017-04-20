@@ -12,18 +12,22 @@ if (count($adminSession->activeSchemes) == 1 && in_array('vl', $adminSession->ac
 }
 $auth = Zend_Auth::getInstance();
 
-//  echo($_SESSION['loggedInDetails']["IsVl"]);
-//  exit;
+$schemeService = new Application_Service_Schemes();
+if ($schemeService->checkResetPassword()) {
+    
+}
+
 if ($auth->hasIdentity()) {
     $role = $_SESSION['loggedInDetails']["IsProvider"];
     $vl = $_SESSION['loggedInDetails']["IsVl"];
     $rep = $_SESSION['loggedInDetails']["AssignModule"];
 }
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>e-PT Admin</title>
+        <title><?php echo $config->applicationName; ?></title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <!--s<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" type="text/css" media="all">-->
@@ -59,7 +63,7 @@ if ($auth->hasIdentity()) {
 
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
         <!--    <link rel="stylesheet" href="-->
-        <?php //echo $this->baseUrl("css/DT_bootstrap.css");  ?><!--" type="text/css" media="all">-->
+        <?php //echo $this->baseUrl("css/DT_bootstrap.css");    ?><!--" type="text/css" media="all">-->
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
@@ -98,7 +102,6 @@ if ($auth->hasIdentity()) {
         src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
 
 
-        <script type="text/javascript" src="<?php echo $this->baseUrl('css/font-awesome.css'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>
         <script type="text/javascript"
         src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
@@ -111,8 +114,8 @@ if ($auth->hasIdentity()) {
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/vfs_fonts.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfMakerController.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/alasql.min.js'); ?>"></script>
-        <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-        <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/exporting.js'); ?>"></script>
 
         <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
@@ -123,18 +126,16 @@ if ($auth->hasIdentity()) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
 
 
-        <!---------------------------------Calendar Module-------------------------------------->
+        <!--__________________________Calendar Module______________________________-->
         <!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
 
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
-        <!--    <script type="text/javascript" src="-->
-        <?php //echo $this->baseUrl('angularMain/calendar/.js');  ?><!--"></script>-->
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
         <script type="text/javascript"
         src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
-        <!-----------------end of files--------------->        
+        <!--_____________-end of files____________________-->        
     </head>
     <!-- Fixed navbar -->
     <div class="navbar navbar-default navbar-fixed-top">
@@ -145,7 +146,7 @@ if ($auth->hasIdentity()) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/admin">ePT Admin</a>
+                <a class="navbar-brand" href="/admin" title="<?php echo $config->applicationName; ?>"><?php echo $config->applicationShortName; ?></a>
             </div>
             <div class="navbar-collapse collapse">
                 <?php
@@ -158,8 +159,12 @@ if ($auth->hasIdentity()) {
                             <ul class="nav navbar-nav">
                                 <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
-                                    <ul class="dropdown-menu" style="overflow-y:scroll;">
-                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT Managers</a></li>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>"><i class="icon-user"></i>&nbsp;&nbsp;Users</a></li>
+                                        <li >
+                                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -171,10 +176,12 @@ if ($auth->hasIdentity()) {
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'providers'), 'default', true); ?>">PT Providers</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                    <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                ?>">Test Kits</a></li>-->
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
-                                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
+                                    <?php if ($vl != 2) { ?>
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
+                        <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                     ?>">Test Kits</a></li>-->
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
+                                        <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
+                                    <?php } ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'failreasons'), 'default', true); ?>">Fail Reasons</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'repcustomfields'), 'default', true); ?>">Custom Fields</a></li>
                                 </ul>
@@ -183,15 +190,15 @@ if ($auth->hasIdentity()) {
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i>&nbsp;&nbsp; Reports <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">
-                                            <i class="icon-list"></i> Participatory Reports</a>
+                                            <i class="icon-list"></i>&nbsp;&nbsp; Reports Manager</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'uploadreports'), 'default', true); ?>">
-                                            <i class="icon-download"></i>&nbsp;&nbsp;Upload Reports</a>
+                                            <i class="icon-download"></i>&nbsp;&nbsp;Uploaded Files</a>
                                     </li>
-                                    <li >
-                                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
-                                        </a>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'validate'), 'default', true); ?>">
+                                            <i class="fa fa-check"></i>&nbsp;&nbsp;Validate Data</a>
                                     </li>
                                             <!--<li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository'), 'default', true); ?>">Performance Reports</a></li>-->
                                 </ul>
@@ -343,18 +350,16 @@ if ($auth->hasIdentity()) {
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-                    ?>">
+                ?>">
                                         Lab & User Mapping
                                     </a></li>
-                                <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'pending'), 'default', true); ?>">Pending
-                                        PT Participants</a></li>
+
 
                             </ul>
                         </li>
 
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze & reports
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
@@ -369,14 +374,28 @@ if ($auth->hasIdentity()) {
 
                 <?php } ?>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>"><i class="icon-signout"></i> Logout</a></li>
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;&nbsp;Account
+                            <b class="caret"></b></a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
+                                    <i class="icon-signout"></i> Logout</a>
+                            </li>
+                            <li>
+                                <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
+                                    <i class="icon-user"></i> Profile</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
 
     <div class="container">
-        <?php // print_r($_SESSION['loggedInDetails']); ?>
+        <?php // print_r($_SESSION['loggedInDetails']);   ?>
         <?php echo $this->layout()->content; ?>
     </div> <!-- /container -->
     <div id="dDiv" class="dialog"> 
@@ -384,7 +403,7 @@ if ($auth->hasIdentity()) {
         <iframe id="dFrame" src="" style="border:none;" scrolling='yes' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' >some problem</iframe> 
     </div>
     <footer style="padding:40px 0 20px 0;color:grey;">
-        <div class="container">&copy; ePT Admin</div>
+        <div class="container"><center><?php echo $config->applicationCopyright; ?></center></div>
     </footer>
     <!--s<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
     <!--s<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->

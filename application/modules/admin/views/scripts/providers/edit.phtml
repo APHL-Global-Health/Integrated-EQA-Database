@@ -9,11 +9,13 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Provider Name <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input id="ProviderName" type="text" id="ProviderName" name="ProviderName" size="50" maxlength="45"
-                                             class="isRequired form-control" title="Please enter the provider name here"
-                                             placeholder="Please enter the provider name here" value="<?php echo $this->admin['ProviderName']; ?>"/></div>
+                <div class="col-lg-5">
+                    <input id="ProviderName" type="text" id="ProviderName" name="ProviderName" size="50" maxlength="45"
+                           class="isRequired form-control" title="Please enter the provider name here"
+                           placeholder="Please enter the provider name here" value="<?php echo $this->admin['ProviderName']; ?>"/></div>
                 <input type="hidden" id="ProviderID" name="ProviderID" size="50" maxlength="45"
-                       class="isRequired form-control" value="<?php echo $this->admin['ProviderID']; ?>"/>
+                       class=" form-control" value="<?php echo $this->editId; ?>"/>
+                
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Provider Email <span class="mandatory">*</span></label>
@@ -29,7 +31,9 @@
                 <label class="col-lg-3 control-label">Provider Address <span class="mandatory">*</span></label>
 
                 <div class="col-lg-5">
-                    <input type="text" id="Address" name="Address" size="50" class="isRequired form-control" title="Please enter the address here" placeholder="Please enter the address here" value="<?php echo $this->admin['Address']; ?>" />
+                    <input type="text" id="Address" name="Address"  maxlength="100"
+                           class="isRequired form-control" title="Please enter the address here"
+                           placeholder="Please enter the address here" value="<?php echo $this->admin['Address']; ?>" />
                 </div>
             </div>
             <div class="form-group">
@@ -44,26 +48,7 @@
                     <input type="PostalCode" id="PostalCode" name="PostalCode"  size="50" value="<?php echo $this->admin['PostalCode']; ?>" class="isRequired form-control" title="Please select postal code" placeholder="Please select postal code"/>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Contact Name <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input type="text" id="ContactName" name="ContactName" size="50" maxlength="45"
-                                             class="isRequired form-control"
-                                             title="Please enter contact name here"
-                                             placeholder="Please enter contact name here" value="<?php echo $this->admin['ContactName']; ?>" /></div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Contact Email</label>
-                <div class="col-lg-5">
-                    <input type="text" id="ContactEmail" name="ContactEmail" size="50" maxlength="45" value="<?php echo $this->admin['ContactEmail']; ?>" placeholder="Please enter contact email here" class="form-control isEmail" onblur="cheackEmailId()"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Contact Telephone <span class="mandatory">*</span></label>
-                <div class="col-lg-5">
-                    <input type="Telephone" id="ContactTelephone" name="ContactTelephone" size="50" value="<?php echo $this->admin['ContactTelephone']; ?>" class="isRequired form-control" title="Please enter a telephone" placeholder="Please enter a telephone"/>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>
@@ -91,7 +76,6 @@
                         $enrolledProg = explode(",", $this->participant['ProgramID']);
                         print_r($enrolledProg);
                         foreach ($this->enrolledPrograms as $enrolledPrograms) {
-                            
                             ?>
 
                             <option value="<?php echo $enrolledPrograms['ProgramID']; ?>" <?php echo (in_array($enrolledPrograms['ProgramID'], $enrolledProg)) ? "selected='selected'" : "" ?>><?php echo $enrolledPrograms['Description']; ?></option>
@@ -114,53 +98,52 @@
 </div>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
 <script type="text/javascript">
-    var duplicated = false;
-    $(document).ready(function () {
-        $('#enrolledProgram').selectpicker();
-    });
-    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
-        objValue = document.getElementById(obj).value;
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
-        function (data) {
-            if (data > 0) {
-                alert(msg, "err");
-                duplicated = true;
-                $("#" + obj).focus();
-            }
-            else {
-                duplicated = false;
-            }
-            return duplicated;
-        });
-    }
+                    var duplicated = false;
+                    $(document).ready(function () {
+                        $('#enrolledProgram').selectpicker();
+                    });
+                    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                        objValue = document.getElementById(obj).value;
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        $("#" + obj).focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                    return duplicated;
+                                });
+                    }
 
-    function validateNow() {
-        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "ProviderID##" . $this->admin['ProviderID']; ?>', 'This Email already exists for another Admin. Please try something else.')
-        //if (!checkDduplicateId) {
-        flag = deforayValidator.init({
-            formId: 'editProvidersForm'
-        });
-        if (flag && !duplicated) {
-            $.blockUI();
-            document.getElementById('editProvidersForm').submit();
-        }
-        //}
+                    function validateNow() {
+                        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "ProviderID##" . $this->admin['ProviderID']; ?>', 'This Email already exists for another Admin. Please try something else.')
+                        //if (!checkDduplicateId) {
+                        flag = deforayValidator.init({
+                            formId: 'editProvidersForm'
+                        });
+                        if (flag && !duplicated) {
+                            $.blockUI();
+                            document.getElementById('editProvidersForm').submit();
+                        }
+                        //}
 
 
-    }
+                    }
 
-    function cheackEmailId() {
-        primaryEmail = document.getElementById("Email").value;
-        secondaryEmail = document.getElementById("ContactEmail").value;
-        if (secondaryEmail != "") {
-            if (primaryEmail == secondaryEmail) {
-                alert("Please check your provider email and contact email");
-                document.getElementById("ContactEmail").value = "";
-                $("#ContactEmail").focus();
-                duplicated = true;
-            } else {
-                duplicated = false;
-            }
-        }
-    }
+                    function cheackEmailId() {
+                        primaryEmail = document.getElementById("Email").value;
+                        secondaryEmail = document.getElementById("ContactEmail").value;
+                        if (secondaryEmail != "") {
+                            if (primaryEmail == secondaryEmail) {
+                                alert("Please check your provider email and contact email");
+                                document.getElementById("ContactEmail").value = "";
+                                $("#ContactEmail").focus();
+                                duplicated = true;
+                            } else {
+                                duplicated = false;
+                            }
+                        }
+                    }
 </script>

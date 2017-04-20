@@ -100,15 +100,12 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
 
 
         if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
-            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
-                    array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pfid' => 'a.ID', 'ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
                     ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
                     ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
                     ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID');
-
         } else {
-            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), 
-                    array('pfid'=>'a.ID','ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('pfid' => 'a.ID', 'ps.ProviderName', 'pr.ProgramCode', 'ro.PeriodDescription', 'a.FileName'))
                     ->joinLeft(array('ps' => 'rep_providers'), 'ps.ProviderID=a.ProviderID')
                     ->joinLeft(array('pr' => 'rep_programs'), 'pr.ProgramID=a.ProgramID')
                     ->joinLeft(array('ro' => 'rep_providerrounds'), 'ro.ID=a.PeriodID')
@@ -159,7 +156,12 @@ class Application_Model_DbTable_Uploadreports extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ProgramCode'];
             $row[] = $aRow['PeriodDescription'];
             $row[] = $aRow['FileName'];
-            $row[] = '<a href="/files/' . $aRow['FileName'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;" target="_blank"><i class="icon-download"></i> Download</a>';
+            $filename = "" . $aRow['FileName'] . "";
+            $row[] = '<a href="/files/' . $filename . '" class="btn btn-warning btn-xs" style="margin-right: 2px;" target="_blank"><i class="icon-download"></i> Download</a>';
+            $filename = "'" . $filename . "'";
+            $row[] = '<button  class="btn btn-success btn-xs" ng-controller="PdfInfileDisplay"'
+                    . ' onclick="displayPdfInline(' . $filename . ')" '
+                    . 'style="margin-right: 2px;" target="_self"><i class="icon-eye"></i> Preview</button>';
             $output['aaData'][] = $row;
         }
 
