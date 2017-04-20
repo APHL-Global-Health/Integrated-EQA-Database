@@ -239,6 +239,7 @@ class ParticipantController extends Zend_Controller_Action {
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetail($pID);
+       
         foreach ($t as $k){
             $id=$k["participant_id"];
         }

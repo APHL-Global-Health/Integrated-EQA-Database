@@ -800,14 +800,15 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
 					}
 				}
 			}
-			$row[]=$qcChkbox;
+            $row[]=$qcChkbox;
             $row[] = $aRow['SHIP_YEAR'];
             $row[] = $general->humanDateFormat($aRow['shipment_date']);
             $row[] = ($aRow['scheme_name']);
             $row[] = $aRow['shipment_code'];
             $row[] = $aRow['unique_identifier'];
-            //$row[] = $aRow['first_name'] . " " . $aRow['last_name'];
+            $row[] = $aRow['first_name'] . " " . $aRow['last_name'];
             $row[] = $general->humanDateFormat($aRow['RESPONSEDATE']);
+            
             
 //            if($aRow['status']!='finalized' && $aRow['RESPONSEDATE']!='' && $aRow['RESPONSEDATE']!='0000-00-00'){
 //             $delete='<a href="javascript:void(0);" onclick="removeSchemes(\'' . $aRow['scheme_type']. '\',\'' . base64_encode($aRow['map_id']) . '\')" style="text-decoration : underline;"> Delete</a>';

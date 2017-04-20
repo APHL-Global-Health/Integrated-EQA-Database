@@ -675,13 +675,13 @@ if(isset($this->schemes) && count($this->schemes) >0 ){
 			"sPaginationType": "full_numbers",
 			"bRetrieve": true,                        
 			"aoColumns": [
-				{"bSortable":false},
+                            {"bSortable":false},
 			    {"sClass":"center"},
 			    {"sClass":"center"},
 			    {"sClass":"center"},
 			    {"sClass":"center"},
 			    {"sClass":""},
-			    {"sClass":""},
+                            {"sClass":""},
 			    {"sClass":"center"},
 			    {"sClass":"center","bSortable":false},
 			    {"sClass":"center","bSortable":false}
@@ -800,7 +800,8 @@ if(isset($this->schemes) && count($this->schemes) >0 ){
 	
 	
 </script>
-  <?php }?>
+  <?php }else{?>
 <div ng-include="'../partialHTMLS/labOperations/participantDashboard.html'">
     
 </div>
+<?php }?>
