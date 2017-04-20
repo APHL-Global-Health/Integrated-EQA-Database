@@ -864,11 +864,11 @@ class Application_Service_Reports {
                 $rNegative = 5;
                 $rInderminate = 6;
             } else if ($parameters['scheme'] == 'vl') {
-                $rPositive = 3;
-                $rNegative = 4;
+                $rPositive = 7;
+                $rNegative = 8;
             } else if ($parameters['scheme'] == 'eid') {
-                $rPositive = 5;
-                $rNegative = 7;
+                $rPositive = 10;
+                $rNegative = 11;
             }
         }
 
