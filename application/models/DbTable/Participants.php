@@ -463,7 +463,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'qc_access' => 'no',
             'enable_adding_test_response_date' => 'no',
             'enable_choosing_mode_of_receipt' => 'no',
-            'view_only_access' => 'yes',
+            'view_only_access' => 'no',
             'status' => 'active',
             'IsVl' => '1',
             'IsTester'=>'1',

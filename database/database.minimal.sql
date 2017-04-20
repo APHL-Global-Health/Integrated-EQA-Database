@@ -132,16 +132,6 @@ CREATE TABLE `distributions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `distributions`
---
-
-LOCK TABLES `distributions` WRITE;
-/*!40000 ALTER TABLE `distributions` DISABLE KEYS */;
-INSERT INTO `distributions` VALUES (1,'PT001','2017-02-15','shipped','2017-02-01 10:23:41','1',NULL,NULL),(2,'PT002','2017-03-15','shipped','2017-03-19 20:32:56','1','2017-03-20 08:59:52','1'),(3,'P003','2017-03-16','shipped','2017-03-27 21:50:30','1',NULL,NULL);
-/*!40000 ALTER TABLE `distributions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `dts_recommended_testkits`
 --
 
