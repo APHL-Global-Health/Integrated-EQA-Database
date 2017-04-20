@@ -46,7 +46,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'p.first_name', 'u.status');
+        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status','u.IsTester');
+
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "dm_id";
@@ -186,7 +187,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/' . $aRow['dm_id'] . '\',\'980\',\'500\');" >' . $aRow['participantCount'] . '</a>';
+            $row[] = $aRow['IsTester']==1?'Yes':'No';
+            //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
 
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
@@ -280,7 +282,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     public function updatePassword($oldpassword, $newpassword) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $email = $authNameSpace->email;
-        $noOfRows = $this->update(array('password' => $newpassword, 'force_password_reset' => 0), "primary_email = '" . $email . "' and password = '" . $oldpassword . "'");
+        $noOfRows = $this->update(array('password' => md5($newpassword), 'force_password_reset' => 0), "primary_email = '" . $email . "' and password = '" . md5($oldpassword) . "'");
+        
         if ($noOfRows != null && count($noOfRows) == 1) {
             $authNameSpace->force_password_reset = 0;
             return true;

@@ -131,7 +131,9 @@
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">E-mail <span class="mandatory">*</span></label>
 
-                <div class="col-lg-8"><input type="text" id="pemail" name="pemail" size="50" maxlength="255" class="isRequired isEmail form-control" title="Please enter the email id here" placeholder="Please enter the email id here"/></div>
+                <div class="col-lg-8"><input type="text" id="pemail" name="pemail" size="50" maxlength="255" class="isRequired isEmail form-control" 
+                                             title="Please enter the email id here" placeholder="Please enter the email id here"
+                                             onblur="checkDuplicate('participant', 'email',this, null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/></div>
             </div>
             
 

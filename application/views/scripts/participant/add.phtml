@@ -49,7 +49,8 @@
                             <th>Participant Phone Number</th>
                             <td><input type="text" id="pphone1" name="pphone1" size="25" maxlength="45" value="<?php echo $this->rsParticipant['phone']; ?>" title="Please enter the Participant's Phone here" placeholder="Please enter the Participant's Phone here" class=" form-control isNumeric" /></td>
                             <th>Participant e-mail Address <span class="mandatory">*</span></th>
-                            <td><input type="text" id="pemail" name="pemail" size="25" maxlength="45" value="<?php echo $this->rsParticipant['email']; ?>" title="Please enter the Participant's Email here" placeholder="Please enter the Participant's Email here" class="form-control isRequired isEmail"/></td>
+                            <td><input type="text" id="pemail" name="pemail" size="25" maxlength="45" value="<?php echo $this->rsParticipant['email']; ?>" title="Please enter the Participant's Email here" placeholder="Please enter the Participant's Email here" class="form-control isRequired isEmail" 
+                                       onblur="checkDuplicate('participant', 'email',this, null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/></td>
                         </tr>    
                         <tr>
                             <th><span class="mandatory"></span></th>
