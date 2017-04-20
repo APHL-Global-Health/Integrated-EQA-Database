@@ -275,7 +275,8 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ' | Your score ' + dataDetails.results.grainStainReactionScore,
+                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction +
+                            ' | Your score ' + dataDetails.results.grainStainReactionScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -286,7 +287,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ' | Your score ' + dataDetails.results.finalIdentificationScore,
+                    text: "-----------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Final identification : ' + dataDetails.results.finalIdentification +
+                            ' | Your score ' + dataDetails.results.finalIdentificationScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -296,9 +303,14 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
-
                 {
-                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() + ' | Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    text: "------------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() +
+                            ' | Your score ' + dataDetails.results.totalMicroAgentsScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -312,7 +324,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Total Score : ' + (Number(dataDetails.results.finalScore) + Number(dataDetails.results.totalMicroAgentsScore)),
+                    text: 'Total Score : ' + Number(dataDetails.results.finalScore) + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -370,9 +382,14 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         pdfMake.createPdf(docDefinition).open();
 
     }
-    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails) {
+    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails, type) {
         try {
             var url = serverReportURL + 'getlabuserresponse';
+            if (angular.isDefined(url)) {
+                url = SERVER_API_URL.bacteriologyParticipant + 'getlabuserresponse';
+            }
+
+
             alerts = $.alert({
                 title: "<i class='fa fa-spin fa-spinner text-success'></i> Fetching data",
                 content: "please wait..."
