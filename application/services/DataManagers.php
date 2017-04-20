@@ -78,7 +78,8 @@ class Application_Service_DataManagers {
 	
     public function changePassword($oldPassword,$newPassword){
 	    $userDb = new Application_Model_DbTable_DataManagers();
-	    $newPassword = $userDb->updatePassword($oldPassword,$newPassword);
+            $newPassword = $userDb->updatePassword($oldPassword,$newPassword);
+            
 	    $sessionAlert = new Zend_Session_Namespace('alertSpace');
 	    if($newPassword != false){
 		    $sessionAlert->message = "Your password has been updated.";
