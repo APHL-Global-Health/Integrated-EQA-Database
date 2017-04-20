@@ -864,17 +864,18 @@ class Application_Service_Reports {
                 $rNegative = 5;
                 $rInderminate = 6;
             } else if ($parameters['scheme'] == 'vl') {
-                $rPositive = 7;
-                $rNegative = 8;
+                $rPositive = 3;
+                $rNegative = 4;
             } else if ($parameters['scheme'] == 'eid') {
-                $rPositive = 10;
-                $rNegative = 11;
+                $rPositive = 5;
+                $rNegative = 7;
             }
         }
 
         //$aColumns = array('sl.scheme_name', "ref.sample_label", 'ref.reference_result', 'positive_responses', 'negative_responses', new Zend_Db_Expr("SUM(sp.shipment_test_date <> '')"), new Zend_Db_Expr("SUM(sp.final_result = 1) + SUM(sp.final_result = 2)"));
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
+        if($parameters['scheme']=='vl'){
+            $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
                 ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "total_passed" => new Zend_Db_Expr("SUM(sp.final_result=1)"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))")))
                 //->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
@@ -884,6 +885,20 @@ class Application_Service_Reports {
                 ->join(array('rp' => 'r_possibleresult'), 'ref.reference_result=rp.id')
                 ->where("res.sample_id = ref.sample_id")
                 ->group(array('sp.shipment_id', 'ref.sample_label'));
+        }
+        if($parameters['scheme']=='eid'){
+            $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
+                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "total_passed" => new Zend_Db_Expr("SUM(sp.final_result=1)"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))")))
+                //->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
+                ->join(array('ref' => $refTable), 's.shipment_id=ref.shipment_id')
+                ->join(array('res' => $resTable), 'sp.map_id=res.shipment_map_id', array("positive_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rPositive . ', 1, 0))'), "negative_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rNegative . ', 1, 0))'), "invalid_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rInderminate . ', 1, 0))')))
+                ->join(array('rr' => 'r_results'), 'sp.final_result=rr.result_id')
+                ->join(array('rp' => 'r_possibleresult'), 'ref.reference_result=rp.id')
+                ->where("res.sample_id = ref.sample_id")
+                ->group(array('sp.shipment_id', 'ref.sample_label'));
+        }
+        
        
         if (isset($parameters['scheme']) && $parameters['scheme'] != "") {
             $sQuery = $sQuery->where("s.scheme_type = ?", $parameters['scheme']);
@@ -925,8 +940,8 @@ class Application_Service_Reports {
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
         $aResultFilterTotal = $dbAdapter->fetchAll($sQuery);
         $iFilteredTotal = count($aResultFilterTotal);
-        // echo $sQuery;
-        //exit;
+//        echo $sQuery;
+//        exit;
         /* Total data set length */
         $sWhere = "";
         $sQuery = $dbAdapter->select()->from(array('ref' => $refTable), new Zend_Db_Expr("COUNT('ref.sample_label')"))

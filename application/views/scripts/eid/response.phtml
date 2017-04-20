@@ -382,10 +382,10 @@ $dtFormat=  $genderHelper->getDateFormat();
             formId: 'eidResponseForm'
         });
         if (flag) {
-            if (moment($("#receiptDate").val()).isAfter($("#testDate").val())) {
-                alert('Testing Date has to come after the Shipment Receipt Date');
-                return false;
-            }
+//            if (moment($("#receiptDate").val()).isAfter($("#testDate").val())) {
+//                alert('Testing Date has to come after the Shipment Receipt Date');
+//                return false;
+//            }
             $.blockUI();
             document.getElementById('eidResponseForm').submit();
         }
