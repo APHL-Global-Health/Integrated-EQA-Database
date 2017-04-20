@@ -27,9 +27,8 @@ class AuthController extends Zend_Controller_Action
     		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
     		$adapter = new Zend_Auth_Adapter_DbTable($db, "data_manager", "primary_email", "password");
     		$adapter->setIdentity($params['username']);
-    		//$adapter->setCredential(MD5($params['password']));
-		$adapter->setCredential($params['password']);	
-                $select = $adapter->getDbSelect();
+    		$adapter->setCredential(MD5($params['password']));
+		$select = $adapter->getDbSelect();
                 $select->where('status = "active"');			
 			
     		// STEP 2 : Let's Authenticate
