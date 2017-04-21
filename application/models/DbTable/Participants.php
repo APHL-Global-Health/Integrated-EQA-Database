@@ -26,11 +26,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
                                 ->where("p.email = ?", $userSystemId));
     }
- public function getAffiliateList() {
+
+    public function getAffiliateList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_participant_affiliates')->order('affiliate ASC'));
     }
-    
+
     public function getSiteTypeList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_site_type')->order('site_type ASC'));
@@ -40,7 +41,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));
     }
-       public function getEnrollmentDetails($pid, $sid) {
+
+    public function getEnrollmentDetails($pid, $sid) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('p' => 'participant'))
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'p.participant_id=sp.participant_id')
@@ -49,7 +51,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $db->fetchAll($sql);
     }
 
-       public function getEnrolledProgramsList() {
+    public function getEnrolledProgramsList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_enrolled_programs')->order('enrolled_programs ASC'));
     }
@@ -162,6 +164,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
             $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
+        }
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $sQuery = $sQuery->where("p.IsVl = ? ", 3);
         }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -335,7 +340,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
             'created_by' => $authNameSpace->primary_email,
-            'ModuleID'=>1,
+            'ModuleID' => 1,
             'status' => 'active'
         );
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {
@@ -343,8 +348,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         } else {
             $data['individual'] = 'no';
         }
+
+        $participantName = $params['instituteName'];
+
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $data['IsVl'] = 3;
+        }
         
-        $participantName=$params['instituteName'];
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
@@ -379,7 +389,15 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                 $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
             }
         }
-        $pMail=$params['pemail'];
+/*
+        $common = new Application_Service_Common();
+        $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        $fromMail = "brianonyi@gmail.com";
+        $fromName = Application_Service_Common::getConfig('admin-name');
+        $common->sendGeneralEmail($toMail, "New Participant Registered   $message", $participantName);
+ */
+	$pMail=$params['pemail'];
         $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
         $fromMail="brianonyi@gmail.com";
@@ -508,7 +526,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     }
 
     public function fetchAllActiveParticipants() {
-        return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+             return $this->fetchAll($this->select()->where("status='active'")->where("IsVl='3'")->order("first_name"));
+        }else{
+            return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));  
+        }
+      
     }
 
     public function getSchemeWiseParticipants($schemeType) {
