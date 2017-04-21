@@ -27,15 +27,13 @@ class AuthController extends Zend_Controller_Action
     		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
     		$adapter = new Zend_Auth_Adapter_DbTable($db, "data_manager", "primary_email", "password");
     		$adapter->setIdentity($params['username']);
-    		$adapter->setCredential($params['password']);
-			
-                $select = $adapter->getDbSelect();
+    		$adapter->setCredential(MD5($params['password']));
+		$select = $adapter->getDbSelect();
                 $select->where('status = "active"');			
 			
     		// STEP 2 : Let's Authenticate
     		$auth = Zend_Auth::getInstance();
     		$res = $auth->authenticate($adapter); // -- METHOD 2 to authenticate , seems to work fine for me
-    		
 			//echo "hi";
     		if($res->isValid()){
 			Zend_Session::rememberMe(60 * 60 * 5); // asking the session to be active for 5 hours
@@ -50,6 +48,7 @@ class AuthController extends Zend_Controller_Action
 	    		$authNameSpace->phone = $rs->phone;
 	    		$authNameSpace->email = $rs->primary_email;
                         $authNameSpace->IsVl = $rs->IsVl;
+                        $authNameSpace->IsTester = $rs->IsTester;
 	    		$authNameSpace->qc_access = $rs->qc_access;
 	    		$authNameSpace->view_only_access = $rs->view_only_access;
 	    		$authNameSpace->enable_adding_test_response_date = $rs->enable_adding_test_response_date;

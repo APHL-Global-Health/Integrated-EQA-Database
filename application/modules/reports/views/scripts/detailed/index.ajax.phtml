@@ -35,8 +35,8 @@
                     }
                 }else if(isset($this->type) && $this->type=='enrolled-programs'){
                     foreach($this->response as $value){
-                       $value['enrolled_programs'] = (isset($value['enrolled_programs']) && $value['enrolled_programs'] != "" && $value['enrolled_programs'] != null) ? $value['enrolled_programs'] : "No Program";
-                       $result[]=strtoupper(stripslashes(wordwrap($value['enrolled_programs'], 50, "<br />\n")));
+                       $value['SchemeName'] = (isset($value['SchemeName']) && $value['SchemeName'] != "" && $value['SchemeName'] != null) ? $value['SchemeName'] : "No Program";
+                       $result[]=strtoupper(stripslashes(wordwrap($value['SchemeName'], 50, "<br />\n")));
                        $passed[]=(isset($value['number_passed']) ? $value['number_passed'] : 0) ;
                        $failed[]=(isset($value['number_failed']) ? $value['number_failed'] : 0) ;
                        $others[]=(isset($value['others']) ? $value['others'] : 0) ;
