@@ -3,7 +3,7 @@
 class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'ReadinessChecklist';
+    protected $_name = 'readinesschecklist';
     protected $_primary = 'ID';
 
     
