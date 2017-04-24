@@ -992,7 +992,6 @@ CREATE TABLE `readinesschecklist` (
 
 LOCK TABLES `readinesschecklist` WRITE;
 /*!40000 ALTER TABLE `readinesschecklist` DISABLE KEYS */;
-INSERT INTO `readinesschecklist` VALUES (1,1,'','','','','','','Complete','Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support','Welcome',NULL,'2017-03-19 14:54:36');
 /*!40000 ALTER TABLE `readinesschecklist` ENABLE KEYS */;
 UNLOCK TABLES;
 
