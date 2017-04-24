@@ -6,7 +6,6 @@ require_once 'pdfCreator.php';
 
 Class Main extends pdfCreator {
 
-    
     public $connect_db;
 
     public function __construct() {
@@ -142,9 +141,11 @@ Class Main extends pdfCreator {
                 $sql .= $this->returnWhereStatement($where, $group, $tableName);
             }
         }
+        if ($tableName == 'tbl_bac_panels_shipments') {
 
-//        echo $sql;
-//        exit;
+//            echo $sql;
+//            exit;
+        }
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -158,18 +159,26 @@ Class Main extends pdfCreator {
             return false;
         }
     }
-public function updateAndDelete($sql){
-    
-    $result = $this->connect_db->query($sql);
-    
-    return true;
-}
-    public function doQuery($sql) {
+
+    public function updateAndDelete($sql) {
+
+        $result = $this->connect_db->query($sql);
+
+        return true;
+    }
+
+    public function doQuery($sql,$count=null) {
 //        echo$sql;
 //        exit;
-        $result = $this->connect_db->query($sql);
         
+
 //        var_dump($this->connect_db->error);
+        
+        if(isset($count)){
+         return  $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];  
+        }
+        
+        $result = $this->connect_db->query($sql);
         $results = array();
         if ($result->num_rows > 0) {
             // output data of each row
@@ -374,8 +383,10 @@ public function updateAndDelete($sql){
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
-//                    echo $sql;
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
+//                        echo $sql;
 //                    exit;
+                    }
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {

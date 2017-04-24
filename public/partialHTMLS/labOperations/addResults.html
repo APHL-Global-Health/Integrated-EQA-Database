@@ -47,8 +47,8 @@
             <td>
                 <button class="btn btn-sm btn-success"
                         ng-click="samples.showAddResponse(sample)"
-                        ng-disabled="sample.daysLeftOnTen==0"
-                        ng-show="sample.responseStatus==10"
+                        ng-disabled="sample.daysLeftOnTen==10"
+                        ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to to respond or give feedback"
                         bs-tooltip

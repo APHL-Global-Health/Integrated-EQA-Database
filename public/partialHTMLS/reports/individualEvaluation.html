@@ -83,7 +83,7 @@
 
                 <td>{{lab.batchName}}</td>
                 <td>
-                    <button ng-disabled="lab.daysLeft > 0"
+                    <button ng-disabled="lab.daysLeft < 1"
                             ng-click="reports.evaluateIndividual(lab)" class="btn btn-danger btn-sm">
                         <i class="fa fa-check"></i>
                         <x ng-show="lab.markedStatus==0">evaluate</x>

@@ -479,6 +479,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                     $scoreFIS = $sampleExpectedResult['finalIdentificationScore'];
                 }
+                
+//                echo $scoreFIS;
+//                exit();
                 $score['finalIdentificationScore'] = round(($scoreFIS / $sampleExpectedResult['finalIdentificationScore']) * 100, 3);
 
                 $whereResponse['sampleId'] = $responseResults['sampleId'];
@@ -633,7 +636,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 $microExpectedAgents = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $whereSampleId);
                 $returnScore = 0;
                 $totalSamples = count($microExpectedAgents);
-                echo $totalSamples;
+//                echo $totalSamples;
                 if ($microExpectedAgents != false) {
                     foreach ($microAgents as $key => $value) {
                         $score['score'] = 0;

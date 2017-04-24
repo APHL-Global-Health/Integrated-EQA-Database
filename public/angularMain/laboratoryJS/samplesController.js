@@ -4,7 +4,7 @@
 
 (function () {
     var samplesModule = angular.module('ReportModule');
-  
+
     samplesModule.controller('samplesController', function ($scope, $http, $location, EptServices, EptFactory, $timeout, loginDataCache) {
         var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
 //        var serverReportURL = SERVER_API_URL.reportsURL;
@@ -1523,7 +1523,7 @@
                                 if (type == 0) {
                                     $scope.samples.hideShipmentModal();
                                     $scope.samples.showReceiveShipment = false;
-                                    alert($scope.samples.showReceiveShipment)
+                                    console.log($scope.samples.showReceiveShipment)
                                     $scope.samples.getDistinctShipmentsForDelivery();
                                 }
                                 if (postedData.tableName == 'tbl_bac_panels_shipments') {
@@ -2133,6 +2133,26 @@
         $scope.samples.showRoundFullUsers = function (sample) {
             $scope.samples.clickedSample = sample;
             $scope.samples.samplesActivePage('sampleFullInfo', 0);
+        }
+        $scope.samples.labAveragePerformance = {};
+        $scope.samples.getRoundEvaluationAverages = function () {
+            try {
+                var url = serverSamplesURL + 'getroundperformanceperlab';
+                var where = {checkLab: 1};
+                $http.post(url, where)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labAveragePerformance = response.data;
+                            } 
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
+            } catch (Exception) {
+
+            }
         }
         $scope.samples.sampleToUsers = {};
         $scope.samples.getSampleAllUsers = function (sample) {

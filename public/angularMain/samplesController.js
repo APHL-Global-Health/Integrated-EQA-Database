@@ -114,14 +114,11 @@
             console.log(test)
             if (test == 1) {
                 return 'ID';
-            }
-            else if (test == 2) {
+            } else if (test == 2) {
                 return 'Grain Stain';
-            }
-            else if (test == 3) {
+            } else if (test == 3) {
                 return 'AST';
-            }
-            else {
+            } else {
                 return '?'
             }
         }
@@ -134,12 +131,9 @@
         $scope.samples.returnSoundStatus = function (status, days) {
             if (Number(days) > 0) {
                 return 'Active';
-            }
-            else if (Number(days) <= 0) {
+            } else if (Number(days) <= 0) {
                 return 'Expired';
-            }
-
-            else {
+            } else {
                 return 'Unknown';
             }
         }
@@ -209,32 +203,32 @@
                 // $scope.samples.updateWhere(postedData, 1);
                 var url = serverSamplesURL + 'updateroundstart';
                 $http
-                    .post(url, postedData)
-                    .success(function (data) {
-                        console.log(data)
-                        alertStartRound.close();
-                        if (data.status == 1) {
-                            $.alert(
-                                {
-                                    title: '<i class="fa fa-check-circle text-success"></i> Success',
-                                    content: '<hr> Round started OK!'
-                                }
-                            );
-                            $scope.samples.showRoundFullDetails(round);
-                            $scope.samples.currentRound.startRoundFlag = 1
-                        } else {
-                            $.alert(
-                                {
-                                    title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
-                                    content: '<hr>' + data.message
-                                }
-                            );
-                        }
+                        .post(url, postedData)
+                        .success(function (data) {
+                            console.log(data)
+                            alertStartRound.close();
+                            if (data.status == 1) {
+                                $.alert(
+                                        {
+                                            title: '<i class="fa fa-check-circle text-success"></i> Success',
+                                            content: '<hr> Round started OK!'
+                                        }
+                                );
+                                $scope.samples.showRoundFullDetails(round);
+                                $scope.samples.currentRound.startRoundFlag = 1
+                            } else {
+                                $.alert(
+                                        {
+                                            title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
+                                            content: '<hr>' + data.message
+                                        }
+                                );
+                            }
 
-                    })
-                    .error(function (error) {
-                        $.alert('Error Occurred');
-                    })
+                        })
+                        .error(function (error) {
+                            $.alert('Error Occurred');
+                        })
             } catch (error) {
                 console.log(error);
             }
@@ -248,8 +242,7 @@
             }
             if (days == 0 && status == 1) {
                 return 'Expired';
-            }
-            else {
+            } else {
                 return 'Unknown';
             }
 
@@ -281,26 +274,26 @@
 
 
                 $http
-                    .post(url, varData)
-                    .success(function (data) {
-                        console.log(data);
-                        $scope.samples.loaderProgressSpinner = '';
-                        if (data.status == 1) {
-                            assignHTTPResponse(data, tableName);
-                        } else {
-                            assignHTTPResponse({}, tableName);
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                        if (data.data == false) {
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        $scope.samples.loaderProgressSpinner = '';
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                        .post(url, varData)
+                        .success(function (data) {
+                            console.log(data);
+                            $scope.samples.loaderProgressSpinner = '';
+                            if (data.status == 1) {
+                                assignHTTPResponse(data, tableName);
+                            } else {
+                                assignHTTPResponse({}, tableName);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                            if (data.data == false) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
             } catch (e) {
                 console.log(e)
             }
@@ -347,8 +340,7 @@
             }
             if (panelStatus == 6) {
                 return 'Del\'d,Good/Rejected';
-            }
-            else {
+            } else {
                 return "Unknown status"
             }
         }
@@ -368,8 +360,7 @@
             }
             if (shipmentStatus == 5) {
                 return 'Rejected ';
-            }
-            else {
+            } else {
                 return 'Unknown';
             }
         }
@@ -396,20 +387,20 @@
                 // changeSavingSpinner(true);
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url, posted)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.samples.receivedShipments = data.data;
-                        $scope.samples.loaderProgressSpinner = '';
+                        .post(url, posted)
+                        .success(function (data) {
+                            console.log(data)
+                            $scope.samples.receivedShipments = data.data;
+                            $scope.samples.loaderProgressSpinner = '';
 
-                        if (data.status == 0) {
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                            if (data.status == 0) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
             } catch (Exc) {
                 console.log(Exc)
             }
@@ -443,20 +434,20 @@
                 changeSavingSpinner(true);
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url)
-                    .success(function (data) {
-                        console.log(data)
-                        changeSavingSpinner(false);
-                        if (data.status == 0) {
-                            // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        } else {
-                            $scope.samples.currentRound = data.data;
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                        .post(url)
+                        .success(function (data) {
+                            console.log(data)
+                            changeSavingSpinner(false);
+                            if (data.status == 0) {
+                                // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            } else {
+                                $scope.samples.currentRound = data.data;
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
             } catch (Exception) {
                 console.log(Exception);
             }
@@ -472,28 +463,28 @@
 
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url, dataLab)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.samples.loaderProgressSpinner = '';
-                        changeSavingSpinner(false);
-                        if (data.status == 0) {
-                            alertStartRound = $.alert({
-                                title: '<i class="fa fa-remove  text-danger"></i> Error',
-                                content: 'You have successfully enrolled for the round.'
-                            });
-                        } else {
-                            alertStartRound = $.alert({
-                                title: '<i class="fa fa-check-circle  text-success"></i> Success',
-                                content: 'You have successfully enrolled for the round.'
-                            });
-                            $scope.samples.getCurrentActiveRound();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                        .post(url, dataLab)
+                        .success(function (data) {
+                            console.log(data)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeSavingSpinner(false);
+                            if (data.status == 0) {
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-remove  text-danger"></i> Error',
+                                    content: 'You have successfully enrolled for the round.'
+                                });
+                            } else {
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-check-circle  text-success"></i> Success',
+                                    content: 'You have successfully enrolled for the round.'
+                                });
+                                $scope.samples.getCurrentActiveRound();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
 
             } catch (Exception) {
 
@@ -504,22 +495,17 @@
 
             if (status == 0) {
                 return type == 1 ? 'panel-primary' : 'btn-primary';
-            }
-            else if (status == 1) {
+            } else if (status == 1) {
                 return type == 1 ? 'panel-primary' : 'btn-primary';
             } else if (status == 2) {
                 return type == 1 ? 'panel-info' : 'btn-info';
-            }
-            else if (status == 3) {
+            } else if (status == 3) {
                 return type == 1 ? 'panel-warning' : 'btn-warning';
-            }
-            else if (status == 4) {
+            } else if (status == 4) {
                 return type == 1 ? 'panel-success' : 'btn-success';
-            }
-            else if (status == 5) {
+            } else if (status == 5) {
                 return type == 1 ? 'panel-danger' : 'btn-danger';
-            }
-            else {
+            } else {
                 return type == 1 ? 'panel-default' : 'btn-default';
             }
         }
@@ -596,7 +582,9 @@
                 $scope.samples.programFormData = {};
             }
             if (tableName == 'tbl_bac_expected_results') {
+
                 $scope.samples.resultsFormData = {};
+
             }
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = {};
@@ -638,6 +626,10 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_programs');
             }
             if (tableName == 'tbl_bac_expected_results') {
+                $.alert({
+                    title: "<i class='fa fa-check text-success'> Success</i>",
+                    content: "Results save successfully"
+                })
                 $scope.samples.samplesActivePage('viewExpectedResults', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_expected_results');
             }
@@ -714,29 +706,29 @@
                         postedData.labId = $scope.samples.labsToRoundArray;
                         var url = serverSamplesURL + 'savelabstoround';
                         $http
-                            .post(url, postedData)
-                            .success(function (response) {
-                                console.log(response)
-                                changeSavingSpinner(false);
-                                if (response.status == 1) {
-                                    $scope.samples.labsToRoundArray = [];
+                                .post(url, postedData)
+                                .success(function (response) {
+                                    console.log(response)
+                                    changeSavingSpinner(false);
+                                    if (response.status == 1) {
+                                        $scope.samples.labsToRoundArray = [];
 
 
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                    $scope.samples.samplesActivePage('viewRounds', 0);
-                                    $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                                        $scope.samples.samplesActivePage('viewRounds', 0);
+                                        $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
-                                } else {
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
-                                }
+                                    } else {
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
+                                    }
 
-                            })
-                            .error(function (error) {
-                                console.log(error)
-                                changeSavingSpinner(false);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                            })
+                                })
+                                .error(function (error) {
+                                    console.log(error)
+                                    changeSavingSpinner(false);
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                })
 
                     }
 
@@ -760,28 +752,28 @@
                     postedData.panelId = $scope.samples.panelsToShipmentArray;
                     var url = serverSamplesURL + 'savepaneltoshipment';
                     $http
-                        .post(url, postedData)
-                        .success(function (response) {
-                            console.log(response)
-                            changeSavingSpinner(false);
-                            if (response.status == 1) {
-                                $scope.samples.panelsToShipmentArray = [];
+                            .post(url, postedData)
+                            .success(function (response) {
+                                console.log(response)
+                                changeSavingSpinner(false);
+                                if (response.status == 1) {
+                                    $scope.samples.panelsToShipmentArray = [];
 
-                                $scope.samples.getPanelFromShipment(shipment.id, 1);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                    $scope.samples.getPanelFromShipment(shipment.id, 1);
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                $scope.samples.showShipmentModal = false;
+                                    $scope.samples.showShipmentModal = false;
 
 
-                            } else {
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
-                            }
+                                } else {
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
+                                }
 
-                        })
-                        .error(function (error) {
-                            changeSavingSpinner(false);
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                        })
+                            })
+                            .error(function (error) {
+                                changeSavingSpinner(false);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            })
 
                 } else {
                     changeSavingSpinner(false);
@@ -900,17 +892,17 @@
                 var url = serverSamplesURL + 'getusersessions';
 
                 $http
-                    .post(url)
-                    .success(function (response) {
-                        if (response.status == 1) {
-                            loginDataCache.put('loginData', response.data);
-                            loginCacheMemory();
-                            console.log($scope.samples.loginDetails);
-                        }
-                    })
-                    .error(function (error) {
+                        .post(url)
+                        .success(function (response) {
+                            if (response.status == 1) {
+                                loginDataCache.put('loginData', response.data);
+                                loginCacheMemory();
+                                console.log($scope.samples.loginDetails);
+                            }
+                        })
+                        .error(function (error) {
 
-                    })
+                        })
                 // }
             } catch (Exception) {
 
@@ -976,8 +968,7 @@
                 }
                 $scope.samples.clickedPanel = panId;
 
-            }
-            catch (error) {
+            } catch (error) {
                 console.log(error)
             }
 
@@ -1043,19 +1034,19 @@
                                     shipmentIds: arr
                                 }
                                 $http.post(url, data)
-                                    .success(function (response) {
-                                        changeSavingSpinner(false);
-                                        //changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
-                                        alertStartRound.close();
-                                        $.alert('Data save successfully');
-                                        $scope.samples.showAddShipment = true
-                                        $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
-                                        $scope.samples.shipmentsToRoundArray = [];
-                                    })
-                                    .error(function (error) {
-                                        changeSavingSpinner(false);
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    })
+                                        .success(function (response) {
+                                            changeSavingSpinner(false);
+                                            //changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
+                                            alertStartRound.close();
+                                            $.alert('Data save successfully');
+                                            $scope.samples.showAddShipment = true
+                                            $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                                            $scope.samples.shipmentsToRoundArray = [];
+                                        })
+                                        .error(function (error) {
+                                            changeSavingSpinner(false);
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                        })
 
                             }
                         },
@@ -1142,25 +1133,25 @@
                 console.log(panel);
                 changeSavingSpinner(true);
                 $http
-                    .post(url, postedData)
-                    .success(function (response) {
-                        console.log(response)
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.samplePanelArray = [];
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-                            console.log('save successfully');
-                            $scope.samples.showPanelModal = false;
-                            $scope.samples.getAllSamples('tbl_bac_panel_mst');
-                        } else {
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Error : possibly you trying to add sample   to already added panel'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                        console.log(error)
-                    })
+                        .post(url, postedData)
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.samplePanelArray = [];
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                console.log('save successfully');
+                                $scope.samples.showPanelModal = false;
+                                $scope.samples.getAllSamples('tbl_bac_panel_mst');
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Error : possibly you trying to add sample   to already added panel'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            console.log(error)
+                        })
             } catch (error) {
                 console.log(error);
             }
@@ -1192,42 +1183,42 @@
                         try {
                             console.log(data)
                             $http.post(url, postedData)
-                                .success(function (response) {
+                                    .success(function (response) {
 
-                                    console.log('data')
-                                    console.log(response.data)
-                                    changeSavingSpinner(false);
-                                    if (angular.isDefined(response.data)) {
-                                        if (response.data.status == 1) {
-                                            emptyFormData(tableName, false);
-                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                        console.log('data')
+                                        console.log(response.data)
+                                        changeSavingSpinner(false);
+                                        if (angular.isDefined(response.data)) {
+                                            if (response.data.status == 1) {
+                                                emptyFormData(tableName, false);
+                                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                            } else {
+                                                EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                                            }
                                         } else {
+                                            var message = EptServices.EptServiceObject.returnTableColumn(tableName)
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
                                             EptServices.EptServiceObject.returnActionUnSuccessAlert();
                                         }
-                                    } else {
-                                        var message = EptServices.EptServiceObject.returnTableColumn(tableName)
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
-                                        EptServices.EptServiceObject.returnActionUnSuccessAlert();
-                                    }
-                                    if (alertStartRound != '') {
+                                        if (alertStartRound != '') {
 
-                                        angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
+                                            angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
 
-                                        if (response.data.status == 1) {
-                                            $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
-                                        } else {
-                                            EptServices.EptServiceObject.returnDuplicateAlert();
-                                            // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                            if (response.data.status == 1) {
+                                                $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
+                                            } else {
+                                                EptServices.EptServiceObject.returnDuplicateAlert();
+                                                // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                            }
+
                                         }
 
-                                    }
+                                    })
+                                    .error(function (error) {
+                                        changeSavingSpinner(false);
 
-                                })
-                                .error(function (error) {
-                                    changeSavingSpinner(false);
-
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                })
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                    })
                         } catch (error) {
                             console.log(error)
                         }
@@ -1245,8 +1236,7 @@
                         console.log(postedData)
                         $scope.samples.updateWhere(postedData, 1);
                     }
-                }
-                else {
+                } else {
                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(4));
                 }
 
@@ -1412,15 +1402,15 @@
                 postedData.where = id;
                 var url = serverSamplesURL + 'customdelete';
                 $http.post(url, postedData)
-                    .success(function (response) {
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnDeleteAlert();
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnServerErrorAlert();
-                    })
+                        .success(function (response) {
+                            alertStartRound.close();
+                            EptServices.EptServiceObject.returnDeleteAlert();
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            alertStartRound.close();
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        })
             } catch (Exc) {
                 console.log(Exc);
             }
@@ -1507,50 +1497,50 @@
                 changeSavingSpinner(true);
                 console.log(postedData)
                 $http.post(url, postedData)
-                    .success(function (response) {
-                        console.log(response)
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
 
-                        if (response.status == 1) {
-                            emptyFormData(postedData.tableName);
+                            if (response.status == 1) {
+                                emptyFormData(postedData.tableName);
 
-                            $scope.samples.receiveShipmentFormData = {};
-                            if (type == 1) {
-                                $scope.samples.showMainTable(postedData.tableName)
-                                if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
-                                    $scope.samples.showShipmentModal = false;
+                                $scope.samples.receiveShipmentFormData = {};
+                                if (type == 1) {
+                                    $scope.samples.showMainTable(postedData.tableName)
+                                    if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
+                                        $scope.samples.showShipmentModal = false;
 
+
+                                        alertStartRound.close();
+                                        $.alert('Data update successfully');
+                                    }
+                                }
+                                if (type == 0) {
+                                    $scope.samples.hideShipmentModal();
+                                    $scope.samples.showReceiveShipment = false;
+                                    alert($scope.samples.showReceiveShipment)
+                                    $scope.samples.getDistinctShipmentsForDelivery();
+                                }
+                                if (postedData.tableName == 'tbl_bac_panels_shipments') {
 
                                     alertStartRound.close();
-                                    $.alert('Data update successfully');
+                                    $.alert('Data updated successfully');
                                 }
+                            } else {
+                                if (type == 1) {
+                                    addIdToEditing(postedData.tableName)
+                                }
+                                $scope.samples.sampleFormData.id = postedData.where.id;
                             }
-                            if (type == 0) {
-                                $scope.samples.hideShipmentModal();
-                                $scope.samples.showReceiveShipment = false;
-                                alert($scope.samples.showReceiveShipment)
-                                $scope.samples.getDistinctShipmentsForDelivery();
-                            }
-                            if (postedData.tableName == 'tbl_bac_panels_shipments') {
-
-                                alertStartRound.close();
-                                $.alert('Data updated successfully');
-                            }
-                        } else {
-                            if (type == 1) {
-                                addIdToEditing(postedData.tableName)
-                            }
-                            $scope.samples.sampleFormData.id = postedData.where.id;
-                        }
-                        angular.isDefined(alertStartRound) && alertStartRound != '' ? alertStartRound.close() : false;
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        console.log(error);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                            angular.isDefined(alertStartRound) && alertStartRound != '' ? alertStartRound.close() : false;
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            console.log(error);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
             } catch (Exc) {
                 changeSavingSpinner(true);
                 console.log(Exc)
@@ -1657,12 +1647,12 @@
                     title: 'Confirm!',
                     theme: 'supervan',
                     content: 'Please confirm action, action can not be undone! ' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Enter a comment</label>' +
-                    '<textarea placeholder="Please enter a comment" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Enter a comment</label>' +
+                            '<textarea placeholder="Please enter a comment" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'Confirm Action': {
                             btnClass: 'btn-blue',
@@ -1721,8 +1711,7 @@
                     });
                     correctData = false;
                     break;
-                }
-                else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
+                } else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
                     $.alert({
                         title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
                         content: " please make sure reported To clinician is filled at row " + (i + 1)
@@ -1730,8 +1719,7 @@
 
                     correctData = false;
                     break;
-                }
-                else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
+                } else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
                     $.alert({
                         title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
                         content: "  please make sure Disk Content is filled,and is a number at row " + (i + 1)
@@ -1787,29 +1775,29 @@
                 aba.panelToSampleId = sampleData.panelToSampleId;
                 aba.resultsAba = data;
                 $http
-                    .post(url, aba)
-                    .success(function (res) {
-                        console.log(res)
-                        alertStartRound.close();
+                        .post(url, aba)
+                        .success(function (res) {
+                            console.log(res)
+                            alertStartRound.close();
 
-                        if (res.status == 1) {
+                            if (res.status == 1) {
+                                $.alert({
+                                    title: "<i class='fa fa-check-circle text-success'></i> ",
+                                    content: "data saved successfully"
+                                });
+                            } else {
+                                $.alert({
+                                    title: "<i class='fa fa-remove text-danger'></i> Error",
+                                    content: "error occured,likely you already submtted the result"
+                                });
+                            }
+                        })
+                        .error(function (error) {
                             $.alert({
-                                title: "<i class='fa fa-check-circle text-success'></i> ",
-                                content: "data saved successfully"
+                                title: "<i class='fa fa-remove text-danger'>",
+                                content: " Server error occured,please try again"
                             });
-                        } else {
-                            $.alert({
-                                title: "<i class='fa fa-remove text-danger'></i> Error",
-                                content: "error occured,likely you already submtted the result"
-                            });
-                        }
-                    })
-                    .error(function (error) {
-                        $.alert({
-                            title: "<i class='fa fa-remove text-danger'>",
-                            content: " Server error occured,please try again"
-                        });
-                    })
+                        })
             }
 
             function saveMicroDataForAdmin() {
@@ -1826,8 +1814,7 @@
                     //     title: "<i class='fa fa-remove text-danger'></i> Error",
                     //     content: "Please fill total score"
                     // });
-                }
-                else {
+                } else {
                     if (angular.isDefined($scope.samples.resultsFormData.id)) {
 
                         aba.edit = 1;
@@ -1841,26 +1828,26 @@
                     aba.resultsAba = data;
 
                     $http
-                        .post(url, aba)
-                        .success(function (res) {
-                            console.log(res)
-                            alertStartRound.close();
+                            .post(url, aba)
+                            .success(function (res) {
+                                console.log(res)
+                                alertStartRound.close();
 
-                            if (res.status == 1) {
-                                $.alert({
-                                    title: "<i class='fa fa-check-circle text-success'></i> Success",
-                                    content: "data saved successfully"
-                                });
-                            } else {
-                                $.alert({
-                                    title: "<i class='fa fa-remove text-danger'></i> Error",
-                                    content: "error occured,likely you already submtted the result"
-                                });
-                            }
-                        })
-                        .error(function (error) {
-                            EptServices.EptServiceObject.returnServerErrorAlert();
-                        })
+                                if (res.status == 1) {
+                                    $.alert({
+                                        title: "<i class='fa fa-check-circle text-success'></i> Success",
+                                        content: "data saved successfully"
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "<i class='fa fa-remove text-danger'></i> Error",
+                                        content: "error occured,likely you already submtted the result"
+                                    });
+                                }
+                            })
+                            .error(function (error) {
+                                EptServices.EptServiceObject.returnServerErrorAlert();
+                            })
                 }
 
             }
@@ -1934,11 +1921,9 @@
                         $scope.samples.exists = true;
                         if (range <= Number(agents[i].fewRange)) {
                             $scope.samples.reagentLevel = 'few';
-                        }
-                        else if (range > Number(agents[i].fewRange) && range <= Number(agents[i].modRange)) {
+                        } else if (range > Number(agents[i].fewRange) && range <= Number(agents[i].modRange)) {
                             $scope.samples.reagentLevel = 'mod';
-                        }
-                        else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
+                        } else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'many';
                         } else if (range < 0 || range > Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'outOfRange'
@@ -1976,23 +1961,23 @@
             }
             url = serverSamplesURL + 'updatetablewhere';
             $http.post(url, updateData)
-                .success(function (response) {
+                    .success(function (response) {
 
-                    alertStartRound.close();
-                    if (response.status == 1) {
-                        $.alert({
-                            title: '<i class="fa fa-check-circle"></i> Success',
-                            content: 'Result saved successfully'
-                        });
-                    } else {
+                        alertStartRound.close();
+                        if (response.status == 1) {
+                            $.alert({
+                                title: '<i class="fa fa-check-circle"></i> Success',
+                                content: 'Result saved successfully'
+                            });
+                        } else {
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        }
+                        console.log(response);
+                    })
+                    .error(function (error) {
                         EptServices.EptServiceObject.returnServerErrorAlert();
-                    }
-                    console.log(response);
-                })
-                .error(function (error) {
-                    EptServices.EptServiceObject.returnServerErrorAlert();
-                    console.log(error)
-                })
+                        console.log(error)
+                    })
         }
         $scope.samples.saveFeedbackFormData = function (userFeedbackData, tablename) {
 
@@ -2096,8 +2081,7 @@
                     $timeout(function () {
                         if (angular.isObject(id)) {
                             $scope.samples.getDistinctShipmentsForDelivery()
-                        }
-                        else {
+                        } else {
                             $scope.samples.getShipmentsForDelivery('tbl_bac_shipments', 'shipmentStatus', '2,3,4,5');
                         }
                     }, 100)
@@ -2109,12 +2093,12 @@
                     title: 'Confirm!',
                     theme: 'supervan',
                     content: 'Please confirm cancellation of shipment,this cant be undone !' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Reason for Cancellation</label>' +
-                    '<textarea placeholder="Cancellation Comment" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Reason for Cancellation</label>' +
+                            '<textarea placeholder="Cancellation Comment" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'cancel shipment': {
                             btnClass: 'btn-blue',
@@ -2157,19 +2141,19 @@
                 $scope.samples.sampleToUsers = {}
                 changeSavingSpinner(true);
                 $http
-                    .post(url, where)
-                    .success(function (response) {
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.sampleToUsersr = response.data;
-                        } else {
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
-                    })
+                        .post(url, where)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.sampleToUsersr = response.data;
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
             } catch (Exception) {
 
             }
@@ -2247,21 +2231,21 @@
                 var url = serverSamplesURL + 'getusersamplesissued';
                 changeSavingSpinner(true);
                 $http
-                    .post(url, where)
-                    .success(function (response) {
-                        console.log(response);
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.samplesIssuedToUser = response.data;
-                        } else {
-                            $scope.samples.samplesIssuedToUser = {};
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
-                    })
+                        .post(url, where)
+                        .success(function (response) {
+                            console.log(response);
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.samplesIssuedToUser = response.data;
+                            } else {
+                                $scope.samples.samplesIssuedToUser = {};
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
 
 
             } catch (Exception) {
@@ -2289,25 +2273,25 @@
                             console.log(postedData);
                             changeSavingSpinner(true);
                             $http
-                                .post(url, postedData)
-                                .success(function (response) {
-                                    console.log(response)
-                                    changeSavingSpinner(false);
-                                    if (response.status == 1) {
-                                        $scope.samples.samplePanelArray = [];
-                                        $scope.samples.usersToSamples = [];
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-                                        alertStartRound.close();
-                                    } else {
+                                    .post(url, postedData)
+                                    .success(function (response) {
+                                        console.log(response)
+                                        changeSavingSpinner(false);
+                                        if (response.status == 1) {
+                                            $scope.samples.samplePanelArray = [];
+                                            $scope.samples.usersToSamples = [];
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                            alertStartRound.close();
+                                        } else {
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                        }
+                                        $scope.samples.showMultiSelect('', 1);
+                                    })
+                                    .error(function (error) {
+                                        changeSavingSpinner(false);
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    }
-                                    $scope.samples.showMultiSelect('', 1);
-                                })
-                                .error(function (error) {
-                                    changeSavingSpinner(false);
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    console.log(error)
-                                })
+                                        console.log(error)
+                                    })
 
                         }
 
@@ -2390,18 +2374,18 @@
                 var url = serverSamplesURL + 'getlabusers';
                 changeSavingSpinner(true);
                 $http
-                    .post(url)
-                    .success(function (response) {
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.labUsers = response.data;
-                        } else {
-                            $scope.samples.labUsers = {};
-                        }
-                    })
-                    .error(function (error) {
+                        .post(url)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labUsers = response.data;
+                            } else {
+                                $scope.samples.labUsers = {};
+                            }
+                        })
+                        .error(function (error) {
 
-                    })
+                        })
 
             } catch (Exception) {
                 console.log(Exception)
@@ -2435,8 +2419,7 @@
                             var update;
                             if (rejectedcounter > 0 && goodcounter > 0) {
                                 update = 6
-                            }
-                            else if (goodcounter == $scope.receive.clickedPanel.totalSamplesAdded) {
+                            } else if (goodcounter == $scope.receive.clickedPanel.totalSamplesAdded) {
                                 update = 4
                             } else {
                                 update = 5
@@ -2448,8 +2431,7 @@
                     }
 
                 }
-            }
-            catch (Exception) {
+            } catch (Exception) {
                 console.log(Exception)
             }
 
@@ -2569,8 +2551,7 @@
                 var message = '';
                 if (status == 5) {
                     message = 'please confirm rejection of the panel,this action can not be undone';
-                }
-                else if (status == 4) {
+                } else if (status == 4) {
                     message = 'please confirm receiving of panel,this action can not be undone'
                 } else {
                     message = 'please confirm action,this action can not be undone'
@@ -2579,14 +2560,14 @@
                     title: 'Confirm!',
                     theme: 'supervan',
                     content: message +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Condition</label>' +
-                    '<input placeholder="Condition e.g temp,moist etc.." class="condition form-control" required />' +
-                    '<label>Reason for Action</label>' +
-                    '<textarea placeholder="Reason for action" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Condition</label>' +
+                            '<input placeholder="Condition e.g temp,moist etc.." class="condition form-control" required />' +
+                            '<label>Reason for Action</label>' +
+                            '<textarea placeholder="Reason for action" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'Save': {
                             btnClass: 'btn-blue',
@@ -2680,21 +2661,21 @@
                 }
                 var url = serverReportURL + 'getlabuserresponse';
                 $http.post(url, where)
-                    .success(function (response) {
-                        console.log(response);
-                        changeSavingSpinner(false);
-                        console.log(response);
-                        if (response.status == 1) {
-                            $scope.samples.userFeedbackFormData = response.data.results;
-                            $scope.samples.susceptibilityFormData = response.data.susceptibility;
-                            $scope.samples.resultFields = response.data.microAgents;
-                            $scope.samples.sampleInstructions = response.data.sampleInstructions;
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        EptServices.EptServiceObject.returnServerErrorAlert();
-                    })
+                        .success(function (response) {
+                            console.log(response);
+                            changeSavingSpinner(false);
+                            console.log(response);
+                            if (response.status == 1) {
+                                $scope.samples.userFeedbackFormData = response.data.results;
+                                $scope.samples.susceptibilityFormData = response.data.susceptibility;
+                                $scope.samples.resultFields = response.data.microAgents;
+                                $scope.samples.sampleInstructions = response.data.sampleInstructions;
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        })
             } else {
 
             }
@@ -2718,7 +2699,7 @@
                     var barcodeString = data.barcode;
                     console.log(barcodeString)
                     $("#demo").barcode(barcodeString, "ean13",
-                        {barWidth: 3, barHeight: 60}
+                            {barWidth: 3, barHeight: 60}
                     );
                 }, 300)
 
@@ -2829,19 +2810,19 @@
             $scope.samples.loaderProgressSpinner = 'fa-spinner'
             $scope.samples.instructionsFormData = {};
             $http.post(url, where)
-                .success(function (data) {
-                    $scope.samples.loaderProgressSpinner = ''
-                    if (data.status == 1) {
+                    .success(function (data) {
+                        $scope.samples.loaderProgressSpinner = ''
+                        if (data.status == 1) {
 
-                        $scope.samples.instructionsFormData = data.data;
-                        $scope.samples.instructionsFormData.sampleId = sample.id;
-                        $scope.samples.instructionsFormData.batchName = sample.batchName;
-                    }
+                            $scope.samples.instructionsFormData = data.data;
+                            $scope.samples.instructionsFormData.sampleId = sample.id;
+                            $scope.samples.instructionsFormData.batchName = sample.batchName;
+                        }
 
-                })
-                .error(function (error) {
-                    $scope.samples.loaderProgressSpinner = ''
-                })
+                    })
+                    .error(function (error) {
+                        $scope.samples.loaderProgressSpinner = ''
+                    })
             $scope.samples.samplesActivePage('addSampleInstructions', 0);
         }
 
@@ -2949,15 +2930,15 @@
                 var url = serverSamplesURL + 'getmicroagents';
                 $scope.samples.clickedSample = data;
                 $http.post(url, where)
-                    .success(function (response) {
-                        console.log(response)
-                        if (response.status == 1) {
-                            $scope.samples.resultFields = response.data;
-                        }
-                    })
-                    .error(function () {
+                        .success(function (response) {
+                            console.log(response)
+                            if (response.status == 1) {
+                                $scope.samples.resultFields = response.data;
+                            }
+                        })
+                        .error(function () {
 
-                    })
+                        })
 
             } catch (Exc) {
                 console.log(Exc)
@@ -3020,7 +3001,7 @@
         // Disable weekend selection
         function disabled(data) {
             var date = data.date,
-                mode = data.mode;
+                    mode = data.mode;
             return false;//mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
         }
 
@@ -3072,7 +3053,7 @@
 
         function getDayClass(data) {
             var date = data.date,
-                mode = data.mode;
+                    mode = data.mode;
             if (mode === 'day') {
                 var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
@@ -3090,23 +3071,23 @@
     }).directive("datePicker", function () {
         return {
             template: "<div class='' ng-controller='DatepickerPopupCtrl'>" +
-            "<p class='input-group'>" +
-            "<input type='text' class='form-control' ng-change='samples.changeCurrentDate(dt)' " +
-            " required uib-datepicker-popup ng-model='dt' is-open='popup2.opened' datepicker-options='dateOptions' ng-required='true' close-text='Close'/>" +
-            "<span class='input-group-btn'>" +
-            "<button type='button' class='btn btn-default' ng-click='open2()'>" +
-            "<i class='glyphicon glyphicon-calendar'></i>" +
-            "</button>" +
-            "</span>" +
-            "</p>" +
-            "</div>"
+                    "<p class='input-group'>" +
+                    "<input type='text' class='form-control' ng-change='samples.changeCurrentDate(dt)' " +
+                    " required uib-datepicker-popup ng-model='dt' is-open='popup2.opened' datepicker-options='dateOptions' ng-required='true' close-text='Close'/>" +
+                    "<span class='input-group-btn'>" +
+                    "<button type='button' class='btn btn-default' ng-click='open2()'>" +
+                    "<i class='glyphicon glyphicon-calendar'></i>" +
+                    "</button>" +
+                    "</span>" +
+                    "</p>" +
+                    "</div>"
         };
     })
-        .filter('capitalizeLetter', function () {
-            return function (input) {
-                return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-            }
-        }).filter('spaceCapitals', function () {
+            .filter('capitalizeLetter', function () {
+                return function (input) {
+                    return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+                }
+            }).filter('spaceCapitals', function () {
         return function (input) {
             return input.replace(/([A-Z])/g, ' $1').trim();
         }
@@ -3155,12 +3136,12 @@
             var e = new Date(end).getTime() / 1000;
             var m = new Date(start).getMonth();
             var events = [{
-                title: 'Feed Me ' + m,
-                start: s + (50000),
-                end: s + (100000),
-                allDay: false,
-                className: ['customFeed']
-            }];
+                    title: 'Feed Me ' + m,
+                    start: s + (50000),
+                    end: s + (100000),
+                    allDay: false,
+                    className: ['customFeed']
+                }];
             try {
                 callback(events);
             } catch (e) {
@@ -3293,4 +3274,4 @@
 
 })
 
-();
+        ();
