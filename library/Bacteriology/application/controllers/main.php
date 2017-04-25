@@ -381,9 +381,10 @@ Class Main extends pdfCreator {
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
 //                        echo $sql;
 //                    exit;
-
+                    }
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {

@@ -328,7 +328,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                             $deleteNullPanel['panelId'] = $panels[$key]->panelId;
                             $insert['panelId'] = $panels[$key]->panelId;
 
-                            $insert['deliveryStatus'] = $panels[$key]->deliveryStatus;
+                            $insert['deliveryStatus'] = $dataDB[$key]->shipmentStatus;
 
 
                             $insert['shipmentId'] = $whereShipmentId['shipmentId'];
@@ -358,7 +358,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         }
     }
 
-    public function savesampleforeachpanel($panelDtls,$status) {
+    public function savesampleforeachpanel($panelDtls, $status) {
 
         try {
 
@@ -381,7 +381,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         $insert['panelId'] = $panelDtls['panelId'];
                         $insert['sampleId'] = $samplesWithPanels[$key]->sampleId;
                         $insert['shipmentId'] = $panelDtls['shipmentId'];
-                        
+
                         $insert['deliveryStatus'] = $status;
                         $insert['participantId'] = $panelDtls['participantId'];
                         $insert['roundId'] = $panelDtls['roundId'];
@@ -685,7 +685,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnTotalSamples($array, $tableName) {
-        if (count($array)) {
+        if (count($array) > 0) {
             foreach ($array as $key => $value) {
                 if ($tableName == 'tbl_bac_panel_mst') {
                     $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
@@ -1181,6 +1181,69 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         exit;
     }
 
+    public function getResultsOnRound($roundId) {
+        
+    }
+
+    public function getroundperformanceperlabAction() {
+
+        $jsPostData = file_get_contents('php://input');
+
+        $jsPostData = (array) (json_decode($jsPostData));
+
+        if (isset($jsPostData['checkLab'])) {
+            if ($jsPostData['checkLab'] == 1) {
+                $whereLab = $this->returnUserLabDetails();
+                $wherePP['labId'] = $whereLab['participant_id'];
+            }
+        }
+
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs');
+
+        if ($round != false) {
+            foreach ($round as $key => $value) {
+//                $where['labId'] = $whereLab['participant_id'];
+                $where['roundId'] = $value->roundId;
+
+                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                $round[$key]->totalMarks = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'finalScore', true);
+
+                $roundId = $where['roundId'];
+                $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(distinct sampleID) as totalSamples from tbl_bac_sample_to_panel where roundId = $roundId  group by roundId", true);
+                $round[$key]->averageScore = round($round[$key]->totalMarks / $round[$key]->totalSamples);
+                $round[$key]->roundName = $roundInfo['roundName'];
+                $round[$key]->roundCode = $roundInfo['roundCode'];
+                $round[$key]->roundDateCreated = $roundInfo['dateCreated'];
+                $grade = $this->getGradeRemark($round[$key]->averageScore);
+                $round[$key]->averageGrade = $grade['grade'];
+            }
+            echo $this->returnJson(array('data' => $round, 'status' => 1));
+        }
+
+
+        exit;
+    }
+
+    public function getGradeRemark($total) {
+
+        $where = '';
+        $range = $this->dbConnection->selectFromTable('tbl_bac_grades', $where);
+        $returnArray['grade'] = 'Not Set';
+        $returnArray['remarks'] = 'Not Available';
+
+        if ($range != false) {
+            foreach ($range as $key => $value) {
+                if ($total >= $value->lowerMark && $total <= $value->upperMark) {
+                    $returnArray['grade'] = $value->grade;
+                    $returnArray['remarks'] = $value->remarks;
+                    break;
+                }
+            }
+        }
+        return $returnArray;
+    }
+
     public function updateShipmentRelatedTables($where, $update) {
         $updatetbl_bac_panel_mst = array();
 
@@ -1195,11 +1258,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         $shipmentStatus = $shipmentData['shipmentStatus'];
         $shipmentId = $shipmentData['id'];
         /*         * ***************************Update tbl_bac_panels_shipments****************************** */
-        $updatetbl_bac_panels_shipments['deliveryStatus'] = 0; //$shipmentStatus;
-        $updatetbl_bac_panels_shipments['dateDelivered'] =  $shipmentData['dateReceived'];
+
+        $updatetbl_bac_panels_shipments['deliveryStatus'] = $shipmentStatus;
+        $updatetbl_bac_panels_shipments['dateDelivered'] = $shipmentData['dateReceived'];
         $updatetbl_bac_panels_shipments['quantity'] = 1;
         $updatetbl_bac_panels_shipments['receivedBy'] = $shipmentData['addressedTo'];
         $whereTBPS['shipmentId'] = $shipmentId;
+        $whereTBPS['deliveryStatus >'] = 0;
 //        $whereTBPS['roundId >'] = 0;
         if ($shipmentData['roundId'] > 0) {
             $updatetbl_bac_panels_shipments['deliveryStatus'] = 0;
@@ -1227,13 +1292,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                 $updateTBSP['dateDelivered'] = $shipmentData['dateReceived'];
                 $updateTBSP['deliveryStatus'] = 0;
+
                 if ($whereShipmentData[$key]->roundId > 0) {
                     $updateTBSP['deliveryStatus'] = $shipmentData['shipmentStatus'];
                 }
                 $updateTBSP['shipmentId'] = $shipmentId;
 
                 $whereTBSP['panelId'] = $whereShipmentData[$key]->panelId;
-//                $whereTBSP['roundId > '] = 0;
+                $whereTBSP['participantId'] = null;
+//                $whereTBSP['r$whereTBSP['participantId'] = null;oundId > '] = 0;
                 $updateTBPMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
 //                print_r($updateTBPMfeedback);
 //                exit;

@@ -1943,7 +1943,30 @@
                 // $.alert("<i class='fa fa-exclamation-triangle'></i> No test reagents found");
             }
         }
-   
+        $scope.samples.labAveragePerformance = {};
+        $scope.samples.getRoundEvaluationAvg = function () {
+
+            try {
+                var url = serverSamplesURL + 'getroundperformanceperlab';
+                var where = {checkLab: 0};
+                console.log(where)
+                $http.post(url, where)
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labAveragePerformance = response.data;
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
+            } catch (Exception) {
+                console.log(Exception);
+            }
+        }
+        
         $scope.samples.updateUserResponse = function (tablename, userFeedbackData) {
             var id = '';
             if (tablename == 'tbl_bac_response_results') {
