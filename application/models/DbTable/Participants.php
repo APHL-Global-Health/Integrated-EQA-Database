@@ -83,7 +83,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('unique_identifier', 'first_name', 'iso_name', 'mobile', 'phone', 'affiliation', 'email', 'status');
+        $aColumns = array('unique_identifier', 'MflCode', 'first_name', 'iso_name', 'mobile', 'phone', 'affiliation', 'email', 'status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "participant_id";
@@ -266,7 +266,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         } else {
             $data['individual'] = 'no';
         }
-
+        if (isset($params['MflCode'])) {
+            $data['MflCode']= $params['MflCode'];
+        }
 
 
         if (isset($params['status']) && $params['status'] != "" && $params['status'] != null) {
@@ -354,8 +356,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
             $data['IsVl'] = 3;
         }
+        if (isset($params['MflCode'])) {
+            $data['MflCode'] = $params['MflCode'];
+        }
+         $participantId = $this->insert($data);
+         $sendTo = $params['pemail'];
         if ($_SESSION['loggedInDetails']["IsVl"] == 1) {
-            $participantId = $this->insert($data);
+           
             $db = Zend_Db_Table_Abstract::getAdapter();
             $common = new Application_Service_Common();
             $password = $common->generateRandomPassword(8);
@@ -405,7 +412,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $toMail = Application_Service_Common::getConfig('admin_email');
             $fromMail = "brianonyi@gmail.com";
             $fromName = Application_Service_Common::getConfig('admin-name');
-            $common->sendGeneralEmail($toMail, "New Participant Registered   $message", $participantName);
+            $common->sendGeneralEmail($sendTo, "New Participant Registered   $message", $participantName);
         }
 
         return $participantId;
