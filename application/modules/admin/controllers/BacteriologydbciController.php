@@ -1211,12 +1211,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                 $roundId = $where['roundId'];
                 $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(distinct sampleID) as totalSamples from tbl_bac_sample_to_panel where roundId = $roundId  group by roundId", true);
-                $round[$key]->averageScore = round($round[$key]->totalMarks / $round[$key]->totalSamples);
+                $round[$key]->averageScore = $roundInfo['evaluated'] == 0 ? 'N/A' : round($round[$key]->totalMarks / $round[$key]->totalSamples);
                 $round[$key]->roundName = $roundInfo['roundName'];
                 $round[$key]->roundCode = $roundInfo['roundCode'];
                 $round[$key]->roundDateCreated = $roundInfo['dateCreated'];
+
                 $grade = $this->getGradeRemark($round[$key]->averageScore);
-                $round[$key]->averageGrade = $grade['grade'];
+
+                $round[$key]->averageGrade = $roundInfo['evaluated'] == 0 ? 'N/A' : $grade['grade'];
+                $round[$key]->evaluated = $roundInfo['evaluated'] == 0 ? 'Un-Evaluated' : 'Evaluated';
             }
             echo $this->returnJson(array('data' => $round, 'status' => 1));
         }
