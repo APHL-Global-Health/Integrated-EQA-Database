@@ -61,11 +61,11 @@
             <td nowrap>{{sample.materialOrigin}}</td>
 
             <td nowrap>
-                <a class="btn btn-danger btn-sm" ng-disabled="sample.responseStatus >0 || sample.feedBack!=0"
-                   data-toggle="tooltip" data-placement="top" title="Click to remove sample fro user!"
+                <button class="btn btn-danger btn-sm" ng-disabled="sample.responseStatus >0 || sample.feedBack!=0"
+                  
                    ng-click="samples.deleteCustomRow(sample.id,'tbl_bac_samples_to_users')"><i
                         class="fa fa-remove"></i>
-                </a>
+                </button>
 
 
             </td>

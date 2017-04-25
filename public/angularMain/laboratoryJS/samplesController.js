@@ -161,7 +161,7 @@
         $scope.samples.getParticipantPanel = function (tableName) {
             var whereData = {
                 participantId: $scope.samples.loginDetails.participant_id,
-                startRoundFlag: 1
+                'deliveryStatus>': 0
             }
             $scope.samples.getAllSamples(tableName, whereData)
         }

@@ -527,7 +527,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         try {
 
             $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
-//            echo(size($where));
+//            print_r($where);
 //            exit;
             if ($dataDB != false) {
 
@@ -991,6 +991,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
             $postedData = (array) (json_decode($postedData));
 
             $tableName = $postedData['tableName'];
+//echo $tableName ;
 
             if (isset($postedData['where'])) {
                 $where = $postedData['where'];
