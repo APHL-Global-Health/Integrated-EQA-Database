@@ -4,7 +4,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
 //    var serverReportURL = SERVER_API_URL.reportsURL;
     var serverReportURL = SERVER_API_URL.bacteriologyParticipant;
-console.log(serverReportURL);
+    console.log(serverReportURL);
     $scope.$log = $log;
     $scope.reports = {};
     $scope.reports.loaderStatus = true;
@@ -789,5 +789,11 @@ console.log(serverReportURL);
                     EptServices.EptServiceObject.returnActionUnSuccessAlert();
                 })
     }
+    $scope.reports.getUserResultsForDownload = function (roundId) {
+        var where = {roundId: roundId};
+        var url = serverReportURL + 'getenrolledrounds';
+        
+    }
+
 
 })

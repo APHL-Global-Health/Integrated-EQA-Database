@@ -2135,23 +2135,25 @@
             $scope.samples.samplesActivePage('sampleFullInfo', 0);
         }
         $scope.samples.labAveragePerformance = {};
-        $scope.samples.getRoundEvaluationAverages = function () {
+        $scope.samples.getRoundEvaluationAvg = function () {
+
             try {
                 var url = serverSamplesURL + 'getroundperformanceperlab';
                 var where = {checkLab: 1};
+                console.log(where)
                 $http.post(url, where)
                         .success(function (response) {
                             changeSavingSpinner(false);
                             if (response.status == 1) {
                                 $scope.samples.labAveragePerformance = response.data;
-                            } 
+                            }
                         })
                         .error(function (error) {
                             changeSavingSpinner(false);
                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
                         })
             } catch (Exception) {
-
+                console.log(Exception);
             }
         }
         $scope.samples.sampleToUsers = {};

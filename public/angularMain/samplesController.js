@@ -1943,8 +1943,7 @@
                 // $.alert("<i class='fa fa-exclamation-triangle'></i> No test reagents found");
             }
         }
-
-
+   
         $scope.samples.updateUserResponse = function (tablename, userFeedbackData) {
             var id = '';
             if (tablename == 'tbl_bac_response_results') {

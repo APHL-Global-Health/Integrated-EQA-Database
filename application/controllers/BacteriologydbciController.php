@@ -305,9 +305,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $jsPostData = file_get_contents('php://input');
 
         $jsPostData = (array) (json_decode($jsPostData));
+//        print_r($whereLab);
         if (isset($jsPostData['checkLab'])) {
             if ($jsPostData['checkLab'] == 1) {
-                $where['labId'] = $whereLab['participantId'];
+                $wherePP['labId'] = $whereLab['participant_id'];
             }
         }
 

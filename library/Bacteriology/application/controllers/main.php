@@ -167,17 +167,15 @@ Class Main extends pdfCreator {
         return true;
     }
 
-    public function doQuery($sql,$count=null) {
+    public function doQuery($sql, $count = null) {
 //        echo$sql;
 //        exit;
-        
-
 //        var_dump($this->connect_db->error);
-        
-        if(isset($count)){
-         return  $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];  
+
+        if (isset($count)) {
+            return $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
         }
-        
+
         $result = $this->connect_db->query($sql);
         $results = array();
         if ($result->num_rows > 0) {
@@ -383,10 +381,9 @@ Class Main extends pdfCreator {
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
-                    if ($tableName == 'tbl_bac_sample_to_panel') {
 //                        echo $sql;
 //                    exit;
-                    }
+
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {

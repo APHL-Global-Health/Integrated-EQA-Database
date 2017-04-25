@@ -207,7 +207,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $posted = $this->returnArrayFromInput()['update'];
         if (count($posted) > 0) {
             $microSum = 0;
-            $where = [];
+            $where = array();
 
             foreach ($posted as $key => $value) {
                 $arr = (array) $value;
@@ -233,8 +233,18 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 }
             }
             $updateEval['totalMicroAgentsScore'] = $microSum;
+            $results = $this->returnValueWhere($where, 'tbl_bac_response_results');
+            if (!empty($results)) {
+                $microAstScore = $results['totalMicroAgentsScore'];
+            }
             if ($updateEvaluation['status'] == 1) {
-                $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
+                if ($microSum < 1) {
+                    
+                } else {
+                    $microSum = $microSum > 100 ? 100 : $microSum;
+                    $updateEval['finalScore'] = round(($results['grainStainReactionScore'] + $results['finalIdentificationScore'] + $microSum) / 3);
+                    $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
+                }
             }
             echo $this->returnJson($updateEvaluation);
             exit;
@@ -257,11 +267,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         unset($updateEval['labDetails']);
         unset($updateEval['evaluatedStatus']);
         unset($updateEval['finalScore']);
-        unset($updateEval['totalMicroAgentsScore']);
         unset($updateEval['allowedOnTenDays']);
 
-//        print_r($updateEval);
-//        exit;
+
         $finalScore = 0;
         $score = '';
         $updateEval['markedStatus'] = 1;
@@ -273,9 +281,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 $finalScore += $value;
             }
         }
-        $updateEval['finalScore'] = $finalScore;
-
-
+        $whereSampleId['sampleId'] = $updateEval['sampleId'];
+        $countAstSamples = $this->dbConnection->selectCount('tbl_bac_expected_micro_bacterial_agents', $whereSampleId, 'sampleId');
+        if ($countAstSamples > 0) {
+            $updateEval['finalScore'] = round($finalScore / 3);
+        } else {
+            $updateEval['finalScore'] = round($finalScore / 2);
+        }
+        $updateEval['totalMicroAgentsScore'] = $updateEval['totalMicroAgentsScore'];
         $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
 
         echo $this->returnJson($updateEvaluation);
@@ -479,7 +492,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                     $scoreFIS = $sampleExpectedResult['finalIdentificationScore'];
                 }
-                
+
 //                echo $scoreFIS;
 //                exit();
                 $score['finalIdentificationScore'] = round(($scoreFIS / $sampleExpectedResult['finalIdentificationScore']) * 100, 3);
@@ -797,6 +810,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
 
                             $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
+                                    'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
+                                    'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
                                     'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
                                     'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
 //                            print_r($reportData[$key]);
@@ -852,6 +867,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
 
                         $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
+                                'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
+                                'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
                                 'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
                                 'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
 
