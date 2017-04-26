@@ -180,6 +180,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
     public function sendemailAction($body, $to = '', $send = '')
     {
         try {
+
             $config = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => 'osoromichael@gmail.com',

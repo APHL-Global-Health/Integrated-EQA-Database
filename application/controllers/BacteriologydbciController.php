@@ -1113,7 +1113,7 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         try {
 
-            $where['userId'] = $this->dbConnection->getUserSession();
+            $where['userId'] =3;// $this->dbConnection->getUserSession();
 
             if (count($where) > 0) {
 
@@ -1142,8 +1142,12 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->roundCode = $round['roundCode'];
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
                         $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
+
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+
+
                         $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+
                         $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                     }

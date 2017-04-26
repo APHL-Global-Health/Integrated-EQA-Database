@@ -12,7 +12,7 @@
                 <tr>
                     <th>#</th>
                     <th>Batch Name</th>
-                    <th>Final Score</th>
+                    <th>Final Score(%)</th>
                     <th>Gram Stain</th>
                     <th>Gram Stain Score</th>
                     <th>Expected</th>
@@ -30,16 +30,16 @@
                 <tr ng-repeat="results in mainResult.arrayResultsAndExpected">
                     <td>{{$index+1}}</td>
                     <td>{{results.batchName}}</td>
-                    <td>{{results.finalScore}}</td>
+                    <td>{{results.finalScore}}%</td>
 
                     <td>{{results.grainStainReactionResult}}</td>
-                    <td>{{results.grainStainReactionScoreResult}}</td>
+                    <td>{{results.grainStainReactionScoreResult}}%</td>
 
                     <td>{{results.grainStainReaction}}</td>
                     <td>{{results.grainStainReactionScore}}</td>
 
                     <td>{{results.finalIdentificationResult}}</td>
-                    <td>{{results.finalIdentificationScoreResult}}</td>
+                    <td>{{results.finalIdentificationScoreResult}}%</td>
 
                     <td>{{results.finalIdentification}}</td>
                     <td>{{results.finalIdentificationScore}}</td>

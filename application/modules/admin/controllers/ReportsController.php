@@ -7,14 +7,16 @@
  * Time: 11:36
  */
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-        . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
-        . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
+    . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 
 require_once 'BacteriologydbciController.php';
 
-class Admin_ReportsController extends Admin_BacteriologydbciController {
+class Admin_ReportsController extends Admin_BacteriologydbciController
+{
 
-    public function testAction() {
+    public function testAction()
+    {
         $arr = array('Hello', 'World!', 'Beautiful', 'Day!');
         echo implode(",", $arr);
         exit;
@@ -22,7 +24,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
     /* selectReportFromTable($tableName,$colArray, $where ,$orderArray, $group='',$groupArray='') */
 
-    public function getgeneralroundreportAction() {
+    public function getgeneralroundreportAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $col = ['*'];
         $orderArray = ['id', 'startDate'];
@@ -48,7 +51,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getresponsefeedbackAction() {
+    public function getresponsefeedbackAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $col = ['*'];
         $orderArray = ['id', 'dateCreated'];
@@ -85,7 +89,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function evaluateroundAction() {
+    public function evaluateroundAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $whereRound['roundId'] = $postedData['id'];
         $whereRound['startRoundFlag'] = 1;
@@ -115,7 +120,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function updatepublicationAction() {
+    public function updatepublicationAction()
+    {
         $where = $this->returnArrayFromInput();
         $wherePub['id'] = $where['id'];
 
@@ -135,7 +141,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function sendEmailToEnrolledLabsForPublish($roundId) {
+    public function sendEmailToEnrolledLabsForPublish($roundId)
+    {
         $where['roundId'] = $roundId;
         $where['status'] = 2;
 
@@ -155,7 +162,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         }
     }
 
-    public function publishedMails($lab, $round) {
+    public function publishedMails($lab, $round)
+    {
 
         $name = $lab['institute_name'] . ' ' . $lab['unique_identifier'];
 
@@ -166,7 +174,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $this->sendemailAction($body, $lab['email'], true);
     }
 
-    public function getindividuallabsAction() {
+    public function getindividuallabsAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $col = ['*'];
         $orderArray = ['id', 'dateCreated'];
@@ -203,14 +212,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function savemicroagentsevaluationAction() {
+    public function savemicroagentsevaluationAction()
+    {
         $posted = $this->returnArrayFromInput()['update'];
         if (count($posted) > 0) {
             $microSum = 0;
             $where = array();
 
             foreach ($posted as $key => $value) {
-                $arr = (array) $value;
+                $arr = (array)$value;
                 $whereUpdate['id'] = $arr['id'];
 
                 $where['panelToSampleId'] = $arr['panelToSampleId'];
@@ -239,7 +249,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             }
             if ($updateEvaluation['status'] == 1) {
                 if ($microSum < 1) {
-                    
+
                 } else {
                     $microSum = $microSum > 100 ? 100 : $microSum;
                     $updateEval['finalScore'] = round(($results['grainStainReactionScore'] + $results['finalIdentificationScore'] + $microSum) / 3);
@@ -253,11 +263,12 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function updatefunctionAction() {
+    public function updatefunctionAction()
+    {
         $posted = $this->returnArrayFromInput();
 
         $whereEvaluation['id'] = $posted['id'];
-        $updateEval = (array) $posted['update'];
+        $updateEval = (array)$posted['update'];
 
         unset($updateEval['id']);
         unset($updateEval['batchName']);
@@ -295,7 +306,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getmicroagentswhereAction() {
+    public function getmicroagentswhereAction()
+    {
         $posted = $this->returnArrayFromInput();
 
         $responseResults = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $posted);
@@ -310,7 +322,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function evaluateresultsAction($whereRoundData = '') {
+    public function evaluateresultsAction($whereRoundData = '')
+    {
         /* select results for evaluation */
         $postedData = $this->returnArrayFromInput();
         $where = array();
@@ -350,7 +363,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                         foreach ($responseResults as $key => $value) {
 
-                            $updateArray = $this->updateResponseResults((array) $responseResults[$key]);
+                            $updateArray = $this->updateResponseResults((array)$responseResults[$key]);
                         }
                     }
                 }
@@ -389,7 +402,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function testinAction() {
+    public function testinAction()
+    {
         $ar = 'michael osoro';
         $arr = explode(" ", $ar);
 
@@ -398,7 +412,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function compareStrings($s1, $s2) {
+    public function compareStrings($s1, $s2)
+    {
         //one is empty, so no result
         if (strlen($s1) == 0 || strlen($s2) == 0) {
             return 0;
@@ -446,7 +461,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         return ($matches / $maxwords) * 100;
     }
 
-    public function updateResponseResults($responseResults) {
+    public function updateResponseResults($responseResults)
+    {
         if (is_array($responseResults)) {
             $whereSampleExpectedResult['sampleId'] = $responseResults['sampleId'];
             $sampleExpectedResult = $this->returnValueWhere($whereSampleExpectedResult, 'tbl_bac_expected_results');
@@ -509,6 +525,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     return false;
                 } else {
                     $updateSuscepibility = $this->updateSuscepibilityScore($whereResponse);
+//                    print_r($updateSuscepibility);
+//                    exit;
                     if ($updateSuscepibility['status']) {
                         $update['feedBack'] = 1;
 
@@ -519,7 +537,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         $score['totalMicroAgentsScore'] = $updateSuscepibility['susScore'];
                         /* total grading update of marks happens here */
                         $part = 3;
-                        if (!$updateSuscepibility['susScore']) {
+                        if ($updateSuscepibility['susScore'] === false) {
                             $part = 2;
                             $score['totalMicroAgentsScore'] = 0;
                         }
@@ -548,7 +566,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         return true;
     }
 
-    public function getGradeRemark($total) {
+    public function getGradeRemark($total)
+    {
 
         $where = '';
         $range = $this->dbConnection->selectFromTable('tbl_bac_grades', $where);
@@ -567,7 +586,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         return $returnArray;
     }
 
-    public function getMicroLevel($diskContent, $antiMicroAgent) {
+    public function getMicroLevel($diskContent, $antiMicroAgent)
+    {
         $where['testAgentName'] = $antiMicroAgent;
 
         $antiMicroAgentData = $this->returnValueWhere($where, 'tbl_bac_test_agents');
@@ -585,11 +605,13 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         }
     }
 
-    public function outOfRange($range, $where) {
-        
+    public function outOfRange($range, $where)
+    {
+
     }
 
-    public function getshipmentsforroundAction() {
+    public function getshipmentsforroundAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $col = ['id', 'shipmentName', 'roundId', 'dateCreated', 'status', 'startRoundFlag', 'evaluated'];
         $orderArray = ['id', 'dateCreated'];
@@ -637,7 +659,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function updateSuscepibilityScore($whereResponse) {
+    public function updateSuscepibilityScore($whereResponse)
+    {
         try {
             if (isset($whereResponse)) {
                 unset($whereResponse['adminMarked']);
@@ -650,43 +673,45 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 $returnScore = 0;
                 $totalSamples = count($microExpectedAgents);
 //                echo $totalSamples;
-                if ($microExpectedAgents != false) {
-                    foreach ($microAgents as $key => $value) {
-                        $score['score'] = 0;
-                        foreach ($microExpectedAgents as $ekey => $evalue) {
+                if ($microExpectedAgents !== false) {
+                    if ($microAgents !== false) {
+                        foreach ($microAgents as $key => $value) {
+                            $score['score'] = 0;
+                            foreach ($microExpectedAgents as $ekey => $evalue) {
 //                            echo $microAgents[$ekey]->antiMicroAgent .' = '. $microExpectedAgents[$key]->antiMicroAgent.'<br>';
-                            $ratioForEverySample = round($evalue->agentScore / $totalSamples, 3);
+                                $ratioForEverySample = round($evalue->agentScore / $totalSamples, 3);
 
-                            if ($evalue->antiMicroAgent == $value->antiMicroAgent) {
-                                $percentOnCorrect = round(($ratioForEverySample / $evalue->agentScore) * 100, 3);
-                                $score['score'] = 0.5 * $percentOnCorrect;
+                                if ($evalue->antiMicroAgent == $value->antiMicroAgent) {
+                                    $percentOnCorrect = round(($ratioForEverySample / $evalue->agentScore) * 100, 3);
+                                    $score['score'] = 0.5 * $percentOnCorrect;
 
-                                if ($microAgents[$key]->finalScore == $microExpectedAgents[$ekey]->finalScore) {
-                                    $score['score'] = $percentOnCorrect;
-                                } else {
-                                    $score['score'] = 0;
-                                    return array('status' => true, 'susScore' => '');
+                                    if ($microAgents[$key]->finalScore == $microExpectedAgents[$ekey]->finalScore) {
+                                        $score['score'] = $percentOnCorrect;
+                                    } else {
+                                        $score['score'] = 0;
+                                        return array('status' => true, 'susScore' => '');
+                                    }
+
+                                    break;
                                 }
-
-                                break;
                             }
-                        }
 //                        print_r($score);
 //                        exit;
-                        $returnScore += $score['score'];
-                        $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
-                        $whereResponse['adminMarked'] = 0;
-                        $score['markedStatus'] = 1;
-                        $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
-                        if ($updateSuscepibility['status'] == 0) {
+                            $returnScore += $score['score'];
+                            $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
+                            $whereResponse['adminMarked'] = 0;
+                            $score['markedStatus'] = 1;
+                            $updateSuscepibility = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereResponse, $score);
+                            if ($updateSuscepibility['status'] == 0) {
 
-                            return false;
+                                return false;
+                            }
                         }
-                    }
 
-                    return array('status' => true, 'susScore' => $returnScore);
-                } else {
-                    return array('status' => true, 'susScore' => false);
+                        return array('status' => true, 'susScore' => $returnScore);
+                    } else {
+                        return array('status' => true, 'susScore' => false);
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -694,7 +719,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         }
     }
 
-    public function getlabuserresponseAction() {
+    public function getlabuserresponseAction()
+    {
         $postedData = $this->returnArrayFromInput();
         $where['userId'] = $postedData['userId'];
         $where['sampleId'] = $postedData['sampleId'];
@@ -723,7 +749,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function returnCompressedArray($lab, $samples) {
+    public function returnCompressedArray($lab, $samples)
+    {
         $collectiveArray = array();
         $tempArray = array();
         for ($j = 0; $j < sizeof($lab); $j++) {
@@ -748,13 +775,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         }
         if (sizeof($tempArray) > 0) {
             for ($i = 0; sizeof($tempArray); $i++) {
-                
+
             }
         }
         return $collectiveArray;
     }
 
-    public function getgenstatperformanceAction() {
+    public function getgenstatperformanceAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
 
@@ -810,10 +838,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
 
                             $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
-                                    'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
-                                    'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
-                                    'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
-                                    'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
+                                'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
+                                'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
+                                'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
+                                'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
 //                            print_r($reportData[$key]);
                             array_push($samples, $score);
 
@@ -833,7 +861,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             if (!$exist) {
                                 array_push($lab, $reportData[$key]->participantId);
                             } else {
-                                
+
                             }
                         }
                     }
@@ -867,10 +895,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         $sampleName = $sampleInfo = $this->returnValueWhere($reportData[$keys]->sampleId, 'tbl_bac_samples');
 
                         $score = array('sampleInfo' => array('finalScore' => $reportData[$keys]->finalScore,
-                                'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
-                                'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
-                                'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
-                                'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
+                            'grainStainReactionScore' => $reportData[$keys]->grainStainReactionScore,
+                            'finalIdentificationScore' => $reportData[$keys]->finalIdentificationScore,
+                            'totalMicroAgentsScore' => $reportData[$keys]->totalMicroAgentsScore, 'sampleName' => $sampleName['batchName'],
+                            'sampleId' => $reportData[$keys]->sampleId), 'labId' => $reportData[$keys]->participantId);
 
                         array_push($samples, $score);
 
@@ -890,7 +918,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         if (!$exist) {
                             array_push($lab, $reportData[$keys]->participantId);
                         } else {
-                            
+
                         }
                     }
 //                    $stat['total'] = $sum;
@@ -916,7 +944,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getroundperformanceAction() {
+    public function getroundperformanceAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
 
@@ -990,7 +1019,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             $reportData[$keys]->status = 'valid';
                             array_push($samples, ($val->finalScore + $val->totalMicroAgentsScore));
                             $sum += ($val->finalScore + $val->totalMicroAgentsScore);
-                            array_push($report, (array) $reportData[$keys]);
+                            array_push($report, (array)$reportData[$keys]);
                         }
                     }
                 }
@@ -1056,7 +1085,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getshipmentsreportsAction() {
+    public function getshipmentsreportsAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
 
@@ -1123,11 +1153,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         foreach ($sampleToPanel as $ky => $val) {
                             $whereParticipantId['participant_id'] = $val->participantId;
                             $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                            $whereSampleId['id'] = $val->sampleId;
-                            ;
+                            $whereSampleId['id'] = $val->sampleId;;
                             $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                            $roundId['id'] = $val->roundId;
-                            ;
+                            $roundId['id'] = $val->roundId;;
                             $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                             $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -1144,7 +1172,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             $whereSamples['deliveryStatus'] = 5;
                             $sampleToPanel[$ky]->rejected = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
                             unset($whereSamples);
-                            array_push($report, (array) $sampleToPanel[$ky]);
+                            array_push($report, (array)$sampleToPanel[$ky]);
                         }
                     }
                 }
@@ -1162,11 +1190,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 foreach ($sampleToPanel as $ky => $val) {
                     $whereParticipantId['participant_id'] = $val->participantId;
                     $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                    $whereSampleId['id'] = $val->sampleId;
-                    ;
+                    $whereSampleId['id'] = $val->sampleId;;
                     $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                    $roundId['id'] = $val->roundId;
-                    ;
+                    $roundId['id'] = $val->roundId;;
                     $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                     $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -1194,7 +1220,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getcorrectiveaactionreportAction() {
+    public function getcorrectiveaactionreportAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
 
@@ -1261,18 +1288,16 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                         foreach ($sampleToPanel as $ky => $val) {
                             $whereParticipantId['participant_id'] = $val->participantId;
                             $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                            $whereSampleId['id'] = $val->sampleId;
-                            ;
+                            $whereSampleId['id'] = $val->sampleId;;
                             $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                            $roundId['id'] = $val->roundId;
-                            ;
+                            $roundId['id'] = $val->roundId;;
                             $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                             $sampleToPanel[$ky]->sample = $sampleInfo;
                             $sampleToPanel[$ky]->round = $roundInfo;
                             $sampleToPanel[$ky]->lab = $participantInfo;
 
-                            array_push($report, (array) $sampleToPanel[$ky]);
+                            array_push($report, (array)$sampleToPanel[$ky]);
                         }
                     }
                 }
@@ -1288,11 +1313,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 foreach ($sampleToPanel as $ky => $val) {
                     $whereParticipantId['participant_id'] = $val->participantId;
                     $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                    $whereSampleId['id'] = $val->sampleId;
-                    ;
+                    $whereSampleId['id'] = $val->sampleId;;
                     $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                    $roundId['id'] = $val->roundId;
-                    ;
+                    $roundId['id'] = $val->roundId;;
                     $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                     $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -1309,7 +1332,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getroundparticipatoryAction() {
+    public function getroundparticipatoryAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
 
@@ -1456,7 +1480,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getlabperformanceAction() {
+    public function getlabperformanceAction()
+    {
         $postedData = $this->returnArrayFromInput();
 
         if (isset($postedData['region'])) {
@@ -1512,7 +1537,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                             $reportData[$keys]->status = 'valid';
                             array_push($samples, ($val->finalScore + $val->totalMicroAgentsScore));
                             $sum += ($val->finalScore + $val->totalMicroAgentsScore);
-                            array_push($report, (array) $reportData[$keys]);
+                            array_push($report, (array)$reportData[$keys]);
                         }
                     }
                 }
@@ -1574,17 +1599,19 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function standard_deviation($aValues, $bSample = false) {
+    public function standard_deviation($aValues, $bSample = false)
+    {
         $fMean = array_sum($aValues) / count($aValues);
         $fVariance = 0.0;
         foreach ($aValues as $i) {
             $fVariance += pow($i - $fMean, 2);
         }
         $fVariance /= ($bSample ? count($aValues) - 1 : count($aValues));
-        return (float) sqrt($fVariance);
+        return (float)sqrt($fVariance);
     }
 
-    public function getcountiesAction() {
+    public function getcountiesAction()
+    {
         $where['status'] = 1;
         $counties = $this->dbConnection->selectFromTable('rep_counties', $where);
         echo $this->returnJson(array('status' => 1, 'data' => $counties));
@@ -1592,7 +1619,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getgradesAction() {
+    public function getgradesAction()
+    {
         $where['status'] = 1;
         $grades = $this->dbConnection->selectFromTable('tbl_bac_grades', $where);
         echo $this->returnJson(array('status' => 1, 'data' => $grades));
@@ -1600,7 +1628,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getroundsAction() {
+    public function getroundsAction()
+    {
         $where['status'] = 1;
         $rounds = $this->dbConnection->selectFromTable('tbl_bac_rounds', $where);
         echo $this->returnJson(array('status' => 1, 'data' => $rounds));
@@ -1608,7 +1637,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function getsamplesAction() {
+    public function getsamplesAction()
+    {
         $where['status'] = 1;
         $samples = $this->dbConnection->selectFromTable('tbl_bac_samples', $where);
         echo $this->returnJson(array('status' => 1, 'data' => $samples));

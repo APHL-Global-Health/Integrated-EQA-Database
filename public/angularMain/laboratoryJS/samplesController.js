@@ -452,6 +452,7 @@
                             changeSavingSpinner(false);
                         })
             } catch (Exception) {
+
                 console.log(Exception);
             }
         }
