@@ -514,6 +514,42 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             $log.debug('Serious error occurred');
         }
     }
+
+
+    $scope.reports.showRoundResults = false;
+    $scope.reports.roundInfo = {};
+    $scope.reports.roundAllResults ={}
+    $scope.reports.getRRoundResults = function (round) {
+        var where = {roundId: round.id};
+        var url = serverReportURL + 'getresultsonround';
+        $scope.reports.showRoundResults = true;
+        // var where = where;
+        $scope.reports.roundInfo = round;
+        console.log(round)
+        showAjaxLoader(true);
+        $http
+            .post(url, where)
+            .success(function (response) {
+
+                showAjaxLoader(false);
+                if (response.status == 1) {
+                    console.log(response);
+                    $scope.reports.roundAllResults = response.data;
+                } else {
+
+                    EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
+                    $scope.reports.roundAllResults = {};
+                }
+            })
+            .error(function (error) {
+                console.log(error)
+                showAjaxLoader(false);
+                EptServices.EptServiceObject.returnServerErrorAlert();
+            })
+
+
+    }
     $scope.reports.correctiveActionData = {};
     $scope.reports.whereCorrectiveActionResults = {};
     $scope.reports.getCorrectiveActionReport = function (where) {
@@ -792,7 +828,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.getUserResultsForDownload = function (roundId) {
         var where = {roundId: roundId};
         var url = serverReportURL + 'getenrolledrounds';
-        
+
     }
 
 

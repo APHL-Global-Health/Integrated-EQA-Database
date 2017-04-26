@@ -1,5 +1,5 @@
 <div class="" ng-controller="ReportsController">
-    <div class="" ng-show="reports.showResults">
+    <div class="" ng-show="!reports.showRoundResults">
 
         <div class=" panel panel-primary" ng-init="samples.showRoundInfo=true">
             <div class="panel panel-heading">
@@ -75,7 +75,7 @@
                                 <td nowrap>Enrolled</td>
                                 <td nowrap>
                                     <button class="btn btn-primary btn-sm" ng-disabled="round.evaluated==0"
-                                            ng-click="reports.getRRoundResults(round.roundId)"
+                                            ng-click="reports.getRRoundResults(round)"
                                     >
                                         <i class="fa fa-download"></i> download
                                     </button>
@@ -101,5 +101,11 @@
             </div>
         </div>
 
+    </div>
+    <div class="" ng-if="reports.showRoundResults">
+
+        <div ng-include="'../partialHTMLS/labOperations/fullRoundFeedback.html'">
+
+        </div>
     </div>
 </div>

@@ -117,7 +117,7 @@ Class Main extends pdfCreator {
 
             if ($group) {
                 if ($tableName == 'tbl_bac_panels_shipments' && $group == true) {
-                    $where .= ' group by shipmentId';
+                    $where .= ' ';
                 } else {
                     $where .= "group by shipmentId,panelId";
                 }
@@ -143,9 +143,10 @@ Class Main extends pdfCreator {
         }
         if ($tableName == 'tbl_bac_panels_shipments') {
 
-//            echo $sql;
-//            exit;
+
         }
+//        echo $sql;
+//        exit;
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
