@@ -1113,7 +1113,7 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         try {
 
-            $where['userId'] =3;// $this->dbConnection->getUserSession();
+            $where['userId'] = $this->dbConnection->getUserSession();
 
             if (count($where) > 0) {
 
