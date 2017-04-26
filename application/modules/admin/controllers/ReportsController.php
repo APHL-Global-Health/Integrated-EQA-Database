@@ -313,7 +313,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
     public function evaluateresultsAction($whereRoundData = '') {
         /* select results for evaluation */
         $postedData = $this->returnArrayFromInput();
-        $where = [];
+        $where = array();
 
 
         if (!empty($whereRoundData)) {
@@ -724,10 +724,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
     }
 
     public function returnCompressedArray($lab, $samples) {
-        $collectiveArray = [];
-        $tempArray = [];
+        $collectiveArray = array();
+        $tempArray = array();
         for ($j = 0; $j < sizeof($lab); $j++) {
-            $allSamples = [];
+            $allSamples = array();
 
             for ($i = 0; $i < sizeof($samples); $i++) {
 
@@ -744,7 +744,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             $tempArrays['labId'] = $lab[$j];
             $tempArrays['sampleInfo'] = $tempArray;
             array_push($collectiveArray, ($tempArrays));
-            $tempArray = [];
+            $tempArray = array();
         }
         if (sizeof($tempArray) > 0) {
             for ($i = 0; sizeof($tempArray); $i++) {
@@ -782,10 +782,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
         $whereSearch['roundId'] = $roundDetails['id'];
         $sum = 0;
-        $samples = [];
-        $report = [];
-        $lab = [];
-        $samples = [];
+        $samples = array();
+        $report = array();
+        $lab = array();
+        $samples = array();
         if ($roundDetails != false) {
 
             if (isset($labs) && $labs != false) {
@@ -953,11 +953,11 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
         $whereSearch['roundId'] = $roundDetails['id'];
         $sum = 0;
-        $samples = [];
+        $samples = array();
         if ($roundDetails != false) {
             if (isset($labs) && $labs != false) {
 
-                $report = [];
+                $report = array();
                 foreach ($labs as $key => $value) {
 
                     $whereSearch['participantId'] = $value->participant_id;
@@ -1108,7 +1108,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $groupArray = ['shipmentId', 'roundId', 'sampleId'];
 
 
-        $report = [];
+        $report = array();
         $postedData['roundId >'] = 0;
         if (isset($labs)) {
             if ($labs != false) {
@@ -1246,7 +1246,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $groupArray = ['id'];
 
 
-        $report = [];
+        $report = array();
 
         $postedData['correctiveAction'] = 1;
         if (isset($labs)) {
@@ -1362,7 +1362,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
 //        var_dump($labs);
 //        exit;
-        $report = [];
+        $report = array();
 
         $data['totalResponded'] = 0;
         $data['totalUnresponded'] = 0;
@@ -1470,7 +1470,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             }
         }
         $sum = 0;
-        $samples = [];
+        $samples = array();
         if (isset($postedData['region'])) {
             $county = $postedData['region'];
             unset($postedData['region']);
@@ -1479,7 +1479,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             $where = $postedData;
             if ($labs != false) {
 
-                $report = [];
+                $report = array();
                 foreach ($labs as $key => $value) {
 
                     $where['participantId'] = $value->participant_id;
