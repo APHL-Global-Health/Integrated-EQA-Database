@@ -475,11 +475,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         var tableWidth1 = ['auto', '*', '*', '*']
 
         var allData = returnGradeDetails(data.results, data.microAgents);
-        console.log(allData)
+        // console.log(allData)
         var reportData = allData.reportData;
         var microAgents = allData.microAgents;
         var expectedResults = returnExpectedAsts(data.expectedResults.expectedASTs);
+        console.log(data);
         expectedResults.expectedBacterialResults = data.expectedResults.expectedResults;
+
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
@@ -588,11 +590,12 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
 
     $scope.pdfMake.generateLabPerformancePdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', '*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
+        var tableWidth = ['auto', '*','*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
                     {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Mfl Code', style: 'subHeader'},
                     {text: 'County', style: 'subHeader'},
                     {text: 'Sample', style: 'subHeader'},
                     {text: 'Round', style: 'subHeader'},
@@ -612,6 +615,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
                     {text: ' ' + lab.labName, style: ['content']},
+                    {text: ' ' + lab.MflCode, style: ['content']},
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
@@ -772,7 +776,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
             for (var i = 0; i < excelData.length; i++) {
                 var tempArray = {
                     'Laboratory Name': excelData[i].labName,
-                    'Lab Code': excelData[i].unique_identifier,
+                    'MFL Code': excelData[i].MflCode,
                     'County': excelData[i].county,
                     'Sample': excelData[i].batchName,
                     'Round': excelData[i].roundCode,

@@ -690,7 +690,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                     $data['message'] = 'There is undispatched shipment,please dispatch then try again';
                 }
             } else {
-                $data['message'] = ('could not find your request');
+                $data['message'] = 'could not find your request';
             }
             echo $this->returnJson($data);
         } catch (Exception $exc) {

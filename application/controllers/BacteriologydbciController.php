@@ -1842,12 +1842,10 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $holdEvery['arrayASTExpectedResults'] = $sampleASTsExptectedResults;
                 $holdEvery['sampleDetails'] = $sampleInfo;
 
-                $arrayResultsAndExpected =array();
+                $arrayResultsAndExpected = array();
 //                array_push($arrayResultsAndExpected, $tempArray);
 //                array_push($arrayASTResults, $sampleASTs);
                 array_push($arrayASTExpectedResults, $holdEvery);
-
-
 
 
             }
@@ -2180,12 +2178,14 @@ class BacteriologydbciController extends Zend_Controller_Action
 
     public function returnExpectedResults($sampleId)
     {
-        $sampleInstructions = $this->returnValueWhere($sampleId, 'tbl_bac_expected_results');
-        $returnFinalASTExpectedResults = [];
+        $sampleWhere['sampleId'] = $sampleId;
+        $sampleInstructions = $this->returnValueWhere($sampleWhere, 'tbl_bac_expected_results');
+
+        $returnFinalASTExpectedResults = array();
         if ($sampleInstructions != null) {
             $returnFinalASTExpectedResults['expectedResults'] = $sampleInstructions;
         }
-        $sampleWhere['sampleId'] = $sampleId;
+
         $expectedASTs = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $sampleWhere);
         $returnFinalASTExpectedResults['expectedASTs'] = $expectedASTs;
         return $returnFinalASTExpectedResults;
@@ -2197,9 +2197,11 @@ class BacteriologydbciController extends Zend_Controller_Action
         $where['userId'] = $postedData['userId'];
         $where['sampleId'] = $postedData['sampleId'];
         $where['roundId'] = $postedData['roundId'];
-
+//        print_r($where);
+//        exit;
         $results = $this->returnValueWhere($where, 'tbl_bac_response_results');
         $susceptibility = $this->returnValueWhere($where, 'tbl_bac_suscepitibility');
+
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
 
 
@@ -2209,14 +2211,15 @@ class BacteriologydbciController extends Zend_Controller_Action
         $postedWhere['sampleId'] = $postedData['sampleId'];
         $data['sampleInstructions'] = $this->returnSampleInstructions($postedWhere);
 
-        if ($microAgents != false) {
-            foreach ($microAgents as $key => $value) {
-
-                $sampleInfoRange = $this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent);
-                $microAgents[$key]->range = $sampleInfoRange;
-            }
-        }
+//        if ($microAgents != false) {
+//            foreach ($microAgents as $key => $value) {
+//
+//                $sampleInfoRange = $this->getMicroLevel($microAgents[$key]->diskContent, $microAgents[$key]->antiMicroAgent);
+//                $microAgents[$key]->range = $sampleInfoRange;
+//            }
+//        }
         $data['expectedResults'] = $this->returnExpectedResults($where['sampleId']);
+
         echo $this->returnJson(array('status' => 1, 'data' => $data));
 
         exit;

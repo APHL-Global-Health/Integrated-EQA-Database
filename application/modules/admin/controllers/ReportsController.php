@@ -1491,10 +1491,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 foreach ($labs as $key => $value) {
 
                     $where['participantId'] = $value->participant_id;
-                    $orderArray = ['id', 'dateCreated'];
-                    $col = ['*'];
+                    $orderArray = array('id', 'dateCreated');
+                    $col = array('*');
 
-                    $groupArray = ['id'];
+                    $groupArray = array('id');
                     $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $where, $orderArray, true, $groupArray);
                     if ($reportData != false) {
 
@@ -1509,6 +1509,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             $reportData[$keys]->labName = $value->institute_name;
                             $reportData[$keys]->county = $value->region;
                             $reportData[$keys]->unique_identifier = $value->unique_identifier;
+                            $reportData[$keys]->MflCode = $value->MflCode;
 
                             $reportData[$keys]->roundName = $roundInfo['roundName'];
                             $reportData[$keys]->roundCode = $roundInfo['roundCode'];
@@ -1565,6 +1566,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                     $reportData[$keys]->materialSource = $sampleInfo['materialSource'];
 
                     $reportData[$keys]->unique_identifier = $labInfo['unique_identifier'];
+                    $reportData[$keys]->MflCode =  $labInfo['MflCode'];
                     $reportData[$keys]->status = 'valid';
                     array_push($samples, ($val->finalScore + $val->totalMicroAgentsScore));
                     $sum += ($val->finalScore + $val->totalMicroAgentsScore);
