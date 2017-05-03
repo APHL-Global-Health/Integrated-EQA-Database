@@ -20,11 +20,11 @@
                             <input type="search" class="col-md-12" ng-model="samples.searchData">
                         </div>
                         <div class="col-md-1 col-sm-3 pull-right">
-                            <a href="#" class=" btn btn-default btn-sm"
+                            <button class=" btn btn-default btn-sm"
                                ng-disabled="samples.loaderProgressSpinner=='fa-spinner'"
                                ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','status','0,1')">
                                 <i class="fa fa-refresh"></i>
-                            </a>
+                            </button>
                             &nbsp;
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                 <tbody>
                 <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
                     <td>{{$index+1}}</td>
-                    <td><a href="#/{{panel.id}}"
+                    <td><a href="#"
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
                            data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
@@ -139,8 +139,8 @@
                     <b> Ends : </b> {{samples.currentRound.endDate}}<br>
                     <b> Days Left : </b>
                     <x class="label label-sm label-info">
-                        {{samples.returnFormattedLeft(samples.currentRound.daysLeft)}}
-                        {{samples.timerCountDown(samples.currentRound.daysLeft)}}
+                        {{samples.currentRound.daysLeft}}
+
                     </x>
                     <br>
                     <b> Status : </b>

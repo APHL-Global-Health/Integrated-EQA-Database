@@ -254,6 +254,8 @@ Class Main extends pdfCreator
     {
 
         $sql = "SELECT " . implode(',', $col) . " FROM $tableName";
+//        print_r($sql);
+//        exit;
         if (isset($where)) {
 
             if (is_array($where)) {

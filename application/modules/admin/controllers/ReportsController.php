@@ -486,24 +486,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                 $score['grainStainReactionScore'] = round(($scoreGS / $sampleExpectedResult['grainStainReactionScore']) * 100, 3);
 
-                if ($responseResults['primaryMedia'] == $sampleExpectedResult['primaryMedia']) {
-                    $score['primaryMedia'] = $sampleExpectedResult['primaryMediaScore'];
-                }
-                if ($responseResults['incubationConditions'] == $sampleExpectedResult['incubationConditions']) {
-                    $score['incubationConditionsScore'] = $sampleExpectedResult['incubationConditionsScore'];
-                }
-                if ($responseResults['colonialMorphology'] == $sampleExpectedResult['colonialMorphology']) {
-                    $score['colonialMorphologyScore'] = $sampleExpectedResult['colonialMorphologyScore'];
-                }
-                if ($responseResults['bacterialQualification'] == $sampleExpectedResult['bacterialQualification']) {
-                    $score['bacterialQualificationScore'] = $sampleExpectedResult['bacterialQualificationScore'];
-                }
-                if ($responseResults['bacterialReagents'] == $sampleExpectedResult['bacterialReagents']) {
-                    $score['bacterialReagentsScore'] = $sampleExpectedResult['bacterialReagentsScore'];
-                }
-                if ($responseResults['isolateProcessing'] == $sampleExpectedResult['isolateProcessing']) {
-                    $score['isolateProcessingScore'] = $sampleExpectedResult['isolateProcessing'];
-                }
+
                 if ($responseResults['finalIdentification'] == $sampleExpectedResult['finalIdentification']) {
 
                     $scoreFIS = $sampleExpectedResult['finalIdentificationScore'];
