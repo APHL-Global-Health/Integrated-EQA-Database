@@ -125,7 +125,7 @@
                                                 <i class="">{{shipment.totalPanelsAdded}}</i>
                                                 <br>
                                                 Round Id :
-                                                <i nowrap>{{shipment.roundId}}</i>
+                                                <i nowrap>{{shipment.roundInfo.roundName}}</i>
                                                 ,Created By
                                                 <i nowrap>{{shipment.createdBy}}</i>
                                                 <br>
@@ -281,7 +281,7 @@
                 <td>{{shipment.numberOfPanels}}</td>
                 <td>{{shipment.courier}}</td>
                 <td>{{shipment.shipmentDsc}}</td>
-                <td nowrap>{{shipment.roundId}}</td>
+                <td nowrap>{{shipment.roundInfo.roundName}}</td>
                 <td nowrap>{{shipment.createdBy}}</td>
 
                 <td nowrap>{{shipment.datePrepared}}</td>

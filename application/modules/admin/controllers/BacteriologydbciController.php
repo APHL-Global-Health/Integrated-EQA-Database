@@ -721,6 +721,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                 if ($tableName == 'tbl_bac_shipments') {
                     $where['participantId'] = null;
                     $where['shipmentId'] = $value->id;
+                    $whereRound['id'] =$value->roundId;
+                    $array[$key]->roundInfo =$this->returnValueWhere($whereRound, 'tbl_bac_rounds');
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
             }
