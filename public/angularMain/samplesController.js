@@ -928,7 +928,7 @@
             try {
                 console.log(panelId);
                 var tempPanel = panelId;
-                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+                var panId = angular.isObject(panelId) ? panelId.panelId : panelId;
                 if (isNumeric(panId)) {
                     try {
 
@@ -936,7 +936,7 @@
 
                         if (angular.isObject(tempPanel)) {
                             where = {
-                                panelId: tempPanel.id,
+                                panelId: tempPanel.panelId,
                                 roundId: tempPanel.roundId,
                                 deliveryStatus: 0,
                                 participantId: tempPanel.participantId
