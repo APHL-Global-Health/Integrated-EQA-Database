@@ -84,7 +84,7 @@
         //oTable.fnStandingRedraw();
         currentHighlighted = did;
         setCookie('did', did);
-
+        
         $("#distroTable tr td").removeClass("highliter");
         $("#dist" + currentHighlighted + " td").addClass("highliter");
         $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'evaluate', 'action' => 'get-shipments')); ?>", {did: did, format: "html"},
@@ -112,5 +112,16 @@
         }
 
     }
-
+    
+    function closeVlModal(sId,sampleId,vlAssay,mLowLimit,mHighLimit) {
+        if (sId!='') {
+            closeLayoutModal();
+            alert("Vl manual value updated successfully");
+            $("#manualRange"+vlAssay.toString()+sampleId.toString()).val(mHighLimit);
+            $("#mLowLimitCol"+vlAssay.toString()+sampleId.toString()).html(mLowLimit);
+            $("#mHighLimitCol"+vlAssay.toString()+sampleId.toString()).html(mHighLimit);
+            $(".manualRange"+vlAssay.toString()+sampleId.toString()).css("background-color","");
+            //getVLReferenceScores(sId);
+        }
+    }
 </script>

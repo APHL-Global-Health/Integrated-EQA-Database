@@ -1,16 +1,5 @@
 <?php
-//Zend_Debug::dump($this->result['vlCalculation'][1]['vlAssay']);
 
-//Zend_Debug::dump($this->result);
-//foreach($this->result['vlGraphResult'] as $key=>$vlRes){
-//	//print_r($vlRes);
-//	echo "Low ".$vlRes['low'];
-//	echo "hig ".$vlRes['high']."<br/>";
-//	foreach($vlRes['vl'] as $val){
-//		echo $val;
-//	}
-//}
-//die;
 require_once('tcpdf/tcpdf.php');
 $schemeType = $this->result['shipment'][0]['scheme_type'];
 //var_dump($this->result['shipment'][0]['responseResult'][0]['testkit1']);die;
@@ -30,12 +19,13 @@ if(sizeof($this->result['shipment'])>0){
 class MYPDF extends TCPDF {
 	public $scheme_name = '';
 
-	public function setSchemeName($header, $schemeName, $logo,$logoRight,$comingFrom) {
+	public function setSchemeName($header, $schemeName, $logo,$logoRight,$comingFrom,$schemeType) {
 		$this->scheme_name = $schemeName;
 		$this->header = $header;
 		$this->logo = $logo;
 		$this->logoRight = $logoRight;
 		$this->comingFrom = $comingFrom;
+		$this->schemeType = $schemeType;
 	}
     
 	//Page header
@@ -64,11 +54,21 @@ class MYPDF extends TCPDF {
 	//error_log($this->header);
 	//$y = $this->getY();
 	$html=$this->header;
-	
+
 	$this->writeHTMLCell(0,0,25,10, $html, 0, 0, 0, true, 'C', true);
 	//$this->writeHTML($html, true, false, true, true, 'L');
+	if($this->schemeType == 'vl'){
+		
+		$html='<h3 style="font-weight: bold;text-align:center;">Proficiency Testing Program for HIV-1 Viral Load Using Dried Tube Specimen</h3>';		
+	}else if($this->schemeType == 'eid'){
+		//HIV-1 Proficiency Testing Program for Early Infant Diagnosis using Dried Blood Spot.
+		$html='<h3 style="font-weight: bold;text-align:center;">HIV-1 Proficiency Testing Program for Early Infant Diagnosis using Dried Blood Spot</h3>';		
+	}
+	else{
+		$html='<h3 style="font-weight: bold;text-align:center;">Proficiency Testing Program for Anti-HIV Antibodies Diagnostics using '.$this->scheme_name.'</h3>';
+		
+	}
 	
-	$html='<p  style="font-weight: bold;text-align:center;">Proficiency Testing Program for Anti-HIV Antibodies Diagnostics using '.$this->scheme_name.'</p>';
 	$this->writeHTMLCell(0, 0, 35, 30, $html, 0, 0, 0, true, 'J', true);
 	$html='<hr/>';
 	$this->writeHTMLCell(0, 0, 10, 45, $html, 0, 0, 0, true, 'J', true);
@@ -77,16 +77,16 @@ class MYPDF extends TCPDF {
 
     // Page footer
     public function Footer() {
-		$underReport="";
-		if(trim($this->comingFrom)!=""){
-			// $underReport='       (Under Review)';
+		$finalizeReport="";
+		if(trim($this->comingFrom)=="finalize"){
+			$finalizeReport=' - FINALIZED';
 		}
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
         // Page number
-        $this->Cell(0, 10, "Report generated at :".date("d-M-Y H:i:s").$underReport, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, "Report generated at :".date("d-M-Y H:i:s").$finalizeReport, 0, false, 'C', 0, '', 0, false, 'T', 'M');
 	
     }
 }
@@ -94,6 +94,12 @@ $totalPages=count($this->result['shipment']);
 $j=1;
 //$this->result['dmResult'];
 foreach($this->result['shipment'] as $result){
+	
+	//Zend_Debug::dump($result['responseResult'][0]);die;
+	
+	if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR .'reports'. DIRECTORY_SEPARATOR.$result['shipment_code'])) {
+		mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']);
+    }
 	//error_log($i);
 	// Extend the TCPDF class to create custom Header and Footer
 	
@@ -101,7 +107,7 @@ foreach($this->result['shipment'] as $result){
 	// create new PDF document
 	$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 	
-	$pdf->setSchemeName($this->header,$result['scheme_name'],$this->logo,$this->logoRight,$this->comingFrom);
+	$pdf->setSchemeName($this->header,$result['scheme_name'],$this->logo,$this->logoRight,$this->comingFrom,$schemeType);
 	// set document information
 	//$pdf->SetCreator(PDF_CREATOR);
 	//$pdf->SetAuthor('Nicola Asuni');
@@ -207,62 +213,124 @@ foreach($this->result['shipment'] as $result){
 	
 	//Coment Details
 	
-	$labInfo='<table cellpadding="2">';
 	
-	$labInfo.='<tr>';
-	$labInfo.='	<td><strong>Participant Code</strong> <br>'.$result['unique_identifier'].'</td>';
-	$labInfo.='	<td><strong>Performing Participant</strong>  <br>'.$result['first_name']." ".$result['last_name'].'</td>';
-	$labInfo.='	<td><strong>PT Survey Name and Date</strong> <br>'.$result['distribution_code'].'('.$result['shipment_date'].')</td>';
-	$labInfo.='</tr>';
-	
+	if($schemeType != 'vl' && $schemeType!='eid'){
+		
+		$labInfo='<table cellpadding="2">';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Participant Code</strong> <br>'.$result['unique_identifier'].'</td>';
 
+		$labInfo.='	<td><strong>Performing Participant</strong>  <br>'.$result['first_name']." ".$result['last_name'].'</td>';
+	
+		$labInfo.='	<td><strong>PT Panel Name and Date</strong> <br>'.$result['distribution_code'].'('.$result['shipment_date'].')</td>';
 
+		$labInfo.='</tr>';
+		
 	
-	$labInfo.='<tr>';
-	$labInfo.='	<td><strong>Shipment Date</strong> <br>'.$result['shipment_date'].'</td>';
-	$labInfo.='	<td><strong>Shipment Code</strong> <br>'.$result['shipment_code'].'</td>';
-	$labInfo.='	<td><strong>Shipment Type</strong>  <br>'.$result['scheme_name']." ".$result['last_name'].'</td>';
-	$labInfo.='</tr>';
 	
-	$labInfo.='<tr>';
-	$labInfo.='	<td><strong>Panel Receipt Date</strong> <br>'.$shipmentReceiptDate.'</td>';
-	$labInfo.='	<td><strong>Rehydration Date</strong> <br>'.$sampleRehydrationDate.'</td>';
-
-	$labInfo.='	<td><strong>Result Due Date</strong> <br>'.$result['lastdate_response'].'</td>';
-	$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Shipment Date</strong> <br>'.$result['shipment_date'].'</td>';
+		$labInfo.='	<td><strong>Shipment Code</strong> <br>'.$result['shipment_code'].'</td>';
+		$labInfo.='	<td><strong>Shipment Type</strong>  <br>'.$result['scheme_name']." ".$result['last_name'].'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Panel Receipt Date</strong> <br>'.$shipmentReceiptDate.'</td>';
+		$labInfo.='	<td><strong>Rehydration Date</strong> <br>'.$sampleRehydrationDate.'</td>';
 	
-	$labInfo.='<tr>';
-	$labInfo.='	<td><strong>Response Date</strong> <br>'.$responseDate.'</td>';
-	$labInfo.='	<td><strong>Shipment Test Date</strong> <br>'.$shipmentTestDate.'</td>';
-	$labInfo.='	<td>';
-	if(isset($attributes['algorithm'])){
-	$labInfo.='	<strong>Algorithm</strong> <br>'.ucfirst($attributes['algorithm']);
+		$labInfo.='	<td><strong>Result Due Date</strong> <br>'.$result['lastdate_response'].'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Response Date</strong> <br>'.$responseDate.'</td>';
+		$labInfo.='	<td><strong>Shipment Test Date</strong> <br>'.$shipmentTestDate.'</td>';
+		$labInfo.='	<td>';
+		if(isset($attributes['algorithm'])){
+		$labInfo.='	<strong>Algorithm</strong> <br>'.ucfirst($attributes['algorithm']);
+		}
+		$labInfo.=' </td>';
+		$labInfo.='</tr>';
+		$labInfo.='<tr>';
+		$labInfo.='	<td>';
+		$labInfo.='	<strong>Supervisor Name</strong> <br>'.($result['participant_supervisor']);
+		$labInfo.=' </td>';	
+		$labInfo.='	<td>';
+		if(isset($this->haveCustom) && $this->haveCustom == 'yes') {
+			$labInfo.='	<strong>'.$this->customField1.'</strong> <br>'.$this->shipment['custom_field_1'];
+		}
+		$labInfo.=' </td>';	
+		$labInfo.='	<td>';
+		if(isset($this->haveCustom) && $this->haveCustom == 'yes') {
+			$labInfo.='	<strong>'.$this->customField2.'</strong> <br>'.$this->shipment['custom_field_2'];
+		}
+		$labInfo.=' </td>';
+		$labInfo.='</tr>';
+	
+		
+		$labInfo.='</table>';
+		//shipment_test_date
+		$pdf->writeHTML($labInfo, true, false, true, false, '');
+	
 	}
-	$labInfo.=' </td>';
-	$labInfo.='</tr>';
-	$labInfo.='<tr>';
-	$labInfo.='	<td>';
-	$labInfo.='	<strong>Supervisor Name</strong> <br>'.($result['participant_supervisor']);
-	$labInfo.=' </td>';	
-	$labInfo.='	<td>';
-	if(isset($this->haveCustom) && $this->haveCustom == 'yes') {
-		$labInfo.='	<strong>'.$this->customField1.'</strong> <br>'.$this->shipment['custom_field_1'];
+	else if($schemeType=='eid'){
+		$labInfo='<table cellpadding="2">';
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>PT Panel Name and Date</strong> <br>'.$result['distribution_code'].'('.$result['shipment_date'].')</td>';
+		$labInfo.='	<td><strong>PT Panel Received</strong> <br>'.$shipmentReceiptDate.'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		//$labInfo.='	<td><strong>Lab Id</strong> <br>'.$result['unique_identifier'].'</td>';
+		$labInfo.='	<td><strong>Extraction Assay </strong> <br>'.$result['extractionAssayVal'].'</td>';
+		$labInfo.='	<td><strong>PT Panel Tested </strong> <br>'.$shipmentTestDate.'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Detection Assay </strong> <br>'.$result['detectionAssayVal'].'</td>';
+		$labInfo.='	<td><strong>Results Submitted Date</strong> <br>'.$responseDate.'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Lab Id</strong> <br>'.$result['unique_identifier'].'</td>';
+		$labInfo.='</tr>';
+		
+		$labInfo.='</table>';
+		
+		$pdf->writeHTML($labInfo, true, false, true, false, '');
 	}
-	$labInfo.=' </td>';	
-	$labInfo.='	<td>';
-	if(isset($this->haveCustom) && $this->haveCustom == 'yes') {
-		$labInfo.='	<strong>'.$this->customField2.'</strong> <br>'.$this->shipment['custom_field_2'];
-	}
-	$labInfo.=' </td>';
-	$labInfo.='</tr>';
+	else{
+		
+		$labInfo='<table cellpadding="2">';
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>PT Panel </strong> <br>'.$result['distribution_code'].'('.$result['shipment_date'].')</td>';
+		$labInfo.='	<td><strong>Date PT Panel Received</strong> <br>'.$shipmentReceiptDate.'</td>';
+		
 
+		
+
+		$labInfo.='</tr>';
+		
 	
-	$labInfo.='</table>';
-	//shipment_test_date
-	$pdf->writeHTML($labInfo, true, false, true, false, '');
+	
+		
+		$labInfo.='<tr>';
+		$labInfo.='	<td><strong>Your Lab Id</strong> <br>'.$result['unique_identifier'].'</td>';
+		$labInfo.='	<td><strong>Date PT Panel Tested</strong> <br>'.$shipmentTestDate.'</td>';
+		$labInfo.='</tr>';
+		
+		
+	
+		
+		$labInfo.='</table>';
+		//shipment_test_date
+		$pdf->writeHTML($labInfo, true, false, true, false, '');		
+	}
 	
 	if(sizeof($result['responseResult'])>0){
-		if($schemeType != 'vl'){
+		if($schemeType != 'vl' && $schemeType!='eid'){
 			$labRes = '<span style="font-weight: bold;font-size:13px;">Your laboratory test results : <br/></span><table border="1" style="font-size:13px;">';
 			$labRes .='<tr style="background-color:#dbe4ee;"><td></td><td style="text-align:center;font-weight:bold;">Test-1</td><td style="text-align:center;font-weight:bold;">Test-2</td><td style="text-align:center;font-weight:bold;">Test-3</td><td colspan="4" style="border:none;"></td></tr>';
 			$labRes .='<tr><td style="text-align:center;font-weight:bold;background-color:#dbe4ee;">Kit Name</td><td>'.$result['responseResult'][0]['testkit1'].'</td><td>'.$result['responseResult'][0]['testkit2'].'</td><td>'.$result['responseResult'][0]['testkit3'].'</td><td colspan="4"></td></tr>';
@@ -471,62 +539,142 @@ foreach($this->result['shipment'] as $result){
 				$failRes.= '</table>';
 				$pdf->writeHTML($failRes, true, false, true, false, '');
 			}
-			
-            			
-		}else{
-			$labRes='<h5>'.$result['responseResult'][0]['vl_assay'].'</h5>';
-			$labRes.='<table border="1" style="text-align:center;font-weight:bold;width:650px;font-size:13px;">
-						<tr>
-							<td style="">Specimen ID </td>
-							<td style="">Your Results<br/>(log<sub>10</sub> copies/ml)</td>
-							<td style="">Mean<br/>(log<sub>10</sub> copies/ml)</td>
-							<td style="">S.D.</td>
-							<td style="">Low</td>
-							<td style="">High</td>
-							<td style="">Your Grade</td>
-						</tr>';
-			if($result['is_excluded'] == 'yes'){
-				foreach($result['responseResult'] as $response){
-					$labRes.='<tr>
-								<td style="text-align:center;">'.$response['sample_label'].'</td>
-								<td>'.$response['reported_viral_load'].'</td>
-								<td>'.$response['mean'].'</td>
-								<td>'.$response['sd'].'</td>
-								<td>'.$response['low'].'</td>
-								<td>'.$response['high'].'</td>
-								<td>Manual Exclusion</td>
-							  </tr>';
-				}
-			}else{
-				foreach($result['responseResult'] as $response){
-					$labRes.='<tr>
-								<td style="text-align:center;">'.$response['sample_label'].'</td>
-								<td>'.$response['reported_viral_load'].'</td>
-								<td>'.$response['mean'].'</td>
-								<td>'.$response['sd'].'</td>
-								<td>'.$response['low'].'</td>
-								<td>'.$response['high'].'</td>
-								<td>'.$response['grade'].'</td>
-							  </tr>';
-				}
+		}
+		else if($schemeType=='eid'){
+		
+			$n=count($result['responseResult']);
+			$labRes = '<span style="font-weight: bold;font-size:13px;">Your laboratory test results : <br/></span>';
+			$labRes .= '<table border="1" style="font-size:13px;">';
+			$labRes .= '<tr style="background-color:#dbe4ee;">';
+			$labRes .= '<td colspan="'.($n+2).'" style="text-align:center;font-weight:bold;">Sample ID</td>';
+			$labRes .= '</tr>';
+			$labRes.='<tr style="background-color:#dbe4ee;">';
+			$labRes.='<td></td>';
+			//Sample codes
+			foreach($result['responseResult'] as $response){
+				$labRes.='<td style="text-align:center;font-weight:bold;">'.$response['sample_label'].'</td>';
 			}
-			$labRes.='</table>';
+			
+			$labRes.='<td style="text-align:center;font-weight:bold;">Score(%)</td>';
+			$labRes.='</tr>';
+			$labRes.='<tr>';
+			$labRes.='<td>Expected Result</td>';
+			foreach($result['responseResult'] as $response){
+				$labRes.='<td style="text-align:left;">'.$response['referenceResult'].'</td>';
+			}
+			$labRes.='<td rowspan="2" style="text-align:center;"><br>'.$result['shipment_score'].'</td>';
+			$labRes.='</tr>';
+			$labRes.='<tr>';
+			$labRes.='<td>Your Results</td>';
+			foreach($result['responseResult'] as $response){
+				$labRes.='<td style="text-align:left;">'.$response['labResult'].'</td>';
+			}
+			$labRes.='</tr>';
+			
+			$labRes .= '</table>';
+			
 			$pdf->SetLeftMargin(15);
 			$pdf->writeHTML($labRes, true, false, true, false, '');
 		}
+		else{
+			//Vl report
+			$labRes='<h5>'.$result['responseResult'][0]['vl_assay'];
+			if(isset($attributes['vl_assay']) && $attributes['vl_assay']==6){
+				$labRes.=" - ".$attributes['other_assay'];
+			}
+			$labRes.='</h5>';
+			
+			if($result['responseResult'][0]['no_of_participants'] > 7) {
+					$labRes.='<table border="1" style="text-align:center;font-weight:bold;width:650px;font-size:13px;">
+								<tr>
+									<td style="background-color:#dbe4ee;">Specimen ID </td>
+									<td style="background-color:#dbe4ee;">Your Results<br/>(log<sub>10</sub> copies/ml)</td>
+									<td style="background-color:#dbe4ee;">Mean<br/>(log<sub>10</sub> copies/ml)</td>
+									<td style="background-color:#dbe4ee;">S.D.</td>
+									<td style="background-color:#dbe4ee;"># of Labs</td>
+									<td style="background-color:#dbe4ee;">Lowest <br/> Acceptable Limit</td>
+									<td style="background-color:#dbe4ee;">Highest <br/> Acceptable Limit</td>
+									<td style="background-color:#dbe4ee;">Your Grade</td>
+								</tr>';
+					if($result['is_excluded'] == 'yes'){
+						foreach($result['responseResult'] as $response){
+							$labRes.='<tr>
+										<td style="text-align:center;">'.$response['sample_label'].'</td>
+										<td>'.$response['reported_viral_load'].'</td>
+										<td>'.number_format(round($response['mean'],2),2,'.','').'</td>
+										<td>'.number_format(round($response['sd'],2),2,'.','').'</td>
+										<td>'.$response['no_of_participants'].'</td>
+										<td>'.number_format(round($response['low'],2),2,'.','').'</td>
+										<td>'.number_format(round($response['high'],2),2,'.','').'</td>
+										<td>Manual Exclusion</td>
+									  </tr>';
+						}
+					}else{
+						foreach($result['responseResult'] as $response){
+							$labRes.='<tr>
+										<td style="text-align:center;">'.$response['sample_label'].'</td>
+										<td>'.$response['reported_viral_load'].'</td>
+										<td>'.number_format(round($response['mean'],2),2,'.','').'</td>
+										<td>'.number_format(round($response['sd'],2),2,'.','').'</td>
+										<td>'.$response['no_of_participants'].'</td>
+										<td>'.number_format(round($response['low'],2),2,'.','').'</td>
+										<td>'.number_format(round($response['high'],2),2,'.','').'</td>
+										<td>'.$response['grade'].'</td>
+									  </tr>';
+						}
+					}
+					$labRes.='</table>';
+					
+			}else{
+				
+				$labRes.='<table border="1" style="text-align:center;font-weight:bold;width:650px;font-size:13px;">
+								<tr>
+									<td style="background-color:#dbe4ee;">Specimen ID </td>
+									<td style="background-color:#dbe4ee;">Your Results<br/>(log<sub>10</sub> copies/ml)</td>
+									<td style="background-color:#dbe4ee;"># of Labs</td>
+									<td style="background-color:#dbe4ee;">Your Grade</td>
+								</tr>';
+					
+						foreach($result['responseResult'] as $response){
+							$labRes.='<tr>
+										<td style="text-align:center;">'.$response['sample_label'].'</td>
+										<td>'.$response['reported_viral_load'].'</td>
+										<td>'.$response['no_of_participants'].'</td>
+										<td>Not Evaluated</td>
+									  </tr>';
+							
+						}
+						
+					
+					$labRes.='</table>';				
+					$labRes.='<h5>'.$result['responseResult'][0]['vl_assay'].' Platforms were not analyzed or graded</h5>';
+				
+			}
+			
+			//if(isset($attributes['vl_assay']) && $attributes['vl_assay']==6){
+			//	$labRes.='<h5>"Other Platforms were not analyzed or graded"</h5>';
+			//}
+			
+			$pdf->SetLeftMargin(15);
+			$pdf->writeHTML($labRes, true, false, true, false, '');
+			
+			$footerHead='<h5>0.00 = Target Not Detected or less than lower limit of detection</h5><br/>';
+			$pdf->writeHTML($footerHead, true, false, true, false, '');
+		}
 	}
 	
-	include_once("pChart/class/pData.class.php"); 
-	include_once("pChart/class/pDraw.class.php");
-	include_once("pChart/class/pImage.class.php"); 
-	include_once("pChart/class/pScatter.class.php"); 
+	//include_once("pChart/class/pData.class.php"); 
+	//include_once("pChart/class/pDraw.class.php");
+	//include_once("pChart/class/pImage.class.php"); 
+	//include_once("pChart/class/pScatter.class.php"); 
 	
-	
- 
- 
 	
 	if(trim($result['shipment_score'])!=""){
-		$shipmentScore=$result['shipment_score'];
+		if($result['shipment_score'] != 0){
+			$shipmentScore=($result['shipment_score']/$result['shipment_score'])*100;
+		}else{
+			$result['shipment_score'] = 0;
+		}
 	}
 	
 	
@@ -541,11 +689,29 @@ foreach($this->result['shipment'] as $result){
 	//	$wishes='<p>Your response was not considered for evaluation</p><br/>';
 	//}
 	
-	if($score>=$this->passPercentage){
-		$wishes='<p>Congratulations! You have received a satisfactory score of '.round($score,2).'%.</p><br/>';
-	}else{
-		$wishes='<p>You have received a score of '.round($score,2).'%.</p><br/>';
-	}
+	
+	
+	
+	
+	//if($schemeType != 'vl'){
+	//	if($score>=$this->passPercentage){
+	//		$wishes='<p>Congratulations! You have received a satisfactory score of '.round($shipmentScore,2).'%.</p><br/>';
+	//	}else{
+	//		$wishes='<p>You have received a score of '.round($shipmentScore,2).'%.</p><br/>';
+	//	}
+	//	
+	//
+	//
+	//	$pdf->SetLeftMargin(15);
+	//
+	//	$pdf->writeHTML($wishes, true, false, true, false, '');
+	//
+	//}
+	
+	
+	
+	
+	
 	//if($result['is_excluded'] != 'yes'){
 		//$wishes.="<br/><strong style='font-weight:bold;'>Score Breakup:</strong>";
 		//$wishes.="<br/>Score for Correct Responses (out of $maxResponsePoints) : $shipmentScore (You reported ".$correctSamplesCount." samples correctly out of ".$totalProperSamples. ")";
@@ -553,127 +719,132 @@ foreach($this->result['shipment'] as $result){
 	//}
 	
 	
-	$pdf->SetLeftMargin(15);
-	
-	$pdf->writeHTML($wishes, true, false, true, false, '');
-	
 	if($schemeType=='vl'){
-		if(count($this->result['vlCalculation'])>0){
-				
-			foreach($this->result['vlCalculation'] as $vlCal){
-				$calRes='<h5> Summary of '.$vlCal['vlAssay'].' Results</h5>';
-				$calRes.='<table border="1" style="text-align:center;font-weight:bold;width:650px;font-size:13px;">
-				<tr>
-					<td style="">Platform </td>
-					<td style="">Specimen ID </td>
-					<td style="">Mean<br/>(log<sub>10</sub> copies/ml)</td>
-					<td style="">S.D.</td>
-					<td style="">CV</td>
-				</tr>';
-				//Zend_Debug::dump($vlCal[0]['low_limit']);
-				//Zend_Debug::dump(count($vlCal));
-				//Zend_Debug::dump($vlCal['vlAssay']);
-				$countCal=count($vlCal)-1;
-				for($c=0;$c<$countCal;$c++){
-					if(isset($vlCal[$c]['mean'])){
-					$calRes.='<tr>';
-					if($c==0){
-					$calRes.='<td style="text-align:center;" rowspan="'.$countCal.'">'.$vlCal['shortName'].'</td>';	
-					}
-					
-					
-					$calRes.='<td>'.$vlCal[$c]['sample_label'].'</td>
-						<td>'.$vlCal[$c]['mean'].'</td>
-						<td>'.$vlCal[$c]['sd'].'</td>
-						<td>'.$vlCal[$c]['cv'].'</td>
-					  </tr>';
-					}
-				}
-				$calRes.='</table>';
-				
-				$pdf->writeHTML($calRes, true, false, true, false, '');
-			}
-		}
-		
+		/*
+		$c=1;
+		$countG=count($this->result['vlGraphResult']);
 		foreach($this->result['vlGraphResult'] as $key=>$vlRes){
-		/* Create and populate the pData object */
-		$myData = new pData();  
-		foreach($vlRes['vl'] as $val){
-			$myData->addPoints($val,"Probe 1");
-		}
-		$myData->addPoints(array($vlRes['low'],$vlRes['high']),"Probe 2");
-		/* Create the X axis and the binded series */
-		//for ($i=0;$i<=360;$i=$i+10) { $myData->addPoints(rand(1,20)*10+rand(0,$i),"Probe 1"); }
-		//for ($i=0;$i<=360;$i=$i+10) { $myData->addPoints(rand(1,2)*10+rand(0,$i),"Probe 2"); }
-		$myData->setAxisName(0,"X-Index");
-		$myData->setAxisXY(0,AXIS_X);
-		$myData->setAxisPosition(0,AXIS_POSITION_TOP);
-		
-		/* Create the Y axis and the binded series */
-		for ($i=0;$i<=390;$i=$i+1) { $myData->addPoints($i,"Probe 3"); }
-		$myData->setSerieOnAxis("Probe 3",1);
-		$myData->setAxisName(1,"Y-Index");
-		$myData->setAxisXY(1,AXIS_Y);
-		$myData->setAxisPosition(1,AXIS_POSITION_LEFT);
-		
-		/* Create the 1st scatter chart binding */
-		$myData->setScatterSerie("Probe 1","Probe 3",0);
-		$myData->setScatterSerieDescription(0,"This year");
-		$myData->setScatterSerieColor(0,array("R"=>0,"G"=>0,"B"=>0));
-		
-		/* Create the 2nd scatter chart binding */
-		$myData->setScatterSerie("Probe 2","Probe 3",1);
-		$myData->setScatterSerieDescription(1,"Last Year");
-		
-		/* Create the pChart object */
-		$myPicture = new pImage(400,400,$myData);
-		
-		/* Draw the background */
-		$Settings = array("R"=>170, "G"=>183, "B"=>87, "Dash"=>1, "DashR"=>190, "DashG"=>203, "DashB"=>107);
-		$myPicture->drawFilledRectangle(0,0,400,400,$Settings);
-		
-		/* Overlay with a gradient */
-		$Settings = array("StartR"=>219, "StartG"=>231, "StartB"=>139, "EndR"=>1, "EndG"=>138, "EndB"=>68, "Alpha"=>50);
-		$myPicture->drawGradientArea(0,0,400,400,DIRECTION_VERTICAL,$Settings);
-		$myPicture->drawGradientArea(0,0,400,20,DIRECTION_VERTICAL,array("StartR"=>0,"StartG"=>0,"StartB"=>0,"EndR"=>50,"EndG"=>50,"EndB"=>50,"Alpha"=>80));
-		
-		/* Write the picture title */ 
-		$myPicture->setFontProperties(array("FontName"=>"../fonts/Silkscreen.ttf","FontSize"=>6));
-		$myPicture->drawText(10,13,"drawScatterBestFit() - Linear regression",array("R"=>255,"G"=>255,"B"=>255));
-		
-		/* Add a border to the picture */
-		$myPicture->drawRectangle(0,0,399,399,array("R"=>0,"G"=>0,"B"=>0));
-		
-		/* Set the default font */
-		$myPicture->setFontProperties(array("FontName"=>"../fonts/pf_arma_five.ttf","FontSize"=>6));
-		
-		/* Set the graph area */
-		$myPicture->setGraphArea(50,60,350,360);
-		
-		/* Create the Scatter chart object */
-		$myScatter = new pScatter($myPicture,$myData);
-		
-		/* Draw the scale */
-		$myScatter->drawScatterScale();
-		
-		/* Turn on shadow computing */
-		$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+			
+			$myData = new pData();
+			$participantCount=count($vlRes['vl']);
+			foreach($vlRes['vl'] as $val){
+				$myData->addPoints($val,"Probe 1");
+			}
+			if(isset($vlRes['NA'])){
+				foreach($vlRes['NA'] as $val){
+					$myData->addPoints($val,"Probe 5");
+				}
+			}
+			
 
-		/* Draw a scatter plot chart */
-		$myScatter->drawScatterPlotChart();
+			$myData->addPoints(array($vlRes['low'],$vlRes['high']),"Probe 2");
+			$myData->addPoints(array($vlRes['pVal']),"Probe 4");
+			
+			
+			$myData->setAxisName(0,"X-Index");
+			$myData->setAxisXY(0,AXIS_X);
+			$myData->setAxisPosition(0,AXIS_POSITION_BOTTOM);
+			
+			//Create the Y axis and the binded series 
+			for ($i=0;$i<=$participantCount;$i=$i+1) { $myData->addPoints($i,"Probe 3"); }
+			$myData->setSerieOnAxis("Probe 3",1);
+			$myData->setAxisName(1,"Y-Index");
+			$myData->setAxisXY(1,AXIS_Y);
+			$myData->setAxisPosition(1,AXIS_POSITION_LEFT);
+			
+			//Create the 1st scatter chart binding 
+			$myData->setScatterSerie("Probe 1","Probe 3",0);
+			$myData->setScatterSerieDescription(0,"VL Val");
+			$myData->setScatterSerieColor(0,array("R"=>28,"G"=>87,"B"=>3));
+			
+			//Create the 2nd scatter chart binding 
+			$myData->setScatterSerie("Probe 2","Probe 3",1);
+			$myData->setScatterSerieDescription(1,"Low/High Val");
+			
+			//Create the 3rd scatter chart binding
+			$myData->setScatterSerie("Probe 4","Probe 3",2);
+			$myData->setScatterSerieDescription(2,"PT Val");
+			$myData->setScatterSerieColor(2,array("R"=>15,"G"=>50,"B"=>190));
+			
+			//Create the 4th scatter chart binding
+			$myData->setScatterSerie("Probe 5","Probe 3",3);
+			$myData->setScatterSerieDescription(3,"PT Val");
+			$myData->setScatterSerieColor(3,array("R"=>205,"G"=>8,"B"=>8));
+			
+			//Create the pChart object
+			$myPicture = new pImage(400,400,$myData);
+			
+			// Draw the background
+			$Settings = array("R"=>170, "G"=>183, "B"=>87, "Dash"=>1, "DashR"=>190, "DashG"=>203, "DashB"=>107);
+			$myPicture->drawFilledRectangle(0,0,400,400,$Settings);
+			
+			//Overlay with a gradient
+			$Settings = array("StartR"=>219, "StartG"=>231, "StartB"=>139, "EndR"=>1, "EndG"=>138, "EndB"=>68, "Alpha"=>50);
+			$myPicture->drawGradientArea(0,0,400,400,DIRECTION_VERTICAL,$Settings);
+			$myPicture->drawGradientArea(0,0,400,20,DIRECTION_VERTICAL,array("StartR"=>0,"StartG"=>0,"StartB"=>0,"EndR"=>50,"EndG"=>50,"EndB"=>50,"Alpha"=>80));
+			
+			//Write the picture title
+			$myPicture->setFontProperties(array("FontName"=>UPLOAD_PATH . DIRECTORY_SEPARATOR."pchart-fonts/Silkscreen.ttf","FontSize"=>6));
+			$myPicture->drawText(10,13,$result['responseResult'][0]['vl_assay'].' - '.$key,array("R"=>255,"G"=>255,"B"=>255));
+			
+			//Add a border to the picture
+			$myPicture->drawRectangle(0,0,399,399,array("R"=>0,"G"=>0,"B"=>0));
+			
+			//Set the default font
+			$myPicture->setFontProperties(array("FontName"=>UPLOAD_PATH . DIRECTORY_SEPARATOR."pchart-fonts/pf_arma_five.ttf","FontSize"=>6));
+			
+			// Set the graph area
+			$myPicture->setGraphArea(50,60,350,360);
+			
+			//Create the Scatter chart object
+			$myScatter = new pScatter($myPicture,$myData);
+			
+			// Draw the scale
+			$myScatter->drawScatterScale();
+			
+			//Turn on shadow computing
+			$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
 	
-		/* Draw the legend */
-		$myScatter->drawScatterLegend(280,380,array("Mode"=>LEGEND_HORIZONTAL,"Style"=>LEGEND_NOBORDER));
-	
-		$image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR.$result['shipment_code']. DIRECTORY_SEPARATOR.'scatter-chart.png';
-		//$myPicture->autoOutput("pictures/example.drawBubbleChart.png"); 
-		$myPicture->render("$image_file");
+			// Draw a scatter plot chart
+			$myScatter->drawScatterPlotChart();
 		
-		$pdf->Image($image_file, 5, $pdf->getY()+5, '', '', '', '', '', false, 300);
-		if (file_exists($image_file)) {
-			unlink($image_file);
+			//Draw the legend
+			$myScatter->drawScatterLegend(280,380,array("Mode"=>LEGEND_HORIZONTAL,"Style"=>LEGEND_NOBORDER));
+			
+			$graphFolderPath= UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports' . DIRECTORY_SEPARATOR.$result['shipment_code']. DIRECTORY_SEPARATOR.'vl-graph';
+			if (!file_exists($graphFolderPath)) {
+				mkdir($graphFolderPath);
+			}
+			$image_file = $graphFolderPath. DIRECTORY_SEPARATOR.$key.'scatter.png';
+			//$myPicture->autoOutput("pictures/example.drawBubbleChart.png"); 
+			$myPicture->render("$image_file");
+			
+			$k=$c%2;
+			if($k!=0){
+			$vlGraphTable='<table>';
+			$vlGraphTable.='<tr>';
+			}
+			$vlGraphTable.='<td><img src="'.$image_file.'" width="300"></td>';
+			if($k==0){
+				$vlGraphTable.='</tr>';
+				$vlGraphTable.='</table>';
+				$pdf->writeHTML($vlGraphTable,true, false, true, false, '');
+			}
+			if($countG==$c){
+				$vlGraphTable.='</tr>';
+				$vlGraphTable.='</table>';
+				$pdf->writeHTML($vlGraphTable,true, false, true, false, '');
+			}
+			
+			if (file_exists($image_file)) {
+				//unlink($image_file);
+			}
+			$c++;
 		}
-}
+		*/
+		
+		
+		
 	}
 	//if(trim($result['distribution_date'])!=""){
 	//	$result['distribution_date']=$this->dateFormat($result['distribution_date']);
@@ -705,8 +876,15 @@ foreach($this->result['shipment'] as $result){
 		$comment.='</table>';
 		$pdf->writeHTML($comment, true, false, true, false, '');
 	}
+	if($schemeType=='vl'){
+		$html='<p>Thank you for participating in the HIV Viral Load Proficiency Testing Program.</p>';
+	}
+	else if($schemeType=='eid'){
+		$html='<p>Thank you for participating in HIV-1 Proficiency Testing Program for Early Infant Diagnosis using Dried Blood Spot.</p>';
+	}else{
+		$html='<p>Thank you for participating in the '.($result['scheme_name']).' Proficiency Testing Program.</p>';
+	}
 	
-	$html='<p>Thank you for participating in the HIV Serology '.strtoupper($result['scheme_type']).' Proficiency Testing Program.</p>';
 	$pdf->writeHTML($html, true, false, true, false, '');
 	
 	if (ob_get_contents()) ob_end_clean();
@@ -715,9 +893,9 @@ foreach($this->result['shipment'] as $result){
 		$result['last_name']="_".$result['last_name'];
 	}
 	
-	if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR .'reports'. DIRECTORY_SEPARATOR.$result['shipment_code'])) {
-		mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']);
-        }
+//	if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR .'reports'. DIRECTORY_SEPARATOR.$result['shipment_code'])) {
+//		mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR.$result['shipment_code']);
+//    }
 	
 	$fileName=$result['first_name'].$result['last_name']."-".$result['map_id'].".pdf";
 	$fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $fileName);
@@ -740,6 +918,7 @@ foreach($this->result['shipment'] as $result){
         $shipmentCode=$result['shipment_code'];
         $j++;
 }
+
 //$mergePdf = $shipmentCode."-bulk-participant-report.pdf";
 $mergePdf = $shipmentCode."-".$this->bulkfileNameVal."-bulk-participant-report.pdf";
 $mergeFilePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR .$shipmentCode. DIRECTORY_SEPARATOR .$mergePdf;

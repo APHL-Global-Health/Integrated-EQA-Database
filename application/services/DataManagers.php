@@ -11,6 +11,13 @@ class Application_Service_DataManagers {
         $userDb = new Application_Model_DbTable_DataManagers();
         return $userDb->updateUser($params);
     }
+    
+    public function updateLastLogin($dmId){
+        $userDb = new Application_Model_DbTable_DataManagers();
+        return $userDb->updateLastLogin($dmId);
+    }
+	
+	
     public function getAllUsers($params){
         $userDb = new Application_Model_DbTable_DataManagers();
         return $userDb->getAllUsers($params);
@@ -71,7 +78,8 @@ class Application_Service_DataManagers {
 	
     public function changePassword($oldPassword,$newPassword){
 	    $userDb = new Application_Model_DbTable_DataManagers();
-	    $newPassword = $userDb->updatePassword($oldPassword,$newPassword);
+            $newPassword = $userDb->updatePassword($oldPassword,$newPassword);
+            
 	    $sessionAlert = new Zend_Session_Namespace('alertSpace');
 	    if($newPassword != false){
 		    $sessionAlert->message = "Your password has been updated.";

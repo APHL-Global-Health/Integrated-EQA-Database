@@ -38,6 +38,10 @@ class Admin_EvaluateController extends Zend_Controller_Action
         }else{
             $this->view->shipments = false;
         }
+        if($this->_hasParam('scheme') && $this->_hasParam('showcalc')){
+            $this->view->showcalc = ($this->_getParam('showcalc'));
+            $this->view->scheme = $this->_getParam('scheme');
+		}
     }
 
     public function shipmentAction()
@@ -206,7 +210,9 @@ class Admin_EvaluateController extends Zend_Controller_Action
 
     public function vlRangeAction()
     {
-		if($this->_hasParam('manualLow')){
+        
+		if($this->_hasParam('manualRange')){
+                    
 			$params = $this->getRequest()->getPost();
 			$schemeService = new Application_Service_Schemes();
 			$schemeService->updateVlInformation($params);
@@ -214,7 +220,7 @@ class Admin_EvaluateController extends Zend_Controller_Action
 			$this->_redirect("/admin/evaluate/index/scheme/vl/showcalc/".base64_encode($shipmentId));
 		}
 		if($this->_hasParam('sid')){
-			if ($this->getRequest()->isPost()) {
+                    if ($this->getRequest()->isPost()) {
 				$shipmentId = (int)base64_decode($this->_getParam('sid'));
 				$schemeService = new Application_Service_Schemes();
 				$this->view->result = $schemeService->getVlRangeInformation($shipmentId);
@@ -229,7 +235,6 @@ class Admin_EvaluateController extends Zend_Controller_Action
     public function recalculateVlRangeAction()
     {
         if($this->_hasParam('sid')){
-			
 			$shipmentId = (int)($this->_getParam('sid'));
 			$schemeService = new Application_Service_Schemes();
 			$this->view->result = $schemeService->setVlRange($shipmentId);
@@ -238,7 +243,42 @@ class Admin_EvaluateController extends Zend_Controller_Action
 			$this->_redirect("/admin/evaluate/");
 		}
     }
-
+	
+	public function vlSamplePlotAction(){
+		$shipmentId = $this->_getParam('shipment');
+		$sampleId = $this->_getParam('sample');
+		
+		$schemeService = new Application_Service_Schemes();
+		//$this->view->sampleVldata = $schemeService->getVlRangeInformation($shipmentId,$sampleId);
+		$this->view->vlRange = $schemeService->getVlRange($shipmentId,$sampleId);
+		$this->view->shipmentId = $shipmentId;
+		$this->view->sampleId = $sampleId;
+		
+		
+	}
+	
+	public function addManualLimitsAction(){
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->layout()->setLayout('modal');
+		$schemeService = new Application_Service_Schemes();
+		if($this->_hasParam('id')){
+			$combineId = base64_decode($this->_getParam('id'));
+			$expStr=explode("#",$combineId);
+			$shipmentId=(int)$expStr[0];
+			$sampleId=(int)$expStr[1];
+			$vlAssay=(int)$expStr[2];
+			$this->view->result = $schemeService->getVlManualValue($shipmentId,$sampleId,$vlAssay);
+		}
+		if ($this->getRequest()->isPost()) {
+			$params = $this->getRequest()->getPost();
+			$updatedResult=$schemeService->updateVlManualValue($params);
+			$this->view->updatedResult=$updatedResult;
+			$this->view->sampleId=base64_decode($params['sampleId']);
+			$this->view->vlAssay=base64_decode($params['vlAssay']);
+			$this->view->mLowLimit=round($params['manualLowLimit'],4);
+			$this->view->mHighLimit=round($params['manualHighLimit'],4);
+		}
+	}
 
 }
 

@@ -22,8 +22,11 @@
                 </th>
             </tr>
             <tr>
-                <th>Lab or Participant ID <span class="mandatory">*</span></th>
-        <td><input type="text" id="pid" name="pid" size="25" maxlength="45" class="form-control" value="<?php echo $this->rsParticipant['unique_identifier']; ?>" class="isRequired" title="Please enter the Participant's ID here" /></td>
+                <th>Lab or Participant ID</th>
+                    <td>
+                        <?php echo $this->rsParticipant['unique_identifier']; ?>
+                        <input type="hidden" id="pid" name="pid" size="25" maxlength="45" class="form-control" value="<?php echo $this->rsParticipant['unique_identifier']; ?>"/>
+                    </td>
                 <th id="firstNameLable">Participant First Name <span class="mandatory">*</span></th>
                 <td><input type="text" id="pfname" name="pfname" size="25" maxlength="45"  class="form-control isRequired"  title="Please enter the Participant's Lab/First Name here" placeholder="Please enter the Participant's Lab/First Name here" value="<?php echo $this->rsParticipant['first_name']; ?>"/></td>
 
@@ -197,6 +200,7 @@
 
 </table>
 <br>
+<?php if($this->isEditable){ ?>
 <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
     <p>
         <input name="submitbtn" class="btn btn-primary" type="submit"  onclick="validateNow();
@@ -205,7 +209,16 @@
         <input name="reset" class="btn btn-danger" type="button" id="reset" tabindex="8" value="Cancel" onclick="javascript:goto_testers()" /> 
 
     </p>
-</div>	
+</div>
+<?php } ?>
+<?php if(!$this->isEditable){
+		?>
+		<div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+			<a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:goto_testers()" >Back</a>
+		</div>
+		<?php
+}
+?>
 </div>			
 </form>			
 
@@ -239,6 +252,12 @@
         <?php
         }
         ?>
+        <?php if(!$this->isEditable){
+			?>
+			$("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
+			<?php
+		}
+		?>
    });
 
     function validateNow() {

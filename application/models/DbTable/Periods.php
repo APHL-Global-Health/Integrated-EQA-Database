@@ -1,24 +1,23 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract
-{
+class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract {
+
     protected $_name = 'rep_providerrounds';
     protected $_primary = 'ID';
-    
-    public function getAllPeriods($parameters)
-    {
+
+    public function getAllPeriods($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ID','PeriodDescription','ProviderID','EnrolledLabs');
+        $aColumns = array('ID', 'PeriodDescription', 'ProviderID', 'EnrolledLabs', 'StartDate', 'EndDate');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -97,7 +96,7 @@ class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-	
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -149,35 +148,42 @@ class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 
         echo json_encode($output);
     }
-    public function getPeriods(){
-		$sql = $this->select();
-		return $this->fetchAll($sql);
-	}
-    public function addPeriods($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function getPeriods() {
+        $sql = $this->select();
+        return $this->fetchAll($sql);
+    }
+
+    public function addPeriods($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'PeriodDescription'=>$params['PeriodDescription'],
-                      'ProviderID'=>$params['ProviderID'],
-                      'EnrolledLabs'=>$params['EnrolledLabs'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
+            'PeriodDescription' => $params['PeriodDescription'],
+            'ProviderID' => $params['ProviderID'],
+            'EnrolledLabs' => $params['EnrolledLabs'],
+            'EndDate' => $params['EndDate'],
+            'StartDate' => $params['StartDate'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
         return $this->insert($data);
     }
-    public function getPeriodDetails($adminId){
-        return $this->fetchRow($this->select()->where("ID = ? ",$adminId));
-    }
-    
-    public function updatePeriods($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
-        $data = array(
-                      'PeriodDescription'=>$params['PeriodDescription'],
-                      'ProviderID'=>$params['ProviderID'],
-                      'EnrolledLabs'=>$params['EnrolledLabs'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
-        return $this->update($data,"ID=".$params['ID']);
-    }
-}
 
+    public function getPeriodDetails($adminId) {
+        return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
+    }
+
+    public function updatePeriods($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $data = array(
+            'PeriodDescription' => $params['PeriodDescription'],
+            'ProviderID' => $params['ProviderID'],
+            'EnrolledLabs' => $params['EnrolledLabs'],
+            'EndDate' => $params['EndDate'],
+            'StartDate' => $params['StartDate'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
+        return $this->update($data, "ID=" . $params['ID']);
+    }
+
+}

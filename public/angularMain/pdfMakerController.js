@@ -1,9 +1,9 @@
 var pdfModule = angular.module('ReportModule')
 
-pdfModule.controller('PdfController', function ($scope, EptServices, $http, serverReportURL, $timeout) {
+pdfModule.controller('PdfController', function ($scope, EptServices, $http, $timeout) {
     $scope.pdfMake = {};
 
-
+    var serverReportURL = SERVER_API_URL.bacteriologyURL;
     function today() {
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -128,16 +128,16 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         var reportData = new Array();
         var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto']
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Lab Name', style: 'subHeader'},
-                {text: 'Sample Name', style: 'subHeader'},
-                {text: 'Round Name', style: 'subHeader'},
-                {text: 'Remarks', style: 'subHeader'},
-                {text: 'Date', style: 'subHeader'},
-                {text: 'Corrective Action', style: 'subHeader'}
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Sample Name', style: 'subHeader'},
+                    {text: 'Round Name', style: 'subHeader'},
+                    {text: 'Remarks', style: 'subHeader'},
+                    {text: 'Date', style: 'subHeader'},
+                    {text: 'Corrective Action', style: 'subHeader'}
 
-            ];
+                ];
 
         reportData.push(reportHeader);
         console.log(data)
@@ -194,7 +194,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                 contentBold: {
                     fontSize: 8,
                     bold: true,
-                    italic:true,
+                    italic: true,
                 },
                 numeric: {
                     alignment: 'right'
@@ -262,7 +262,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                 },
                 {
                     text: 'Start Of Round  : ' + dataDetails.sampleDetails.startDate + ' - End Of Round  : ' +
-                    dataDetails.sampleDetails.endDate, style: ['content', 'leftData'], margin: [0, 0, 0, 5]
+                            dataDetails.sampleDetails.endDate, style: ['content', 'leftData'], margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Sample : ' + dataDetails.sampleDetails.batchName,
@@ -275,28 +275,50 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ' | Your score ' + dataDetails.results.grainStainReactionScore,
+                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction +
+                            ' | Your score ' + dataDetails.results.grainStainReactionScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Gram Stain : ' + expectedResults.expectedBacterialResults.grainStainReaction
-                    + ' | Possible score ' +  expectedResults.expectedBacterialResults.grainStainReactionScore,
-                    style: ['content', 'leftData','contentBold'],
+                            + ' | Possible score ' + expectedResults.expectedBacterialResults.grainStainReactionScore,
+                    style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ' | Your score ' + dataDetails.results.finalIdentificationScore,
+                    text: "-----------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Final identification : ' + dataDetails.results.finalIdentification +
+                            ' | Your score ' + dataDetails.results.finalIdentificationScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Final identification : ' + expectedResults.expectedBacterialResults.finalIdentification
-                    + ' : Possible score ' +  expectedResults.expectedBacterialResults.finalIdentificationScore,
-                    style: ['content', 'leftData','contentBold'],
+                            + ' : Possible score ' + expectedResults.expectedBacterialResults.finalIdentificationScore,
+                    style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
-
+                {
+                    text: "------------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() +
+                            ' | Your score ' + dataDetails.results.totalMicroAgentsScore + '%',
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Expected Micro Agents : ' + expectedResults.microAst.length + ' : ' + expectedResults.microAst.toString() + ' | Total Possible score ' + expectedResults.totalScore,
+                    style: ['content', 'leftData', 'contentBold'],
+                    margin: [0, 0, 0, 5]
+                },
                 {
                     text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() + ' | Your score ' + dataDetails.results.totalMicroAgentsScore,
                     style: ['content', 'leftData'],
@@ -312,7 +334,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Total Score : ' + (Number(dataDetails.results.finalScore) + Number(dataDetails.results.totalMicroAgentsScore)),
+                    text: 'Total Average Score : ' + Number(dataDetails.results.finalScore) + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -343,8 +365,6 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     , style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
-
-
             ],
 
             footer: function (page, pages) {
@@ -372,28 +392,33 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         pdfMake.createPdf(docDefinition).open();
 
     }
-    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails) {
+    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails, type) {
         try {
             var url = serverReportURL + 'getlabuserresponse';
+            if (angular.isDefined(url)) {
+                url = SERVER_API_URL.bacteriologyParticipant + 'getlabuserresponse';
+            }
+
+
             alerts = $.alert({
                 title: "<i class='fa fa-spin fa-spinner text-success'></i> Fetching data",
                 content: "please wait..."
             });
             $http.post(url, samples)
-                .success(function (response) {
-                    console.log(response);
-                    alerts.close();
-                    if (response.status == 1) {
-                        response.data.sampleDetails = samples;
-                        createUserResponseData(response.data, labDetails)
-                        $scope.pdfMake.userFeedbackResults = response.data;
-                    } else {
-                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                    }
-                })
-                .error(function () {
-                    EptServices.EptServiceObject.returnServerErrorAlert();
-                })
+                    .success(function (response) {
+                        console.log(response);
+                        alerts.close();
+                        if (response.status == 1) {
+                            response.data.sampleDetails = samples;
+                            createUserResponseData(response.data, labDetails)
+                            $scope.pdfMake.userFeedbackResults = response.data;
+                        } else {
+                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                        }
+                    })
+                    .error(function () {
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+                    })
         } catch (err) {
             console.log(err);
         }
@@ -403,14 +428,12 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         var reportData = new Array();
 
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Gram Stain', style: 'subHeader'},
-                {text: 'Gram Stain Score', style: 'subHeader'},
-                {text: 'Grade', style: 'subHeader'},
-
-
-            ];
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Gram Stain', style: 'subHeader'},
+                    {text: 'Gram Stain Score', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'},
+                ];
 
         reportData.push(reportHeader);
 
@@ -462,11 +485,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         var tableWidth1 = ['auto', '*', '*', '*']
 
         var allData = returnGradeDetails(data.results, data.microAgents);
-        console.log(allData)
+        // console.log(allData)
         var reportData = allData.reportData;
         var microAgents = allData.microAgents;
         var expectedResults = returnExpectedAsts(data.expectedResults.expectedASTs);
+        console.log(data);
         expectedResults.expectedBacterialResults = data.expectedResults.expectedResults;
+
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
@@ -484,16 +509,16 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         var reportData = new Array();
         var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto']
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Lab Name', style: 'subHeader'},
-                {text: 'Sample Name', style: 'subHeader'},
-                {text: 'Round Name', style: 'subHeader'},
-                {text: 'Total Sent', style: 'subHeader'},
-                {text: 'Total Rejected', style: 'subHeader'},
-                {text: 'Received', style: 'subHeader'}
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Sample Name', style: 'subHeader'},
+                    {text: 'Round Name', style: 'subHeader'},
+                    {text: 'Total Sent', style: 'subHeader'},
+                    {text: 'Total Rejected', style: 'subHeader'},
+                    {text: 'Received', style: 'subHeader'}
 
-            ];
+                ];
 
         reportData.push(reportHeader);
         console.log(data)
@@ -522,23 +547,25 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         }
     }
 
-
+    $scope.pdfMake.generateRepositoryPdf = function (reportData) {
+        console.log(reportData)
+    }
     $scope.pdfMake.generateParticipatoryReportPdf = function (data) {
         var reportData = new Array();
         var tableWidth = ['auto', '*', '*', '*', '*', '*', 'auto', '*', '*']
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Sample Name', style: 'subHeader'},
-                {text: 'Round Name', style: 'subHeader'},
-                {text: 'Enrolled Labs', style: 'subHeader'},
-                {text: ' Unresponded', style: 'subHeader'},
-                {text: ' Responded', style: 'subHeader'},
-                {text: ' Evaluated', style: 'subHeader'},
-                {text: ' Unevaluated', style: 'subHeader'},
-                {text: 'Response %', style: 'subHeader'}
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Sample Name', style: 'subHeader'},
+                    {text: 'Round Name', style: 'subHeader'},
+                    {text: 'Enrolled Labs', style: 'subHeader'},
+                    {text: ' Unresponded', style: 'subHeader'},
+                    {text: ' Responded', style: 'subHeader'},
+                    {text: ' Evaluated', style: 'subHeader'},
+                    {text: ' Unevaluated', style: 'subHeader'},
+                    {text: 'Response %', style: 'subHeader'}
 
-            ];
+                ];
 
         reportData.push(reportHeader);
         console.log(data)
@@ -573,21 +600,22 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
 
     $scope.pdfMake.generateLabPerformancePdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', '*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
+        var tableWidth = ['auto', '*','*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Lab Name', style: 'subHeader'},
-                {text: 'County', style: 'subHeader'},
-                {text: 'Sample', style: 'subHeader'},
-                {text: 'Round', style: 'subHeader'},
-                {text: 'Micro', style: 'subHeader'},
-                {text: 'Micro Agents', style: 'subHeader'},
-                {text: 'Remarks', style: 'subHeader'},
-                {text: 'Grade', style: 'subHeader'},
-                {text: 'Total', style: 'subHeader'}
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Mfl Code', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Sample', style: 'subHeader'},
+                    {text: 'Round', style: 'subHeader'},
+                    {text: 'Micro', style: 'subHeader'},
+                    {text: 'Micro Agents', style: 'subHeader'},
+                    {text: 'Remarks', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'},
+                    {text: 'Total', style: 'subHeader'}
 
-            ];
+                ];
 
         reportData.push(reportHeader);
         console.log(data)
@@ -597,6 +625,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
                     {text: ' ' + lab.labName, style: ['content']},
+                    {text: ' ' + lab.MflCode, style: ['content']},
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
@@ -623,20 +652,20 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
         var reportData = new Array();
         var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
         var reportHeader =
-            [
-                {text: ' # ', style: 'subHeader'},
-                {text: 'Lab Name', style: 'subHeader'},
-                {text: 'Lab Code', style: 'subHeader'},
-                {text: 'County', style: 'subHeader'},
-                {text: 'Sample', style: 'subHeader'},
-                {text: 'Round', style: 'subHeader'},
-                {text: 'Micro', style: 'subHeader'},
-                {text: 'Agents', style: 'subHeader'},
-                {text: 'Remarks', style: 'subHeader'},
-                {text: 'Grade', style: 'subHeader'},
-                {text: 'Total', style: 'subHeader'}
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Lab Code', style: 'subHeader'},
+                    {text: 'County', style: 'subHeader'},
+                    {text: 'Sample', style: 'subHeader'},
+                    {text: 'Round', style: 'subHeader'},
+                    {text: 'Micro', style: 'subHeader'},
+                    {text: 'Agents', style: 'subHeader'},
+                    {text: 'Remarks', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'},
+                    {text: 'Total', style: 'subHeader'}
 
-            ];
+                ];
 
         reportData.push(reportHeader);
         console.log(data)
@@ -741,7 +770,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-            ;
+                    ;
             var res = alasql('SELECT INTO XLSX("ROUNDS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -757,7 +786,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
             for (var i = 0; i < excelData.length; i++) {
                 var tempArray = {
                     'Laboratory Name': excelData[i].labName,
-                    'Lab Code': excelData[i].unique_identifier,
+                    'MFL Code': excelData[i].MflCode,
                     'County': excelData[i].county,
                     'Sample': excelData[i].batchName,
                     'Round': excelData[i].roundCode,
@@ -800,7 +829,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-            ;
+                    ;
             var res = alasql('SELECT INTO XLSX("LABORATORY PERFORMANCE REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -823,7 +852,6 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                     'Total Evaluated': excelData[i].totalTotalEvaluated,
                     'Total Unevaluated': excelData[i].totalTotalUnevaluated,
                     'Response %': excelData[i].responseRate,
-
 
                 }
                 returnArray.push(tempArray);
@@ -857,7 +885,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-            ;
+                    ;
             var res = alasql('SELECT INTO XLSX("PARTICIPATORY REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -914,7 +942,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-            ;
+                    ;
             var res = alasql('SELECT INTO XLSX("SHIPMENT REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -969,7 +997,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, serv
                         style: 'font-size:30px'
                     }
                 }]
-            ;
+                    ;
             var res = alasql('SELECT INTO XLSX("CORRECTIVE ACTION REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();

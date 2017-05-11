@@ -1,4 +1,18 @@
-<h4 style="width:100%;height:50px;border-bottom:1px solid #777;"><div style="font-size:22.5px;line-height:36px;color:#333;float:left;">List of All Programs</div><div style="margin-top:10px;"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Import Data</a></div></h4>
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;"><div style="font-size:22.5px;line-height:36px;color:#333;float:left;">
+        Imported Repository Data</div>
+    <div style="margin-top:10px;">
+        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;">
+            <i class="icon-download"></i>&nbsp;&nbsp;Import Data</a>
+    </div>
+    <div style="float:right;">
+        &nbsp;&nbsp;
+    </div>
+    <div style="margin-top:10px;">       
+        &nbsp; <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv', 'action' => 'invaliddata'), 'default', true); ?>"
+                  class="btn btn-danger" style="float:right;">
+            <i class="fa fa-close"></i>&nbsp;&nbsp;Invalid Data</a>
+    </div>   
+</h4>
 
 
 <table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover" id="repositoryTable">
@@ -13,6 +27,8 @@
             <th>Result Code</th>
             <th>Grade</th>
             <th>Fail Reason</th>
+            <th>Batch</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +41,135 @@
 <script type="text/javascript" charset="utf-8">
     /* Table initialisation */
     var oTable = null;
+    function approveBatch(BatchID) {
+
+        $.confirm({
+            title: 'Confirm Approval!',
+            theme: 'supervan',
+            content: 'Are you sure want to approve this batch,this action can not be undone ',
+            buttons: {
+                'Approve': {
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                        alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"></i> Approving batch,please wait...!');
+                        approveBatchFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+
+
+    }
+    function approveBatchFinal(BatchID) {
+        try {
+
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'updatebatch', 'format' => 'html')); ?>',
+                dataType: 'text',
+                data: {BatchID: BatchID},
+                success: function (data) {
+                    console.log(data)
+                    alertStartRound.close();
+                    data = JSON.parse(data);
+                    if (data.status == '1') {
+
+                        $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: 'Batch records have been updated'});
+                        //.$('#loader').hide();
+                        window.location = '/admin/importcsv/';
+                        
+                    } else {
+                        $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: data.message});
+                         window.location = '/admin/importcsv/invaliddata'
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#loader').hide();
+                    //alert(data);
+                    alert(xhr.responseText);
+                    //alert(thrownError);
+                }
+            });
+
+
+        } catch (Exception) {
+            console.log(Exception);
+        }
+    }
+
+ function deleteBatch(BatchID) {
+
+        $.confirm({
+            title: 'Confirm Delete!',
+            theme: 'supervan',
+            content: 'Are you sure want to delete this batch,this action can not be undone ',
+            buttons: {
+                'Delete': {
+                    btnClass: 'btn-blue',
+                    action: function () {
+
+                        alertStartRound = $.alert({title: '<i class="fa fa-spin fa-spinner"></i>', content: ' Deleting batch,please wait...!'});
+                        deleteBatchFinal(BatchID)
+
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // $.alert('cancelled !');
+                    }
+                }
+            }
+        })
+
+
+    }
+    function deleteBatchFinal(BatchID) {
+        try {
+
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'deletebatch', 'format' => 'html')); ?>',
+                dataType: 'text',
+                data: {BatchID: BatchID},
+                success: function (data) {
+                    console.log(data)
+                    data = JSON.parse(data);
+                    alertStartRound.close();
+                    if (data.status == '1') {
+
+                        $.alert({title: '<i class="fa fa-check text-success"> Success</i>', content: 'All records in batch deleted'});
+                        //.$('#loader').hide();
+                        window.location = '/admin/importcsv/';
+                        console.log('deleted');
+                    } else {
+                        $.alert({title: '<i class = "fa fa-close text-danger"> Error</i>', content: 'record could not be deleted'});
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#loader').hide();
+                    //alert(data);
+                    alert(xhr.responseText);
+                    //alert(thrownError);
+                }
+            });
+
+
+        } catch (Exception) {
+            console.log(Exception);
+        }
+    }
+
+
+
     $(document).ready(function () {
         oTable = $('#repositoryTable').dataTable({
             "oLanguage": {
@@ -37,6 +182,9 @@
             "sPaginationType": "bootstrap",
             "bRetrieve": true,
             "aoColumns": [
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
                 {"sClass": ""},
                 {"sClass": ""},
                 {"sClass": ""},

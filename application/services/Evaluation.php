@@ -199,84 +199,7 @@ class Application_Service_Evaluation {
         $schemeService = new Application_Service_Schemes();
 
         if ($shipmentResult[0]['scheme_type'] == 'eid') {
-            $counter = 0;
-            $maxScore = 0;
-            foreach ($shipmentResult as $shipment) {
-                $createdOnUser = explode(" ", $shipment['created_on_user']);
-                if (trim($createdOnUser[0]) != "" && $createdOnUser[0] != null && trim($createdOnUser[0]) != "0000-00-00") {
-
-                    $createdOn = new Zend_Date($createdOnUser[0], Zend_Date::ISO_8601);
-                } else {
-                    $datearray = array('year' => 1970, 'month' => 1, 'day' => 01);
-                    $createdOn = new Zend_Date($datearray);
-                }
-
-                $lastDate = new Zend_Date($shipment['lastdate_response'], Zend_Date::ISO_8601);
-                if ($createdOn->compare($lastDate) <=0) {
-                    $results = $schemeService->getEidSamples($shipmentId, $shipment['participant_id']);
-                    $totalScore = 0;
-                    $maxScore = 0;
-                    $mandatoryResult = "";
-                    $scoreResult = "";
-                    $failureReason = array();
-                    foreach ($results as $result) {
-
-                        // matching reported and reference results
-                        if (isset($result['reported_result']) && $result['reported_result'] != null) {
-                            if ($result['reference_result'] == $result['reported_result']) {
-                                $totalScore += $result['sample_score'];
-                            } else {
-                                if ($result['sample_score'] > 0) {
-                                    $failureReason[]['warning'] = "Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
-                                }
-                            }
-                        }
-                        $maxScore += $result['sample_score'];
-
-                        // checking if mandatory fields were entered and were entered right
-                        if ($result['mandatory'] == 1) {
-                            if ((!isset($result['reported_result']) || $result['reported_result'] == "" || $result['reported_result'] == null)) {
-                                $mandatoryResult = 'Fail';
-                                $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was not reported";
-                            } else if (($result['reference_result'] != $result['reported_result'])) {
-                                $mandatoryResult = 'Fail';
-                                $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
-                            }
-                        }
-                    }
-
-                    // checking if total score and maximum scores are the same
-                    if ($totalScore != $maxScore) {
-                        $scoreResult = 'Fail';
-                        $failureReason[]['warning'] = "Participant did not meet the score criteria (Participant Score - <strong>$totalScore</strong> and Required Score - <strong>$maxScore</strong>)";
-                    } else {
-                        $scoreResult = 'Pass';
-                    }
-
-                    // if any of the results have failed, then the final result is fail
-                    if ($scoreResult == 'Fail' || $mandatoryResult == 'Fail') {
-                        $finalResult = 2;
-                    } else {
-                        $finalResult = 1;
-                    }
-                    $shipmentResult[$counter]['shipment_score'] = $totalScore;
-                    $shipmentResult[$counter]['max_score'] = $maxScore;
-                    $shipmentResult[$counter]['final_result'] = $finalResult;
-
-
-                    $fRes = $db->fetchCol($db->select()->from('r_results', array('result_name'))->where('result_id = ' . $finalResult));
-
-                    $shipmentResult[$counter]['display_result'] = $fRes[0];
-                    $shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);
-                    // let us update the total score in DB
-                    $db->update('shipment_participant_map', array('shipment_score' => $totalScore, 'final_result' => $finalResult, 'failure_reason' => $failureReason), "map_id = " . $shipment['map_id']);
-                    $counter++;
-                } else {
-                    $failureReason = array('warning' => "Response was submitted after the last response date.");
-                    $db->update('shipment_participant_map', array('failure_reason' => json_encode($failureReason)), "map_id = " . $shipment['map_id']);
-                }
-            }
-            $db->update('shipment', array('max_score' => $maxScore), "shipment_id = " . $shipmentId);
+			$shipmentResult =  $this->evaluateEid($shipmentResult,$shipmentId);
         } else if ($shipmentResult[0]['scheme_type'] == 'dbs') {
             $counter = 0;
             $maxScore = 0;
@@ -487,7 +410,7 @@ class Application_Service_Evaluation {
 
         $participantData = $participantService->getParticipantDetails($participantId);
         $shipmentData = $schemeService->getShipmentData($shipmentId, $participantId);
-
+       
         if ($scheme == 'eid') {
             $possibleResults = $schemeService->getPossibleResults('eid');
             $evalComments = $schemeService->getSchemeEvaluationComments('eid');
@@ -548,8 +471,6 @@ class Application_Service_Evaluation {
     }
 
     public function viewEvaluation($shipmentId, $participantId, $scheme) {
-
-
         $participantService = new Application_Service_Participants();
         $schemeService = new Application_Service_Schemes();
         $shipmentService = new Application_Service_Shipments();
@@ -839,7 +760,7 @@ class Application_Service_Evaluation {
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_code', 'distribution_date'))
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id')
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
-                ->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id', array('first_name', 'last_name'))
+                ->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id', array('first_name', 'last_name','lab_name','unique_identifier'))
                 ->joinLeft(array('res' => 'r_results'), 'res.result_id=sp.final_result')
                 ->where("s.shipment_id = ?", $shipmentId)
                 ->where("substring(sp.evaluation_status,4,1) != '0'");
@@ -853,6 +774,7 @@ class Application_Service_Evaluation {
         $responseResult = "";
         $vlCalculation = "";
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+		$schemeService = new Application_Service_Schemes();
         $sql = $db->select()->from(array('s' => 'shipment'), array('s.shipment_id', 's.shipment_code', 's.scheme_type', 's.shipment_date', 's.lastdate_response', 's.max_score', 's.shipment_comment'))
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('d.distribution_id', 'd.distribution_code', 'd.distribution_date'))
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array('sp.map_id', 'sp.participant_id', 'sp.shipment_test_date', 'sp.shipment_receipt_date', 'sp.shipment_test_report_date', 'sp.final_result', 'sp.failure_reason', 'sp.shipment_score', 'sp.final_result', 'sp.attributes', 'sp.is_followup', 'sp.is_excluded', 'sp.optional_eval_comment', 'sp.evaluation_comment', 'sp.documentation_score','sp.participant_supervisor'))
@@ -872,6 +794,8 @@ class Application_Service_Evaluation {
         $i = 0;
         //$mapRes="";
         $mapRes = array();
+        $penResult = array();
+		$vlGraphResult = array();
         foreach ($shipmentResult as $res) {
             $dmResult = $db->fetchAll($db->select()->from(array('pmm' => 'participant_manager_map'))
                             ->join(array('dm' => 'data_manager'), 'dm.dm_id=pmm.dm_id', array('institute'))
@@ -916,83 +840,128 @@ class Application_Service_Evaluation {
 			 
                 $shipmentResult[$i]['responseResult'] = $db->fetchAll($sQuery);
             } else if ($res['scheme_type'] == 'eid') {
-
+				
+				$extractionAssay = $schemeService->getEidExtractionAssay();
+                $detectionAssay = $schemeService->getEidDetectionAssay();
+				$attributes = json_decode($res['attributes'], true);
+				
+				if(isset($attributes['extraction_assay'])){
+					//$shipmentResult[$i]['extractionAssayVal']=$extractionAssay[$attributes['extraction_assay']];
+					$shipmentResult[$i]['extractionAssayVal']=(isset($extractionAssay[$attributes['extraction_assay']]) ? $extractionAssay[$attributes['extraction_assay']] : "");
+				}
+				if(isset($attributes['detection_assay'])){
+					
+					$shipmentResult[$i]['detectionAssayVal']=(isset($detectionAssay[$attributes['detection_assay']]) ? $detectionAssay[$attributes['detection_assay']] : "");
+				}
+				
                 $sQuery = $db->select()->from(array('reseid' => 'response_result_eid'), array('reseid.shipment_map_id', 'reseid.sample_id', 'reseid.reported_result', 'responseDate' => 'reseid.created_on'))
                         ->join(array('respr' => 'r_possibleresult'), 'respr.id=reseid.reported_result', array('labResult' => 'respr.response'))
-                        ->join(array('sp' => 'shipment_participant_map'), 'sp.map_id=reseid.shipment_map_id', array('sp.shipment_id', 'sp.participant_id'))
-                        ->join(array('refeid' => 'reference_result_eid'), 'refeid.shipment_id=sp.shipment_id and refeid.sample_id=reseid.sample_id', array('refeid.reference_result', 'refeid.sample_label', 'refeid.mandatory'))
+                        ->join(array('sp' => 'shipment_participant_map'), 'sp.map_id=reseid.shipment_map_id', array('sp.shipment_id', 'sp.participant_id','sp.shipment_receipt_date','sp.shipment_test_date'))
+                        ->join(array('refeid' => 'reference_result_eid'), 'refeid.shipment_id=sp.shipment_id and refeid.sample_id=reseid.sample_id', array('refeid.reference_result', 'refeid.sample_label', 'refeid.mandatory')) 
                         ->join(array('refpr' => 'r_possibleresult'), 'refpr.id=refeid.reference_result', array('referenceResult' => 'refpr.response'))
-                        ->where("reseid.shipment_map_id = ?", $res['map_id']);
+						->where("refeid.control = 0")
+                        ->where("reseid.shipment_map_id = ?", $res['map_id'])
+						->order(array('refeid.sample_id'));
 			
-			
+				//$vlAssayResultSet[$responseAssay['vl_assay']]
                 //error_log($sQuery);
                 $shipmentResult[$i]['responseResult'] = $db->fetchAll($sQuery);
+				
             } else if ($res['scheme_type'] == 'vl') {
-                $schemeService = new Application_Service_Schemes();
                 $vlAssayResultSet = $schemeService->getVlAssay();
                 $vlAssayList = array();
 				
-                //foreach ($vlAssayResultSet as $vlAssayRow) {
-                //    $vlAssayList[$vlAssayRow['id']] = $vlAssayRow['name'];
-                //}
-				//print_r($vlAssayList);die;
                 $vlRange = $schemeService->getVlRange($shipmentId);
                 $results = $schemeService->getVlSamples($shipmentId, $res['participant_id']);
                 //$assayResults = $schemeService->getShipmentParticipantBassedAssay($shipmentId);
 				
                 $attributes = json_decode($res['attributes'], true);
-				$attributes['vl_assay'];
 				
-				
-//				$sQuery = $db->select()->from(array('sp' => 'shipment_participant_map'), array('sp.map_id','sp.participant_id','attributes'))
-//						->where("is_excluded=?",'no')
-//                        ->where("sp.shipment_id = ?", $shipmentId);
-//				$spmResult=$db->fetchAll($sQuery);
 				
 				$sql = $db->select()->from(array('ref' => 'reference_result_vl'),array('sample_id','ref.sample_label'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id',array('s.shipment_id'))
-                ->join(array('sp' => 'shipment_participant_map'),'s.shipment_id=sp.shipment_id',array('sp.map_id','sp.attributes'))
-                ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load'))
-				->where("is_excluded=?",'no')
-                ->where('sp.shipment_id = ? ', $shipmentId);
+					->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id',array('*'))
+					->join(array('sp' => 'shipment_participant_map'),'s.shipment_id=sp.shipment_id',array('sp.map_id','sp.attributes','sp.shipment_receipt_date','sp.shipment_test_date'))
+					->join(array('p' => 'participant'),'p.participant_id=sp.participant_id',array('p.unique_identifier'))
+					->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load'))
+					->where("is_excluded=?",'no')
+					->where('sp.shipment_id = ? ', $shipmentId);
 				$spmResult=$db->fetchAll($sql);
 				
-				$vlCalQuery=$db->select()->from(array('refvlcal' => 'reference_vl_calculation'), array('refvlcal.sample_id','refvlcal.low_limit','refvlcal.high_limit'))
-										->where("refvlcal.vl_assay = ?", $attributes['vl_assay'])
-										->where("refvlcal.shipment_id = ?", $shipmentId);
-				//die;
 				$vlGraphResult = array();
 				foreach($spmResult as $val){
 					$valAttributes = json_decode($val['attributes'], true);
 					if($attributes['vl_assay']==$valAttributes['vl_assay']){
 						if (array_key_exists($val['sample_label'], $vlGraphResult)) {
-							$vlGraphResult[$val['sample_label']]['vl'][]=$val['reported_viral_load'];
+							if (isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low']) && $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low'] <= $val['reported_viral_load'] && isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high']) && $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high'] >= $val['reported_viral_load']) {
+                                $vlGraphResult[$val['sample_label']]['vl'][]=$val['reported_viral_load'];
+                            } else {
+                                $vlGraphResult[$val['sample_label']]['NA'][]=$val['reported_viral_load'];
+                            }
+							//$vlGraphResult[$val['sample_label']]['pId'][]="lab ".$val['unique_identifier'];
 						}else{
-							$vlGraphResult[$val['sample_label']]=array();							
-							$vlGraphResult[$val['sample_label']]['low']= $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low'];
-							$vlGraphResult[$val['sample_label']]['high']= $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high'];
-							
+							$vlGraphResult[$val['sample_label']]=array();
+							if (isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low']) && $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low'] <= $val['reported_viral_load'] && isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high']) && $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high'] >= $val['reported_viral_load']) {
+                                $vlGraphResult[$val['sample_label']]['vl'][]=$val['reported_viral_load'];
+                            } else {
+                                $vlGraphResult[$val['sample_label']]['NA'][]=$val['reported_viral_load'];
+                            }
+							if(isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low'])){
+								$vlGraphResult[$val['sample_label']]['low']= $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['low'];
+							}
+							if(isset($vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high'])){
+								$vlGraphResult[$val['sample_label']]['high']= $vlRange[$valAttributes['vl_assay']][$val['sample_id']]['high'];
+							}
 						}
 					}
 				}
-				
 				//print_r($vlGraphResult);
+				
+				//<-- count no.of labs participans in particular sample
+				$cQuery = $db->select()->from(array('ref' => 'reference_result_vl'),array('sample_id','ref.sample_label'))
+					->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id',array('s.*'))
+					->join(array('sp' => 'shipment_participant_map'),'s.shipment_id=sp.shipment_id',array('sp.map_id','sp.attributes','sp.shipment_receipt_date','sp.shipment_test_date'))
+					->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load'))
+					->where('sp.shipment_id = ? ', $shipmentId);
+				
+				$cResult=$db->fetchAll($cQuery);
+				
+				$labResult = array();
+				foreach($cResult as $val){
+					$valAttributes = json_decode($val['attributes'], true);
+					if($attributes['vl_assay']==$valAttributes['vl_assay']){
+						if (array_key_exists($val['sample_label'], $labResult)) {
+							$labResult[$val['sample_label']]+=1;
+						}else{
+							$labResult[$val['sample_label']]=array();
+							$labResult[$val['sample_label']]=1;
+						}
+					}
+				}
+				//-------->
+				
+				//print_r($labResult);
 				//die;
                 $counter = 0;
                 $toReturn = array();
                 foreach ($results as $result) {
                     //$toReturn = array();
                     $responseAssay = json_decode($result['attributes'], true);
-                    $toReturn[$counter]['vl_assay'] = $vlAssayResultSet[$responseAssay['vl_assay']];
+                    $toReturn[$counter]['vl_assay'] = isset($vlAssayResultSet[$responseAssay['vl_assay']]) ? $vlAssayResultSet[$responseAssay['vl_assay']] : "";
                     $responseAssay = $responseAssay['vl_assay'];
-
+					
+					$vlGraphResult[$result['sample_label']]['pVal']=$result['reported_viral_load'];
+					//print_r($vlGraphResult[$result['sample_label']]['vl']);die;
+					
                     $toReturn[$counter]['sample_label'] = $result['sample_label'];
                     $toReturn[$counter]['shipment_map_id'] = $result['map_id'];
                     $toReturn[$counter]['shipment_id'] = $result['shipment_id'];
                     $toReturn[$counter]['responseDate'] = $result['responseDate'];
                     $toReturn[$counter]['shipment_score'] = $result['shipment_score'];
+                    $toReturn[$counter]['shipment_test_date'] = $result['shipment_test_date'];
+                    $toReturn[$counter]['shipment_receipt_date'] = $result['shipment_receipt_date'];
                     $toReturn[$counter]['max_score'] = $result['max_score'];
                     $toReturn[$counter]['reported_viral_load'] = $result['reported_viral_load'];
+                    $toReturn[$counter]['no_of_participants'] = $labResult[$result['sample_label']];
                     if (isset($vlRange[$responseAssay])) {
                         // matching reported and low/high limits
                         if (isset($result['reported_viral_load']) && $result['reported_viral_load'] != null) {
@@ -1003,7 +972,7 @@ class Application_Service_Evaluation {
                             }
                         }
 
-                        if (isset($result['reported_viral_load']) && $result['reported_viral_load'] != null) {
+                        if (isset($result['reported_viral_load']) && $result['reported_viral_load'] != null && trim($result['reported_viral_load']) != null) {
                             if ($vlRange[$responseAssay][$result['sample_id']]['low'] <= $result['reported_viral_load'] && $vlRange[$responseAssay][$result['sample_id']]['high'] >= $result['reported_viral_load']) {
                                 $grade = 'Acceptable';
                             } else {
@@ -1013,7 +982,9 @@ class Application_Service_Evaluation {
                                     $grade = '-';
                                 }
                             }
-                        }
+                        }else{
+							$grade = 'Not Acceptable';
+						}
 
                         $toReturn[$counter]['low'] = $vlRange[$responseAssay][$result['sample_id']]['low'];
                         $toReturn[$counter]['high'] = $vlRange[$responseAssay][$result['sample_id']]['high'];
@@ -1027,49 +998,35 @@ class Application_Service_Evaluation {
                         $grade = 'Not Applicable';
                     }
                     $toReturn[$counter]['grade'] = $grade;
-
-
+					
                     $counter++;
                 }
-
+				
                 $shipmentResult[$i]['responseResult'] = $toReturn;
+				
             }
-
+			
             $i++;
             $db->update('shipment_participant_map', array('report_generated' => 'yes'), "map_id=" . $res['map_id']);
             $db->update('shipment', array('status' => 'evaluated'), "shipment_id=" . $shipmentId);
         }
-        if ($res['scheme_type'] == 'vl') {
-            //$schemeService = new Application_Service_Schemes();
-            //$vlAssayResultSet = $schemeService->getVlAssay();
-			$vlAssayResultSet = $db->fetchAll($db->select()->from('r_vl_assay'));
-			
-            foreach ($vlAssayResultSet as $vlAssayRow) {
-                $vlCalRes = $db->fetchAll($db->select()->from(array('vlCal' => 'reference_vl_calculation'))
-                                ->join(array('refVl' => 'reference_result_vl'), 'refVl.shipment_id=vlCal.shipment_id and vlCal.sample_id=refVl.sample_id', array('refVl.sample_label', 'refVl.mandatory'))
-                                ->where("vlCal.shipment_id=?", $res['shipment_id'])->where("vlCal.vl_assay=?", $vlAssayRow['id']));
-
-                if (count($vlCalRes) > 0) {
-                    $vlCalculation[$vlAssayRow['id']] = $vlCalRes;
-                    $vlCalculation[$vlAssayRow['id']]['vlAssay'] = $vlAssayRow['name'];
-                    $vlCalculation[$vlAssayRow['id']]['shortName'] = $vlAssayRow['short_name'];
-                }
-            }
-        }
+        
 		
-        $result = array('shipment' => $shipmentResult, 'vlCalculation' => $vlCalculation, 'dmResult' => $mapRes,'vlGraphResult'=>$vlGraphResult);
+        $result = array('shipment' => $shipmentResult,'dmResult' => $mapRes,'vlGraphResult'=>$vlGraphResult);
 
         return $result;
     }
 
     public function getSummaryReportsInPdf($shipmentId) {
         $responseResult = "";
+		$vlCalculation = "";
+		$penResult = "";
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('s' => 'shipment'), array('s.shipment_id', 's.shipment_code', 's.scheme_type', 's.shipment_date', 's.lastdate_response', 's.max_score'))
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('sl.scheme_name'))
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('d.distribution_code'))
                 ->where("s.shipment_id = ?", $shipmentId);
-        //error_log($sql);
+		
         $shipmentResult = $db->fetchRow($sql);
         $i = 0;
         if ($shipmentResult != "") {
@@ -1225,54 +1182,262 @@ class Application_Service_Evaluation {
                 $shipmentResult['participantScores'] = $db->fetchAll($sql);
             } else if ($shipmentResult['scheme_type'] == 'eid') {
                 $schemeService = new Application_Service_Schemes();
-
                 $extractionAssay = $schemeService->getEidExtractionAssay();
                 $detectionAssay = $schemeService->getEidDetectionAssay();
+				$pQuery = $db->select()->from(array('spm' => 'shipment_participant_map'), array('spm.map_id', 'spm.shipment_id','spm.documentation_score','participant_count' => new Zend_Db_Expr('count("participant_id")'),'reported_count' => new Zend_Db_Expr("SUM(shipment_test_date <> '0000-00-00')")))
+                        ->joinLeft(array('res' => 'r_results'), 'res.result_id=spm.final_result', array('result_name'))
+                        ->where("spm.shipment_id = ?", $shipmentId)
+                        ->group('spm.shipment_id');
+				$totParticipantsRes = $db->fetchRow($pQuery);
+				if($totParticipantsRes!=""){
+					$shipmentResult['participant_count']=$totParticipantsRes['participant_count'];
+					//Zend_Debug::dump($shipmentResult);die;
+				}
+				
+				$sQuery = $db->select()->from(array('spm' => 'shipment_participant_map'), array('spm.map_id', 'spm.shipment_id', 'spm.shipment_score', 'spm.documentation_score', 'spm.attributes'))
+                        //->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.status'))
+                        ->joinLeft(array('res' => 'r_results'), 'res.result_id=spm.final_result', array('result_name'))
+                        ->where("spm.shipment_id = ?", $shipmentId)
+                        ->where("spm.shipment_test_report_date IS NOT NULL")
+                        ->where("spm.shipment_test_report_date!=''")
+                        ->group('spm.map_id');
+				
+                $sQueryRes = $db->fetchAll($sQuery);
+				
+				if (count($sQueryRes) > 0) {
+					$shipmentResult['summaryResult'][] = $sQueryRes;
+				}
+				
+				$cQuery = $db->select()->from(array('refeid' => 'reference_result_eid'),array('refeid.sample_id', 'refeid.sample_label','refeid.reference_result','refeid.mandatory'))
+						->join(array('s' => 'shipment'), 's.shipment_id=refeid.shipment_id',array('s.shipment_id'))
+						->join(array('spm' => 'shipment_participant_map'),'s.shipment_id=spm.shipment_id',array('spm.map_id','spm.attributes','spm.shipment_score'))
+						->joinLeft(array('reseid' => 'response_result_eid'), 'reseid.shipment_map_id = spm.map_id and reseid.sample_id = refeid.sample_id', array('reported_result'))
+						->where('spm.shipment_id = ? ', $shipmentId)
+						->where("spm.shipment_test_report_date IS NOT NULL")
+						->where("refeid.control = 0")
+						->where("spm.shipment_test_report_date!=''");
 
-                foreach ($extractionAssay as $extractionAssayVal) {
-                    foreach ($detectionAssay as $detectionAssayVal) {
-                        $extId = $extractionAssayVal['id'];
-                        $detId = $detectionAssayVal['id'];
-
-                        $sQuery = $db->select()->from(array('spm' => 'shipment_participant_map'), array('spm.map_id', 'spm.shipment_id', 'spm.shipment_score', 'spm.documentation_score', 'spm.attributes'))
-                                ->join(array('refeid' => 'reference_result_eid'), 'refeid.shipment_id=spm.shipment_id', array('refeid.sample_label'))
-                                ->join(array('eidExtrac' => 'r_eid_extraction_assay'), "eidExtrac.id=$extId", array('eidExtracName' => 'eidExtrac.name'))
-                                ->join(array('eidDetec' => 'r_eid_detection_assay'), "eidDetec.id=$detId", array('eidDetecName' => 'eidDetec.name'))
-                                ->where("spm.shipment_id = ?", $shipmentId)
-                                ->where("spm.attributes LIKE '%\"extraction_assay\":\"$extId\"%' ")
-                                ->where("spm.attributes LIKE '%\"detection_assay\":\"$detId\"%' ")
-                                ->where("spm.final_result IS NOT NULL")
-                                ->where("spm.final_result!=''")
-                                //->where("spm.final_result = ?",'2')
-                                ->where("substring(spm.evaluation_status,4,1) != '0'")
-                                ->group('spm.map_id');
-                        //echo "<br/>";
-                        $sQueryRes = $db->fetchAll($sQuery);
-
-                        if (count($sQueryRes) > 0) {
-                            $tQuery = $db->select()->from(array('refeid' => 'reference_result_eid'), array('refeid.sample_id', 'refeid.sample_label', 'refeid.mandatory'))
-                                    ->join(array('reseid' => 'response_result_eid'), 'reseid.sample_id=refeid.sample_id', array('correctRes' => new Zend_Db_Expr("SUM(CASE WHEN reseid.reported_result=refeid.reference_result THEN 1 ELSE 0 END)")))
-                                    ->join(array('spm' => 'shipment_participant_map'), 'reseid.shipment_map_id=spm.map_id and refeid.shipment_id=spm.shipment_id', array())
-                                    ->where("spm.attributes LIKE '%\"extraction_assay\":\"$extId\"%' ")
-                                    ->where("spm.attributes LIKE '%\"detection_assay\":\"$detId\"%' ")
-                                    ->where("spm.final_result IS NOT NULL")
-                                    ->where("spm.final_result!=''")
-                                    ->where("substring(spm.evaluation_status,4,1) != '0'")
-                                    ->where("spm.shipment_id = ?", $shipmentId)
-                                    ->group(array("refeid.sample_id"));
-                            $shipmentResult['summaryResult'][] = $sQueryRes;
-                            $shipmentResult['summaryResult'][count($shipmentResult['summaryResult']) - 1]['correctCount'] = $db->fetchAll($tQuery);
-                        }
-                    }
-                }
+				$cResult=$db->fetchAll($cQuery);
+				$correctResult = array();
+				foreach($cResult as $cVal){
+					//Formed correct result
+					if (array_key_exists($cVal['sample_label'], $correctResult)) {
+						if($cVal['reported_result']==$cVal['reference_result']){
+							$correctResult[$cVal['sample_label']]+=1;
+						}
+					}else{
+						$correctResult[$cVal['sample_label']]=array();
+						if($cVal['reported_result']==$cVal['reference_result']){
+							$correctResult[$cVal['sample_label']]=1;
+						}else{
+							$correctResult[$cVal['sample_label']]=0;
+						}
+					}
+				}
+				
+				
+				$shipmentResult['correctRes'] = $correctResult;
+				
+				$extAssayResult = array();
+				$correctRes=0;
+				$maxScore = 0;
+				$belowScore = 0;
+				
+				foreach($sQueryRes as $sVal){
+					$valAttributes = json_decode($sVal['attributes'], true);
+					foreach ($extractionAssay as $eKey=>$extractionAssayVal) {
+						if($eKey==$valAttributes['extraction_assay']){
+							if (array_key_exists($eKey,$extAssayResult)) {
+								
+								$extAssayResult[$eKey]['participantCount']=(isset($extAssayResult[$eKey]['participantCount']) ? $extAssayResult[$eKey]['participantCount']+1 : "1");
+								
+								if ($shipmentResult['max_score'] == $sVal['shipment_score']) {
+									$extAssayResult[$eKey]['maxScore']=(isset($extAssayResult[$eKey]['maxScore']) ? $extAssayResult[$eKey]['maxScore']+1 : "1");
+								}else{
+									$extAssayResult[$eKey]['belowScore']=(isset($extAssayResult[$eKey]['belowScore']) ? $extAssayResult[$eKey]['belowScore']+1 : "1");
+								}
+								
+								$cQuery = $db->select()->from(array('refeid' => 'reference_result_eid'),array('refeid.sample_id', 'refeid.sample_label','refeid.reference_result','refeid.mandatory'))
+									->joinLeft(array('reseid' => 'response_result_eid'), 'reseid.sample_id = refeid.sample_id', array('reported_result'))
+									->where('refeid.shipment_id = ? ', $shipmentId)
+									->where("refeid.control = 0")
+									->where('reseid.shipment_map_id = ? ', $sVal['map_id']);
+									
+								$cResult=$db->fetchAll($cQuery);
+								foreach($cResult as $val){
+									if($val['reported_result']==$val['reference_result']){
+										$extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']=(isset($extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']) ? $extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']+1 : "1");
+									}else{
+										$extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']=(isset($extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']) ? $extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes'] : "0");
+									}
+								}
+							}else{
+								
+								$extAssayResult[$eKey]=array();
+								$extAssayResult[$eKey]['vlAssay']=$extractionAssayVal;
+								$extAssayResult[$eKey]['participantCount']=1;
+								if ($shipmentResult['max_score'] == $sVal['shipment_score']) {
+									$extAssayResult[$eKey]['maxScore']=1;
+								}else{
+									$extAssayResult[$eKey]['belowScore']=1;
+								}
+								
+								
+								$cQuery = $db->select()->from(array('refeid' => 'reference_result_eid'),array('refeid.sample_id', 'refeid.sample_label','refeid.reference_result','refeid.mandatory'))
+									->joinLeft(array('reseid' => 'response_result_eid'), 'reseid.sample_id = refeid.sample_id', array('reported_result'))
+									->where('refeid.shipment_id = ? ', $shipmentId)
+									->where("refeid.control = 0")
+									->where('reseid.shipment_map_id = ? ', $sVal['map_id']);
+								
+								$cResult=$db->fetchAll($cQuery);
+								
+								foreach($cResult as $val){
+									if($val['reported_result']==$val['reference_result']){
+										$extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']=(isset($extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']) ? $extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']+1 : "1");
+									}else{
+										$extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']=(isset($extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']) ? $extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes'] : "0");
+									}
+								}
+								//$extAssayResult[$eKey]['specimen'][$val['sample_label']]['correctRes']=$correctRes;
+							}
+							
+						}
+					}
+				}
+				
+				$shipmentResult['avgAssayResult'] = $extAssayResult;
+				//Zend_Debug::dump($shipmentResult);
+				//die;
             } else if ($shipmentResult['scheme_type'] == 'vl') {
                 
-            }
-
+				$sQuery = $db->select()->from(array('spm' => 'shipment_participant_map'), array('spm.map_id', 'spm.shipment_id', 'spm.shipment_score', 'spm.documentation_score', 'spm.attributes','spm.is_excluded'))
+                        ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.status'))
+                        ->joinLeft(array('res' => 'r_results'), 'res.result_id=spm.final_result', array('result_name'))
+                        ->where("spm.shipment_id = ?", $shipmentId)
+                        ->where("spm.shipment_test_report_date IS NOT NULL")
+                        ->where("spm.shipment_test_report_date!=''")
+                        ->group('spm.map_id');
+				
+                $sQueryRes = $db->fetchAll($sQuery);
+				if (count($sQueryRes) > 0) {
+					$shipmentResult['summaryResult'][] = $sQueryRes;
+				}
+				
+				$query=$db->select()->from(array('refvl' => 'reference_result_vl'),array('refvl.sample_score'))
+								
+								->where('refvl.control!=1')
+								->where('refvl.shipment_id = ? ',$shipmentId);
+				$smpleResult=$db->fetchAll($query);
+				$shipmentResult['no_of_samples']=count($smpleResult);
+				
+				$vlAssayResultSet = $db->fetchAll($db->select()->from('r_vl_assay'));
+				
+				//print_r($shipmentResult);die;
+				$refVlQuery=$db->select()->from(array('ref' => 'reference_vl_calculation'),array('ref.vl_assay'))
+								->where('ref.shipment_id = ? ',$shipmentId)
+								->group('vl_assay');
+				
+				$vlQuery=$db->select()->from(array('vl' => 'r_vl_assay'),array('vl.id','vl.name','vl.short_name'))
+								->where("vl.id NOT IN ($refVlQuery)");
+				$pendingResult=$db->fetchAll($vlQuery);
+				$penResult = array();
+				foreach ($pendingResult as $pendingRow) {
+					$cQuery = $db->select()->from(array('ref' => 'reference_result_vl'),array('ref.sample_id','ref.sample_label'))
+							->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id',array('s.shipment_id'))
+							->join(array('sp' => 'shipment_participant_map'),'s.shipment_id=sp.shipment_id',array('sp.map_id','sp.attributes'))
+							->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load'))
+							->where('ref.control!=1')
+							->where('sp.shipment_id = ? ', $shipmentId);
+					
+					$cResult=$db->fetchAll($cQuery);
+					
+					foreach($cResult as $val){
+						$valAttributes = json_decode($val['attributes'], true);
+						if($pendingRow['id']==$valAttributes['vl_assay']){
+							if (array_key_exists($pendingRow['id'], $penResult)) {
+								$penResult[$pendingRow['id']]['specimen'][$val['sample_label']][]=$val['reported_viral_load'];
+								if($pendingRow['id']==6){
+									if(isset($penResult[$pendingRow['id']]['otherAssayName'])){
+										$valAttributes['other_assay'] = (isset($valAttributes['other_assay']) ? $valAttributes['other_assay'] : "");
+										if(!in_array($valAttributes['other_assay'],$penResult[$pendingRow['id']]['otherAssayName'])){
+											$penResult[$pendingRow['id']]['otherAssayName'][]=$valAttributes['other_assay'];	
+										}
+									}
+								}
+							}else{
+								$penResult[$pendingRow['id']]=array();
+								$penResult[$pendingRow['id']]['specimen'][$val['sample_label']][]=$val['reported_viral_load'];
+								$penResult[$pendingRow['id']]['vlAssay']=$pendingRow['name'];
+								$penResult[$pendingRow['id']]['shortName']=$pendingRow['short_name'];
+								if($pendingRow['id']==6){
+									$penResult[$pendingRow['id']]['otherAssayName'][]=(isset($valAttributes['other_assay']) ? $valAttributes['other_assay'] : "");
+								}
+								
+							}
+						}
+					}
+				}
+				//print_r($penResult);
+				//die;
+				foreach ($vlAssayResultSet as $vlAssayRow) {
+					$vlCalRes = $db->fetchAll($db->select()->from(array('vlCal' => 'reference_vl_calculation'))
+									->join(array('refVl' => 'reference_result_vl'), 'refVl.shipment_id=vlCal.shipment_id and vlCal.sample_id=refVl.sample_id', array('refVl.sample_label', 'refVl.mandatory'))
+									->where("vlCal.shipment_id=?", $shipmentId)->where("vlCal.vl_assay=?", $vlAssayRow['id'])->where("refVl.control!=1"));
+					
+					$cQuery = $db->select()->from(array('ref' => 'reference_result_vl'),array('ref.sample_id','ref.sample_label'))
+						->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id',array('s.shipment_id'))
+						->join(array('sp' => 'shipment_participant_map'),'s.shipment_id=sp.shipment_id',array('sp.map_id','sp.attributes'))
+						->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load'))
+						->where('ref.control!=1')
+						->where('sp.shipment_id = ? ', $shipmentId);
+					
+					$cResult=$db->fetchAll($cQuery);
+					
+					$labResult = array();
+					$otherAssayName = array();
+					
+					foreach($cResult as $val){
+						$valAttributes = json_decode($val['attributes'], true);
+						if($vlAssayRow['id']==$valAttributes['vl_assay']){
+							if($vlAssayRow['id']==6){
+								if(isset($valAttributes['other_assay'])){
+									$otherAssayName[]=$valAttributes['other_assay'];
+								}else{
+									$otherAssayName[]="";
+								}
+							}
+							if (array_key_exists($val['sample_label'], $labResult)) {
+								$labResult[$val['sample_label']]+=1;
+							}else{
+								$labResult[$val['sample_label']]=array();
+								$labResult[$val['sample_label']]=1;
+							}
+						}
+					}
+					
+					if (count($vlCalRes) > 0) {
+						
+						
+						$vlCalculation[$vlAssayRow['id']] = $vlCalRes;
+						$vlCalculation[$vlAssayRow['id']]['vlAssay'] = $vlAssayRow['name'];
+						$vlCalculation[$vlAssayRow['id']]['shortName'] = $vlAssayRow['short_name'];
+						$vlCalculation[$vlAssayRow['id']]['participant-count'] = $labResult;
+						if($vlAssayRow['id']==6){
+							$vlCalculation[$vlAssayRow['id']]['otherAssayName']=array_unique($otherAssayName);
+						}
+					}
+				}
+				//print_r($vlCalculation);
+				//die;
+			}
+            
             $i++;
         }
+		$result = array('shipment' => $shipmentResult, 'vlCalculation' => $vlCalculation,'pendingAssay'=>$penResult);
+
+        return $result;
         //Zend_Debug::dump($shipmentResult);die;
-        return $shipmentResult;
+        //return $shipmentResult;
     }
 
     public function getResponseReports($shipmentId) {
@@ -1293,24 +1458,28 @@ class Application_Service_Evaluation {
     }
 	
 	
-	public function evaluateDtsViralLoad($shipmentResult,$shipmentId,$reEvaluate){
+    public function evaluateDtsViralLoad($shipmentResult,$shipmentId,$reEvaluate){
 		$counter = 0;
 		$maxScore = 0;
 		$scoreHolder = array();
+		$finalResult = null;
 		$schemeService = new Application_Service_Schemes();
 		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
 		$file = APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini";
 		$config = new Zend_Config_Ini($file, APPLICATION_ENV);
+		$passPercentage = $config->evaluation->vl->passPercentage;
 	
 		$vlRange = $schemeService->getVlRange($shipmentId);
+		
 		if ($reEvaluate || $vlRange == null || $vlRange == "" || count($vlRange) == 0) {
 			$schemeService->setVlRange($shipmentId);
 			$vlRange = $schemeService->getVlRange($shipmentId);
 		}
 
 		foreach ($shipmentResult as $shipment) {
-			$createdOnUser = explode(" ", $shipment['created_on_user']);
+			
+			$createdOnUser = explode(" ", $shipment['shipment_test_report_date']);
 			if (trim($createdOnUser[0]) != "" && $createdOnUser[0] != null && trim($createdOnUser[0]) != "0000-00-00") {
 
 				$createdOn = new Zend_Date($createdOnUser[0], Zend_Date::ISO_8601);
@@ -1320,6 +1489,7 @@ class Application_Service_Evaluation {
 			}
 
 			$lastDate = new Zend_Date($shipment['lastdate_response'], Zend_Date::ISO_8601);
+			
 			//Zend_Debug::dump($createdOn->isEarlier($lastDate));die;
 			if ($createdOn->compare($lastDate,Zend_date::DATES) <= 0) {
 
@@ -1333,79 +1503,252 @@ class Application_Service_Evaluation {
 				$attributes = json_decode($shipment['attributes'], true);
 
 				foreach ($results as $result) {
+					$calcResult = "";
 					$responseAssay = json_decode($result['attributes'], true);
 					$responseAssay = isset($responseAssay['vl_assay']) ? $responseAssay['vl_assay'] : "";
 					if (isset($vlRange[$responseAssay])) {
 						// matching reported and low/high limits
 						if (isset($result['reported_viral_load']) && $result['reported_viral_load'] != null) {
-							if ($vlRange[$responseAssay][$result['sample_id']]['low'] <= $result['reported_viral_load'] && $vlRange[$responseAssay][$result['sample_id']]['high'] >= $result['reported_viral_load']) {
+							if (isset($vlRange[$responseAssay][$result['sample_id']]) && $vlRange[$responseAssay][$result['sample_id']]['low'] <= $result['reported_viral_load'] && $vlRange[$responseAssay][$result['sample_id']]['high'] >= $result['reported_viral_load']) {
 								$totalScore += $result['sample_score'];
+								$calcResult = "pass";
 							} else {
 								if ($result['sample_score'] > 0) {
 									$failureReason[]['warning'] = "Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
 								}
+								$calcResult = "fail";
 							}
 						}
 					} else {
 						$totalScore = "N/A";
+						$calcResult = "excluded";
 					}
 
 					$maxScore += $result['sample_score'];
+					
+					$db->update('response_result_vl', array('calculated_score' => $calcResult), "shipment_map_id = " . $result['map_id'] . " and sample_id = " . $result['sample_id']);
 
-					// checking if mandatory fields were entered and were entered right
-					if ($result['mandatory'] == 1) {
-						if ((!isset($result['reported_viral_load']) || $result['reported_viral_load'] == "" || $result['reported_viral_load'] == null)) {
-							$mandatoryResult = 'Fail';
-							$failureReason[]['warning'] = "Mandatory Sample <strong>" . $result['sample_label'] . "</strong> was not reported";
+					//// checking if mandatory fields were entered and were entered right
+					//if ($result['mandatory'] == 1) {
+					//	if ((!isset($result['reported_viral_load']) || $result['reported_viral_load'] == "" || $result['reported_viral_load'] == null)) {
+					//		$mandatoryResult = 'Fail';
+					//		$failureReason[]['warning'] = "Mandatory Sample <strong>" . $result['sample_label'] . "</strong> was not reported";
+					//	}
+					//	//else if(($result['reported_viral_load'] != $result['reported_viral_load'])){
+					//	//	$mandatoryResult = 'Fail';
+					//	//	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> was reported wrongly";
+					//	//}
+					//}
+				}
+
+					
+					
+					// if we are excluding this result, then let us not give pass/fail				
+					if ($shipment['is_excluded'] == 'yes') {
+						$finalResult = '';
+						$totalScore = 0;
+						$failureReason = array();
+						$shipmentResult[$counter]['shipment_score'] = $responseScore = 0;
+						$shipmentResult[$counter]['documentation_score'] = 0;
+						$shipmentResult[$counter]['display_result'] = 'Excluded';
+						$shipmentResult[$counter]['is_followup'] = 'yes';
+						$failureReason[] = array('warning' => 'Excluded from Evaluation');
+						$finalResult = 3;
+						$shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);
+					} else {
+						$shipment['is_excluded'] = 'no';
+								
+		
+						// checking if total score and maximum scores are the same
+						if ($totalScore == 'N/A') {
+							$failureReason[]['warning'] = "Could not determine score. Not enough responses found in the chosen VL Assay.";
+							$scoreResult = 'Not Evaluated';
+						} else if ($totalScore != $maxScore) {
+							$scoreResult = 'Fail';
+							if($maxScore != 0){
+								$totalScore = ($totalScore/$maxScore)*100;
+							}
+							$failureReason[]['warning'] = "Participant did not meet the score criteria (Participant Score - <strong>$totalScore</strong> and Required Score - <strong>$passPercentage</strong>)";
+						} else {
+							if($maxScore != 0){
+								$totalScore = ($totalScore/$maxScore)*100;
+							}
+							$scoreResult = 'Pass';
 						}
-						//else if(($result['reported_viral_load'] != $result['reported_viral_load'])){
-						//	$mandatoryResult = 'Fail';
-						//	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> was reported wrongly";
-						//}
-					}
-				}
-
-				// checking if total score and maximum scores are the same
-				if ($totalScore == 'N/A') {
-					$failureReason[]['warning'] = "Could not determine score. Not enough responses found in the chosen VL Assay.";
-					$scoreResult = 'Fail';
-				} else if ($totalScore != $maxScore) {
-					$scoreResult = 'Fail';
-					$failureReason[]['warning'] = "Participant did not meet the score criteria (Participant Score - <strong>$totalScore</strong> and Required Score - <strong>$maxScore</strong>)";
-				} else {
-					$scoreResult = 'Pass';
-				}
-
-
-				// if any of the results have failed, then the final result is fail
-				if ($scoreResult == 'Fail' || $mandatoryResult == 'Fail') {
-					$finalResult = 2;
-				} else {
-					$finalResult = 1;
-				}
-				$shipmentResult[$counter]['shipment_score'] = $totalScore;
-				$shipmentResult[$counter]['max_score'] = $maxScore;
-
-				$fRes = $db->fetchCol($db->select()->from('r_results', array('result_name'))->where('result_id = ' . $finalResult));
-
-				$shipmentResult[$counter]['display_result'] = $fRes[0];
-				$shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);
-
-				// let us update the total score in DB
-				if ($totalScore == 'N/A') {
-					$totalScore = 0;
-				}
+		
+		
+						// if $finalResult == 3 , then  excluded
+						
+						if ($scoreResult == 'Not Evaluated') {
+							$finalResult = 4;
+						}
+						else if ($scoreResult == 'Fail' || $mandatoryResult == 'Fail') {
+							$finalResult = 2;
+						} else {
+							$finalResult = 1;
+						}
+						
+						$shipmentResult[$counter]['shipment_score'] = $totalScore;
+						$shipmentResult[$counter]['max_score'] = $passPercentage; //$maxScore;
+						
+						
+		
+						$fRes = $db->fetchCol($db->select()->from('r_results', array('result_name'))->where('result_id = ' . $finalResult));
+		
+						$shipmentResult[$counter]['display_result'] = $fRes[0];
+						$shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);
+						//Zend_Debug::dump($shipmentResult[$counter]);
+						// let us update the total score in DB
+						if ($totalScore == 'N/A') {
+							$totalScore = 0;
+						}
+						
+						
+						
+						
+						
+					}				
+				
+				
+				
 				$nofOfRowsUpdated = $db->update('shipment_participant_map', array('shipment_score' => $totalScore, 'final_result' => $finalResult, 'failure_reason' => $failureReason), "map_id = " . $shipment['map_id']);
-				$counter++;
+				
 			} else {
 				$failureReason = array('warning' => "Response was submitted after the last response date.");
 
 				$db->update('shipment_participant_map', array('failure_reason' => json_encode($failureReason)), "map_id = " . $shipment['map_id']);
 			}
+			$counter++;
 		}
 		$db->update('shipment', array('max_score' => $maxScore), "shipment_id = " . $shipmentId);
 		return $shipmentResult;
 	}
+	
+	
+	
+	public function evaluateEid($shipmentResult,$shipmentId){
+		
+		$counter = 0;
+		$maxScore = 0;
+		$scoreHolder = array();
+		$finalResult = null;
+		$schemeService = new Application_Service_Schemes();
+		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
+		
+            foreach ($shipmentResult as $shipment) {
+                $createdOnUser = explode(" ", $shipment['shipment_test_report_date']);
+                if (trim($createdOnUser[0]) != "" && $createdOnUser[0] != null && trim($createdOnUser[0]) != "0000-00-00") {
+
+                    $createdOn = new Zend_Date($createdOnUser[0], Zend_Date::ISO_8601);
+                } else {
+                    $datearray = array('year' => 1970, 'month' => 1, 'day' => 01);
+                    $createdOn = new Zend_Date($datearray);
+                }
+
+                $lastDate = new Zend_Date($shipment['lastdate_response'], Zend_Date::ISO_8601);
+                if ($createdOn->compare($lastDate) <=0) {
+                    $results = $schemeService->getEidSamples($shipmentId, $shipment['participant_id']);
+                    $totalScore = 0;
+                    $maxScore = 0;
+                    $mandatoryResult = "";
+                    $scoreResult = "";
+                    $failureReason = array();
+                    foreach ($results as $result) {
+                        // matching reported and reference results
+                        if (isset($result['reported_result']) && $result['reported_result'] != null) {
+                            if ($result['reference_result'] == $result['reported_result']) {
+								if(0 == $result['control']) {
+									$totalScore += $result['sample_score'];
+								}
+                            } else {
+                                if ($result['sample_score'] > 0) {
+                                    $failureReason[]['warning'] = "Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+                                }
+                            }
+                        }
+						if(0 == $result['control']) {
+							$maxScore += $result['sample_score'];
+						}
+
+                        // checking if mandatory fields were entered and were entered right
+                        //if ($result['mandatory'] == 1) {
+                        //    if ((!isset($result['reported_result']) || $result['reported_result'] == "" || $result['reported_result'] == null)) {
+                        //        $mandatoryResult = 'Fail';
+                        //        $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was not reported";
+                        //    } else if (($result['reference_result'] != $result['reported_result'])) {
+                        //        $mandatoryResult = 'Fail';
+                        //        $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+                        //    }
+                        //}
+                    }
+					
+					
+						$totalScore = ($totalScore/$maxScore)*100;
+						$maxScore = 100; 
+					
+					
+					
+					// if we are excluding this result, then let us not give pass/fail				
+					if ($shipment['is_excluded'] == 'yes') {
+						$finalResult = '';
+						$totalScore = 0;
+						$shipmentResult[$counter]['shipment_score'] = $responseScore = 0;
+						$shipmentResult[$counter]['documentation_score'] = 0;
+						$shipmentResult[$counter]['display_result'] = '';
+						$shipmentResult[$counter]['is_followup'] = 'yes';
+						$failureReason[] = array('warning' => 'Excluded from Evaluation');
+						$finalResult = 3;
+						$shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);
+					} else {
+						$shipment['is_excluded'] = 'no';
+						
+						
+						// checking if total score and maximum scores are the same
+						if ($totalScore != $maxScore) {
+							$scoreResult = 'Fail';
+							$failureReason[]['warning'] = "Participant did not meet the score criteria (Participant Score - <strong>$totalScore</strong> and Required Score - <strong>$maxScore</strong>)";
+						} else {
+							$scoreResult = 'Pass';
+						}
+	
+						// if any of the results have failed, then the final result is fail
+						if ($scoreResult == 'Fail' || $mandatoryResult == 'Fail') {
+							$finalResult = 2;
+						} else {
+							$finalResult = 1;
+						}
+						$shipmentResult[$counter]['shipment_score'] = $totalScore = round($totalScore,2);
+						$shipmentResult[$counter]['max_score'] = 100; //$maxScore;
+						$shipmentResult[$counter]['final_result'] = $finalResult;
+	
+	
+						$fRes = $db->fetchCol($db->select()->from('r_results', array('result_name'))->where('result_id = ' . $finalResult));
+	
+						$shipmentResult[$counter]['display_result'] = $fRes[0];
+						$shipmentResult[$counter]['failure_reason'] = $failureReason = json_encode($failureReason);						
+							
+						
+
+					}
+					
+					
+                    // let us update the total score in DB
+                    $db->update('shipment_participant_map', array('shipment_score' => $totalScore, 'final_result' => $finalResult, 'failure_reason' => $failureReason), "map_id = " . $shipment['map_id']);
+                    //$counter++;
+                } else {
+                    $failureReason = array('warning' => "Response was submitted after the last response date.");
+                    $db->update('shipment_participant_map', array('failure_reason' => json_encode($failureReason)), "map_id = " . $shipment['map_id']);
+                }
+				$counter++;
+            }
+            $db->update('shipment', array('max_score' => $maxScore), "shipment_id = " . $shipmentId);
+			
+			//Zend_Debug::dump($shipmentResult);die;
+			
+			return $shipmentResult;
+	}
+	
+	
 	
 	public function evaluateDtsHivSerology($shipmentResult,$shipmentId){
 

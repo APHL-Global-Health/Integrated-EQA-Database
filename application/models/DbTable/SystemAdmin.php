@@ -1,14 +1,11 @@
 <?php
 
-class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
-{
+class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
     protected $_name = 'system_admin';
     protected $_primary = 'admin_id';
 
-    
-    public function getAllAdmin($parameters)
-    {
+    public function getAllAdmin($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -91,9 +88,15 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
          * SQL queries
          * Get data to display
          */
-
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            if ($sWhere == "") {
+                $sWhere .= "IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
+            } else {
+                $sWhere .= "and (IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
+            }
+        }
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-	
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -146,46 +149,140 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
 
         echo json_encode($output);
     }
-    
-    public function addSystemAdmin($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function generateRandomPassword($len) {
+
+        $min_lenght = 0;
+        $max_lenght = 100;
+        $bigL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789&$@";
+        $number = "0123456789&$@";
+        $bigB = str_shuffle($bigL);
+        $smallS = str_shuffle($smallL);
+        $numberS = str_shuffle($number);
+        $subA = substr($bigB, 0, 5);
+        $subB = substr($bigB, 6, 5);
+        $subC = substr($bigB, 10, 5);
+        $subD = substr($smallS, 0, 5);
+        $subE = substr($smallS, 6, 5);
+        $subF = substr($smallS, 10, 5);
+        $subG = substr($numberS, 0, 5);
+        $subH = substr($numberS, 6, 5);
+        $subI = substr($numberS, 10, 5);
+        $RandCode1 = str_shuffle($subA . $subD . $subB . $subF . $subC . $subE);
+        $RandCode2 = str_shuffle($RandCode1);
+        $RandCode = $RandCode1 . $RandCode2;
+        if ($len > $min_lenght && $len < $max_lenght) {
+            $CodeEX = substr($RandCode, 0, $len);
+        } else {
+            $CodeEX = $RandCode;
+        }
+        return $CodeEX;
+    }
+
+    public function sendEmailToUser($sendTo, $password, $fullname) {
+        $common = new Application_Service_Common();
+        $message = "Dear $fullname,"
+                . "You have been granted access to the NPHL Integrated EQA Database application."
+                . "Please click the following link to access the application in your computer browser."
+                . "Kindly log in with below credentials to access the system <br>"
+                . "<br>Username : $sendTo <br>"
+                . "Password : $password <br>"
+                . "If you have received this email in error or have any other queries, "
+                . "please notify the system administrator at info@nphl.or.ke."
+                . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
+                . "<small>This is a system generated email. Please do not reply.</small>";
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        //$fromName = Application_Service_Common::getConfig('admin-name');			
+        $common->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+    }
+
+    public function addSystemAdmin($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $common = new Application_Service_Common();
+        $email = $params['primaryEmail'];
+        $password = $this->generateRandomPassword(9);
         $data = array(
-                      'first_name'=>$params['firstName'],
-                      'last_name'=>$params['lastName'],
-                      'primary_email'=>$params['primaryEmail'],
-                      'secondary_email'=>$params['secondaryEmail'],
-                      'password'=>$params['password'],
-                      'phone'=>$params['phone'],
-                      'status'=>$params['status'],
-                      'force_password_reset'=>1,
-		      'created_by' => $authNameSpace->admin_id,
-                      'created_on' => new Zend_Db_Expr('now()')
-                      );
+            'first_name' => $params['firstName'],
+            'last_name' => $params['lastName'],
+            'primary_email' => $params['primaryEmail'],
+            'secondary_email' => $params['secondaryEmail'],
+            'password' => MD5($password), // $params['password'],
+            'phone' => $params['phone'],
+            'IsVl' => $params['IsVl'],
+            'IsProvider' => $params['IsProvider'],
+            'AssignModule' => 0,
+            'status' => $params['status'],
+            'force_password_reset' => 1,
+            'created_by' => $authNameSpace->admin_id,
+            'created_on' => new Zend_Db_Expr('now()')
+        );
+
+        if ($data['IsVl'] == 4) {
+            $data['AssignModule'] = 1;
+            $data['IsProvider'] = 1;
+        }
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
+            if ($data['IsVl'] == 2) {
+                $data['County'] = $params['County'];
+            }
+        }
+        if ($_SESSION['loggedInDetails']['IsVl'] == 4) {
+            if ($data['IsVl'] == 2) {
+                $data['IsProvider'] = 1;
+            }
+        }
+
+        $fullname = $params['firstName'] . ' ' . $params['lastName'];
+
+        $common->sendPasswordEmailToUser($email, $password, $fullname);
+
         return $this->insert($data);
     }
-    
-    public function getSystemAdminDetails($adminId){
-        return $this->fetchRow($this->select()->where("admin_id = ? ",$adminId));
+
+    public function getSystemAdminDetails($adminId) {
+        return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
     }
-    
-    public function updateSystemAdmin($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function updateSystemAdmin($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'first_name'=>$params['firstName'],
-                      'last_name'=>$params['lastName'],
-                      'primary_email'=>$params['primaryEmail'],
-                      'secondary_email'=>$params['secondaryEmail'],
-                      'phone'=>$params['phone'],
-                      'status'=>$params['status'],
-		      'updated_by' => $authNameSpace->admin_id,
-                      'updated_on' => new Zend_Db_Expr('now()')
-                      );
-        if(isset($params['password']) && $params['password'] !=""){
-            $data['password']= $params['password'];
-            $data['force_password_reset']= 1;
+            'first_name' => $params['firstName'],
+            'last_name' => $params['lastName'],
+            'primary_email' => $params['primaryEmail'],
+            'secondary_email' => $params['secondaryEmail'],
+            'phone' => $params['phone'],
+            'status' => $params['status'],
+            'IsVl' => $params['IsVl'],
+            'AssignModule' => 0,
+            'updated_by' => $authNameSpace->admin_id,
+            'updated_on' => new Zend_Db_Expr('now()')
+        );
+        if (isset($params['IsProvider'])) {
+            $data['IsProvider'] = $params['IsProvider'];
         }
-        return $this->update($data,"admin_id=".$params['adminId']);
+        if (isset($params['password']) && $params['password'] != "") {
+            $data['password'] = MD5($params['password']);
+//            $data['force_password_reset'] = 1;
+        }
+        if (isset($params['force_password_reset'])) {
+            $data['force_password_reset'] = 0;
+            $_SESSION['loggedInDetails']['force_password_reset'] = 0;
+        }
+        if ($data['IsVl'] == 4) {
+            $data['AssignModule'] = 1;
+        }
+        if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
+            if ($data['IsVl'] == 2) {
+                if (isset($data['County'])) {
+                    $data['County'] = $params['County'];
+                }
+            }
+        }
+
+        return $this->update($data, "admin_id=" . $params['adminId']);
     }
 
 }
-

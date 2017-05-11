@@ -39,7 +39,7 @@
 
                     <td><b>Lab Name</b></td>
                     <td><b>Region</b></td>
-                    <td><b>Quantity</b></td>
+                    <td><b>Unique Identifier</b></td>
                     <td><b>Readiness Date</b></td>
                 </tr>
                 <tr ng-repeat="lab in samples.readyLabs |filter : searchSample |limitTo : 8"
@@ -75,7 +75,7 @@
 
                     <td>{{lab.first_name}}</td>
                     <td>{{lab.region}}</td>
-                    <td>{{lab.institute}}</td>
+                    <td>{{lab.unique_identifier}}</td>
                     <td>{{lab.dateCreated}}</td>
                 </tr>
             </table>

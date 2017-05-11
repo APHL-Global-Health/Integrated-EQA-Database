@@ -16,17 +16,17 @@
 
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('generalReport')"><i
-                                                class="fa fa-check"></i> Round Evaluation</a>
+                                            class="fa fa-check"></i> Round Evaluation</a>
 
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('individualEvaluation')"><i
-                                                class="fa fa-user"></i> Individual Evaluation</a>
+                                            class="fa fa-user"></i> Individual Evaluation</a>
 
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('publishResults')"><i
-                                                class="fa fa-book"></i> Publish Results</a>
+                                            class="fa fa-book"></i> Publish Results</a>
 
                                 </li>
                             </ul>
@@ -39,12 +39,12 @@
 
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('shipmentReports')"><i
-                                                class="fa fa-ship"></i> Shipment Report </a>
+                                            class="fa fa-ship"></i> Shipment Report </a>
 
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('correctiveActionReport')"><i
-                                                class="fa fa-close"></i> Corrective Report</a>
+                                            class="fa fa-close"></i> Corrective Report</a>
 
                                 </li>
                             </ul>
@@ -65,17 +65,17 @@
 
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('labsReports')"><i
-                                                class="fa fa-fw fa-save"></i>Labs Summary</a>
+                                            class="fa fa-fw fa-save"></i>Labs Summary</a>
 
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('surveyReports')"><i
-                                                class="fa fa-times-rectangle-o"></i> Round Reports </a>
+                                            class="fa fa-times-rectangle-o"></i> Round Reports </a>
 
                                 </li>
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('participatoryReports')"><i
-                                                class="fa fa-fw fa-users"></i> Participatory Report</a>
+                                            class="fa fa-fw fa-users"></i> Participatory Report</a>
 
                                 </li>
                             </ul>
@@ -88,21 +88,26 @@
 
                             <ul class="dropdown-menu" role="menu" aria-labelledby="finalized">
 
-<!--                                <li role="presentation">-->
-<!--                                    <a href="#" ng-click="reports.changeCurrentReport('laboratoryStatistical')"><i-->
-<!--                                                class="fa fa-fw fa-save"></i>Laboratory Statistical Performance</a>-->
-<!---->
-<!--                                </li>-->
+                                <!--                                <li role="presentation">-->
+                                <!--                                    <a href="#" ng-click="reports.changeCurrentReport('laboratoryStatistical')"><i-->
+                                <!--                                                class="fa fa-fw fa-save"></i>Laboratory Statistical Performance</a>-->
+                                <!---->
+                                <!--                                </li>-->
                                 <li role="presentation">
                                     <a href="#" ng-click="reports.changeCurrentReport('labCombinational')"><i
-                                                class="fa fa-fw fa-folder"></i>Lab Combinational Performance</a>
+                                            class="fa fa-area-chart"></i> Lab Combinational Performance</a>
 
+                                    <a href="#" ng-click="reports.changeCurrentReport('individualLabRecords')"><i
+                                            class="fa fa-line-chart"></i> Individual Lab performance</a>
+                                            
+                                    <a href="#" ng-click="reports.changeCurrentReport('roundextremesummary')"><i
+                                            class="fa fa-circle-o"></i> Round compressed Summary</a>
                                 </li>
-<!--                                <li role="presentation">-->
-<!--                                    <a href="#" ng-click="reports.changeCurrentReport('samplesReports')"><i-->
-<!--                                                class="fa fa-fw fa-folder"></i>General Reports</a>-->
-<!---->
-<!--                                </li>-->
+                                <!--                                <li role="presentation">-->
+                                <!--                                    <a href="#" ng-click="reports.changeCurrentReport('samplesReports')"><i-->
+                                <!--                                                class="fa fa-fw fa-folder"></i>General Reports</a>-->
+                                <!---->
+                                <!--                                </li>-->
                             </ul>
                         </li>
 
@@ -116,14 +121,14 @@
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 
                                     <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('add'+clickedTab)"><i
-                                                    class="fa fa-fw fa-save"></i> Add
+                                        <a href="#" ng-click="reports.changeCurrentReport('add' + clickedTab)"><i
+                                                class="fa fa-fw fa-save"></i> Add
                                             {{clickedTab|capitalizeLetter}}</a>
 
                                     </li>
                                     <li role="presentation">
-                                        <a href="#" ng-click="reports.changeCurrentReport('view'+clickedTab)"><i
-                                                    class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
+                                        <a href="#" ng-click="reports.changeCurrentReport('view' + clickedTab)"><i
+                                                class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
 
                                     </li>
                                     <!--

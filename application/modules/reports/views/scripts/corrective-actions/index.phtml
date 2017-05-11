@@ -23,11 +23,10 @@
                 <option value=""> -- Select Scheme Type --</option>
                 <?php
                 foreach ($this->schemes as $scheme) {
-                    if ($scheme['scheme_id'] == 'dts') {
-                        ?>
-                        <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>	
+                    ?>
+                   <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>	
                         <?php
-                    }
+                  
                 }
                 ?>
             </select>			

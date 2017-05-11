@@ -16,33 +16,30 @@ class AuthController extends Zend_Controller_Action
 
     public function loginAction()
     {
-        // action body
+    // action body
     	if($this->getRequest()->isPost()){
-                //die;
+    		//die;
     		//echo "Post";
-    		$params = $this->getRequest()->getPost();
+		$params = $this->getRequest()->getPost();
+		//Zend_Debug::dump($params);die;
+		$params['username'] = trim($params['username']);
+		$params['password'] = trim($params['password']);
     		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
     		$adapter = new Zend_Auth_Adapter_DbTable($db, "data_manager", "primary_email", "password");
     		$adapter->setIdentity($params['username']);
-                $adapter->setIdentity($params['IsProvider']);
-    		$adapter->setCredential($params['password']);
-			
-                $select = $adapter->getDbSelect();
+    		$adapter->setCredential(MD5($params['password']));
+		$select = $adapter->getDbSelect();
                 $select->where('status = "active"');			
 			
     		// STEP 2 : Let's Authenticate
     		$auth = Zend_Auth::getInstance();
     		$res = $auth->authenticate($adapter); // -- METHOD 2 to authenticate , seems to work fine for me
-    		//$auth->getStorage()->write( $select );
-			
+			//echo "hi";
     		if($res->isValid()){
-				
 			Zend_Session::rememberMe(60 * 60 * 5); // asking the session to be active for 5 hours
 
     			$rs = $adapter->getResultRowObject();
-                        print_r($rs);
-                        exit;
-    			$auth->getStorage()->write( $rs );
+    			
     			$authNameSpace = new Zend_Session_Namespace('datamanagers');
     			$authNameSpace->UserID = $params['username'];
 	    		$authNameSpace->dm_id = $rs->dm_id;
@@ -50,17 +47,25 @@ class AuthController extends Zend_Controller_Action
 	    		$authNameSpace->last_name = $rs->last_name;
 	    		$authNameSpace->phone = $rs->phone;
 	    		$authNameSpace->email = $rs->primary_email;
+                        $authNameSpace->IsVl = $rs->IsVl;
+                        $authNameSpace->IsTester = $rs->IsTester;
 	    		$authNameSpace->qc_access = $rs->qc_access;
+	    		$authNameSpace->view_only_access = $rs->view_only_access;
 	    		$authNameSpace->enable_adding_test_response_date = $rs->enable_adding_test_response_date;
+	    		$authNameSpace->enable_choosing_mode_of_receipt = $rs->enable_choosing_mode_of_receipt;
 	    		$authNameSpace->force_password_reset = $rs->force_password_reset;
-                        $authNameSpace->IsProvider=$rs->IsProvider;
                         
 	    		// PT Provider Dependent Configuration 
 	    		//$authNameSpace->UserFld1 = $rs->UserFld1;
 	    		//$authNameSpace->UserFld2 = $rs->UserFld2;
 	    		//$authNameSpace->UserFld3 = $rs->UserFld3;
 	    		
-    			$this->_redirect('/participant/current-schemes');
+                        $userService = new Application_Service_DataManagers();
+			$userService->updateLastLogin($rs->dm_id);				
+				
+				
+    			$this->_redirect('/participant/dashboard');
+                        
     		
     		}else
     		{

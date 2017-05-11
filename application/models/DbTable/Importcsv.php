@@ -11,7 +11,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
     protected $_name = 'rep_repository';
     protected $_primary = 'ImpID';
 
-    public function getAllData($parameters,$pname) {
+    public function getAllData($parameters, $pname, $validity = null) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -23,7 +23,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 //        print_r($auth);
 //        exit;
         //echo $pname;
-        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode');
+        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode', 'BatchID', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -99,8 +99,22 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
          * SQL queries
          * Get data to display
          */
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
-                ->where("a.ProviderID='$pname'");
+        if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
+
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
+        } else {
+            $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name))
+                    ->where("a.ProviderID='$pname'");
+        }
+        if (isset($validity)) {
+            if ($validity == 0) {
+                if ($sWhere == "") {
+                    $sWhere .= " valid='0' ";
+                } else {
+                    $sWhere .= " and  valid='0' ";
+                }
+            }
+        }
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -152,8 +166,36 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $row[] = $aRow['ResultCode'];
             $row[] = $aRow['Grade'];
             $row[] = $aRow['FailReasonCode'];
-            //$row[] = '<a href="/admin/periods/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $row[] = $aRow['BatchID'];
+            $batchID = "'" . $aRow['BatchID'] . "'";
+            if (isset($validity)) {
+                if ($validity == 0) {
 
+                    $row[] = '<a href="#" class="btn btn-danger btn-xs" '
+                            . 'onclick="deleteRecord(' . $aRow['ImpID'] . ')" style="margin-right: 2px;"><i class="fa fa-close"></i> delete</a>';
+                    $row[] = '<a href="#" class="btn btn-warning btn-xs" '
+                            . 'onclick="deleteBatch(' . $batchID . ')"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
+                }
+            } //else {
+            if ($aRow['Status'] == 0) {
+                $row[] = '<a href="#" class="btn btn-danger btn-xs" '
+                        . 'onclick="deleteBatch(' . $batchID . ')"  style="margin-right: 2px;"><i class="fa fa-close"></i>delete Batch </a>';
+            } else {
+                $row[] = '<x class="btn btn-danger btn-xs disabled" style="margin-right: 2px;"><i class="fa fa-check"></i>Approved</x>';
+            }
+            if ($_SESSION['loggedInDetails']["IsVl"] == 2 && $_SESSION['loggedInDetails']["IsProvider"] == 1) {
+                if ($aRow['Status'] == 0) {
+                    $row[] = '<a href="#" class="btn btn-success btn-xs" '
+                            . 'onclick="approveBatch(' . $batchID . ')" style="margin-right: 2px;"><i class="fa fa-check"></i>Approve Batch</a>';
+                } else {
+                    $row[] = '<x class="btn btn-success btn-xs disabled" style="margin-right: 2px;"><i class="fa fa-check"></i>Approved</x>';
+                }
+            }
+
+            //}
+//               
+//                }
+//            }
             $output['aaData'][] = $row;
         }
 
@@ -162,7 +204,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 
     public function addData($params, $provider, $program, $period) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
-        
+
         $labid = $this->getLabID($params[0]);
         $county = $this->getCountyID($params[1]);
         $country = $this->getCountryID($params[2]);
@@ -229,7 +271,9 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
     public function getAllColumns() {
         $db = Zend_Db_Table::getDefaultAdapter();
         $result = $db->fetchAll(
-                "SHOW FULL COLUMNS IN rep_repository where Field NOT IN('ProviderID','RoundID','ProgramID','ImpID')"
+                "SHOW FULL COLUMNS IN rep_repository where "
+                . "Field NOT IN('ProviderID','Status','BatchID','valid','UserApproved','RoundID','ProgramID','ImpID','lastUpdatePerson','AdminApproved')"
+                . ""
         );
         return $result;
     }

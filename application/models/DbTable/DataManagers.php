@@ -6,8 +6,13 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     protected $_primary = array('dm_id');
 
     public function addUser($params) {
-	$authNameSpace = new Zend_Session_Namespace('administrators');
-	$data = array(
+
+        $common = new Application_Service_Common();
+        $email = $params['userId'];
+        $password = MD5($common->generateRandomPassword(9));
+
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $data = array(
             'first_name' => $params['fname'],
             'last_name' => $params['lname'],
             'institute' => $params['institute'],
@@ -15,24 +20,34 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             'mobile' => $params['phone1'],
             'secondary_email' => $params['semail'],
             'primary_email' => $params['userId'],
-            'password' => $params['password'],
+            'password' => $password,
             'force_password_reset' => 1,
             'qc_access' => $params['qcAccess'],
             'enable_adding_test_response_date' => $params['receiptDateOption'],
+            'enable_choosing_mode_of_receipt' => $params['modeOfReceiptOption'],
+            'view_only_access' => $params['viewOnlyAccess'],
             'status' => $params['status'],
-	    'created_by' => $authNameSpace->admin_id,
+            'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
+        if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
+        }
+
+        $fullname = $data['first_name'] . ' ' . $data['last_name'];
+        
+        $common->sendPasswordEmailToUser($email, $password, $fullname);
         return $this->insert($data);
     }
-    
+
     public function getAllUsers($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status');
+        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status','u.IsTester');
+
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "dm_id";
@@ -111,9 +126,15 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('u' => $this->_name))
-				    ->joinLeft(array('pmm'=>'participant_manager_map'),'pmm.dm_id=u.dm_id',array())
-				    ->joinLeft(array('p'=>'participant'),'p.participant_id = pmm.participant_id',array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"),'p.participant_id'))
-				    ->group('u.dm_id');
+                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array())
+                ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"), 'p.participant_id'))
+                ->group('u.dm_id');
+
+        if ($sWhere == "") {
+            $sWhere .= "u.IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
+        } else {
+            $sWhere .= "and (u.IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
+        }
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -127,7 +148,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-        //die($sQuery);
+//        die($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
@@ -152,101 +173,139 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-        
+
         foreach ($rResult as $aRow) {
             $row = array();
-	    //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
-	    //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
-	    //}else{
-	    //$participantDetails='';
-	    //}
+            //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
+            //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
+            //}else{
+            //$participantDetails='';
+            //}
             $row[] = $aRow['institute'];
-	   // $row[] = $participantDetails.' '.$aRow['institute'];
-            $row[] = $aRow['first_name']; 
-            $row[] = $aRow['last_name']; 
+            // $row[] = $participantDetails.' '.$aRow['institute'];
+            $row[] = $aRow['first_name'];
+            $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-            $row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
+            
+          
+            if($_SESSION['loggedInDetails']["IsVl"] == 3){
+                $row[] = $aRow['IsTester']==0?'YES':'';
+            }else{
+                 $row[] = $aRow['IsTester']==1?'Yes':'No'; 
+            }
+            //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
-            $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
 
+            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+                $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            } else {
+                $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            }
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
-    }    
-    
-    public function getUserDetails($userId){
-        return $this->fetchRow("primary_email = '".$userId."'")->toArray();
     }
-    
-    public function getUserDetailsBySystemId($userSystemId){
-        return $this->fetchRow("dm_id = '".$userSystemId."'")->toArray();
+
+    public function getUserDetails($userId) {
+        return $this->fetchRow("primary_email = '" . $userId . "'")->toArray();
+    }
+
+    public function getUserDetailsBySystemId($userSystemId) {
+        return $this->fetchRow("dm_id = '" . $userSystemId . "'")->toArray();
     }
 
     public function updateUser($params) {
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'first_name' => $params['fname'],
             'last_name' => $params['lname'],
             'phone' => $params['phone2'],
             'mobile' => $params['phone1'],
-			'institute' => $params['institute'],
             'secondary_email' => $params['semail'],
-			'updated_by' => $authNameSpace->admin_id,
-//			'enable_adding_test_response_date' => $params['receiptDateOption'],
-//			'qc_access' => $params['qcAccess'],
+            'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')
         );
-        
-        if(isset($params['userId']) && $params['userId'] != ""){
+
+        if (isset($params['institute']) && $params['institute'] != "") {
+            $data['institute'] = $params['institute'];
+        }
+        if (isset($params['qcAccess']) && $params['qcAccess'] != "") {
+            $data['qc_access'] = $params['qcAccess'];
+        }
+        if (isset($params['receiptDateOption']) && $params['receiptDateOption'] != "") {
+            $data['enable_adding_test_response_date'] = $params['receiptDateOption'];
+        }
+        if (isset($params['modeOfReceiptOption']) && $params['modeOfReceiptOption'] != "") {
+            $data['enable_choosing_mode_of_receipt'] = $params['modeOfReceiptOption'];
+        }
+        if (isset($params['viewOnlyAccess']) && $params['viewOnlyAccess'] != "") {
+            $data['view_only_access'] = $params['viewOnlyAccess'];
+        }
+        if (isset($params['userId']) && $params['userId'] != "") {
             $data['primary_email'] = $params['userId'];
         }
-        
-        if(isset($params['password']) && $params['password'] != ""){
+        if (isset($params['password']) && $params['password'] != "") {
             $data['password'] = $params['password'];
             $data['force_password_reset'] = 1;
         }
-        if(isset($params['status']) && $params['status'] != ""){
+        if (isset($params['status']) && $params['status'] != "") {
             $data['status'] = $params['status'];
         }
-
+        if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
+        }
         return $this->update($data, "dm_id = " . $params['userSystemId']);
     }
-    
-    public function resetpasswordForEmail($email){
-        $row = $this->fetchRow("primary_email = '".$email."'");
-        if($row != null && count($row) ==1){
+
+    public function resetpasswordForEmail($email) {
+        $row = $this->fetchRow("primary_email = '" . $email . "'");
+        if ($row != null && count($row) == 1) {
             $randompassword = Application_Service_Common::getRandomString(15);
             $row->password = $randompassword;
             $row->force_password_reset = 1;
             $row->save();
             return $randompassword;
-        }else{
+        } else {
             return false;
         }
     }
-	
-    public function getAllDataManagers($active=true){
-	$sql = $this->select()->order("first_name");
-	if($active){
-	    $sql = $sql->where("status='active'");
-	}
-	return $this->fetchAll($sql);
+
+    public function getAllDataManagers($active = true) {
+        $sql = $this->select()->order("first_name");
+        if ($active) {
+            if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+                $IsVl = $_SESSION['loggedInDetails']["IsVl"];
+                $sql = $sql->where("status='active' and IsVl=$IsVl");
+            } else {
+                $sql = $sql->where("status='active'");
+            }
+        }
+        return $this->fetchAll($sql);
     }
-	
-    public function updatePassword($oldpassword,$newpassword){
+
+    public function updatePassword($oldpassword, $newpassword) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-    	$email = $authNameSpace->email;
-        $noOfRows = $this->update(array('password' => $newpassword,'force_password_reset'=>0),"primary_email = '".$email."' and password = '".$oldpassword."'");
-        if($noOfRows != null && count($noOfRows) ==1){
+        $email = $authNameSpace->email;
+        $noOfRows = $this->update(array('password' => md5($newpassword), 'force_password_reset' => 0), "primary_email = '" . $email . "' and password = '" . md5($oldpassword) . "'");
+        
+        if ($noOfRows != null && count($noOfRows) == 1) {
             $authNameSpace->force_password_reset = 0;
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
-    
-}
 
+    public function updateLastLogin($dmId) {
+
+        $noOfRows = $this->update(array('last_login' => new Zend_Db_Expr('now()')), "dm_id = " . $dmId);
+        if ($noOfRows != null && count($noOfRows) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}

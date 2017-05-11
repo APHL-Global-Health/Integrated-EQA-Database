@@ -116,6 +116,8 @@ class Reports_DistributionController extends Zend_Controller_Action
             $this->_redirect("/reports/finalize/");
         }
     }
+    
+   
 
     
 }

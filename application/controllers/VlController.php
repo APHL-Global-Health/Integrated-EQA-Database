@@ -52,7 +52,7 @@ class VlController extends Zend_Controller_Action
 					
 				}
 			  }
-           
+			
             $shipmentService->updateVlResults($data);
     		
     		
@@ -67,14 +67,15 @@ class VlController extends Zend_Controller_Action
             $sID= $this->getRequest()->getParam('sid');
             $pID= $this->getRequest()->getParam('pid');
             $eID =$this->getRequest()->getParam('eid');
-			$this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
+	    $this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
 			
             $participantService = new Application_Service_Participants();
             $this->view->participant = $participantService->getParticipantDetails($pID);
             //Zend_Debug::dump($schemeService->getVlSamples($sID,$pID));
             $this->view->allSamples =$schemeService->getVlSamples($sID,$pID);
+            $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
             $shipment = $schemeService->getShipmentData($sID,$pID);
-			$shipment['attributes'] = json_decode($shipment['attributes'],true);
+	    $shipment['attributes'] = json_decode($shipment['attributes'],true);
             $this->view->shipment = $shipment;
             $this->view->shipId = $sID;
             $this->view->participantId = $pID;
@@ -88,26 +89,25 @@ class VlController extends Zend_Controller_Action
     	}
     }
 
-    public function downloadAction()
-    {
-		$this->_helper->layout()->disableLayout();
-		$sID= $this->getRequest()->getParam('sid');
-	    $pID= $this->getRequest()->getParam('pid');
-	    $eID =$this->getRequest()->getParam('eid');
-	    
-		$reportService = new Application_Service_Reports();
-        $this->view->header=$reportService->getReportConfigValue('report-header');
-        $this->view->logo=$reportService->getReportConfigValue('logo');
-        $this->view->logoRight=$reportService->getReportConfigValue('logo-right');
-			
-	    $participantService = new Application_Service_Participants();
-	    $this->view->participant = $participantService->getParticipantDetails($pID);
-		$schemeService = new Application_Service_Schemes();
-		$this->view->referenceDetails = $schemeService->getVlReferenceData($sID);
-	    
-		$shipment = $schemeService->getShipmentData($sID,$pID);
-	    $shipment['attributes'] = json_decode($shipment['attributes'],true);
-	    $this->view->shipment = $shipment;
+    public function downloadAction(){
+	$this->_helper->layout()->disableLayout();
+	$sID= $this->getRequest()->getParam('sid');
+	$pID= $this->getRequest()->getParam('pid');
+	$eID =$this->getRequest()->getParam('eid');
+	
+	$reportService = new Application_Service_Reports();
+	$this->view->header=$reportService->getReportConfigValue('report-header');
+	$this->view->logo=$reportService->getReportConfigValue('logo');
+	$this->view->logoRight=$reportService->getReportConfigValue('logo-right');
+	
+	$participantService = new Application_Service_Participants();
+	$this->view->participant = $participantService->getParticipantDetails($pID);
+	$schemeService = new Application_Service_Schemes();
+	$this->view->referenceDetails = $schemeService->getVlReferenceData($sID);
+	$this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
+	$shipment = $schemeService->getShipmentData($sID,$pID);
+	$shipment['attributes'] = json_decode($shipment['attributes'],true);
+	$this->view->shipment = $shipment;
     }
 
     public function deleteAction()

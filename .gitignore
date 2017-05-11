@@ -1,20 +1,10 @@
-#Ignore .idea files
-/.idea
-afq.komodoproject
-/application/cache/**
-/backup/(?!index.php)
-/public/uploads/(?!index.php)
-/public/docs/(?!index.php)
-/public/temporary/cache(?!index.php)
-/public/temporary/(?!index.php)
-error_log
-Thumbs.db
-Thumbs.db.orig
-.DS_Store
-.DS_Store.orig
+application/cache
+application/configs
+public/files
 
-#Ignore eclipse ide files
-/.buildpath
-/.settings
-/.project
-/.zfproject.xml
+nbproject
+*.hgignore
+.idea
+*.log
+public/angularMain/constants.js
+

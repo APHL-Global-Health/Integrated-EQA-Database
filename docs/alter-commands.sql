@@ -2078,11 +2078,11 @@ INSERT INTO `r_dts_corrective_actions` (`action_id`, `corrective_action`, `descr
 (3, 'Review all testing procedures prior to performing client testing as reported result does not match expected result.', 'Sample (1/2/3?) reported result does not match with expected result.'),
 (4, 'You are required to test all samples in PT panel', 'Sample (1/2/3) was not reported '),
 (5, 'Ensure expired test kit are not be used for testing. If test kits are not available, please contact your superior.', 'Test kit XYZ expired M days before the test date DD-MON-YYY.'),
-(6, 'Ensure expiry date information is submitted for all performed tests.', 'Result not evaluated Ð test kit expiry date (first/second/third) is not reported with PT response.'),
-(7, 'Ensure test kit name is reported for all performed tests.', 'Result not evaluated Ð name of test kit not reported.'),
+(6, 'Ensure expiry date information is submitted for all performed tests.', 'Result not evaluated ? test kit expiry date (first/second/third) is not reported with PT response.'),
+(7, 'Ensure test kit name is reported for all performed tests.', 'Result not evaluated ? name of test kit not reported.'),
 (8, 'Please use the approved test kits according to the SOP/National HIV Testing algorithm for confirmatory and tie-breaker.', 'Testkit XYZ repeated for all 3 test kits'),
 (9, 'Please use the approved test kits according to the SOP/National HIV Testing algorithm for confirmatory and tie-breaker.', 'Test kit repeated for confirmatory or tiebreaker test (T1/T2/T3).'),
-(10, 'Ensure test kit lot number is reported for all performed tests. ', 'Result not evaluated Ð Test Kit lot number (first/second/third) is not reported.'),
+(10, 'Ensure test kit lot number is reported for all performed tests. ', 'Result not evaluated ? Test Kit lot number (first/second/third) is not reported.'),
 (11, 'Ensure to provide supervisor approval along with his name.', 'Missing supervisor approval for reported result.'),
 (12, 'Ensure to provide sample rehydration date', 'Re-hydration date missing in PT report form.'),
 (13, 'Ensure to provide to provide panel testing date.', 'Testing date missing in PT report form.'),
@@ -2129,7 +2129,7 @@ ALTER TABLE `reference_vl_calculation` ADD `use_range` VARCHAR(255) NOT NULL DEF
 
 --ilahir 07-JUN-2016
 
-INSERT INTO `eanalyze`.`global_config` (`name`, `value`) VALUES ('qc_access', 'yes');
+INSERT INTO `global_config` (`name`, `value`) VALUES ('qc_access', 'yes');
 ALTER TABLE  `data_manager` ADD  `qc_access` VARCHAR( 100 ) NULL DEFAULT NULL AFTER  `force_password_reset` ;
 
 ALTER TABLE  `shipment_participant_map` ADD  `qc_date` DATE NULL DEFAULT NULL ;
@@ -2159,7 +2159,7 @@ ALTER TABLE  `shipment_participant_map` ADD  `mode_id` INT NULL DEFAULT NULL ;
 --Pal 24th-JUN-2016
 ALTER TABLE `data_manager` ADD `enable_adding_test_response_date` VARCHAR(45) NULL DEFAULT NULL AFTER `qc_access`;
 
-INSERT INTO `eanalyze`.`r_modes_of_receipt` (`mode_id`, `mode_name`) VALUES (NULL, 'Online Response');
+INSERT INTO `r_modes_of_receipt` (`mode_id`, `mode_name`) VALUES (NULL, 'Online Response');
 
 --Pal 25th-JUN-2016
 ALTER TABLE `shipment_participant_map` CHANGE `qc_done_by` `qc_done_by` VARCHAR(255) NULL DEFAULT NULL;
@@ -2169,9 +2169,118 @@ ALTER TABLE `shipment_participant_map` ADD `qc_done` VARCHAR(45) NULL DEFAULT NU
 ALTER TABLE `shipment_participant_map` CHANGE `qc_done` `qc_done` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no';
 
 -- Re-ordered mode--
+Delete from `r_modes_of_receipt`;
 INSERT INTO `r_modes_of_receipt` (`mode_id`, `mode_name`) VALUES
 (1, 'Online Response'),
 (2, 'Courier'),
 (3, 'Email'),
 (4, 'Scan'),
 (5, 'SMS');
+
+--Pal 2nd-JUL-2016
+INSERT INTO `global_config` (`name`, `value`) VALUES ('text_under_logo', '');
+
+CREATE TABLE IF NOT EXISTS `publications` (
+  `publication_id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text,
+  `file_name` varchar(255) DEFAULT NULL,
+  `added_by` int(11) NOT NULL,
+  `added_on` datetime NOT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`publication_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `home_banner` (
+  `banner_id` int(11) NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`banner_id`)
+);
+
+INSERT INTO `home_banner` (`banner_id`, `image`) VALUES
+(1, '');
+
+--Pal 4th-JUL-2016
+
+ALTER TABLE `data_manager` ADD `enable_choosing_mode_of_receipt` VARCHAR(45) NULL DEFAULT NULL AFTER `enable_adding_test_response_date`;
+
+CREATE TABLE IF NOT EXISTS `partners` (
+  `partner_id` int(11) NOT NULL AUTO_INCREMENT,
+  `partner_name` varchar(500) DEFAULT NULL,
+  `link` varchar(500) DEFAULT NULL,
+  `added_by` int(11) NOT NULL,
+  `added_on` datetime NOT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`partner_id`)
+);
+
+INSERT INTO `partners` (`partner_id`, `partner_name`, `link`, `added_by`, `added_on`, `status`) VALUES
+(1, 'CDC-Centers for Disease Control and Prevention', '', 1, '2016-07-04 17:58:43', 'active');
+
+-- Amit Jul 5 2016
+ALTER TABLE `data_manager` ADD `last_login` DATETIME NULL DEFAULT NULL AFTER `updated_by`;
+
+--ilahir Jul 19 2016
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_mean` DOUBLE( 20, 10 ) NOT NULL AFTER  `calculated_on` ;
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_sd` DOUBLE( 20, 10 ) NOT NULL AFTER  `manual_mean` ;
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_cv` DOUBLE( 20, 10 ) NOT NULL AFTER  `manual_sd` ;
+
+
+--ilahir Jul 25 2016
+
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_q1` DOUBLE( 20, 10 ) NULL DEFAULT NULL AFTER  `calculated_on` ;
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_q3` DOUBLE( 20, 10 ) NULL DEFAULT NULL AFTER  `manual_q1` ,
+ADD  `manual_iqr` DOUBLE( 20, 10 ) NULL DEFAULT NULL AFTER  `manual_q3` ;
+
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_quartile_low` DOUBLE( 20, 10 ) NULL DEFAULT NULL AFTER  `manual_iqr` ;
+ALTER TABLE  `reference_vl_calculation` ADD  `manual_quartile_high` DOUBLE( 20, 10 ) NULL DEFAULT NULL AFTER  `manual_quartile_low` ;
+
+
+-- Amit Jul 29 2016
+INSERT INTO `r_eid_detection_assay` (`id`, `name`) VALUES (NULL, 'Abbott RealTime HIV-1 Qualitative Assay');
+INSERT INTO `r_eid_extraction_assay` (`id`, `name`) VALUES (NULL, 'Abbott RealTime HIV-1 Qualitative Assay');
+INSERT INTO `r_eid_detection_assay` (`id`, `name`) VALUES (NULL, 'Other');
+INSERT INTO `r_eid_extraction_assay` (`id`, `name`) VALUES (NULL, 'Other');
+INSERT INTO `r_results` (`result_id`, `result_name`) VALUES ('4', 'Not Evaluated');
+
+--Ilahir Aug 25 2016
+ALTER TABLE  `data_manager` ADD  `view_only_access` VARCHAR( 45 ) NULL DEFAULT NULL AFTER  `enable_choosing_mode_of_receipt` ;
+
+--Pal 12th-Sep-2016
+ALTER TABLE `publications` ADD `sort_order` INT(11) NULL DEFAULT NULL AFTER `file_name`;
+
+ALTER TABLE `partners` ADD `sort_order` INT(11) NULL DEFAULT NULL AFTER `link`;
+
+--Pal 15th-Sep-2016
+ALTER TABLE `r_eid_detection_assay` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `name`;
+
+ALTER TABLE `r_eid_extraction_assay` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `name`;
+
+--Pal 28th-OCT-2016
+ALTER TABLE `shipment_participant_map` CHANGE `participant_supervisor` `participant_supervisor` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--Pal 21st-DEC-2016
+ALTER TABLE `response_result_vl` ADD `is_tnd` VARCHAR(45) NULL DEFAULT NULL AFTER `calculated_score`;
+
+ALTER TABLE `shipment_participant_map` ADD `is_pt_test_not_performed` VARCHAR(45) NULL DEFAULT NULL AFTER `shipment_test_date`, ADD `vl_not_tested_reason`INT(11) NULL DEFAULT NULL AFTER `is_pt_test_not_performed`, ADD `pt_test_not_performed_comments` TEXT NULL DEFAULT NULL AFTER `vl_not_tested_reason`;
+
+CREATE TABLE `response_vl_not_tested_reason` (
+  `vl_not_tested_reason_id` int(11) NOT NULL,
+  `vl_not_tested_reason` varchar(500) DEFAULT NULL,
+  `status` varchar(45) NOT NULL DEFAULT 'active'
+);
+
+INSERT INTO `response_vl_not_tested_reason` (`vl_not_tested_reason_id`, `vl_not_tested_reason`, `status`) VALUES
+(1, 'invalid sample', 'active'),
+(2, 'VL machine not working', 'active');
+
+ALTER TABLE `response_vl_not_tested_reason`
+  ADD PRIMARY KEY (`vl_not_tested_reason_id`);
+  
+ALTER TABLE `response_vl_not_tested_reason`
+  MODIFY `vl_not_tested_reason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  
+--Pal 24th-DEC-2016
+ALTER TABLE `shipment_participant_map` ADD `pt_support_comments` TEXT NULL DEFAULT NULL AFTER `pt_test_not_performed_comments`;
+
+--mapesa 12th-APR-2017: Change from using plain text passwords
+UPDATE system_admin SET password = md5(password);

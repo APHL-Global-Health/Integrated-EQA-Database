@@ -93,7 +93,7 @@
                 <th>County</th>
                 <th>Sample</th>
                 <th>Round</th>
-                <th>Micro</th>
+                <th>ID</th>
 
                 <th>Micro Agents</th>
                 <th>Remarks</th>
@@ -109,11 +109,11 @@
                 <td>{{lab.county}}</td>
                 <td>{{lab.batchName}}</td>
                 <td nowrap>{{lab.roundCode}}</td>
-                <td nowrap>{{lab.finalScore}}</td>
+                <td nowrap>{{reports.sumNumbers(lab.grainStainReactionScore,lab.finalIdentificationScore)/2}}</td>
                 <td nowrap>{{lab.totalMicroAgentsScore}}</td>
                 <td>{{lab.remarks}}</td>
                 <td>{{lab.grade}}</td>
-                <td>{{reports.sumNumbers(lab.finalScore,lab.totalMicroAgentsScore)}}</td>
+                <td>{{lab.finalScore}}</td>
             </tr>
             <!--<tr ng-hide="reports.generalRoundData.length >0">-->
             <!--<td colspan="10" class="text-center">No records available</td>-->

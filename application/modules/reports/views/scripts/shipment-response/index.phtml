@@ -1,3 +1,6 @@
+<?php
+$hideSchemes = array('tb');
+?>
 <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css" media="all">
 <style>
     @media print {
@@ -6,8 +9,6 @@
 	    
         }
     }
-	
-
 </style>
 <legend><h3>Shipment Response Overview</h3></legend>
 <table  style="margin:20px 0;" class="table table-bordered">
@@ -32,9 +33,11 @@
                 <option value=""> -- Select Scheme Type --</option>
                 <?php
                 foreach ($this->schemes as $scheme) {
+		    if(!in_array($scheme['scheme_id'],$hideSchemes)) {
                     ?>
-                    <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>	
+                     <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>	
                     <?php
+		    }
                 }
                 ?>
             </select>			
@@ -96,6 +99,7 @@
             });
 	    
 	    function getShipmentCodes(schemeType){
+		console.log(schemeType);
 		if (schemeType == "") {
 			$("#shipmentId").html("<option value=''>-- Select Date Range and Scheme to populate this list --</option>");
 			return false;

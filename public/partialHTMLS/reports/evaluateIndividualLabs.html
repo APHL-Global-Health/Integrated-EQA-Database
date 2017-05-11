@@ -5,8 +5,8 @@
         Evaluate Results for <b> {{reports.currentClickedLabResults.batchName}}</b>
         <small><i>-({{reports.currentClickedLabResults.datePrepared}})</i></small>
 
-        <button class="pull-right btn btn-danger btn-sm text-gray" ng-show="reports.currentClickedLabResults.id >0"
-                ng-click="reports.changeCurrentReport('individualEvaluation',0)"><i class="fa fa-close"></i> close
+        <button class="pull-right btn btn-danger btn-sm text-gray" ng-show="reports.currentClickedLabResults.id > 0"
+                ng-click="reports.changeCurrentReport('individualEvaluation', 0)"><i class="fa fa-close"></i> close
         </button>
     </div>
     <br>
@@ -34,29 +34,29 @@
 <div class="">
     <table class="table table-bordered">
         <thead class="btn-primary">
-        <tr>
-            <th>
-                SAMPLE
-            </th>
-            <th>
-                SOURCE
-            </th>
-            <th>
-                CLINICAL DETAILS
-            </th>
-            <th>
-                INSTRUCTIONS
-            </th>
-        </tr>
+            <tr>
+                <th>
+                    SAMPLE
+                </th>
+                <th>
+                    SOURCE
+                </th>
+                <th>
+                    CLINICAL DETAILS
+                </th>
+                <th>
+                    INSTRUCTIONS
+                </th>
+            </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>{{reports.currentClickedLabResults.batchName}}</td>
-            <td>{{reports.currentClickedLabResults.materialSource}}</td>
+            <tr>
+                <td>{{reports.currentClickedLabResults.batchName}}</td>
+                <td>{{reports.currentClickedLabResults.materialSource}}</td>
 
-            <td>{{reports.currentClickedLabResults.sampleDetails}}</td>
-            <td>{{reports.currentClickedLabResults.sampleInstructions}}</td>
-        </tr>
+                <td>{{reports.currentClickedLabResults.sampleDetails}}</td>
+                <td>{{reports.currentClickedLabResults.sampleInstructions}}</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -64,211 +64,211 @@
 <form class="form-horizontal" novalidate="" name="resultsData">
     <table class="table table-bordered">
         <thead class="btn-primary">
-        <tr>
-            <th>
-                Description
-            </th>
-            <th>
-                Results
-            </th>
-            <th>
-                Marks Scored
-            </th>
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Results
+                </th>
+                <th>
+                    Marks Scored
+                </th>
 
-        </tr>
+            </tr>
         </thead>
         <tbody ng-form novalidate="" name="resultsData">
-        <tr ng-class="{ 'has-error'
-             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine ) ||
-              (resultsData.grainStainReactionScore.$invalid && !resultsData.grainStainReactionScore.$pristine )
+            <tr ng-class="{ 'has-error'
+             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine) ||
+                        (resultsData.grainStainReactionScore.$invalid && !resultsData.grainStainReactionScore.$pristine)
               }">
-            <td width="30%">Gram stain reaction and morphology</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter the grain stain results"
-                       ng-model="reports.currentClickedLabResults.grainStainReaction" required
-                       name="grainStainReaction">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.grainStainReactionScore" required
-                                   name="grainStainReactionScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
-              (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine ) }">
-            <td width="30%">Details of primary media used for isolation and manufacturer</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text"
-                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Details of primary media "
-                       ng-model="reports.currentClickedLabResults.primaryMedia" required
-                       name="primaryMedia">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.primaryMediaScore" required
-                                   name="primaryMediaScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine||
-              (resultsData.incubationConditionsScore.$invalid && !resultsData.incubationConditionsScore.$pristine )  }">
-            <td width="30%">Incubation conditions</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Incubation conditions"
-                       ng-model="reports.currentClickedLabResults.incubationConditions" required
-                       name="incubationConditions">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.incubationConditionsScore" required
-                                   name="incubationConditionsScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine||
-              (resultsData.colonialMorphologyScore.$invalid && !resultsData.colonialMorphologyScore.$pristine )  }">
-            <td width="30%">Colonial morphology (colony appearance on media)</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Colonial morphology"
-                       ng-model="reports.currentClickedLabResults.colonialMorphology" required
-                       name="colonialMorphology">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.colonialMorphologyScore" required
-                                   name="colonialMorphologyScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
-              (resultsData.bacterialQualificationScore.$invalid && !resultsData.bacterialQualificationScore.$pristine ) }">
-            <td width="30%">Bacterial quantification (if applicable)</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Bacterial quantification"
-                       ng-model="reports.currentClickedLabResults.bacterialQualification" required
-                       name="bacterialQualification">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.bacterialQualificationScore" required
-                                   name="bacterialQualificationScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine||
-              (resultsData.bacterialReagentsScore.$invalid && !resultsData.bacterialReagentsScore.$pristine )  }">
-            <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
-                Indicate
-                the reaction observed.
-            </td>
+                <td width="30%">Gram stain reaction and morphology</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter the grain stain results"
+                           ng-model="reports.currentClickedLabResults.grainStainReaction" required
+                           name="grainStainReaction">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.grainStainReactionScore" required
+                                       name="grainStainReactionScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
+                                (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine) }">
+                <td width="30%">Details of primary media used for isolation and manufacturer</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Details of primary media "
+                           ng-model="reports.currentClickedLabResults.primaryMedia" required
+                           name="primaryMedia">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.primaryMediaScore" required
+                                       name="primaryMediaScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine ||
+                                        (resultsData.incubationConditionsScore.$invalid && !resultsData.incubationConditionsScore.$pristine)  }">
+                <td width="30%">Incubation conditions</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Incubation conditions"
+                           ng-model="reports.currentClickedLabResults.incubationConditions" required
+                           name="incubationConditions">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.incubationConditionsScore" required
+                                       name="incubationConditionsScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine ||
+                                                (resultsData.colonialMorphologyScore.$invalid && !resultsData.colonialMorphologyScore.$pristine)  }">
+                <td width="30%">Colonial morphology (colony appearance on media)</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Colonial morphology"
+                           ng-model="reports.currentClickedLabResults.colonialMorphology" required
+                           name="colonialMorphology">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.colonialMorphologyScore" required
+                                       name="colonialMorphologyScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
+                                                        (resultsData.bacterialQualificationScore.$invalid && !resultsData.bacterialQualificationScore.$pristine) }">
+                <td width="30%">Bacterial quantification (if applicable)</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Bacterial quantification"
+                           ng-model="reports.currentClickedLabResults.bacterialQualification" required
+                           name="bacterialQualification">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.bacterialQualificationScore" required
+                                       name="bacterialQualificationScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine ||
+                                                                (resultsData.bacterialReagentsScore.$invalid && !resultsData.bacterialReagentsScore.$pristine)  }">
+                <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
+                    Indicate
+                    the reaction observed.
+                </td>
 
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
-                       placeholder="Please enter Biochemical reagents"
-                       ng-model="reports.currentClickedLabResults.bacterialReagents" required name="bacterialReagents">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.bacterialReagentsScore" required
-                                   name="bacterialReagentsScore"></td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
-              (resultsData.isolateProcessingScore.$invalid && !resultsData.isolateProcessingScore.$pristine ) }">
-            <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please Discuss further processing"
-                       ng-model="reports.currentClickedLabResults.isolateProcessing" required name="isolateProcessing">
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.isolateProcessingScore" required
-                                   name="isolateProcessingScore"></td>
-        </tr>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
+                           placeholder="Please enter Biochemical reagents"
+                           ng-model="reports.currentClickedLabResults.bacterialReagents" required name="bacterialReagents">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.bacterialReagentsScore" required
+                                       name="bacterialReagentsScore"></td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
+                                                                        (resultsData.isolateProcessingScore.$invalid && !resultsData.isolateProcessingScore.$pristine) }">
+                <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please Discuss further processing"
+                           ng-model="reports.currentClickedLabResults.isolateProcessing" required name="isolateProcessing">
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.isolateProcessingScore" required
+                                       name="isolateProcessingScore"></td>
+            </tr>
 
-        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
-              (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine ) }">
-            <td width="30%">Final identification (i.e. report given to clinician)</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter Final identification "
-                       ng-model="reports.currentClickedLabResults.finalIdentification" required
-                       name="finalIdentification">
+            <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
+                                                                                (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine) }">
+                <td width="30%">Final identification (i.e. report given to clinician)</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter Final identification "
+                           ng-model="reports.currentClickedLabResults.finalIdentification" required
+                           name="finalIdentification">
 
-            </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="reports.currentClickedLabResults.finalIdentificationScore" required
-                                   name="finalIdentificationScore"></td>
-        </tr>
+                </td>
+                <td width="15%"><input class="form-control col-md-12" type="text"
+                                       ng-pattern="samples.numericOnly" placeholder="score"
+                                       ng-model="reports.currentClickedLabResults.finalIdentificationScore" required
+                                       name="finalIdentificationScore"></td>
+            </tr>
 
-        <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
-              (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine ) }">
-            <td width="30%">Grade</td>
-            <td width="55%">
+            <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine ||
+                                                                                        (resultsData.finalIdentificationScore.$invalid && !resultsData.finalIdentificationScore.$pristine) }">
+                <td width="30%">Grade</td>
+                <td width="55%">
 
-                <input class="form-control input-sm" ng-model="reports.currentClickedLabResults.grade"
-                       id="grade" name="grade" ng-init="reports.getGrades()"
-                       class="form-control"
-                       data-min-length="0"
-                       data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       bs-options="icon.grade as icon.grade for icon in reports.grades"
-                       placeholder="Type grade" bs-typeahead
-                >
+                    <input class="form-control input-sm" ng-model="reports.currentClickedLabResults.grade"
+                           id="grade" name="grade" ng-init="reports.getGrades()"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.grade as icon.grade for icon in reports.grades"
+                           placeholder="Type grade" bs-typeahead
+                           >
 
-            </td>
-            <td width="15%"></td>
-        </tr>
+                </td>
+                <td width="15%"></td>
+            </tr>
 
-        <tr ng-class="{ 'has-error'  : resultsData.remarks.$invalid && !resultsData.remarks.$pristine  }">
-            <td width="30%">Remarks</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter remarks  "
-                       ng-model="reports.currentClickedLabResults.remarks" required
-                       name="remarks">
+            <tr ng-class="{ 'has-error'  : resultsData.remarks.$invalid && !resultsData.remarks.$pristine  }">
+                <td width="30%">Remarks</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter remarks  "
+                           ng-model="reports.currentClickedLabResults.remarks" required
+                           name="remarks">
 
-            </td>
-            <td width="15%">
+                </td>
+                <td width="15%">
 
-            </td>
-        </tr>
+                </td>
+            </tr>
 
-        <tr ng-class="{ 'has-error'  : resultsData.adminRemarks.$invalid && !resultsData.adminRemarks.$pristine  }">
-            <td width="30%">Result Recommedation</td>
-            <td width="55%">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please enter remarks  "
-                       ng-model="reports.currentClickedLabResults.adminRemarks"
-                       name="adminRemarks">
+            <tr ng-class="{ 'has-error'  : resultsData.adminRemarks.$invalid && !resultsData.adminRemarks.$pristine  }">
+                <td width="30%">Result Recommedation</td>
+                <td width="55%">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           placeholder="Please enter remarks  "
+                           ng-model="reports.currentClickedLabResults.adminRemarks"
+                           name="adminRemarks">
 
-            </td>
-            <td width="15%">
-                <select class="form-control col-md-12" type="text" placeholder="score"
-                        ng-model="reports.currentClickedLabResults.correctiveAction" required
-                        name="correctiveAction">
-                    <option selected disabled>--Corrective Action--</option>
-                    <option value="1">YES</option>
-                    <option value="0">NO</option>
-                </select>
-            </td>
-        </tr>
-        <!--<tr>-->
-        <!--<td width="30%">-->
-        <!--<div class="col-md-12 no-padding">-->
+                </td>
+                <td width="15%">
+                    <select class="form-control col-md-12" type="text" placeholder="score"
+                            ng-model="reports.currentClickedLabResults.correctiveAction" required
+                            name="correctiveAction">
+                        <option selected disabled>--Corrective Action--</option>
+                        <option value="1">YES</option>
+                        <option value="0">NO</option>
+                    </select>
+                </td>
+            </tr>
+            <!--<tr>-->
+            <!--<td width="30%">-->
+            <!--<div class="col-md-12 no-padding">-->
 
-        <!--</div>-->
-        <!--</td>-->
-        <!--<td width="55%">-->
-        <!--<div class="col-md-12 no-padding">-->
-        <!--<button class="btn btn-info col-md-12"-->
-        <!--ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"-->
-        <!--ng-disabled="resultsData.$invalid || samples.savingInProgress"-->
-        <!--&gt;Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>-->
-        <!--</button>-->
-        <!--</div>-->
-        <!--</td>-->
-        <!--<td width="15%">-->
+            <!--</div>-->
+            <!--</td>-->
+            <!--<td width="55%">-->
+            <!--<div class="col-md-12 no-padding">-->
+            <!--<button class="btn btn-info col-md-12"-->
+            <!--ng-click="reports.saveIndividualEvaluation(reports.currentClickedLabResults)"-->
+            <!--ng-disabled="resultsData.$invalid || samples.savingInProgress"-->
+            <!--&gt;Update<i class="fa fa-spin {{samples.savingSpinner}}"></i>-->
+            <!--</button>-->
+            <!--</div>-->
+            <!--</td>-->
+            <!--<td width="15%">-->
 
-        <!--</td>-->
-        <!--</tr>-->
+            <!--</td>-->
+            <!--</tr>-->
         </tbody>
     </table>
 </form>
@@ -277,114 +277,125 @@
     <h3><u>ANTIMICROBIAL AGENT</u></h3>
     <table class="table table-bordered">
         <thead class="btn-primary">
-        <tr>
-            <th>
-                ANTIMICROBIAL
-                AGENT
+            <tr>
+                <th>
+                    ANTIMICROBIAL
+                    AGENT
 
-            </th>
-            <th>
-                Reported to
-                Clinician(Yes or No)
+                </th>
+                <th>
+                    Reported to
+                    Clinician(Yes or No)
 
-            </th>
-            <th>
-                DISK CONTENT
-                (&micro;g or Units)
+                </th>
+                <th>
+                    DISK CONTENT
+                    (&micro;g or Units)
 
-            </th>
-            <th>Score</th>
-            <th>
-                S <sup>1</sup>
-            </th>
-            <th>
-                I <sup>2</sup>
-            </th>
-            <th>
-                R <sup>3</sup>
-            </th>
-            <th></th>
-        </tr>
+                </th>
+                <th>Score</th>
+                <th>
+                    S <sup>1</sup>
+                </th>
+                <th>
+                    I <sup>2</sup>
+                </th>
+                <th>
+                    R <sup>3</sup>
+                </th>
+                <th></th>
+            </tr>
         </thead>
-        <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
+        <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents', 'testAgentType', '3')">
 
-        <tr ng-repeat="fields in reports.microagentsData.microAgents"
-            ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
-            <td nowrap><input type="text" class="form-control"
-                              ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                              id="antiMicroAgent" name="antiMicroAgent"
-                              class="form-control"
-                              data-min-length="0"
-                              data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                              required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                              bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
-                              placeholder="Search Reagent" bs-typeahead
+            <tr ng-repeat="fields in reports.microagentsData.microAgents"
+                ng-class="{ 'has-error'  : samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
+                <td nowrap><input type="text" class="form-control"
+                                  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                  id="antiMicroAgent" name="antiMicroAgent"
+                                  class="form-control"
+                                  data-min-length="0"
+                                  data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                                  required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                  bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
+                                  placeholder="Search Reagent" bs-typeahead
 
-                              ng-model="fields.antiMicroAgent">
+                                  ng-model="fields.antiMicroAgent">
 
-            </td>
-            <td>
-                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                        ng-model="fields.reportedToStatus">
-                    <option class="" selected disabled>--select reported--</option>
-                    <option value="yes">YES</option>
-                    <option value="no">NO</option>
-                </select>
-            </td>
+                </td>
+                <td>
+                    <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                            ng-model="fields.reportedToStatus">
+                        <option class="" selected disabled>--select reported--</option>
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                    </select>
+                </td>
 
-            <td><input type="text" class="form-control"
-                       ng-change="" ng-pattern="samples.numericOnly"
-                       ng-model="fields.diskContent"></td>
-            <td>
-                <input type="text" class="form-control"
-                       ng-change=""
-                       ng-model="fields.score">
-            </td>
-            <td>
-                <input type="radio" class="form-control" ng-click="fields.finalScore='S'"
-                       ng-checked="fields.finalScore=='S'"
-                       name="score{{$index}}" ng-model="fields.finalScore">
-            </td>
-            <td>
-                <input type="radio" class="form-control" ng-click="fields.finalScore='I'"
-                       ng-checked="fields.finalScore=='I'" name="score{{$index}}" ng-model="fields.finalScore">
-            </td>
-            <td>
-                <input type="radio" class="form-control" ng-click="fields.finalScore='R'"
-                       ng-checked="fields.finalScore=='R'" name="score{{$index}}" ng-model="fields.finalScore">
-            </td>
-            <td>
-                {{fields.finalScore}}
-            </td>
-        </tr>
+                <td><input type="text" class="form-control"
+                           ng-change="" ng-pattern="samples.numericOnly"
+                           ng-model="fields.diskContent"></td>
+                <td>
+                    <input type="text" class="form-control"
+                           ng-change="reports.calculateTotalScore(reports.microagentsData.microAgents)"
+                           ng-model="fields.score">
+                </td>
+                <td>
+                    <input type="radio" class="form-control" ng-click="fields.finalScore = 'S'"
+                           ng-checked="fields.finalScore == 'S'"
+                           name="score{{$index}}" ng-model="fields.finalScore">
+                </td>
+                <td>
+                    <input type="radio" class="form-control" ng-click="fields.finalScore = 'I'"
+                           ng-checked="fields.finalScore == 'I'" name="score{{$index}}" ng-model="fields.finalScore">
+                </td>
+                <td>
+                    <input type="radio" class="form-control" ng-click="fields.finalScore = 'R'"
+                           ng-checked="fields.finalScore == 'R'" name="score{{$index}}" ng-model="fields.finalScore">
+                </td>
+                <td>
+                    {{fields.finalScore}}
+                </td>
+            </tr>
+            <tr  ng-class="{ 'has-error'  : reports.currentClickedLabResults.totalMicroAgentsScore > 100 }">
+                <td>Total Score For AST</td>
+                <td colspan="6">
+                    <input type="text" class="form-control" placeholder="total score for ASTs(Number)" ng-pattern="samples.numericOnly"
+                           ng-model="reports.currentClickedLabResults.totalMicroAgentsScore">
 
-        <!--<tr>-->
-        <!--<td>-->
+                    <b class="text-danger" ng-show="reports.currentClickedLabResults.totalMicroAgentsScore > 100">
+                        Total AST marks should be less than 100 and a number
+                    </b>
+                </td>
+            </tr>
+            <!--<tr>-->
+            <!--<td>-->
 
-        <!--</td>-->
-        <!--<td>-->
-        <!--<div class="col-md-12 no-padding">-->
+            <!--</td>-->
+            <!--<td>-->
+            <!--<div class="col-md-12 no-padding">-->
 
-        <!--<button class="btn btn-success col-md-12"-->
-        <!--ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"-->
-        <!--ng-disabled="reports.load=='fa-spinner'"-->
-        <!--&gt;Update<i class="fa fa-spin {{reports.load}}"></i>-->
-        <!--</button>-->
+            <!--<button class="btn btn-success col-md-12"-->
+            <!--ng-click="reports.saveMicroAgentsEvaluation(reports.microagentsData)"-->
+            <!--ng-disabled="reports.load=='fa-spinner'"-->
+            <!--&gt;Update<i class="fa fa-spin {{reports.load}}"></i>-->
+            <!--</button>-->
 
 
-        <!--</div>-->
-        <!--</td>-->
-        <!--<td></td>-->
-        <!--<td></td>-->
-        <!--<td></td>-->
-        <!--<td></td>-->
-        <!--<td></td>-->
-        <!--</tr>-->
+            <!--</div>-->
+            <!--</td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--</tr>-->
         </tbody>
     </table>
 
+
     <div class="col-md-12 btn btn-warning"
-         ng-click="reports.evaluateBoth(reports.currentClickedLabResults,reports.microagentsData.microAgents)"
-         ng-disabled="resultsData.$invalid"> Evaluate Both
+         ng-click="reports.evaluateBoth(reports.currentClickedLabResults, reports.microagentsData.microAgents)"
+         ng-disabled="resultsData.$invalid || reports.currentClickedLabResults.totalMicroAgentsScore > 100"> Evaluate Both
     </div>
 </div>
