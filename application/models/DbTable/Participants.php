@@ -83,7 +83,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('unique_identifier', 'first_name', 'iso_name', 'mobile', 'phone', 'affiliation', 'email', 'status');
+        $aColumns = array('unique_identifier', 'MflCode', 'first_name', 'iso_name', 'mobile', 'phone', 'affiliation', 'email', 'status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "participant_id";
@@ -164,6 +164,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
             $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
+        }
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $sQuery = $sQuery->where("p.IsVl = ? ", 3);
         }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -263,7 +266,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         } else {
             $data['individual'] = 'no';
         }
-
+        if (isset($params['MflCode'])) {
+            $data['MflCode']= $params['MflCode'];
+        }
 
 
         if (isset($params['status']) && $params['status'] != "" && $params['status'] != null) {
@@ -347,6 +352,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
         $participantName = $params['instituteName'];
+
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
@@ -389,6 +395,71 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $fromName = Application_Service_Common::getConfig('admin-name');
         $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
         $common->sendPasswordEmailToUser($pMail, $password, $participantName);
+
+
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $data['IsVl'] = 3;
+        }
+        if (isset($params['MflCode'])) {
+            $data['MflCode'] = $params['MflCode'];
+        }
+         $participantId = $this->insert($data);
+         $sendTo = $params['pemail'];
+        if ($_SESSION['loggedInDetails']["IsVl"] == 1) {
+           
+            $db = Zend_Db_Table_Abstract::getAdapter();
+            $common = new Application_Service_Common();
+            $password = $common->generateRandomPassword(8);
+
+            $datam = array(
+                'first_name' => $params['contactname'],
+                //'last_name' => $params['lname'],
+                'institute' => $params['instituteName'],
+                'phone' => $params['phone2'],
+                'mobile' => $params['phone1'],
+                'secondary_email' => $params['pemail'],
+                'primary_email' => $params['pemail'],
+                'password' => md5($password),
+                'force_password_reset' => 1,
+                'qc_access' => 'no',
+                'enable_adding_test_response_date' => 'no',
+                'enable_choosing_mode_of_receipt' => 'no',
+                'view_only_access' => 'no',
+                'status' => 'active',
+                'IsVl' => '1',
+                'created_by' => $authNameSpace->admin_id,
+                'created_on' => new Zend_Db_Expr('now()')
+            );
+
+            $db->insert('data_manager', $datam);
+
+
+            foreach ($params['dataManager'] as $dataManager) {
+                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
+            }
+            if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
+                foreach ($params['enrolledProgram'] as $epId) {
+                    $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
+                }
+            }
+            $pMail = $params['pemail'];
+            $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
+            $toMail = Application_Service_Common::getConfig('admin_email');
+            $fromMail = "brianonyi@gmail.com";
+            $fromName = Application_Service_Common::getConfig('admin-name');
+            $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
+            $common->sendPasswordEmailToUser($pMail, $password, $participantName);
+        }
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $common = new Application_Service_Common();
+            $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
+            $toMail = Application_Service_Common::getConfig('admin_email');
+            $fromMail = "brianonyi@gmail.com";
+            $fromName = Application_Service_Common::getConfig('admin-name');
+            $common->sendGeneralEmail($sendTo, "New Participant Registered   $message", $participantName);
+        }
+
+
         return $participantId;
     }
 
@@ -488,6 +559,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $lastInsertId = $this->getAdapter()->lastInsertId('data_manager');
         $db->insert('participant_manager_map', array('dm_id' => $lastInsertId, 'participant_id' => $participantId, 'Parent_id' => $authNameSpace->dm_id));
 
+
         $participantName = $params['pfname'] . " " . $params['plname'];
         $dataManager = $authNameSpace->first_name . " " . $authNameSpace->last_name;
 
@@ -501,7 +573,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     }
 
     public function fetchAllActiveParticipants() {
-        return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            return $this->fetchAll($this->select()->where("status='active'")->where("IsVl='3'")->order("first_name"));
+        } else {
+            return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));
+        }
     }
 
     public function getSchemeWiseParticipants($schemeType) {

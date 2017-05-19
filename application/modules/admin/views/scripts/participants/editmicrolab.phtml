@@ -5,7 +5,7 @@
 <div class="well" id='ng-app' ng-app="ReportModule" ng-cloak="">
     <form name="editParticipantForm"  ng-controller="ReportsController"
           id="editParticipantForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "participants", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
-            return false;">
+                          return false;">
         <fieldset>
             <legend>Edit Laboratory (<?php echo ucwords($this->participant['status']); ?>)</legend>
 
@@ -22,6 +22,17 @@
                 </div>
                 <input type="hidden" id="participantId" name="participantId" size="50" maxlength=tip"255" class="isRequired form-control" value="<?php echo $this->participant['participant_id']; ?>"/>
             </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Mfl Code <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <input type="text" id="pid" name="pid" size="50" class="isRequired form-control"
+                           title="Please enter the Mfl Code here"
+                           placeholder="Please enter the MflCode here"
+                           value="<?php echo $this->participant['MflCode']; ?>"
+                           onblur="checkDuplicate('participant', 'MflCode', this, '<?php echo "participant_id##" . $this->participant['participant_id']; ?>', 'This Mfl Code already exists for another Participant. Please try something else.')"/>
+                </div>
+           </div>
 
             <div class="form-group col-lg-6" id="firstNameDiv">
                 <label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label>
@@ -100,7 +111,7 @@
                 <div class="col-lg-8">
                     <select id="region" name="region"
                             class="form-control isRequired" title="Please enter region here"
-                    >
+                            >
                         <option ng-repeat="county in reports.counties">{{county.Description}}</option>
                     </select>
                 </div>
@@ -129,46 +140,50 @@
                                              class="form-control" title="Please enter the funding source here"
                                              placeholder="Please enter the funding source here" value="<?php echo $this->participant['funding_source']; ?>"/></div>
             </div>
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Testing Volume</label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" -->
-<!--                           class="form-control" title="Please enter testing volume here"-->
-<!--                           placeholder="Please enter the testing volume here" value="--><?php //echo $this->participant['testing_volume']; ?><!--"/></div>-->
-<!--            </div>-->
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Enrolled Programs </label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="enrolledProgram[]" id="enrolledProgram"   multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >-->
-<!--                        --><?php
+            <!--            <div class="form-group col-lg-6">-->
+            <!--                <label class="col-lg-4 control-label">Testing Volume</label>-->
+            <!---->
+            <!--                <div class="col-lg-8">-->
+            <!--                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" -->
+            <!--                           class="form-control" title="Please enter testing volume here"-->
+            <!--                           placeholder="Please enter the testing volume here" value="--><?php //echo $this->participant['testing_volume'];  ?><!--"/></div>-->
+            <!--            </div>-->
+            <!--            <div class="form-group col-lg-6">-->
+            <!--                <label class="col-lg-4 control-label">Enrolled Programs </label>-->
+            <!---->
+            <!--                <div class="col-lg-8">-->
+            <!--                    <select name="enrolledProgram[]" id="enrolledProgram"   multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >-->
+            <!--                        --><?php
 //                        $enrolledProg = explode(",", $this->participant['enrolled_prog']);
 //
 //                        foreach ($this->enrolledPrograms as $enrolledPrograms) {
-//                            ?>
-<!--                            -->
-<!--                            <option value="--><?php //echo $enrolledPrograms['r_epid']; ?><!--" --><?php //echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? "selected='selected'" : "" ?><?php //echo $enrolledPrograms['enrolled_programs']; ?><!--</option>-->
-<!--                            --><?php
+//                            
+            ?>
+            <!--                            -->
+            <!--                            <option value="--><?php //echo $enrolledPrograms['r_epid'];  ?><!--" --><?php //echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? "selected='selected'" : ""  ?><?php //echo $enrolledPrograms['enrolled_programs'];  ?><!--</option>-->
+            <!--                            --><?php
 //                        }
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Site Type</label>-->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="siteType" id="siteType"  class="form-control">-->
-<!--                        <option value="">--Select--</option>-->
-<!--                        --><?php //foreach ($this->siteType as $siteType) {
-//                            ?>
-<!--                            <option value="--><?php //echo $siteType['r_stid']; ?><!--" --><?php //echo ($this->participant['site_type'] == $siteType['r_stid']) ? "selected='selected'" : ""; ?><?php //echo $siteType['site_type']; ?><!--</option>-->
-<!--                            --><?php
+//                        
+            ?>
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="form-group col-lg-6">-->
+            <!--                <label class="col-lg-4 control-label">Site Type</label>-->
+            <!--                <div class="col-lg-8">-->
+            <!--                    <select name="siteType" id="siteType"  class="form-control">-->
+            <!--                        <option value="">--Select--</option>-->
+            <!--                        --><?php //foreach ($this->siteType as $siteType) {
+//                            
+            ?>
+            <!--                            <option value="--><?php //echo $siteType['r_stid']; ?><!--" --><?php //echo ($this->participant['site_type'] == $siteType['r_stid']) ? "selected='selected'" : ""; ?><?php //echo $siteType['site_type']; ?><!--</option>-->
+            <!--                            --><?php
 //                        }
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
+//                        
+            ?>
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <hr style="border:1px solid #ccc;background: #ccc;width:90%;"/>
 
@@ -184,13 +199,13 @@
                         foreach ($this->dataManagers as $dm) {
                             ?>
                             <option value="<?php echo $dm['dm_id']; ?>" <?php echo (in_array($dm['dm_id'], $dataManagers)) ? "selected='selected'" : "" ?>><?php echo $dm['first_name'] . " " . $dm['last_name']; ?></option>
-                            <?php
-                        }
-                        ?>
+    <?php
+}
+?>
                     </select>
                 </div>
             </div>
-             <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Contact Name </label>
 
                 <div class="col-lg-8"><input type="text" id="contactname" name="contactname" size="50" maxlength="255" class="form-control" title="Please enter the contact name here" placeholder="Please enter the contact name here"  value="<?php echo $this->participant['contact_name']; ?>" /></div>
@@ -255,37 +270,41 @@
                 </div>
             </div>
 
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Affiliation <span class="mandatory">*</span></label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">-->
-<!--                        <option value="">--Select--</option>-->
-<!--                        --><?php //foreach ($this->affiliates as $aff) {
-//                            ?>
-<!--                            <option value="--><?php //echo $aff['affiliate']; ?><!--" --><?php //echo ($this->participant['affiliation'] == $aff['affiliate']) ? "selected='selected'" : "" ?><?php //echo $aff['affiliate']; ?><!--</option>-->
-<!--                        --><?php //}
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            --><?php //if ($this->participant['status'] == "pending") { ?>
-<!--                <div class="form-group col-lg-6">-->
-<!--                    <label class="col-lg-4 control-label">Schemes <span class="mandatory">*</span></label>-->
-<!---->
-<!--                    <div class="col-lg-8">-->
-<!--                        <select id="scheme" name="scheme[]"  class="form-control isRequired" multiple="multiple" title="Please choose one or more Schemes" data-selected-text-format="count>3">-->
-<!--                            --><?php
+            <!--            <div class="form-group col-lg-6">-->
+            <!--                <label class="col-lg-4 control-label">Affiliation <span class="mandatory">*</span></label>-->
+            <!---->
+            <!--                <div class="col-lg-8">-->
+            <!--                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">-->
+            <!--                        <option value="">--Select--</option>-->
+            <!--                        --><?php //foreach ($this->affiliates as $aff) {
+//                            
+?>
+            <!--                            <option value="--><?php //echo $aff['affiliate'];  ?><!--" --><?php //echo ($this->participant['affiliation'] == $aff['affiliate']) ? "selected='selected'" : ""  ?><?php //echo $aff['affiliate'];  ?><!--</option>-->
+            <!--                        --><?php //}
+//                        
+?>
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            --><?php //if ($this->participant['status'] == "pending") {  ?>
+            <!--                <div class="form-group col-lg-6">-->
+            <!--                    <label class="col-lg-4 control-label">Schemes <span class="mandatory">*</span></label>-->
+            <!---->
+            <!--                    <div class="col-lg-8">-->
+            <!--                        <select id="scheme" name="scheme[]"  class="form-control isRequired" multiple="multiple" title="Please choose one or more Schemes" data-selected-text-format="count>3">-->
+            <!--                            --><?php
 //                            foreach ($this->schemes as $scheme) {
-//                                ?>
-<!--                                <option value="--><?php //echo $scheme['scheme_id']; ?><!--" --><?php //echo (in_array($scheme['scheme_id'], $this->participantSchemes) ? "selected='selected'" : ""); ?><!--><?php //echo $scheme['scheme_name']; ?><!--</option>	-->
-<!--                                --><?php
+//                                
+?>
+            <!--                                <option value="--><?php //echo $scheme['scheme_id'];  ?><!--" --><?php //echo (in_array($scheme['scheme_id'], $this->participantSchemes) ? "selected='selected'" : "");  ?><!--><?php //echo $scheme['scheme_name'];  ?><!--</option>	-->
+            <!--                                --><?php
 //                            }
-//                            ?>
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            --><?php //} ?>
+//                            
+?>
+            <!--                        </select>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            --><?php //}  ?>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                 <div class="col-lg-8">
@@ -318,7 +337,7 @@
 <script type="text/javascript">
                     var duplicated = false;
 
-                    $(document).ready(function() {
+                    $(document).ready(function () {
                         $('#dataManager').selectpicker();
                         $('#enrolledProgram').selectpicker();
                         $('#country').selectpicker();
@@ -327,16 +346,15 @@
 
                     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
                         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
-                        function(data) {
-                            if (data > 0) {
-                                alert(msg, "err");
-                                duplicated = true;
-                                obj.focus();
-                            }
-                            else {
-                                duplicated = false;
-                            }
-                        });
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        obj.focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                });
                     }
 
                     function validateNow() {
@@ -362,14 +380,14 @@
                         }
                         $("#firstNameDiv").html(tag);
                     }
-                    
-                    <?php
-                    if(isset($this->participant['individual']) && trim($this->participant['individual'])=='no'){
-                    ?>
-                        document.getElementById("individualParticipant").checked=false;
+
+<?php
+if (isset($this->participant['individual']) && trim($this->participant['individual']) == 'no') {
+    ?>
+                        document.getElementById("individualParticipant").checked = false;
                         tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here" value="<?php echo $this->participant['first_name']; ?>"/></div>';
                         $("#lastNameDiv").hide();
                         $("#plname").val('');
                         $("#firstNameDiv").html(tag);
-                    <?php } ?>
+<?php } ?>
 </script>

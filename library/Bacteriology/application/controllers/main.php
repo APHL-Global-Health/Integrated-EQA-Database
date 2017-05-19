@@ -6,7 +6,6 @@ require_once 'pdfCreator.php';
 
 Class Main extends pdfCreator {
 
-    
     public $connect_db;
 
     public function __construct() {
@@ -39,6 +38,7 @@ Class Main extends pdfCreator {
             foreach ($dataArray as $key => $value) {
 
                 $query .= $key;
+                $value = addslashes($value);
                 $values .= "'$value'";
                 $counter++;
                 if ($counter < sizeof($dataArray)) {
@@ -65,7 +65,10 @@ Class Main extends pdfCreator {
                 if (isset($dataArray) && is_array($dataArray)) {
 
                     $queryStatement = $this->createInsertStatement($tableName, $dataArray);
-
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
+//                        echo $queryStatement;
+//                        exit;
+                    }
                     if (is_string($queryStatement)) {
                         $queryStatus = $this->connect_db->query($queryStatement);
                         if ($queryStatus) {
@@ -118,7 +121,7 @@ Class Main extends pdfCreator {
 
             if ($group) {
                 if ($tableName == 'tbl_bac_panels_shipments' && $group == true) {
-                    $where .= ' group by shipmentId';
+                    $where .= ' ';
                 } else {
                     $where .= "group by shipmentId,panelId";
                 }
@@ -142,9 +145,11 @@ Class Main extends pdfCreator {
                 $sql .= $this->returnWhereStatement($where, $group, $tableName);
             }
         }
-
-//        echo $sql;
+        if ($tableName == 'tbl_bac_sample_to_panel') {
+//                    echo $sql;
 //        exit;
+        }
+
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -158,18 +163,24 @@ Class Main extends pdfCreator {
             return false;
         }
     }
-public function updateAndDelete($sql){
-    
-    $result = $this->connect_db->query($sql);
-    
-    return true;
-}
-    public function doQuery($sql) {
+
+    public function updateAndDelete($sql) {
+
+        $result = $this->connect_db->query($sql);
+
+        return true;
+    }
+
+    public function doQuery($sql, $count = null) {
 //        echo$sql;
 //        exit;
-        $result = $this->connect_db->query($sql);
-        
 //        var_dump($this->connect_db->error);
+
+        if (isset($count)) {
+            return $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
+        }
+
+        $result = $this->connect_db->query($sql);
         $results = array();
         if ($result->num_rows > 0) {
             // output data of each row
@@ -233,6 +244,8 @@ public function updateAndDelete($sql){
     public function selectReportFromTable($tableName, $col, $where, $order, $group = '', $groupArray = '') {
 
         $sql = "SELECT " . implode(',', $col) . " FROM $tableName";
+//        print_r($sql);
+//        exit;
         if (isset($where)) {
 
             if (is_array($where)) {
@@ -374,8 +387,10 @@ public function updateAndDelete($sql){
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
-//                    echo $sql;
+                    if ($tableName == 'tbl_bac_sample_to_panel') {
+//                        echo $sql;
 //                    exit;
+                    }
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {

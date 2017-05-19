@@ -88,7 +88,18 @@ class Application_Service_Common {
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
-
+public function sendGeneralEmail($sendTo, $Message, $fullname) {
+//        $common = new Application_Service_Common();
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $message = "Dear $fullname,"
+                
+                . "<br> $Message <br>"
+               
+                . $config->emailRegistrationSignature;
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        //$fromName = Application_Service_Common::getConfig('admin-name');			
+        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+    }
     public function generateRandomPassword($len) {
 
         $min_lenght = 0;

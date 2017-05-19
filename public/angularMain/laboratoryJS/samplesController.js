@@ -4,7 +4,7 @@
 
 (function () {
     var samplesModule = angular.module('ReportModule');
-  
+
     samplesModule.controller('samplesController', function ($scope, $http, $location, EptServices, EptFactory, $timeout, loginDataCache) {
         var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
 //        var serverReportURL = SERVER_API_URL.reportsURL;
@@ -161,7 +161,7 @@
         $scope.samples.getParticipantPanel = function (tableName) {
             var whereData = {
                 participantId: $scope.samples.loginDetails.participant_id,
-                startRoundFlag: 1
+                'deliveryStatus>': 0
             }
             $scope.samples.getAllSamples(tableName, whereData)
         }
@@ -452,6 +452,7 @@
                             changeSavingSpinner(false);
                         })
             } catch (Exception) {
+
                 console.log(Exception);
             }
         }
@@ -1523,7 +1524,7 @@
                                 if (type == 0) {
                                     $scope.samples.hideShipmentModal();
                                     $scope.samples.showReceiveShipment = false;
-                                    alert($scope.samples.showReceiveShipment)
+                                    console.log($scope.samples.showReceiveShipment)
                                     $scope.samples.getDistinctShipmentsForDelivery();
                                 }
                                 if (postedData.tableName == 'tbl_bac_panels_shipments') {
@@ -2133,6 +2134,28 @@
         $scope.samples.showRoundFullUsers = function (sample) {
             $scope.samples.clickedSample = sample;
             $scope.samples.samplesActivePage('sampleFullInfo', 0);
+        }
+        $scope.samples.labAveragePerformance = {};
+        $scope.samples.getRoundEvaluationAvg = function () {
+
+            try {
+                var url = serverSamplesURL + 'getroundperformanceperlab';
+                var where = {checkLab: 1};
+                console.log(where)
+                $http.post(url, where)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labAveragePerformance = response.data;
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
+            } catch (Exception) {
+                console.log(Exception);
+            }
         }
         $scope.samples.sampleToUsers = {};
         $scope.samples.getSampleAllUsers = function (sample) {

@@ -4,7 +4,7 @@
     <form name="addParticipantForm" ng-controller="ReportsController" id="addParticipantForm" method="post"
           action="<?php echo $this->url(array("module" => "admin", "controller" => "participants", "action" => "add"), 'default', true) ?>"
           class="form-horizontal bs-example" role="form" onsubmit="validateNow();
-            return false;">
+                          return false;">
         <fieldset>
 
             <legend>Add New Laboratory</legend>
@@ -19,9 +19,19 @@
                            onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')"/>
                 </div>
             </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Mfl Code <span class="mandatory">*</span></label>
 
+                <div class="col-lg-8">
+                    <input type="text" id="pid" name="MflCode" size="50" class="isRequired form-control"
+                           title="Please enter a unique Mfl Code here"
+                           placeholder="Please enter a unique Mfl Code here"
+                           onblur="checkDuplicate('participant', 'MflCode', this, null, 'This Participant Mfl Code already exists for another Participant. Please try something else.')"/>
+                </div>
+            </div>
+            
             <div class="form-group col-lg-6" id="firstNameDiv">
-                <label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label>
+                <label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label>
                 <div class="col-lg-8">
                     <input type="text" id="pfname" name="pfname" size="50" maxlength="255"
                            class="isRequired form-control" title="Please enter the Lab Name or First Name here"
@@ -96,7 +106,7 @@
                 <div class="col-lg-8">
                     <select id="region" name="region"
                             class="form-control isRequired" title="Please enter region here"
-                    >
+                            >
                         <option ng-repeat="county in reports.counties">{{county.Description}}</option>
                     </select>
                 </div>
@@ -139,12 +149,14 @@
             <!--                <div class="col-lg-8">-->
             <!--                    <select name="enrolledProgram[]" id="enrolledProgram"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >-->
             <!--                        --><?php //foreach ($this->enrolledPrograms as $enrolledPrograms) {
-            //                            ?>
+                        //                            
+                        ?>
             <!--                            <option value="--><?php //echo $enrolledPrograms['r_epid']; ?><!--">-->
-            <?php //echo $enrolledPrograms['enrolled_programs']; ?><!--</option>-->
+            <?php //echo $enrolledPrograms['enrolled_programs'];  ?><!--</option>-->
             <!--                            --><?php
             //                        }
-            //                        ?>
+            //                        
+            ?>
             <!--                    </select>-->
             <!--                </div>-->
             <!--            </div>-->
@@ -155,12 +167,14 @@
             <!--                    <select name="siteType" id="siteType"  class="form-control">-->
             <!--                        <option value="">--Select--</option>-->
             <!--                        --><?php //foreach ($this->siteType as $siteType) {
-            //                            ?>
+            //                            
+            ?>
             <!--                            <option value="--><?php //echo $siteType['r_stid']; ?><!--">-->
             <?php //echo $siteType['site_type']; ?><!--</option>-->
             <!--                            --><?php
             //                        }
-            //                        ?>
+            //                        
+            ?>
             <!--                    </select>-->
             <!--                </div>-->
             <!--            </div>-->
@@ -176,9 +190,9 @@
                         <?php foreach ($this->dataManagers as $dm) {
                             ?>
                             <option value="<?php echo $dm['dm_id']; ?>"><?php echo $dm['first_name'] . " " . $dm['last_name']; ?></option>
-                            <?php
-                        }
-                        ?>
+    <?php
+}
+?>
                     </select>
                 </div>
             </div>
@@ -255,11 +269,13 @@
             <!--                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">-->
             <!--                        <option value="">--Select--</option>-->
             <!--                        --><?php //foreach ($this->affiliates as $aff) {
-            //                            ?>
-            <!--                            <option value="--><?php //echo $aff['affiliate']; ?><!--">-->
-            <?php //echo $aff['affiliate']; ?><!--</option>-->
+//                            
+?>
+            <!--                            <option value="--><?php //echo $aff['affiliate'];  ?><!--">-->
+<?php //echo $aff['affiliate'];  ?><!--</option>-->
             <!--                        --><?php //}
-            //                        ?>
+//                        
+?>
             <!--                    </select>-->
             <!--                </div>-->
             <!--            </div>-->
@@ -289,60 +305,59 @@
 </div>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
 <script type="text/javascript">
-    var duplicated = false;
+                    var duplicated = false;
 
-    $(document).ready(function () {
-        $('#dataManager').selectpicker();
-        $('#enrolledProgram').selectpicker();
-        $('#country').selectpicker();
-        tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
-        $("#lastNameDiv").hide();
-        $("#plname").val('');
-        $("#firstNameDiv").html(tag);
-    });
+                    $(document).ready(function () {
+                        $('#dataManager').selectpicker();
+                        $('#enrolledProgram').selectpicker();
+                        $('#country').selectpicker();
+                        tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
+                        $("#lastNameDiv").hide();
+                        $("#plname").val('');
+                        $("#firstNameDiv").html(tag);
+                    });
 
-    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {
-                tableName: tableName,
-                fieldName: fieldName,
-                value: obj.value,
-                fnct: fnct,
-                format: "html"
-            },
-            function (data) {
-                if (data > 0) {
-                    alert(msg, "err");
-                    duplicated = true;
-                    obj.focus();
-                }
-                else {
-                    duplicated = false;
-                }
-            });
-    }
+                    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+                        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {
+                            tableName: tableName,
+                            fieldName: fieldName,
+                            value: obj.value,
+                            fnct: fnct,
+                            format: "html"
+                        },
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        obj.focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                });
+                    }
 
-    function validateNow() {
-        $(".bootstrap-select").removeClass('isRequired');
-        //checkDuplicate('participant', 'unique_identifier', $("#pid"), null, 'This Participant ID already exists for another Participant. Please try something else.')
-        flag = deforayValidator.init({
-            formId: 'addParticipantForm'
-        });
-        if (flag && !duplicated) {
-            $.blockUI();
-            document.getElementById('addParticipantForm').submit();
-        }
-    }
+                    function validateNow() {
+                        $(".bootstrap-select").removeClass('isRequired');
+                        //checkDuplicate('participant', 'unique_identifier', $("#pid"), null, 'This Participant ID already exists for another Participant. Please try something else.')
+                        flag = deforayValidator.init({
+                            formId: 'addParticipantForm'
+                        });
+                        if (flag && !duplicated) {
+                            $.blockUI();
+                            document.getElementById('addParticipantForm').submit();
+                        }
+                    }
 
-    function checkIndividualParticipant(obj) {
-        if (obj.checked) {
-            tag = '<label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the First Name here" placeholder="Please enter the First Name here"/></div>';
-            $("#lastNameDiv").show();
+                    function checkIndividualParticipant(obj) {
+                        if (obj.checked) {
+                            tag = '<label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the First Name here" placeholder="Please enter the First Name here"/></div>';
+                            $("#lastNameDiv").show();
 
-        } else {
-            tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
-            $("#lastNameDiv").hide();
-            $("#plname").val('');
-        }
-        $("#firstNameDiv").html(tag);
-    }
+                        } else {
+                            tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
+                            $("#lastNameDiv").hide();
+                            $("#plname").val('');
+                        }
+                        $("#firstNameDiv").html(tag);
+                    }
 </script>

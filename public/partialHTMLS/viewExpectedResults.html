@@ -50,13 +50,10 @@
                 <th>primary Media</th>
                 <th ng-show="scoreCols">primaryMedia Score</th>
                 <th>incubation Conditions</th>
-                <th ng-show="scoreCols">incubation Conditions Score</th>
+                
                 <th>colonial Morphology</th>
-                <th ng-show="scoreCols">colonial Morphology Score</th>
                 <th>bacterial Qualification</th>
-                <th ng-show="scoreCols">bacterial Qualification Score</th>
                 <th>bacterial Reagents</th>
-                <th ng-show="scoreCols">bacterial Reagents Score</th>
                 <th>final Identification</th>
                 <th ng-show="scoreCols">final Identification Score</th>
                 <th>Date Created</th>
@@ -72,13 +69,9 @@
                 <td>{{expectedResults.primaryMedia}}</td>
                 <td ng-show="scoreCols">{{expectedResults.primaryMediaScore}}</td>
                 <td>{{expectedResults.incubationConditions}}</td>
-                <td ng-show="scoreCols">{{expectedResults.incubationConditionsScore}}</td>
                 <td>{{expectedResults.colonialMorphology}}</td>
-                <td ng-show="scoreCols">{{expectedResults.colonialMorphologyScore}}</td>
                 <td>{{expectedResults.bacterialQualification}}</td>
-                <td ng-show="scoreCols">{{expectedResults.bacterialQualificationScore}}</td>
                 <td>{{expectedResults.bacterialReagents}}</td>
-                <td ng-show="scoreCols">{{expectedResults.bacterialReagentsScore}}</td>
                 <td>{{expectedResults.finalIdentification}}</td>
                 <td ng-show="scoreCols">{{expectedResults.finalIdentificationScore}}</td>
                 <td nowrap>{{samples.returnSubstring(expectedResults.dateCreated ,10)}}</td>

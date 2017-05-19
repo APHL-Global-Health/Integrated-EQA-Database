@@ -4,7 +4,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
 //    var serverReportURL = SERVER_API_URL.reportsURL;
     var serverReportURL = SERVER_API_URL.bacteriologyParticipant;
-console.log(serverReportURL);
+    console.log(serverReportURL);
     $scope.$log = $log;
     $scope.reports = {};
     $scope.reports.loaderStatus = true;
@@ -514,6 +514,42 @@ console.log(serverReportURL);
             $log.debug('Serious error occurred');
         }
     }
+
+
+    $scope.reports.showRoundResults = false;
+    $scope.reports.roundInfo = {};
+    $scope.reports.roundAllResults ={}
+    $scope.reports.getRRoundResults = function (round) {
+        var where = {roundId: round.id};
+        var url = serverReportURL + 'getresultsonround';
+        $scope.reports.showRoundResults = true;
+        // var where = where;
+        $scope.reports.roundInfo = round;
+        console.log(round)
+        showAjaxLoader(true);
+        $http
+            .post(url, where)
+            .success(function (response) {
+
+                showAjaxLoader(false);
+                if (response.status == 1) {
+                    console.log(response);
+                    $scope.reports.roundAllResults = response.data;
+                } else {
+
+                    EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+
+                    $scope.reports.roundAllResults = {};
+                }
+            })
+            .error(function (error) {
+                console.log(error)
+                showAjaxLoader(false);
+                EptServices.EptServiceObject.returnServerErrorAlert();
+            })
+
+
+    }
     $scope.reports.correctiveActionData = {};
     $scope.reports.whereCorrectiveActionResults = {};
     $scope.reports.getCorrectiveActionReport = function (where) {
@@ -789,5 +825,11 @@ console.log(serverReportURL);
                     EptServices.EptServiceObject.returnActionUnSuccessAlert();
                 })
     }
+    $scope.reports.getUserResultsForDownload = function (roundId) {
+        var where = {roundId: roundId};
+        var url = serverReportURL + 'getenrolledrounds';
+
+    }
+
 
 })

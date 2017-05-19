@@ -135,10 +135,10 @@
                 <td class="no-padding" ng-repeat="sample in lab.sampleInfo">
                     <table class="no-padding table" style="margin: 0px!important;">
                         <tr CLASS="table table-bordered no-padding">
-                            <td CLASS=" table-bordered" width="33%"> {{sample.finalScore}}</td>
+                            <td CLASS=" table-bordered" width="33%"> {{reports.sumNumbers(sample.grainStainReactionScore,sample.finalIdentificationScore)/2}}</td>
                             <td CLASS=" table-bordered" width="33%"> {{sample.totalMicroAgentsScore}}</td>
                             <td CLASS="table-bordered" width="33%">
-                                {{reports.sumNumbers(sample.finalScore,sample.totalMicroAgentsScore)}}
+                                {{sample.finalScore}}
                             </td>
                         </tr>
                     </table>

@@ -8,6 +8,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
     protected $homeDir;
     protected $dbConnection;
+    protected $dbLimit;
 
     public function init() {
         /* Initialize action controller here */
@@ -20,6 +21,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $this->homeDir = dirname($_SERVER['DOCUMENT_ROOT']);
 
         $this->dbConnection = new Main();
+        $this->dbLimit = 1000;
     }
 
     public function validateAction() {
@@ -66,7 +68,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query = "select DISTINCT ProgramID as name,count(DISTINCT LabID) as data"
                 . "  from rep_repository";
         //if(isset())
-        $query .= " GROUP BY ProgramID;";
+        $query .= " GROUP BY ProgramID ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -106,7 +109,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         $query .= $this->returnUserCountStatement($whereArray['county']);
         //if(isset())
-        $query .= " GROUP BY ProgramID;";
+        $query .= " GROUP BY ProgramID ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -145,8 +149,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        }
         //if(isset())
         $query .= $this->returnUserCountStatement($whereArray['county']);
-        $query .= " GROUP BY rep_repository.MflCode  order by data desc;";
-
+        $query .= " GROUP BY rep_repository.MflCode  order by data desc ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -202,6 +206,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $select .= " GROUP BY rep_repository.MflCode,RoundID order by LID asc ";
 //        echo $select;
 //        exit;
+        $query .= "  LIMIT " . $this->dbLimit;
         $jsonData = $this->dbConnection->doQuery($select); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
@@ -252,8 +257,9 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        }
         $query .= $this->returnUserCountStatement($whereArray['county']);
         //if(isset())
-        $query .= " GROUP BY County;";
+        $query .= " GROUP BY County ";
 //        echo $query;
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -296,7 +302,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        }
         $query .= $this->returnUserCountStatement($whereArray['county']);
         //if(isset())
-        $query .= " GROUP BY ProviderID;";
+        $query .= " GROUP BY ProviderID ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -353,7 +360,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        }
         $query .= $this->returnUserCountStatement($whereArray['county']);
         //if(isset())
-        $query .= " GROUP BY RoundID;";
+        $query .= " GROUP BY RoundID ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         if (count($query) > 0) {
             for ($i = 0; $i < sizeof($query); $i++) {
@@ -391,7 +399,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
 //        }
         $query .= $this->returnUserCountStatement($whereArray['county']);
-        $query .= " GROUP BY RoundID,Grade ORDER BY title";
+        $query .= " GROUP BY RoundID,Grade ORDER BY title ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         $titles = array();
         $labGrades = array();
@@ -436,7 +445,8 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //            $query .= " and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
 //        }
         $query .= $this->returnUserCountStatement($whereArray['county']);
-        $query .= " GROUP BY rep_repository.MflCode,Grade ORDER BY title";
+        $query .= " GROUP BY rep_repository.MflCode,Grade ORDER BY title ";
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
         $titles = array();
         $labGrades = array();
@@ -474,7 +484,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
             $testEvent = $testEvents[rand(0, count($testEvents) - 1)];
             $grade = $grades[rand(0, count($grades) - 1)];
             $result = $results[rand(0, count($results) - 1)];
-            echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `EventDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', '$test', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL);";
+            echo $query = "INSERT INTO `rep_repository` (`ImpID`, `ProviderID`, `LabID`, `RoundID`, `ProgramID`, `EventDate`, `SampleCode`, `AnalyteID`, `SampleCondition`, `DateSampleReceived`, `Result`, `ResultCode`, `Grade`, `TestKitID`, `DateSampleShipped`, `FailReasonCode`, `Frequency`, `StCount`, `TragetValue`, `UpperLimit`, `LowerLimit`, `OverallScore`) VALUES (NULL, '$provider', '$lab', '$testEvent', '$test', '0000-00-00 00:00:00', '$grade', 'Malaria Parasite Detection and Identification ', NULL, NULL, 'No Parasite Seen', 'OK', '$result', NULL, NULL, NULL, 'A', '', '', '', '', NULL) ";
             echo "<br /><br />";
         }
         echo "Done dumping";
@@ -507,7 +517,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query .= $this->returnUserCountStatement($whereArray['county']);
         $query .= " GROUP BY ProgramID,Grade ";
 //        $query = $this->dbConnection->doQuery($query);
-
+        $query .= "  LIMIT " . $this->dbLimit;
         $query = $this->dbConnection->doQuery($query);
 //         print_r($query);
 //         exit;
@@ -551,14 +561,13 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         if (isset($whereArray['AnalyteID']) && !empty($whereArray['AnalyteID'])) {
             $query .= " and AnalyteID ='" . $whereArray['AnalyteID'] . "'";
         }
-         if (isset($whereArray['ResultCode']) && !empty($whereArray['ResultCode'])) {
+        if (isset($whereArray['ResultCode']) && !empty($whereArray['ResultCode'])) {
             $query .= " and ResultCode ='" . $whereArray['ResultCode'] . "'";
         }
 //        if (isset($whereArray['county']) && !empty($whereArray['county'])) {
 
         $query .= $this->returnUserCountStatement($whereArray['county']); //" and labID in (select labName from rep_labs where  County ='" . $whereArray['county'] . "')";
 //        }
-       
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
@@ -566,10 +575,11 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query .= " GROUP BY rep_repository.MflCode,ResultCode order by Name ";
 // echo $query;
 //        exit;
+        $query .= "  LIMIT " . $this->dbLimit;
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
-       
+
         echo json_encode($jsonData);
 
         exit;
@@ -609,7 +619,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
 
         $query .= " GROUP BY mfl_facility_codes.MflCode order by mfl_facility_codes.MflCode";
-
+        $query .= "  LIMIT " . $this->dbLimit;
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
@@ -686,7 +696,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 //        $sytemAdmin = new \database\crud\SystemAdmin($databaseUtils);
 //
 //        $jsonData = json_encode(($sytemAdmin->query_from_system_admin(array(), array())));
-
+        $query .= "  LIMIT " . $this->dbLimit;
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
@@ -722,7 +732,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         $query .= " and rep_repository.valid ='1' and Status = '1' ";
 
         $query .= $this->returnUserCountStatement($whereArray['county']);
-
+        $query .= "  LIMIT " . $this->dbLimit;
         $jsonData = $this->dbConnection->doQuery($query); //$databaseUtils->rawQuery($query);
         $_SESSION['currentRepoData'] = $jsonData;
         $_SESSION['filterData'] = $whereArray;
@@ -864,7 +874,7 @@ class Reports_RepositoryController extends Zend_Controller_Action {
                 }
             }
         }
-       $sql .= " and rep_repository.Status ='1'";
+        $sql .= " and rep_repository.Status ='1' ";
         return $sql;
     }
 

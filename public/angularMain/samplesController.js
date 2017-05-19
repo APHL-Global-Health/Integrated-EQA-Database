@@ -114,14 +114,11 @@
             console.log(test)
             if (test == 1) {
                 return 'ID';
-            }
-            else if (test == 2) {
+            } else if (test == 2) {
                 return 'Grain Stain';
-            }
-            else if (test == 3) {
+            } else if (test == 3) {
                 return 'AST';
-            }
-            else {
+            } else {
                 return '?'
             }
         }
@@ -134,12 +131,9 @@
         $scope.samples.returnSoundStatus = function (status, days) {
             if (Number(days) > 0) {
                 return 'Active';
-            }
-            else if (Number(days) <= 0) {
+            } else if (Number(days) <= 0) {
                 return 'Expired';
-            }
-
-            else {
+            } else {
                 return 'Unknown';
             }
         }
@@ -248,8 +242,7 @@
             }
             if (days == 0 && status == 1) {
                 return 'Expired';
-            }
-            else {
+            } else {
                 return 'Unknown';
             }
 
@@ -279,7 +272,7 @@
                     varData.where = where;
                 }
 
-
+                console.log(varData);
                 $http
                     .post(url, varData)
                     .success(function (data) {
@@ -347,8 +340,7 @@
             }
             if (panelStatus == 6) {
                 return 'Del\'d,Good/Rejected';
-            }
-            else {
+            } else {
                 return "Unknown status"
             }
         }
@@ -368,8 +360,7 @@
             }
             if (shipmentStatus == 5) {
                 return 'Rejected ';
-            }
-            else {
+            } else {
                 return 'Unknown';
             }
         }
@@ -504,22 +495,17 @@
 
             if (status == 0) {
                 return type == 1 ? 'panel-primary' : 'btn-primary';
-            }
-            else if (status == 1) {
+            } else if (status == 1) {
                 return type == 1 ? 'panel-primary' : 'btn-primary';
             } else if (status == 2) {
                 return type == 1 ? 'panel-info' : 'btn-info';
-            }
-            else if (status == 3) {
+            } else if (status == 3) {
                 return type == 1 ? 'panel-warning' : 'btn-warning';
-            }
-            else if (status == 4) {
+            } else if (status == 4) {
                 return type == 1 ? 'panel-success' : 'btn-success';
-            }
-            else if (status == 5) {
+            } else if (status == 5) {
                 return type == 1 ? 'panel-danger' : 'btn-danger';
-            }
-            else {
+            } else {
                 return type == 1 ? 'panel-default' : 'btn-default';
             }
         }
@@ -596,7 +582,9 @@
                 $scope.samples.programFormData = {};
             }
             if (tableName == 'tbl_bac_expected_results') {
+
                 $scope.samples.resultsFormData = {};
+
             }
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = {};
@@ -638,6 +626,10 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_programs');
             }
             if (tableName == 'tbl_bac_expected_results') {
+                $.alert({
+                    title: "<i class='fa fa-check text-success'> Success</i>",
+                    content: "Results save successfully"
+                })
                 $scope.samples.samplesActivePage('viewExpectedResults', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_expected_results');
             }
@@ -934,18 +926,19 @@
         $scope.samples.panelArrowDown = false;
         $scope.samples.getSampleFromPanel = function (panelId, tableName) {
             try {
-
+                console.log(panelId);
                 var tempPanel = panelId;
-                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+                var panId = angular.isObject(panelId) ? panelId.panelId : panelId;
                 if (isNumeric(panId)) {
                     try {
 
-                        var where = {panelId: panId};
+                        var where = {panelId: panId, deliveryStatus: 0};
 
                         if (angular.isObject(tempPanel)) {
                             where = {
                                 panelId: tempPanel.panelId,
                                 roundId: tempPanel.roundId,
+                                deliveryStatus: 0,
                                 participantId: tempPanel.participantId
                             };
                         }
@@ -976,8 +969,7 @@
                 }
                 $scope.samples.clickedPanel = panId;
 
-            }
-            catch (error) {
+            } catch (error) {
                 console.log(error)
             }
 
@@ -1245,8 +1237,7 @@
                         console.log(postedData)
                         $scope.samples.updateWhere(postedData, 1);
                     }
-                }
-                else {
+                } else {
                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(4));
                 }
 
@@ -1721,8 +1712,7 @@
                     });
                     correctData = false;
                     break;
-                }
-                else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
+                } else if (data[i]['reportedToStatus'] == '' || angular.isUndefined(data[i]['reportedToStatus'])) {
                     $.alert({
                         title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
                         content: " please make sure reported To clinician is filled at row " + (i + 1)
@@ -1730,8 +1720,7 @@
 
                     correctData = false;
                     break;
-                }
-                else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
+                } else if (data[i]['diskContent'] == '' || angular.isUndefined(data[i]['diskContent'])) {
                     $.alert({
                         title: "<i class='fa fa-exclamation-triangle text-danger'></i> Error",
                         content: "  please make sure Disk Content is filled,and is a number at row " + (i + 1)
@@ -1826,8 +1815,7 @@
                     //     title: "<i class='fa fa-remove text-danger'></i> Error",
                     //     content: "Please fill total score"
                     // });
-                }
-                else {
+                } else {
                     if (angular.isDefined($scope.samples.resultsFormData.id)) {
 
                         aba.edit = 1;
@@ -1934,11 +1922,9 @@
                         $scope.samples.exists = true;
                         if (range <= Number(agents[i].fewRange)) {
                             $scope.samples.reagentLevel = 'few';
-                        }
-                        else if (range > Number(agents[i].fewRange) && range <= Number(agents[i].modRange)) {
+                        } else if (range > Number(agents[i].fewRange) && range <= Number(agents[i].modRange)) {
                             $scope.samples.reagentLevel = 'mod';
-                        }
-                        else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
+                        } else if (range > Number(agents[i].modRange) && range <= Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'many';
                         } else if (range < 0 || range > Number(agents[i].manyRange)) {
                             $scope.samples.reagentLevel = 'outOfRange'
@@ -1958,7 +1944,29 @@
                 // $.alert("<i class='fa fa-exclamation-triangle'></i> No test reagents found");
             }
         }
+        $scope.samples.labAveragePerformance = {};
+        $scope.samples.getRoundEvaluationAvg = function () {
 
+            try {
+                var url = serverSamplesURL + 'getroundperformanceperlab';
+                var where = {checkLab: 0};
+                console.log(where)
+                $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        changeSavingSpinner(false);
+                        if (response.status == 1) {
+                            $scope.samples.labAveragePerformance = response.data;
+                        }
+                    })
+                    .error(function (error) {
+                        changeSavingSpinner(false);
+                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                    })
+            } catch (Exception) {
+                console.log(Exception);
+            }
+        }
 
         $scope.samples.updateUserResponse = function (tablename, userFeedbackData) {
             var id = '';
@@ -2096,8 +2104,7 @@
                     $timeout(function () {
                         if (angular.isObject(id)) {
                             $scope.samples.getDistinctShipmentsForDelivery()
-                        }
-                        else {
+                        } else {
                             $scope.samples.getShipmentsForDelivery('tbl_bac_shipments', 'shipmentStatus', '2,3,4,5');
                         }
                     }, 100)
@@ -2435,8 +2442,7 @@
                             var update;
                             if (rejectedcounter > 0 && goodcounter > 0) {
                                 update = 6
-                            }
-                            else if (goodcounter == $scope.receive.clickedPanel.totalSamplesAdded) {
+                            } else if (goodcounter == $scope.receive.clickedPanel.totalSamplesAdded) {
                                 update = 4
                             } else {
                                 update = 5
@@ -2448,8 +2454,7 @@
                     }
 
                 }
-            }
-            catch (Exception) {
+            } catch (Exception) {
                 console.log(Exception)
             }
 
@@ -2569,8 +2574,7 @@
                 var message = '';
                 if (status == 5) {
                     message = 'please confirm rejection of the panel,this action can not be undone';
-                }
-                else if (status == 4) {
+                } else if (status == 4) {
                     message = 'please confirm receiving of panel,this action can not be undone'
                 } else {
                     message = 'please confirm action,this action can not be undone'

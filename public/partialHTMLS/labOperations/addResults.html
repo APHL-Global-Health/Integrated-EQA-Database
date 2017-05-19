@@ -14,12 +14,12 @@
                    ng-model="samples.searchData">
         </div>
         <div class="col-md-1 pull-right">
-            <a href="#" class=" btn btn-default btn-sm"
+            <button class=" btn btn-default btn-sm"
                data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
                ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
                     class="fa fa-refresh"></i>
-            </a>
+            </button>
             &nbsp;
         </div>
     </div>
@@ -47,8 +47,8 @@
             <td>
                 <button class="btn btn-sm btn-success"
                         ng-click="samples.showAddResponse(sample)"
-                        ng-disabled="sample.daysLeftOnTen==0"
-                        ng-show="sample.responseStatus==10"
+                        ng-disabled="sample.daysLeftOnTen==10"
+                        ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to to respond or give feedback"
                         bs-tooltip

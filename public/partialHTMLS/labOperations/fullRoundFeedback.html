@@ -1,0 +1,98 @@
+<div style="">
+    <button class="btn btn-sm btn-danger pull-right" ng-click="reports.showRoundResults=false"><i class="fa fa-close"></i> Close</button>
+    <button class="btn btn-sm btn-primary pull-right" ng-click="reports.showRoundResults=false"><i class="fa fa-print"></i> Print</button>
+    <h3>Results For {{reports.roundInfo.roundName}}</h3>
+    <hr>
+    <div class="col-md-12 well" ng-repeat="mainResult in reports.roundAllResults"
+         style="background-color: white !important;">
+        <h4 class="border-bottom">{{$index+1}}. {{mainResult.sampleDetails.batchName}}</h4>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Batch Name</th>
+                    <th>Final Score(%)</th>
+                    <th>Gram Stain</th>
+                    <th>Gram Stain Score</th>
+                    <th>Expected</th>
+                    <th>Exp'Score</th>
+
+                    <th>Final Id</th>
+                    <th>Final Id Score</th>
+                    <th>Expected</th>
+                    <th>Exp'Score</th>
+
+                    <td>Grade</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="results in mainResult.arrayResultsAndExpected">
+                    <td>{{$index+1}}</td>
+                    <td>{{results.batchName}}</td>
+                    <td>{{results.finalScore}}%</td>
+
+                    <td>{{results.grainStainReactionResult}}</td>
+                    <td>{{results.grainStainReactionScoreResult}}%</td>
+
+                    <td>{{results.grainStainReaction}}</td>
+                    <td>{{results.grainStainReactionScore}}</td>
+
+                    <td>{{results.finalIdentificationResult}}</td>
+                    <td>{{results.finalIdentificationScoreResult}}%</td>
+
+                    <td>{{results.finalIdentification}}</td>
+                    <td>{{results.finalIdentificationScore}}</td>
+                    <td>{{results.grade}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6 ">
+                <h4 class="border-bottom">AST Results</h4>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>AST</th>
+                        <th>Level</th>
+                        <th>Disk Content</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="astResults in mainResult.arrayASTResults">
+                        <td>{{$index+1}}</td>
+                        <td>{{astResults.antiMicroAgent}}</td>
+                        <td>{{astResults.diskContent}}</td>
+                        <td>{{astResults.finalScore}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 ">
+
+                <h4 class="border-bottom">AST Expected Results</h4>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>AST</th>
+                        <th>Level</th>
+                        <th>Disk Content</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="astResultsExpected in mainResult.arrayASTExpectedResults">
+                        <td>{{$index+1}}</td>
+                        <td>{{astResultsExpected.antiMicroAgent}}</td>
+                        <td>{{astResultsExpected.diskContent}}</td>
+                        <td>{{astResultsExpected.finalScore}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

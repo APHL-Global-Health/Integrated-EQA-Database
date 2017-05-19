@@ -34,7 +34,7 @@
                         <a href="#" class=" btn btn-default btn-sm"
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                           data-trigger="hover" data-type="success" data-title="Load data" bs-tooltip
 
                            ng-click="samples.getDistinctShipmentsForDelivery()"><i class="fa fa-refresh"></i>
                         </a>
@@ -69,9 +69,12 @@
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
                            data-trigger="hover" data-type="success"
+                           
                            data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
 
                     >{{shipment.shipmentName}}</a>
+                        
+                <x></x>
                     </td>
                     <td>{{shipment.totalPanelsAdded}}</td>
                     <td>{{shipment.dispatchCourier}}</td>

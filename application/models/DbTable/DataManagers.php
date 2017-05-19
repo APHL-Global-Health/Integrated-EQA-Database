@@ -9,7 +9,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $common = new Application_Service_Common();
         $email = $params['userId'];
-        $password = $common->generateRandomPassword(9);
+        $password = MD5($common->generateRandomPassword(9));
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
@@ -131,9 +131,9 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
                 ->group('u.dm_id');
 
         if ($sWhere == "") {
-            $sWhere .= "IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
+            $sWhere .= "u.IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "' ";
         } else {
-            $sWhere .= "and (IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
+            $sWhere .= "and (u.IsVl='" . $_SESSION['loggedInDetails']['IsVl'] . "') ";
         }
 
         if (isset($sWhere) && $sWhere != "") {
@@ -148,7 +148,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-        //die($sQuery);
+//        die($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
@@ -187,7 +187,17 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
+
             $row[] = $aRow['IsTester'] == 0 ? 'Yes':'No';
+
+            
+          
+            if($_SESSION['loggedInDetails']["IsVl"] == 3){
+                $row[] = $aRow['IsTester']==0?'YES':'';
+            }else{
+                 $row[] = $aRow['IsTester']==1?'Yes':'No'; 
+            }
+
             //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
 

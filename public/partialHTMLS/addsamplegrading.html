@@ -91,9 +91,9 @@
                        ng-model="samples.resultsFormData.primaryMedia" required
                        name="primaryMedia">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.primaryMediaScore" required
+                                   ng-model="samples.resultsFormData.primaryMediaScore"
                                    name="primaryMediaScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine||
@@ -104,9 +104,9 @@
                        placeholder="Please enter Incubation conditions"
                        ng-model="samples.resultsFormData.incubationConditions" required name="incubationConditions">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.incubationConditionsScore" required
+                                   ng-model="samples.resultsFormData.incubationConditionsScore"
                                    name="incubationConditionsScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine||
@@ -117,9 +117,9 @@
                        placeholder="Please enter Colonial morphology"
                        ng-model="samples.resultsFormData.colonialMorphology" required name="colonialMorphology">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.colonialMorphologyScore" required
+                                   ng-model="samples.resultsFormData.colonialMorphologyScore"
                                    name="colonialMorphologyScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
@@ -131,9 +131,9 @@
                        ng-model="samples.resultsFormData.bacterialQualification" required
                        name="bacterialQualification">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.bacterialQualificationScore" required
+                                   ng-model="samples.resultsFormData.bacterialQualificationScore"
                                    name="bacterialQualificationScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine||
@@ -148,9 +148,9 @@
                        placeholder="Please enter Biochemical reagents"
                        ng-model="samples.resultsFormData.bacterialReagents" required name="bacterialReagents">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.bacterialReagentsScore" required
+                                   ng-model="samples.resultsFormData.bacterialReagentsScore"
                                    name="bacterialReagentsScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
@@ -161,9 +161,9 @@
                        placeholder="Please Discuss further processing"
                        ng-model="samples.resultsFormData.isolateProcessing" required name="isolateProcessing">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="true"
+            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
-                                   ng-model="samples.resultsFormData.isolateProcessingScore" required
+                                   ng-model="samples.resultsFormData.isolateProcessingScore"
                                    name="isolateProcessingScore"></td>
         </tr>
 
@@ -259,7 +259,7 @@
                        id="antiMicroAgent" name="antiMicroAgent"
                        class="form-control"
                        data-min-length="0"
-                       data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                       data-html="0" data-auto-select="false" data-animation="am-flip-x" data-container="body"
                        required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
                        placeholder="Search Reagent" bs-typeahead
@@ -310,7 +310,7 @@
             <td></td>
             <td>
                 <div class="col-md-12 no-padding">
-                    <button class="btn btn-warning col-md-12" ng-disabled="true"
+                    <button class="btn btn-warning col-md-12" ng-disabled="false"
                             ng-click="samples.susceptibilityFormData =''"
                     >Reset
                     </button>

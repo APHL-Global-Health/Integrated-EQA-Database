@@ -11,30 +11,7 @@
             </small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
-                <div class="dropdown col-md-3 pull-right">
-
-                    <button class="text-capitalize btn btn-success btn-sm dropdown-toggle" type="button"
-                            id="menu1" data-toggle="dropdown">Items Per Page {{samples.itemsPerPage}}
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-
-                        <li role="presentation">
-                            <a href="#" ng-click="samples.changeItemsPerPage(10)">10</a>
-
-                        </li>
-                        <li role="presentation">
-                            <a href="#" ng-click="samples.changeItemsPerPage(25)">25</a>
-
-                        </li>
-                        <li role="presentation">
-                            <a href="#" ng-click="samples.changeItemsPerPage(50)">50 </a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#" ng-click="samples.changeItemsPerPage(100)">100</a>
-                        </li>
-                    </ul>
-
-                </div>
+              <items-per-page></items-per-page>
                 <div class="pull-right" ng-init="expanded=true"
 
                 >
@@ -148,7 +125,7 @@
                                                 <i class="">{{shipment.totalPanelsAdded}}</i>
                                                 <br>
                                                 Round Id :
-                                                <i nowrap>{{shipment.roundId}}</i>
+                                                <i nowrap>{{shipment.roundInfo.roundName}}</i>
                                                 ,Created By
                                                 <i nowrap>{{shipment.createdBy}}</i>
                                                 <br>
@@ -252,8 +229,8 @@
                                             <td>{{$index+1}}</td>
                                             <td>{{panels.panelName}}</td>
                                             <td nowrap>{{panels.panelDatePrepared}}</td>
-                                            <td nowrap>{{panels.dateReceived}}</td>
-                                            <td nowrap>{{samples.returnShipmentStatus(panels.deliveryStatus)}}</td>
+                                            <td nowrap>{{shipment.dateReceived}}</td>
+                                            <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
                                             <td nowrap>
                                                 <a href="#" class="btn btn-sm btn-danger"
                                                    ng-disabled="shipment.shipmentStatus!=0"
@@ -261,11 +238,7 @@
                                                     <i class="fa fa-remove"> </i>
                                                 </a>
 
-                                                <a href="#" class="btn btn-sm btn-info"
-                                                   ng-disabled="shipment.shipmentStatus!=0"
-                                                   ng-click="samples.deleteCustomRow(panels.id,'tbl_bac_panels_shipments')">
-                                                    <i class="fa fa-check"> </i>
-                                                </a>
+
                                             </td>
                                         </tr>
                                     </table>
@@ -308,7 +281,7 @@
                 <td>{{shipment.numberOfPanels}}</td>
                 <td>{{shipment.courier}}</td>
                 <td>{{shipment.shipmentDsc}}</td>
-                <td nowrap>{{shipment.roundId}}</td>
+                <td nowrap>{{shipment.roundInfo.roundName}}</td>
                 <td nowrap>{{shipment.createdBy}}</td>
 
                 <td nowrap>{{shipment.datePrepared}}</td>

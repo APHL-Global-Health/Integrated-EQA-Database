@@ -275,7 +275,8 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction + ' | Your score ' + dataDetails.results.grainStainReactionScore,
+                    text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction +
+                            ' | Your score ' + dataDetails.results.grainStainReactionScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -286,7 +287,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Final identification : ' + dataDetails.results.finalIdentification + ' | Your score ' + dataDetails.results.finalIdentificationScore,
+                    text: "-----------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Final identification : ' + dataDetails.results.finalIdentification +
+                            ' | Your score ' + dataDetails.results.finalIdentificationScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -296,9 +303,14 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
-
                 {
-                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() + ' | Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    text: "------------------------------------------------------------------------------------------------------------------------------------------------------",
+                    style: ['content'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() +
+                            ' | Your score ' + dataDetails.results.totalMicroAgentsScore + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -312,7 +324,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Total Score : ' + (Number(dataDetails.results.finalScore) + Number(dataDetails.results.totalMicroAgentsScore)),
+                    text: 'Total Average Score : ' + Number(dataDetails.results.finalScore) + '%',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -370,9 +382,14 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         pdfMake.createPdf(docDefinition).open();
 
     }
-    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails) {
+    $scope.pdfMake.generateCorrectiveAction = function (samples, labDetails, type) {
         try {
             var url = serverReportURL + 'getlabuserresponse';
+            if (angular.isDefined(url)) {
+                url = SERVER_API_URL.bacteriologyParticipant + 'getlabuserresponse';
+            }
+
+
             alerts = $.alert({
                 title: "<i class='fa fa-spin fa-spinner text-success'></i> Fetching data",
                 content: "please wait..."
@@ -458,11 +475,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         var tableWidth1 = ['auto', '*', '*', '*']
 
         var allData = returnGradeDetails(data.results, data.microAgents);
-        console.log(allData)
+        // console.log(allData)
         var reportData = allData.reportData;
         var microAgents = allData.microAgents;
         var expectedResults = returnExpectedAsts(data.expectedResults.expectedASTs);
+        console.log(data);
         expectedResults.expectedBacterialResults = data.expectedResults.expectedResults;
+
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
@@ -571,11 +590,12 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
 
     $scope.pdfMake.generateLabPerformancePdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', '*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
+        var tableWidth = ['auto', '*','*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
                     {text: 'Lab Name', style: 'subHeader'},
+                    {text: 'Mfl Code', style: 'subHeader'},
                     {text: 'County', style: 'subHeader'},
                     {text: 'Sample', style: 'subHeader'},
                     {text: 'Round', style: 'subHeader'},
@@ -595,6 +615,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 var rowData = [
                     {text: '' + (i + 1), style: ['content']},
                     {text: ' ' + lab.labName, style: ['content']},
+                    {text: ' ' + lab.MflCode, style: ['content']},
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
@@ -755,7 +776,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
             for (var i = 0; i < excelData.length; i++) {
                 var tempArray = {
                     'Laboratory Name': excelData[i].labName,
-                    'Lab Code': excelData[i].unique_identifier,
+                    'MFL Code': excelData[i].MflCode,
                     'County': excelData[i].county,
                     'Sample': excelData[i].batchName,
                     'Round': excelData[i].roundCode,
