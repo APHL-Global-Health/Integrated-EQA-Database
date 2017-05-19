@@ -10,113 +10,113 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>ePT - Online Lab Proficiency Testing</title>
-          <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
+        <!--[if IE 7]>
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
-    <![endif]-->
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery-ui.min.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
+        <![endif]-->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery-ui.min.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
-    <script src="<?php echo $this->baseUrl('js/respond.min.js'); ?>"></script>
-    <![endif]-->
-    <!-- Theme style -->
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/AdminLTE.min.css'); ?>">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/skins/_all-skins.min.css'); ?>">
-    <!------------------------------------------Angular files----------------------------------------------------------------------->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-    <!--s<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" type="text/css" media="all">-->
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery_ui_min.css"); ?>" type="text/css" media="all">
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
+        <script src="<?php echo $this->baseUrl('js/respond.min.js'); ?>"></script>
+        <![endif]-->
+        <!-- Theme style -->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/AdminLTE.min.css'); ?>">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/skins/_all-skins.min.css'); ?>">
+        <!------------------------------------------Angular files----------------------------------------------------------------------->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+        <!--s<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" type="text/css" media="all">-->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery_ui_min.css"); ?>" type="text/css" media="all">
 
 
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
+        <!--[if IE 7]>
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
-    <![endif]-->
+        <![endif]-->
 
-    <!--s<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
+        <!--s<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 
     <!--s<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/constants.js'); ?>"></script>
-    <script src="<?php echo $this->baseUrl("js/jquery_10.2.js"); ?>" type="text/javascript"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/constants.js'); ?>"></script>
+        <script src="<?php echo $this->baseUrl("js/jquery_10.2.js"); ?>" type="text/javascript"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
 
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.tpl.min.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.min.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.tpl.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.tpl.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/datepicker.tpl.min.js'); ?>"></script>
 
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.min.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.tpl.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.min.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularStrap/typeahead.tpl.min.js'); ?>"></script>
 
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
-
-
-    <script type="text/javascript" src="<?php echo $this->baseUrl('css/font-awesome.css'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/laboratoryJS/samplesController.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/laboratoryJS/reportsController.js'); ?>"></script>
-
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/pdfmake.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/vfs_fonts.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfMakerController.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/alasql.min.js'); ?>"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
-
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/nanobar.js'); ?>"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/angularjs-nvd3-directives.js'); ?>"></script>
 
 
-    <!---------------------------------Calendar Module-------------------------------------->
-    <!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
+        <script type="text/javascript" src="<?php echo $this->baseUrl('css/font-awesome.css'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/laboratoryJS/samplesController.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/laboratoryJS/reportsController.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
-    <!--    <script type="text/javascript" src="-->
-    <?php //echo $this->baseUrl('angularMain/calendar/.js'); ?><!--"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
-    <script type="text/javascript"
-            src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
-    <!------------------------------------------End Angular files----------------------------------------------------------------------->
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/pdfmake.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/vfs_fonts.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfMakerController.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/alasql.min.js'); ?>"></script>
+        <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/nanobar.js'); ?>"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
+
+
+        <!---------------------------------Calendar Module-------------------------------------->
+        <!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/moment.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.js'); ?>"></script>
+        <!--    <script type="text/javascript" src="-->
+        <?php //echo $this->baseUrl('angularMain/calendar/.js'); ?><!--"></script>-->
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendar.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.js'); ?>"></script>
+        <script type="text/javascript"
+        src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
+        <!------------------------------------------End Angular files----------------------------------------------------------------------->
         <style>
 
             .center{
@@ -159,7 +159,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <ul class="nav navbar-nav">
                             <?php if ($authNameSpace->IsVl == 3) { ?>
                                 <li class="dropdown user user-menu">
-                                    <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)      ?>
+                                    <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)       ?>
                                     <a href="#">
                                         <i class="icon icon-dashboard"></i> <span
                                             class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
@@ -209,11 +209,22 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                                     </a>
                                 </li>
-                                <li class="<?php echo ($activeMenu == 'readiness') ? ' active ' : ''; ?>">
-                                    <a href="<?php echo $this->url(array("controller" => "participant", "action" => "readiness"), null, true) ?>">
-                                        <i class="icon icon-list-ul"></i> <span>PT Readiness Form</span>
-                                    </a>
+                                <li class="treeview <?php echo ($activeMenu == 'reasdiness') ? ' active ' : ''; ?>">
+                                    <a href="#" class="" aria-haspopup="true" aria-expanded="false"><i class="icon icon-edit"></i> <span>Readiness Checklist </span> <i class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
+                                    <ul class="treeview-menu">
+                                        <li class="<?php echo ($activeMenu == 'readinesss') ? ' active ' : ''; ?>">
+                                            <a href="<?php echo $this->url(array("controller" => "distributions", "action" => "index"), null, true) ?>">
+                                                <i class="icon icon-list-ul"></i> <span>Active Test Events</span>
+                                            </a>
+                                        </li>
+                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?>">
+                                            <a href="<?php echo $this->url(array("controller" => "readiness", "action" => "index"), null, true) ?>">
+                                                <i class="icon icon-list-ul"></i> <span>Readiness Status</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
+
                                 <li class="<?php echo ($activeMenu == 'current-schemes') ? ' active ' : ''; ?>">
                                     <a href="<?php echo $this->url(array("controller" => "participant", "action" => "current-schemes"), null, true) ?>">
                                         <i class="icon icon-list-ul"></i> <span>PT Result Submission</span>
@@ -268,7 +279,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <?php
                     }
 
-                    if ($authNameSpace->IsVl == 3 && ($_SESSION['datamanagers']['force_password_reset']==0)) {
+                    if ($authNameSpace->IsVl == 3 && ($_SESSION['datamanagers']['force_password_reset'] == 0)) {
                         ?>
                         <ul class="sidebar-menu">
 
@@ -364,14 +375,15 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                                 Password</a></li>
                                     </ul>
                                 </li>
-                                 <?php if (!$authNameSpace->IsVl == 3) { ?>
-                                <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>"><a
-                                        href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i
-                                            class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
-                                 <?php }} ?>
+                                <?php if (!$authNameSpace->IsVl == 3) { ?>
+                                    <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>"><a
+                                            href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i
+                                                class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
+                                    <?php }
+                                } ?>
 
 
-                            <?php if (!isset($authNameSpace->dm_id)) { ?>
+    <?php if (!isset($authNameSpace->dm_id)) { ?>
                                 <li>
                                     <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i
                                             class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
@@ -380,7 +392,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i
                                             class="icon icon-lock"></i> <span>Participant Login</span></a>
                                 </li>
-                            <?php } else { ?>
+    <?php } else { ?>
                                 <li>
                                     <a class=""
                                        href="<?php echo $this->url(array("controller" => "auth", "action" => "logout"), null, true) ?>"><i
@@ -389,7 +401,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 samples.showPhmtlPages    <?php } ?>
 
                         </ul>
-                    <?php } ?>
+<?php } ?>
                 </section>
                 <!-- /.sidebar -->
             </aside>
@@ -399,7 +411,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                 <!-- Content Header (Page header) -->
                 <section class="content" style="background-color: white !important;">
                     <div ng-show="samples.showPhmtlPages">
-                        <?php echo $this->layout()->content; ?>
+<?php echo $this->layout()->content; ?>
                     </div>
                     <br/>
                     <div ng-hide="samples.showPhmtlPages">
@@ -438,7 +450,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <script src="<?php echo $this->baseUrl("assets/plugins/jQueryUI/jquery-ui.min.js"); ?>"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
-                    $.widget.bridge('uibutton', $.ui.button);
+                            $.widget.bridge('uibutton', $.ui.button);
         </script>
         <!-- Bootstrap 3.3.5 -->
         <script src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
@@ -458,29 +470,29 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
         <script type="text/javascript">
-                    function layoutModal(url, w, h) {
-                    showdefModal('dDiv', w, h);
-                    document.getElementById('dFrame').style.height = h + 'px';
-                    document.getElementById('dFrame').style.width = w + 'px';
-                    document.getElementById('dFrame').src = url;
-                    }
+                            function layoutModal(url, w, h) {
+                                showdefModal('dDiv', w, h);
+                                document.getElementById('dFrame').style.height = h + 'px';
+                                document.getElementById('dFrame').style.width = w + 'px';
+                                document.getElementById('dFrame').src = url;
+                            }
 
-                    function closeLayoutModal() {
-                    document.getElementById('dFrame').src = "";
-                    //window.location.reload(true);
-                    hidedefModal();
-                    }
+                            function closeLayoutModal() {
+                                document.getElementById('dFrame').src = "";
+                                //window.location.reload(true);
+                                hidedefModal();
+                            }
 
-                    Array.prototype.remove = function () {
-                    var what, a = arguments, L = a.length, ax;
-                    while (L && this.length) {
-                    what = a[--L];
-                    while ((ax = this.indexOf(what)) != - 1) {
-                    this.splice(ax, 1);
-                    }
-                    }
-                    return this;
-                    }
+                            Array.prototype.remove = function () {
+                                var what, a = arguments, L = a.length, ax;
+                                while (L && this.length) {
+                                    what = a[--L];
+                                    while ((ax = this.indexOf(what)) != -1) {
+                                        this.splice(ax, 1);
+                                    }
+                                }
+                                return this;
+                            }
         </script>
     </body>
 </html>

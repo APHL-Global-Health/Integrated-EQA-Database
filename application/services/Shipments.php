@@ -1499,10 +1499,9 @@ class Application_Service_Shipments {
                 ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date'))
                 ->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id', array('p.email', 'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT p.first_name,\" \",p.last_name ORDER BY p.first_name SEPARATOR ', ')")))
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
-                ->where("sp.shipment_id = ?", $sid)
+                ->where("sp.map_id = ?", $sid)
                 ->group("p.participant_id");
-        echo $sQuery;
-        die;
+        
         $participantEmails = $db->fetchAll($sQuery);
 
         foreach ($participantEmails as $participantDetails) {

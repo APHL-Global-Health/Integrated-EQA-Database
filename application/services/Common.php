@@ -119,6 +119,26 @@ class Application_Service_Common {
         return $CodeEX;
     }
 
+    function generate_id() {
+        $participantDb = new Application_Model_DbTable_Participants();
+        $t = $participantDb->CountParticipants();
+        
+        $start_dig = 5;
+        $num=$t;
+        $num_dig = strlen($num);
+
+        $id = $num;
+        if ($num_dig <= $start_dig) {
+            $num_zero = $start_dig - $num_dig;
+
+            for ($i = 0; $i < $num_zero; $i++) {
+                $id = '0' . $id;
+            }
+        }
+        $id = 'P' . $id;
+        return $id;
+    }
+
     public static function getConfig($name) {
         $gc = new Application_Model_DbTable_GlobalConfig();
         return $gc->getValue($name);
@@ -188,7 +208,35 @@ class Application_Service_Common {
         }
         return $data;
     }
+    
+    public function checkDuplicates($params) {
+        $session = new Zend_Session_Namespace('credo');
+        $tableName = $params['tableName'];
+        $fieldName = $params['fieldName'];
+        $fieldName1 = $params['fieldName1'];
+        $value = trim($params['value']);
+        $fnct = $params['fnct'];
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        if ($fnct == '' || $fnct == 'null') {
+            $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'");
+            $result = $db->fetchAll($sql);
+            $data = count($result);
+        } else {
+            $table = explode("##", $fnct);
+            // first trying $table[1] without quotes. If this does not work, then in catch we try with single quotes
+            try {
 
+                $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'")->where($table[0] . "!=" . $table[1]);
+                $result = $db->fetchAll($sql);
+                $data = count($result);
+            } catch (Exception $e) {
+                $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'")->where($table[0] . "!='" . $table[1] . "'");
+                $result = $db->fetchAll($sql);
+                $data = count($result);
+            }
+        }
+        return $data;
+    }
     public function removespecials($url) {
         $url = str_replace(" ", "-", $url);
 
@@ -204,7 +252,11 @@ class Application_Service_Common {
         $countriesDb = new Application_Model_DbTable_Countries();
         return $countriesDb->getAllCountries();
     }
-
+    
+    public function getUnshippedDistributions(){
+	$disrtibutionDb = new Application_Model_DbTable_Distribution();
+	return $disrtibutionDb->getUnshippedDistributions();		
+    }
     public function getCountiesList() {
         $countriesDb = new Application_Model_DbTable_Counties();
         return $countriesDb->getAllCounties();

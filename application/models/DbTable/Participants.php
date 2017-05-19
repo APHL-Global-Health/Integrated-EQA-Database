@@ -7,30 +7,31 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getParticipantsByUserSystemId($userSystemId) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-        if($authNameSpace->IsTester == '1'){
+        if ($authNameSpace->IsTester == '1') {
             return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
-                                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
-                                ->where("pmm.dm_id = ?", $userSystemId)
-                                //->where("p.status = 'active'")
-                                ->group('p.participant_id'));
-        }else{
+                                    ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
+                                    ->where("pmm.dm_id = ?", $userSystemId)
+                                    //->where("p.status = 'active'")
+                                    ->group('p.participant_id'));
+        } else {
             return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
-                                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
-                                ->where("pmm.parent_id = ?", $userSystemId)
-                                //->where("p.status = 'active'")
-                                ->group('p.participant_id'));
+                                    ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
+                                    ->where("pmm.parent_id = ?", $userSystemId)
+                                    //->where("p.status = 'active'")
+                                    ->group('p.participant_id'));
         }
-        
     }
+
     public function getParticipantsByUserm($userSystemId) {
         return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
                                 ->where("p.email = ?", $userSystemId));
     }
- public function getAffiliateList() {
+
+    public function getAffiliateList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_participant_affiliates')->order('affiliate ASC'));
     }
-    
+
     public function getSiteTypeList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_site_type')->order('site_type ASC'));
@@ -40,7 +41,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));
     }
-       public function getEnrollmentDetails($pid, $sid) {
+
+    public function getEnrollmentDetails($pid, $sid) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('p' => 'participant'))
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'p.participant_id=sp.participant_id')
@@ -49,7 +51,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $db->fetchAll($sql);
     }
 
-       public function getEnrolledProgramsList() {
+    public function getEnrolledProgramsList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_enrolled_programs')->order('enrolled_programs ASC'));
     }
@@ -156,7 +158,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier', 'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status', 'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT p.first_name,\" \",p.last_name ORDER BY p.first_name SEPARATOR ', ')")))
+        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier', 'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status', 'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
                 ->join(array('c' => 'countries'), 'c.id=p.country')
                 ->group("p.participant_id");
 
@@ -326,7 +328,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'mobile' => $params['pphone2'],
             'phone' => $params['pphone1'],
             'email' => $params['pemail'],
-            'contact_name' => $params['contactname'],
+            'contact_name' => $params['pfname'] . ' ' . $params['plname'],
 //            'affiliation' => $params['partAff'],
             'network_tier' => $params['network'],
 //            'testing_volume' => $params['testingVolume'],
@@ -335,7 +337,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
             'created_by' => $authNameSpace->primary_email,
-            'ModuleID'=>1,
+            'ModuleID' => 1,
             'status' => 'active'
         );
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {
@@ -343,15 +345,15 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         } else {
             $data['individual'] = 'no';
         }
-        
-        $participantName=$params['instituteName'];
+
+        $participantName = $params['instituteName'];
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
-        $password=$common->generateRandomPassword(8);
+        $password = $common->generateRandomPassword(8);
         $datam = array(
-            'first_name' => $params['contactname'],
-            //'last_name' => $params['lname'],
+            'first_name' => $params['pfname'],
+            'last_name' => $params['plname'],
             'institute' => $params['instituteName'],
             'phone' => $params['phone2'],
             'mobile' => $params['phone1'],
@@ -365,27 +367,28 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'view_only_access' => 'no',
             'status' => 'active',
             'IsVl' => '1',
+            'IsTester' => '0',
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
-        
-        $db->insert('data_manager',$datam);
-         
+
+        $db->insert('data_manager', $datam);
+
         foreach ($params['dataManager'] as $dataManager) {
             $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
         }
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-            }
+        if (isset($params['scheme']) && $params['scheme'] != "") {
+            $enrollDb = new Application_Model_DbTable_Enrollments();
+            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
-        $pMail=$params['pemail'];
+
+        $pMail = $params['pemail'];
         $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
-        $fromMail="brianonyi@gmail.com";
-        $fromName = Application_Service_Common::getConfig('admin-name');			
+        $fromMail = "brianonyi@gmail.com";
+        $fromName = Application_Service_Common::getConfig('admin-name');
         $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
-        $common->sendPasswordEmailToUser($pMail,$password,$participantName);
+        $common->sendPasswordEmailToUser($pMail, $password, $participantName);
         return $participantId;
     }
 
@@ -420,6 +423,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'site_type' => $params['siteType'],
             'created_on' => new Zend_Db_Expr('now()'),
             'created_by' => $authNameSpace->UserID,
+            'ModuleID' => 1,
         );
 
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {
@@ -432,7 +436,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         //Zend_Debug::dump($data);die;
         //Zend_Debug::dump($data);die;
         $participantId = $this->insert($data);
-        
+
 
         if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
             $db = Zend_Db_Table_Abstract::getAdapter();
@@ -442,14 +446,23 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             }
         }
 
+
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
             $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
+        if (isset($params['assay']) && $params['assay'] != "") {
+            $assayDb = Zend_Db_Table_Abstract::getAdapter();
+            $assayDb->delete('participantassays', "participant=" . $participantId);
+            foreach ($params['assay'] as $assay) {
+                $data = array('participant' => $participantId, 'AssayID' => $assay);
+                $assayDb->insert('participantassays', $data);
+            }
+        }
 
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
-        $password=$common->generateRandomPassword(8);
+        $password = $common->generateRandomPassword(8);
         $datam = array(
             'first_name' => $params['pfname'],
             'last_name' => $params['plname'],
@@ -466,43 +479,23 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'view_only_access' => 'no',
             'status' => 'active',
             'IsVl' => '1',
-            'IsTester'=>'1',
+            'IsTester' => '1',
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
-        
-        $dmId = $db->insert('data_manager',$datam);
+
+        $dmId = $db->insert('data_manager', $datam);
         $lastInsertId = $this->getAdapter()->lastInsertId('data_manager');
-        $db->insert('participant_manager_map', array('dm_id' => $lastInsertId, 'participant_id' => $participantId,'Parent_id'=>$authNameSpace->dm_id));
-        
-        //Add enrollemnt
-        $dataeid = array(
-            'scheme_id' => 'eid',
-            'participant_id' => $participantId,
-            'enrolled_on' => new Zend_Db_Expr('now()'),
-            //'enrollment_ended_on' => '',
-            'status' => 'enrolled'
-        );
-        
-        $eId = $db->insert('enrollments',$dataeid);
-        $datavl = array(
-            'scheme_id' => 'vl',
-            'participant_id' => $participantId,
-            'enrolled_on' => new Zend_Db_Expr('now()'),
-            //enrollment_ended_on' => '',
-            'status' => 'enrolled'
-        );
-        $partmail=$params['pemail'];
-        $vlId = $db->insert('enrollments',$datavl);
-        
+        $db->insert('participant_manager_map', array('dm_id' => $lastInsertId, 'participant_id' => $participantId, 'Parent_id' => $authNameSpace->dm_id));
+
         $participantName = $params['pfname'] . " " . $params['plname'];
         $dataManager = $authNameSpace->first_name . " " . $authNameSpace->last_name;
-        
+
         //$message = "Hi $participantName,<br/><small>Login using the following credentials:<br/><small>Username: $partmail <br/> Password: 123456</small><br/>This is a system generated email. Please do not reply.</small>";
         $toMail = $params['pemail'];
         //$fromMail="brianonyi@gmail.com";
         //$fromName = Application_Service_Common::getConfig('admin-name');			
-        $common->sendPasswordEmailToUser($toMail,$password,$participantName);
+        $common->sendPasswordEmailToUser($toMail, $password, $participantName);
 
         return $participantId;
     }
@@ -1306,6 +1299,20 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
         echo json_encode($output);
+    }
+
+    public function CountParticipants() {
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $count = $db->fetchOne("SELECT COUNT(*) AS count FROM participant where ModuleID=1 AND status='active'");
+        return $count;
+    }
+
+    public function AllEnrolledParticipants() {
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $count = $db->fetchAll("select DISTINCT p.email from participant p
+                                LEFT JOIN enrollments e on p.participant_id=e.participant_id
+                                where e.`status`='enrolled' and p.`status`='active' and p.ModuleID=1");
+        return $count;
     }
 
 }

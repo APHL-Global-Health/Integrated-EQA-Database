@@ -167,13 +167,167 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         echo json_encode($output);
     }
     
+    public function getDistributions($parameters)
+    {
+        /* Array of database columns which should be read and sent back to DataTables. Use a space where
+         * you want to insert a non-database field (for example a counter or static image)
+         */
+        $aColumns = array('d.distribution_id',"DATE_FORMAT(distribution_date,'%d-%b-%Y')", 'distribution_code','readinessdate','d.status');
+        $orderColumns = array('d.distribution_id','distribution_date', 'distribution_code','d.status');
+
+        /* Indexed column (used for fast and accurate table cardinality) */
+        $sIndexColumn = $this->_primary;
+
+        /*
+         * Paging
+         */
+        $sLimit = "";
+        if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
+            $sOffset = $parameters['iDisplayStart'];
+            $sLimit = $parameters['iDisplayLength'];
+        }
+
+        /*
+         * Ordering
+         */
+        $sOrder = "";
+        if (isset($parameters['iSortCol_0'])) {
+            $sOrder = "";
+            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
+                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
+                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . "
+				 	" . ($parameters['sSortDir_' . $i]) . ", ";
+                }
+            }
+
+            $sOrder = substr_replace($sOrder, "", -2);
+        }
+
+        /*
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+         */
+        $sWhere = "";
+        if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
+            $searchArray = explode(" ", $parameters['sSearch']);
+            $sWhereSub = "";
+            foreach ($searchArray as $search) {
+                if ($sWhereSub == "") {
+                    $sWhereSub .= "(";
+                } else {
+                    $sWhereSub .= " AND (";
+                }
+                $colSize = count($aColumns);
+
+                for ($i = 0; $i < $colSize; $i++) {
+                    if($aColumns[$i] == "" || $aColumns[$i] == null){
+                        continue;
+                    }
+                    if ($i < $colSize - 1) {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
+                    } else {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
+                    }
+                }
+                $sWhereSub .= ")";
+            }
+            $sWhere .= $sWhereSub;
+        }
+
+        /* Individual column filtering */
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
+                if ($sWhere == "") {
+                    $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                } else {
+                    $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                }
+            }
+        }
+
+
+        /*
+         * SQL queries
+         * Get data to display
+         */
+
+        $sQuery = $this->getAdapter()->select()->from(array('d' => $this->_name));
+
+        if (isset($sWhere) && $sWhere != "") {
+            $sQuery = $sQuery->where($sWhere);
+        }
+
+        if (isset($sOrder) && $sOrder != "") {
+            $sQuery = $sQuery->order($sOrder);
+        }
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery = $sQuery->limit($sLimit, $sOffset);
+        }
+
+        //die($sQuery);
+
+        $rResult = $this->getAdapter()->fetchAll($sQuery);
+
+
+        /* Data set length after filtering */
+        $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
+        $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $aResultFilterTotal = $this->getAdapter()->fetchAll($sQuery);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $sQuery = $this->getAdapter()->select()->from($this->_name, new Zend_Db_Expr("COUNT('" . $sIndexColumn . "')"));
+        $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
+        $iTotal = $aResultTotal[0];
+
+        /*
+         * Output
+         */
+        $output = array(
+            "sEcho" => intval($parameters['sEcho']),
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
+        );
+       
+        foreach ($rResult as $aRow) {
+            $row = array();
+            $row[] = $aRow['distribution_code'];
+            $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
+            $row[] = ucwords($aRow['readinessdate']);
+            $row[] = ucwords($aRow['status']);
+            if(isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured' ){
+                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Readiness Checklist</a>';
+            }else if(isset($aRow['status']) && $aRow['status'] == 'shipped'){
+                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;"><i class="icon-pencil"></i> Readiness Checklist</a>';
+            }
+            $output['aaData'][] = $row;
+        }
+        echo json_encode($output);
+    }
+    
     public function addDistribution($params){
 	$authNameSpace = new Zend_Session_Namespace('administrators');
+        $common = new Application_Service_Common();
         $data = array('distribution_code'=>$params['distributionCode'],
                       'distribution_date'=> Pt_Commons_General::dateFormat($params['distributionDate']),
+                      'readinessdate'=> Pt_Commons_General::dateFormat($params['readinessDate']),
                       'status' => 'created',
 		      'created_by' => $authNameSpace->admin_id,
                       'created_on' => new Zend_Db_Expr('now()'));
+        //get participant emails
+        $participantService = new Application_Service_Participants();
+        $emails=$participantService->AllEnrolledParticipants();
+        $date=$params['readinessDate'];
+        foreach ($emails as $email){
+            $toMail=$email["email"];
+            $message = "Hi,<br/>  A new PT Round was added. Kindly go to the system and login using your credentials, access the readiness checklist form which is to be filled and submited on or before $date. <br/><br/><br/>Regards,<br/><br/>ePT Admin<br/><br/><small>This is a system generated email. Please do not reply.</small>";
+            $fromMail = $authNameSpace->primary_email;
+            $common->sendMail($toMail, null, null, "New PT Round Participation", $message, $fromMail, "ePT Admin");
+        }
         return $this->insert($data);
     }
     
@@ -193,6 +347,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 	$authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array('distribution_code'=>$params['distributionCode'],
                       'distribution_date'=> Pt_Commons_General::dateFormat($params['distributionDate']),
+                      'readinessdate'=> Pt_Commons_General::dateFormat($params['readinessDate']),
 		      'updated_by' => $authNameSpace->admin_id,
                       'updated_on' => new Zend_Db_Expr('now()'));
         return $this->update($data,"distribution_id=".base64_decode($params['distributionId']));

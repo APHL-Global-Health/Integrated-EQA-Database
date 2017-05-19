@@ -14,7 +14,8 @@
                         <tr>
                             <th>Test Event <span class="mandatory">*</span></th>
                             <td>
-                                <select id="roundId" name="roundId" class="form-control"  data-selected-text-format="count>3" title="Please choose assays">
+                                <select id="roundId" name="roundId" class="form-control"  data-selected-text-format="count>3" title="Please choose assays" onBlur="checkDuplicate('readinesschecklist', 'RoundID','ParticipantID', this, null, 'This record already exists. Please try for another round.')">
+                                    <option value="0">--Select Test Event--</option>
                                     <?php
                                     foreach ($this->roundsList as $round) {
                                         ?>
@@ -95,3 +96,52 @@
     </div>
 </section>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/select2.min.js'); ?>"></script>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName,fieldName1, obj, fnct, msg) {
+        if (obj.value == "" || obj.value == null) {
+            return;
+        }
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicates')); ?>", {tableName: tableName, fieldName: fieldName,fieldName1:fieldName1, value: obj.value, fnct: fnct, format: "html"},
+        function (data) {
+            if (data > 0) {
+                alert(msg, "err");
+                duplicated = true;
+                obj.focus();
+            }
+            else {
+                duplicated = false;
+            }
+        });
+    }
+
+    function validateNow() {
+        //checkDuplicate('distributions', 'distribution_code',$("#distributionCode"),null, 'This Code already exists for another PT Survey. Please try something else.')
+        flag = deforayValidator.init({
+            formId: 'addDistributionForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('addDistributionForm').submit();
+        }
+    }
+
+
+
+    var disabledDates = [<?php echo '"' . implode('","', $this->distributionDates) . '"' ?>];
+
+
+    $(function () {
+        //$(".datepicker" ).datepicker({dateFormat: '<?php echo $this->defaultDateFormat(); ?>'});
+        $('.datepicker').datepicker({
+            dateFormat: '<?php echo $this->defaultDateFormat(); ?>',
+            beforeShowDay: function (date) {
+                var string = jQuery.datepicker.formatDate('dd-M-yy', date);
+                return [disabledDates.indexOf(string) == -1]
+            }
+        });
+    });
+
+
+
+</script>

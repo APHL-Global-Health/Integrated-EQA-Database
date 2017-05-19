@@ -12,7 +12,7 @@
                     <input type="text" id="distributionCode" name="distributionCode" size="50" class="isRequired form-control"
                            title="Please enter a Unique PT Survey Code here"
                            placeholder="Please enter a Unique PT Survey Code here"
-                           onblur="checkDuplicate('distributions', 'distribution_code', this, null, 'This Code already exists for another PT Survey. Please try something else.')"/>
+                           onChange="checkDuplicate('distributions', 'distribution_code', this, null, 'This Code already exists for another PT Survey. Please try something else.')"/>
                 </div>
             </div>
 
@@ -55,11 +55,11 @@
 </div>
 <script type="text/javascript">
     var duplicated = false;
-    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+    function checkDuplicate(tableName, fieldName,fieldName1, obj, fnct, msg) {
         if (obj.value == "" || obj.value == null) {
             return;
         }
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName,fieldName1:fieldName1, value: obj.value, fnct: fnct, format: "html"},
         function (data) {
             if (data > 0) {
                 alert(msg, "err");

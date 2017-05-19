@@ -146,7 +146,11 @@ class Application_Service_Participants {
         $enrollments = new Application_Model_DbTable_Enrollments();
         return $enrollments->enrollParticipants($params);
     }
-
+    
+    public function AllEnrolledParticipants() {
+        $enrollments = new Application_Model_DbTable_Participants();
+        return $enrollments->AllEnrolledParticipants();
+    }
     public function addParticipantManagerMap($params) {
         $db = new Application_Model_DbTable_Participants();
         return $db->addParticipantManager($params);

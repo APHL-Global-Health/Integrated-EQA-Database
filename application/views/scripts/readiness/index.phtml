@@ -14,7 +14,7 @@
                 </div>
                   
             <?php endif; ?>
-            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentScheme">
+            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentSchemeTable">
                 <thead>
                     <tr>
                         <th>Participant Name</th>
@@ -22,7 +22,6 @@
                         <th>Verdict</th>
                         <th>Date</th>
                         <th>Test Event Status</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,11 +33,11 @@
         </div>
     </div>
 </section>
-<script type="text/javascript" charset="utf-8">
-    /* Table initialisation */
-    var oTable = null;
-    $(document).ready(function() {
-        oTable = $('#currentScheme').dataTable( {
+<script>
+
+    var csTable = null;
+    function currentSchemes() {
+        csTable = $('#currentSchemeTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -46,21 +45,21 @@
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "sPaginationType": "bootstrap",
-            "bRetrieve": true,
+            "sPaginationType": "full_numbers",
+            "bRetrieve": false,
+            "bDestroy": true,
             "aoColumns": [
-                {"sClass":""},
-                {"sClass":""},
-                {"sClass":""},
-                {"sClass":""},
-                {"sClass":""},
-                {"sClass":"center","bSortable":false}
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""}
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[0, "desc"]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness', 'action' => 'index', 'format' => 'html')); ?>",
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'readiness', 'action' => 'index', 'format' => 'html')); ?>",
+            "fnServerData": function (sSource, aoData, fnCallback) {
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -69,6 +68,20 @@
                     "success": fnCallback
                 });
             }
-        } );
-    } );
+        });
+    }
+
+
+
+
+    $(document).ready(function () {
+
+        currentSchemes();
+
+        $('#currentType1,#currentType2,#currentType3').click(function () {
+            currentSchemes();
+        });
+    });
+
+
 </script>

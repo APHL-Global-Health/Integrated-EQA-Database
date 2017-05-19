@@ -718,7 +718,8 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         //->order('s.shipment_date')
         //->order('spm.participant_id')
        // error_log($this->_session->dm_id);
-     
+//        echo $sQuery;
+//        exit;
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }

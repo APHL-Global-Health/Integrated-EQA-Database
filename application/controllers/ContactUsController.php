@@ -50,16 +50,17 @@ class ContactUsController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
 	    $participantService->addParticipants($params);
+            $this->message->addMessage("Account created successfully. Check your email for login credentials.");
             $this->_redirect("/auth/login");
         }
-        
-        $this->view->affiliates = $participantService->getAffiliateList();
-        $this->view->networks = $participantService->getNetworkTierList();
-        $this->view->dataManagers = $dataManagerService->getDataManagerList();
-        $this->view->countriesList = $commonService->getcountriesList();
-	$this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
-	$this->view->siteType = $participantService->getSiteTypeList();
-        $this->view->countriesList = $common->getCountriesList();
+            
+            $this->view->affiliates = $participantService->getAffiliateList();
+            $this->view->networks = $participantService->getNetworkTierList();
+            $this->view->dataManagers = $dataManagerService->getDataManagerList();
+            $this->view->countriesList = $commonService->getcountriesList();
+            $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
+            $this->view->siteType = $participantService->getSiteTypeList();
+            $this->view->countriesList = $common->getCountriesList();
             $this->view->countiesList = $common->getCountiesList();
             $this->view->mflList = $common->getMflList();
             $this->view->deptList = $common->getDepartmentList();

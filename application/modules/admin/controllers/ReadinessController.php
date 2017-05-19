@@ -22,20 +22,11 @@ class Admin_ReadinessController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $shipmentService = new Application_Model_DbTable_Readiness();
-            $shipmentService->fetchAllReadiness($params);
+            $shipmentService->getReadiness($params);
         }
     }
 
-    public function readinessAction(){
-        $authNameSpace = new Zend_Session_Namespace('datamanagers');
-        $pID = $authNameSpace->UserID;
-        $participantService = new Application_Service_Participants();
-        $t = $participantService->getParticipantDetail($pID);
-        foreach ($t as $k){
-            $id=$k["participant_id"];
-        }
-        $this->view->participantId = $id;
-    }
+
     public function addAction(){
         
         if ($this->getRequest()->isPost()) {
