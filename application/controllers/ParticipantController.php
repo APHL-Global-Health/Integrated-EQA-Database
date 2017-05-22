@@ -95,8 +95,7 @@ class ParticipantController extends Zend_Controller_Action {
             $newPassword = $this->getRequest()->getPost('newpassword');
             $oldPassword = $this->getRequest()->getPost('oldpassword');
             $response = $user->changePassword($oldPassword, $newPassword);
-            echo $response;
-            exit;
+           
             if ($response) {
                 $this->_redirect('/participant/current-schemes');
             }

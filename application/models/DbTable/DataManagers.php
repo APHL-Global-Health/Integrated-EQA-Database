@@ -266,8 +266,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     public function resetpasswordForEmail($email) {
         $row = $this->fetchRow("primary_email = '" . $email . "'");
         if ($row != null && count($row) == 1) {
-            $randompassword = Application_Service_Common::getRandomString(15);
-            $row->password = $randompassword;
+            $randompassword = Application_Service_Common::getRandomString(10);
+            $row->password = md5($randompassword);
             $row->force_password_reset = 1;
             $row->save();
             return $randompassword;
