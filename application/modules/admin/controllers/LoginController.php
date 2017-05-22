@@ -48,8 +48,8 @@ class Admin_LoginController extends Zend_Controller_Action {
                 $authNameSpace->activeSchemes = $schemeList;
                 if ($rs->force_password_reset == 0) {
                     $this->_redirect('/admin');
-                }else{
-                   $this->_redirect('/admin/system-admins/edit/id/'.$rs->admin_id); 
+                } else {
+                    $this->_redirect('/admin/system-admins/edit/id/' . $rs->admin_id);
                 }
             } else {
                 $sessionAlert = new Zend_Session_Namespace('alertSpace');
@@ -68,6 +68,20 @@ class Admin_LoginController extends Zend_Controller_Action {
         Zend_Auth::getInstance()->clearIdentity();
         Zend_Session::destroy();
         $this->_redirect('/admin');
+    }
+
+    public function resetpasswordAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            
+            $resetPassword = new Application_Model_DbTable_Resetpassword();
+           $status  = $resetPassword->resetPassword($params['username']); 
+            if($status){
+                $this->_redirect('/admin/login/resetpassword?status=success');
+            }else{
+                 $this->_redirect('/admin/login/resetpassword?status=failed');
+            }
+        }
     }
 
 }

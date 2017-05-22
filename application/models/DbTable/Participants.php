@@ -267,7 +267,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $data['individual'] = 'no';
         }
         if (isset($params['MflCode'])) {
-            $data['MflCode']= $params['MflCode'];
+            $data['MflCode'] = $params['MflCode'];
         }
 
 
@@ -352,7 +352,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
         $participantName = $params['instituteName'];
-
+        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+            $data['IsVl'] = 3;
+        }
+        if (isset($params['MflCode'])) {
+            $data['MflCode'] = $params['MflCode'];
+        }
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
@@ -377,9 +382,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
-
-        $db->insert('data_manager', $datam);
-
+        if ($_SESSION['loggedInDetails']["IsVl"] != 3) {
+            $db->insert('data_manager', $datam);
+        }
         foreach ($params['dataManager'] as $dataManager) {
             $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
         }
@@ -397,16 +402,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $common->sendPasswordEmailToUser($pMail, $password, $participantName);
 
 
-        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-            $data['IsVl'] = 3;
-        }
-        if (isset($params['MflCode'])) {
-            $data['MflCode'] = $params['MflCode'];
-        }
-         $participantId = $this->insert($data);
-         $sendTo = $params['pemail'];
+
+//        $participantId = $this->insert($data);
+        $sendTo = $params['pemail'];
         if ($_SESSION['loggedInDetails']["IsVl"] == 1) {
-           
+
             $db = Zend_Db_Table_Abstract::getAdapter();
             $common = new Application_Service_Common();
             $password = $common->generateRandomPassword(8);
@@ -453,9 +453,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
             $common = new Application_Service_Common();
             $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
-            $toMail = Application_Service_Common::getConfig('admin_email');
-            $fromMail = "brianonyi@gmail.com";
-            $fromName = Application_Service_Common::getConfig('admin-name');
+
             $common->sendGeneralEmail($sendTo, "New Participant Registered   $message", $participantName);
         }
 
@@ -920,6 +918,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $db->delete('participant_manager_map', "participant_id = " . $params['participantId']);
 
             foreach ($params['datamangers'] as $datamangers) {
+                
                 $db->insert('participant_manager_map', array('dm_id' => $datamangers, 'participant_id' => $params['participantId']));
             }
         }
