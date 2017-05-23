@@ -49,7 +49,10 @@ class ContactUsController extends Zend_Controller_Action
         $this->_helper->layout()->activeMenu = 'contact-us';
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
-	    $participantService->addParticipants($params);
+
+	    $participantService->selfRegistration($params);
+            
+            
             $this->message->addMessage("Account created successfully. Check your email for login credentials.");
             $this->_redirect("/auth/login");
         }
