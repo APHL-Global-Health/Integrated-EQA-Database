@@ -13,7 +13,7 @@
             <div class="pull-right col-mod-12">
                 <items-per-page></items-per-page>
                 <div class="col-md-8 pull-right">
-                    <input type="search" class="col-md-12" placeholder="search shipment"
+                    <input type="search" class="col-md-12" placeholder="search samples"
                            ng-model="samples.searchData">
                 </div>
                 <div class="col-md-1 pull-right">
@@ -70,7 +70,7 @@
                         <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
                         <td nowrap>{{sample.materialSource}}</td>
                         <td nowrap>
-                            <a href="#/" ng-show="sample.expectedResults==0" target="_self" ng-click="samples.addSampleGrading(sample)">Add expected
+                            <a href="" target="_self" ng-show="sample.expectedResults==0" target="_self" ng-click="samples.addSampleGrading(sample)">Add expected
                             Results</a>
                             <x  ng-show="sample.expectedResults==1">
                                 Results added
