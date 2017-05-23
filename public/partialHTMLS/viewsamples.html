@@ -13,16 +13,11 @@
             <div class="pull-right col-mod-12">
                 <items-per-page></items-per-page>
                 <div class="col-md-8 pull-right">
-                    <input type="search" class="col-md-12"
-                           data-placement="right" data-type="info" data-container="body"
-                           data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Search Panel" bs-tooltip
+                    <input type="search" class="col-md-12" placeholder="search shipment"
                            ng-model="samples.searchData">
                 </div>
                 <div class="col-md-1 pull-right">
                     <a href="#" class=" btn btn-default btn-sm"
-                       data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="Load Samples" bs-tooltip
                        ng-click="samples.getAllSamples('tbl_bac_samples')"><i
                             class="fa fa-refresh"></i>
                     </a>

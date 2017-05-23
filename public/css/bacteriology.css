@@ -2,7 +2,11 @@
     background-color: #002a80 !important;
     color: white;
 }
-
+.micro{ 
+    zoom: 1.0; 
+    -moz-transform: scale(1.0); 
+    -moz-transform-origin: 0 0;
+} 
 .side-menu ul li:hover {
     background-color: #0922DE;
 }
