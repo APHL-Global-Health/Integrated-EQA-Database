@@ -245,7 +245,34 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
         }
     }
+    $scope.reports.getParticipatingLabsReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            
+            console.log(where);
+            var url = serverReportURL + 'getparticipatinglabs';
+            $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        showAjaxLoader(false)
+                        if (response.status == 1) {
+                            $scope.reports.labParticipatingData = response.data;
+                            
+                        } else {
+                            EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                            $scope.reports.labParticipatingData = {};
+                          
+                        }
+                    })
+                    .error(function (error) {
+                        showAjaxLoader(false)
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+                    })
 
+        } catch (exc) {
+
+        }
+    }
     $scope.reports.whereLabGenStatResults = {};
     $scope.reports.genStatPerformance = {};
     $scope.reports.genStatPerformanceStat = {};
@@ -631,12 +658,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             $log.debug('Serious error occurred');
         }
     }
-    
+
     $scope.reports.calculateTotalScore = function (agent) {
 
         console.log(agent)
         var sumOfMicro = 0;
-        if ( agent != '' && angular.isDefined(agent)) {
+        if (agent != '' && angular.isDefined(agent)) {
 
             for (var i = 0; i < agent.length; i++) {
                 sumOfMicro += Number(agent[i].score);
