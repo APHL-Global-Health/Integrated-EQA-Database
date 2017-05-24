@@ -165,9 +165,10 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
             $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
         }
-        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-            $sQuery = $sQuery->where("p.IsVl = ? ", 3);
+        if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+            $sQuery = $sQuery->where("p.IsVl = ? ", $_SESSION['loggedInDetails']["IsVl"]);
         }
+        
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
