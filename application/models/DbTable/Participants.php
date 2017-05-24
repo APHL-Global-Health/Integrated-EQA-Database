@@ -377,7 +377,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $participantId;
     }
 
-    public function selfRegistration($params) {
+    public function selfRegistration($params, $sysAdminEmails = null) {
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
 
@@ -424,9 +424,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $data['MflCode'] = $params['MflCode'];
         }
         $participantId = $this->insert($data);
-        
+
         ///////end of inserting to participants table
-        
+
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
 
@@ -463,8 +463,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
 
-
-//        $participantId = $this->insert($data);
         $sendTo = $params['pemail'];
 
 
@@ -477,10 +475,19 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $fromMail = "brianonyi@gmail.com";
         $fromName = Application_Service_Common::getConfig('admin-name');
         $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
+
         $common->sendPasswordEmailToUser($pMail, $password, $participantName);
 
-
+        if (isset($sysAdminEmails)) {
+            
+             $common->sendMail($sysAdminEmails, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
+             
+        }
         return $participantId;
+    }
+
+    public function getAdminsArray() {
+        
     }
 
     public function addParticipantForDataManager($params) {

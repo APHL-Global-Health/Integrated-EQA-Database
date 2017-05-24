@@ -150,6 +150,26 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
+    public function getAllSystemAdmins($systemType = null) {
+
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
+        $sWhere = '';
+        if(isset($systemType)){
+            $sWhere .= " IsVl = $systemType";
+        }
+        if (isset($sWhere) && $sWhere != "") {
+            $sQuery = $sQuery->where($sWhere);
+        }
+
+        
+
+        //error_log($sQuery);
+
+        $rResult = $this->getAdapter()->fetchAll($sQuery);
+
+        return $rResult;
+    }
+
     public function generateRandomPassword($len) {
 
         $min_lenght = 0;

@@ -41,6 +41,17 @@ class ContactUsController extends Zend_Controller_Action
             $this->view->PartnersList = $common->getPartnersList();
         }
     }
+    public function getallsysadmins(){
+        $sysAdmin =  new Application_Model_DbTable_SystemAdmin();
+        
+        $systemAdmins = $sysAdmin->getAllSystemAdmins(1);
+        $emails = array();
+        foreach($systemAdmins as $key=>$value){
+            array_push($emails,$value['primary_email']);
+        }
+        return $emails;
+        
+    }
     public function addAction()
     {
         $participantService = new Application_Model_DbTable_Participants();
@@ -50,7 +61,7 @@ class ContactUsController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
 
-	    $participantService->selfRegistration($params);
+	    $participantService->selfRegistration($params, $this->getallsysadmins());
             
             
             $this->message->addMessage("Account created successfully. Check your email for login credentials.");
