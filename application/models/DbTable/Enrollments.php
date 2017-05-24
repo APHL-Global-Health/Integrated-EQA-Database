@@ -172,7 +172,7 @@ class Application_Model_DbTable_Enrollments extends Zend_Db_Table_Abstract {
     public function enrollParticipantToSchemes($participantId, $schemes) {
         $this->delete("participant_id=" . $participantId);
         foreach ($schemes as $scheme) {
-            $data = array('participant_id' => $participantId, 'scheme_id' => $scheme = 1 ? 'vl':'eid', 'status' => 'enrolled', 'enrolled_on' => new Zend_Db_Expr('now()'));
+            $data = array('participant_id' => $participantId, 'scheme_id' => $scheme == 1 ? 'vl':'eid', 'status' => 'enrolled', 'enrolled_on' => new Zend_Db_Expr('now()'));
             $this->insert($data);
         }
     }

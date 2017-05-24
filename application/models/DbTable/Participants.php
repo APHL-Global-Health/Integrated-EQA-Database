@@ -423,7 +423,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if (isset($params['MflCode'])) {
             $data['MflCode'] = $params['MflCode'];
         }
-        $participantId = $this->insert($data);
+      // $participantId = $this->insert($data);
 
         ///////end of inserting to participants table
 
@@ -453,14 +453,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'created_on' => new Zend_Db_Expr('now()')
         );
 
-        $db->insert('data_manager', $datam);
+    //  $dm_id = $db->insert('data_manager', $datam);
 
-        foreach ($params['dataManager'] as $dataManager) {
-            $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
-        }
+      //  $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
+
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
-            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
+          //  $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
 
         $sendTo = $params['pemail'];
@@ -472,16 +471,14 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $pMail = $params['pemail'];
         $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
-        $fromMail = "brianonyi@gmail.com";
-        $fromName = Application_Service_Common::getConfig('admin-name');
-        $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
+
+        $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, null, "ePT Admin");
 
         $common->sendPasswordEmailToUser($pMail, $password, $participantName);
 
         if (isset($sysAdminEmails)) {
-            
-             $common->sendMail($sysAdminEmails, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
-             
+
+            $common->sendMail($sysAdminEmails, null, null, "New Participant Registered  ($participantName)", $message, null, "ePT Admin");
         }
         return $participantId;
     }

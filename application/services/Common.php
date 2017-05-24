@@ -4,7 +4,9 @@ class Application_Service_Common {
 
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
         //Send to email
-        $to = explode(",", $to);
+        if (is_string($to)) {
+            $to = explode(",", $to);
+        }
         $conf = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         $smtpTransportObj = new Zend_Mail_Transport_Smtp($conf->email->host, $conf->email->config->toArray());
 
@@ -88,18 +90,18 @@ class Application_Service_Common {
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
-public function sendGeneralEmail($sendTo, $Message, $fullname) {
+
+    public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
-                
                 . "<br> $Message <br>"
-               
                 . $config->emailRegistrationSignature;
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
-        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+        $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
     }
+
     public function generateRandomPassword($len) {
 
         $min_lenght = 0;
@@ -133,9 +135,9 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
     function generate_id() {
         $participantDb = new Application_Model_DbTable_Participants();
         $t = $participantDb->CountParticipants();
-        
+
         $start_dig = 5;
-        $num=$t;
+        $num = $t;
         $num_dig = strlen($num);
 
         $id = $num;
@@ -219,7 +221,7 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
         }
         return $data;
     }
-    
+
     public function checkDuplicates($params) {
         $session = new Zend_Session_Namespace('credo');
         $tableName = $params['tableName'];
@@ -248,6 +250,7 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
         }
         return $data;
     }
+
     public function removespecials($url) {
         $url = str_replace(" ", "-", $url);
 
@@ -263,11 +266,12 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
         $countriesDb = new Application_Model_DbTable_Countries();
         return $countriesDb->getAllCountries();
     }
-    
-    public function getUnshippedDistributions(){
-	$disrtibutionDb = new Application_Model_DbTable_Distribution();
-	return $disrtibutionDb->getUnshippedDistributions();		
+
+    public function getUnshippedDistributions() {
+        $disrtibutionDb = new Application_Model_DbTable_Distribution();
+        return $disrtibutionDb->getUnshippedDistributions();
     }
+
     public function getCountiesList() {
         $countriesDb = new Application_Model_DbTable_Counties();
         return $countriesDb->getAllCounties();
