@@ -24,6 +24,11 @@ class Application_Service_Participants {
         return $db->fetchAll($db->select()->from('r_site_type')->order('site_type ASC'));
     }
 
+    public function getCounties() {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
+    }
+
     public function getNetworkTierList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));
@@ -33,6 +38,11 @@ class Application_Service_Participants {
 
         $participantDb = new Application_Model_DbTable_Participants();
         return $participantDb->getParticipant($partSysId);
+    }
+
+    public function getEnrolledPlatforms($participantId) {
+        $participantDb = new Application_Model_DbTable_Participants();
+        return $participantDb->getEnrolledPlatforms($participantId);
     }
 
     public function getParticipantDetail($partSysId) {
@@ -146,11 +156,12 @@ class Application_Service_Participants {
         $enrollments = new Application_Model_DbTable_Enrollments();
         return $enrollments->enrollParticipants($params);
     }
-    
+
     public function AllEnrolledParticipants() {
         $enrollments = new Application_Model_DbTable_Participants();
         return $enrollments->AllEnrolledParticipants();
     }
+
     public function addParticipantManagerMap($params) {
         $db = new Application_Model_DbTable_Participants();
         return $db->addParticipantManager($params);

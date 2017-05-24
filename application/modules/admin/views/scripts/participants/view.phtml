@@ -8,12 +8,16 @@
           action="<?php echo $this->url(array("module" => "admin", "controller" => "participants", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
                   return false;">
         <fieldset>
-            <h3>View Participant Details <a href="" class="pull-right btn btn-danger"><< Back</a></h3>
+            <h3>View Participant Details
+                <a class="btn btn-danger pull-right" type="button" onclick="window.location.href = '/admin/participants';" tabindex="8" value="Cancel">
+                    << Back</a></h3>
             <hr>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Participant Name</label>
                 <div class="col-lg-8">
-
+                    <div class="list-group-item">  
+                        <?php echo $this->participant['institute_name']; ?>&nbsp;
+                    </div>
                 </div>
             </div>
 
@@ -22,7 +26,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">  
-                        <?php echo $this->participant['unique_identifier']; ?>
+                        <?php echo $this->participant['unique_identifier']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -33,7 +37,7 @@
                 <div class="col-lg-8">
 
                     <div class="list-group-item">
-                        <?php echo $this->participant['first_name']; ?>
+                        <?php echo $this->participant['first_name']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -43,7 +47,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['last_name']; ?>
+                        <?php echo $this->participant['last_name']; ?>&nbsp;
                     </div>
                 </div>
             </div>	    
@@ -52,7 +56,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['institute_name']; ?>
+                        <?php echo $this->participant['institute_name']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -60,14 +64,18 @@
                 <label class="col-lg-4 control-label">Department Name </label>
 
                 <div class="col-lg-8">
-                    <div class="list-group-item"> <?php echo $this->participant['department_name']; ?></div>
+                    <div class="list-group-item"> 
+                        <?php echo $this->participant['department_name']; ?>&nbsp;
+                    </div>
                 </div>
             </div>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Physical Address</label>
 
                 <div class="col-lg-8">
-                    <div class="list-group-item"> <?php echo $this->participant['address']; ?></div>
+                    <div class="list-group-item"> 
+                        <?php echo $this->participant['address']; ?>&nbsp;
+                    </div>
                 </div>
             </div>
             <div class="form-group col-lg-6">
@@ -75,7 +83,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['city']; ?>
+                        <?php echo $this->participant['city']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -99,17 +107,23 @@
                             if (($this->participant["country"] == $cou['id']))
                                 echo $cou['iso_name'];
                         }
-                        ?>
+                        ?>&nbsp;
                     </div>
                 </div>
             </div>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Region </label>
                 <div class="col-lg-8">
-                    <input type="text" id="region" name="region"
-                           size="50" maxlength="255" class="form-control isRequired" 
-                           title="Please enter region here" placeholder="Please enter the region here" 
-                           value="<?php echo $this->participant['region']; ?>"/>
+                    <div class="list-group-item">
+                        <?php foreach ($this->counties as $cou) {
+                            ?>
+                            <?php
+                            if (($this->participant['region'] == $cou['CountyID']))
+                                echo $cou['Description'];
+                        }
+                        ?>&nbsp;
+                    </div>
+
                 </div>
             </div>
 
@@ -157,7 +171,7 @@
                         foreach ($this->enrolledPrograms as $enrolledPrograms) {
                             echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? $enrolledPrograms['enrolled_programs'] . '<br>' : "&nbsp;";
                         }
-                        ?>
+                        ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -165,9 +179,9 @@
                 <label class="col-lg-4 control-label">Site Type</label>
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php foreach ($this->siteType as $siteType) {
-                             echo ($this->participant['site_type'] == $siteType['r_stid']) ? $siteType['site_type'] : "&nbsp;";
-                            
+                        <?php
+                        foreach ($this->siteType as $siteType) {
+                            echo ($this->participant['site_type'] == $siteType['r_stid']) ? $siteType['site_type'] : "&nbsp;";
                         }
                         ?>
                     </div>
@@ -178,27 +192,44 @@
 
 
 
-            <div class="form-group col-lg-12">
-                <label class="col-lg-2 control-label">PT Participant Login</label>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">PT Participant Login</label>
 
-                <div class="col-lg-9">
+                <div class="col-lg-8">
                     <div class="list-group-item">
-                      <?php
-                            $dataManagers = explode(",", $this->participant['data_manager']);
-                            foreach ($this->dataManagers as $dm) {
-                                echo (in_array($dm['dm_id'], $dataManagers)) ? $dm['first_name'] . " " . $dm['last_name'].'<br>' : "&nbsp" ; 
-                            }
-                            ?>
-                
+                        <?php
+                        $dataManagers = explode(",", $this->participant['data_manager']);
+                        foreach ($this->dataManagers as $dm) {
+                            echo (in_array($dm['dm_id'], $dataManagers)) ? $dm['first_name'] . " " . $dm['last_name'] . '<br>' : "&nbsp";
+                        }
+                        ?>
+
                     </div>
                 </div>
             </div>
+
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Platforms Enrolled</label>
+
+                <div class="col-lg-8">
+                    <div class="list-group-item">
+                        <?php
+                        foreach ($this->enrolledPlatforms as $platform) {
+                            echo $platform['PlatformName'] . '<br>';
+                        }
+                        ?>&nbsp;
+
+                    </div>
+                </div>
+            </div>
+
+
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Contact Name </label>
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['contact_name']; ?>
+                        <?php echo $this->participant['contact_name']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -207,7 +238,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['email']; ?>
+                        <?php echo $this->participant['email']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -218,7 +249,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['shipping_address']; ?>
+                        <?php echo $this->participant['shipping_address']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -227,7 +258,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['zip']; ?>
+                        <?php echo $this->participant['zip']; ?>&nbsp;
                     </div>
                 </div>
             </div>            
@@ -236,7 +267,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['mobile']; ?>
+                        <?php echo $this->participant['mobile']; ?>&nbsp;
                     </div>
                 </div>
             </div>
@@ -245,7 +276,7 @@
 
                 <div class="col-lg-8">
                     <div class="list-group-item">
-                        <?php echo $this->participant['phone']; ?>
+                        <?php echo $this->participant['phone']; ?>&nbsp;
                     </div>
                 </div>
             </div>

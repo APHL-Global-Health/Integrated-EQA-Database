@@ -112,7 +112,7 @@
                 <label class="col-lg-4 control-label">Platforms </label>
 
                 <div class="col-lg-8">
-                    <select name="platform[]" id="platform" name="platforms" multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose platforms" >
+                    <select name="platform[]" id="platform" multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose platforms" >
                         <?php foreach ($this->platformList as $platforms) {
                             ?>
                             <option value="<?php echo $platforms['ID']; ?>"><?php echo $platforms['PlatformName']; ?></option>

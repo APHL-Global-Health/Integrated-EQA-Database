@@ -122,6 +122,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             if ($this->_hasParam('id')) {
                 $userId = (int) $this->_getParam('id');
                 $this->view->participant = $participantService->getParticipantDetails($userId);
+                $this->view->enrolledPlatforms = $participantService->getEnrolledPlatforms($userId);
             }
             $this->view->affiliates = $participantService->getAffiliateList();
             $dataManagerService = new Application_Service_DataManagers();
@@ -130,6 +131,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             $this->view->siteType = $participantService->getSiteTypeList();
             $this->view->dataManagers = $dataManagerService->getDataManagerList();
             $this->view->countriesList = $commonService->getcountriesList();
+            $this->view->counties = $participantService->getCounties();
         }
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
