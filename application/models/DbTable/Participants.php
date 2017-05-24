@@ -168,7 +168,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if (isset($_SESSION['loggedInDetails']["IsVl"])) {
             $sQuery = $sQuery->where("p.IsVl = ? ", $_SESSION['loggedInDetails']["IsVl"]);
         }
-        
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -424,8 +424,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if (isset($params['MflCode'])) {
             $data['MflCode'] = $params['MflCode'];
         }
-      // $participantId = $this->insert($data);
-
+        // $participantId = $this->insert($data);
         ///////end of inserting to participants table
 
         $db = Zend_Db_Table_Abstract::getAdapter();
@@ -454,15 +453,16 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'created_on' => new Zend_Db_Expr('now()')
         );
 
-    //  $dm_id = $db->insert('data_manager', $datam);
-
-      //  $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
+        //  $dm_id = $db->insert('data_manager', $datam);
+        //  $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
 
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
-          //  $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
+            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
-
+        if (isset($params['platforms']) && $params['platforms'] != "") {
+            $this->savePlatformInfo($params['platforms'],$participantId);
+        }
         $sendTo = $params['pemail'];
 
 
@@ -484,8 +484,10 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $participantId;
     }
 
-    public function getAdminsArray() {
-        
+    public function savePlatformInfo($platformArray,$facilityID) {
+        foreach ($platformArray as $platformId) {
+            $db->insert('facilityplatform', array('FacilityID' => $facilityID, 'PlatformID' => $platformId));
+        }
     }
 
     public function addParticipantForDataManager($params) {
