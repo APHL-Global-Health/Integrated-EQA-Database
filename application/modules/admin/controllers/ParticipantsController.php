@@ -38,8 +38,8 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->siteType = $participantService->getSiteTypeList();
     }
 
-    public function addmicrolabAction(){
-          $participantService = new Application_Model_DbTable_Participants();
+    public function addmicrolabAction() {
+        $participantService = new Application_Model_DbTable_Participants();
         $commonService = new Application_Service_Common();
         $dataManagerService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {
@@ -55,7 +55,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
     }
-    
+
     public function editmicrolabAction() {
         $participantService = new Application_Service_Participants();
         $commonService = new Application_Service_Common();
@@ -109,6 +109,31 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
 
     public function pendingAction() {
         // action body
+    }
+
+    public function viewAction() {
+        $participantService = new Application_Service_Participants();
+        $commonService = new Application_Service_Common();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $participantService->updateParticipant($params);
+            $this->_redirect("/admin/participants");
+        } else {
+            if ($this->_hasParam('id')) {
+                $userId = (int) $this->_getParam('id');
+                $this->view->participant = $participantService->getParticipantDetails($userId);
+            }
+            $this->view->affiliates = $participantService->getAffiliateList();
+            $dataManagerService = new Application_Service_DataManagers();
+            $this->view->networks = $participantService->getNetworkTierList();
+            $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
+            $this->view->siteType = $participantService->getSiteTypeList();
+            $this->view->dataManagers = $dataManagerService->getDataManagerList();
+            $this->view->countriesList = $commonService->getcountriesList();
+        }
+        $scheme = new Application_Service_Schemes();
+        $this->view->schemes = $scheme->getAllSchemes();
+        $this->view->participantSchemes = $participantService->getSchemesByParticipantId($userId);
     }
 
     public function viewParticipantsAction() {

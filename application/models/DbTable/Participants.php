@@ -224,7 +224,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = '<a href="/admin/participants/editmicrolab/id/' . $aRow['participant_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             } else {
-                $row[] = '<a href="/admin/participants/edit/id/' . $aRow['participant_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+                $row[] = ''
+                        . '<a href="/admin/participants/edit/id/' . $aRow['participant_id']
+                        . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                        . '<i class="icon-pencil"></i> Edit</a>'
+                        . '<a href="/admin/participants/view/id/' . $aRow['participant_id']
+                        . '" class="btn btn-info btn-xs" style="margin-right: 2px;">'
+                        . '<i class="icon-eye"></i> view</a>';
             }
             $output['aaData'][] = $row;
         }
@@ -461,7 +467,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
         if (isset($params['platforms']) && $params['platforms'] != "") {
-            $this->savePlatformInfo($params['platforms'],$participantId);
+            $this->savePlatformInfo($params['platforms'], $participantId);
         }
         $sendTo = $params['pemail'];
 
@@ -484,7 +490,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $participantId;
     }
 
-    public function savePlatformInfo($platformArray,$facilityID) {
+    public function savePlatformInfo($platformArray, $facilityID) {
         foreach ($platformArray as $platformId) {
             $db->insert('facilityplatform', array('FacilityID' => $facilityID, 'PlatformID' => $platformId));
         }
