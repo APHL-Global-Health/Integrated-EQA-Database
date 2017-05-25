@@ -23,14 +23,24 @@ class Admin_DistributionsController extends Zend_Controller_Action
            $this->view->searchData= $this->_getParam('searchString');
         }
     }
+  public function getAllDataManagers() {
+        $sysAdmin = new Application_Model_DbTable_Participants();
 
+        $systemAdmins = $sysAdmin->AllEnrolledParticipants();
+        $emails = array();
+        foreach ($systemAdmins as $key => $value) {
+            array_push($emails, $value['email']);
+        }
+        return $emails;
+    }
+    
     public function addAction()
     {
         $distributionService = new Application_Service_Distribution();
         
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();            
-            $distributionService->addDistribution($params);
+            $distributionService->addDistribution($params, $this->getAllDataManagers());
             $this->_redirect("/admin/distributions");
         }
 

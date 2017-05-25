@@ -288,6 +288,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         }
         return $this->fetchAll($sql);
     }
+    
 
     public function updatePassword($oldpassword, $newpassword) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
