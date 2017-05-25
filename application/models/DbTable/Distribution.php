@@ -305,10 +305,49 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
+    public function returnYearQuarter() {
+        $month = date('m', time());
+        switch ($month) {
+            case $month >= 1 && $month <= 3:
+                return 'A';
+                break;
+            case $month >= 4 && $month <= 6:
+                return 'B';
+                break;
+            case $month >= 7 && $month <= 9:
+                return 'C';
+                break;
+            case $month >= 10 && $month <= 12:
+                return 'D';
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public function generateroundcode($id = null) {
+        $roundName = '';
+        $year = date('Y', time());
+        $yearQuearter = $this->returnYearQuarter();
+        if (isset($id)) {
+            if ($id > 0) {
+                $roundName .= '000' . $id;
+            }
+        } else {
+            $roundName .= '00' . '1';
+        }
+        $roundName .= "/" . $year;
+        $roundName = $yearQuearter . "/" . $roundName;
+        return $roundName;
+        
+    }
+
     public function addDistribution($params, $labEmail = null) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $common = new Application_Service_Common();
-        $data = array('distribution_code' => $params['distributionCode'],
+         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $data = array('distribution_code' => "",
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
             'readinessdate' => Pt_Commons_General::dateFormat($params['readinessDate']),
             'status' => 'created',
@@ -318,21 +357,24 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         $participantService = new Application_Service_Participants();
         $emails = $participantService->AllEnrolledParticipants();
         $date = $params['readinessDate'];
+
+        $insertId = $this->insert($data);
+        $updateInfo['distribution_code'] = $this->generateroundcode($insertId);
         
-        $insert = $this->insert($data);
+        $db->update('distributions', $updateInfo, "distribution_id ='" . $insertId . "' ");
         
-        if(isset($labEmail)){
-             $message = "Hi,<br/> "
-                     . " A new PT Round was added. "
-                     . "Kindly go to the system and login using your credentials,"
-                     . " access the readiness checklist form which is to be filled and"
-                     . " submited on or before $date. <br/><br/><br/>Regards,<br/><br/>"
-                     . "ePT Admin<br/><br/><small>This is a system generated email. "
-                     . "Please do not reply.</small>";
-           
-            $subject ="New Round Starts  ".$params['distributionCode']."";
-            if(count($labEmail) > 0){
-                  $common->sendMail($labEmail, null, null, $subject, $message, null, "ePT Admin");
+        if (isset($labEmail)) {
+            $message = "Hi,<br/> "
+                    . " A new PT Round was added. "
+                    . "Kindly go to the system and login using your credentials,"
+                    . " access the readiness checklist form which is to be filled and"
+                    . " submited on or before $date. <br/><br/><br/>Regards,<br/><br/>"
+                    . "ePT Admin<br/><br/><small>This is a system generated email. "
+                    . "Please do not reply.</small>";
+
+            $subject = "New Round Starts  " . $params['distributionCode'] . "";
+            if (count($labEmail) > 0) {
+                $common->sendMail($labEmail, null, null, $subject, $message, null, "ePT Admin");
             }
             return $insert;
         }
