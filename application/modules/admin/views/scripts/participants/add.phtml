@@ -4,7 +4,7 @@
             return false;">
         <fieldset>
             <legend>Add New Participant</legend>
-            
+
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label"></label>
                 <div class="col-lg-8">
@@ -122,9 +122,13 @@
                 <label class="col-lg-4 control-label">Testing Volume</label>
 
                 <div class="col-lg-8">
-                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" 
-                           class="form-control" title="Please enter testing volume here"
-                           placeholder="Please enter the testing volume here"/></div>
+                    <select id="testingVolume" name="testingVolume"
+                           class="form-control" title="Please enter testing volume here">
+                        <?php for ($i = 1; $i <= 1000; $i++) { ?>
+                            <option><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
             </div>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Enrolled Programs </label>
@@ -171,7 +175,7 @@
                     </select>
                 </div>
             </div>
-             <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Contact Name </label>
 
                 <div class="col-lg-8"><input type="text" id="contactname" name="contactname" size="50" maxlength="255" class="form-control" title="Please enter the contact name here" placeholder="Please enter the contact name here"/></div>
@@ -181,7 +185,7 @@
 
                 <div class="col-lg-8"><input type="text" id="pemail" name="pemail" size="50" maxlength="255" class="isRequired isEmail form-control" title="Please enter the email id here" placeholder="Please enter the email id here"/></div>
             </div>
-            
+
 
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Shipping Address (include city and country)</label>
@@ -197,8 +201,8 @@
                                              class="form-control" title="Please enter the Zip/Postal here"
                                              placeholder="Please enter the Zip/Postal here"/></div>
             </div>
-            
-            
+
+
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Cell/Mobile No.</label>
 
@@ -211,7 +215,7 @@
                     <input id="phone2" type="text" id="pphone1" name="pphone1" size="50" maxlength="255" placeholder="Please enter phone number here" class="form-control isNumeric checkNum"/>
                 </div>
             </div>
-            
+
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Network Tier <span class="mandatory">*</span></label>
                 <div class="col-lg-8">
@@ -266,28 +270,27 @@
 <script type="text/javascript">
                     var duplicated = false;
 
-                    $(document).ready(function() {
+                    $(document).ready(function () {
                         $('#dataManager').selectpicker();
                         $('#enrolledProgram').selectpicker();
                         $('#country').selectpicker();
                         tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
-                            $("#lastNameDiv").hide();
-                            $("#plname").val('');
-                            $("#firstNameDiv").html(tag);
+                        $("#lastNameDiv").hide();
+                        $("#plname").val('');
+                        $("#firstNameDiv").html(tag);
                     });
 
                     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
                         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
-                        function(data) {
-                            if (data > 0) {
-                                alert(msg, "err");
-                                duplicated = true;
-                                obj.focus();
-                            }
-                            else {
-                                duplicated = false;
-                            }
-                        });
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        obj.focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                });
                     }
 
                     function validateNow() {
@@ -306,7 +309,7 @@
                         if (obj.checked) {
                             tag = '<label class="col-lg-4 control-label">First Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the First Name here" placeholder="Please enter the First Name here"/></div>';
                             $("#lastNameDiv").show();
-                           
+
                         } else {
                             tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>';
                             $("#lastNameDiv").hide();
