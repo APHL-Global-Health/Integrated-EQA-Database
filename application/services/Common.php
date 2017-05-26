@@ -94,6 +94,7 @@ class Application_Service_Common {
     public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $fullname = isset($fullname) ? $fullname : 'user';
         $message = "Dear $fullname,"
                 . "<br> $Message <br>"
                 . $config->emailRegistrationSignature;

@@ -37,8 +37,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $db->fetchAll($db->select()->from('r_site_type')->order('site_type ASC'));
     }
 
-
-
     public function getNetworkTierList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));
@@ -79,14 +77,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                                 ->where("p.participant_id = ?", $partSysId)
                                 ->group('p.participant_id'));
     }
-   public function getEnrolledPlatforms($partSysId) {
+
+    public function getEnrolledPlatforms($partSysId) {
         return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => 'facilityplatform'))
-                                 ->joinLeft(array('e' => 'vl_platform'), 'e.ID=p.PlatformID')
+                                ->joinLeft(array('e' => 'vl_platform'), 'e.ID=p.PlatformID')
                                 ->where("p.FacilityID = ?", $partSysId));
-                               
     }
 
-    
     public function getAllParticipants($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -469,7 +466,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         );
 
         $dm_id = $db->insert('data_manager', $datam);
-         $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
+        $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
 
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
@@ -500,7 +497,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     }
 
     public function savePlatformInfo($platformArray, $facilityID) {
-         $db = Zend_Db_Table_Abstract::getAdapter();
+        $db = Zend_Db_Table_Abstract::getAdapter();
         foreach ($platformArray as $platformId) {
             $db->insert('facilityplatform', array('FacilityID' => $facilityID, 'PlatformID' => $platformId));
         }
@@ -630,6 +627,22 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                             ->where("e.scheme_id = ?", $schemeType)
                             ->where("p.status='active'")
                             ->group('p.participant_id'));
+        } else {
+            $result = $this->fetchAll($this->select()->where("status='active'"));
+        }
+
+        return $result;
+    }
+
+    public function getAllModuleParticipants($schemeType = null) {
+        if ($schemeType != "all") {
+            $IsVl = $_SESSION['loggedInDetails']['IsVl'];
+            $result = $this->getAdapter()
+                    ->fetchAll($this->getAdapter()
+                    ->select()
+                    ->from(array('p' => $this->_name), array('p.unique_identifier', 'p.institute_name', 'p.participant_id'))
+                    ->where("p.IsVl='" . $IsVl . "'")
+                    ->group('p.participant_id'));
         } else {
             $result = $this->fetchAll($this->select()->where("status='active'"));
         }

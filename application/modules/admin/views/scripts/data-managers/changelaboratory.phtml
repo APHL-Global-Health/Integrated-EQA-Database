@@ -1,0 +1,51 @@
+<div class="well">
+
+    <form name="editUserForm" id="editUserForm" method="post" 
+          action="<?php echo $this->url(array("module" => "admin", "controller" => "data-managers", "action" => "changelaboratory"), 'default', true) ?>"
+          class="form-horizontal bs-example" 
+          >
+
+        <fieldset>
+            <legend>Change User Participant</legend>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Primary e-mail <span class="mandatory"></span></label>
+                <div class="col-lg-5">
+                    <div class="list-group-item">
+                        <?php echo $this->rsUser['primary_email']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Names<span class="mandatory"></span></label>
+                <div class="col-lg-5">
+                    <div class="list-group-item">
+                        <?php echo $this->rsUser['last_name'] . ' ' . $this->rsUser['first_name']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                
+                <label class="col-lg-3 control-label">Select Laboratory <span class="mandatory">*</span></label>
+                <input type="hidden" id="dm_id" value="<?php echo $this->rsUser['dm_id']; ?>" name="dm_id">
+                  <input type="hidden" id="email" value="<?php echo $this->rsUser['primary_email']; ?>" name="email">
+                <div class="col-lg-5">
+                    <select type="text" id="participant_id" required name="participant_id" 
+                            class="isRequired form-control" title="Please select user status here">
+
+                        <?php foreach ($this->participants as $key => $value) { ?>
+
+                            <option <?php  ?> 
+                                value="<?php echo $value['participant_id']; ?>"><?php echo $value['institute_name']; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"  /> 
+                <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/data-managers';" tabindex="8" value="Cancel" /> 
+            </div>
+        </fieldset>
+    </form>
+</div>
