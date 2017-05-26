@@ -219,6 +219,10 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         return $this->fetchRow("primary_email = '" . $userId . "'")->toArray();
     }
 
+    public function getUserRecords($userId) {
+        return count($this->fetchRow("dm_id = '" . $userId . "'")->toArray());
+    }
+
     public function getUserDetailsBySystemId($userSystemId) {
         return $this->fetchRow("dm_id = '" . $userSystemId . "'")->toArray();
     }
@@ -229,19 +233,23 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $bind['participant_id'] = $params['participant_id'];
         $numberRows = $db->update('participant_manager_map', $bind, "dm_id = $where");
+        $exists = $this->getUserRecords($params['dm_id']);
         if ($numberRows == 0) {
             $bind['dm_id'] = $params['dm_id'];
-            $numberRows = $db->insert('participant_manager_map', $bind);
+            if ($exists == 0) {
+                $numberRows = $db->insert('participant_manager_map', $bind);
+            }
             $message = '<br>You have added to a facility : ';
         } else {
             $message = '<br>You have been change from you current facility to : ';
         }
         $participant = new Application_Model_DbTable_Participants();
         $partpnt = $participant->getParticipant($bind['participant_id']);
-        
-        $common = new Application_Service_Common();
 
-        $common->sendGeneralEmail($params['email'], $message.$partpnt["institute_name"]);
+        $common = new Application_Service_Common();
+        if ($numberRows == 1) {
+            $common->sendGeneralEmail($params['email'], $message . $partpnt["institute_name"]);
+        }
     }
 
     public function updateUser($params) {
