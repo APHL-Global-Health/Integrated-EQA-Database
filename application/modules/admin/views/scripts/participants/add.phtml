@@ -233,11 +233,11 @@
                 <label class="col-lg-4 control-label">Partner<span class="mandatory">*</span></label>
 
                 <div class="col-lg-8">
-                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">
+                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the partner here">
                         <option value="">--Select--</option>
-                        <?php foreach ($this->affiliates as $aff) {
+                        <?php foreach ($this->partners as $aff) {
                             ?>
-                            <option value="<?php echo $aff['affiliate']; ?>"><?php echo $aff['affiliate']; ?></option>
+                            <option value="<?php echo $aff['partner_name']; ?>"><?php echo $aff['partner_name']; ?></option>
                         <?php }
                         ?>
                     </select>

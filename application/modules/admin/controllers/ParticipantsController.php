@@ -36,6 +36,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->countriesList = $commonService->getcountriesList();
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
+         $this->view->partners = $participantService->getPartnerList();
     }
 
     public function addmicrolabAction() {
@@ -54,6 +55,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->countriesList = $commonService->getcountriesList();
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
+       
     }
 
     public function editmicrolabAction() {
