@@ -21,8 +21,6 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
     }
 
- 
-
     public function getAllDataManagers() {
         $sysAdmin = new Application_Model_DbTable_Participants();
 
@@ -39,7 +37,7 @@ class Admin_DistributionsController extends Zend_Controller_Action {
 
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-           
+
             $distributionService->addDistribution($params, $this->getAllDataManagers());
             $this->_redirect("/admin/distributions");
         }
@@ -59,6 +57,10 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
     }
 
+    public function getParticipatingLabsEmail() {
+        
+    }
+
     public function shipDistributionAction() {
         if ($this->_hasParam('did')) {
             $id = (int) base64_decode($this->_getParam('did'));
@@ -68,6 +70,8 @@ class Admin_DistributionsController extends Zend_Controller_Action {
             $this->view->message = "Unable to ship. Please try again later or contact system admin for help";
         }
     }
+
+
 
     public function editAction() {
         $distributionService = new Application_Service_Distribution();
@@ -86,6 +90,12 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         } else {
             $this->_redirect('admin/distributions/index');
         }
+    }
+
+    public function testpartAction() {
+        $distributionService = new Application_Service_Distribution();
+        var_dump($distributionService->shipDistribution(1));
+        exit;
     }
 
 }

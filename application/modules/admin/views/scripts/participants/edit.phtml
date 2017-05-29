@@ -138,7 +138,7 @@
                             <option <?php echo $this->participant['testing_volume'] == $i ? 'selected' : '' ?>><?php echo $i; ?></option>
                         <?php } ?>
                     </select>
-                   </div>
+                </div>
             </div>
             <div class="form-group col-lg-6" style="display: none;">
                 <label class="col-lg-4 control-label">Enrolled Programs </label>
@@ -261,11 +261,12 @@
                 <div class="col-lg-8">
                     <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">
                         <option value="">--Select--</option>
-                        <?php foreach ($this->affiliates as $aff) {
+                        <?php foreach ($this->partners as $aff) {
                             ?>
-                            <option value="<?php echo $aff['affiliate']; ?>" <?php echo ($this->participant['affiliation'] == $aff['affiliate']) ? "selected='selected'" : "" ?>><?php echo $aff['affiliate']; ?></option>
-                        <?php }
-                        ?>
+                            <option value="<?php echo $aff['partner_name']; ?>"
+                                    <?php echo ($this->participant['affiliation'] == $aff['partner_name']) ? "selected='selected'" : "" ?>><?php echo $aff['partner_name']; ?></option>
+                                <?php }
+                                ?>
                     </select>
                 </div>
             </div>
