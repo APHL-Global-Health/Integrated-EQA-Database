@@ -103,10 +103,20 @@ class Application_Service_Participants {
         return $db->fetchAll($sql);
     }
 
-    public function getUnEnrolled($scheme) {
+    public function getUnEnrolled($scheme, $roundId = null) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $subSql = $db->select()->from(array('e' => 'enrollments'), 'participant_id')->where("scheme_id = ?", $scheme);
-        $sql = $db->select()->from(array('p' => 'participant'))->where("participant_id NOT IN ?", $subSql)->where("p.status='active'")->order('first_name');
+
+        $sql = $db->select()
+                ->from(array('p' => 'participant'))
+                ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
+                ->where("sl.status='Approved'")
+                ->where("sl.RoundId='$roundId'")
+                ->where("p.status='active'")
+                ->where("participant_id NOT IN ?", $subSql)
+                ->order('first_name');
+
+
         return $db->fetchAll($sql);
     }
 
@@ -140,14 +150,19 @@ class Application_Service_Participants {
         return $db->fetchCol($sql);
     }
 
-    public function getUnEnrolledByShipmentId($shipmentId) {
+    public function getUnEnrolledByShipmentId($shipmentId, $roundId) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $subSql = $db->select()->from(array('p' => 'participant'), array('participant_id'))
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array())
                 ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id', array())
                 ->where("s.shipment_id = ?", $shipmentId)
                 ->where("p.status='active'");
-        $sql = $db->select()->from(array('p' => 'participant'))->where("participant_id NOT IN ?", $subSql)
+        $sql = $db->select()
+                ->from(array('p' => 'participant'))
+                ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
+                ->where("sl.status='Approved'")
+                ->where("sl.RoundId='$roundId'")
+                ->where("participant_id NOT IN ?", $subSql)
                 ->order('p.first_name');
         return $db->fetchAll($sql);
     }

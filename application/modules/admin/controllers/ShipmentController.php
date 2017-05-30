@@ -103,12 +103,14 @@ class Admin_ShipmentController extends Zend_Controller_Action
                 $participantService = new Application_Service_Participants();
                 $sid = (int) base64_decode($this->_getParam('sid'));
                 $this->view->shipment = $shipmentDetails = $shipmentService->getShipment($sid);
+//                var_dump($shipmentDetails['distribution_id']);
+//                exit;
                 $this->view->previouslySelected = $previouslySelected = $participantService->getEnrolledByShipmentId($sid);
                 if ($previouslySelected == "" || $previouslySelected == null) {
                     $this->view->enrolledParticipants = $participantService->getEnrolledBySchemeCode($shipmentDetails['scheme_type']);
-                    $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type']);
+                    $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'],$shipmentDetails['distribution_id']);
                 } else {
-                    $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid);
+                    $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid,$shipmentDetails['distribution_id']);
                 }
             }
         }
