@@ -110,7 +110,7 @@ class Application_Service_Participants {
         $sql = $db->select()
                 ->from(array('p' => 'participant'))
                 ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
-                ->where("sl.verdict='Complete'")
+                ->where("sl.verdict='Approved'")
                 ->where("sl.RoundId='$roundId'")
                 ->where("p.status='active'")
                 ->where("participant_id NOT IN ?", $subSql)
@@ -160,7 +160,7 @@ class Application_Service_Participants {
         $sql = $db->select()
                 ->from(array('p' => 'participant'))
                 ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
-                ->where("sl.verdict='Complete'")
+                ->where("sl.verdict='Approved'")
                 ->where("sl.RoundId='$roundId'")
                 ->where("participant_id NOT IN ?", $subSql)
                 ->order('p.first_name');
