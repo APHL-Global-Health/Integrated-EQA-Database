@@ -61,7 +61,12 @@ class ReadinessController extends Zend_Controller_Action {
             
         }
         $this->view->participantId = $id;
+        $roundInfo['distribution_Id'] =  $this->getRequest()->getParam('roundId');
+        $roundInfo['distribution_code'] = str_replace('*', "/", $this->getRequest()->getParam('code'));
+
+        
         $commonService = new Application_Service_Common();
         $this->view->roundsList = $commonService->getUnshippedDistributions();
+        $this->view->roundInfo = $roundInfo;
     }
 }

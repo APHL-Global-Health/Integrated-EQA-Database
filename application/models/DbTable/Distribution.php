@@ -296,13 +296,24 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
             $row[] = ucwords($aRow['readinessdate']);
             $row[] = ucwords($aRow['status']);
             if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured') {
-                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Readiness Checklist</a>';
+                $row[] = '<a href="/readiness/add/roundId/'.$aRow['distribution_id'].'/code/'.str_replace('/', "*",$aRow['distribution_code']).'" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                        . '<i class="icon-pencil"></i> Readiness Checklist</a>';
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
-                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;"><i class="icon-pencil"></i> Readiness Checklist</a>';
+                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;">'
+                        . '<i class="icon-pencil"></i> Readiness Checklist'
+                        . '</a>';
+            } else {
+                $row[] = '<a href="/readiness/add" class="btn btn-danger btn-xs disabled" style="margin-right: 2px;">'
+                        . '<i class="icon-pencil"></i> Not Allowed'
+                        . '</a>';
             }
             $output['aaData'][] = $row;
         }
         echo json_encode($output);
+    }
+
+    public function returnFilledForm() {
+            
     }
 
     public function returnYearQuarter() {
@@ -340,13 +351,12 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         $roundName .= "/" . $year;
         $roundName = $yearQuearter . "/" . $roundName;
         return $roundName;
-        
     }
 
     public function addDistribution($params, $labEmail = null) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $common = new Application_Service_Common();
-         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $data = array('distribution_code' => "",
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
             'readinessdate' => Pt_Commons_General::dateFormat($params['readinessDate']),
@@ -360,9 +370,9 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
 
         $insertId = $this->insert($data);
         $updateInfo['distribution_code'] = $this->generateroundcode($insertId);
-        
+
         $db->update('distributions', $updateInfo, "distribution_id ='" . $insertId . "' ");
-        
+
         if (isset($labEmail)) {
             $message = "Hi,<br/> "
                     . " A new PT Round was added. "

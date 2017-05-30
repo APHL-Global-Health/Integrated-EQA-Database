@@ -294,9 +294,10 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('pt' => $this->_name), array('participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.first_name,\" \",pmm.last_name ORDER BY pmm.first_name SEPARATOR ', ')"), 'pt.verdict', 'pt.status', 'pt.added_on', 'pt.ID','r.distribution_code'))
-                ->joinLeft(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID')
-                ->joinLeft(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID');
+        $sQuery = $this->getAdapter()->select()
+                ->from(array('pt' => $this->_name))
+                ->joinLeft(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID','institute_name')
+                ->joinLeft(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID','distribution_code');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -344,7 +345,7 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
                 $link = '<a href="' . $aRow['link'] . '" target="_blank">' . $aRow['link'] . '<a>';
             }
             $row = array();
-            $row[] = ucwords($aRow['participantName']);
+            $row[] = ucwords($aRow['institute_name']);
             $row[] = $aRow['distribution_code'];
             $row[] = $aRow['verdict'];
             $row[] = $general->humanDateFormat($addedDateTime[0]);

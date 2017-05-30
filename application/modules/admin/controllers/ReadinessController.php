@@ -24,6 +24,7 @@ class Admin_ReadinessController extends Zend_Controller_Action {
             $shipmentService = new Application_Model_DbTable_Readiness();
             $shipmentService->getReadiness($params);
         }
+        
     }
 
 
