@@ -2,6 +2,37 @@
 
 class Application_Service_Shipments {
 
+    public function getSampleShipment($sid) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        return $db->fetchAll(
+                        $db->select()
+                                ->from('reference_vl_calculation')
+                                ->join(array('rr' => 'reference_result_vl'), 'reference_vl_calculation.sample_id=rr.sample_id')
+                                ->join(array('sp' => 'shipment'), 'reference_vl_calculation.shipment_id=sp.shipment_id')
+
+//                                ->where("reference_vl_calculation.shipment_id=" . $sid)
+                                ->where("reference_vl_calculation.shipment_id=rr.shipment_id")
+                                ->where("rr.shipment_id=" . $sid)
+                                ->order('reference_vl_calculation.sample_id ASC')
+        );
+    }
+
+    public function getsamplemeans($sid, $sampleId) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        return $db->fetchAll(
+                        $db->select()
+                                ->from('vl_peer_mean')
+                                ->join(array('rr' => 'reference_result_vl'), 'vl_peer_mean.sampleId=rr.sample_id')
+                                ->join(array('sp' => 'shipment'), 'vl_peer_mean.shipmentId=sp.shipment_id')
+                                ->joinLeft(array('system_admin' => 'system_admin'), 'vl_peer_mean.system_id=system_admin.admin_id')
+//                                ->where("reference_vl_calculation.shipment_id=" . $sid)
+                                ->where("vl_peer_mean.shipmentId=rr.shipment_id")
+                                ->where("vl_peer_mean.shipmentId=" . $sid)
+                                ->where("vl_peer_mean.sampleId=" . $sampleId)
+                                ->order('vl_peer_mean.sampleId ASC')
+        );
+    }
+
     public function getAllShipments($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -201,6 +232,9 @@ class Application_Service_Shipments {
 
             if ($aRow['status'] != 'finalized') {
                 $delete = '&nbsp;<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="removeShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-remove"></i> Delete</span></a>';
+            }
+            if ($aRow['status'] != 'finalized') {
+                $delete = '&nbsp;<a class="btn btn-info btn-xs" href="/admin/shipment/addpeermean/sid/' . $aRow['shipment_id'] . '"><span><i class="icon-remove"></i> Peer Mean</span></a>';
             }
 
 //           if ($aRow['status'] != null && $aRow['status'] != "" && $aRow['status'] != 'shipped' && $aRow['status'] != 'evaluated' && $aRow['status'] != 'closed' && $aRow['status'] != 'finalized') {
@@ -694,7 +728,7 @@ class Application_Service_Shipments {
         $controlCount = 0;
         foreach ($params['control'] as $control) {
             if ($control == 1) {
-                $controlCount+=1;
+                $controlCount += 1;
             }
         }
 
@@ -766,7 +800,7 @@ class Application_Service_Shipments {
                                 'mean' => $params['vlRef'][$i + 1]['mean'][$e],
                                 'low_limit' => $params['vlRef'][$i + 1]['mean'][$e] - $params['vlRef'][$i + 1]['deviation'][$e],
                                 'high_limit' => $params['vlRef'][$i + 1]['mean'][$e] + $params['vlRef'][$i + 1]['deviation'][$e]
-                                 )
+                                    )
                             );
                         }
                     }
@@ -1099,7 +1133,7 @@ class Application_Service_Shipments {
         $controlCount = 0;
         foreach ($params['control'] as $control) {
             if ($control == 1) {
-                $controlCount+=1;
+                $controlCount += 1;
             }
         }
 
@@ -1147,7 +1181,7 @@ class Application_Service_Shipments {
                                 'sample_id' => ($i + 1),
                                 'assay' => $params['vlRef'][$i + 1]['assay'][$e],
                                 'value' => $params['vlRef'][$i + 1]['value'][$e]
-                               )
+                                    )
                             );
                         }
                     }
@@ -1501,7 +1535,7 @@ class Application_Service_Shipments {
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
                 ->where("sp.map_id = ?", $sid)
                 ->group("p.participant_id");
-        
+
         $participantEmails = $db->fetchAll($sQuery);
 
         foreach ($participantEmails as $participantDetails) {

@@ -17,29 +17,38 @@ class DistributionsController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        if ($this->getRequest()->isPost()) {
-            $params = $this->_getAllParams();
-            $rService = new Application_Model_DbTable_Distribution();
-            $rService->getDistributions($params);
-       } 
-    }
-    public function getreadinessAction(){
-       if ($this->getRequest()->isPost()) {
-            $params = $this->_getAllParams();
-            $rService = new Application_Model_DbTable_Readiness();
-            $rService->getAllReadiness($params);
-        }        
-    }
-
-    public function addAction(){
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetail($pID);
-        foreach ($t as $k){
-            $id=$k["participant_id"];
+
+        foreach ($t as $k) {
+            $id = $k["participant_id"];
         }
-        
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            $rService = new Application_Model_DbTable_Distribution();
+            $rService->getDistributions($params);
+        }
+    }
+
+    public function getreadinessAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            $rService = new Application_Model_DbTable_Readiness();
+            $rService->getAllReadiness($params);
+        }
+    }
+
+    public function addAction() {
+        $authNameSpace = new Zend_Session_Namespace('datamanagers');
+        $pID = $authNameSpace->UserID;
+        $participantService = new Application_Service_Participants();
+        $t = $participantService->getParticipantDetail($pID);
+        foreach ($t as $k) {
+            $id = $k["participant_id"];
+        }
+
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $partnerService = new Application_Model_DbTable_Readiness();
@@ -50,4 +59,5 @@ class DistributionsController extends Zend_Controller_Action {
         $commonService = new Application_Service_Common();
         $this->view->roundsList = $commonService->getUnshippedDistributions();
     }
+
 }
