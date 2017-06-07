@@ -22,9 +22,7 @@
 h3 input{
     font-size-adjust: 12px;
 }
-input{
-    border: 1px darkgray solid !important;
-}
+
 *, .btn {
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
@@ -116,7 +114,7 @@ h3 input type {
 }
 
 .panel small {
-    color: white !important;
+    /*color: white !important;*/
 }
 
 .table {
