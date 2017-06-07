@@ -77,7 +77,7 @@
                        ng-model="samples.resultsFormData.grainStainReaction" required name="grainStainReaction">
             </td>
             <td width="15%"><input class="form-control col-md-12"
-                                   ng-pattern="samples.numericOnly" placeholder="N/A"
+                                   ng-pattern="samples.numericOnly" placeholder="score"
                                    ng-model="samples.resultsFormData.grainStainReactionScore" required
                                    name="grainStainReactionScore"></td>
         </tr>
@@ -88,7 +88,8 @@
                 <input class="form-control col-md-12" type="text"
                        ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Details of primary media "
-                       ng-model="samples.resultsFormData.primaryMedia" required
+                        ng-init="samples.resultsFormData.primaryMedia='NONE'"
+                       ng-model="samples.resultsFormData.primaryMedia" value="NONE"
                        name="primaryMedia">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
@@ -102,7 +103,8 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Incubation conditions"
-                       ng-model="samples.resultsFormData.incubationConditions" required name="incubationConditions">
+                       ng-model="samples.resultsFormData.incubationConditions" ng-init="samples.resultsFormData.incubationConditions='NONE'"
+                       name="incubationConditions">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
@@ -115,7 +117,7 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Colonial morphology"
-                       ng-model="samples.resultsFormData.colonialMorphology" required name="colonialMorphology">
+                       ng-model="samples.resultsFormData.colonialMorphology" ng-init="samples.resultsFormData.colonialMorphology='NONE'" name="colonialMorphology">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
@@ -128,7 +130,7 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Bacterial quantification"
-                       ng-model="samples.resultsFormData.bacterialQualification" required
+                       ng-model="samples.resultsFormData.bacterialQualification" ng-init="samples.resultsFormData.bacterialQualification='NONE'"
                        name="bacterialQualification">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
@@ -146,7 +148,7 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
                        placeholder="Please enter Biochemical reagents"
-                       ng-model="samples.resultsFormData.bacterialReagents" required name="bacterialReagents">
+                       ng-model="samples.resultsFormData.bacterialReagents" ng-init="samples.resultsFormData.bacterialReagents='NONE'" name="bacterialReagents">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
@@ -158,11 +160,11 @@
             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please Discuss further processing"
+                       placeholder="Please Discuss further processing" ng-init="samples.resultsFormData.isolateProcessing='NONE'"
                        ng-model="samples.resultsFormData.isolateProcessing" required name="isolateProcessing">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
-                                   ng-pattern="samples.numericOnly" placeholder="N/A"
+                                   ng-pattern="samples.numericOnly" placeholder="N/A" 
                                    ng-model="samples.resultsFormData.isolateProcessingScore"
                                    name="isolateProcessingScore"></td>
         </tr>

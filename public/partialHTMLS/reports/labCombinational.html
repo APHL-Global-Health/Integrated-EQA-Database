@@ -12,12 +12,12 @@
                 <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
 
                     <input type="text" class="form-control input-sm" ng-model="reports.whereLabGenStatResults.round"
-                           required placeholder="Search Round"
+                           required placeholder="Search Rounds"
                            id="rounds" name="rounds"
-                           class="form-control"
+                           
                            data-min-length="0"
                            data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           
                            bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
                            bs-typeahead>
                 </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div ng-controller="PdfController">
                     &nbsp;
-                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                    <button class="btn btn-sm btn-info" 
                             ng-click="reports.getGenStatPerformanceReport(reports.whereLabGenStatResults)">get report
                     </button>
 

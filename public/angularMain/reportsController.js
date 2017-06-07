@@ -278,7 +278,8 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.genStatPerformanceStat = {};
     $scope.reports.getGenStatPerformanceReport = function (where) {
         try {
-            showAjaxLoader(true)
+            showAjaxLoader(true);
+            console.log(where);
             var url = serverReportURL + 'getgenstatperformance';
             $http.post(url, where)
                     .success(function (response) {
