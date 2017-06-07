@@ -28,6 +28,10 @@ class IndexController extends Zend_Controller_Action
         $this->view->publications = $publicationService->getAllActivePublications();
         $this->view->partners = $partnerService->getAllActivePartners();
     }
+    public function showviralAction(){
+        
+        
+    }
 
 
 }

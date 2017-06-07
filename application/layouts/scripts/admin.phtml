@@ -333,26 +333,28 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">Admin
-                                        Manager</a>
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">
+                                       <i class="fa fa-user"></i> System  Admin</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">Micro-Biology
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'bacteriology'), 'default', true); ?>">
+                                        <i class="fa fa-gear"></i>  Setup Round
                                     </a>
                                 </li>
                                
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">Micro
-                                        Labs</a></li>
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">
+                                       <i class="fa fa-hospital-o"></i>  Micro Labs</a></li>
                                 <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">Users</a>
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">
+                                      <i class="fa fa-users"></i>  Users</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
                 ?>">
-                                        Lab & User Mapping
+                                   <i class="fa fa-link"></i>     Lab & User Mapping
                                     </a></li>
 
 

@@ -9,7 +9,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $common = new Application_Service_Common();
         $email = $params['userId'];
-        $password = MD5($common->generateRandomPassword(9));
+        $plainPass = $common->generateRandomPassword(9);
+        $password = MD5($plainPass);
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
@@ -36,7 +37,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $fullname = $data['first_name'] . ' ' . $data['last_name'];
 
-        $common->sendPasswordEmailToUser($email, $password, $fullname);
+        $common->sendPasswordEmailToUser($email, $plainPass, $fullname);
         return $this->insert($data);
     }
 
