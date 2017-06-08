@@ -381,7 +381,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
         $jsPostData = (array) (json_decode($jsPostData));
 
-        $response['status'] = 1; // $this->dbConnection->insertData('tbl_bac_ready_labs', $jsPostData);
+        $response = $this->dbConnection->insertData('tbl_bac_ready_labs', $jsPostData);
         if ($response['status']) {
             $this->addSamplesToLab($jsPostData);
         }
@@ -1000,19 +1000,27 @@ class BacteriologydbciController extends Zend_Controller_Action {
             $labDetails = $this->returnUserLabDetails();
             $where['participant_id'] = $labDetails['participant_id'];
 
+
+
             if (isset($where['participant_id'])) {
                 $labUsers = $this->dbConnection->selectFromTable('participant_manager_map', $where);
+
                 if ($labUsers != false) {
                     foreach ($labUsers as $key => $value) {
                         $userDetails = $this->returnValueWhere($value->dm_id, 'data_manager');
 
                         $receivedLastRound = $this->returnLastRounds($where, $value->dm_id);
 
-                        $labUsers[$key]->names = $userDetails['first_name'] . ' ' . $userDetails['last_name'];
+                        $labUsers[$key]->names = isset($userDetails['first_name']) ? $userDetails['first_name'] : 'INVALID';
+                        $labUsers[$key]->names .= isset($userDetails['last_name']) ? $userDetails['last_name'] : ' USER';
 
                         $labUsers[$key]->receivedLastMessage = $receivedLastRound ? 'Received sample previous Round' : 'Didn\'t receive sample previous round';
                         $labUsers[$key]->receivedLastStatus = $receivedLastRound;
+                        $labUsers[$key]->validUser =  isset($userDetails['first_name']) ? 1 : 0;
                     }
+
+//                    var_dump($labUsers);
+//                    exit;
                     echo $this->returnJson(array("status" => 1, "data" => $labUsers));
                 }
             }

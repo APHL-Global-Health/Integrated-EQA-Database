@@ -78,7 +78,10 @@
             <div class="panel panel-default bg-info">
                 <div class="h4 col-md-12 text-capitalize">
                     <br>
-                    Distribute Samples <b> {{samples.clickedSample.batchName}} </b>
+                    Issue Samples <b> {{samples.clickedSample.batchName}}  </b>
+                    <button class="btn btn-xs btn-xs" ng-click="samples.getAllFacilityUsers('data_manager')">
+                        <i class="fa fa-refresh"></i>
+                        </button>
 
                     <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
                 </div>

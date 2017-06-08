@@ -2412,6 +2412,7 @@
                 $http
                         .post(url)
                         .success(function (response) {
+                            console.log(response)
                             changeSavingSpinner(false);
                             if (response.status == 1) {
                                 $scope.samples.labUsers = response.data;
