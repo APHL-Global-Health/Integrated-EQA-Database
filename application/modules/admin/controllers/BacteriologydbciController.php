@@ -1257,7 +1257,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $round[$key]->totalMarks = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'finalScore', true);
 
                 $roundId = $where['roundId'];
-                $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(distinct sampleID) as totalSamples from tbl_bac_sample_to_panel where roundId = $roundId  group by roundId", true);
+                $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(sampleID) as totalSamples from tbl_bac_response_results where roundId = $roundId  group by roundId", true);
                 $round[$key]->averageScore = $roundInfo['evaluated'] == 0 ? 'N/A' : round($round[$key]->totalMarks / $round[$key]->totalSamples);
                 $round[$key]->roundName = $roundInfo['roundName'];
                 $round[$key]->roundCode = $roundInfo['roundCode'];
