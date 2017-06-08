@@ -169,9 +169,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         return $mess;
     }
 
+    public function testconfigAction() {
+         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
+         
+         var_dump($config);
+         exit;
+    }
+
     public function sendemailAction($body, $to = '', $send = '') {
         try {
-
+            $config_details = $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+            ;
             $config = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => 'osoromichael@gmail.com',
@@ -1321,7 +1329,6 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 //        $whereTBPS['roundId >'] = 0;
         if ($shipmentData['roundId'] > 0) {
             $updatetbl_bac_panels_shipments['deliveryStatus'] = $shipmentStatus;
-           
         }
         $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
         /*         * ****************************************************************************************** */
