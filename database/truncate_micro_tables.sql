@@ -6,8 +6,8 @@ truncate table tbl_bac_panels_shipments;
 truncate table tbl_bac_rounds;
 truncate table tbl_bac_grades;
 truncate table tbl_bac_couriers;
-truncate table tbl_bac_round_labs;
-truncate table tbl_bac_shipments_logs;
+truncate table tbl_bac_rounds_labs;
+truncate table tbl_bac_shipment_logs;
 truncate table tbl_bac_ready_labs;
 truncate table tbl_bac_samples_to_users;
 
