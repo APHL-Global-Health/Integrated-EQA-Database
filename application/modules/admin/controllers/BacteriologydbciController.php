@@ -1317,11 +1317,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         $updatetbl_bac_panels_shipments['quantity'] = 1;
         $updatetbl_bac_panels_shipments['receivedBy'] = $shipmentData['addressedTo'];
         $whereTBPS['shipmentId'] = $shipmentId;
-        $whereTBPS['deliveryStatus >'] = 0;
+//        $whereTBPS['deliveryStatus >'] = 0;
 //        $whereTBPS['roundId >'] = 0;
         if ($shipmentData['roundId'] > 0) {
-            $updatetbl_bac_panels_shipments['deliveryStatus'] = 0;
-            $shipmentStatus;
+            $updatetbl_bac_panels_shipments['deliveryStatus'] = $shipmentStatus;
+           
         }
         $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
         /*         * ****************************************************************************************** */
@@ -1336,7 +1336,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                 $updateTBPM['dateDelivered'] = $shipmentData['dateReceived'];
                 $updateTBPM['shipmentNumber'] = 'S-0' . $shipmentId;
-                $updateTBPM['panelStatus'] = 0;
+                $updateTBPM['panelStatus'] = $shipmentStatus;
                 if ($whereShipmentData[$key]->roundId > 0) {
                     $updateTBPM['panelStatus'] = $shipmentData['shipmentStatus'];
                 }
@@ -1352,7 +1352,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $updateTBSP['shipmentId'] = $shipmentId;
 
                 $whereTBSP['panelId'] = $whereShipmentData[$key]->panelId;
-                $whereTBSP['participantId'] = null;
+//                $whereTBSP['participantId'] = null;
 //                $whereTBSP['r$whereTBSP['participantId'] = null;oundId > '] = 0;
                 $updateTBPMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
 //                print_r($updateTBPMfeedback);
@@ -1397,8 +1397,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $where['id'] = $shipments[$i];
                 $updateData['roundId'] = $postedData['roundCode'];
                 $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where, $updateData);
-                $whereShipment['id'] = $where['id']; 
-                $this-> updateShipmentRelatedTables($where);
+                $whereShipment['id'] = $where['id'];
+                $this->updateShipmentRelatedTables($where);
                 print_r($data);
             }
         }

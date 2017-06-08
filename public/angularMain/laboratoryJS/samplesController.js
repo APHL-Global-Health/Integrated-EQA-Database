@@ -440,6 +440,7 @@
                         .post(url)
                         .success(function (data) {
                             console.log(data)
+                            $scope.samples.loaderProgressSpinner = '';
                             changeSavingSpinner(false);
                             if (data.status == 0) {
                                 // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -448,6 +449,7 @@
                             }
                         })
                         .error(function (error) {
+                            $scope.samples.loaderProgressSpinner = '';
                             console.log(error)
                             changeSavingSpinner(false);
                         })

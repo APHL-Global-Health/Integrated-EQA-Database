@@ -248,7 +248,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.getParticipatingLabsReport = function (where) {
         try {
             showAjaxLoader(true)
-            
+
             console.log(where);
             var url = serverReportURL + 'getparticipatinglabs';
             $http.post(url, where)
@@ -257,11 +257,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                         showAjaxLoader(false)
                         if (response.status == 1) {
                             $scope.reports.labParticipatingData = response.data;
-                            
+
                         } else {
                             EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
                             $scope.reports.labParticipatingData = {};
-                          
+
                         }
                     })
                     .error(function (error) {
@@ -362,11 +362,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                     title: '<i class="fa fa-spin fa-spinner  text-danger"></i> Enrolling..',
                     content: 'Enrolling,please wait ....'
                 });
-                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+               
                 $http
                         .post(url, dataLab)
                         .success(function (data) {
                             console.log(data)
+                            $scope.samples.loaderProgressSpinner = '';
                             alertStartRound.close();
                             if (data.status == 0) {
                                 alertStartRound = $.alert({
