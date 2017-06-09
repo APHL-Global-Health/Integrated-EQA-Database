@@ -818,7 +818,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 //        print_r($where);
 //          exit();
         $tableName = 'tbl_bac_panels_shipments';
-        $where['deliveryStatus'] = 0;
+        $where['participantId'] = null;
         $dataDB = $this->dbConnection->selectFromTable($tableName, $where, true);
 
         if ($dataDB != false) {
@@ -835,7 +835,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
                     $dataDB[$key]->dateCreated = $panel['dateCreated'];
                     $dataDB[$key]->barcode = $panel['barcode'];
-                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                    $wherCnt['participantId']=null;
+                    $wherCnt['id']= $value->panelId;
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel',$wherCnt, 'panelId');
                 }
             }
         }

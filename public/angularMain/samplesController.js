@@ -926,24 +926,25 @@
         $scope.samples.panelArrowDown = false;
         $scope.samples.getSampleFromPanel = function (panelId, tableName) {
             try {
-                console.log(panelId);
+               
                 var tempPanel = panelId;
-                var panId = angular.isObject(panelId) ? panelId.panelId : panelId;
+                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+                console.log(panId);
                 if (isNumeric(panId)) {
                     try {
 
-                        var where = {panelId: panId, deliveryStatus: 0};
+                        var where = {panelId: panId, participantId: null};
 
                         if (angular.isObject(tempPanel)) {
                             where = {
                                 panelId: tempPanel.panelId,
-                                roundId: tempPanel.roundId,
-                                deliveryStatus: 0,
-                                participantId: tempPanel.participantId
+//                                roundId: tempPanel.roundId,
+                                
+                                participantId: null
                             };
                         }
 
-
+ 
                         if ($scope.samples.clickedPanel !== panId || tableName == 'tbl_bac_sample_to_panel') {
 
                             if ($scope.samples.clickedPanel !== panId) {
