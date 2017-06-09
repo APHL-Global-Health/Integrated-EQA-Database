@@ -182,8 +182,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             ;
             $config = array('ssl' => 'tls',
                 'auth' => 'login',
-                'username' => 'osoromichael@gmail.com',
-                'password' => 'w@r10r@90');
+                'username' => $config['production']['email.config.username'],
+                'password' => $config['production']['email.config.password']);
 
             $transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
 
@@ -197,7 +197,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             if ($to != '') {
                 $mail->addTo($to, '');
             } else {
-                $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
+                $mail->addTo($config['production']['email.config.username'], 'EQA NMRL');
             }
             $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
             $mail->setSubject($subject);
