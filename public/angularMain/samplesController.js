@@ -1950,9 +1950,12 @@
             try {
                 var url = serverSamplesURL + 'getroundperformanceperlab';
                 var where = {checkLab: 0};
-                console.log(where)
+               
+                changeSavingSpinner(true);
+                console.log($scope.samples.savingSpinner);
                 $http.post(url, where)
                     .success(function (response) {
+                    
                         console.log(response)
                         changeSavingSpinner(false);
                         if (response.status == 1) {
