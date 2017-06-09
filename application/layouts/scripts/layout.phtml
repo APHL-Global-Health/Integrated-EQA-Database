@@ -117,6 +117,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <script type="text/javascript"
         src="<?php echo $this->baseUrl('angularMain/calendar/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
         <!------------------------------------------End Angular files----------------------------------------------------------------------->
+
         <style>
 
             .center{
@@ -159,7 +160,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <ul class="nav navbar-nav">
                             <?php if ($authNameSpace->IsVl == 3) { ?>
                                 <li class="dropdown user user-menu">
-                                    <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)       ?>
+                                    <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)        ?>
                                     <a href="#">
                                         <i class="icon icon-dashboard"></i> <span
                                             class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
@@ -380,7 +381,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                             href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i
                                                 class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
                                     <?php }
-                                } ?>
+                                }
+                                ?>
 
 
     <?php if (!isset($authNameSpace->dm_id)) { ?>
@@ -450,7 +452,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <script src="<?php echo $this->baseUrl("assets/plugins/jQueryUI/jquery-ui.min.js"); ?>"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
-                            $.widget.bridge('uibutton', $.ui.button);
+                    $.widget.bridge('uibutton', $.ui.button);
         </script>
         <!-- Bootstrap 3.3.5 -->
         <script src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
@@ -469,30 +471,36 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/bootstrap-multiselect.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/multiselect.js"); ?>"></script>
+        <script src="<?php echo $this->baseUrl('js/jQuery.print.js'); ?>"></script>
+
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/htmlPdf/html2canvas.min.js'); ?>" ></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/htmlPdf/jspdf.min.js'); ?>"></script>
+        
         <script type="text/javascript">
-                            function layoutModal(url, w, h) {
-                                showdefModal('dDiv', w, h);
-                                document.getElementById('dFrame').style.height = h + 'px';
-                                document.getElementById('dFrame').style.width = w + 'px';
-                                document.getElementById('dFrame').src = url;
-                            }
+                    function layoutModal(url, w, h) {
+                    showdefModal('dDiv', w, h);
+                    document.getElementById('dFrame').style.height = h + 'px';
+                    document.getElementById('dFrame').style.width = w + 'px';
+                    document.getElementById('dFrame').src = url;
+                    }
 
-                            function closeLayoutModal() {
-                                document.getElementById('dFrame').src = "";
-                                //window.location.reload(true);
-                                hidedefModal();
-                            }
+                    function closeLayoutModal() {
+                    document.getElementById('dFrame').src = "";
+                    //window.location.reload(true);
+                    hidedefModal();
+                    }
 
-                            Array.prototype.remove = function () {
-                                var what, a = arguments, L = a.length, ax;
-                                while (L && this.length) {
-                                    what = a[--L];
-                                    while ((ax = this.indexOf(what)) != -1) {
-                                        this.splice(ax, 1);
-                                    }
-                                }
-                                return this;
-                            }
+                    Array.prototype.remove = function () {
+                    var what, a = arguments, L = a.length, ax;
+                    while (L && this.length) {
+                    what = a[--L];
+                    while ((ax = this.indexOf(what)) != - 1) {
+                    this.splice(ax, 1);
+                    }
+                    }
+                    return this;
+                    }
         </script>
     </body>
 </html>
