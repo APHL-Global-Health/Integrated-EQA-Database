@@ -15,6 +15,6 @@ CREATE TABLE `vl_peer_mean` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 
-ALTER TABLE `eanalyze_test`.`vl_peer_mean` 
+ALTER TABLE `vl_peer_mean` 
 DROP INDEX `shipmentId_UNIQUE` ,
 ADD UNIQUE INDEX `shipmentId_UNIQUE` (`shipmentId` ASC, `sampleId` ASC, `system_id` ASC);

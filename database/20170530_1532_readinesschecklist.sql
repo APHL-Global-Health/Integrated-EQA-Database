@@ -1,4 +1,4 @@
-ALTER TABLE `eanalyze_test`.`readinesschecklist` 
+ALTER TABLE `readinesschecklist` 
 CHANGE COLUMN `q1` `q1` VARCHAR(100) NULL DEFAULT NULL ,
 CHANGE COLUMN `q2` `q2` VARCHAR(100) NULL DEFAULT NULL ,
 CHANGE COLUMN `q3` `q3` VARCHAR(100) NULL DEFAULT NULL ,
@@ -6,6 +6,6 @@ CHANGE COLUMN `q5` `q5` VARCHAR(100) NULL DEFAULT NULL ,
 CHANGE COLUMN `q6` `q6` VARCHAR(100) NULL DEFAULT NULL ;
 
 
-ALTER TABLE `eanalyze_test`.`readinesschecklist` 
+ALTER TABLE `readinesschecklist` 
 CHANGE COLUMN `ParticipantID` `ParticipantID` INT(11) NOT NULL ,
 ADD UNIQUE INDEX `UN_KEY` (`ParticipantID` ASC, `RoundID` ASC);
