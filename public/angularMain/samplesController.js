@@ -2889,7 +2889,7 @@
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = data;
-                $scope.samples.samplesActivePage('addSamples', 0);
+                $scope.samples.samplesActivePage('addsamples', 0);
 
 
             }

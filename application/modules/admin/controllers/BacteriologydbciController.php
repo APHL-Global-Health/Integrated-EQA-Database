@@ -455,7 +455,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     return '';
                 }
             } else {
-                
+               return false; 
             }
         }
         return (array) $returnArray;
@@ -508,10 +508,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 //print_r($sample);
 //exit;
+                        
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
+                        
                     } else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
