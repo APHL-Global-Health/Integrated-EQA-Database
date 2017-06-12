@@ -48,7 +48,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $idArray = (array) $idArray;
 
             if (is_array($jsPostData)) {
-                $response = [];
+                $response = array();
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
                     $value = ((array) $value);
@@ -74,7 +74,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $idArray = $jsPostData['userIds'];
 
             if (is_array($jsPostData)) {
-                $response = [];
+                $response = array();
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
                     $data['userId'] = $value;
@@ -426,7 +426,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnValueWhere($id, $tableName) {
-        $returnArray = [];
+        $returnArray = array();
         if (!is_array($id)) {
             if ($tableName == 'data_manager') {
                 $whereId['dm_id'] = $id;

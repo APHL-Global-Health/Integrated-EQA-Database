@@ -167,11 +167,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
     public function getindividuallabsAction() {
         $postedData = $this->returnArrayFromInput();
-        $col = ['*'];
-        $orderArray = ['id', 'dateCreated'];
+        $col = array('*');
+        $orderArray = array('id', 'dateCreated');
 
-        $groupArray = ['id'];
-
+        $groupArray = array('id');
+        if (isset($postedData['participantId'])) {
+            if ($postedData['participantId'] == '') {
+                unset($postedData['participantId']);
+            }
+        }
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
@@ -340,10 +344,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
         if (is_string($where)) {
             $results = $this->dbConnection->returnParticipatinglabs($where);
-            if($results !== false) {
+            if ($results !== false) {
                 echo $this->returnJson(array('status' => 1, 'data' => $results));
-            }else{
-                  echo $this->returnJson(array('status' => 0, 'Message' => 'No data found'));
+            } else {
+                echo $this->returnJson(array('status' => 0, 'Message' => 'No data found'));
             }
         }
 

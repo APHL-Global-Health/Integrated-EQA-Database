@@ -878,7 +878,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         }
 
         $tableName = 'tbl_bac_panels_shipments';
-
+//        $whereParticipant['startRoundFlag'] = 1;
         $dataDB = $this->dbConnection->selectFromTable($tableName, $whereParticipant, true);
 
 
@@ -1016,7 +1016,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
                         $labUsers[$key]->receivedLastMessage = $receivedLastRound ? 'Received sample previous Round' : 'Didn\'t receive sample previous round';
                         $labUsers[$key]->receivedLastStatus = $receivedLastRound;
-                        $labUsers[$key]->validUser =  isset($userDetails['first_name']) ? 1 : 0;
+                        $labUsers[$key]->validUser = isset($userDetails['first_name']) ? 1 : 0;
                     }
 
 //                    var_dump($labUsers);
