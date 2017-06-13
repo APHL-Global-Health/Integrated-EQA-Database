@@ -155,7 +155,11 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     if ($role == 1) {
                         ?>
                         <ul class="nav navbar-nav">
-                            <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
+                            <li 
+                                <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>">
+                                    <i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
+                            </li>
 
                             <ul class="nav navbar-nav">
                                 <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -233,7 +237,10 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 } else if ($vl == 1) {
                     ?>
                     <ul class="nav navbar-nav">
-                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
+                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>">
+                                <i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
+                        </li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
                             <ul class="dropdown-menu" style="overflow-y:scroll;">
@@ -312,7 +319,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
                 <?php if ($vl == 4) { ?>
                     <ul class="nav navbar-nav">
-                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> ><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
+                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
                             <ul class="dropdown-menu" style="overflow-y:scroll;">
@@ -325,7 +333,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 <?php if ($vl == 3) { ?>
                     <ul class="nav navbar-nav">
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'dashboard') ? "class='active'" : ""; ?> >
-                            <a href="#"><i
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index'), 'default', true); ?>"><i
                                     class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a></li>
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure
