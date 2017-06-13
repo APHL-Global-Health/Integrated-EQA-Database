@@ -169,7 +169,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier', 'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status', 'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
+        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier', 
+            'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status',  'p.MflCode', 
+            'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
                 ->join(array('c' => 'countries'), 'c.id=p.country')
                 ->group("p.participant_id");
 
@@ -229,7 +231,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row[] = $aRow['iso_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['phone'];
-            $row[] = $aRow['affiliation'];
+            $row[] = $aRow['MflCode'];
             $row[] = $aRow['email'];
             $row[] = ucwords($aRow['status']);
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
