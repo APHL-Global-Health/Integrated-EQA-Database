@@ -189,12 +189,12 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
 
-            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
+//            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
 
 
 
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-                $row[] = $aRow['IsTester'] == 0 ? 'YES' : '';
+                $row[] = $aRow['secondary_email'] ;
             } else {
                 $row[] = $aRow['IsTester'] == 1 ? 'Yes' : 'No';
             }
