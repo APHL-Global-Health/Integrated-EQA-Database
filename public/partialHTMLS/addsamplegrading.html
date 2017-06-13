@@ -74,11 +74,11 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter the grain stain results"
-                       ng-model="samples.resultsFormData.grainStainReaction" required name="grainStainReaction">
+                       ng-model="samples.resultsFormData.grainStainReaction"  name="grainStainReaction">
             </td>
             <td width="15%"><input class="form-control col-md-12"
                                    ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="samples.resultsFormData.grainStainReactionScore" required
+                                   ng-model="samples.resultsFormData.grainStainReactionScore" 
                                    name="grainStainReactionScore"></td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
@@ -175,12 +175,12 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Final identification "
-                       ng-model="samples.resultsFormData.finalIdentification" required name="finalIdentification">
+                       ng-model="samples.resultsFormData.finalIdentification"  name="finalIdentification">
 
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
                                    ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="samples.resultsFormData.finalIdentificationScore" required
+                                   ng-model="samples.resultsFormData.finalIdentificationScore" 
                                    name="finalIdentificationScore"></td>
         </tr>
         <tr>
