@@ -170,16 +170,16 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function testconfigAction() {
-         $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
-         
-         print_r($config['production']);
-         exit;
+        $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
+
+        print_r($config['production']);
+        exit;
     }
 
     public function sendemailAction($body, $to = '', $send = '') {
         try {
             $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-            
+
             $config = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => $config['production']['email.config.username'],
@@ -455,7 +455,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     return '';
                 }
             } else {
-               return false; 
+                return false;
             }
         }
         return (array) $returnArray;
@@ -508,12 +508,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 //print_r($sample);
 //exit;
-                        
+
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
-                        
                     } else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
@@ -707,6 +706,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $where['shipmentId'] = $value->id;
                     $whereRound['id'] = $value->roundId;
                     $array[$key]->roundInfo = $this->returnValueWhere($whereRound, 'tbl_bac_rounds');
+                    $whereCreatedBy['admin_id'] = $value->createdBy;
+                    $created = $this->returnValueWhere($whereCreatedBy, 'system_admin');
+                    $array[$key]->createdBy = $created['first_name'].' '.$created['last_name'];
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
             }
@@ -837,9 +839,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
                     $dataDB[$key]->dateCreated = $panel['dateCreated'];
                     $dataDB[$key]->barcode = $panel['barcode'];
-                    $wherCnt['participantId']=null;
-                    $wherCnt['id']= $value->panelId;
-                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel',$wherCnt, 'panelId');
+                    $wherCnt['participantId'] = null;
+                    $wherCnt['id'] = $value->panelId;
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $wherCnt, 'panelId');
                 }
             }
         }
