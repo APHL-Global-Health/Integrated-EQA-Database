@@ -336,7 +336,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     public function addParticipants($params) {
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
-
+//print_r($params);
+//exit;
         $data = array(
             'unique_identifier' => $params['pid'],
             'institute_name' => $params['instituteName'],
