@@ -1176,6 +1176,12 @@
                         if (tableName == 'tbl_bac_samples') {
                             data.sampleType = JSON.stringify(data.sampleType);
                         }
+                        
+                        if(tableName == 'tbl_bac_shipments'){
+                            if(angular.isDefined(postedData.roundInfo)) {
+                                delete postedData.roundInfo;
+                            }
+                        }
                         postedData.data = data;
                         postedData.tableName = tableName;
                         console.log(data);

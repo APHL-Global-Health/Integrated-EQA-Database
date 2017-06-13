@@ -254,7 +254,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         $data = array(
             'unique_identifier' => $params['pid'],
+            'MflCode' => $params['MflCode'],
             'institute_name' => $params['instituteName'],
+            'lab_name'=>$params['lab_name'],
             'department_name' => $params['departmentName'],
             'address' => $params['address'],
             'city' => $params['city'],
