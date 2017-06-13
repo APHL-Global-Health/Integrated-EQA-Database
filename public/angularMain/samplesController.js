@@ -2885,7 +2885,7 @@
         $scope.samples.editFunction = function (data, tableName) {
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.shipmentFormData = data;
-                $scope.samples.samplesActivePage('addShipments', 0);
+                $scope.samples.samplesActivePage('addshipments', 0);
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = data;
