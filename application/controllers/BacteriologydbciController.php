@@ -519,7 +519,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnValueWhere($id, $tableName) {
-        $returnArray = [];
+        $returnArray = array();
         if (!is_array($id)) {
             if ($tableName == 'data_manager') {
                 $whereId['dm_id'] = $id;
@@ -545,10 +545,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
                         $returnArray = $value;
                     }
                 } catch (Exception $e) {
-                    return '';
+                    return false;
                 }
             } else {
-                
+                return false;
             }
         }
         return (array) $returnArray;
@@ -903,7 +903,12 @@ class BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->roundId = $shipment['roundId'];
                     $dataDB[$key]->shipmentStatus = $shipment['shipmentStatus'];
                     $dataDB[$key]->datePrepared = $shipment['datePrepared'];
+
                     $dataDB[$key]->dispatchCourier = $shipment['dispatchCourier'];
+                    $whereCouriers['courierName'] = $shipment['dispatchCourier'];
+
+                    $courierInfo = $this->returnValueWhere($whereCouriers, 'tbl_bac_couriers');
+                    $dataDB[$key]->courierContactNumber = $courierInfo['mobile'];
                     $dataDB[$key]->roundName = $round['roundName'];
                     $dataDB[$key]->roundCode = $round['roundCode'];
                     $dataDB[$key]->startDate = $round['startDate'];
@@ -1036,7 +1041,6 @@ class BacteriologydbciController extends Zend_Controller_Action {
             $postedData = (array) (json_decode($postedData));
 
             $tableName = $postedData['tableName'];
-//echo $tableName ;
 
             if (isset($postedData['where'])) {
                 $where = $postedData['where'];

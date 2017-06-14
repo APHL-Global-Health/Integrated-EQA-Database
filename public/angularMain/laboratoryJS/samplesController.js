@@ -716,7 +716,7 @@
 
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                        $scope.samples.samplesActivePage('viewRounds', 0);
+                                        $scope.samples.samplesActivePage('viewrounds', 0);
                                         $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
                                     } else {

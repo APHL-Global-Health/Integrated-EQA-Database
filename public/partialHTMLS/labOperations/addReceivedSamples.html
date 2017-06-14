@@ -50,13 +50,14 @@
                     <th>Shipment Name</th>
                     <th>No Of Panels</th>
                     <th>Courier</th>
+                    <th>Courier Contact</th>
                     <th>Days Left</th>
 
                     <th>Round ID</th>
-                    <th>Created By</th>
+                    <th>Dispatched On</th>
                     <th>Prepared On</th>
                     <!--                                <th>Date Saved</th>-->
-                    <th>Prepared By</th>
+                    <th>Days Left</th>
                     <th>Ship't Status</th>
                     <th></th>
                 </tr>
@@ -78,12 +79,13 @@
                     </td>
                     <td>{{shipment.totalPanelsAdded}}</td>
                     <td>{{shipment.dispatchCourier}}</td>
+                    <td>{{shipment.courierContactNumber}}</td>
                     <td>{{shipment.daysLeft}}</td>
                     <td nowrap>{{shipment.roundCode}}</td>
-                    <td nowrap>{{shipment.createdBy}}</td>
+                    <td nowrap>{{shipment.dateDispatched}}</td>
 
                     <td nowrap>{{shipment.datePrepared}}</td>
-                    <td nowrap>{{shipment.preparedBy}}</td>
+                    <td nowrap>{{shipment.daysLeft}}</td>
                     <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
                     <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 

@@ -708,7 +708,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $array[$key]->roundInfo = $this->returnValueWhere($whereRound, 'tbl_bac_rounds');
                     $whereCreatedBy['admin_id'] = $value->createdBy;
                     $created = $this->returnValueWhere($whereCreatedBy, 'system_admin');
-                    $array[$key]->createdBy = $created['first_name'].' '.$created['last_name'];
+                    $array[$key]->createdBy = $created['first_name'] . ' ' . $created['last_name'];
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
             }
@@ -1384,8 +1384,19 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $dataArray = $this->returnArrayFromInput();
 
             if (is_array($dataArray)) {
-
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], (array) $dataArray['updateData']);
+                $updateInfo = (array) $dataArray['updateData'];
+                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
+                    if (isset($updateInfo['roundInfo'])) {
+                        unset($updateInfo['roundInfo']);
+                    }
+                }
+                if ($dataArray['tableName'] == 'tbl_bac_rounds') {
+                    if (isset($updateInfo['totalLabsAdded'])) {
+                        unset($updateInfo['totalLabsAdded']);
+                    }
+                }
+                
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], $updateInfo);
 
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
                     if ($data['status'] == 1) {
