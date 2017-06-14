@@ -1383,6 +1383,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $data['status'] = 0;
             $dataArray = $this->returnArrayFromInput();
 
+//            print_r($dataArray);
+//            exit;
+
             if (is_array($dataArray)) {
                 $updateInfo = (array) $dataArray['updateData'];
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
@@ -1395,12 +1398,17 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         unset($updateInfo['totalLabsAdded']);
                     }
                 }
-                
+
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], $updateInfo);
 
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
                     if ($data['status'] == 1) {
                         $this->updateShipmentRelatedTables((array) $dataArray['where'], (array) $dataArray['updateData']);
+                    }
+                    $posted = (array) $dataArray['updateData'];
+                    if ($posted['shipmentStatus'] == 2) {
+
+                        $this->sendemailondispatchAction((array)$dataArray['where']);
                     }
                 }
             } else {
@@ -1411,6 +1419,47 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $exc->getMessage();
         }
         exit();
+    }
+
+    public function sendemailondispatchAction($shipmentWhere = null) {
+
+
+        $shipmentInfo = $this->returnValueWhere($shipmentWhere['id'], 'tbl_bac_shipments');
+        $round = $this->returnValueWhere($shipmentInfo['roundId'], 'tbl_bac_rounds');
+
+        
+        if (count($shipmentInfo)>0) {
+//            print_r($shipmentInfo);
+//exit;
+            $roundId = $shipmentInfo['roundId'];
+            $sql_query = "select email from tbl_bac_rounds_labs"
+                    . " join participant on participant.participant_id=tbl_bac_rounds_labs.labId"
+                    . " where roundId = $roundId ";
+
+
+//            print_r($sql_query);
+//            exit;
+            $data = $this->dbConnection->doQuery($sql_query);
+            $email = array();
+            foreach ($data as $key => $value) {
+
+
+                if (!in_array($value['email'], $email)) {
+                    array_push($email, $value['email']);
+                }
+            }
+
+            $shipmentInfo['date'] = $shipmentInfo['dateDispatched'];
+            $shipmentInfo['courier'] = $shipmentInfo['dispatchCourier'];
+            $message = $this->generateMessage($shipmentInfo, 3);
+            $common = new Application_Service_Common();
+            $message['message'] .= " of round <b>" . $round['roundName'] ."</b> ";
+            $message['message'] = "This is to notify you <br> ".$message['message'];
+            $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
+
+          
+        }
+     return true;
     }
 
     public function saveshipmentstoroundAction() {

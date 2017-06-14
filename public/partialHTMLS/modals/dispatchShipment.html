@@ -128,7 +128,7 @@
                              ng-class="{ 'has-error'  : dispatchShipmentForm.temperature.$invalid && !dispatchShipmentForm.temperature.$pristine }">
                             <label for="temperature" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="temperature" required name="temperature"
+                                <input class="form-control" type="text" id="temperature" name="temperature"
                                        ng-pattern="samples.numericOnly" placeholder="Current temperature of panel"
                                        ng-model="samples.dispatchShipmentFormData.temperature">
                             </div>
