@@ -45,7 +45,9 @@
                             <button class="btn btn-success" ng-click="reports.saveEnrolled(round.id, round.participantId)">Enroll</button>
                         </td>
                         <td ng-show="round.enrolled == 0 && round.daysLeft == 0">
-                            <button class="btn btn-success" ng-click="reports.saveEnrolled(round.id, round.participantId)">Enroll</button>
+                            <div class="text-danger">
+                                <i class="fa fa-close"></i> Expired
+                            </div>
                         </td>
                         <td ng-show="round.enrolled == 1">
                             Enrolled

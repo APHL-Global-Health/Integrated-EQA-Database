@@ -1157,7 +1157,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
 
 
-                        $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                        $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft;//$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
 
                         $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
