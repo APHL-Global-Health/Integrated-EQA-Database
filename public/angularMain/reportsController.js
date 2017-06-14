@@ -304,6 +304,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         }
     }
 
+    $scope.reports.whereLabGenStatResults = {};
+    $scope.reports.genStatPerformance = {};
+    $scope.reports.genStatPerformanceStat ={};
+    $scope.reports.getGenStatPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getgenstatperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.genStatPerformance = response.data;
+                        $scope.reports.genStatPerformanceStat = response.stat;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                        $scope.reports.genStatPerformance = {};
+                        $scope.reports.genStatPerformanceStat = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (exc) {
+
+        }
+    }
+
+
 
 
     var alertStartRound = '';
