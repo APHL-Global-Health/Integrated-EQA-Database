@@ -512,7 +512,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     $scoreGS = 0.75 * $sampleExpectedResult['grainStainReactionScore'];
                 }
 
-                $score['grainStainReactionScore'] = round(($scoreGS / $sampleExpectedResult['grainStainReactionScore']) * 100, 3);
+                $score['grainStainReactionScore'] = $sampleExpectedResult['grainStainReactionScore'] > 0 ? round(($scoreGS / $sampleExpectedResult['grainStainReactionScore']) * 100, 3) : -1;
 
 
                 if ($responseResults['finalIdentification'] == $sampleExpectedResult['finalIdentification']) {
@@ -522,7 +522,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
 //                echo $scoreFIS;
 //                exit();
-                $score['finalIdentificationScore'] = round(($scoreFIS / $sampleExpectedResult['finalIdentificationScore']) * 100, 3);
+                $score['finalIdentificationScore'] = $sampleExpectedResult['finalIdentificationScore'] > 0 ? round(($scoreFIS / $sampleExpectedResult['finalIdentificationScore']) * 100, 3) : -1;
 
                 $whereResponse['sampleId'] = $responseResults['sampleId'];
                 $whereResponse['roundId'] = $responseResults['roundId'];

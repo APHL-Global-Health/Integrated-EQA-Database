@@ -705,8 +705,8 @@ class BacteriologydbciController extends Zend_Controller_Action {
                             $whereId = $tableName == 'tbl_bac_sample_to_panel' ? $dataDB[$key]->id : $dataDB[$key]->panelToSampleId;
                             $sampleInfo = $this->returnSampleInfo($whereId);
 
-                            $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
-                            $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
+                            $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] ;//> 10 ? 0 : $sampleInfo['endDaysLeft'];
+                            $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 0 ? 1 : 0;
 
 
                             if ($tableName == 'tbl_bac_samples_to_users') {
@@ -1159,7 +1159,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
                         $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft;//$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
 
-                        $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;
+                        $dataDB[$key]->allowedOnTenDays =  $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                     }
                     $data['status'] = 1;
