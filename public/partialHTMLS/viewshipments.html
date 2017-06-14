@@ -12,9 +12,7 @@
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
               <items-per-page></items-per-page>
-                <div class="pull-right" ng-init="expanded=true"
-
-                >
+                <div class="pull-right" ng-init="expanded=true">
                     <a href="#" ng-click="expanded=!expanded" class=" btn btn-default btn-sm"
 
                     ><i class="fa fa-expand"></i>
@@ -274,7 +272,7 @@
 
                 </td>
                 <td>{{shipment.numberOfPanels}}</td>
-                <td>{{shipment.courier}}</td>
+                <td>{{shipment.dispatchCourier}}</td>
                 <td>{{shipment.shipmentDsc}}</td>
                 <td nowrap>{{shipment.roundInfo.roundName}}</td>
                 <td nowrap>{{shipment.createdBy}}</td>
