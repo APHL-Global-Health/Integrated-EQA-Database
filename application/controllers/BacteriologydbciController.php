@@ -287,9 +287,11 @@ class BacteriologydbciController extends Zend_Controller_Action {
                 $where['labId'] = $whereLab['participant_id'];
                 $where['roundId'] = $value->id;
 
-                $readyLabs = $this->returnValueWhere($where, 'tbl_bac_ready_labs');
-                $round[$key]->enrolled = sizeof($readyLabs) > 0 ? 1 : 0;
-                $round[$key]->enrolledStatus = sizeof($readyLabs) > 0 ? 'Enrolled for the round' : 'Not Enrolled';
+                $readyLabs = $this->dbConnection->selectCount('tbl_bac_ready_labs', $where, 'labId');
+
+
+                $round[$key]->enrolled = $readyLabs > 0 ? 1 : 0;
+                $round[$key]->enrolledStatus = $readyLabs > 0 ? 'Enrolled for the round' : 'Not Enrolled';
                 $round[$key]->evalauatedStatus = $round[$key]->evaluated == 0 ? 'Not Evaluated' : 'Evaluated';
                 $round[$key]->daysLeft = $this->converttodays($round[$key]->endDate);
                 $round[$key]->participantId = $whereLab['participant_id'];
