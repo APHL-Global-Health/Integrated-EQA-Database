@@ -945,7 +945,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     exit;
                 }
                 $orderArray = array('id', 'dateCreated');
-                $col = ('*');
+                $col = array('*');
 
                 $groupArray = array('id');
                 $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
