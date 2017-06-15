@@ -919,7 +919,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                                 }
                             }
                             if (!$exist) {
-                                array_push($lab, $reportData[$key]->participantId);
+                               
+                                array_push($lab, $reportData[$keys]->participantId);
                             } else {
                                 
                             }
