@@ -51,42 +51,48 @@
     <div class="col-md-12 no-padding">
         <table class="table table-bordered table-striped">
             <thead>
-            <tr>
-                <th>#</th>
-                <th>Lab Name</th>
-                <th>Lab Code</th>
-                <th>Sample</th>
-                <th>County</th>
-                <th>Date Responded</th>
+                <tr>
+                    <th>#</th>
+                    <th>Lab Name</th>
+                    <th>Lab Code</th>
+                    <th>Sample</th>
+                    <th>County</th>
+                    <th>Date Responded</th>
 
-                <th>Gram Stain Score</th>
-                <th>Final ID Score</th>
-                <th>AST Score</th>
-                <th>Total</th>
-            </tr>
+                    <th>Gram Stain Score</th>
+                    <th>Final ID Score</th>
+                    <th>AST Score</th>
+                    <th>Total</th>
+                </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="lab in reports.individualLabsEvaluation|filter:searchLabs | itemsPerPage: samples.itemsPerPage ">
-                <td>{{$index+1}}</td>
-                <td><a href="#/{{lab.id}}"
-                       data-placement="right" data-type="info" data-container="body"
-                       data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="More infor on {{lab.labDetails.institute_name}}"
-                       bs-tooltip
-                       ng-click="samples.showlabFullDetails(lab)"
-                       class="">{{lab.labDetails.institute_name}}</a>
-                </td>
-                <td>{{lab.labDetails.unique_identifier}}</td>
-                 <td>{{lab.batchName}}</td>
-                <td>{{lab.labDetails.city}}</td>
-                <td>{{lab.dateCreated}}</td>
-                <td nowrap>{{lab.grainStainReactionScore}}</td>
-                <td nowrap>{{lab.finalIdentificationScore}}</td>
+                <tr dir-paginate="lab in reports.individualLabsEvaluation|filter:searchLabs | itemsPerPage: samples.itemsPerPage ">
+                    <td>{{$index + 1}}</td>
+                    <td><a href="#/{{lab.id}}"
+                           data-placement="right" data-type="info" data-container="body"
+                           data-animation="am-fade-and-scale"
+                           data-trigger="hover" data-type="success" data-title="More infor on {{lab.labDetails.institute_name}}"
+                           bs-tooltip
+                           ng-click="samples.showlabFullDetails(lab)"
+                           class="">{{lab.labDetails.institute_name}}</a>
+                    </td>
+                    <td>{{lab.labDetails.unique_identifier}}</td>
+                    <td>{{lab.batchName}}</td>
+                    <td>{{lab.labDetails.city}}</td>
+                    <td>{{lab.dateCreated}}</td>
+                    <td nowrap>
+                        <b ng-hide="lab.grainStainReactionScore < 0">{{lab.grainStainReactionScore}}</b>
+                        <b ng-show="lab.grainStainReactionScore < 0"> N/A</b>
+                    </td>
+                    <td nowrap>
+                        <b  ng-hide="lab.finalIdentificationScore < 0">{{lab.finalIdentificationScore}}</b>
+                        <b ng-show="lab.finalIdentificationScore < 0"> N/A</b>
+                    </td>
 
-                <td>{{lab.totalMicroAgentsScore}}</td>
-                <td>{{lab.finalScore}}</td>
+                    <td>{{lab.totalMicroAgentsScore}}</td>
+                    <td>{{lab.finalScore}}</td>
 
-            </tr>
+                </tr>
 
             </tbody>
         </table>
