@@ -224,7 +224,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                 $update['score'] = $arr['score'];
                 $update['diskContent'] = $arr['diskContent'];
+
                 $update['finalScore'] = $arr['finalScore'];
+
                 $update['reportedToStatus'] = $arr['reportedToStatus'];
                 $update['score'] = $arr['score'];
                 if (is_float($update['score']) || is_numeric($update['score'])) {
@@ -245,7 +247,38 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     
                 } else {
                     $microSum = $microSum > 100 ? 100 : $microSum;
-                    $updateEval['finalScore'] = round(($results['grainStainReactionScore'] + $results['finalIdentificationScore'] + $microSum) / 3);
+                    $count = 0;
+                    $updateEval['finalScore'] = 0;
+
+
+
+                    $count = 0;
+                    if ($results['finalIdentificationScore'] > -1) {
+                        $count++;
+                        $updateEval['finalScore'] += $results['finalIdentificationScore'];
+                    }
+
+                    if ($results['grainStainReactionScore'] > -1) {
+                        $count++;
+                        $updateEval['finalScore'] += $results['grainStainReactionScore'];
+                    }
+                    if ($microSum > 0) {
+
+                        $count++;
+                        $updateEval['finalScore'] += $microSum;
+                    }
+                    if ($count > 0) {
+
+                        $updateEval['finalScore'] = round($updateEval['finalScore'] / $count);
+                    } else {
+                        echo $this->returnJson(array('status' => 0, 'message' => 'Samples seems to have no possible expected results'));
+                        exit;
+                    }
+
+                    $gradingArray = $this->getGradeRemark($updateEval['finalScore']);
+
+                    $updateEval['grade'] = $gradingArray['grade'];
+                    $updateEval['remarks'] = $gradingArray['remarks'];
                     $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $where, $updateEval);
                 }
             }
@@ -280,17 +313,34 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         foreach ($updateEval as $key => $value) {
 
             if (is_numeric($value) && substr($key, -5) == 'Score') {
-
-                $finalScore += $value;
+                if ($value > -1) {
+                    $finalScore += $value;
+                }
             }
         }
         $whereSampleId['sampleId'] = $updateEval['sampleId'];
         $countAstSamples = $this->dbConnection->selectCount('tbl_bac_expected_micro_bacterial_agents', $whereSampleId, 'sampleId');
-        if ($countAstSamples > 0) {
-            $updateEval['finalScore'] = round($finalScore / 3);
-        } else {
-            $updateEval['finalScore'] = round($finalScore / 2);
+        $count = 0;
+        if ($updateEval['finalIdentificationScore'] > -1) {
+            $count++;
         }
+
+        if ($updateEval['grainStainReactionScore'] > -1) {
+            $count++;
+        }
+        if ($countAstSamples > 0) {
+
+            $count++;
+        }
+        if ($count > 0) {
+
+            $updateEval['finalScore'] = round($finalScore / $count);
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'Samples seems to have no possible expected results'));
+            exit;
+        }
+//        print_r($updateEval);
+//        exit;
         $updateEval['totalMicroAgentsScore'] = $updateEval['totalMicroAgentsScore'];
         $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
 
