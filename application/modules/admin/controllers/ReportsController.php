@@ -31,10 +31,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             $whereRnd['roundName'] = $postedData['round'];
             $roundInfo = $this->returnValueWhere($whereRnd, 'tbl_bac_rounds');
             $postedData['id'] = $roundInfo['id'];
+            unset($postedData['round']);
         }
-        unset($postedData['round']);
-//        print_r($postedData);
-//        exit;
+        
+
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
 
@@ -943,10 +943,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
                     exit;
                 }
-                $orderArray = ['id', 'dateCreated'];
-                $col = ['*'];
+                $orderArray = array('id', 'dateCreated');
+                $col = ('*');
 
-                $groupArray = ['id'];
+                $groupArray = array('id');
                 $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
                 if ($reportData != false) {
 
@@ -1052,7 +1052,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     $orderArray = array('id', 'dateCreated');
                     $col = array('*');
 
-                    $groupArray = arrray('id');
+                    $groupArray = array('id');
                     $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
                     if ($reportData != false) {
 
