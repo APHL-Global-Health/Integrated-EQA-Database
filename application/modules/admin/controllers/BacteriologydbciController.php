@@ -172,20 +172,20 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     public function testconfigAction() {
         $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
 
-        print_r($config['production']);
+        print_r($config['production']['email.config.username']);
         exit;
     }
 
-    public function sendemailAction($body, $to = '', $send = '') {
+    public function sendemailAction($body='', $to = '', $send = '') {
         try {
-            $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-
-            $config = array('ssl' => 'tls',
+            $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
+          
+            $configMail = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => $config['production']['email.config.username'],
                 'password' => $config['production']['email.config.password']);
 
-            $transport = new Zend_Mail_Transport_Smtp($config['production']['email.host'], $config);
+            $transport = new Zend_Mail_Transport_Smtp($config['production']['email.host'], $configMail);
 
 
             $mail = new Zend_Mail();
