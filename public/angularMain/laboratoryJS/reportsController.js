@@ -719,6 +719,8 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.sumNumbers = function (num1, num2) {
         return Math.round((Number(num1) + Number(num2)), 2);
     }
+
+
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
         delete primaryEvaluation.daysLeft;
         delete primaryEvaluation.daysLeftOnTen;

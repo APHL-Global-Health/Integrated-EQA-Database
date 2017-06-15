@@ -1042,10 +1042,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 foreach ($labs as $key => $value) {
 
                     $whereSearch['participantId'] = $value->participant_id;
-                    $orderArray = ['id', 'dateCreated'];
-                    $col = ['*'];
+                    $orderArray = array('id', 'dateCreated');
+                    $col = array('*');
 
-                    $groupArray = ['id'];
+                    $groupArray = arrray('id');
                     $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
                     if ($reportData != false) {
 
