@@ -1813,6 +1813,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
                 $tempArray['grainStainReactionScoreResult'] = $value->grainStainReactionScore;
                 $tempArray['finalIdentificationResult'] = $value->finalIdentification;
                 $tempArray['finalIdentificationScoreResult'] = $value->finalIdentificationScore;
+                $tempArray['microSco'] = $value->totalMicroAgentsScore;
 
                 $tempArray['grade'] = $value->grade;
                 $tempArray['finalScore'] = $value->finalScore;

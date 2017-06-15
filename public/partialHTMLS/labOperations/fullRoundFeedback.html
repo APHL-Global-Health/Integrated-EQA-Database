@@ -22,6 +22,7 @@
                             <th>#</th>
                             <th>Batch Name</th>
                             <th>Final Score(%)</th>
+                            <th>AST</th>
                             <th>Gram Stain</th>
                             <th>Gram Stain Score</th>
                             <th>Expected</th>
@@ -40,18 +41,18 @@
                             <td>{{$index + 1}}</td>
                             <td>{{results.batchName}}</td>
                             <td>{{results.finalScore}}%</td>
-
+                            <td>{{results.microSco}}%</td>
                             <td>{{results.grainStainReactionResult}}</td>
-                            <td>{{results.grainStainReactionScoreResult}}%</td>
+                            <td> {{reports.checkScore(results.grainStainReactionScoreResult)}}</td>
 
                             <td>{{results.grainStainReaction}}</td>
-                            <td>{{results.grainStainReactionScore}}</td>
+                            <td>{{reports.checkScore(results.grainStainReactionScore, true)}}</td>
 
                             <td>{{results.finalIdentificationResult}}</td>
-                            <td>{{results.finalIdentificationScoreResult}}%</td>
+                            <td>{{reports.checkScore(results.finalIdentificationScoreResult)}}</td>
 
                             <td>{{results.finalIdentification}}</td>
-                            <td>{{results.finalIdentificationScore}}</td>
+                            <td>{{reports.checkScore(results.finalIdentificationScore, true)}}</td>
                             <td>{{results.grade}}</td>
                         </tr>
                     </tbody>

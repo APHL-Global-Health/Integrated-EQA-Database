@@ -22,76 +22,104 @@ EptServices.service('EptServices', function () {
 
     this.EptServiceObject.returnServerErrorAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
-                content: ' Server error occurred,please try again.'
-            }
-            );
+                {
+                    title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
+                    content: ' Server error occurred,please try again.'
+                }
+        );
     }
     this.EptServiceObject.returnNoRecordsFoundAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                content: ' No Records found.'
-            }
+                {
+                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                    content: ' No Records found.'
+                }
         );
 
     }
     this.EptServiceObject.returnNoRecordsFoundFiltersAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                content: ' No Records found with selected filters.'
-            }
+                {
+                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                    content: ' No Records found with selected filters.'
+                }
         );
 
     }
     this.EptServiceObject.returnDuplicateAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                content: ' You are try to re-submit already submitted data,please go back and edit instead.'
-            }
+                {
+                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                    content: ' You are try to re-submit already submitted data,please go back and edit instead.'
+                }
         );
 
     }
     this.EptServiceObject.returnProgressAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
-                content: 'Action in progress,please wait ...'
-            }
+                {
+                    title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                    content: 'Action in progress,please wait ...'
+                }
         );
 
     }
     this.EptServiceObject.returnActionSuccessAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-check-circle text-success"></i> Success',
-                content: ' Action was successful.'
-            }
+                {
+                    title: '<i class="fa fa-check-circle text-success"></i> Success',
+                    content: ' Action was successful.'
+                }
         );
 
     }
     this.EptServiceObject.returnDeleteAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-check-circle text-success"></i> Success',
-                content: '1 row deleted successfully.'
-            }
+                {
+                    title: '<i class="fa fa-check-circle text-success"></i> Success',
+                    content: '1 row deleted successfully.'
+                }
         );
 
     }
     this.EptServiceObject.returnActionUnSuccessAlert = function () {
         $.alert(
-            {
-                title: '<i class="fa fa-exclamation-circle text-warning"></i> Alert',
-                content: ' Action was Unsuccessful,please retry'
-            }
+                {
+                    title: '<i class="fa fa-exclamation-circle text-warning"></i> Alert',
+                    content: ' Action was Unsuccessful,please retry'
+                }
         );
 
     }
 
+    this.EptServiceObject.checkForGramStnFi = function (num1, num2) {
+        if (Number(num1) > -1 && Number(num2) > -1) {
+            return Math.round(((Number(num1) + Number(num2)), 2) / 2);
+        } else {
+            if (Number(num1) > -1) {
+                return num1;
+            } else if (Number(num2) > -1) {
+                return num2;
+            } else {
+                return 'N/A';
+            }
+        }
+    }
+    this.EptServiceObject.checkNegativeScore = function (num, state = false) {
+        switch (true) {
+            case  num < 0:
+                return 'N/A';
+                break;
+
+            default:
+                if (state) {
+                    return num;
+                }
+                return num + "%";
+
+                break;
+    }
+    }
     this.EptServiceObject.returnBarcode = function () {
         var barcode = Math.random().toString();
 
@@ -116,27 +144,19 @@ EptServices.service('EptServices', function () {
         var message = '';
         if (table == 'tbl_bac_samples') {
             message = 'Batch name is already used';
-        }
-        else if (table == 'tbl_bac_panel_mst') {
+        } else if (table == 'tbl_bac_panel_mst') {
             message = 'Panel name is already used';
-        }
-        else if (table == 'tbl_bac_shipment') {
+        } else if (table == 'tbl_bac_shipment') {
             message = 'Shipment name is already used';
-        }
-        else if (table == 'tbl_bac_rounds') {
+        } else if (table == 'tbl_bac_rounds') {
             message = 'round code/name already in use';
-        }
-        else if (table == 'tbl_bac_programs') {
+        } else if (table == 'tbl_bac_programs') {
             message = 'program code/name already in use';
-        }
-        else if (table == 'tbl_bac_expected_results') {
+        } else if (table == 'tbl_bac_expected_results') {
             message = 'Sample results already entered';
-        }
-        else if (table == 'tbl_bac_test_agents') {
+        } else if (table == 'tbl_bac_test_agents') {
             message = 'Test reagent already saved';
-        }
-
-        else {
+        } else {
             message = 'Unknown server error occurred';
         }
         return message;

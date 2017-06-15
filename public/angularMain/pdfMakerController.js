@@ -276,13 +276,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 },
                 {
                     text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction +
-                            ' | Your score ' + dataDetails.results.grainStainReactionScore + '%',
+                            ' | Your score ' + EptServices.EptServiceObject.checkNegativeScore(dataDetails.results.grainStainReactionScore) + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Gram Stain : ' + expectedResults.expectedBacterialResults.grainStainReaction
-                            + ' | Possible score ' + expectedResults.expectedBacterialResults.grainStainReactionScore,
+                            + ' | Possible score ' + EptServices.EptServiceObject.checkNegativeScore(expectedResults.expectedBacterialResults.grainStainReactionScore),
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
@@ -293,13 +293,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 },
                 {
                     text: 'Final identification : ' + dataDetails.results.finalIdentification +
-                            ' | Your score ' + dataDetails.results.finalIdentificationScore + '%',
+                            ' | Your score ' + EptServices.EptServiceObject.checkNegativeScore(dataDetails.results.finalIdentificationScore) + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Final identification : ' + expectedResults.expectedBacterialResults.finalIdentification
-                            + ' : Possible score ' + expectedResults.expectedBacterialResults.finalIdentificationScore,
+                            + ' : Possible score ' + EptServices.EptServiceObject.checkNegativeScore(expectedResults.expectedBacterialResults.finalIdentificationScore),
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
