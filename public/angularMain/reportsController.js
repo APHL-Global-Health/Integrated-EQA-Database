@@ -167,7 +167,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         var url = serverReportURL + 'getresponsefeedback';
         showAjaxLoader(true)
         if (angular.isDefined(type)) {
-            where.published = 1
+            where.published = 1;
         }
 
         $http.post(url, where)

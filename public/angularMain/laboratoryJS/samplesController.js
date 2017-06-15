@@ -123,6 +123,21 @@
                 return '?'
             }
         }
+        $scope.sumNumbers = function (num1, num2) {
+            console.log(num1, num2);
+            if (Number(num1) > -1 && Number(num2) > -1) {
+                return Math.round(((Number(num1) + Number(num2)), 2) / 2);
+            } else {
+                if (Number(num1) > -1) {
+                    return num1;
+                } else if (Number(num2) > -1) {
+                    return num2;
+                } else {
+                    return 'N/A';
+                }
+            }
+        }
+
         $scope.samples.returnRange = function (range) {
             range = Number(range);
             range++;
@@ -2657,7 +2672,7 @@
             // }
         };
         $scope.samples.generatePDfCanvas = function (div) {
-            
+
             var form = $("#" + div),
                     cache_width = form.width(),
                     a4 = [595.28, 841.89];  // for a4 size paper width and height

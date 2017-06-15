@@ -716,10 +716,24 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
         }
     }
-    $scope.reports.sumNumbers = function (num1, num2) {
+    $scope.reports.sumNumbers  = function (num1, num2) {
         return Math.round((Number(num1) + Number(num2)), 2);
     }
-
+   $scope.reports.addGramFinals  = function (num1, num2) {
+        console.log(num1,num2);
+        if (Number(num1) > -1 && Number(num2) > -1) {
+            return Math.round(((Number(num1) + Number(num2)), 2)/2);
+        } else {
+            if (Number(num1) > -1) {
+                return num1;
+            }
+            else if (Number(num2) > -1) {
+                return num2;
+            } else {
+                return 'N/A';
+            }
+        }
+    }
 
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
         delete primaryEvaluation.daysLeft;
