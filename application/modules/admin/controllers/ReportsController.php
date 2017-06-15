@@ -27,7 +27,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $orderArray = array('id', 'startDate');
 
         $groupArray = array('id');
-
+        if (isset($postedData['round'])) {
+            $whereRnd['roundName'] = $postedData['round'];
+            $roundInfo = $this->returnValueWhere($whereRnd, 'tbl_bac_rounds');
+            $postedData['id'] = $roundInfo['id'];
+        }
+        unset($postedData['round']);
+//        print_r($postedData);
+//        exit;
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
 
