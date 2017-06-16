@@ -73,7 +73,7 @@
                     <td nowrap>{{samples.roundStatus(round.daysLeft,round.startRoundFlag)}}</td>
 
                     <td nowrap>
-                        <button class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0 || round.startRoundFlag==1"
+                        <button class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
@@ -82,7 +82,7 @@
                            ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
                                 class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0|| round.startRoundFlag==1|| round.totalShipmentsAdded > 0"
+                        <button class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0|| round.totalShipmentsAdded > 0"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
@@ -93,7 +93,7 @@
                         </button>
 
                         <button class="btn btn-success btn-sm"
-                                ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0|| round.startRoundFlag==1"
+                                ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0"
 
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
