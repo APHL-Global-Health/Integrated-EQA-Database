@@ -373,9 +373,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         if (!isset($_SESSION['loggedInDetails']["IsVl"])) {
             $this->insertSelfRegistration($params);
         }
-        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-            
-        }
+
         if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
             $common = new Application_Service_Common();
             $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
@@ -425,14 +423,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $enrollDb = new Application_Model_DbTable_Enrollments();
             $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
-//            foreach ($params['dataManager'] as $dataManager) {
-//                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
-//            }
-//            if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-//                foreach ($params['enrolledProgram'] as $epId) {
-//                    $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-//                }
-//            }
+
         $pMail = $params['pemail'];
         $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');

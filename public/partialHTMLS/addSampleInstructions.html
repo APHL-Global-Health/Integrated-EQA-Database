@@ -1,17 +1,17 @@
 <div class="col-md-12 text-capitalize" ng-cloak="">
     <div class="clearfix">&nbsp;</div>
     <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-default">
-            <div class="panel panel-heading ">
+        <div class="panel panel-primary">
+            <div class="panel-heading ">
                 <h5>
                     <x >Edit Sample Instructions -({{samples.instructionSample.batchName}})  <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-                    <div class="label btn label-default pull-right"
+                    <div class="label btn pull-right" title="Close" 
                          ng-click="samples.emptyFormData('tbl_bac_samples',0)">
-                        <i class="fa fa-close"></i> Cancel
+                        <i class="fa fa-close"></i>
                     </div>
                 </h5>
             </div>
-            <div class="panel panel-body" style="margin: 10px !important;">
+            <div class="panel-body" style="margin: 10px !important;">
                 <div id='alert' tabindex='1'></div>
                 <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
                     <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -238,31 +238,26 @@
                     </div>
 
                     <div class="clearfix">&nbsp;</div>
-                    <div class="form-group"
-                         ng-class="{ 'has-error'  : instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine }">
-
-                        <div class="col-10">
-
-                            <button class="btn btn-primary col-md-12"
-                                    ng-click="samples.saveSampleInstructions('tbl_bac_sample_instructions',samples.instructionsFormData)"
-                                    ng-disabled="instructionsData.$invalid || samples.savingInProgress"
-                            >Save Instructions<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                            </button>
+                    <div class="container-fluid">
+                      <div class="col-md-6">
+                        <div class="form-group"
+                           ng-class="{ 'has-error'  : instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine }">
+                              <button class="btn btn-primary col-md-12"
+                                ng-click="samples.saveSampleInstructions('tbl_bac_sample_instructions',samples.instructionsFormData)"
+                                ng-disabled="instructionsData.$invalid || samples.savingInProgress"
+                              >Save Instructions<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                              </button>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-
-                        <div class="col-10">
-
-                            <button class="btn btn-danger col-md-12"
-                                    ng-click="samples.emptyFormData('tbl_bac_samples',0)"
-                            >Cancel</i>
-                            </button>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <button class="btn btn-danger col-md-12"
+                            ng -click="samples.emptyFormData('tbl_bac_samples',0)"
+                          >Cancel
+                          </button>
                         </div>
+                      </div>
                     </div>
-
-
                 </form>
             </div>
         </div>

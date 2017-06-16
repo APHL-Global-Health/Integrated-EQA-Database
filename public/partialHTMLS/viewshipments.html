@@ -1,4 +1,4 @@
-<div class="main-div" style="overflow: auto;">
+<div class="main-div">
     <div class="main" ng-show="!samples.showShipmentModal">
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
             <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -6,34 +6,34 @@
         </div>
 
 
-        <h3> Current Shipments
-            <small>{{samples.shipmentsData.length}} records
-            </small>
-            <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-            <div class="pull-right col-mod-12">
-                <items-per-page></items-per-page>
-                <div class="pull-right" ng-init="expanded = true">
-                    <a href="#" ng-click="expanded = !expanded" class=" btn btn-default btn-sm"
-
-                       ><i class="fa fa-expand"></i>
-                    </a>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>
+                        Shipments
+                        <small ng-show="samples.shipmentsData.length">{{samples.shipmentsData.length}} records</small>
+                    </h3>
                 </div>
-                <div class="col-md-7 pull-right">
-                    <input type="search" class="col-md-12" placeholder="search shipment"
-
-                           ng-model="samples.searchData">
-                </div>
-                <div class="col-md-1 pull-right">
-                    <button class=" btn btn-default btn-sm"
-                            ng-click="samples.getAllSamples('tbl_bac_shipments')"><i class="fa fa-refresh"></i>
-                    </button>
-                    &nbsp;
+                <div class="col-md-6">
+                    <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                    <div style="margin-bottom: 0;"><items-per-page></items-per-page></div>
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Search for shipments"
+                               ng-model="samples.searchData">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="samples.getAllSamples('tbl_bac_shipments')">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="expand = !expand">
+                                <i class="fa fa-expand"></i>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </h3>
+        </div>
 
-
-        <div class="panel panel-body text-sm bg-aqua no-padding" ng-show="!expanded">
+        <div class="panel panel-body text-sm bg-aqua no-padding" ng-show="expand">
             <div class="fullInfoDiv">
                 <hr>
                 <div class="panel-group" id="accordion">
@@ -83,12 +83,6 @@
                                                     <i class="fa fa-truck"></i></a> &nbsp;
 
                                             </x>
-                                            <!--<a ng-click="samples.receiveShipment(shipment,'receiveShipments')"-->
-
-                                            <!--href="#receiveShipments" data-backdrop="false" data-toggle="modal">-->
-                                            <!--<i class="fa fa-truck">-->
-
-                                            <!--</i></a>&nbsp;-->
 
                                             <a href="" ng-show="shipment.shipmentStatus == 0"
                                                ng-click="samples.deleteCustomRow(shipment.id, 'tbl_bac_shipments')">
@@ -242,21 +236,19 @@
                 </div>
             </div>
         </div>
-        <table class="table table-striped table-condensed table-bordered" ng-show="expanded">
+
+        <table class="table table-striped table-condensed table-bordered" ng-show="!expand">
             <thead>
                 <tr>
                     <th>#.</th>
                     <th>Shipment Name</th>
                     <th>No Of Panels</th>
                     <th>Courier</th>
-                    <th>ship't Desc</th>
 
                     <th>Round ID</th>
-                    <th>Created By</th>
                     <th>Prepared On</th>
-                    <th>Panel Added</th>
-                    <th>Prepared By</th>
-                    <th>Ship't Status</th>
+                    <th>Panels Added</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -273,15 +265,11 @@
                     </td>
                     <td>{{shipment.numberOfPanels}}</td>
                     <td>{{shipment.dispatchCourier}}</td>
-                    <td>{{shipment.shipmentDsc}}</td>
                     <td nowrap>{{shipment.roundInfo.roundName}}</td>
-                    <td nowrap>{{shipment.createdBy}}</td>
 
                     <td nowrap>{{shipment.datePrepared}}</td>
                     <td>{{shipment.totalPanelsAdded}}</td>
-                    <td nowrap>{{shipment.preparedBy}}</td>
                     <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
-                    <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 
                     <td nowrap>
                         <a class="btn btn-info btn-sm" ng-disabled="shipment.shipmentStatus != 0"
@@ -331,14 +319,3 @@
     <div ng-include="'../partialHTMLS/modals/addPanelsToShipment.html'">
     </div>
 </div>
-
-
-<!--<div class="modal-footer">-->
-<!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-<!--<button type="button" class="btn btn-primary">Save changes</button>-->
-<!--</div>-->
-
-<!-- /.modal-content -->
-
-<!-- /.modal-dialog -->
-

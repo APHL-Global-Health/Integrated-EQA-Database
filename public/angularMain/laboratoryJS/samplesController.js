@@ -630,11 +630,11 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_programs');
             }
             if (tableName == 'tbl_bac_expected_results') {
-                $scope.samples.samplesActivePage('viewExpectedResults', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_expected_results');
+                $scope.samples.samplesActivePage('viewsamples', 0);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_test_agents') {
-                $scope.samples.samplesActivePage('viewTestAgents', 0);
+                $scope.samples.samplesActivePage('viewReagents', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_test_agents');
             }
             if (tableName == 'tbl_bac_test_types') {

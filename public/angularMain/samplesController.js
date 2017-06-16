@@ -4,7 +4,8 @@
 
 (function () {
     var samplesModule = angular.module('ReportModule');
-    ReportModule.constant('serverSamplesURL', 'http://localhost:8082/admin/Bacteriologydbci/');
+    var BASE_URL = window.location.href.replace(window.location.pathname, "/");
+    ReportModule.constant('serverSamplesURL', BASE_URL + 'admin/Bacteriologydbci/');
     samplesModule.controller('samplesController', function ($scope, $http, $location, EptServices, EptFactory, $timeout, loginDataCache) {
         var serverSamplesURL = SERVER_API_URL.sampleURL;
         var serverReportURL = SERVER_API_URL.reportsURL;
@@ -37,7 +38,6 @@
             $scope.samples.feedbackObject = data;
             $('.alert').show('slow');
 
-            //  $(window).scrollTop($('#alert').offset().top);
             $("#alert").focus();
         }
 
@@ -53,6 +53,7 @@
         $scope.samples.programs = {}
         $scope.samples.expectedResults = {};
         $scope.samples.testAgents = {};
+
         function assignHTTPResponse(data, tableName) {
 
             if (tableName == 'tbl_bac_samples') {
@@ -137,6 +138,29 @@
                 return 'Unknown';
             }
         }
+
+        // Returns a promise for table data on the given condition
+        $scope.samples.getRow = function (tableName, where) {
+
+            var url = serverSamplesURL + EptServices.EptServiceObject.returnServerUrl(tableName);
+            var postData = {};
+            postData.tableName = tableName;
+            if (angular.isDefined(where)) {
+                postData.where = where;
+            }
+
+            return $http.post(url, postData);
+        }
+
+        $scope.samples.editExpectedResult = function(id){
+            $scope.samples.getRow('tbl_bac_expected_results', {sampleId: id})
+                .success(function(data){
+                    $scope.samples.editFunction(data.data[0],'tbl_bac_expected_results');
+                }).error(function(error){
+                    console.log(error);
+                });
+        }
+
         $scope.samples.shipmentsData = {};
         $scope.samples.panelsData = {};
         $scope.samples.labs = {}
@@ -630,11 +654,11 @@
                     title: "<i class='fa fa-check text-success'> Success</i>",
                     content: "Results save successfully"
                 })
-                $scope.samples.samplesActivePage('viewExpectedResults', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_expected_results');
+                $scope.samples.samplesActivePage('viewsamples', 0);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_test_agents') {
-                $scope.samples.samplesActivePage('viewTestAgents', 0);
+                $scope.samples.samplesActivePage('viewReagents', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_test_agents');
             }
             if (tableName == 'tbl_bac_test_types') {
