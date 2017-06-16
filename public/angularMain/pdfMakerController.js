@@ -276,13 +276,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 },
                 {
                     text: 'Gram Stain Identified : ' + dataDetails.results.grainStainReaction +
-                            ' | Your score ' + dataDetails.results.grainStainReactionScore + '%',
+                            ' | Your score ' + EptServices.EptServiceObject.checkNegativeScore(dataDetails.results.grainStainReactionScore) + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Gram Stain : ' + expectedResults.expectedBacterialResults.grainStainReaction
-                            + ' | Possible score ' + expectedResults.expectedBacterialResults.grainStainReactionScore,
+                            + ' | Possible score ' + EptServices.EptServiceObject.checkNegativeScore(expectedResults.expectedBacterialResults.grainStainReactionScore),
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
@@ -293,13 +293,13 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 },
                 {
                     text: 'Final identification : ' + dataDetails.results.finalIdentification +
-                            ' | Your score ' + dataDetails.results.finalIdentificationScore + '%',
+                            ' | Your score ' + EptServices.EptServiceObject.checkNegativeScore(dataDetails.results.finalIdentificationScore) + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
                 {
                     text: 'Expected Final identification : ' + expectedResults.expectedBacterialResults.finalIdentification
-                            + ' : Possible score ' + expectedResults.expectedBacterialResults.finalIdentificationScore,
+                            + ' : Possible score ' + EptServices.EptServiceObject.checkNegativeScore(expectedResults.expectedBacterialResults.finalIdentificationScore),
                     style: ['content', 'leftData', 'contentBold'],
                     margin: [0, 0, 0, 5]
                 },
@@ -599,7 +599,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: 'County', style: 'subHeader'},
                     {text: 'Sample', style: 'subHeader'},
                     {text: 'Round', style: 'subHeader'},
-                    {text: 'Micro', style: 'subHeader'},
+                    {text: 'GS&FI Avg.', style: 'subHeader'},
                     {text: 'Micro Agents', style: 'subHeader'},
                     {text: 'Remarks', style: 'subHeader'},
                     {text: 'Grade', style: 'subHeader'},
@@ -619,11 +619,11 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
-                    {text: ' ' + lab.finalScore, style: ['content']},
+                    {text: ' ' +  EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore,lab.finalIdentificationScore), style: ['content']},
                     {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
                     {text: ' ' + lab.remarks, style: ['content']},
                     {text: ' ' + lab.grade, style: ['content']},
-                    {text: ' ' + (Number(lab.finalScore) + Number(lab.totalMicroAgentsScore)), style: ['content']}
+                    {text: ' ' + lab.finalScore, style: ['content']}
                 ];
 
                 reportData.push(rowData);
@@ -649,7 +649,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: 'County', style: 'subHeader'},
                     {text: 'Sample', style: 'subHeader'},
                     {text: 'Round', style: 'subHeader'},
-                    {text: 'Micro', style: 'subHeader'},
+                    {text: 'GS&FI Avg', style: 'subHeader'},
                     {text: 'Agents', style: 'subHeader'},
                     {text: 'Remarks', style: 'subHeader'},
                     {text: 'Grade', style: 'subHeader'},
@@ -669,11 +669,14 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
-                    {text: ' ' + lab.finalScore, style: ['content']},
+                    
+                    {text: ' ' + EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore,lab.finalIdentificationScore),
+                        style: ['content']},
+                    
                     {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
                     {text: ' ' + lab.remarks, style: ['content']},
                     {text: ' ' + lab.grade, style: ['content']},
-                    {text: ' ' + (Number(lab.finalScore) + Number(lab.totalMicroAgentsScore)), style: ['content']}
+                    {text: ' ' + lab.finalScore, style: ['content']}
                 ];
 
                 reportData.push(rowData);

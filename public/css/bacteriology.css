@@ -19,8 +19,9 @@
 * {
     border-radius: 0 !important;
 }
-h3 input{
-    font-size-adjust: 12px;
+input[type="text"]
+{
+    /*font-size:18px !important;*/
 }
 
 *, .btn {

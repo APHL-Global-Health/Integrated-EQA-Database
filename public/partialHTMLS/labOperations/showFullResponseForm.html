@@ -108,7 +108,12 @@
                                 </td>
                                 <td width="30%">{{reports.userResults.expectedResults.expectedResults.grainStainReaction}}</td>
                                 <td class="10%">
-                                    {{reports.userResults.results.grainStainReactionScore}}
+                                    <b ng-show="reports.userResults.results.grainStainReactionScore > -1">
+                                        {{reports.userResults.results.grainStainReactionScore}}
+                                    </b>
+                                    <b ng-hide="reports.userResults.results.grainStainReactionScore > -1">
+                                        N/A
+                                    </b>
                                 </td>
 
 
@@ -172,7 +177,15 @@
                                 <td width="30%">Final identification (i.e. report given to clinician)</td>
                                 <td width="30%"> {{reports.userResults.results.finalIdentification}}</td>
                                 <td width="30%">{{reports.userResults.expectedResults.expectedResults.finalIdentification}}</td>
-                                <td class="10%"> {{reports.userResults.results.finalIdentificationScore}}
+                                <td class="10%"> 
+                                    <b ng-show="reports.userResults.results.finalIdentificationScore > -1">
+                                        {{reports.userResults.results.finalIdentificationScore}}
+                                    </b>
+                                    <b ng-hide="reports.userResults.results.finalIdentificationScore > -1">
+                                       N/A
+                                    </b>
+                                    
+                                   
                                 </td>
 
                             </tr>
@@ -180,7 +193,10 @@
                                 <td width="30% ">
                                     TOTAL SCORE
                                 </td>
-                                <td width="00%"> {{reports.sumNumbers(reports.userResults.results.finalIdentificationScore , reports.userResults.results.grainStainReactionScore)}}</td>
+                                <td width="00%"> 
+                                   {{reports.addGramFinals(reports.userResults.results.finalIdentificationScore,
+                                                reports.userResults.results.grainStainReactionScore)}}
+                                </td>
                                 <td></td>
                                 <td class="10%">
 

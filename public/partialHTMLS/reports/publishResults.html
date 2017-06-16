@@ -3,7 +3,7 @@
         <h3>Publish Results
             <small>{{reports.generalRoundData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
-            <input ng-model="searchRounds" class="pull-right" placeholder="">
+            <input ng-model="searchRounds" class="pull-right  btn-sm" placeholder="">
         </h3>
     </div>
     <div class="col-md-12 no-padding text-center">
@@ -28,10 +28,23 @@
                            name="dateTo"
                            bs-datepicker>
                 </div>
-                <div class="col-md-3 no-padding">
-                    <input class="form-control input-sm" placeholder="Round Name"
-                           ng-model="reports.wherePublishRounds.roundName">
+     
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.wherePublishRounds.round"
+                            placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
                 </div>
+                
+                
+                
+                
                 <div class="col-md-2 " ng-init="reports.wherePublishRounds.evaluated = 1">
                     <select class="form-control input-sm" ng-model="reports.wherePublishRounds.evaluated">
 

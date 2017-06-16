@@ -705,7 +705,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
                             $whereId = $tableName == 'tbl_bac_sample_to_panel' ? $dataDB[$key]->id : $dataDB[$key]->panelToSampleId;
                             $sampleInfo = $this->returnSampleInfo($whereId);
 
-                            $dataDB[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] ;//> 10 ? 0 : $sampleInfo['endDaysLeft'];
+                            $dataDB[$key]->daysLeftOnTen = $this->converttodays($round['endDate']);//> 10 ? 0 : $sampleInfo['endDaysLeft'];
                             $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 0 ? 1 : 0;
 
 
@@ -1543,10 +1543,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
     public function getresponsefeedbackAction() {
         $postedData = $this->returnArrayFromInput();
-        $col = ['*'];
-        $orderArray = ['id', 'dateCreated'];
+        $col = array('*');
+        $orderArray = array('id', 'dateCreated');
 
-        $groupArray = ['id'];
+        $groupArray = array('id');
         $userDetails = $this->returnUserLabDetails();
         if (!$userDetails) {
             echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
@@ -1813,6 +1813,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
                 $tempArray['grainStainReactionScoreResult'] = $value->grainStainReactionScore;
                 $tempArray['finalIdentificationResult'] = $value->finalIdentification;
                 $tempArray['finalIdentificationScoreResult'] = $value->finalIdentificationScore;
+                $tempArray['microSco'] = $value->totalMicroAgentsScore;
 
                 $tempArray['grade'] = $value->grade;
                 $tempArray['finalScore'] = $value->finalScore;

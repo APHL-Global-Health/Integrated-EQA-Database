@@ -167,7 +167,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         var url = serverReportURL + 'getresponsefeedback';
         showAjaxLoader(true)
         if (angular.isDefined(type)) {
-            where.published = 1
+            where.published = 1;
         }
 
         $http.post(url, where)
@@ -362,7 +362,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                     title: '<i class="fa fa-spin fa-spinner  text-danger"></i> Enrolling..',
                     content: 'Enrolling,please wait ....'
                 });
-               
+
                 $http
                         .post(url, dataLab)
                         .success(function (data) {
@@ -752,6 +752,21 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     }
     $scope.reports.sumNumbers = function (num1, num2) {
         return Math.round((Number(num1) + Number(num2)), 2);
+    }
+    $scope.reports.addGramFinal = function (num1, num2) {
+        console.log(num1,num2);
+        if (Number(num1) > -1 && Number(num2) > -1) {
+            return Math.round(((Number(num1) + Number(num2)), 2)/2);
+        } else {
+            if (Number(num1) > -1) {
+                return num1;
+            }
+            else if (Number(num2) > -1) {
+                return num2;
+            } else {
+                return 'N/A';
+            }
+        }
     }
     $scope.reports.evaluateBoth = function (primaryEvaluation, microEvaluation) {
         delete primaryEvaluation.daysLeft;

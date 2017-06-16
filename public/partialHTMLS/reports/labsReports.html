@@ -3,7 +3,7 @@
         <h3>Lab Performance Report
             <small>{{reports.labPerformanceData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
-            <input ng-model="searchRounds" class="pull-right" placeholder="">
+            <input ng-model="searchRounds" class="pull-right  btn-sm" placeholder="">
         </h3>
     </div>
     <div class="col-md-12 no-padding text-center">
@@ -88,7 +88,7 @@
                 <th>County</th>
                 <th>Sample</th>
                 <th>Round</th>
-                <th>ID</th>
+                <th>GS/FI Avg.</th>
 
                 <th>Micro Agents</th>
                 <th>Remarks</th>
@@ -104,7 +104,7 @@
                 <td>{{lab.county}}</td>
                 <td>{{lab.batchName}}</td>
                 <td nowrap>{{lab.roundCode}}</td>
-                <td nowrap>{{reports.sumNumbers(lab.grainStainReactionScore,lab.finalIdentificationScore)/2}}</td>
+                <td nowrap>{{reports.addGramFinal(lab.grainStainReactionScore,lab.finalIdentificationScore)}}</td>
                 <td nowrap>{{lab.totalMicroAgentsScore}}</td>
                 <td>{{lab.remarks}}</td>
                 <td>{{lab.grade}}</td>

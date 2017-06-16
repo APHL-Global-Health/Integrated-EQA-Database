@@ -54,10 +54,10 @@ class ReportsController extends Zend_Controller_Action
     public function getresponsefeedbackAction()
     {
         $postedData = $this->returnArrayFromInput();
-        $col = ['*'];
-        $orderArray = ['id', 'dateCreated'];
+        $col = array('*');
+        $orderArray =  array('id', 'dateCreated');
 
-        $groupArray = ['id'];
+        $groupArray =  array('id');
 
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);

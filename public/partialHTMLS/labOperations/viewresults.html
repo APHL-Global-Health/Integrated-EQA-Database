@@ -70,13 +70,7 @@
                 <tbody>
                 <tr dir-paginate="sampleResponse in reports.responseInfoData | itemsPerPage: samples.itemsPerPage ">
                     <td>{{$index+1}}</td>
-                    <td><a href="#/{{sampleResponse.id}}"
-                           data-placement="right" data-type="info" data-container="body"
-                           data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
-                           bs-tooltip
-                           ng-click="samples.showRoundFullDetails(round)"
-                           class="">{{sampleResponse.roundName}}</a>
+                    <td>{{sampleResponse.roundName}}
                     </td>
                     <td>{{sampleResponse.roundCode}}</td>
                     <td>{{sampleResponse.batchName}}</td>

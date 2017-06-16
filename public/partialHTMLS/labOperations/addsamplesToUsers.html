@@ -55,7 +55,7 @@
                 <td>Round Code</td>
                 <td>Date Prep'd</td>
                 <td>Date Del'd</td>
-                <td>Day Left</td>
+                <td>Days Left</td>
                 <td>Material Origin</td>
                 <td>action</td>
                 <tr dir-paginate="sample in samples.sampleToPanel | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
@@ -67,7 +67,7 @@
                     <td>{{sample.daysLeftOnTen}}</td>
                     <td>{{sample.materialOrigin}}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" ng-disabled="sample.allowedOnTenDays==0"
+                        <button class="btn btn-sm btn-primary" ng-disabled="sample.daysLeftOnTen==0"
                                 ng-click="samples.showMultiSelect(sample,0)"><i class="fa fa-user"></i> Issue
                         </button>
                     </td>
