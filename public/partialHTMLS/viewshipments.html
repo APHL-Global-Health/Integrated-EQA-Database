@@ -299,7 +299,7 @@
                         </a>
             <x ng-hide="samples.loaderProgressSpinner == 'fa-spinner'">
                 <a ng-click="samples.dispatchShipment(shipment, 'dipatchSipments')" class="btn btn-xs btn-info"
-                   ng-show="shipment.shipmentStatus == 0 && shipment.totalPanelsAdded > 0|| shipment.roundId > 0"
+                   ng-show="shipment.shipmentStatus == 0 && shipment.totalPanelsAdded > 0 && shipment.roundId > 0"
                    href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
                     <i class="fa fa-truck"></i></a> &nbsp;
 

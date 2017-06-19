@@ -1549,6 +1549,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $common = new Application_Service_Common();
             $message['message'] .= " of round <b>" . $round['roundName'] . "</b> ";
             $message['message'] = "This is to notify you <br> " . $message['message'];
+            
             $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
         }
         return true;
