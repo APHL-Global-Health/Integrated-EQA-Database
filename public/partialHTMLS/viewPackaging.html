@@ -1,5 +1,5 @@
 <div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink == 'viewPackaging'">
-    <div class="main-div" ng-show="!samples.showPanelModal">
+    <div class="main-div" ng-show="!samples.showPanelModal" ng-init="samples.getAllSamples('tbl_bac_panel_mst',samples.where)">
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -27,7 +27,7 @@
                     <button class=" btn btn-default btn-sm"
                             data-placement="right" data-container="body" data-animation="am-fade-and-scale"
                             data-trigger="hover" data-type="success" data-title="Load data" bs-tooltip
-                            ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
+                            ng-click="samples.getAllSamples('tbl_bac_panel_mst',samples.where)"><i
                             class="fa fa-refresh"></i>
                     </button>
                     &nbsp;

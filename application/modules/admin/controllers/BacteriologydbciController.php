@@ -61,7 +61,6 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $updateSamples['addedStatus'] = 1;
                     $where['id'] = $data['sampleId'];
                     $this->dbConnection->updateTable('tbl_bac_samples', $where, $updateSamples);
-                    
                 }
                 echo $this->returnJson($response);
             }
@@ -230,7 +229,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                     $data['panelId'] = $value;
                     $data['shipmentId'] = $jsPostData['shipmentId'];
+
                     $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $data);
+                    $where['id'] = $data['panelId'];
+                    $updateData['addedStatus'] = 1;
+                    $this->dbConnection->updateTable('tbl_bac_panel_mst', $where, $updateData);
                 }
                 echo $this->returnJson($response);
             }

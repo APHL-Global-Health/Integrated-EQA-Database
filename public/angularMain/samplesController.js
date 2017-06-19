@@ -529,7 +529,20 @@
             $scope.samples.showPanelModal = false;
         }
         $scope.samples.where = {};
+        
+        
+      /* --------------Old data filters------------------  */
         $scope.samples.where.addedStatus = 0;
+       
+        
+        
+        /* ------------------ end of files load     --------------------------*/
+        
+        
+        
+        
+        
+        
         $scope.samples.addSamplesToPanel = function (panel) {
 
             $scope.samples.currentPanel = panel;
