@@ -33,7 +33,7 @@
                         <!--</small>-->
                         <!--</div>-->
 
-                        <div class="form-group "
+                        <div class="form-group " ng-hide="true"
                              ng-class="{ 'has-error'  : receiveShipmentForm.dateReceived.$invalid && !receiveShipmentForm.dateReceived.$pristine }">
                             <label for="dateReceived" class="col-2 col-form-label">Actual Date Received</label>
                             <div class="col-10">
@@ -43,7 +43,7 @@
                                             class="fa fa-calendar"></i></span>
                                     <input type="text" class="form-control col-md-12" id="dateReceived"
                                            ng-model="samples.receiveShipmentFormData.dateReceived"
-                                           data-date-format="yyyy-MM-dd" required=""
+                                           data-date-format="yyyy-MM-dd"
                                            data-min-date="" data-max-date="today" style="max-width: 45.5%;"
                                            data-autoclose="1" aria-describedby="basic-addon2"
                                            name="panelDateOfDelivery"
@@ -112,11 +112,11 @@
                             </small>
                         </div>
 
-                        <div class="form-group "
+                        <div class="form-group " ng-hide="true"
                              ng-class="{ 'has-error'  : receiveShipmentForm.tempAtReceiving.$invalid && !receiveShipmentForm.tempAtReceiving.$pristine }">
                             <label for="type" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="" required name="tempAtReceiving"
+                                <input class="form-control" type="text" id="" name="tempAtReceiving"
                                        ng-pattern="samples.numericStorage" style="max-width: 47%;"
                                        ng-model="samples.receiveShipmentFormData.tempAtReceiving">
                             </div>

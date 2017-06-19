@@ -2801,7 +2801,7 @@
 
                 receiveShipmentData.shipmentStatus = 3;
                 console.log(receiveShipmentData);
-
+                receiveShipmentData.dateReceived = new Date();
 
                 var postedData = {};
                 postedData.tableName = 'tbl_bac_shipments';
