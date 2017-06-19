@@ -277,10 +277,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
     public function getroundwherelabAction() {
 
-//        $whereRound['evaluated'] = 0;
+        $whereRound['evaluated'] = 0;
         $whereLab = $this->returnUserLabDetails();
 
-        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds');
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds',$whereRound);
 //        var_dump($whereLab);
         if ($round != false) {
             foreach ($round as $key => $value) {

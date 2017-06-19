@@ -357,7 +357,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                             $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
 
-                            $insertSample = $this->savesampleforeachpanel($insert, $insert['deliveryStatus']);
+//                            $insertSample = $this->savesampleforeachpanel($insert, $insert['deliveryStatus']);
 //                        if (!$insertSample) {
 //                            exit;
 //                        }
@@ -897,9 +897,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
     public function getparticipatinglabsAction() {
 
-//        $postedData = file_get_contents('php://input');
-//        $postedData = (array) (json_decode($postedData));
-        $whereLab['roundId'] =3;// $postedData['roundId'];
+        $postedData = file_get_contents('php://input');
+        $postedData = (array) (json_decode($postedData));
+        $whereLab['roundId'] = $postedData['roundId'];
+
         $where['IsVl'] = 3;
         $laboratory = $this->dbConnection->selectFromTable('participant', $where);
 
@@ -908,7 +909,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             foreach ($laboratory as $key => $value) {
                 $whereLab['labId'] = $laboratory[$key]->participant_id;
                 $laboratory[$key]->roundId = $whereLab['roundId'];
-                $laboratory[$key]->enrolled = $this->dbConnection->selectCount('tbl_bac_rounds_labs', $whereLab, 'id');
+                $enrolled = $this->dbConnection->selectCount('tbl_bac_rounds_labs', $whereLab, 'id');
+                $laboratory[$key]->enrolled = $enrolled;
+                if ($postedData['status'] == 2) {
+                    unset($laboratory[$key]);
+                }
             }
             echo($this->returnJson((array('status' => 1, 'message' => 'Records Found', 'data' => $laboratory))));
         } else {
@@ -932,11 +937,46 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $resp['status'] = 0;
             $resp['message'] = $insertStatus['message'];
         } else {
+            $this->savePanelForEachLab($insertData['roundId'], $insertData['labId']);
+            $this->addSamplesToLab($insertData);
             $resp['status'] = 1;
             $resp['message'] = 'Data saved successfully';
         }
         echo($this->returnJson($resp));
         exit;
+    }
+
+    public function addSamplesToLab($jsPostData) {
+        $where['participantId'] = $jsPostData['labId'];
+        $where['roundId'] = $jsPostData['roundId'];
+
+        $panels = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $where);
+
+        if (count($panels) > 0) {
+            foreach ($panels as $key => $value) {
+
+                $panel['panelId'] = $panels[$key]->panelId;
+                $panel['shipmentId'] = $panels[$key]->shipmentId;
+                $panel['participantId'] = null;
+                $samples = $this->dbConnection->selectFromTable('tbl_bac_sample_to_panel', $panel);
+
+
+                if (count($samples) > 0) {
+
+                    foreach ($samples as $ky => $val) {
+                        $panelSample = (array) $samples[$ky];
+                        unset($panelSample['id']);
+                        $shipment = $this->returnValueWhere($panel['shipmentId'], 'tbl_bac_shipments');
+                        $panelSample['deliveryStatus'] = $shipment['shipmentStatus'];
+                        $panelSample['panelId'] = $panel['panelId'];
+                        $panelSample['participantId'] = $where['participantId'];
+                        $panelSample['roundId'] = $where['roundId'];
+                        $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $panelSample);
+                       
+                    }
+                }
+            }
+        }
     }
 
     public function getlabusersAction() {

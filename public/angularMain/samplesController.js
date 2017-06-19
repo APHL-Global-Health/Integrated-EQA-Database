@@ -2240,6 +2240,7 @@
             }
             if (all == 1) {
                 where.status = 2
+                $scope.samples.readyLabs = {};
             }
             $scope.samples.currentRound = round;
             $scope.samples.getReadyLabs(where);
@@ -2253,7 +2254,7 @@
                 var varData = {roundId: where.roundId}
                 var tableName = 'tbl_bac_ready_labs';
                 $http
-                        .post(url, varData)
+                        .post(url, where)
                         .success(function (data) {
                             console.log(data);
                             $scope.samples.loaderProgressSpinner = '';
