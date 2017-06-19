@@ -533,10 +533,10 @@
 
         /* --------------Old data filters------------------  */
         $scope.samples.where = {};
-        $scope.samples.whereShipment={};
+        $scope.samples.whereShipment = {};
         $scope.samples.where.addedStatus = 0;
-        
-        
+
+
         $scope.samples.whereShipment.evaluated = 0;
 
 
@@ -630,15 +630,15 @@
             console.log(tableName)
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.samplesActivePage('viewshipments', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments',$scope.samples.whereShipment);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments', $scope.samples.whereShipment);
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesActivePage('viewsamples', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples',$scope.samples.where);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples', $scope.samples.where);
             }
             if (tableName == 'tbl_bac_panel_mst') {
                 $scope.samples.samplesActivePage('viewPackaging', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst',$scope.samples.where);
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst', $scope.samples.where);
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.samplesActivePage('viewcouriers', 0);
@@ -947,11 +947,13 @@
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
         $scope.samples.panelArrowDown = false;
-        $scope.samples.getSampleFromPanel = function (panelId, tableName) {
+        $scope.samples.getSampleFromPanel = function (panelId, tableName, flag = false) {
             try {
 
                 var tempPanel = panelId;
-                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+                
+                var panId = flag ? panelId.id : panelId.panelId;
+                
                 console.log(panId);
                 if (isNumeric(panId)) {
                     try {
@@ -959,12 +961,14 @@
                         var where = {panelId: panId, participantId: null};
 
                         if (angular.isObject(tempPanel)) {
-                            where = {
-                                panelId: tempPanel.panelId,
+                            if (flag) {
+                                where = {
+                                    panelId: tempPanel.id,
 //                                roundId: tempPanel.roundId,
 
-                                participantId: null
-                            };
+                                    participantId: null
+                                };
+                            }
                         }
 
 
@@ -976,7 +980,7 @@
                                 $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
 
                             }
-                            console.log(tempPanel);
+                            console.log(where);
 
                             $scope.samples.getAllSamples(tableName, where);
 
@@ -995,7 +999,7 @@
 
             } catch (error) {
                 console.log(error)
-            }
+        }
 
         }
 

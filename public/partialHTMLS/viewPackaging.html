@@ -49,7 +49,7 @@
                             <div class="panel-heading">
                                 <div class="panel-title">
                                     <a data-toggle="collapse" href="#{{panel.id}}"
-                                       ng-click="samples.getSampleFromPanel(panel, 'tbl_bac_sample_to_panel')"
+                                       ng-click="samples.getSampleFromPanel(panel, 'tbl_bac_sample_to_panel',true)"
                                        data-parent="#accordion">{{$index + 1}}.
                                         {{panel.panelName}}</a>
                                     <a href="#{{panel.id}}" style="color:white;" data-toggle="collapse"
@@ -285,12 +285,12 @@
 
 
     <!---------Modal---------->
-    <div>
+    <div class="">
         <div  ng-if="samples.showPanelModal">
             <div class="col-md-12 text-right">
                 <div class="clearfix">&nbsp;</div>
                 <div><button type="button" class="btn btn-sm btn-danger"
-                             ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> Cancel
+                             ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> close
                     </button>
                 </div>
                 <div class="clearfix">&nbsp;</div>
@@ -309,7 +309,7 @@
                         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                         <small class="">
                             <a href="#" class=" btn btn-default btn-sm"
-                               ng-click="samples.getAllSamples('tbl_bac_samples')">
+                               ng-click="samples.getAllSamples('tbl_bac_samples',samples.where)">
                                 <i class="fa fa-refresh"></i>
                             </a>
                         </small>

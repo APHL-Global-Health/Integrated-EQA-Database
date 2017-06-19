@@ -850,7 +850,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->dateCreated = $panel['dateCreated'];
                     $dataDB[$key]->barcode = $panel['barcode'];
                     $wherCnt['participantId'] = null;
-                    $wherCnt['id'] = $value->panelId;
+                    $wherCnt['panelId'] = $value->panelId;
                     $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $wherCnt, 'panelId');
                 }
             }
