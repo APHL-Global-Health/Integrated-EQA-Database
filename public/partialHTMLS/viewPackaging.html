@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <h3> Available Packaging
+        <h3> Available Panel
             <small>{{samples.panelsData.length}} records</small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             <div class="pull-right col-mod-12">
@@ -39,7 +39,7 @@
         <div class="panel panel-body text-sm no-padding">
 
             <div class="panel panel-body text-sm bg-aqua" ng-if="!expand">
-                <h4 class="h4">Expanded Packaging Information</h4>
+                <h4 class="h4">Expanded Panel Information</h4>
 
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
@@ -101,10 +101,10 @@
                                         <div>
                                             <blockquote class="small">
                                                 <div>
-                                                    Packaging Name :
+                                                    Panel Name :
                                                     <i>{{panel.panelName}}</i>
                                                     <br>
-                                                    Packaging Type :
+                                                    Panel Type :
                                                     <i>{{panel.panelType}}</i><br>
                                                     Number of samples
                                                     <i class="">{{panel.numberOfSamples}}</i>
@@ -115,7 +115,7 @@
                                                     <i class="">{{panel.shipmentNumber}}</i>
                                                     <br>
 
-                                                    Packaging Label :
+                                                    Panel Label :
                                                     <i nowrap>{{panel.panelLabel}}</i>
 
                                                     <br>
@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="col-md-7"
                                          ng-if="samples.clickedPanel == panel.id && samples.loaderProgressSpinner != 'fa-spinner'">
-                                        <div class="h4">Samples In this Packaging
+                                        <div class="h4">Samples In this Panel
                                             <div class="label label-success">
                                                 {{samples.sampleToPanel.length}} records
                                             </div>
@@ -199,9 +199,9 @@
                     <thead>
                         <tr>
                             <th>#.</th>
-                            <th>Packaging Name</th>
-                            <th>Packaging Type</th>
-                            <th>Packaging Label</th>
+                            <th>Panel Name</th>
+                            <th>Panel Type</th>
+                            <th>Panel Label</th>
                             <th>Prepared on</th>
 
                             <th>Delivered on</th>
@@ -231,7 +231,7 @@
                                 <a class="btn btn-info btn-sm"
                                    data-placement="right" data-type="info" data-container="body"
                                    data-animation="am-fade-and-scale"
-                                   data-trigger="hover" data-type="success" data-title="Edit Packaging" bs-tooltip
+                                   data-trigger="hover" data-type="success" data-title="Edit Panel" bs-tooltip
 
                                    ng-click="samples.editFunction(panel, 'tbl_bac_panel_mst')">
                                     <i class="fa fa-edit"></i>
@@ -239,14 +239,14 @@
                                 <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus != 0"
                                    data-placement="right" data-type="info" data-container="body"
                                    data-animation="am-fade-and-scale"
-                                   data-trigger="hover" data-type="success" data-title="Remove Packaging" bs-tooltip
+                                   data-trigger="hover" data-type="success" data-title="Remove Panel" bs-tooltip
 
                                    ng-click="samples.deleteCustomRow(panel.id, 'tbl_bac_panel_mst')"><i
                                         class="fa fa-remove"></i></a>
                                 <!--<a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"-->
                                 <!--data-placement="right" data-type="info" data-container="body"-->
                                 <!--data-animation="am-fade-and-scale"-->
-                                <!--data-trigger="hover" data-type="success" data-title="Lock Packaging" bs-tooltip-->
+                                <!--data-trigger="hover" data-type="success" data-title="Lock Panel" bs-tooltip-->
                                 <!--&gt;-->
                                 <!--<i class="fa fa-unlock"></i>-->
                                 <!--</a>-->

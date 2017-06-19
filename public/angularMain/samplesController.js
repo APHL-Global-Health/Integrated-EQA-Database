@@ -630,15 +630,15 @@
             console.log(tableName)
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.samplesActivePage('viewshipments', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments',$scope.samples.whereShipment);
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesActivePage('viewsamples', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples',$scope.samples.where);
             }
             if (tableName == 'tbl_bac_panel_mst') {
                 $scope.samples.samplesActivePage('viewPackaging', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst',$scope.samples.where);
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.samplesActivePage('viewcouriers', 0);
@@ -670,7 +670,7 @@
             }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.samplesActivePage('viewrounds', 0);
-                return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'evaluated', '0');
 
             }
         }
