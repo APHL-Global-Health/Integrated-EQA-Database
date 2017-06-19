@@ -57,6 +57,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $data['totalAddedSamples'] = $value['quantity'];
                     $data['panelId'] = $jsPostData['panelId'];
                     $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $data);
+
+                    $updateSamples['addedStatus'] = 1;
+                    $where['id'] = $data['sampleId'];
+                    $this->dbConnection->updateTable('tbl_bac_samples', $where, $updateSamples);
+                    
                 }
                 echo $this->returnJson($response);
             }
@@ -176,10 +181,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         exit;
     }
 
-    public function sendemailAction($body='', $to = '', $send = '') {
+    public function sendemailAction($body = '', $to = '', $send = '') {
         try {
             $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
-          
+
             $configMail = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => $config['production']['email.config.username'],
@@ -1408,7 +1413,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $posted = (array) $dataArray['updateData'];
                     if ($posted['shipmentStatus'] == 2) {
 
-                        $this->sendemailondispatchAction((array)$dataArray['where']);
+                        $this->sendemailondispatchAction((array) $dataArray['where']);
                     }
                 }
             } else {
@@ -1427,8 +1432,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         $shipmentInfo = $this->returnValueWhere($shipmentWhere['id'], 'tbl_bac_shipments');
         $round = $this->returnValueWhere($shipmentInfo['roundId'], 'tbl_bac_rounds');
 
-        
-        if (count($shipmentInfo)>0) {
+
+        if (count($shipmentInfo) > 0) {
 //            print_r($shipmentInfo);
 //exit;
             $roundId = $shipmentInfo['roundId'];
@@ -1453,13 +1458,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $shipmentInfo['courier'] = $shipmentInfo['dispatchCourier'];
             $message = $this->generateMessage($shipmentInfo, 3);
             $common = new Application_Service_Common();
-            $message['message'] .= " of round <b>" . $round['roundName'] ."</b> ";
-            $message['message'] = "This is to notify you <br> ".$message['message'];
+            $message['message'] .= " of round <b>" . $round['roundName'] . "</b> ";
+            $message['message'] = "This is to notify you <br> " . $message['message'];
             $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
-
-          
         }
-     return true;
+        return true;
     }
 
     public function saveshipmentstoroundAction() {
