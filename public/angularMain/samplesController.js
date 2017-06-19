@@ -528,21 +528,26 @@
         $scope.samples.hidePanelModal = function () {
             $scope.samples.showPanelModal = false;
         }
+
+
+
+        /* --------------Old data filters------------------  */
         $scope.samples.where = {};
-        
-        
-      /* --------------Old data filters------------------  */
+        $scope.samples.whereShipment={};
         $scope.samples.where.addedStatus = 0;
-       
         
         
+        $scope.samples.whereShipment.evaluated = 0;
+
+
+
         /* ------------------ end of files load     --------------------------*/
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         $scope.samples.addSamplesToPanel = function (panel) {
 
             $scope.samples.currentPanel = panel;

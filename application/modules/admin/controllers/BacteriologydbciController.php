@@ -704,7 +704,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnTotalSamples($array, $tableName) {
-        if (count($array) > 0) {
+//        var_dump($array);
+//        exit;
+        if (is_array($array)) {
             foreach ($array as $key => $value) {
                 if ($tableName == 'tbl_bac_panel_mst') {
                     $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
