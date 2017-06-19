@@ -14,17 +14,17 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                     ng-click="samples.samplesActivePage('viewrounds', 0)">&times;</button>
             <h4 class="modal-title"> Enroll Ready Labs :
-                {{samples.currentRound.roundName | capitalizeLetter}} :
-                {{samples.currentRound.roundCode | capitalizeLetter}}
+                {{samples.currentRound.roundName| capitalizeLetter}} :
+                {{samples.currentRound.roundCode| capitalizeLetter}}
                 <small class="small">
                     {{samples.labsToRoundArray.length}} Labs
                 </small>
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                 <!--<small class="">-->
-                    <!--<a href="#" class=" btn btn-default btn-sm"-->
-                       <!--ng-click="samples.addLabsToRound('tbl_bac_ready_labs', samples.currentRound)">-->
-                        <!--<i class="fa fa-refresh"></i>-->
-                    <!--</a>-->
+                <!--<a href="#" class=" btn btn-default btn-sm"-->
+                <!--ng-click="samples.addLabsToRound('tbl_bac_ready_labs', samples.currentRound)">-->
+                <!--<i class="fa fa-refresh"></i>-->
+                <!--</a>-->
                 <!--</small>-->
             </h4>
         </div>
@@ -40,19 +40,19 @@
                     <td><b>Lab Name</b></td>
                     <td><b>Region</b></td>
                     <td><b>Unique Identifier</b></td>
-                    <td><b>Readiness Date</b></td>
+                    <td><b>Status</b></td>
                 </tr>
-                <tr ng-repeat="lab in samples.readyLabs |filter : searchSample |limitTo : 8"
-                    ng-class="{'alert-danger':panel.totalSamplesAdded==0}"
-                >
+                <tr ng-repeat="lab in samples.readyLabs|filter : searchSample |limitTo : 8"
+                    ng-class="{'alert-danger':panel.totalSamplesAdded == 0}"
+                    >
                     <td>
 
 
-                        <div class="[ form-group ]">
+                        <div class="[ form-group ]" ng-show="lab.enrolled == 0">
 
                             <input type="checkbox"  ng-hidden="true"  name="{{panel.labId}}" id="{{lab.labId}}" autocomplete="off"
-                                   ng-checked="samples.indexOfId(panel.labId,samples.labsToRoundArray)"
-                                   ng-click="samples.addLabsToRoundArray(lab.labId,labCheck)"
+                                   ng-checked="samples.indexOfId(panel.labId, samples.labsToRoundArray)"
+                                   ng-click="samples.addLabsToRoundArray(lab.labId, labCheck)"
                                    ng-model="labCheck">
                             <div class="[ no-padding]">
                                 <label for="{{lab.labId}}" class="[ btn-round ]">
@@ -61,12 +61,12 @@
                                           data-placement="right" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
                                           data-trigger="hover" data-title="remove panel"
-                                    ></span>
+                                          ></span>
                                     <span class="[ fa fa-minus-circle  ]" ng-show="!labCheck"
                                           data-placement="right" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
                                           data-trigger="hover" data-title="add panel"
-                                    > </span>
+                                          > </span>
                                 </label>
                             </div>
                         </div>
@@ -76,7 +76,14 @@
                     <td>{{lab.first_name}}</td>
                     <td>{{lab.region}}</td>
                     <td>{{lab.unique_identifier}}</td>
-                    <td>{{lab.dateCreated}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" ng-show="lab.enrolled == 0" ng-click="samples.enrolLab(lab)">
+                             Enrol
+                        </button>
+                        <b ng-hide="lab.enrolled == 0">
+                            Enrolled
+                        </b>
+                    </td>
                 </tr>
             </table>
             </p>
@@ -86,10 +93,10 @@
                 <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
             </div>
             <button class="btn btn-info col-md-12"
-                    ng-disabled="samples.labsToRoundArray.length==0 || samples.savingInProgress"
+                    ng-disabled="samples.labsToRoundArray.length == 0 || samples.savingInProgress"
                     ng-click="samples.saveLabsToRound(samples.currentRound)"
-            >
-                Save Lab to {{samples.currentRound.roundName | capitalizeLetter}} <i
+                    >
+                Save Lab to {{samples.currentRound.roundName| capitalizeLetter}} <i
                     class="fa fa-spin {{samples.savingSpinner}}"></i>
             </button>
         </div>

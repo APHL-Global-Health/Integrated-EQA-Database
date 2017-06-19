@@ -951,9 +951,9 @@
             try {
 
                 var tempPanel = panelId;
-                
+
                 var panId = flag ? panelId.id : panelId.panelId;
-                
+
                 console.log(panId);
                 if (isNumeric(panId)) {
                     try {
@@ -2242,9 +2242,70 @@
                 where.status = 2
             }
             $scope.samples.currentRound = round;
-            $scope.samples.getAllSamples('tbl_bac_ready_labs', where);
+            $scope.samples.getReadyLabs(where);
 
         }
+
+        $scope.samples.getReadyLabs = function (where) {
+            try {
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                var url = serverSamplesURL + 'getparticipatinglabs';
+                var varData = {roundId: where.roundId}
+                var tableName = 'tbl_bac_ready_labs';
+                $http
+                        .post(url, varData)
+                        .success(function (data) {
+                            console.log(data);
+                            $scope.samples.loaderProgressSpinner = '';
+                            if (data.status == 1) {
+                                assignHTTPResponse(data, tableName);
+                            } else {
+                                assignHTTPResponse({}, tableName);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                            if (data.data == false) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
+
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+
+
+        $scope.samples.enrolLab = function (lab) {
+            lab.enrolled = 1;
+
+            var url = serverSamplesURL + 'saveparticipatinglabs';
+            var varData = {labData: lab}
+            $http
+                    .post(url, varData)
+                    .success(function (data) {
+                        console.log(data);
+                        $scope.samples.loaderProgressSpinner = '';
+                        if (data.status == 1) {
+
+                        } else {
+
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        }
+
+                    })
+                    .error(function (error) {
+                        console.log(error)
+
+                    })
+
+        }
+
+
         $scope.samples.returnFormattedLeft = function (daysLeft) {
             var delta = Math.abs(daysLeft * 24 * 3600);
 

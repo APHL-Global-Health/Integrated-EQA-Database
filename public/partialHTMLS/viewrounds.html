@@ -120,7 +120,7 @@
             <h4>Round Basic Info
                 <small>{{samples.currentRound.roundName}}</small>
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-                <button type="button" class="pull-right btn btn-sm btn-danger"
+                <button type="button" class="pull-right btn btn-sm btn-danger  position-static"
                         ng-click="samples.showRoundFullDetails('')"><i class="fa fa-remove"></i> close
                 </button>
                 <hr>
@@ -162,10 +162,10 @@
                         <tr>
                             <th>#.</th>
                             <th>Lab Name</th>
-                            <th>Date Ready</th>
-                            <th>Total Participants</th>
+                            <th>Date Enrolled</th>
+                            <th>Unique /MFL Code</th>
                             <th>Region</th>
-                            <th>Comments</th>
+                            <th>Email</th>
 
                         </tr>
                     </thead>
@@ -173,10 +173,10 @@
                         <tr dir-paginate="lab in samples.readyLabs | itemsPerPage: samples.itemsPerPage |filter : samples.searchLab">
                             <td>{{$index + 1}}</td>
                             <td>{{lab.first_name}}</td>
-                            <td>{{lab.dateCreated}}</td>
-                            <td>{{lab.totalParticipants}}</td>
+                            <td>{{lab.created_on}}</td>
+                            <td>{{lab.unique_identifier}}/{{lab.MflCode}}</td>
                             <td>{{lab.region}}</td>
-                            <td>{{lab.comments}}</td>
+                            <td>{{lab.email}}</td>
 
 
                         </tr>

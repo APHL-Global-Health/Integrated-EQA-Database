@@ -895,6 +895,50 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         }
     }
 
+    public function getparticipatinglabsAction() {
+
+//        $postedData = file_get_contents('php://input');
+//        $postedData = (array) (json_decode($postedData));
+        $whereLab['roundId'] =3;// $postedData['roundId'];
+        $where['IsVl'] = 3;
+        $laboratory = $this->dbConnection->selectFromTable('participant', $where);
+
+        if (is_array($laboratory)) {
+
+            foreach ($laboratory as $key => $value) {
+                $whereLab['labId'] = $laboratory[$key]->participant_id;
+                $laboratory[$key]->roundId = $whereLab['roundId'];
+                $laboratory[$key]->enrolled = $this->dbConnection->selectCount('tbl_bac_rounds_labs', $whereLab, 'id');
+            }
+            echo($this->returnJson((array('status' => 1, 'message' => 'Records Found', 'data' => $laboratory))));
+        } else {
+            echo($this->returnJson((array('status' => 0, 'message' => 'No Records Found'))));
+        }
+        exit;
+    }
+
+    public function saveparticipatinglabsAction() {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array) json_decode($postedData);
+        $labInfo = (array) $postedData['labData'];
+        $insertData['labId'] = $labInfo['participant_id'];
+        $insertData['roundId'] = $labInfo['roundId'];
+
+
+        $insertStatus = $this->dbConnection->insertData('tbl_bac_rounds_labs', $insertData);
+
+        if ($insertStatus['status'] != 1) {
+
+            $resp['status'] = 0;
+            $resp['message'] = $insertStatus['message'];
+        } else {
+            $resp['status'] = 1;
+            $resp['message'] = 'Data saved successfully';
+        }
+        echo($this->returnJson($resp));
+        exit;
+    }
+
     public function getlabusersAction() {
 
         try {
