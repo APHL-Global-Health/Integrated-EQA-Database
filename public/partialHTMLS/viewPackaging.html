@@ -45,7 +45,7 @@
                     <div class="clearfix">&nbsp;</div>
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-success"
-                             dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                             dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|filter : samples.where">
                             <div class="panel-heading">
                                 <div class="panel-title">
                                     <a data-toggle="collapse" href="#{{panel.id}}"

@@ -1,5 +1,5 @@
 <div class="main-div" style="overflow: auto;">
-    <div class="main" ng-show="!samples.showShipmentModal" ng-init="samples.getAllSamples('tbl_bac_shipments',samples.whereShipment)">
+    <div class="main" ng-show="!samples.showShipmentModal" ng-init="samples.getAllSamples('tbl_bac_shipments', samples.whereShipment)">
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-1 pull-right">
                     <button class=" btn btn-default btn-sm"
-                            ng-click="samples.getAllSamples('tbl_bac_shipments',samples.whereShipment)"><i class="fa fa-refresh"></i>
+                            ng-click="samples.getAllSamples('tbl_bac_shipments', samples.whereShipment)"><i class="fa fa-refresh"></i>
                     </button>
                     &nbsp;
                 </div>
@@ -38,7 +38,7 @@
                 <hr>
                 <div class="panel-group" id="accordion">
                     <div class="panel {{samples.returnPanelColorFromStatus(shipment.shipmentStatus, 1)}} "
-                         dir-paginate="shipment in samples.shipmentsData| itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                         dir-paginate="shipment in samples.shipmentsData| itemsPerPage: samples.itemsPerPage |filter : samples.searchData |filter:samples.whereShipment">
                         <div class="panel-heading">
                             <div class="panel-title">
 
@@ -78,7 +78,7 @@
                                         <div class="pull-right col-md-5">
                                             <x ng-hide="samples.loaderProgressSpinner == 'fa-spinner'">
                                                 <a ng-click="samples.dispatchShipment(shipment, 'dipatchSipments')"
-                                                   ng-show="shipment.shipmentStatus == 0 && samples.panelsToShipment.length > 0"
+                                                   ng-show="shipment.shipmentStatus == 0 && samples.panelsToShipment.length > 0&& shipment.roundId > 0"
                                                    href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
                                                     <i class="fa fa-truck"></i></a> &nbsp;
 
@@ -96,7 +96,7 @@
                                             <a href="#" ng-click="samples.editFunction(shipment, 'tbl_bac_shipments')">
                                                 <i class="fa fa-edit"></i></a>&nbsp;
                                             <a ng-click="samples.addPanelsToShipment(shipment)"
-                                               ng-show="shipment.shipmentStatus == 0"
+                                               ng-show="shipment.shipmentStatus == 0 || shipment.roundId > 0"
                                                href="#addPanels" data-backdrop="false" data-toggle="modal">
                                                 <i class="fa fa-plus-square"></i></a>&nbsp;
 
@@ -261,7 +261,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData| orderBy :'-id'">
+                <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage|filter:samples.whereShipment |filter : samples.searchData| orderBy :'-id'">
                     <td>{{$index + 1}}</td>
                     <td>
                         <a href="" ng-click="samples.showFullShipmentInfo(shipment)"
@@ -290,7 +290,7 @@
                            ng-click="samples.editFunction(shipment, 'tbl_bac_shipments')"><i
                                 class="fa fa-edit"></i>
                         </a>
-                        <a class="btn btn-danger btn-sm" ng-disabled="shipment.shipmentStatus != 0"
+                        <a class="btn btn-danger btn-sm" ng-disabled="shipment.shipmentStatus != 0 || shipment.roundId > 0"
                            data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                            data-trigger="hover"  data-title="Remove Shipment" bs-tooltip
 
@@ -299,13 +299,13 @@
                         </a>
             <x ng-hide="samples.loaderProgressSpinner == 'fa-spinner'">
                 <a ng-click="samples.dispatchShipment(shipment, 'dipatchSipments')" class="btn btn-xs btn-info"
-                   ng-show="shipment.shipmentStatus == 0 && samples.panelsToShipment.length > 0"
+                   ng-show="shipment.shipmentStatus == 0 && shipment.totalPanelsAdded > 0"
                    href="#dispatchShipments" data-backdrop="false" data-toggle="modal">
                     <i class="fa fa-truck"></i></a> &nbsp;
 
             </x>
             <a class="btn btn-primary btn-sm" ng-click="samples.addPanelsToShipment(shipment)"
-               ng-disabled="shipment.shipmentStatus != 0"
+               ng-disabled="shipment.shipmentStatus != 0 || shipment.roundId > 0"
 
                data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                data-trigger="hover" data-type="success" data-title="Add Panels" bs-tooltip
