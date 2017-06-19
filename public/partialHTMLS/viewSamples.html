@@ -1,5 +1,5 @@
-<div class="col-md-12 no-padding" ng-show="samples.linksObject.samplesLink=='viewsamples'">
-    <div class="main-div" ng-init="samples.getAllSamples('tbl_bac_samples')">
+<div class="col-md-12 no-padding" ng-show="samples.linksObject.samplesLink=='viewSamples'">
+    <div class="main-div" ng-init="samples.getAllSamples('tbl_bac_samples');console.log('VIEWING SAMPLES')">
 
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
             <a href="#" class="close" data-dismiss="alert">&times;</a>

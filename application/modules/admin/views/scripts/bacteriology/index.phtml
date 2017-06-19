@@ -3,18 +3,18 @@
 
         <div ng-controller="ReportController">
             <div class="">
-                <ul class="nav nav-tabs" ng-init="clickedTab = 'samples'">
+                <ul class="nav nav-tabs" ng-init="clickedTab = 'samples';">
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
-                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('viewsamples');">Manage Samples</a>
+                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('viewSamples');">Manage Samples</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'Packaging'}">
-                        <a href="" ng-click="clickedTab = 'Packaging';samples.samplesActivePage('viewPackaging');">Manage Panels</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'packaging'}">
+                        <a href="" ng-click="clickedTab = 'packaging';samples.samplesActivePage('viewPackaging');">Manage Panels</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
-                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('viewshipments');">Manage Shipments</a>
+                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('viewShipments');">Manage Shipments</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
-                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('viewrounds');">Config Rounds</a>
+                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('viewRounds');">Manage Rounds</a>
                     </li>
                 </ul>
             </div>
@@ -23,17 +23,17 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="text-align: left;">
-                        <li><a href="#" ng-click="clickedTab = 'courier';samples.samplesActivePage('viewcouriers')">Couriers</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'couriers';samples.samplesActivePage('viewCouriers')">Couriers</a></li>
 
-                        <li><a href="#" ng-click="clickedTab = 'Reagents';samples.samplesActivePage('viewReagents')">Reagents</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'reagents';samples.samplesActivePage('viewReagents')">Reagents</a></li>
 
-                        <li><a href="#" ng-click="samples.samplesActivePage('addGradingLevels')">Grades</a></li>
-                        <li><a href="#" ng-click="samples.samplesActivePage('testTypes')">Test Types</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'grading';samples.samplesActivePage('viewGrading')">Grades</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'testTypes';samples.samplesActivePage('viewTestTypes')">Test Types</a></li>
                     </ul>
                 </div>
                 <div class="btn btn-sm btn-primary pull-right "
-                     ng-click="samples.samplesActivePage('add'+clickedTab)">
-                    <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
+                     ng-click="samples.samplesActivePage('add'+samples.roundFiles[clickedTab])">
+                    <i class="fa fa-plus"></i> Add {{samples.roundLabels[clickedTab]}}
                 </div>
             </div>
 

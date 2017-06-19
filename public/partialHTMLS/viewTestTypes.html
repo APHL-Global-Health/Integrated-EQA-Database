@@ -1,26 +1,28 @@
 <div class="col-md-12">
-    <div class="col-md-12 border-bottom">
-        <h3>
-            <div class="pull-left col-md-4 col-sm-12">Micro Test Types
-                <small>{{samples.programs.length}} records</small>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Test Types
+                    <small ng-show="samples.testTypes.length">{{samples.testTypes.length}} records</small>
+                </h3>
+            </div>
+            <div class="col-md-6">
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-            </div>
-            <div class="pull-right col-md-8 col-sm-12">
-                <items-per-page></items-per-page>
-
-                <div class="col-md-7 col-sm-9 pull-right">
-                    <input type="search" class="col-md-12" ng-model="samples.searchData">
-                </div>
-                <div class="col-md-1 col-sm-3 pull-right">
-                    <a href="#" class=" btn btn-default btn-sm"
-                       ng-click="samples.getShipmentsForDelivery('tbl_bac_test_types','status','0,1')">
-                        <i class="fa fa-refresh"></i>
-                    </a>
-                    &nbsp;
+                <div style="margin-bottom: 0;"><items-per-page></items-per-page></div>
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="search Test Types"
+                        ng-model="samples.searchData">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="samples.getShipmentsForDelivery('tbl_bac_test_types','status','0,1')">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
-        </h3>
+        </div>
     </div>
+
     <div id="alert" tabindex="1" class="col-md-12">
         <div class="clearfix">&nbsp;</div>
         <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
@@ -28,52 +30,37 @@
             <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
         </div>
     </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>#.</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate="testType in samples.testTypes | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                    <td>{{$index+1}}</td>
+                    <td>{{testType.testName}}</td>
+                    <td>{{testType.testDesc}}</td>
+                    <td>{{testType.dateCreated}}</td>
+                    <td>Active</td>
+                    <td nowrap>
+                        <button class="btn btn-info btn-sm" title="Edit Test Type"
+                            ng-click="samples.editFunction(testType,'tbl_bac_test_types')"><i
+                            class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" title="Remove Test Type"
+                            ng-click="samples.deleteCustomRow(testType.id,'tbl_bac_test_types')"
+                        ><i class="fa fa-remove"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
 </div>
-
-<div class="">
-    <button class="btn btn-sm btn-info pull-right" ng-click="samples.samplesActivePage('testTypes')">Add   Test Types
-    </button>
-</div>
-<div class="table-responsive">
-    <table class="table table-striped table-condensed table-bordered">
-        <thead>
-        <tr>
-            <th>#.</th>
-            <th>Test Name</th>
-            <th>Test Desc</th>
-            <th>Date Created</th>
-            <th>Status</th>            <!--                                <th>Date Saved</th>-->
-
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr dir-paginate="testType in samples.testTypes | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
-            <td>{{$index+1}}</td>
-            <td>{{testType.testName}}</td>
-            <td>{{testType.testDesc}}</td>
-            <td>{{testType.dateCreated}}</td>
-            <td>Active</td>
-
-
-            <td nowrap>
-                <button class="btn btn-info btn-sm"
-                        data-placement="right" data-type="info" data-container="body"
-                        data-animation="am-fade-and-scale"
-                        data-trigger="hover" data-type="success" data-title="Edit courier" bs-tooltip
-                        ng-click="samples.editFunction(testType,'tbl_bac_test_types')"><i
-                        class="fa fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm"
-                        data-placement="right" data-type="info" data-container="body"
-                        data-animation="am-fade-and-scale"
-                        data-trigger="hover" data-type="success" data-title="Remove courier" bs-tooltip
-                        ng-click="samples.deleteCustomRow(testType.id,'tbl_bac_test_types')"
-                ><i class="fa fa-remove"></i></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-</div>
-
-

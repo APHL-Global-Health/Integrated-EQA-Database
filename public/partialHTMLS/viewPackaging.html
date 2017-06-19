@@ -36,7 +36,7 @@
 
         <div class="panel panel-body text-sm no-padding">
             <div class="panel panel-body text-sm bg-aqua" ng-if="expand">
-                <h4 class="h4">Expanded Packaging Information</h4>
+                <h4 class="h4">Expanded Panel Information</h4>
 
                 <div class="fullInfoDiv">
                     <div class="clearfix">&nbsp;</div>
@@ -98,10 +98,10 @@
                                         <div>
                                             <blockquote class="small">
                                                 <div>
-                                                    Packaging Name :
+                                                    Name :
                                                     <i>{{panel.panelName}}</i>
                                                     <br>
-                                                    Packaging Type :
+                                                    Type :
                                                     <i>{{panel.panelType}}</i><br>
                                                     Number of samples
                                                     <i class="">{{panel.numberOfSamples}}</i>
@@ -112,7 +112,7 @@
                                                     <i class="">{{panel.shipmentNumber}}</i>
                                                     <br>
 
-                                                    Packaging Label :
+                                                    Label :
                                                     <i nowrap>{{panel.panelLabel}}</i>
 
                                                     <br>
@@ -193,17 +193,17 @@
                     <thead>
                     <tr>
                         <th>#.</th>
-                        <th>Packaging Name</th>
-                        <th>Packaging Type</th>
-                        <th>Packaging Label</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Label</th>
                         <th>Prepared on</th>
 
                         <th>Delivered on</th>
 
                         <th>Status</th>
-                        <th>Samples Added</th>
+                        <th>Number of Samples</th>
                         <!--                                <th>Date Saved</th>-->
-                        <th>Ship't Number</th>
+                        <th>Shipment Number</th>
                         <th>Created on</th>
                         <th></th>
                     </tr>
@@ -315,9 +315,9 @@
                     <table class="table table-striped table-responsive">
                         <tr>
                             <td></td>
-                            <td>Quantitys</td>
+                            <td>Quantity</td>
                             <td><b>Sample</b></td>
-                            <td><b>Date Prer'd</b></td>
+                            <td><b>Preration Date</b></td>
                         </tr>
                         <tr ng-repeat="sample in samples.samplesData |filter : searchSample |limitTo : 8">
                             <td>

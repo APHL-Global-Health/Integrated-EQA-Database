@@ -1,25 +1,27 @@
 <div class="col-md-12">
-    <div class="col-md-12 border-bottom">
-        <h3>
-            <div class="pull-left col-md-4 col-sm-12">Couriers
-                <small>{{samples.couriers.length}} records</small>
-                <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-            </div>
-            <div class="pull-right col-md-8 col-sm-12">
-                <items-per-page></items-per-page>
-
-                <div class="col-md-7 col-sm-9 pull-right">
-                    <input type="search" class="col-md-12" ng-model="samples.searchData">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>
+                        Couriers
+                        <small ng-show="samples.couriers.length">{{samples.couriers.length}} records</small>
+                    </h3>
                 </div>
-                <div class="col-md-1 col-sm-3 pull-right">
-                    <a href="#" class=" btn btn-default btn-sm"
-                       ng-click="samples.getShipmentsForDelivery('tbl_bac_couriers','status','0,1')">
-                        <i class="fa fa-refresh"></i>
-                    </a>
-                    &nbsp;
+                <div class="col-md-6">
+                    <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                    <div style="margin-bottom: 0;"><items-per-page></items-per-page></div>
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="search couriers"
+                               ng-model="samples.searchData">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="samples.getShipmentsForDelivery('tbl_bac_couriers','status','0,1')">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </h3>
+        </div>
     </div>
     <div id="alert" tabindex="1" class="col-md-12">
         <div class="clearfix">&nbsp;</div>
@@ -36,14 +38,11 @@
         <tr>
             <th>#.</th>
             <th>Courier Name</th>
-            <th>Mobile</th>
-            <th>Tel.</th>
+            <th>Phone</th>
             <th>Email</th>
-
             <th>Address</th>
             <th>Physical Addr</th>
             <th>Contact Person</th>
-            <th>Date</th>
             <th></th>
         </tr>
         </thead>
@@ -51,13 +50,11 @@
         <tr dir-paginate="courier in samples.couriers | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
             <td>{{courier.courierName}}</td>
-            <td>{{courier.mobile}}</td>
-            <td>{{courier.tel}}</td>
+            <td>{{courier.mobile}}<span ng-if="courier.mobile && courier.tel">,</span> {{courier.tel}}</td>
             <td>{{courier.email}}</td>
             <td nowrap>{{courier.address}}</td>
             <td nowrap>{{courier.physicalAddress}}</td>
             <td nowrap>{{courier.contactPerson}}</td>
-            <td nowrap>{{courier.dateCreated}}</td>
             <td nowrap>
                 <button class="btn btn-info btn-sm"
                         data-placement="right" data-type="info" data-container="body"

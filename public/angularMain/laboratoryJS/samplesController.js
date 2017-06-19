@@ -370,8 +370,8 @@
 
 
         $scope.samples.linksObject = {
-            samplesLink: 'viewsamples',
-            currentTemplate: '../partialHTMLS/viewsamples.html'
+            samplesLink: 'viewSamples',
+            currentTemplate: '../partialHTMLS/viewSamples.html'
         }
         $scope.samples.showPhmtlPages = true;
         $scope.samples.linksLabObject = {
@@ -610,11 +610,11 @@
         $scope.samples.showMainTable = function (tableName, type) {
             console.log(tableName)
             if (tableName == 'tbl_bac_shipments') {
-                $scope.samples.samplesActivePage('viewshipments', 0);
+                $scope.samples.samplesActivePage('viewShipments', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments');
             }
             if (tableName == 'tbl_bac_samples') {
-                $scope.samples.samplesActivePage('viewsamples', 0);
+                $scope.samples.samplesActivePage('viewSamples', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_panel_mst') {
@@ -622,15 +622,15 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
             }
             if (tableName == 'tbl_bac_couriers') {
-                $scope.samples.samplesActivePage('viewcouriers', 0);
+                $scope.samples.samplesActivePage('viewCouriers', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_couriers');
             }
             if (tableName == 'tbl_bac_programs') {
-                $scope.samples.samplesActivePage('viewprograms', 0);
+                $scope.samples.samplesActivePage('viewPrograms', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_programs');
             }
             if (tableName == 'tbl_bac_expected_results') {
-                $scope.samples.samplesActivePage('viewsamples', 0);
+                $scope.samples.samplesActivePage('viewSamples', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_test_agents') {
@@ -646,7 +646,7 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_grades');
             }
             if (tableName == 'tbl_bac_rounds') {
-                $scope.samples.samplesActivePage('viewrounds', 0);
+                $scope.samples.samplesActivePage('viewRounds', 0);
                 return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
             }
@@ -2955,7 +2955,7 @@
             if (tableName == 'tbl_bac_grades') {
                 $scope.samples.gradingFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addGradingLevels', 0);
+                $scope.samples.samplesActivePage('addGrading', 0);
 
 
             }

@@ -111,6 +111,28 @@
 
         }
 
+        $scope.samples.roundLabels = {
+            samples: 'Sample',
+            packaging: 'Panel',
+            shipments: 'Shipment',
+            rounds: 'Round',
+            couriers: 'Courier',
+            reagents: 'Reagent',
+            grading: 'Grade',
+            testTypes: 'Test Type',
+        }
+
+        $scope.samples.roundFiles = {
+            samples: 'Samples',
+            packaging: 'Packaging',
+            shipments: 'Shipments',
+            rounds: 'Rounds',
+            couriers: 'Couriers',
+            reagents: 'Reagents',
+            grading: 'Grading',
+            testTypes: 'TestTypes',
+        }
+
         $scope.samples.returnSamplesType = function (test) {
             console.log(test)
             if (test == 1) {
@@ -391,8 +413,8 @@
 
 
         $scope.samples.linksObject = {
-            samplesLink: 'viewsamples',
-            currentTemplate: '../partialHTMLS/viewsamples.html'
+            samplesLink: 'viewSamples',
+            currentTemplate: '../partialHTMLS/viewSamples.html'
         }
         $scope.samples.showPhmtlPages = true;
         $scope.samples.linksLabObject = {
@@ -630,11 +652,11 @@
         $scope.samples.showMainTable = function (tableName, type) {
             console.log(tableName)
             if (tableName == 'tbl_bac_shipments') {
-                $scope.samples.samplesActivePage('viewshipments', 0);
+                $scope.samples.samplesActivePage('viewShipments', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments');
             }
             if (tableName == 'tbl_bac_samples') {
-                $scope.samples.samplesActivePage('viewsamples', 0);
+                $scope.samples.samplesActivePage('viewSamples', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_panel_mst') {
@@ -642,19 +664,19 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
             }
             if (tableName == 'tbl_bac_couriers') {
-                $scope.samples.samplesActivePage('viewcouriers', 0);
+                $scope.samples.samplesActivePage('viewCouriers', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_couriers');
             }
             if (tableName == 'tbl_bac_programs') {
-                $scope.samples.samplesActivePage('viewprograms', 0);
+                $scope.samples.samplesActivePage('viewPrograms', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_programs');
             }
             if (tableName == 'tbl_bac_expected_results') {
                 $.alert({
                     title: "<i class='fa fa-check text-success'> Success</i>",
-                    content: "Results save successfully"
+                    content: "Results saved successfully."
                 })
-                $scope.samples.samplesActivePage('viewsamples', 0);
+                $scope.samples.samplesActivePage('viewSamples', 0);
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
             }
             if (tableName == 'tbl_bac_test_agents') {
@@ -670,7 +692,7 @@
                 return type ? false : $scope.samples.getAllSamples('tbl_bac_grades');
             }
             if (tableName == 'tbl_bac_rounds') {
-                $scope.samples.samplesActivePage('viewrounds', 0);
+                $scope.samples.samplesActivePage('viewRounds', 0);
                 return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
             }
@@ -1240,7 +1262,6 @@
                                             $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
                                         } else {
                                             EptServices.EptServiceObject.returnDuplicateAlert();
-                                            // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
                                         }
 
                                     }
@@ -1387,11 +1408,10 @@
             try {
                 $.confirm({
                     title: 'Confirm delete!',
-                    theme: 'supervan',
-                    content: 'Are you sure you want to delete this record,this action cannot be undone',
+                    content: 'Are you sure you want to delete this record, this action cannot be undone.',
                     buttons: {
                         'Delete': {
-                            btnClass: 'btn-blue',
+                            btnClass: 'btn-red',
                             action: function () {
 
                                 alertStartRound = $.alert({
@@ -1410,9 +1430,7 @@
                             }
                         },
                         cancel: {
-                            btnClass: 'btn-red',
                             action: function () {
-                                // $.alert('cancelled !');
                             }
                         }
                     }
@@ -1815,19 +1833,20 @@
                         if (res.status == 1) {
                             $.alert({
                                 title: "<i class='fa fa-check-circle text-success'></i> ",
-                                content: "data saved successfully"
+                                content: "The data was saved successfully."
                             });
                         } else {
                             $.alert({
                                 title: "<i class='fa fa-remove text-danger'></i> Error",
-                                content: "error occured,likely you already submtted the result"
+                                content: "An error occured while submitting the result. <br />" + 
+                                  "It is likely that you already submtted this result."
                             });
                         }
                     })
                     .error(function (error) {
                         $.alert({
                             title: "<i class='fa fa-remove text-danger'>",
-                            content: " Server error occured,please try again"
+                            content: "A server error occured, please try again."
                         });
                     })
             }
@@ -1868,12 +1887,13 @@
                             if (res.status == 1) {
                                 $.alert({
                                     title: "<i class='fa fa-check-circle text-success'></i> Success",
-                                    content: "data saved successfully"
+                                    content: "The data was saved successfully."
                                 });
                             } else {
                                 $.alert({
                                     title: "<i class='fa fa-remove text-danger'></i> Error",
-                                    content: "error occured,likely you already submtted the result"
+                                    content: "An error occured while submitting the result. <br />" + 
+                                      "It is likely that you already submtted this result."
                                 });
                             }
                         })
@@ -2915,39 +2935,39 @@
         $scope.samples.editFunction = function (data, tableName) {
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.shipmentFormData = data;
-                $scope.samples.samplesActivePage('addshipments', 0);
+                $scope.samples.samplesActivePage('addShipments', 0);
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.sampleFormData = data;
-                $scope.samples.samplesActivePage('addsamples', 0);
+                $scope.samples.samplesActivePage('addSamples', 0);
 
 
             }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.roundFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addrounds', 0);
+                $scope.samples.samplesActivePage('addRounds', 0);
 
 
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.courierFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addcourier', 0);
+                $scope.samples.samplesActivePage('addCouriers', 0);
 
 
             }
             if (tableName == 'tbl_bac_grades') {
                 $scope.samples.gradingFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addGradingLevels', 0);
+                $scope.samples.samplesActivePage('addGrading', 0);
 
 
             }
             if (tableName == 'tbl_bac_programs') {
                 $scope.samples.programFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addprograms', 0);
+                $scope.samples.samplesActivePage('addPrograms', 0);
 
 
             }
@@ -2962,24 +2982,25 @@
             if (tableName == 'tbl_bac_expected_results') {
                 $scope.samples.resultsFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addsamplegrading', 0);
+                $scope.samples.samplesActivePage('addSampleGrading', 0);
                 getMicroAgents(data)
 
             }
             if (tableName == 'tbl_bac_test_agents') {
                 $scope.samples.testAgentsFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('addTestAgents', 0);
+                $scope.samples.samplesActivePage('addReagents', 0);
 
             }
             if (tableName == 'tbl_bac_test_types') {
                 $scope.samples.testTypesFormData = data;
                 console.log(data)
-                $scope.samples.samplesActivePage('testTypes', 0);
+                $scope.samples.samplesActivePage('TestTypes', 0);
 
             }
         }
         $scope.samples.microAgentsUpdateStatus = false;
+        
         function getMicroAgents(data) {
             try {
                 var where = data;

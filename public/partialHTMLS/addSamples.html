@@ -228,28 +228,16 @@
                     </div>
 
                     <div class="clearfix">&nbsp;</div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error'  : sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine }">
-
-                                    <button class="btn btn-primary col-md-12"
-                                            ng-click="samples.saveSampleFormData('tbl_bac_samples',samples.sampleFormData)"
-                                            ng-disabled="sampleData.$invalid || samples.savingInProgress"
-                                    >Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <button class="btn btn-danger col-md-12"
-                                            ng-click="samples.emptyFormData('tbl_bac_samples',0)"
-                                    >Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-success" ng-class="{ 'has-error'  : sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine }"
+                            ng-click="samples.saveSampleFormData('tbl_bac_samples',samples.sampleFormData)"
+                            ng-disabled="sampleData.$invalid || samples.savingInProgress">
+                            Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                        <button class="btn"
+                            ng-click="samples.emptyFormData('tbl_bac_samples',0)">
+                        Cancel
+                        </button>
                     </div>
                 </form>
             </div>
