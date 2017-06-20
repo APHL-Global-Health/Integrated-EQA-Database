@@ -208,12 +208,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             if ($mail->send($transport)) {
 //                echo 'Sent successfully';
             } else {
-                echo 'unable to send email';
+//                echo 'unable to send email';
             }
         } catch (Exception $e) {
             echo $e->getMessage();
         }
-        exit();
+        
     }
 
     public function savepaneltoshipmentAction() {

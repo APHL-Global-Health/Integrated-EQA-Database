@@ -33,7 +33,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             $postedData['id'] = $roundInfo['id'];
             unset($postedData['round']);
         }
-        
+
 
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
@@ -133,43 +133,48 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereRound, $update);
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_response_results', $whereRound, $update);
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_micro_bacterial_agents', $whereRound, $update);
-        echo $this->returnJson($updatePublication);
+
 
         if ($update['published'] == 1) {
             $this->sendEmailToEnrolledLabsForPublish($wherePub['id']);
         }
+        echo $this->returnJson($updatePublication);
         exit;
     }
 
     public function sendEmailToEnrolledLabsForPublish($roundId) {
         $where['roundId'] = $roundId;
-        $where['status'] = 2;
+        $where['status'] = 1;
 
-        $enrolledLabs = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $where);
+        $enrolledLabs = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs', $where);
 
         if ($enrolledLabs != false) {
-            $round = $this->returnValueWhere($where['roundId'], 'tbl_bac_rounds');
 
+            $round = $this->returnValueWhere($where['roundId'], 'tbl_bac_rounds');
+            $emails = array();
             foreach ($enrolledLabs as $key => $value) {
                 $labDetails = $this->returnValueWhere($value->labId, 'participant');
                 if (!empty($labDetails)) {
                     if ($labDetails['email'] != '' || $labDetails['email'] != null) {
-                        $this->publishedMails($labDetails, $round);
+                        array_push($emails, $labDetails['email']);
                     }
                 }
             }
+            $this->publishedMails($emails, $round);
         }
     }
 
     public function publishedMails($lab, $round) {
 
-        $name = $lab['institute_name'] . ' ' . $lab['unique_identifier'];
+        $name = 'Laboratory';
 
         $message = 'The results for for round, <b>' . $round['roundName'] . ' : ' . $round['roundCode'] . '</b> have been evaluated and published.<br>Please log in to view.';
 
         $body = $this->createEmailBody($name, $message);
 
-        $this->sendemailAction($body, $lab['email'], true);
+        $this->sendemailAction($body, $lab, true);
+
+        return true;
     }
 
     public function getindividuallabsAction() {
@@ -919,7 +924,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                                 }
                             }
                             if (!$exist) {
-                               
+
                                 array_push($lab, $reportData[$keys]->participantId);
                             } else {
                                 
@@ -1194,7 +1199,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $orderArray = ['id', 'dateCreated'];
         $col = ['*'];
 
-        $groupArray = ['shipmentId', 'roundId', 'sampleId'];
+        $groupArray = ['participantId', 'roundId', 'sampleId'];
 
 
         $report = array();
@@ -1209,6 +1214,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
 
                     if ($sampleToPanel != false) {
+
                         foreach ($sampleToPanel as $ky => $val) {
                             $whereParticipantId['participant_id'] = $val->participantId;
                             $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
@@ -1225,6 +1231,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                             $whereSamples['sampleId'] = $val->sampleId;
                             $whereSamples['shipmentId'] = $val->shipmentId;
+                            $whereSamples['participantId'] = $val->participantId;
 
                             $sampleToPanel[$ky]->totalSent = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
 
@@ -1248,6 +1255,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
 
             if ($sampleToPanel != false) {
+
                 foreach ($sampleToPanel as $ky => $val) {
                     $whereParticipantId['participant_id'] = $val->participantId;
                     $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
@@ -1264,7 +1272,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
 
                     $whereSamples['sampleId'] = $val->sampleId;
                     $whereSamples['shipmentId'] = $val->shipmentId;
-
+                    $whereSamples['participantId'] = $val->participantId;
                     $sampleToPanel[$ky]->totalSent = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $whereSamples, 'roundId');
 
                     $whereSamples['deliveryStatus'] = 4;

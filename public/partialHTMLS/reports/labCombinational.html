@@ -131,7 +131,7 @@
             <tr dir-paginate="lab in reports.genStatPerformance|filter:searchRounds | itemsPerPage: samples.itemsPerPage "
                 class="no-padding table-bordered" style="margin: 0px!important;">
 
-                <td>{{lab.labName}}.</td>
+                <td><b>{{lab.labName}}</b></td>
                 <td class="no-padding" ng-repeat="sample in lab.sampleInfo">
                     <table class="no-padding table" style="margin: 0px!important;">
                         <tr CLASS="table table-bordered no-padding">
