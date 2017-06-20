@@ -427,7 +427,8 @@
             }
             console.log($scope.samples.linksObject)
 
-        }
+        };
+        
         $scope.samples.currentRound = {};
         $scope.samples.getCurrentActiveRound = function () {
             try {

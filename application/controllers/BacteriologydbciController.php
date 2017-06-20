@@ -509,9 +509,23 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $jsPostData = file_get_contents('php://input');
 
         $jsPostData = (array) (json_decode($jsPostData));
+//        print_r($jsPostData);
+//        exit;
         if (is_array($jsPostData)) {
+            $insertData = (array) $jsPostData['data'];
+            $dataDB['data'] = $this->dbConnection->insertData($jsPostData['tableName'], $insertData);
+            
+            if ($jsPostData['tableName'] == 'tbl_bac_response_results') {
+                $where['userId'] = $insertData['userId'];
+                $where['sampleId'] = $insertData['sampleId'];
+                $where['panelToSampleId'] = $insertData['panelToSampleId'];
+                $where['roundId'] = $insertData['roundId'];
 
-            $dataDB['data'] = $this->dbConnection->insertData($jsPostData['tableName'], (array) $jsPostData['data']);
+                $updateData['responseStatus'] = 1;
+
+                $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $updateData);
+            }
+            
             $dataDB['status'] = 1;
         } else {
             $dataDB['status'] = 0;
