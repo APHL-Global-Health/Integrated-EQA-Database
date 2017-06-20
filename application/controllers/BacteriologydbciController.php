@@ -308,13 +308,14 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
         $jsPostData = (array) (json_decode($jsPostData));
 //        print_r($whereLab);
+        $wherePP = array();
         if (isset($jsPostData['checkLab'])) {
             if ($jsPostData['checkLab'] == 1) {
                 $wherePP['labId'] = $whereLab['participant_id'];
             }
         }
 
-        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs');
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs', $wherePP);
 
         if ($round != false) {
             foreach ($round as $key => $value) {
@@ -1367,6 +1368,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $whereShipmentData = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
 
         if ($whereShipmentData != false) {
+            $shipmentData['okStatus'] = 0;
             foreach ($whereShipmentData as $key => $value) {
                 $whereTBPM['id'] = $whereShipmentData[$key]->panelId;
                 $updateTBPM['dateDelivered'] = $shipmentData['dateReceived'];
@@ -1377,28 +1379,69 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
                 /*                 * *********************update tbl_bac_sample_to_panel************************** */
 
-                $updateTBSP['dateDelivered'] = date('Y-m-d', time());
-                $updateTBSP['deliveryStatus'] = $shipmentData['shipmentStatus'] == 3 ? 4 : $shipmentData['shipmentStatus'];
+                $updateTBSP['dateDelivered'] = date('Y-m-d h:i:s', time());
+                $updateTBSP['deliveryStatus'] = $update['shipmentStatus'] == 3 ? 4 : $update['shipmentStatus'];
                 $updateTBSP['shipmentId'] = $shipmentId;
                 $whereTBSP['panelId'] = $whereShipmentData[$key]->panelId;
                 $whereTBSP['roundId >'] = 0;
                 $whereTBSP['participantId'] = $where['participantId'];
 
                 $updateTBSMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
-
+                $shipmentData['dateDelivered'] = $updateTBSP['dateDelivered'];
+                $shipmentData['okStatus'] = $update['shipmentStatus'];
 
 //                print_r($whereTBPM);
 //                exit;
                 /*                 * ****************************************** */
             }
+            $this->returnMicroAdmins($shipmentData, $where['participantId']);
         }
         /*         * ************************************************************************************************************** */
 //        exit;
         return true;
     }
 
-    public function returnMicroAdmins() {
-        
+    public function testtimeAction() {
+        echo date('Y-m-d H:i:j');
+        exit;
+    }
+
+    public function returnMicroAdmins($shipmentInfo, $participantId) {
+        $where['IsVl'] = 3;
+        $systemAdmin = $this->dbConnection->selectFromTable('system_admin', $where);
+
+
+        if (count($systemAdmin) > 0) {
+
+            $email = array();
+            foreach ($systemAdmin as $key => $value) {
+
+
+                if (!in_array($systemAdmin[$key]->primary_email, $email)) {
+                    array_push($email, $systemAdmin[$key]->primary_email);
+                }
+            }
+            $whereRoundId['id'] = $shipmentInfo['roundId'];
+
+            $roundInfo = $this->returnValueWhere($whereRoundId, 'tbl_bac_rounds');
+            $whereLabId['participant_id'] = $participantId;
+            $labInfo = $this->returnValueWhere($whereLabId, 'participant');
+            $labName = $labInfo['institute_name'] . '-' . $labInfo['lab_name'];
+            $status = '';
+            if ($shipmentInfo['okStatus'] == 3) {
+                $status = " has been RECEIVED in at labs (" . $labName . ") on <b>" . $shipmentInfo['dateDelivered'] . " </b>";
+            } else if ($shipmentInfo['okStatus'] == 5) {
+                $status = " was REJECTED at (" . $labName . ") on <b>" . $shipmentInfo['dateDelivered'] . " </b>";
+            }
+            $message['message'] = '';
+            $common = new Application_Service_Common();
+            $message['message'] .= " Shipment (" . $shipmentInfo['shipmentName'] . ") of round  <b>" . $roundInfo['roundName'] . "</b>"
+                    . $status;
+            $message['message'] = "This is to notify you <br> " . $message['message'];
+            $message['subject'] = 'ACKNOWLEDGEMENT OF SHIPMENT DELIVERY';
+            $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
+        }
+        return true;
     }
 
     public function updatetablewhereAction() {
