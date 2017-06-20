@@ -280,7 +280,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $whereRound['evaluated'] = 0;
         $whereLab = $this->returnUserLabDetails();
 
-        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds',$whereRound);
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds', $whereRound);
 //        var_dump($whereLab);
         if ($round != false) {
             foreach ($round as $key => $value) {
@@ -705,7 +705,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
                             $whereId = $tableName == 'tbl_bac_sample_to_panel' ? $dataDB[$key]->id : $dataDB[$key]->panelToSampleId;
                             $sampleInfo = $this->returnSampleInfo($whereId);
 
-                            $dataDB[$key]->daysLeftOnTen = $this->converttodays($round['endDate']);//> 10 ? 0 : $sampleInfo['endDaysLeft'];
+                            $dataDB[$key]->daysLeftOnTen = $this->converttodays($round['endDate']); //> 10 ? 0 : $sampleInfo['endDaysLeft'];
                             $dataDB[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 0 ? 1 : 0;
 
 
@@ -1157,9 +1157,9 @@ class BacteriologydbciController extends Zend_Controller_Action {
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
 
 
-                        $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft;//$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                        $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft; //$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
 
-                        $dataDB[$key]->allowedOnTenDays =  $dataDB[$key]->daysLeft > 0 ? 1 : 0;
+                        $dataDB[$key]->allowedOnTenDays = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                     }
                     $data['status'] = 1;
@@ -1352,11 +1352,12 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $shipmentStatus = $shipmentData['shipmentStatus'];
         $shipmentId = $shipmentData['id'];
         /*         * ***************************Update tbl_bac_panels_shipments****************************** */
-        $updatetbl_bac_panels_shipments['deliveryStatus'] = $shipmentStatus;
+        $updatetbl_bac_panels_shipments['deliveryStatus'] = $update['shipmentStatus'];
         $updatetbl_bac_panels_shipments['dateDelivered'] = date('Y-m-d', time());
         $updatetbl_bac_panels_shipments['quantity'] = 1;
         $updatetbl_bac_panels_shipments['receivedBy'] = $shipmentData['addressedTo'];
         $whereTBPS['shipmentId'] = $shipmentId;
+        $whereTBPS['participantId'] = $where['participantId'];
         $whereTBPS['roundId >'] = 0;
         $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
         /*         * ****************************************************************************************** */
@@ -1377,11 +1378,15 @@ class BacteriologydbciController extends Zend_Controller_Action {
                 /*                 * *********************update tbl_bac_sample_to_panel************************** */
 
                 $updateTBSP['dateDelivered'] = date('Y-m-d', time());
-                $updateTBSP['deliveryStatus'] = $shipmentData['shipmentStatus'];
+                $updateTBSP['deliveryStatus'] = $shipmentData['shipmentStatus'] == 3 ? 4 : $shipmentData['shipmentStatus'];
                 $updateTBSP['shipmentId'] = $shipmentId;
                 $whereTBSP['panelId'] = $whereShipmentData[$key]->panelId;
-                $whereTBSP['roundId > '] = 0;
-                $updateTBPMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
+                $whereTBSP['roundId >'] = 0;
+                $whereTBSP['participantId'] = $where['participantId'];
+
+                $updateTBSMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
+
+
 //                print_r($whereTBPM);
 //                exit;
                 /*                 * ****************************************** */
@@ -1392,19 +1397,39 @@ class BacteriologydbciController extends Zend_Controller_Action {
         return true;
     }
 
+    public function returnMicroAdmins() {
+        
+    }
+
     public function updatetablewhereAction() {
         try {
             $data['status'] = 0;
             $dataArray = $this->returnArrayFromInput();
 
+            $wherePosted = (array) $dataArray['where'];
+            $postedData = (array) $dataArray['updateData'];
+
+
+
             if (is_array($dataArray)) {
 
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], (array) $dataArray['updateData']);
+
 
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
-                    if ($data['status'] == 1) {
-                        $this->updateShipmentRelatedTables((array) $dataArray['where'], (array) $dataArray['updateData']);
+
+                    if (in_array($postedData['shipmentStatus'], array(3, 5))) {
+
+                        $this->updateShipmentRelatedTables($wherePosted, $postedData);
+//                        print_r($wherePosted);
+//                        exit;
+                        $data['status'] = 1;
+                        $data['message'] = 'Updated successfully';
+                    } else {
+
+                        $data = $this->dbConnection->updateTable($dataArray['tableName'], $wherePosted, $postedData);
                     }
+                } else {
+                    $data = $this->dbConnection->updateTable($dataArray['tableName'], $wherePosted, $postedData);
                 }
             } else {
                 $data['message'] = ('could not find your request');

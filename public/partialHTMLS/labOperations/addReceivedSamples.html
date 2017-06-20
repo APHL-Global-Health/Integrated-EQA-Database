@@ -12,7 +12,7 @@
 
     <!--</h3>-->
     <br>
-    <div class="panel panel-primary">
+    <div class="panel panel-primary" ng-init="samples.getDistinctShipmentsForDelivery()">
         <div class="panel panel-heading">
             Receive Shipments
         </div>
@@ -45,79 +45,80 @@
             <hr>
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
-                <tr>
-                    <th>#.</th>
-                    <th>Shipment Name</th>
-                    <th>No Of Panels</th>
-                    <th>Courier</th>
-                    <th>Courier Contact</th>
-                    <th>Days Left</th>
+                    <tr>
+                        <th>#.</th>
+                        <th>Shipment Name</th>
+                        <th>No Of Panels</th>
+                        <th>Courier</th>
+                        <th>Courier Contact</th>
+                        <th>Days Left</th>
 
-                    <th>Round ID</th>
-                    <th>Dispatched On</th>
-                    <th>Prepared On</th>
-                    <!--                                <th>Date Saved</th>-->
-                    <th>Days Left</th>
-                    <th>Ship't Status</th>
-                    <th></th>
-                </tr>
+                        <th>Round ID</th>
+                        <th>Dispatched On</th>
+                        <th>Prepared On</th>
+                        <!--                                <th>Date Saved</th>-->
+                        <th>Days Left</th>
+                        <th>Ship't Status</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr dir-paginate="shipment in samples.receivedShipments | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
-                    <td>{{$index+1}}</td>
-                    <td><a href="#"
-                           ng-click="samples.showShipmentAndPanels('viewReceivedSamples',shipment)"
-                           data-placement="right" data-type="info" data-container="body"
-                           data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success"
-                           
-                           data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
+                    <tr dir-paginate="shipment in samples.receivedShipments | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                        <td>{{$index + 1}}</td>
+                        <td>
+                            <a href="" target="_SELF" ng-show="shipment.deliveryStatus != 5"
+                               ng-click="samples.showShipmentAndPanels('viewReceivedSamples', shipment)"
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success"
 
-                    >{{shipment.shipmentName}}</a>
-                        
-                <x></x>
-                    </td>
-                    <td>{{shipment.totalPanelsAdded}}</td>
-                    <td>{{shipment.dispatchCourier}}</td>
-                    <td>{{shipment.courierContactNumber}}</td>
-                    <td>{{shipment.daysLeft}}</td>
-                    <td nowrap>{{shipment.roundCode}}</td>
-                    <td nowrap>{{shipment.dateDispatched}}</td>
+                               data-title="Click here to view more about {{shipment.shipmentName}} shipment" bs-tooltip
 
-                    <td nowrap>{{shipment.datePrepared}}</td>
-                    <td nowrap>{{shipment.daysLeft}}</td>
-                    <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
-                    <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+                               >{{shipment.shipmentName}}</a>
 
-                    <td nowrap>
-                        <!--<a ng-click="samples.receiveShipment(shipment,'receiveShipments')"-->
+                <x ng-show="shipment.deliveryStatus == 5">{{shipment.shipmentName}}</x>
+                </td>
+                <td>{{shipment.totalPanelsAdded}}</td>
+                <td>{{shipment.dispatchCourier}}</td>
+                <td>{{shipment.courierContactNumber}}</td>
+                <td>{{shipment.daysLeft}}</td>
+                <td nowrap>{{shipment.roundCode}}</td>
+                <td nowrap>{{shipment.dateDispatched}}</td>
 
-                        <!--href="#receiveShipments" data-backdrop="false" data-toggle="modal">-->
-                        <!--<i class="fa fa-truck">-->
+                <td nowrap>{{shipment.datePrepared}}</td>
+                <td nowrap>{{shipment.daysLeft}}</td>
+                <td nowrap>{{samples.returnShipmentStatus(shipment.deliveryStatus)}}</td>
+                <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 
-                        <!--</i></a>&nbsp;-->
-                        <button class="btn btn-success btn-sm"
-                           ng-click="samples.receiveShipment(shipment,'receiveShipments')"
-                           href="#receiveShipments" data-backdrop="false" data-toggle="modal"
-                           data-placement="right" data-type="info" data-container="body"
-                           data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Receive Shipment" bs-tooltip
+                <td nowrap>
+                    <!--<a ng-click="samples.receiveShipment(shipment,'receiveShipments')"-->
 
-                           ng-disabled="shipment.deliveryStatus !=2">
-                            <i class="fa fa-download"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm"
-                           ng-click="samples.updateStatusShipment('tbl_bac_shipments',5,shipment)"
+                    <!--href="#receiveShipments" data-backdrop="false" data-toggle="modal">-->
+                    <!--<i class="fa fa-truck">-->
 
-                           data-placement="right" data-type="info" data-container="body"
-                           data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Reject Shipment" bs-tooltip
+                    <!--</i></a>&nbsp;-->
+                    <button class="btn btn-success btn-sm"
+                            ng-click="samples.receiveShipment(shipment, 'receiveShipments')"
+                            href="#receiveShipments" data-backdrop="false" data-toggle="modal"
+                            data-placement="right" data-type="info" data-container="body"
+                            data-animation="am-fade-and-scale"
+                            data-trigger="hover" data-type="success" data-title="Receive Shipment" bs-tooltip
 
-                           ng-disabled="shipment.deliveryStatus !=2">
-                            <i class="fa fa-remove"></i>
-                        </button>
+                            ng-disabled="shipment.deliveryStatus != 2">
+                        <i class="fa fa-download"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" ng-hide="true"
+                            ng-click="samples.updateStatusShipment('tbl_bac_shipments', 5, shipment)"
 
-                    </td>
+                            data-placement="right" data-type="info" data-container="body"
+                            data-animation="am-fade-and-scale"
+                            data-trigger="hover" data-type="success" data-title="Reject Shipment" bs-tooltip
+
+                            ng-disabled="shipment.deliveryStatus != 6">
+                        <i class="fa fa-remove"></i>
+                    </button>
+
+                </td>
                 </tr>
 
                 </tbody>

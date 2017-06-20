@@ -6,8 +6,8 @@
                         ng-click="samples.hideShipmentModal()">&times;
                 </button>
                 <h4 class="modal-title">Receive Shipment
-                    {{samples.currentShipment.shipmentName | capitalizeLetter}} :
-                    {{samples.currentShipment.shipmentDsc | capitalizeLetter}}
+                    {{samples.currentShipment.shipmentName| capitalizeLetter}} 
+                    {{samples.currentShipment.shipmentDsc| capitalizeLetter}}
 
                 </h4>
             </div>
@@ -19,26 +19,12 @@
                         <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
                     </div>
                     <form class="form-horizontal " name="receiveShipmentForm" novalidate="">
-                        <!--<div class="form-group "-->
-                        <!--ng-class="{ 'has-error'  : receiveShipmentForm.receivedBy.$invalid && !receiveShipmentForm.receivedBy.$pristine }">-->
-                        <!--<label for="receivedBy" class="col-2 col-form-label">Received By</label>-->
-                        <!--<div class="col-10">-->
-                        <!--<input class="form-control" type="text" id="receivedBy" required name="receivedBy"-->
-                        <!--ng-pattern="samples.alphaNumHyDashSpaceRegExp"-->
-                        <!--ng-model="samples.receiveShipmentFormData.receivedBy">-->
-                        <!--</div>-->
-                        <!--<small class="text-danger col-md-12"-->
-                        <!--ng-show="receiveShipmentForm.panelName.$invalid && !receiveShipmentForm.panelName.$pristine">-->
-                        <!--Error : Required & Only numbers,alphabets,hyphen and dashes allowed-->
-                        <!--</small>-->
-                        <!--</div>-->
-
                         <div class="form-group " ng-hide="true"
                              ng-class="{ 'has-error'  : receiveShipmentForm.dateReceived.$invalid && !receiveShipmentForm.dateReceived.$pristine }">
                             <label for="dateReceived" class="col-2 col-form-label">Actual Date Received</label>
                             <div class="col-10">
 
-                                <div class="input-group">
+                                <div class="input-group" ng-hide="true">
                                     <span class="input-group-addon" id="basic-addon2"><i
                                             class="fa fa-calendar"></i></span>
                                     <input type="text" class="form-control col-md-12" id="dateReceived"
@@ -56,11 +42,11 @@
                             </div>
 
                         </div>
-                        <div class="form-group "
+                        <div class="form-group " ng-hide="true"
                              ng-class="{ 'has-error'  : receiveShipmentForm.panelsReceived.$invalid && !receiveShipmentForm.panelsReceived.$pristine }">
                             <label for="panelsReceived" class="col-2 col-form-label"># Panels Received</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="panelsReceived" required
+                                <input class="form-control" type="text" id="panelsReceived" 
                                        name="panelsReceived" ng-pattern="samples.numericOnly" style="max-width: 47%;"
                                        ng-model="samples.receiveShipmentFormData.panelsReceived">
                             </div>
@@ -69,21 +55,7 @@
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                             </small>
                         </div>
-                        <div class="form-group "
-                             ng-class="{ 'has-error'  : receiveShipmentForm.receiveComments.$invalid && !receiveShipmentForm.receiveComments.$pristine }">
-                            <label for="receiveComments" class="col-2 col-form-label">Receive Comments</label>
-                            <div class="col-10">
-                                <textarea class="form-control" id="receiveComments" required name="receiveComments"
-                                          ng-pattern="samples.alphaNumHyDashSpaceRegExp" style="max-width: 47%;"
-                                          ng-model="samples.receiveShipmentFormData.receiveComments">
 
-                                </textarea>
-                            </div>
-                            <small class="text-danger col-md-12"
-                                   ng-show="receiveShipmentForm.receiveComments.$invalid && !receiveShipmentForm.receiveComments.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                            </small>
-                        </div>
                         <!--<div class="form-group "-->
                         <!--ng-class="{ 'has-error'  : receiveShipmentForm.courier.$invalid && !receiveShipmentForm.courier.$pristine }">-->
                         <!--<label for="type" class="col-2 col-form-label">Courier</label>-->
@@ -98,11 +70,11 @@
                         <!--</small>-->
                         <!--</div>-->
 
-                        <div class="form-group "
+                        <div class="form-group " ng-hide="true"
                              ng-class="{ 'has-error'  : receiveShipmentForm.storage.$invalid && !receiveShipmentForm.storage.$pristine }">
                             <label for="storage" class="col-2 col-form-label">Means Of Storage</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="storage" required name="storage"
+                                <input class="form-control" type="text" id="storage" name="storage"
                                        ng-pattern="samples.alphaNumHyDashSpaceRegExp" style="max-width: 47%;"
                                        ng-model="samples.receiveShipmentFormData.storage">
                             </div>
@@ -112,27 +84,44 @@
                             </small>
                         </div>
 
-                        <div class="form-group " ng-hide="true"
-                             ng-class="{ 'has-error'  : receiveShipmentForm.tempAtReceiving.$invalid && !receiveShipmentForm.tempAtReceiving.$pristine }">
+                        <div class="form-group " 
+                             ng-class="{ 'has-error'  : receiveShipmentForm.shipmentStatus.$invalid && !receiveShipmentForm.shipmentStatus.$pristine }">
                             <label for="type" class="col-2 col-form-label">Temperature</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="" name="tempAtReceiving"
-                                       ng-pattern="samples.numericStorage" style="max-width: 47%;"
-                                       ng-model="samples.receiveShipmentFormData.tempAtReceiving">
+                                <select class="form-control" type="text" id="" name="shipmentStatus"
+                                        style="max-width: 47%;"
+                                        ng-model="samples.receiveShipmentFormData.shipmentStatus">
+                                    <option selected="" value="3"> Received Okay </option>
+                                    <option selected="" value="5"> Spoilt </option>
+                                </select>
                             </div>
                             <small class="text-danger col-md-12"
-                                   ng-show="receiveShipmentForm.tempAtReceiving.$invalid && !receiveShipmentForm.tempAtReceiving.$pristine">
+                                   ng-show="receiveShipmentForm.shipmentStatus.$invalid && !receiveShipmentForm.shipmentStatus.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                             </small>
                         </div>
+                        <div class="form-group "
+                             ng-class="{ 'has-error'  : receiveShipmentForm.receiveComments.$invalid && !receiveShipmentForm.receiveComments.$pristine }">
+                            <label for="receiveComments" class="col-2 col-form-label">Receive Comments</label>
+                            <div class="col-10">
+                                <textarea class="form-control" id="receiveComments" required name="receiveComments"
+                                          ng-pattern="samples.alphaNumHyDashSpaceRegExp" style="max-width: 47%;"
+                                          ng-model="samples.receiveShipmentFormData.receiveComments">
 
+                                </textarea>
+                            </div>
+                            <small class="text-danger col-md-12" 
+                                   ng-show="receiveShipmentForm.receiveComments.$invalid && !receiveShipmentForm.receiveComments.$pristine">
+                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                            </small>
+                        </div>
                         <div class="form-group ">
                             <label for="storage" class="col-2 col-form-label"></label>
                             <div class="col-10">
                                 <button class="btn btn-success col-md-12" style="max-width: 47%;"
                                         ng-disabled="receiveShipmentForm.$invalid || samples.savingInProgress"
                                         ng-click="samples.saveReceiveShipmentForm(samples.receiveShipmentFormData)"
-                                >Save Receiving Details<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                                        >Save Receiving Details<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                                 </button>
                             </div>
                         </div>

@@ -2799,14 +2799,14 @@
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
 
-                receiveShipmentData.shipmentStatus = 3;
+//                receiveShipmentData.shipmentStatus = 3;
                 console.log(receiveShipmentData);
                 receiveShipmentData.dateReceived = new Date();
 
                 var postedData = {};
                 postedData.tableName = 'tbl_bac_shipments';
                 postedData.updateData = receiveShipmentData;
-                postedData.where = {id: $scope.samples.currentShipment.id};
+                postedData.where = {id: $scope.samples.currentShipment.id,participantId : $scope.samples.loginDetails.participant_id};
                 if (angular.isDefined(postedData)) {
                     $scope.samples.updateWhere(postedData, 0);
                 }
