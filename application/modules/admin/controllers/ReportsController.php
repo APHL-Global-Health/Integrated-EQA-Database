@@ -1447,7 +1447,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         $orderArray = ['id', 'dateCreated'];
         $col = ['id', 'participantId', 'roundId', 'sampleId'];
 
-        $groupArray = ['participantId', 'roundId', 'sampleId'];
+        $groupArray = ['roundId', 'sampleId'];
 
 //        var_dump($labs);
 //        exit;
@@ -1470,7 +1470,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     if ($sampleToPanel != false) {
                         foreach ($sampleToPanel as $ky => $val) {
 
-                            $where['participantId'] = $val->participantId;
+//                            $where['participantId'] = $val->participantId;
                             $where['roundId'] = $val->roundId;
                             $where['sampleId'] = $val->sampleId;
 
@@ -1509,7 +1509,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
             if ($sampleToPanel != false) {
                 foreach ($sampleToPanel as $ky => $val) {
 
-                    $where['participantId'] = $val->participantId;
+//                    $where['participantId'] = $val->participantId;
                     $where['roundId'] = $val->roundId;
                     $where['sampleId'] = $val->sampleId;
 

@@ -101,12 +101,12 @@
                     <input class="form-control col-md-12" type="text"
                            ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter Details of primary media "
-                           ng-model="reports.currentClickedLabResults.primaryMedia" required
+                           ng-model="reports.currentClickedLabResults.primaryMedia" 
                            name="primaryMedia">
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.primaryMediaScore" required
+                                       ng-model="reports.currentClickedLabResults.primaryMediaScore" 
                                        name="primaryMediaScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine ||
@@ -115,12 +115,12 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter Incubation conditions"
-                           ng-model="reports.currentClickedLabResults.incubationConditions" required
+                           ng-model="reports.currentClickedLabResults.incubationConditions" 
                            name="incubationConditions">
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.incubationConditionsScore" required
+                                       ng-model="reports.currentClickedLabResults.incubationConditionsScore" 
                                        name="incubationConditionsScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine ||
@@ -134,7 +134,7 @@
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.colonialMorphologyScore" required
+                                       ng-model="reports.currentClickedLabResults.colonialMorphologyScore" 
                                        name="colonialMorphologyScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine ||
@@ -143,12 +143,12 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter Bacterial quantification"
-                           ng-model="reports.currentClickedLabResults.bacterialQualification" required
+                           ng-model="reports.currentClickedLabResults.bacterialQualification" 
                            name="bacterialQualification">
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.bacterialQualificationScore" required
+                                       ng-model="reports.currentClickedLabResults.bacterialQualificationScore" 
                                        name="bacterialQualificationScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine ||
@@ -165,7 +165,7 @@
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.bacterialReagentsScore" required
+                                       ng-model="reports.currentClickedLabResults.bacterialReagentsScore" 
                                        name="bacterialReagentsScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
@@ -174,11 +174,11 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please Discuss further processing"
-                           ng-model="reports.currentClickedLabResults.isolateProcessing" required name="isolateProcessing">
+                           ng-model="reports.currentClickedLabResults.isolateProcessing"  name="isolateProcessing">
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.isolateProcessingScore" required
+                                       ng-model="reports.currentClickedLabResults.isolateProcessingScore" 
                                        name="isolateProcessingScore"></td>
             </tr>
 

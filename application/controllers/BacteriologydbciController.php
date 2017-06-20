@@ -255,8 +255,8 @@ class BacteriologydbciController extends Zend_Controller_Action {
     public function getenrolledroundsAction() {
         $whereLab = $this->returnUserLabDetails();
         $where['labId'] = $whereLab['participant_id'];
-        $where['status'] = 2;
-        $round = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $where);
+        $where['status'] = 1;
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs', $where);
         if ($round != false) {
             foreach ($round as $key => $value) {
                 $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
@@ -514,7 +514,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         if (is_array($jsPostData)) {
             $insertData = (array) $jsPostData['data'];
             $dataDB['data'] = $this->dbConnection->insertData($jsPostData['tableName'], $insertData);
-            
+
             if ($jsPostData['tableName'] == 'tbl_bac_response_results') {
                 $where['userId'] = $insertData['userId'];
                 $where['sampleId'] = $insertData['sampleId'];
@@ -525,7 +525,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
                 $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $updateData);
             }
-            
+
             $dataDB['status'] = 1;
         } else {
             $dataDB['status'] = 0;
@@ -1636,6 +1636,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         } else {
             $postedData['participantId'] = $userDetails['participant_id'];
         }
+        $postedData['responseStatus'] = 1;
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
@@ -1877,6 +1878,8 @@ class BacteriologydbciController extends Zend_Controller_Action {
     public function getresultsonroundAction() {
         $where['roundId'] = 1;
         $where['markedStatus'] = 1;
+        $whereLab = $this->returnUserLabDetails();
+        $where['participantId'] = $whereLab['participant_id'];
         $getSampleResults = $this->dbConnection->selectFromTable('tbl_bac_response_results', $where);
 
         if ($getSampleResults !== false) {

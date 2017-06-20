@@ -429,7 +429,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         msg = shipment.evaluated == 1 ? ' AGAIN' : '';
         $.confirm({
             title: 'Confirm Evaluation!',
-            theme: 'supervan',
+            theme: 'light',
             content: 'Are you want to evaluate this shipment ' + shipment.shipmentName + msg,
             buttons: {
                 'Evaluate': {
@@ -453,7 +453,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.confirmDialog = function (message, callbackFunction) {
         $.confirm({
             title: 'Confirm !',
-            theme: 'supervan',
+            theme: 'light',
             content: message,
             buttons: {
                 'Confirm': {
@@ -734,7 +734,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
                                 $scope.reports.getIndividualReport($scope.reports.whereIndividualLabs)
                             } else {
-                                EptServices.EptServiceObject.returnServerErrorAlert();
+                                EptServices.EptServiceObject.returnServerErrorAlert(response.message);
                             }
                         })
                         .error(function (error) {
