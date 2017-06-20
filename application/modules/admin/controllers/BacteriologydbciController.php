@@ -911,7 +911,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $laboratory[$key]->roundId = $whereLab['roundId'];
                 $enrolled = $this->dbConnection->selectCount('tbl_bac_rounds_labs', $whereLab, 'id');
                 $laboratory[$key]->enrolled = $enrolled;
-                if ($postedData['status'] == 2) {
+                if ($postedData['status'] == 2 &&$enrolled==0) {
                     unset($laboratory[$key]);
                 }
             }
