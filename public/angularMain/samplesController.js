@@ -169,7 +169,7 @@
 
             $.confirm({
                 title: 'Confirm!',
-                theme: 'supervan',
+                theme: 'light',
                 content: 'Please confirm start of round! ' + round.roundName,
                 buttons: {
                     'start round': {
@@ -700,7 +700,7 @@
         $scope.samples.confirmDialog = function (message, callbackFunction) {
             $.confirm({
                 title: 'Confirm !',
-                theme: 'supervan',
+                theme: 'light',
                 content: message,
                 buttons: {
                     'Confirm': {
@@ -1047,7 +1047,7 @@
             if (round.id > 0) {
                 $.confirm({
                     title: 'Confirm changes!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please note the current round will be overwritten to the shipments',
                     buttons: {
                         'Confirm': {
@@ -1390,7 +1390,7 @@
             try {
                 $.confirm({
                     title: 'Confirm delete!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to delete this record,this action cannot be undone',
                     buttons: {
                         'Delete': {
@@ -1589,7 +1589,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to dispatch,this action can not be undone! ',
                     buttons: {
                         'Dispatch Shipment': {
@@ -1680,7 +1680,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm action, action can not be undone! ' +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +
@@ -1890,7 +1890,7 @@
             if (correctData) {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are  you sure you want to submit the results anti microbacterial data? ',
                     buttons: {
                         'Confirm Action': {
@@ -2058,7 +2058,7 @@
             try {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message,
                     buttons: {
                         'Confirm Action': {
@@ -2151,7 +2151,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm cancellation of shipment,this cant be undone !' +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +
@@ -2419,7 +2419,7 @@
 
                         $.confirm({
                             title: 'Confirm!',
-                            theme: 'supervan',
+                            theme: 'light',
                             content: 'Please confirm issue of samples,this action can not be undone to ' + users.length + ' User(s)',
                             buttons: {
                                 'Issue Sample': {
@@ -2680,7 +2680,7 @@
                 }
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +

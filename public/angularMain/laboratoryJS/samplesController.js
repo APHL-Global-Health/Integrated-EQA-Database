@@ -138,6 +138,15 @@
             }
         }
 
+        $scope.samples.returnRowColor = function (status) {
+            console.log(status)
+            if (status == 0) {
+                return 'btn-danger';
+            } else {
+                return 'btn-success';
+            }
+        };
+
         $scope.samples.returnRange = function (range) {
             range = Number(range);
             range++;
@@ -2806,7 +2815,7 @@
                 var postedData = {};
                 postedData.tableName = 'tbl_bac_shipments';
                 postedData.updateData = receiveShipmentData;
-                postedData.where = {id: $scope.samples.currentShipment.id,participantId : $scope.samples.loginDetails.participant_id};
+                postedData.where = {id: $scope.samples.currentShipment.id, participantId: $scope.samples.loginDetails.participant_id};
                 if (angular.isDefined(postedData)) {
                     $scope.samples.updateWhere(postedData, 0);
                 }

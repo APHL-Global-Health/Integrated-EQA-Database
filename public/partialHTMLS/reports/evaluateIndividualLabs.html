@@ -392,10 +392,12 @@
             <!--</tr>-->
         </tbody>
     </table>
-
+    <div class="btn-danger alert" ng-show=" reports.currentClickedLabResults.totalMicroAgentsScore > 100">
+        AST marks have exceeded allowed 100%
+    </div>
 
     <div class="col-md-12 btn btn-warning"
          ng-click="reports.evaluateBoth(reports.currentClickedLabResults, reports.microagentsData.microAgents)"
-         ng-disabled="resultsData.$invalid || reports.currentClickedLabResults.totalMicroAgentsScore > 100"> Evaluate Both
+         ng-disabled="resultsData.$invalid"> Evaluate Both
     </div>
 </div>
