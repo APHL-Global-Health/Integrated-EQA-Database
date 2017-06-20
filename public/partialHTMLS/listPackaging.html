@@ -1,4 +1,4 @@
-<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='viewPackaging'">
+<div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink=='listPackaging'">
     <div class="main-div" ng-show="!samples.showPanelModal">
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
@@ -148,8 +148,7 @@
                                                 {{samples.sampleToPanel.length}} records
                                             </div>
                                         </div>
-                                        <table class="table"
-                                        >
+                                        <table class="table">
                                             <tr>
                                                 <th></th>
                                                 <th>Batch Name</th>
@@ -191,22 +190,16 @@
             <div ng-if="!expand">
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
-                    <tr>
-                        <th>#.</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Label</th>
-                        <th>Prepared on</th>
-
-                        <th>Delivered on</th>
-
-                        <th>Status</th>
-                        <th>Number of Samples</th>
-                        <!--                                <th>Date Saved</th>-->
-                        <th>Shipment Number</th>
-                        <th>Created on</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Label</th>
+                            <th>Date Prepared</th>
+                            <th>Date Shipped</th>
+                            <th>Number of Samples</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                     <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
@@ -217,45 +210,32 @@
                         <td nowrap>{{panel.panelDatePrepared}}</td>
                         <td nowrap>{{panel.panelDateOfDelivery}}</td>
 
-                        <td nowrap>Active</td>
-                        <td nowrap>{{panel.totalSamplesAdded}}</td>
-                        <td nowrap>{{panel.shipmentNo}}</td>
-                        <td nowrap>{{panel.dateCreated.substring(0,10)}}</td>
+                        <td nowrap style="text-align: center;">{{panel.totalSamplesAdded}}</td>
                         <td nowrap>
-                            <a class="btn btn-info btn-sm"
-                               data-placement="right" data-type="info" data-container="body"
-                               data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Edit Packaging" bs-tooltip
-
+                            <a class="btn btn-info btn-sm" title="Edit Packaging"
                                ng-click="samples.editFunction(panel,'tbl_bac_panel_mst')">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus!=0"
-                               data-placement="right" data-type="info" data-container="body"
-                               data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Remove Packaging" bs-tooltip
-
+                               title="Remove Packaging"
                                ng-click="samples.deleteCustomRow(panel.id,'tbl_bac_panel_mst')"><i
                                     class="fa fa-remove"></i></a>
                             <!--<a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"-->
                                <!--data-placement="right" data-type="info" data-container="body"-->
                                <!--data-animation="am-fade-and-scale"-->
-                               <!--data-trigger="hover" data-type="success" data-title="Lock Packaging" bs-tooltip-->
+                               <!--data-trigger="hover" data-type="success" data-title="Lock Packaging"-->
                             <!--&gt;-->
                                 <!--<i class="fa fa-unlock"></i>-->
                             <!--</a>-->
                             <a class="btn btn-primary btn-sm" about="" ng-disabled="panel.panelStatus!=0"
                                ng-click="samples.addSamplesToPanel(panel)"
                                href="#addSamples" data-backdrop="false" data-toggle="modal"
-                               data-placement="right" data-type="info" data-container="body"
-                               data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Add Samples" bs-tooltip
-
+                               title="Add Samples"
                             ><i class="fa fa-plus"></i></a>
                             <!--<a class="btn btn-primary btn-sm" href="#barcodeModal"-->
                                <!--data-placement="right" data-type="info" data-container="body"-->
                                <!--data-animation="am-fade-and-scale"-->
-                               <!--data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip-->
+                               <!--data-trigger="hover" data-type="success" data-title="Print Barcode"-->
                                <!--data-backdrop="false"-->
                                <!--data-toggle="modal"-->
                                <!--ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>-->
@@ -278,24 +258,14 @@
 
     <!--_______Modal______-->
     <div>
-        <div  ng-if="samples.showPanelModal">
-            <div class="col-md-12 text-right">
-                <div class="clearfix">&nbsp;</div>
-                <div><button type="button" class="btn btn-sm btn-danger"
-                        ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> Cancel
-                </button>
-                </div>
-                <div class="clearfix">&nbsp;</div>
-            </div>
+        <br />
+        <div ng-if="samples.showPanelModal">
             <div class="panel panel-primary">
-
-                <div class="panel panel-heading" ng-init="samples.samplePanelArray=[]">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="samples.hidePanelModal()">&times;</button>
-                    <h4 class="modal-title">Add Sample To
+                <div class="panel-heading" ng-init="samples.samplePanelArray=[]">
+                    <h4 class="modal-title" style="display:inline-block">Add Sample To
                         {{samples.currentPanel.panelName | capitalizeLetter}} :
                         {{samples.currentPanel.panelLabel | capitalizeLetter}}
-                        <small class="small">
+                        <small class="small" ng-show="samples.samplePanelArray.length">
                             {{samples.samplePanelArray.length}} samples
                         </small>
                         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
@@ -306,22 +276,24 @@
                             </a>
                         </small>
                     </h4>
+                    <div class="label btn pull-right" ng-click="samples.hidePanelModal()" title="Close">
+                        <i class="fa fa-close"></i>
+                    </div>
                 </div>
 
-                <div class="panel panel-body">
+                <div class="panel-body">
                     <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
                     <p class="pre-scrollable">
 
                     <table class="table table-striped table-responsive">
                         <tr>
                             <td></td>
-                            <td>Quantity</td>
+                            <td><b>Quantity</b></td>
                             <td><b>Sample</b></td>
                             <td><b>Preration Date</b></td>
                         </tr>
                         <tr ng-repeat="sample in samples.samplesData |filter : searchSample |limitTo : 8">
                             <td>
-
                                 <div class="[ form-group ]">
                                     <input type="checkbox" ng-hide="true"
                                            ng-checked="samples.returnCheckedRow(sample.id,samples.samplePanelArray)" name="{{sample.id}}" id="{{sample.id}}" autocomplete="off"
@@ -331,16 +303,10 @@
 
                                     <div class="[ no-padding]">
                                         <label for="{{sample.id}}" class="[ btn-round ]">
-                                    <span class="[ fa fa-check-circle  ]" ng-show="samples.returnCheckedRow(sample.id,samples.samplePanelArray)"
-
-                                          data-placement="right" data-type="info" data-container="body"
-                                          data-animation="am-fade-and-scale" bs-tooltip
-                                          data-trigger="hover" data-title="remove sample"
+                                    <span class="[ fa fa-check-circle  ]" ng-show="samples.returnCheckedRow(sample.id,samples.samplePanelArray)" title="remove sample"
                                     ></span>
                                             <span class="[ fa fa-minus-circle  ]" ng-show="!samples.returnCheckedRow(sample.id,samples.samplePanelArray)"
-                                                  data-placement="right" data-type="info" data-container="body"
-                                                  data-animation="am-fade-and-scale" bs-tooltip
-                                                  data-trigger="hover" data-title="add sample"
+                                                  title="add sample"
                                             > </span>
                                         </label>
                                     </div>

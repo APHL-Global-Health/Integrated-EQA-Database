@@ -8,7 +8,7 @@
                     <x ng-hide="samples.testAgentsFormData.id > 0">Add</x>
                     Reagent
                     <div class="label btn pull-right" title="Close"
-                         ng-click="samples.samplesActivePage('viewReagents')">
+                         ng-click="samples.samplesActivePage('listReagents')">
                         <i class="fa fa-close"></i>
                     </div>
                 </h5>
@@ -50,12 +50,11 @@
                     <div class="form-group row"
                          ng-class="{ 'has-error'  : testAgentsForm.testAgentType.$invalid && !testAgentsForm.testAgentType.$pristine }">
                         <label class="col-2 col-form-label">Type</label>
-                        <div class="col-10">
+                        <div class="col-10" ng-init="samples.getMicrobiologyTestTypes()">
                             <select class="form-control" required="" ng-model="samples.testAgentsFormData.testAgentType"
                                     name="testAgentType">
-                                <option value="1">ID</option>
-                                <option value="2">Gram Stain</option>
-                                <option value="3">AST</option>
+                                <option ng-repeat="testType in samples.testTypes" value="{{testType.id}}" title="{{testType.testDesc}}">
+                                    {{testType.testName}}</option>
                             </select>
                             <small class="text-danger col-md-12"
                                    ng-show="testAgentsForm.testAgentType.$invalid && !testAgentsForm.testAgentType.$pristine">

@@ -1,5 +1,6 @@
 var reportsModule = angular.module('ReportModule');
-reportsModule.constant('serverReportURL', 'http://localhost:8082/admin/reports/')
+// var BASE_URL = window.location.href.replace(window.location.pathname, "/");
+reportsModule.constant('serverReportURL', BASE_URL + 'admin/reports/')
 reportsModule.controller('ReportsController', function ($scope, $log, $http, EptServices, EptFactory, $timeout, loginDataCache) {
     var serverSamplesURL = SERVER_API_URL.sampleURL;
     var serverReportURL = SERVER_API_URL.reportsURL;

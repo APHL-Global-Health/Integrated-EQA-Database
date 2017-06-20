@@ -107,14 +107,12 @@
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : sampleData.sampleType.$invalid && !sampleData.sampleType.$pristine }">
-                        <label class="col-2 col-form-label">Test Type</label>
-                        <div class="col-10">
+                        <label class="col-2 col-form-label">Test Type <sub class="text-info">(CTRL + CLICK to select multiple items)</sup></label>
+                        <div class="col-10" ng-init="samples.getMicrobiologyTestTypes()">
                             <select required="" multiple="" class="form-control"
-                                    ng-model="samples.sampleFormData.sampleType"
-                                    name="sampleType">
-                                <option value="1">ID</option>
-                                <option value="2">Gram Stain</option>
-                                <option value="3">AST</option>
+                                    ng-model="samples.sampleFormData.sampleType" name="sampleType">
+                                <option ng-repeat="testType in samples.testTypes" value="{{testType.id}}" title="{{testType.testDesc}}">
+                                    {{testType.testName}}</option>
                             </select>
                             <small class="text-danger col-md-12"
                                    ng-show="sampleData.sampleType.$invalid && !sampleData.sampleType.$pristine">

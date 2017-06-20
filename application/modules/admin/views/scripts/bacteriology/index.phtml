@@ -5,16 +5,16 @@
             <div class="">
                 <ul class="nav nav-tabs" ng-init="clickedTab = 'samples';">
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
-                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('viewSamples');">Manage Samples</a>
+                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('listSamples');">Manage Samples</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'packaging'}">
-                        <a href="" ng-click="clickedTab = 'packaging';samples.samplesActivePage('viewPackaging');">Manage Panels</a>
+                        <a href="" ng-click="clickedTab = 'packaging';samples.samplesActivePage('listPackaging');">Manage Panels</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
-                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('viewShipments');">Manage Shipments</a>
+                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('listShipments');">Manage Shipments</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
-                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('viewRounds');">Manage Rounds</a>
+                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('listRounds');">Manage Rounds</a>
                     </li>
                 </ul>
             </div>
@@ -23,12 +23,12 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="text-align: left;">
-                        <li><a href="#" ng-click="clickedTab = 'couriers';samples.samplesActivePage('viewCouriers')">Couriers</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'couriers';samples.samplesActivePage('listCouriers')">Couriers</a></li>
 
-                        <li><a href="#" ng-click="clickedTab = 'reagents';samples.samplesActivePage('viewReagents')">Reagents</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'reagents';samples.samplesActivePage('listReagents')">Reagents</a></li>
 
-                        <li><a href="#" ng-click="clickedTab = 'grading';samples.samplesActivePage('viewGrading')">Grades</a></li>
-                        <li><a href="#" ng-click="clickedTab = 'testTypes';samples.samplesActivePage('viewTestTypes')">Test Types</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'grading';samples.samplesActivePage('listGrading')">Grades</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'testTypes';samples.samplesActivePage('listTestTypes')">Test Types</a></li>
                     </ul>
                 </div>
                 <div class="btn btn-sm btn-primary pull-right "
