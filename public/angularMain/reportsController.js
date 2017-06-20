@@ -10,9 +10,15 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     console.log($scope.reports.currentReports)
     $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/generalReport.html';
     $scope.reports.changeCurrentReport = function (htmlFile, report) {
-        $scope.reports.loaderStatus = true;
-        $scope.reports.currentReports = report;
-        $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/' + htmlFile + '.html';
+        var tempfile = '../partialHTMLS/reports/' + htmlFile + '.html';
+        if (tempfile == $scope.reports.loadedCurrentUrl) {
+
+        } else {
+            $scope.reports.loaderStatus = true;
+            $scope.reports.currentReports = report;
+
+            $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/' + htmlFile + '.html';
+        }
         console.log($scope.reports.loadedCurrentUrl);
 
     }

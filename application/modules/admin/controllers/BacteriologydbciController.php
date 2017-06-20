@@ -1353,14 +1353,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             }
         }
 
-        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs');
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds');
 
         if ($round !== false) {
             foreach ($round as $key => $value) {
 //                $where['labId'] = $whereLab['participant_id'];
-                $where['roundId'] = $value->roundId;
+                $where['roundId'] = $value->id;
 
-                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                $roundInfo = $this->returnValueWhere($value->id, 'tbl_bac_rounds');
 
                 $round[$key]->totalMarks = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'finalScore', true);
 
