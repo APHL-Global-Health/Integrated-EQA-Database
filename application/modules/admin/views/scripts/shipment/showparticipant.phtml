@@ -29,6 +29,8 @@
 </table>
 
 <script type="text/javascript" >
+    var data = {};
+    var shipmentCode = '';
     function getShipmentParticipants() {
         $('#loader').show();
         $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'getparticiting'), 'default', true); ?>/sid/<?php echo $this->shipmentId; ?>',
@@ -40,8 +42,9 @@
                                 var trHTML = '';
                                 response = JSON.parse(response);
                                 if (response.status == 1) {
+                                    data = response.data;
                                     $.each(response.data, function (i, item) {
-
+                                        shipmentCode = item.shipment_code;
 
                                         trHTML += '<tr><td>' + item.institute_name
                                                 + '</td><td>' + item.shipment_code
@@ -68,15 +71,78 @@
 
             }
             getShipmentParticipants();
-            
-            function generateExcelFile(){
-            
+            function returnRoundExcelData(excelData) {
+
+                if (excelData.length > 0) {
+                    var returnArray = [];
+
+                    for (var i = 0; i < excelData.length; i++) {
+                        var tempArray = {
+                            'Laboratory Name': excelData[i].institute_name,
+                            'Shipment Code': excelData[i].shipmentIcode,
+                            'Unique Identifier': excelData[i].unique_identifier,
+                            'Mfl Code': excelData[i].MflCode,
+                            'email': excelData[i].email,
+                            'mobile': excelData[i].mobile,
+                            'City': excelData[i].city,
+                            'Status': ""
+
+
+                        }
+                        returnArray.push(tempArray);
+                    }
+                    console.log(returnArray);
+                    return returnArray;
+                } else {
+                    return {};
+                }
             }
-            
-            
-            
-            
-            
-            
-            
+
+            function today() {
+                var today = new Date();
+                var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+                var dateTime = date + ' ' + time;
+
+                return dateTime;
+            }
+
+            function generateExcelFile() {
+                if (typeof data !== 'undefined') {
+                    if (data.length > 0) {
+                        var excelData = returnRoundExcelData(data);
+                        console.log(excelData);
+                        var opts = [{
+                                sheetid: 'PARTICIPANTS ON SHIPMENT '+shipmentCode, header: true,
+                                style: "background:#00ff00",
+
+                                caption: {
+                                    title: 'PARTICIPANTS on survey',
+                                    style: 'font-size: 50px; color:blue;'
+                                },
+                                caption: {
+                                    title: 'My Big Table',
+                                    style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                                },
+                                style: 'background:#00FF00',
+                                column: {
+                                    style: 'font-size:30px'
+                                }
+                            }]
+                                ;
+                        var res = alasql('SELECT INTO XLSX("PARTICIPANTS ON SHIPMENT '+shipmentCode+' ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+                    } else {
+                        $.alert({title: "<i class='fa fa-close text-danger'> </i>Error !", content: "Data is not loaded"});
+                    }
+                } else {
+                    $.alert({title: "<i class='fa fa-close text-danger'> </i>Error !", content: "Data is not loaded"});
+                }
+            }
+
+
+
+
+
+
+
 </script>
