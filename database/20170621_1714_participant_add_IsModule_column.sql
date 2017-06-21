@@ -1,0 +1,2 @@
+ALTER TABLE participant
+ADD COLUMN `IsModule` VARCHAR(45) NULL DEFAULT 0 AFTER `MflCode`;

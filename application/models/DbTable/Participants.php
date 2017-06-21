@@ -558,7 +558,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         //Zend_Debug::dump($data);die;
         //Zend_Debug::dump($data);die;
-        $participantId = $this->getParticipantLab();// $this->insert($data);
+        $participantId =  $this->insert($data);//$this->getParticipantLab();
 
 
         if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {

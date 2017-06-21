@@ -196,7 +196,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = $aRow['secondary_email'] ;
             } else {
-                $row[] = $aRow['IsTester'] == 1 ? 'Yes' : 'No';
+                $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
             }
 
             //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
