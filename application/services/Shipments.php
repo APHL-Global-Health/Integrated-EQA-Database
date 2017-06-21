@@ -32,7 +32,20 @@ class Application_Service_Shipments {
                                 ->order('vl_peer_mean.sampleId ASC')
         );
     }
+    
+    public function getparticipatingLabs($sid){
+         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        return $db->fetchAll(
+                        $db->select()
+                                ->from('shipment_participant_map')
+                                ->join(array('pp' => 'participant'), 'shipment_participant_map.participant_id=pp.participant_id')
+                                ->join(array('sp' => 'shipment'), 'shipment_participant_map.shipment_id=sp.shipment_id')
+                                ->where("shipment_participant_map.shipment_id=" . $sid)
 
+        );
+    }
+    
+    
     public function getAllShipments($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -203,7 +216,7 @@ class Application_Service_Shipments {
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = Pt_Commons_General::humanDateFormat($aRow['lastdate_response']);
             $row[] = $aRow['number_of_samples'];
-            $row[] = $aRow['total_participants'];
+            $row[] = "<a href='/admin/shipment/showparticipant/sid/".($aRow['shipment_id'])."'>". $aRow['total_participants']."</a>";
             $row[] = $responseSwitch;
             $row[] = ucfirst($aRow['status']);
 //             $row[] = $mailedOn;

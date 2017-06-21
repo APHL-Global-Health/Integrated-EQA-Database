@@ -33,7 +33,7 @@ class Application_Service_Participants {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));
     }
-
+    
     public function getParticipantDetails($partSysId) {
 
         $participantDb = new Application_Model_DbTable_Participants();
