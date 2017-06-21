@@ -52,7 +52,7 @@
                             </td>
                             <th>Participant e-mail Address <span class="mandatory">*</span></th>
                             <td><input type="text" id="pemail" name="pemail" size="25" maxlength="45" value="<?php echo $this->rsParticipant['email']; ?>" title="Please enter the Participant's Email here" placeholder="Please enter the Participant's Email here" class="form-control isRequired isEmail" 
-                                       onblur="checkDuplicate('participant', 'email',this, null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/></td>
+                                       onblur="checkDuplicate('data_manager', 'primary_email',this, null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/></td>
                         </tr> 
                         <tr>
                             <th>Enrolled Schemes <span class="mandatory">*</span></th>

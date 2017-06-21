@@ -32,7 +32,7 @@ class ParticipantController extends Zend_Controller_Action {
     public function dashboardAction() {
         $this->_helper->layout()->activeMenu = 'dashboard';
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-	$scheme = new Application_Service_Schemes();
+        $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
         $this->view->authNameSpace = $authNameSpace;
     }
@@ -67,24 +67,24 @@ class ParticipantController extends Zend_Controller_Action {
         $dbUsersProfile = new Application_Service_Participants();
         $this->view->rsUsersProfile = $dbUsersProfile->getUsersParticipants();
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-		if($authNameSpace->view_only_access=='yes'){
+        if ($authNameSpace->view_only_access == 'yes') {
             $this->view->isEditable = false;
-        }else{
+        } else {
             $this->view->isEditable = true;
         }
     }
 
     public function schemeAction() {
-	$authNameSpace = new Zend_Session_Namespace('datamanagers');
+        $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $dbUsersProfile = new Application_Service_Participants();
-	 if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             $parameters = $this->_getAllParams();
             $dbUsersProfile->getParticipantSchemesBySchemeId($parameters);
-        }else{
-	    $this->_helper->layout()->activeMenu = 'my-account';
-	    $this->_helper->layout()->activeSubMenu = 'scheme';
-	    $this->view->participantSchemes = $dbUsersProfile->getParticipantSchemes($authNameSpace->dm_id);
-	}
+        } else {
+            $this->_helper->layout()->activeMenu = 'my-account';
+            $this->_helper->layout()->activeSubMenu = 'scheme';
+            $this->view->participantSchemes = $dbUsersProfile->getParticipantSchemes($authNameSpace->dm_id);
+        }
     }
 
     public function passwordAction() {
@@ -95,7 +95,7 @@ class ParticipantController extends Zend_Controller_Action {
             $newPassword = $this->getRequest()->getPost('newpassword');
             $oldPassword = $this->getRequest()->getPost('oldpassword');
             $response = $user->changePassword($oldPassword, $newPassword);
-           
+
             if ($response) {
                 $this->_redirect('/participant/current-schemes');
             }
@@ -116,22 +116,29 @@ class ParticipantController extends Zend_Controller_Action {
         } else {
             $this->view->rsParticipant = $participantService->getParticipantDetails($this->_getParam('psid'));
         }
-        
+
         $this->view->affiliates = $participantService->getAffiliateList();
         $this->view->countriesList = $commonService->getcountriesList();
         $this->view->networks = $participantService->getNetworkTierList();
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-		if($authNameSpace->view_only_access=='yes'){
+        if ($authNameSpace->view_only_access == 'yes') {
             $this->view->isEditable = false;
-        }else{
+        } else {
             $this->view->isEditable = true;
         }
     }
 
     public function schemeinfoAction() {
         // action body
+    }
+
+    public function testusAction() {
+        $participantService = new Application_Model_DbTable_Participants();
+        $authNameSpace = $participantService->getParticipantLab();
+        var_dump((array) $authNameSpace);
+        exit;
     }
 
     public function addAction() {
@@ -154,12 +161,12 @@ class ParticipantController extends Zend_Controller_Action {
         $this->view->countriesList = $commonService->getcountriesList();
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
-        $this->view->uniqueid=$commonService->generate_id();
-        $this->view->institute=$authNameSpace->institute;
+        $this->view->uniqueid = $commonService->generate_id();
+        $this->view->institute = $authNameSpace->institute;
         $this->view->schemeList = $commonService->getSchemesList();
-		if($authNameSpace->view_only_access=='yes'){
+        if ($authNameSpace->view_only_access == 'yes') {
             $this->view->isEditable = false;
-        }else{
+        } else {
             $this->view->isEditable = true;
         }
     }
@@ -193,7 +200,7 @@ class ParticipantController extends Zend_Controller_Action {
             $shipmentService->getShipmentAll($params);
         }
         $commonService = new Application_Service_Common();
-        $this->view->globalQcAccess=$commonService->getConfig('qc_access');
+        $this->view->globalQcAccess = $commonService->getConfig('qc_access');
     }
 
     public function downloadAction() {
@@ -230,27 +237,29 @@ class ParticipantController extends Zend_Controller_Action {
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
     }
-    
+
     public function addQcAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $shipmentService = new Application_Service_Shipments();
-            $this->view->result =$shipmentService->addQcDetails($params);
+            $this->view->result = $shipmentService->addQcDetails($params);
         }
     }
-    public function readinessAction(){
+
+    public function readinessAction() {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetail($pID);
         $commonService = new Application_Service_Common();
-        foreach ($t as $k){
-            $id=$k["participant_id"];
+        foreach ($t as $k) {
+            $id = $k["participant_id"];
         }
         $this->view->roundsList = $commonService->getUnshippedDistributions();
         $this->view->participantId = $id;
     }
-    public function addReadinessAction(){
+
+    public function addReadinessAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $partnerService = new Application_Model_DbTable_Readiness();
@@ -258,6 +267,7 @@ class ParticipantController extends Zend_Controller_Action {
             $this->_redirect("/participant/readinesslist");
         }
     }
+
     public function readinesslistAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
@@ -265,4 +275,5 @@ class ParticipantController extends Zend_Controller_Action {
             $shipmentService->fetchAllReadiness($params);
         }
     }
+
 }

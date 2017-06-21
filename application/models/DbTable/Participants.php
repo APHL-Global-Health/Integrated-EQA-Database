@@ -169,9 +169,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier', 
-            'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status',  'p.MflCode', 
-            'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
+        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier',
+                    'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status', 'p.MflCode',
+                    'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
                 ->join(array('c' => 'countries'), 'c.id=p.country')
                 ->group("p.participant_id");
 
@@ -258,7 +258,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'unique_identifier' => $params['pid'],
             'MflCode' => $params['MflCode'],
             'institute_name' => $params['instituteName'],
-            'lab_name'=>$params['lab_name'],
+            'lab_name' => $params['lab_name'],
             'department_name' => $params['departmentName'],
             'address' => $params['address'],
             'city' => $params['city'],
@@ -477,7 +477,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         );
 
         $dm_id = $db->insert('data_manager', $datam);
-        $db->insert('participant_manager_map', array('dm_id' => $dm_id, 'participant_id' => $participantId));
+        $lastInsertId = $this->getAdapter()->lastInsertId('data_manager');
+        $db->insert('participant_manager_map', array('dm_id' => $lastInsertId, 'participant_id' => $participantId));
 
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
@@ -557,7 +558,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         //Zend_Debug::dump($data);die;
         //Zend_Debug::dump($data);die;
-        $participantId = $this->insert($data);
+        $participantId = $this->getParticipantLab();// $this->insert($data);
 
 
         if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
@@ -608,7 +609,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         $dmId = $db->insert('data_manager', $datam);
         $lastInsertId = $this->getAdapter()->lastInsertId('data_manager');
-        $db->insert('participant_manager_map', array('dm_id' => $lastInsertId, 'participant_id' => $participantId, 'Parent_id' => $authNameSpace->dm_id));
+        $db->insert('participant_manager_map', array('dm_id' => $lastInsertId,
+            'participant_id' => $this->getParticipantLab(), 'Parent_id' => $authNameSpace->dm_id));
 
 
         $participantName = $params['pfname'] . " " . $params['plname'];
@@ -628,6 +630,18 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             return $this->fetchAll($this->select()->where("status='active'")->where("IsVl='3'")->order("first_name"));
         } else {
             return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));
+        }
+    }
+
+    public function getParticipantLab() {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $authNameSpace = new Zend_Session_Namespace('datamanagers');
+        $mp = $db->fetchRow($db->select()->from('participant_manager_map')->where("dm_id=$authNameSpace->dm_id"));
+        
+        if(isset($mp['participant_id'])){
+            return $mp['participant_id'];
+        }else{
+            return false;
         }
     }
 
