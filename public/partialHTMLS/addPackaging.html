@@ -6,7 +6,7 @@
                 <h5>
                     <x ng-show="samples.panelFormData.id > 0">Edit {{samples.panelFormData.panelName}}</x>
                     <x ng-hide="samples.panelFormData.id > 0">Add</x>
-                    Packaging
+                    Panel
                     <div class="label btn label-default pull-right" ng-click="samples.emptyFormData('tbl_bac_panel_mst',0)">
                         <i class="fa fa-close"></i> Cancel
                     </div>
@@ -21,7 +21,7 @@
                 <form class="form-horizontal " name="panelForm" novalidate>
                     <div class="form-group row"
                          ng-class="{ 'has-error'  : panelForm.panelName.$invalid && !panelForm.panelName.$pristine }">
-                        <label for="panelName" class="col-2 col-form-label">Packaging Name.</label>
+                        <label for="panelName" class="col-2 col-form-label">Panel Name.</label>
                         <div class="col-10">
                             <input class="form-control" type="text" id="panelName" required name="panelName"
                                    ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group row"
                          ng-class="{ 'has-error'  : panelForm.panelLabel.$invalid && !panelForm.panelLabel.$pristine }">
-                        <label for="label" class="col-2 col-form-label">Packaging Label</label>
+                        <label for="label" class="col-2 col-form-label">Panel Label</label>
                         <div class="col-10">
                             <input class="form-control" type="text" id="label" required
                                    ng-pattern="samples.alphaNumHyDashSpaceRegExp"
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group row"
                          ng-class="{ 'has-error'  : panelForm.panelDatePrepared.$invalid && !panelForm.panelDatePrepared.$pristine }">
-                        <label for="" class="col-2 col-form-label">Date Prepared</label>
+                        <label for="" class="col-2 col-form-label">Packaging Date</label>
                         <div class="col-10">
 
                             <div class="col-10">
@@ -118,7 +118,7 @@
                     </div>
                     <div class="form-group row"
                          ng-class="{ 'has-error'  : panelForm.numberOfSamples.$invalid && !panelForm.numberOfSamples.$pristine }">
-                        <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(Packaging
+                        <label for="numberOfSamples" class="col-2 col-form-label">No of Samples(Panel
                             capacity)</label>
                         <div class="col-10">
                             <input class="form-control" type="text" id="numberOfSamples" name="numberOfSamples"
@@ -144,7 +144,7 @@
                         <button class="btn btn-success col-md-12 pull-right"
                                 ng-disabled="panelForm.$invalid || samples.savingInProgress"
                                 ng-click="samples.saveSampleFormData('tbl_bac_panel_mst',samples.panelFormData)"
-                        >Save Packaging <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
+                        >Save Panel <i class="fa fa-spin {{samples.savingSpinner}}"></i></button>
                     </div>
                     <div class="form-group">
 

@@ -1,491 +1,499 @@
-<div class="col-md-12 pre-scrollable">
 <div class="col-md-12">
-    <h3><u>MICROBIOLOGY  FEEDBACK FORM ({{samples.currentSampleForResponse.batchName}})</u>
-        <i class="fa fa-spin {{samples.savingSpinner}}"></i>
-        <button ng-click="samples.samplesActivePage('addResults','1')"
-                class="btn btn-sm btn-danger pull-right">
-            <i class="fa fa-close"></i> close
-        </button>
-    </h3>
-    <h4 class="text-center"><b>INSTRUCTIONS TO PARTICIPANT – BACTERIOLOGY</b></h4>
-    <table class="table text-capitalize">
-        <tr>
-            <td>
-                <h4><b>A)   INTRODUCTION</b></h4>
-                <p class=''>{{samples.sampleInstructions.introduction}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>B)   SCOPE</b></h4>
-                <p class=''>{{samples.sampleInstructions.scope}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>C)   PROFICIENCY TEST ITEM - TREATMENT AND ANALYSIS</b></h4>
-                <p class=''>{{samples.sampleInstructions.proficiency}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>D)	SURVEY REQUIREMENT</b></h4>
-                <p class=''>{{samples.sampleInstructions.surveyRequirement}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>E)	FACTORS THAT COULD INFLUENCE THE TESTING i.e.
-                    NATURE OF THE PT ITEMS, CONDITIONS OF STORAGE, WHETHER THE PTS IS LIMITED TO SELECTED METHODS AND TIMING OF THE PT ITEM</b></h4>
-                <p class=''>{{samples.sampleInstructions.factorsInfluenceTesting}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>F)	SELECTION OF SAMPLE</b></h4>
-                <p class=''>{{samples.sampleInstructions.selectionOfSample}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>G)	HOMOGENEITY AND STABILITY</b></h4>
-                <p class=''>{{samples.sampleInstructions.homogeneityAndStability}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>H)	CLINICAL DETAILS AND SAMPLE PREPARATION</b></h4>
-                <p class=''>{{samples.sampleInstructions.clinicalDetails}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>I)	SPECIAL HANDLING INSTRUCTIONS AND SAFETY REQUIREMENTS</b></h4>
-                <p class=''>{{samples.sampleInstructions.specialHandling}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>J)	SPECIFIC ENVIRONMENTAL CONDITIONS</b></h4>
-                <p class=''>{{samples.sampleInstructions.specificEnvirons}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>K)	SAMPLE DISPATCH NOTIFICATIONS AND ACTIONS TO BE TAKEN IF SAMPLE WAS NOT RECEIVED.</b></h4>
-                <p class=''>{{samples.sampleInstructions.sampleDispatch}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>L)	INSTRUCTIONS ON RETURNING OF PROFICIENCY TEST RESULTS.</b></h4>
-                <p class=''>{{samples.sampleInstructions.returnInstructions}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h4><b>M)	SAMPLE RECEPTION</b></h4>
-                <p class=''>{{samples.sampleInstructions.sampleInstructions}}</p>
-            </td>
-        </tr>
-    </table>
-    <div class="">
+    <button ng-click="samples.samplesActivePage('addResults', '1')"
+            class="btn btn-sm btn-danger pull-right">
+        <i class="fa fa-close"></i> close
+    </button>
+    <div class="col-md-12">
+        <img src="images/nphl-logo-2.png"/><br>
+        <h3><u>MICROBIOLOGY  FEEDBACK FORM ({{samples.currentSampleForResponse.batchName}})</u>
+            <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+
+        </h3>
+    </div>
+    <div class="col-md-12 col-xs-12">
+        <h4 class="text-center"><b>INSTRUCTIONS TO PARTICIPANT – BACTERIOLOGY</b></h4>
+        <table class="table text-capitalize">
+            <tr>
+                <td>
+                    <h4><b>A)   INTRODUCTION</b></h4>
+                    <p class=''>{{samples.sampleInstructions.introduction}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>B)   SCOPE</b></h4>
+                    <p class=''>{{samples.sampleInstructions.scope}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>C)   PROFICIENCY TEST ITEM - TREATMENT AND ANALYSIS</b></h4>
+                    <p class=''>{{samples.sampleInstructions.proficiency}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>D)	SURVEY REQUIREMENT</b></h4>
+                    <p class=''>{{samples.sampleInstructions.surveyRequirement}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>E)	FACTORS THAT COULD INFLUENCE THE TESTING i.e.
+                            NATURE OF THE PT ITEMS, CONDITIONS OF STORAGE, WHETHER THE PTS IS LIMITED TO SELECTED METHODS AND TIMING OF THE PT ITEM</b></h4>
+                    <p class=''>{{samples.sampleInstructions.factorsInfluenceTesting}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>F)	SELECTION OF SAMPLE</b></h4>
+                    <p class=''>{{samples.sampleInstructions.selectionOfSample}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>G)	HOMOGENEITY AND STABILITY</b></h4>
+                    <p class=''>{{samples.sampleInstructions.homogeneityAndStability}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>H)	CLINICAL DETAILS AND SAMPLE PREPARATION</b></h4>
+                    <p class=''>{{samples.sampleInstructions.clinicalDetails}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>I)	SPECIAL HANDLING INSTRUCTIONS AND SAFETY REQUIREMENTS</b></h4>
+                    <p class=''>{{samples.sampleInstructions.specialHandling}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>J)	SPECIFIC ENVIRONMENTAL CONDITIONS</b></h4>
+                    <p class=''>{{samples.sampleInstructions.specificEnvirons}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>K)	SAMPLE DISPATCH NOTIFICATIONS AND ACTIONS TO BE TAKEN IF SAMPLE WAS NOT RECEIVED.</b></h4>
+                    <p class=''>{{samples.sampleInstructions.sampleDispatch}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>L)	INSTRUCTIONS ON RETURNING OF PROFICIENCY TEST RESULTS.</b></h4>
+                    <p class=''>{{samples.sampleInstructions.returnInstructions}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><b>M)	SAMPLE RECEPTION</b></h4>
+                    <p class=''>{{samples.sampleInstructions.sampleInstructions}}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12 col-xs-12">
         <table class="table table-bordered">
             <thead class="btn-primary">
-            <tr>
-                <th>
-                    SAMPLE
-                </th>
-                <th>
-                    SOURCE
-                </th>
-                <th>
-                    CLINICAL DETAILS
-                </th>
-                <th>
-                    INSTRUCTIONS
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        SAMPLE
+                    </th>
+                    <th>
+                        SOURCE
+                    </th>
+                    <th>
+                        CLINICAL DETAILS
+                    </th>
+                    <th>
+                        INSTRUCTIONS
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>{{samples.currentSampleForResponse.batchName}}</td>
-                <td>{{samples.currentSampleForResponse.materialSource}}</td>
+                <tr>
+                    <td>{{samples.currentSampleForResponse.batchName}}</td>
+                    <td>{{samples.currentSampleForResponse.materialSource}}</td>
 
-                <td>{{samples.currentSampleForResponse.sampleDetails}}</td>
-                <td>{{samples.currentSampleForResponse.sampleInstructions}}</td>
-            </tr>
+                    <td>{{samples.currentSampleForResponse.sampleDetails}}</td>
+                    <td>{{samples.currentSampleForResponse.sampleInstructions}}</td>
+                </tr>
             </tbody>
         </table>
     </div>
     <div class="clearfix">&nbsp;</div>
-    <form class="form-horizontal" novalidate="" name="resultsData">
-        <table class="table table-bordered">
-            <thead class="btn-primary">
-            <tr>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Results
-                </th>
+    <div class="col-md-12 col-xs-12">
+        <form class="form-horizontal" novalidate="" name="resultsData">
+            <table class="table table-bordered">
+                <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Results
+                        </th>
 
 
-            </tr>
-            </thead>
-            <tbody ng-form novalidate="" name="resultsData">
-            <tr ng-class="{ 'has-error'
-             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine )
+                    </tr>
+                </thead>
+                <tbody ng-form novalidate="" name="resultsData">
+                    <tr ng-class="{ 'has-error'
+             : (resultsData.grainStainReaction.$invalid && !resultsData.grainStainReaction.$pristine)
               }">
-                <td width="30%">Gram stain reaction and morphology</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter the grain stain results"
-                           ng-model="samples.userFeedbackFormData.grainStainReaction" required
-                           name="grainStainReaction">
-                </td>
+                        <td width="30%">Gram stain reaction and morphology</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter the grain stain results"
+                                   ng-model="samples.userFeedbackFormData.grainStainReaction" required
+                                   name="grainStainReaction">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine }">
-                <td width="30%">Details of primary media used for isolation and manufacturer</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text"
-                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Details of primary media "
-                           ng-model="samples.userFeedbackFormData.primaryMedia" required
-                           name="primaryMedia">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine }">
+                        <td width="30%">Details of primary media used for isolation and manufacturer</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Details of primary media "
+                                   ng-model="samples.userFeedbackFormData.primaryMedia" required
+                                   name="primaryMedia">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine }">
-                <td width="30%">Incubation conditions</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Incubation conditions"
-                           ng-model="samples.userFeedbackFormData.incubationConditions" required
-                           name="incubationConditions">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.incubationConditions.$invalid && !resultsData.incubationConditions.$pristine }">
+                        <td width="30%">Incubation conditions</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Incubation conditions"
+                                   ng-model="samples.userFeedbackFormData.incubationConditions" required
+                                   name="incubationConditions">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine  }">
-                <td width="30%">Colonial morphology (colony appearance on media)</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Colonial morphology"
-                           ng-model="samples.userFeedbackFormData.colonialMorphology" required
-                           name="colonialMorphology">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.colonialMorphology.$invalid && !resultsData.colonialMorphology.$pristine  }">
+                        <td width="30%">Colonial morphology (colony appearance on media)</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Colonial morphology"
+                                   ng-model="samples.userFeedbackFormData.colonialMorphology" required
+                                   name="colonialMorphology">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine}">
-                <td width="30%">Bacterial quantification (if applicable)</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Bacterial quantification"
-                           ng-model="samples.userFeedbackFormData.bacterialQualification" required
-                           name="bacterialQualification">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.bacterialQualification.$invalid && !resultsData.bacterialQualification.$pristine}">
+                        <td width="30%">Bacterial quantification (if applicable)</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Bacterial quantification"
+                                   ng-model="samples.userFeedbackFormData.bacterialQualification" required
+                                   name="bacterialQualification">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine }">
-                <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
-                    Indicate
-                    the reaction observed.
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.bacterialReagents.$invalid && !resultsData.bacterialReagents.$pristine }">
+                        <td width="30%">Biochemical reagents or test used for organisms identification e.g. API, Indole.
+                            Indicate
+                            the reaction observed.
+                        </td>
 
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
-                           placeholder="Please enter Biochemical reagents"
-                           ng-model="samples.userFeedbackFormData.bacterialReagents" required name="bacterialReagents">
-                </td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
+                                   placeholder="Please enter Biochemical reagents"
+                                   ng-model="samples.userFeedbackFormData.bacterialReagents" required name="bacterialReagents">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine  }">
-                <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please Discuss further processing"
-                           ng-model="samples.userFeedbackFormData.isolateProcessing" required name="isolateProcessing">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine  }">
+                        <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please Discuss further processing"
+                                   ng-model="samples.userFeedbackFormData.isolateProcessing" required name="isolateProcessing">
+                        </td>
 
-            </tr>
+                    </tr>
 
-            <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine }">
-                <td width="30%">Final identification (i.e. report given to clinician)</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Final identification "
-                           ng-model="samples.userFeedbackFormData.finalIdentification" required
-                           name="finalIdentification">
+                    <tr ng-class="{ 'has-error'  : resultsData.finalIdentification.$invalid && !resultsData.finalIdentification.$pristine }">
+                        <td width="30%">Final identification (i.e. report given to clinician)</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Final identification "
+                                   ng-model="samples.userFeedbackFormData.finalIdentification" required
+                                   name="finalIdentification">
 
-                </td>
+                        </td>
 
-            </tr>
-            <tr>
-                <td width="30%">
-                    <div class="col-md-12 no-padding">
-                        <!--<button class="btn btn-warning col-md-12"-->
+                    </tr>
+                    <tr>
+                        <td width="30%">
+                            <div class="col-md-12 no-padding">
+                                <!--<button class="btn btn-warning col-md-12"-->
                                 <!--ng-click="samples.userFeedbackFormData =''"-->
-                        <!--&gt;Reset-->
-                        <!--</button>-->
-                    </div>
-                </td>
-                <td width="70%">
-                    <div class="col-md-12 no-padding">
-                        <button class="btn btn-info col-md-12"
-                                ng-click="samples.saveFeedbackFormData(samples.userFeedbackFormData,'tbl_bac_response_results')"
-                                ng-disabled="resultsData.$invalid || samples.savingInProgress"
-                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                        </button>
-                    </div>
-                </td>
+                                <!--&gt;Reset-->
+                                <!--</button>-->
+                            </div>
+                        </td>
+                        <td width="70%">
+                            <div class="col-md-12 no-padding">
+                                <button class="btn btn-info col-md-12"
+                                        ng-click="samples.saveFeedbackFormData(samples.userFeedbackFormData, 'tbl_bac_response_results')"
+                                        ng-disabled="resultsData.$invalid || samples.savingInProgress"
+                                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                                </button>
+                            </div>
+                        </td>
 
-            </tbody>
-        </table>
-    </form>
-</div>
-
-</div>
-<div class="col-md-12">
-    <h3><u>SUSCEPTIBILITY TESTING REPORT FORM.</u></h3>
-    <div class="">
-        Please report only those antimicrobial appropriate for the pathogen isolated and which and routinely tested.
-        Please indicate carefully which antibiotics would be reported to the clinician.<br>
+                </tbody>
+            </table>
+        </form>
     </div>
-    <div class="form-horizontal" novalidate="" name="resultsData">
-        <table class="table table-bordered">
-            <thead class="btn-primary">
-            <tr>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Results
-                </th>
 
 
-            </tr>
-            </thead>
-            <tbody ng-form novalidate="" name="susceptibilityData">
-            <tr ng-class="{ 'has-error'
+
+    <div class="col-md-12 col-xs-12">
+        <h3><u>SUSCEPTIBILITY TESTING REPORT FORM.</u></h3>
+        <div class="">
+            Please report only those antimicrobial appropriate for the pathogen isolated and which and routinely tested.
+            Please indicate carefully which antibiotics would be reported to the clinician.<br>
+        </div>
+
+        <div class="form-horizontal" novalidate="" name="resultsData">
+            <table class="table table-bordered">
+                <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Results
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody ng-form novalidate="" name="susceptibilityData">
+                    <tr ng-class="{ 'has-error'
              : susceptibilityData.surveyNumber.$invalid && !susceptibilityData.surveyNumber.$pristine
               }">
-                <td width="30%">Survey number</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern=""
-                           placeholder="System Picked" ng-disabled="true"
-                           ng-model="samples.currentSampleForResponse.roundCode" required name="surveyNumber">
-                </td>
+                        <td width="30%">Survey number</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern=""
+                                   placeholder="System Picked" ng-disabled="true"
+                                   ng-model="samples.currentSampleForResponse.roundCode" required name="surveyNumber">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.isolateIdentification.$invalid && !susceptibilityData.isolateIdentification.$pristine }">
-                <td width="30%">Isolate identification</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text"
-                           ng-pattern="samples.s"
-                           placeholder="Please enter Isolate identification "
-                           ng-model="samples.susceptibilityFormData.isolateIdentification" required
-                           name="isolateIdentification">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.isolateIdentification.$invalid && !susceptibilityData.isolateIdentification.$pristine }">
+                        <td width="30%">Isolate identification</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text"
+                                   ng-pattern="samples.s"
+                                   placeholder="Please enter Isolate identification "
+                                   ng-model="samples.susceptibilityFormData.isolateIdentification" required
+                                   name="isolateIdentification">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
-                <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Method used for disc diffusion (Kirby Bauer, Stroke etc.)"
-                           ng-model="samples.susceptibilityFormData.methodUsed" required name="methodUsed">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
+                        <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Method used for disc diffusion (Kirby Bauer, Stroke etc.)"
+                                   ng-model="samples.susceptibilityFormData.methodUsed" required name="methodUsed">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.mediaUsed.$invalid && !susceptibilityData.mediaUsed.$pristine  }">
-                <td width="30%">Media used</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Media used"
-                           ng-model="samples.susceptibilityFormData.mediaUsed" required name="mediaUsed">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaUsed.$invalid && !susceptibilityData.mediaUsed.$pristine  }">
+                        <td width="30%">Media used</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Media used"
+                                   ng-model="samples.susceptibilityFormData.mediaUsed" required name="mediaUsed">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.mediaManufacturer.$invalid && !susceptibilityData.mediaManufacturer.$pristine}">
-                <td width="30%">Manufacturer of media</td>
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Please enter Manufacturer of media"
-                           ng-model="samples.susceptibilityFormData.mediaManufacturer" required
-                           name="mediaManufacturer">
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.mediaManufacturer.$invalid && !susceptibilityData.mediaManufacturer.$pristine}">
+                        <td width="30%">Manufacturer of media</td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Please enter Manufacturer of media"
+                                   ng-model="samples.susceptibilityFormData.mediaManufacturer" required
+                                   name="mediaManufacturer">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.discManufacturer.$invalid && !susceptibilityData.discManufacturer.$pristine }">
-                <td width="30%">Manufacturer of disc and disc size (mm):
-                </td>
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.discManufacturer.$invalid && !susceptibilityData.discManufacturer.$pristine }">
+                        <td width="30%">Manufacturer of disc and disc size (mm):
+                        </td>
 
-                <td width="70%">
-                    <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                           placeholder="Manufacturer of disc and disc size (mm)"
-                           ng-model="samples.susceptibilityFormData.discManufacturer" required name="discManufacturer">
-                </td>
+                        <td width="70%">
+                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                   placeholder="Manufacturer of disc and disc size (mm)"
+                                   ng-model="samples.susceptibilityFormData.discManufacturer" required name="discManufacturer">
+                        </td>
 
-            </tr>
-            <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
-                <td width="30%">Guidelines used (CLSI):</td>
-                <td width="70%">
-                    <select class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                    </tr>
+                    <tr ng-class="{ 'has-error'  : susceptibilityData.guidelines.$invalid && !susceptibilityData.guidelines.$pristine  }">
+                        <td width="30%">Guidelines used (CLSI):</td>
+                        <td width="70%">
+                            <select class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
 
-                            ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
-                        <option selected disabled>--SELECT GUIDELINE--</option>
-                        <option value="CLSI">CLSI</option>
-                        <option value="HUQAS">HUQAS</option>
-                    </select>
-                </td>
+                                    ng-model="samples.susceptibilityFormData.guidelines" required name="guidelines">
+                                <option selected disabled>--SELECT GUIDELINE--</option>
+                                <option value="CLSI">CLSI</option>
+                                <option value="HUQAS">HUQAS</option>
+                            </select>
+                        </td>
 
-            </tr>
-            <tr>
-                <td width="30%">
-                    <div class="col-md-12 no-padding">
-                        <!--<button class="btn btn-warning col-md-12"-->
+                    </tr>
+                    <tr>
+                        <td width="30%">
+                            <div class="col-md-12 no-padding">
+                                <!--<button class="btn btn-warning col-md-12"-->
                                 <!--ng-click="samples.susceptibilityFormData =''"-->
-                        <!--&gt;Reset-->
-                        <!--</button>-->
-                    </div>
-                </td>
-                <td width="70%">
-                    <div class="col-md-12 no-padding">
-                        <button class="btn btn-success col-md-12"
-                                ng-click="samples.saveFeedbackFormData(samples.susceptibilityFormData,'tbl_bac_suscepitibility')"
-                                ng-disabled="susceptibilityData.$invalid || samples.savingInProgress"
-                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                                <!--&gt;Reset-->
+                                <!--</button>-->
+                            </div>
+                        </td>
+                        <td width="70%">
+                            <div class="col-md-12 no-padding">
+                                <button class="btn btn-success col-md-12"
+                                        ng-click="samples.saveFeedbackFormData(samples.susceptibilityFormData, 'tbl_bac_suscepitibility')"
+                                        ng-disabled="susceptibilityData.$invalid || samples.savingInProgress"
+                                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="">
-        <h3><u>ANTIMICROBIAL AGENT</u></h3>
-        <table class="table table-bordered">
-            <thead class="btn-primary">
-            <tr>
-                <th>
-                    ANTIMICROBIAL
-                    AGENT
+        <div class=" col-md-12 col-xs-12">
+            <h3><u>ANTIMICROBIAL AGENT</u></h3>
+            <table class="table table-bordered">
+                <thead class="btn-primary">
+                    <tr>
+                        <th>
+                            ANTIMICROBIAL
+                            AGENT
 
-                </th>
-                <th>
-                    Reported to
-                    Clinician(Yes or No)
+                        </th>
+                        <th>
+                            Reported to
+                            Clinician(Yes or No)
 
-                </th>
-                <th>
-                    DISK CONTENT
-                    (&micro;g or Units)
+                        </th>
+                        <th>
+                            DISK CONTENT
+                            (&micro;g or Units)
 
-                </th>
-                <th>
-                    S <sup>1</sup>
-                </th>
-                <th>
-                    I <sup>2</sup>
-                </th>
-                <th>
-                    R <sup>3</sup>
-                </th>
-                <th ng-init="where.testAgentType=3">
-                    <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length >1"
-                            ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                            class="fa fa-plus"></i></button>
-                </th>
-            </tr>
-            </thead>
-            <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
+                        </th>
+                        <th>
+                            S <sup>1</sup>
+                        </th>
+                        <th>
+                            I <sup>2</sup>
+                        </th>
+                        <th>
+                            R <sup>3</sup>
+                        </th>
+                        <th ng-init="where.testAgentType = 3">
+                            <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
+                                    ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                                    class="fa fa-plus"></i></button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents', 'testAgentType', '3')">
 
-            <tr ng-repeat="fields in samples.resultFields"
-                ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
-                <td nowrap><input type="text" class="form-control"
-                                  ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                  id="antiMicroAgent" name="antiMicroAgent"
-                                  class="form-control"
-                                  data-min-length="0"
-                                  data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
-                                  required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                                  bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
-                                  placeholder="Search Reagent" bs-typeahead
+                    <tr ng-repeat="fields in samples.resultFields"
+                        ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
+                        <td nowrap><input type="text" class="form-control"
+                                          ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                          id="antiMicroAgent" name="antiMicroAgent"
+                                          class="form-control"
+                                          data-min-length="0"
+                                          data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                                          required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                          bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
+                                          placeholder="Search Reagent" bs-typeahead
 
-                                  ng-model="fields.antiMicroAgent">
+                                          ng-model="fields.antiMicroAgent">
 
-                </td>
-                <td>
-                    <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                            ng-model="fields.reportedToStatus">
-                        <option class="" selected disabled>--select reported--</option>
-                        <option value="yes">YES</option>
-                        <option value="no">NO</option>
-                    </select>
-                </td>
+                        </td>
+                        <td>
+                            <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                                    ng-model="fields.reportedToStatus">
+                                <option class="" selected disabled>--select reported--</option>
+                                <option value="yes">YES</option>
+                                <option value="no">NO</option>
+                            </select>
+                        </td>
 
-                <td><input type="text" class="form-control"
-                           ng-pattern="samples.numericOnly"
-                           ng-model="fields.diskContent"></td>
-                <td>
-                    <input type="radio" class="form-control"  ng-click="fields.finalScore='S'"
-                           ng-change="" value="S" name="score{{$index}}"
-                           ng-model="fields.finalScore">
-                </td>
-                <td>
-                    <input type="radio" class="form-control"  ng-click="fields.finalScore='I'"
-                           ng-change="" value="I" name="score{{$index}}"
-                           ng-model="fields.finalScore">
-                </td>
-                <td>
-                    <input type="radio" class="form-control"  ng-click="fields.finalScore='R'"
-                           ng-change="" value="R" name="score{{$index}}"
-                           ng-model="fields.finalScore">
-                </td>
-                <td ng-init="samples.resultActiveFields=fields">
-                    <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
-                            ng-click="samples.resultAddField(0,$index)"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                            class="fa fa-plus"></i></button>
-                </td>
-            </tr>
+                        <td><input type="text" class="form-control"
+                                   ng-pattern="samples.numericOnly"
+                                   ng-model="fields.diskContent"></td>
+                        <td>
+                            <input type="radio" class="form-control"  ng-click="fields.finalScore = 'S'"
+                                   ng-change="" value="S" name="score{{$index}}"
+                                   ng-model="fields.finalScore">
+                        </td>
+                        <td>
+                            <input type="radio" class="form-control"  ng-click="fields.finalScore = 'I'"
+                                   ng-change="" value="I" name="score{{$index}}"
+                                   ng-model="fields.finalScore">
+                        </td>
+                        <td>
+                            <input type="radio" class="form-control"  ng-click="fields.finalScore = 'R'"
+                                   ng-change="" value="R" name="score{{$index}}"
+                                   ng-model="fields.finalScore">
+                        </td>
+                        <td ng-init="samples.resultActiveFields = fields">
+                            <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
+                                    ng-click="samples.resultAddField(0, $index)"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                                    class="fa fa-plus"></i></button>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td>
-                    <div class="col-md-12 no-padding">
-                        <!--<button class="btn btn-warning col-md-12"-->
+                    <tr>
+                        <td>
+                            <div class="col-md-12 no-padding">
+                                <!--<button class="btn btn-warning col-md-12"-->
                                 <!--ng-click="samples.susceptibilityFormData =''"-->
-                        <!--&gt;Reset-->
-                        <!--</button>-->
-                    </div>
-                </td>
-                <td>
-                    <div class="col-md-12 no-padding">
-                        <button class="btn btn-success col-md-12"
-                                ng-click="samples.saveAntiMicroAgent(samples.resultFields)"
-                                ng-disabled=" samples.savingInProgress"
-                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                        </button>
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+                                <!--&gt;Reset-->
+                                <!--</button>-->
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-12 no-padding">
+                                <button class="btn btn-success col-md-12"
+                                        ng-click="samples.saveAntiMicroAgent(samples.resultFields)"
+                                        ng-disabled=" samples.savingInProgress"
+                                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <button class="btn btn-primary col-md-12" ng-disabled="true"
-             ng-click="samples.saveUserBothResponse(samples.resultFields,samples.susceptibilityFormData)"
-             ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
-            Save Both
-        </button>
+            <button class="btn btn-primary col-md-12" ng-disabled="true"
+                    ng-click="samples.saveUserBothResponse(samples.resultFields, samples.susceptibilityFormData)"
+                    ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
+                Save Both
+            </button>
+        </div>
+
     </div>
-
-</div>
 </div>

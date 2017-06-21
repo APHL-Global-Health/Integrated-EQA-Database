@@ -5,7 +5,10 @@
 
     <div class="panel panel-success" ng-init="samples.getCurrentActiveRound()">
         <div class="panel panel-heading">
-            <h5>Current Round</h5>
+            <h5>Current Round</h5> 
+<!--            <button ng-click="samples.getCurrentActiveRound()">
+                load
+            </button>-->
         </div>
         <div class="panel panel-body">
             <table class="table table-striped table-condensed table-bordered" id="printableTable">
@@ -42,7 +45,7 @@
                         <td nowrap>{{round.daysLeft}}</td>
                         <td nowrap>{{samples.roundStatus(round.daysLeft, round.startRoundFlag)}}</td>
                         <td ng-show="round.enrolled == 0 && round.daysLeft > 0">
-                            <button class="btn btn-success" ng-click="reports.saveEnrolled(round.id, round.participantId)">Enroll</button>
+                            Awaiting Enrollment
                         </td>
                         <td ng-show="round.enrolled == 0 && round.daysLeft == 0">
                             <div class="text-danger">

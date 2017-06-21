@@ -14,7 +14,7 @@
     </div-->
     <div class="panel panel-primary">
         <div class="panel panel-heading">
-            Delivered Packages
+            Delivered Panels
         </div>
         <div class="panel panel-body">
             <h3>
@@ -78,16 +78,16 @@
                     <tbody>
                     <tr dir-paginate="panel in samples.panelsToShipment | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                         <td>{{$index+1}}</td>
-                        <td><a href="#/{{panel.id}}" ng-click="receive.showPanelFullDetails(panel)"
+                        <td><a href="" target="_SELF" ng-click="receive.showPanelFullDetails(panel)"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
                                data-trigger="hover" data-type="success"
                                data-title="Click to view more about {{panel.panelName}} panel" bs-tooltip
 
-                               ng-show="panel.totalSamplesAdded >0 && panel.shipmentDeliveryStatus !=2"
+                               ng-show="panel.totalSamplesAdded >0 && panel.deliveryStatus !=2"
                                class="">{{panel.panelName}}</a>
 
-                            <x ng-show="panel.totalSamplesAdded==0 || panel.shipmentDeliveryStatus ==2">
+                            <x ng-show="panel.totalSamplesAdded==0 || panel.deliveryStatus ==2">
                                 {{panel.panelName}}
                             </x>
                         </td>

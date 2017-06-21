@@ -20,11 +20,11 @@ EptServices.service('EptServices', function () {
     }
 
 
-    this.EptServiceObject.returnServerErrorAlert = function () {
+    this.EptServiceObject.returnServerErrorAlert = function (message) {
         $.alert(
                 {
                     title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
-                    content: ' Server error occurred,please try again.'
+                    content: angular.isDefined(message) ? message : ' Server error occurred,please try again.'
                 }
         );
     }

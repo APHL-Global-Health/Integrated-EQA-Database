@@ -1,4 +1,4 @@
-<div>
+<div ng-init="samples.getShipmentsForDelivery('tbl_bac_samples_to_users','status','0,1,2,3')">
     <h3> Samples Issued to Users
         <small>{{samples.samplesToUsers.length}} records</small>
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>

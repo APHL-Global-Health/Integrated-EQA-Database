@@ -98,7 +98,7 @@
                     <td nowrap>{{round.totalShipmentsAdded}}</td>
                     <td>{{round.currentStatus}}</td>
                     <td>
-                        <button ng-disabled="round.totalShipmentsAdded == 0 || round.daysLeft > 1" ng-show="round.published == 0"
+                        <button ng-disabled="round.totalShipmentsAdded == 0 " ng-show="round.published == 0"
                                 ng-click="reports.publishRoundResults(round, 1)" class="btn btn-success btn-sm">
                             <i class="fa fa-check"></i> Publish
                         </button>

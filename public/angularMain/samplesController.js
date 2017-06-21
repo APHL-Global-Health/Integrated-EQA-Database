@@ -169,7 +169,7 @@
 
             $.confirm({
                 title: 'Confirm!',
-                theme: 'supervan',
+                theme: 'light',
                 content: 'Please confirm start of round! ' + round.roundName,
                 buttons: {
                     'start round': {
@@ -203,32 +203,32 @@
                 // $scope.samples.updateWhere(postedData, 1);
                 var url = serverSamplesURL + 'updateroundstart';
                 $http
-                    .post(url, postedData)
-                    .success(function (data) {
-                        console.log(data)
-                        alertStartRound.close();
-                        if (data.status == 1) {
-                            $.alert(
-                                {
-                                    title: '<i class="fa fa-check-circle text-success"></i> Success',
-                                    content: '<hr> Round started OK!'
-                                }
-                            );
-                            $scope.samples.showRoundFullDetails(round);
-                            $scope.samples.currentRound.startRoundFlag = 1
-                        } else {
-                            $.alert(
-                                {
-                                    title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
-                                    content: '<hr>' + data.message
-                                }
-                            );
-                        }
+                        .post(url, postedData)
+                        .success(function (data) {
+                            console.log(data)
+                            alertStartRound.close();
+                            if (data.status == 1) {
+                                $.alert(
+                                        {
+                                            title: '<i class="fa fa-check-circle text-success"></i> Success',
+                                            content: '<hr> Round started OK!'
+                                        }
+                                );
+                                $scope.samples.showRoundFullDetails(round);
+                                $scope.samples.currentRound.startRoundFlag = 1
+                            } else {
+                                $.alert(
+                                        {
+                                            title: '<i class="fa fa-exclamation-circle text-danger"></i> Error',
+                                            content: '<hr>' + data.message
+                                        }
+                                );
+                            }
 
-                    })
-                    .error(function (error) {
-                        $.alert('Error Occurred');
-                    })
+                        })
+                        .error(function (error) {
+                            $.alert('Error Occurred');
+                        })
             } catch (error) {
                 console.log(error);
             }
@@ -246,7 +246,8 @@
                 return 'Unknown';
             }
 
-        }
+        };
+
         $scope.samples.getAllSamples = function (tableName, where, whereDelivery) {
 
             try {
@@ -274,26 +275,26 @@
 
                 console.log(varData);
                 $http
-                    .post(url, varData)
-                    .success(function (data) {
-                        console.log(data);
-                        $scope.samples.loaderProgressSpinner = '';
-                        if (data.status == 1) {
-                            assignHTTPResponse(data, tableName);
-                        } else {
-                            assignHTTPResponse({}, tableName);
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                        if (data.data == false) {
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        $scope.samples.loaderProgressSpinner = '';
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                        .post(url, varData)
+                        .success(function (data) {
+                            console.log(data);
+                            $scope.samples.loaderProgressSpinner = '';
+                            if (data.status == 1) {
+                                assignHTTPResponse(data, tableName);
+                            } else {
+                                assignHTTPResponse({}, tableName);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                            if (data.data == false) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
             } catch (e) {
                 console.log(e)
             }
@@ -387,20 +388,20 @@
                 // changeSavingSpinner(true);
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url, posted)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.samples.receivedShipments = data.data;
-                        $scope.samples.loaderProgressSpinner = '';
+                        .post(url, posted)
+                        .success(function (data) {
+                            console.log(data)
+                            $scope.samples.receivedShipments = data.data;
+                            $scope.samples.loaderProgressSpinner = '';
 
-                        if (data.status == 0) {
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                            if (data.status == 0) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
             } catch (Exc) {
                 console.log(Exc)
             }
@@ -426,7 +427,8 @@
             }
             console.log($scope.samples.linksObject)
 
-        }
+        };
+        
         $scope.samples.currentRound = {};
         $scope.samples.getCurrentActiveRound = function () {
             try {
@@ -434,20 +436,20 @@
                 changeSavingSpinner(true);
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url)
-                    .success(function (data) {
-                        console.log(data)
-                        changeSavingSpinner(false);
-                        if (data.status == 0) {
-                            // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        } else {
-                            $scope.samples.currentRound = data.data;
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                        .post(url)
+                        .success(function (data) {
+                            console.log(data)
+                            changeSavingSpinner(false);
+                            if (data.status == 0) {
+                                // EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            } else {
+                                $scope.samples.currentRound = data.data;
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
             } catch (Exception) {
                 console.log(Exception);
             }
@@ -463,28 +465,28 @@
 
                 $scope.samples.loaderProgressSpinner = 'fa-spinner';
                 $http
-                    .post(url, dataLab)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.samples.loaderProgressSpinner = '';
-                        changeSavingSpinner(false);
-                        if (data.status == 0) {
-                            alertStartRound = $.alert({
-                                title: '<i class="fa fa-remove  text-danger"></i> Error',
-                                content: 'You have successfully enrolled for the round.'
-                            });
-                        } else {
-                            alertStartRound = $.alert({
-                                title: '<i class="fa fa-check-circle  text-success"></i> Success',
-                                content: 'You have successfully enrolled for the round.'
-                            });
-                            $scope.samples.getCurrentActiveRound();
-                        }
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        changeSavingSpinner(false);
-                    })
+                        .post(url, dataLab)
+                        .success(function (data) {
+                            console.log(data)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeSavingSpinner(false);
+                            if (data.status == 0) {
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-remove  text-danger"></i> Error',
+                                    content: 'You have successfully enrolled for the round.'
+                                });
+                            } else {
+                                alertStartRound = $.alert({
+                                    title: '<i class="fa fa-check-circle  text-success"></i> Success',
+                                    content: 'You have successfully enrolled for the round.'
+                                });
+                                $scope.samples.getCurrentActiveRound();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            changeSavingSpinner(false);
+                        })
 
             } catch (Exception) {
 
@@ -527,15 +529,37 @@
         $scope.samples.hidePanelModal = function () {
             $scope.samples.showPanelModal = false;
         }
+
+
+
+        /* --------------Old data filters------------------  */
+        $scope.samples.where = {};
+        $scope.samples.whereShipment = {};
+        $scope.samples.where.addedStatus = 0;
+
+
+        $scope.samples.whereShipment.evaluated = 0;
+
+
+
+        /* ------------------ end of files load     --------------------------*/
+
+
+
+
+
+
         $scope.samples.addSamplesToPanel = function (panel) {
 
             $scope.samples.currentPanel = panel;
             $scope.samples.showPanelModal = true;
             console.log($scope.samples.samplesData.length)
             $scope.samples.samplePanelArray = [];
+            var where = {};
+            where.addedStatus = 0;
             if ($scope.samples.samplesData.length == 0) {
 
-                $scope.samples.getAllSamples('tbl_bac_samples');
+                $scope.samples.getAllSamples('tbl_bac_samples', where);
             }
 
         }
@@ -607,15 +631,15 @@
             console.log(tableName)
             if (tableName == 'tbl_bac_shipments') {
                 $scope.samples.samplesActivePage('viewshipments', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_shipments', $scope.samples.whereShipment);
             }
             if (tableName == 'tbl_bac_samples') {
                 $scope.samples.samplesActivePage('viewsamples', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_samples', $scope.samples.where);
             }
             if (tableName == 'tbl_bac_panel_mst') {
                 $scope.samples.samplesActivePage('viewPackaging', 0);
-                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst');
+                return type ? false : $scope.samples.getAllSamples('tbl_bac_panel_mst', $scope.samples.where);
             }
             if (tableName == 'tbl_bac_couriers') {
                 $scope.samples.samplesActivePage('viewcouriers', 0);
@@ -647,7 +671,7 @@
             }
             if (tableName == 'tbl_bac_rounds') {
                 $scope.samples.samplesActivePage('viewrounds', 0);
-                return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                return type ? false : $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'evaluated', '0');
 
             }
         }
@@ -677,7 +701,7 @@
         $scope.samples.confirmDialog = function (message, callbackFunction) {
             $.confirm({
                 title: 'Confirm !',
-                theme: 'supervan',
+                theme: 'light',
                 content: message,
                 buttons: {
                     'Confirm': {
@@ -706,29 +730,29 @@
                         postedData.labId = $scope.samples.labsToRoundArray;
                         var url = serverSamplesURL + 'savelabstoround';
                         $http
-                            .post(url, postedData)
-                            .success(function (response) {
-                                console.log(response)
-                                changeSavingSpinner(false);
-                                if (response.status == 1) {
-                                    $scope.samples.labsToRoundArray = [];
+                                .post(url, postedData)
+                                .success(function (response) {
+                                    console.log(response)
+                                    changeSavingSpinner(false);
+                                    if (response.status == 1) {
+                                        $scope.samples.labsToRoundArray = [];
 
 
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                    $scope.samples.samplesActivePage('viewrounds', 0);
-                                    $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                                        $scope.samples.samplesActivePage('viewrounds', 0);
+                                        $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
 
-                                } else {
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
-                                }
+                                    } else {
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a Lab  to already added round'));
+                                    }
 
-                            })
-                            .error(function (error) {
-                                console.log(error)
-                                changeSavingSpinner(false);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                            })
+                                })
+                                .error(function (error) {
+                                    console.log(error)
+                                    changeSavingSpinner(false);
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                })
 
                     }
 
@@ -752,28 +776,28 @@
                     postedData.panelId = $scope.samples.panelsToShipmentArray;
                     var url = serverSamplesURL + 'savepaneltoshipment';
                     $http
-                        .post(url, postedData)
-                        .success(function (response) {
-                            console.log(response)
-                            changeSavingSpinner(false);
-                            if (response.status == 1) {
-                                $scope.samples.panelsToShipmentArray = [];
+                            .post(url, postedData)
+                            .success(function (response) {
+                                console.log(response)
+                                changeSavingSpinner(false);
+                                if (response.status == 1) {
+                                    $scope.samples.panelsToShipmentArray = [];
 
-                                $scope.samples.getPanelFromShipment(shipment.id, 1);
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                    $scope.samples.getPanelFromShipment(shipment.id, 1);
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
-                                $scope.samples.showShipmentModal = false;
+                                    $scope.samples.showShipmentModal = false;
 
 
-                            } else {
-                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
-                            }
+                                } else {
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status, 'Error : possibly you trying to add a panel  to already add shipment'));
+                                }
 
-                        })
-                        .error(function (error) {
-                            changeSavingSpinner(false);
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                        })
+                            })
+                            .error(function (error) {
+                                changeSavingSpinner(false);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            })
 
                 } else {
                     changeSavingSpinner(false);
@@ -892,17 +916,17 @@
                 var url = serverSamplesURL + 'getusersessions';
 
                 $http
-                    .post(url)
-                    .success(function (response) {
-                        if (response.status == 1) {
-                            loginDataCache.put('loginData', response.data);
-                            loginCacheMemory();
-                            console.log($scope.samples.loginDetails);
-                        }
-                    })
-                    .error(function (error) {
+                        .post(url)
+                        .success(function (response) {
+                            if (response.status == 1) {
+                                loginDataCache.put('loginData', response.data);
+                                loginCacheMemory();
+                                console.log($scope.samples.loginDetails);
+                            }
+                        })
+                        .error(function (error) {
 
-                    })
+                        })
                 // }
             } catch (Exception) {
 
@@ -924,11 +948,13 @@
         /*-----------------------------------------------------------samples from panels data------------------------------------------------------------------------*/
 
         $scope.samples.panelArrowDown = false;
-        $scope.samples.getSampleFromPanel = function (panelId, tableName) {
+        $scope.samples.getSampleFromPanel = function (panelId, tableName, flag = false) {
             try {
-               
+
                 var tempPanel = panelId;
-                var panId = angular.isObject(panelId) ? panelId.id : panelId;
+
+                var panId = flag ? panelId.id : panelId.panelId;
+
                 console.log(panId);
                 if (isNumeric(panId)) {
                     try {
@@ -936,15 +962,17 @@
                         var where = {panelId: panId, participantId: null};
 
                         if (angular.isObject(tempPanel)) {
-                            where = {
-                                panelId: tempPanel.panelId,
+                            if (flag) {
+                                where = {
+                                    panelId: tempPanel.id,
 //                                roundId: tempPanel.roundId,
-                                
-                                participantId: null
-                            };
+
+                                    participantId: null
+                                };
+                            }
                         }
 
- 
+
                         if ($scope.samples.clickedPanel !== panId || tableName == 'tbl_bac_sample_to_panel') {
 
                             if ($scope.samples.clickedPanel !== panId) {
@@ -953,7 +981,7 @@
                                 $scope.samples.panelArrowDown = !$scope.samples.panelArrowDown;
 
                             }
-                            console.log(tempPanel);
+                            console.log(where);
 
                             $scope.samples.getAllSamples(tableName, where);
 
@@ -972,7 +1000,7 @@
 
             } catch (error) {
                 console.log(error)
-            }
+        }
 
         }
 
@@ -1020,7 +1048,7 @@
             if (round.id > 0) {
                 $.confirm({
                     title: 'Confirm changes!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please note the current round will be overwritten to the shipments',
                     buttons: {
                         'Confirm': {
@@ -1036,19 +1064,19 @@
                                     shipmentIds: arr
                                 }
                                 $http.post(url, data)
-                                    .success(function (response) {
-                                        changeSavingSpinner(false);
-                                        //changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
-                                        alertStartRound.close();
-                                        $.alert('Data save successfully');
-                                        $scope.samples.showAddShipment = true
-                                        $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
-                                        $scope.samples.shipmentsToRoundArray = [];
-                                    })
-                                    .error(function (error) {
-                                        changeSavingSpinner(false);
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    })
+                                        .success(function (response) {
+                                            changeSavingSpinner(false);
+                                            //changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'shipments saved successfully'));
+                                            alertStartRound.close();
+                                            $.alert('Data save successfully');
+                                            $scope.samples.showAddShipment = true
+                                            $scope.samples.getShipmentsForDelivery('tbl_bac_rounds', 'status', '0,1');
+                                            $scope.samples.shipmentsToRoundArray = [];
+                                        })
+                                        .error(function (error) {
+                                            changeSavingSpinner(false);
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                        })
 
                             }
                         },
@@ -1135,25 +1163,25 @@
                 console.log(panel);
                 changeSavingSpinner(true);
                 $http
-                    .post(url, postedData)
-                    .success(function (response) {
-                        console.log(response)
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.samplePanelArray = [];
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-                            console.log('save successfully');
-                            $scope.samples.showPanelModal = false;
-                            $scope.samples.getAllSamples('tbl_bac_panel_mst');
-                        } else {
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Error : possibly you trying to add sample   to already added panel'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                        console.log(error)
-                    })
+                        .post(url, postedData)
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.samplePanelArray = [];
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                console.log('save successfully');
+                                $scope.samples.showPanelModal = false;
+                                $scope.samples.getAllSamples('tbl_bac_panel_mst');
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Error : possibly you trying to add sample   to already added panel'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                            console.log(error)
+                        })
             } catch (error) {
                 console.log(error);
             }
@@ -1176,9 +1204,9 @@
                         if (tableName == 'tbl_bac_samples') {
                             data.sampleType = JSON.stringify(data.sampleType);
                         }
-                        
-                        if(tableName == 'tbl_bac_shipments'){
-                            if(angular.isDefined(postedData.roundInfo)) {
+
+                        if (tableName == 'tbl_bac_shipments') {
+                            if (angular.isDefined(postedData.roundInfo)) {
                                 delete postedData.roundInfo;
                             }
                         }
@@ -1191,42 +1219,42 @@
                         try {
                             console.log(data)
                             $http.post(url, postedData)
-                                .success(function (response) {
+                                    .success(function (response) {
 
-                                    console.log('data')
-                                    console.log(response.data)
-                                    changeSavingSpinner(false);
-                                    if (angular.isDefined(response.data)) {
-                                        if (response.data.status == 1) {
-                                            emptyFormData(tableName, false);
-                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                        console.log('data')
+                                        console.log(response.data)
+                                        changeSavingSpinner(false);
+                                        if (angular.isDefined(response.data)) {
+                                            if (response.data.status == 1) {
+                                                emptyFormData(tableName, false);
+                                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
+                                            } else {
+                                                EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                                            }
                                         } else {
+                                            var message = EptServices.EptServiceObject.returnTableColumn(tableName)
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
                                             EptServices.EptServiceObject.returnActionUnSuccessAlert();
                                         }
-                                    } else {
-                                        var message = EptServices.EptServiceObject.returnTableColumn(tableName)
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
-                                        EptServices.EptServiceObject.returnActionUnSuccessAlert();
-                                    }
-                                    if (alertStartRound != '') {
+                                        if (alertStartRound != '') {
 
-                                        angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
+                                            angular.isDefined(alertStartRound) ? alertStartRound.close() : false;
 
-                                        if (response.data.status == 1) {
-                                            $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
-                                        } else {
-                                            EptServices.EptServiceObject.returnDuplicateAlert();
-                                            // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                            if (response.data.status == 1) {
+                                                $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
+                                            } else {
+                                                EptServices.EptServiceObject.returnDuplicateAlert();
+                                                // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
+                                            }
+
                                         }
 
-                                    }
+                                    })
+                                    .error(function (error) {
+                                        changeSavingSpinner(false);
 
-                                })
-                                .error(function (error) {
-                                    changeSavingSpinner(false);
-
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                })
+                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                    })
                         } catch (error) {
                             console.log(error)
                         }
@@ -1363,7 +1391,7 @@
             try {
                 $.confirm({
                     title: 'Confirm delete!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to delete this record,this action cannot be undone',
                     buttons: {
                         'Delete': {
@@ -1410,15 +1438,15 @@
                 postedData.where = id;
                 var url = serverSamplesURL + 'customdelete';
                 $http.post(url, postedData)
-                    .success(function (response) {
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnDeleteAlert();
-                    })
-                    .error(function (error) {
-                        console.log(error)
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnServerErrorAlert();
-                    })
+                        .success(function (response) {
+                            alertStartRound.close();
+                            EptServices.EptServiceObject.returnDeleteAlert();
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            alertStartRound.close();
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        })
             } catch (Exc) {
                 console.log(Exc);
             }
@@ -1505,50 +1533,50 @@
                 changeSavingSpinner(true);
                 console.log(postedData)
                 $http.post(url, postedData)
-                    .success(function (response) {
-                        console.log(response)
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                        .success(function (response) {
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
 
-                        if (response.status == 1) {
-                            emptyFormData(postedData.tableName);
+                            if (response.status == 1) {
+                                emptyFormData(postedData.tableName);
 
-                            $scope.samples.receiveShipmentFormData = {};
-                            if (type == 1) {
-                                $scope.samples.showMainTable(postedData.tableName)
-                                if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
-                                    $scope.samples.showShipmentModal = false;
+                                $scope.samples.receiveShipmentFormData = {};
+                                if (type == 1) {
+                                    $scope.samples.showMainTable(postedData.tableName)
+                                    if (postedData.tableName == 'tbl_bac_shipments' || postedData.tableName == 'tbl_bac_panels_shipments') {
+                                        $scope.samples.showShipmentModal = false;
 
+
+                                        alertStartRound.close();
+                                        $.alert('Data update successfully');
+                                    }
+                                }
+                                if (type == 0) {
+                                    $scope.samples.hideShipmentModal();
+                                    $scope.samples.showReceiveShipment = false;
+                                    alert($scope.samples.showReceiveShipment)
+                                    $scope.samples.getDistinctShipmentsForDelivery();
+                                }
+                                if (postedData.tableName == 'tbl_bac_panels_shipments') {
 
                                     alertStartRound.close();
-                                    $.alert('Data update successfully');
+                                    $.alert('Data updated successfully');
                                 }
+                            } else {
+                                if (type == 1) {
+                                    addIdToEditing(postedData.tableName)
+                                }
+                                $scope.samples.sampleFormData.id = postedData.where.id;
                             }
-                            if (type == 0) {
-                                $scope.samples.hideShipmentModal();
-                                $scope.samples.showReceiveShipment = false;
-                                alert($scope.samples.showReceiveShipment)
-                                $scope.samples.getDistinctShipmentsForDelivery();
-                            }
-                            if (postedData.tableName == 'tbl_bac_panels_shipments') {
-
-                                alertStartRound.close();
-                                $.alert('Data updated successfully');
-                            }
-                        } else {
-                            if (type == 1) {
-                                addIdToEditing(postedData.tableName)
-                            }
-                            $scope.samples.sampleFormData.id = postedData.where.id;
-                        }
-                        angular.isDefined(alertStartRound) && alertStartRound != '' ? alertStartRound.close() : false;
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        console.log(error);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                            angular.isDefined(alertStartRound) && alertStartRound != '' ? alertStartRound.close() : false;
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            console.log(error);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
             } catch (Exc) {
                 changeSavingSpinner(true);
                 console.log(Exc)
@@ -1562,7 +1590,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to dispatch,this action can not be undone! ',
                     buttons: {
                         'Dispatch Shipment': {
@@ -1653,14 +1681,14 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm action, action can not be undone! ' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Enter a comment</label>' +
-                    '<textarea placeholder="Please enter a comment" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Enter a comment</label>' +
+                            '<textarea placeholder="Please enter a comment" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'Confirm Action': {
                             btnClass: 'btn-blue',
@@ -1783,29 +1811,29 @@
                 aba.panelToSampleId = sampleData.panelToSampleId;
                 aba.resultsAba = data;
                 $http
-                    .post(url, aba)
-                    .success(function (res) {
-                        console.log(res)
-                        alertStartRound.close();
+                        .post(url, aba)
+                        .success(function (res) {
+                            console.log(res)
+                            alertStartRound.close();
 
-                        if (res.status == 1) {
+                            if (res.status == 1) {
+                                $.alert({
+                                    title: "<i class='fa fa-check-circle text-success'></i> ",
+                                    content: "data saved successfully"
+                                });
+                            } else {
+                                $.alert({
+                                    title: "<i class='fa fa-remove text-danger'></i> Error",
+                                    content: "error occured,likely you already submtted the result"
+                                });
+                            }
+                        })
+                        .error(function (error) {
                             $.alert({
-                                title: "<i class='fa fa-check-circle text-success'></i> ",
-                                content: "data saved successfully"
+                                title: "<i class='fa fa-remove text-danger'>",
+                                content: " Server error occured,please try again"
                             });
-                        } else {
-                            $.alert({
-                                title: "<i class='fa fa-remove text-danger'></i> Error",
-                                content: "error occured,likely you already submtted the result"
-                            });
-                        }
-                    })
-                    .error(function (error) {
-                        $.alert({
-                            title: "<i class='fa fa-remove text-danger'>",
-                            content: " Server error occured,please try again"
-                        });
-                    })
+                        })
             }
 
             function saveMicroDataForAdmin() {
@@ -1836,26 +1864,26 @@
                     aba.resultsAba = data;
 
                     $http
-                        .post(url, aba)
-                        .success(function (res) {
-                            console.log(res)
-                            alertStartRound.close();
+                            .post(url, aba)
+                            .success(function (res) {
+                                console.log(res)
+                                alertStartRound.close();
 
-                            if (res.status == 1) {
-                                $.alert({
-                                    title: "<i class='fa fa-check-circle text-success'></i> Success",
-                                    content: "data saved successfully"
-                                });
-                            } else {
-                                $.alert({
-                                    title: "<i class='fa fa-remove text-danger'></i> Error",
-                                    content: "error occured,likely you already submtted the result"
-                                });
-                            }
-                        })
-                        .error(function (error) {
-                            EptServices.EptServiceObject.returnServerErrorAlert();
-                        })
+                                if (res.status == 1) {
+                                    $.alert({
+                                        title: "<i class='fa fa-check-circle text-success'></i> Success",
+                                        content: "data saved successfully"
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "<i class='fa fa-remove text-danger'></i> Error",
+                                        content: "error occured,likely you already submtted the result"
+                                    });
+                                }
+                            })
+                            .error(function (error) {
+                                EptServices.EptServiceObject.returnServerErrorAlert();
+                            })
                 }
 
             }
@@ -1863,7 +1891,7 @@
             if (correctData) {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are  you sure you want to submit the results anti microbacterial data? ',
                     buttons: {
                         'Confirm Action': {
@@ -1957,22 +1985,22 @@
             try {
                 var url = serverSamplesURL + 'getroundperformanceperlab';
                 var where = {checkLab: 0};
-               
+
                 changeSavingSpinner(true);
                 console.log($scope.samples.savingSpinner);
                 $http.post(url, where)
-                    .success(function (response) {
-                    
-                        console.log(response)
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.labAveragePerformance = response.data;
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
-                    })
+                        .success(function (response) {
+
+                            console.log(response)
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labAveragePerformance = response.data;
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
             } catch (Exception) {
                 console.log(Exception);
             }
@@ -1994,23 +2022,23 @@
             }
             url = serverSamplesURL + 'updatetablewhere';
             $http.post(url, updateData)
-                .success(function (response) {
+                    .success(function (response) {
 
-                    alertStartRound.close();
-                    if (response.status == 1) {
-                        $.alert({
-                            title: '<i class="fa fa-check-circle"></i> Success',
-                            content: 'Result saved successfully'
-                        });
-                    } else {
+                        alertStartRound.close();
+                        if (response.status == 1) {
+                            $.alert({
+                                title: '<i class="fa fa-check-circle"></i> Success',
+                                content: 'Result saved successfully'
+                            });
+                        } else {
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        }
+                        console.log(response);
+                    })
+                    .error(function (error) {
                         EptServices.EptServiceObject.returnServerErrorAlert();
-                    }
-                    console.log(response);
-                })
-                .error(function (error) {
-                    EptServices.EptServiceObject.returnServerErrorAlert();
-                    console.log(error)
-                })
+                        console.log(error)
+                    })
         }
         $scope.samples.saveFeedbackFormData = function (userFeedbackData, tablename) {
 
@@ -2031,7 +2059,7 @@
             try {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message,
                     buttons: {
                         'Confirm Action': {
@@ -2124,14 +2152,14 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm cancellation of shipment,this cant be undone !' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Reason for Cancellation</label>' +
-                    '<textarea placeholder="Cancellation Comment" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Reason for Cancellation</label>' +
+                            '<textarea placeholder="Cancellation Comment" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'cancel shipment': {
                             btnClass: 'btn-blue',
@@ -2174,19 +2202,19 @@
                 $scope.samples.sampleToUsers = {}
                 changeSavingSpinner(true);
                 $http
-                    .post(url, where)
-                    .success(function (response) {
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.sampleToUsersr = response.data;
-                        } else {
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
-                    })
+                        .post(url, where)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.sampleToUsersr = response.data;
+                            } else {
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
             } catch (Exception) {
 
             }
@@ -2213,11 +2241,73 @@
             }
             if (all == 1) {
                 where.status = 2
+                $scope.samples.readyLabs = {};
             }
             $scope.samples.currentRound = round;
-            $scope.samples.getAllSamples('tbl_bac_ready_labs', where);
+            $scope.samples.getReadyLabs(where);
 
         }
+
+        $scope.samples.getReadyLabs = function (where) {
+            try {
+                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+                var url = serverSamplesURL + 'getparticipatinglabs';
+                var varData = {roundId: where.roundId}
+                var tableName = 'tbl_bac_ready_labs';
+                $http
+                        .post(url, where)
+                        .success(function (data) {
+                            console.log(data);
+                            $scope.samples.loaderProgressSpinner = '';
+                            if (data.status == 1) {
+                                assignHTTPResponse(data, tableName);
+                            } else {
+                                assignHTTPResponse({}, tableName);
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(data.status));
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                            if (data.data == false) {
+                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                            }
+                        })
+                        .error(function (error) {
+                            console.log(error)
+                            $scope.samples.loaderProgressSpinner = '';
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                        })
+
+            } catch (Exc) {
+                console.log(Exc)
+            }
+        }
+
+
+        $scope.samples.enrolLab = function (lab) {
+            lab.enrolled = 1;
+
+            var url = serverSamplesURL + 'saveparticipatinglabs';
+            var varData = {labData: lab}
+            $http
+                    .post(url, varData)
+                    .success(function (data) {
+                        console.log(data);
+                        $scope.samples.loaderProgressSpinner = '';
+                        if (data.status == 1) {
+
+                        } else {
+
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        }
+
+                    })
+                    .error(function (error) {
+                        console.log(error)
+
+                    })
+
+        }
+
+
         $scope.samples.returnFormattedLeft = function (daysLeft) {
             var delta = Math.abs(daysLeft * 24 * 3600);
 
@@ -2264,21 +2354,21 @@
                 var url = serverSamplesURL + 'getusersamplesissued';
                 changeSavingSpinner(true);
                 $http
-                    .post(url, where)
-                    .success(function (response) {
-                        console.log(response);
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.samplesIssuedToUser = response.data;
-                        } else {
-                            $scope.samples.samplesIssuedToUser = {};
-                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
-                    })
+                        .post(url, where)
+                        .success(function (response) {
+                            console.log(response);
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.samplesIssuedToUser = response.data;
+                            } else {
+                                $scope.samples.samplesIssuedToUser = {};
+                                changeFb(EptServices.EptServiceObject.returnLoaderStatus(1, 'No Records available'));
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0, 'Server Err ' + error));
+                        })
 
 
             } catch (Exception) {
@@ -2306,31 +2396,31 @@
                             console.log(postedData);
                             changeSavingSpinner(true);
                             $http
-                                .post(url, postedData)
-                                .success(function (response) {
-                                    console.log(response)
-                                    changeSavingSpinner(false);
-                                    if (response.status == 1) {
-                                        $scope.samples.samplePanelArray = [];
-                                        $scope.samples.usersToSamples = [];
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
-                                        alertStartRound.close();
-                                    } else {
+                                    .post(url, postedData)
+                                    .success(function (response) {
+                                        console.log(response)
+                                        changeSavingSpinner(false);
+                                        if (response.status == 1) {
+                                            $scope.samples.samplePanelArray = [];
+                                            $scope.samples.usersToSamples = [];
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
+                                            alertStartRound.close();
+                                        } else {
+                                            changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                        }
+                                        $scope.samples.showMultiSelect('', 1);
+                                    })
+                                    .error(function (error) {
+                                        changeSavingSpinner(false);
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    }
-                                    $scope.samples.showMultiSelect('', 1);
-                                })
-                                .error(function (error) {
-                                    changeSavingSpinner(false);
-                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    console.log(error)
-                                })
+                                        console.log(error)
+                                    })
 
                         }
 
                         $.confirm({
                             title: 'Confirm!',
-                            theme: 'supervan',
+                            theme: 'light',
                             content: 'Please confirm issue of samples,this action can not be undone to ' + users.length + ' User(s)',
                             buttons: {
                                 'Issue Sample': {
@@ -2407,18 +2497,18 @@
                 var url = serverSamplesURL + 'getlabusers';
                 changeSavingSpinner(true);
                 $http
-                    .post(url)
-                    .success(function (response) {
-                        changeSavingSpinner(false);
-                        if (response.status == 1) {
-                            $scope.samples.labUsers = response.data;
-                        } else {
-                            $scope.samples.labUsers = {};
-                        }
-                    })
-                    .error(function (error) {
+                        .post(url)
+                        .success(function (response) {
+                            changeSavingSpinner(false);
+                            if (response.status == 1) {
+                                $scope.samples.labUsers = response.data;
+                            } else {
+                                $scope.samples.labUsers = {};
+                            }
+                        })
+                        .error(function (error) {
 
-                    })
+                        })
 
             } catch (Exception) {
                 console.log(Exception)
@@ -2591,16 +2681,16 @@
                 }
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Condition</label>' +
-                    '<input placeholder="Condition e.g temp,moist etc.." class="condition form-control" required />' +
-                    '<label>Reason for Action</label>' +
-                    '<textarea placeholder="Reason for action" class="name form-control" required ></textarea>' +
-                    '</div>' +
-                    '</form>',
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>Condition</label>' +
+                            '<input placeholder="Condition e.g temp,moist etc.." class="condition form-control" required />' +
+                            '<label>Reason for Action</label>' +
+                            '<textarea placeholder="Reason for action" class="name form-control" required ></textarea>' +
+                            '</div>' +
+                            '</form>',
                     buttons: {
                         'Save': {
                             btnClass: 'btn-blue',
@@ -2694,21 +2784,21 @@
                 }
                 var url = serverReportURL + 'getlabuserresponse';
                 $http.post(url, where)
-                    .success(function (response) {
-                        console.log(response);
-                        changeSavingSpinner(false);
-                        console.log(response);
-                        if (response.status == 1) {
-                            $scope.samples.userFeedbackFormData = response.data.results;
-                            $scope.samples.susceptibilityFormData = response.data.susceptibility;
-                            $scope.samples.resultFields = response.data.microAgents;
-                            $scope.samples.sampleInstructions = response.data.sampleInstructions;
-                        }
-                    })
-                    .error(function (error) {
-                        changeSavingSpinner(false);
-                        EptServices.EptServiceObject.returnServerErrorAlert();
-                    })
+                        .success(function (response) {
+                            console.log(response);
+                            changeSavingSpinner(false);
+                            console.log(response);
+                            if (response.status == 1) {
+                                $scope.samples.userFeedbackFormData = response.data.results;
+                                $scope.samples.susceptibilityFormData = response.data.susceptibility;
+                                $scope.samples.resultFields = response.data.microAgents;
+                                $scope.samples.sampleInstructions = response.data.sampleInstructions;
+                            }
+                        })
+                        .error(function (error) {
+                            changeSavingSpinner(false);
+                            EptServices.EptServiceObject.returnServerErrorAlert();
+                        })
             } else {
 
             }
@@ -2732,7 +2822,7 @@
                     var barcodeString = data.barcode;
                     console.log(barcodeString)
                     $("#demo").barcode(barcodeString, "ean13",
-                        {barWidth: 3, barHeight: 60}
+                            {barWidth: 3, barHeight: 60}
                     );
                 }, 300)
 
@@ -2843,19 +2933,19 @@
             $scope.samples.loaderProgressSpinner = 'fa-spinner'
             $scope.samples.instructionsFormData = {};
             $http.post(url, where)
-                .success(function (data) {
-                    $scope.samples.loaderProgressSpinner = ''
-                    if (data.status == 1) {
+                    .success(function (data) {
+                        $scope.samples.loaderProgressSpinner = ''
+                        if (data.status == 1) {
 
-                        $scope.samples.instructionsFormData = data.data;
-                        $scope.samples.instructionsFormData.sampleId = sample.id;
-                        $scope.samples.instructionsFormData.batchName = sample.batchName;
-                    }
+                            $scope.samples.instructionsFormData = data.data;
+                            $scope.samples.instructionsFormData.sampleId = sample.id;
+                            $scope.samples.instructionsFormData.batchName = sample.batchName;
+                        }
 
-                })
-                .error(function (error) {
-                    $scope.samples.loaderProgressSpinner = ''
-                })
+                    })
+                    .error(function (error) {
+                        $scope.samples.loaderProgressSpinner = ''
+                    })
             $scope.samples.samplesActivePage('addSampleInstructions', 0);
         }
 
@@ -2963,15 +3053,15 @@
                 var url = serverSamplesURL + 'getmicroagents';
                 $scope.samples.clickedSample = data;
                 $http.post(url, where)
-                    .success(function (response) {
-                        console.log(response)
-                        if (response.status == 1) {
-                            $scope.samples.resultFields = response.data;
-                        }
-                    })
-                    .error(function () {
+                        .success(function (response) {
+                            console.log(response)
+                            if (response.status == 1) {
+                                $scope.samples.resultFields = response.data;
+                            }
+                        })
+                        .error(function () {
 
-                    })
+                        })
 
             } catch (Exc) {
                 console.log(Exc)
@@ -3034,7 +3124,7 @@
         // Disable weekend selection
         function disabled(data) {
             var date = data.date,
-                mode = data.mode;
+                    mode = data.mode;
             return false;//mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
         }
 
@@ -3086,7 +3176,7 @@
 
         function getDayClass(data) {
             var date = data.date,
-                mode = data.mode;
+                    mode = data.mode;
             if (mode === 'day') {
                 var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
@@ -3104,23 +3194,23 @@
     }).directive("datePicker", function () {
         return {
             template: "<div class='' ng-controller='DatepickerPopupCtrl'>" +
-            "<p class='input-group'>" +
-            "<input type='text' class='form-control' ng-change='samples.changeCurrentDate(dt)' " +
-            " required uib-datepicker-popup ng-model='dt' is-open='popup2.opened' datepicker-options='dateOptions' ng-required='true' close-text='Close'/>" +
-            "<span class='input-group-btn'>" +
-            "<button type='button' class='btn btn-default' ng-click='open2()'>" +
-            "<i class='glyphicon glyphicon-calendar'></i>" +
-            "</button>" +
-            "</span>" +
-            "</p>" +
-            "</div>"
+                    "<p class='input-group'>" +
+                    "<input type='text' class='form-control' ng-change='samples.changeCurrentDate(dt)' " +
+                    " required uib-datepicker-popup ng-model='dt' is-open='popup2.opened' datepicker-options='dateOptions' ng-required='true' close-text='Close'/>" +
+                    "<span class='input-group-btn'>" +
+                    "<button type='button' class='btn btn-default' ng-click='open2()'>" +
+                    "<i class='glyphicon glyphicon-calendar'></i>" +
+                    "</button>" +
+                    "</span>" +
+                    "</p>" +
+                    "</div>"
         };
     })
-        .filter('capitalizeLetter', function () {
-            return function (input) {
-                return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-            }
-        }).filter('spaceCapitals', function () {
+            .filter('capitalizeLetter', function () {
+                return function (input) {
+                    return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+                }
+            }).filter('spaceCapitals', function () {
         return function (input) {
             return input.replace(/([A-Z])/g, ' $1').trim();
         }
@@ -3169,12 +3259,12 @@
             var e = new Date(end).getTime() / 1000;
             var m = new Date(start).getMonth();
             var events = [{
-                title: 'Feed Me ' + m,
-                start: s + (50000),
-                end: s + (100000),
-                allDay: false,
-                className: ['customFeed']
-            }];
+                    title: 'Feed Me ' + m,
+                    start: s + (50000),
+                    end: s + (100000),
+                    allDay: false,
+                    className: ['customFeed']
+                }];
             try {
                 callback(events);
             } catch (e) {
@@ -3307,4 +3397,4 @@
 
 })
 
-();
+        ();

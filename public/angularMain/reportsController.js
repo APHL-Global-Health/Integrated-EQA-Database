@@ -10,9 +10,15 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     console.log($scope.reports.currentReports)
     $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/generalReport.html';
     $scope.reports.changeCurrentReport = function (htmlFile, report) {
-        $scope.reports.loaderStatus = true;
-        $scope.reports.currentReports = report;
-        $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/' + htmlFile + '.html';
+        var tempfile = '../partialHTMLS/reports/' + htmlFile + '.html';
+        if (tempfile == $scope.reports.loadedCurrentUrl) {
+
+        } else {
+            $scope.reports.loaderStatus = true;
+            $scope.reports.currentReports = report;
+
+            $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/' + htmlFile + '.html';
+        }
         console.log($scope.reports.loadedCurrentUrl);
 
     }
@@ -429,7 +435,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         msg = shipment.evaluated == 1 ? ' AGAIN' : '';
         $.confirm({
             title: 'Confirm Evaluation!',
-            theme: 'supervan',
+            theme: 'light',
             content: 'Are you want to evaluate this shipment ' + shipment.shipmentName + msg,
             buttons: {
                 'Evaluate': {
@@ -453,7 +459,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.confirmDialog = function (message, callbackFunction) {
         $.confirm({
             title: 'Confirm !',
-            theme: 'supervan',
+            theme: 'light',
             content: message,
             buttons: {
                 'Confirm': {
@@ -514,7 +520,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             //console.log($scope.reports.whereGenRounds);
             var where = {id: round.id, published: published};
             var url = serverReportURL + 'updatepublication';
-            alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait,participnats are being notified through mail...')
+            alertStartRound = $.alert(
+                    {
+                        title: "<i class='fa fa-spin fa-spinner'> </i> In-progress",
+                        content: 'publishing results,please wait,participants are being notified through mail...'
+                    }
+            )
             $http
                     .post(url, where)
                     .success(function (response) {
@@ -523,7 +534,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                         if (response.status == 1) {
                             $scope.reports.getGeneralRoundReport($scope.reports.wherePublishRounds);
 
-                            $.alert('<i class="fa fa-check-circle"> Results ' + action + ' successfully');
+                            $.alert(
+                                    {title: "<i class='fa fa-check text-success'></i> Success",
+                                        content: '<i class="fa fa-check-circle"> Results ' + action + ' successfully'
+                                    }
+                            );
 
                         } else {
                             $.alert('<i class="fa fa-check-circle">results could not ' + action + ',please try again');
@@ -734,7 +749,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
                                 $scope.reports.getIndividualReport($scope.reports.whereIndividualLabs)
                             } else {
-                                EptServices.EptServiceObject.returnServerErrorAlert();
+                                EptServices.EptServiceObject.returnServerErrorAlert(response.message);
                             }
                         })
                         .error(function (error) {
@@ -754,14 +769,13 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         return Math.round((Number(num1) + Number(num2)), 2);
     }
     $scope.reports.addGramFinal = function (num1, num2) {
-        console.log(num1,num2);
+        console.log(num1, num2);
         if (Number(num1) > -1 && Number(num2) > -1) {
-            return Math.round(((Number(num1) + Number(num2)), 2)/2);
+            return Math.round(((Number(num1) + Number(num2)) / 2), 2);
         } else {
             if (Number(num1) > -1) {
                 return num1;
-            }
-            else if (Number(num2) > -1) {
+            } else if (Number(num2) > -1) {
                 return num2;
             } else {
                 return 'N/A';

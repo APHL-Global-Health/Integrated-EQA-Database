@@ -27,7 +27,7 @@
 
 <div class="col-md-12"  ng-init="samples.getUserIssuedSamples('tbl_bac_panels_shipments')">
 
-    <table class="table table-striped">
+    <table class="table table-bordered">
         <td>No.</td>
         <td>Batch Name</td>
         <td>Round Code</td>
@@ -36,7 +36,8 @@
         <td>Date Iss'd</td>
         <td>Material Source</td>
         <td>action</td>
-        <tr dir-paginate="sample in samples.samplesIssuedToUser | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+        <tr class="{{samples.returnRowColor(sample.responseStatus)}}"
+            dir-paginate="sample in samples.samplesIssuedToUser | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
             <td>{{sample.batchName}}</td>
             <td>{{sample.roundCode}}</td>

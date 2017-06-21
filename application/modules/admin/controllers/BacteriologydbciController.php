@@ -57,6 +57,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $data['totalAddedSamples'] = $value['quantity'];
                     $data['panelId'] = $jsPostData['panelId'];
                     $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $data);
+
+                    $updateSamples['addedStatus'] = 1;
+                    $where['id'] = $data['sampleId'];
+                    $this->dbConnection->updateTable('tbl_bac_samples', $where, $updateSamples);
                 }
                 echo $this->returnJson($response);
             }
@@ -176,10 +180,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         exit;
     }
 
-    public function sendemailAction($body='', $to = '', $send = '') {
+    public function sendemailAction($body = '', $to = '', $send = '') {
         try {
             $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
-          
+
             $configMail = array('ssl' => 'tls',
                 'auth' => 'login',
                 'username' => $config['production']['email.config.username'],
@@ -204,12 +208,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             if ($mail->send($transport)) {
 //                echo 'Sent successfully';
             } else {
-                echo 'unable to send email';
+//                echo 'unable to send email';
             }
         } catch (Exception $e) {
             echo $e->getMessage();
         }
-        exit();
+        
     }
 
     public function savepaneltoshipmentAction() {
@@ -225,7 +229,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                     $data['panelId'] = $value;
                     $data['shipmentId'] = $jsPostData['shipmentId'];
+
                     $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $data);
+                    $where['id'] = $data['panelId'];
+                    $updateData['addedStatus'] = 1;
+                    $this->dbConnection->updateTable('tbl_bac_panel_mst', $where, $updateData);
                 }
                 echo $this->returnJson($response);
             }
@@ -349,7 +357,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                             $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
 
-                            $insertSample = $this->savesampleforeachpanel($insert, $insert['deliveryStatus']);
+//                            $insertSample = $this->savesampleforeachpanel($insert, $insert['deliveryStatus']);
 //                        if (!$insertSample) {
 //                            exit;
 //                        }
@@ -696,7 +704,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnTotalSamples($array, $tableName) {
-        if (count($array) > 0) {
+//        var_dump($array);
+//        exit;
+        if (is_array($array)) {
             foreach ($array as $key => $value) {
                 if ($tableName == 'tbl_bac_panel_mst') {
                     $array[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->id, 'panelId');
@@ -840,7 +850,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->dateCreated = $panel['dateCreated'];
                     $dataDB[$key]->barcode = $panel['barcode'];
                     $wherCnt['participantId'] = null;
-                    $wherCnt['id'] = $value->panelId;
+                    $wherCnt['panelId'] = $value->panelId;
                     $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $wherCnt, 'panelId');
                 }
             }
@@ -882,6 +892,90 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             }
         } else {
             return false;
+        }
+    }
+
+    public function getparticipatinglabsAction() {
+
+        $postedData = file_get_contents('php://input');
+        $postedData = (array) (json_decode($postedData));
+        $whereLab['roundId'] = $postedData['roundId'];
+
+        $where['IsVl'] = 3;
+        $laboratory = $this->dbConnection->selectFromTable('participant', $where);
+
+        if (is_array($laboratory)) {
+
+            foreach ($laboratory as $key => $value) {
+                $whereLab['labId'] = $laboratory[$key]->participant_id;
+                $laboratory[$key]->roundId = $whereLab['roundId'];
+                $enrolled = $this->dbConnection->selectCount('tbl_bac_rounds_labs', $whereLab, 'id');
+                $laboratory[$key]->enrolled = $enrolled;
+                if ($postedData['status'] == 2 &&$enrolled==0) {
+                    unset($laboratory[$key]);
+                }
+            }
+            echo($this->returnJson((array('status' => 1, 'message' => 'Records Found', 'data' => $laboratory))));
+        } else {
+            echo($this->returnJson((array('status' => 0, 'message' => 'No Records Found'))));
+        }
+        exit;
+    }
+
+    public function saveparticipatinglabsAction() {
+        $postedData = file_get_contents('php://input');
+        $postedData = (array) json_decode($postedData);
+        $labInfo = (array) $postedData['labData'];
+        $insertData['labId'] = $labInfo['participant_id'];
+        $insertData['roundId'] = $labInfo['roundId'];
+
+
+        $insertStatus = $this->dbConnection->insertData('tbl_bac_rounds_labs', $insertData);
+
+        if ($insertStatus['status'] != 1) {
+
+            $resp['status'] = 0;
+            $resp['message'] = $insertStatus['message'];
+        } else {
+            $this->savePanelForEachLab($insertData['roundId'], $insertData['labId']);
+            $this->addSamplesToLab($insertData);
+            $resp['status'] = 1;
+            $resp['message'] = 'Data saved successfully';
+        }
+        echo($this->returnJson($resp));
+        exit;
+    }
+
+    public function addSamplesToLab($jsPostData) {
+        $where['participantId'] = $jsPostData['labId'];
+        $where['roundId'] = $jsPostData['roundId'];
+
+        $panels = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $where);
+
+        if (count($panels) > 0) {
+            foreach ($panels as $key => $value) {
+
+                $panel['panelId'] = $panels[$key]->panelId;
+                $panel['shipmentId'] = $panels[$key]->shipmentId;
+                $panel['participantId'] = null;
+                $samples = $this->dbConnection->selectFromTable('tbl_bac_sample_to_panel', $panel);
+
+
+                if (count($samples) > 0) {
+
+                    foreach ($samples as $ky => $val) {
+                        $panelSample = (array) $samples[$ky];
+                        unset($panelSample['id']);
+                        $shipment = $this->returnValueWhere($panel['shipmentId'], 'tbl_bac_shipments');
+                        $panelSample['deliveryStatus'] = $shipment['shipmentStatus'];
+                        $panelSample['panelId'] = $panel['panelId'];
+                        $panelSample['participantId'] = $where['participantId'];
+                        $panelSample['roundId'] = $where['roundId'];
+                        $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $panelSample);
+                       
+                    }
+                }
+            }
         }
     }
 
@@ -1259,14 +1353,14 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             }
         }
 
-        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs');
+        $round = $this->dbConnection->selectFromTable('tbl_bac_rounds');
 
         if ($round !== false) {
             foreach ($round as $key => $value) {
 //                $where['labId'] = $whereLab['participant_id'];
-                $where['roundId'] = $value->roundId;
+                $where['roundId'] = $value->id;
 
-                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                $roundInfo = $this->returnValueWhere($value->id, 'tbl_bac_rounds');
 
                 $round[$key]->totalMarks = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'finalScore', true);
 
@@ -1408,7 +1502,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $posted = (array) $dataArray['updateData'];
                     if ($posted['shipmentStatus'] == 2) {
 
-                        $this->sendemailondispatchAction((array)$dataArray['where']);
+                        $this->sendemailondispatchAction((array) $dataArray['where']);
                     }
                 }
             } else {
@@ -1420,15 +1514,15 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         }
         exit();
     }
-
+    
     public function sendemailondispatchAction($shipmentWhere = null) {
 
 
         $shipmentInfo = $this->returnValueWhere($shipmentWhere['id'], 'tbl_bac_shipments');
         $round = $this->returnValueWhere($shipmentInfo['roundId'], 'tbl_bac_rounds');
 
-        
-        if (count($shipmentInfo)>0) {
+
+        if (count($shipmentInfo) > 0) {
 //            print_r($shipmentInfo);
 //exit;
             $roundId = $shipmentInfo['roundId'];
@@ -1453,13 +1547,12 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $shipmentInfo['courier'] = $shipmentInfo['dispatchCourier'];
             $message = $this->generateMessage($shipmentInfo, 3);
             $common = new Application_Service_Common();
-            $message['message'] .= " of round <b>" . $round['roundName'] ."</b> ";
-            $message['message'] = "This is to notify you <br> ".$message['message'];
+            $message['message'] .= " of round <b>" . $round['roundName'] . "</b> ";
+            $message['message'] = "This is to notify you <br> " . $message['message'];
+            
             $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
-
-          
         }
-     return true;
+        return true;
     }
 
     public function saveshipmentstoroundAction() {

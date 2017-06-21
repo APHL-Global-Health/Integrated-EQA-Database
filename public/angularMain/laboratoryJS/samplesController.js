@@ -138,6 +138,15 @@
             }
         }
 
+        $scope.samples.returnRowColor = function (status) {
+            console.log(status)
+            if (status == 0) {
+                return 'btn-danger';
+            } else {
+                return 'btn-success';
+            }
+        };
+
         $scope.samples.returnRange = function (range) {
             range = Number(range);
             range++;
@@ -185,7 +194,7 @@
 
             $.confirm({
                 title: 'Confirm!',
-                theme: 'supervan',
+                theme: 'light',
                 content: 'Please confirm start of round! ' + round.roundName,
                 buttons: {
                     'start round': {
@@ -692,7 +701,7 @@
         $scope.samples.confirmDialog = function (message, callbackFunction) {
             $.confirm({
                 title: 'Confirm !',
-                theme: 'supervan',
+                theme: 'light',
                 content: message,
                 buttons: {
                     'Confirm': {
@@ -1039,7 +1048,7 @@
             if (round.id > 0) {
                 $.confirm({
                     title: 'Confirm changes!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please note the current round will be overwritten to the shipments',
                     buttons: {
                         'Confirm': {
@@ -1207,7 +1216,7 @@
                                     .success(function (response) {
 
                                         console.log('data')
-                                        console.log(response.data)
+                                        console.log(response)
                                         changeSavingSpinner(false);
                                         if (angular.isDefined(response.data)) {
                                             if (response.data.status == 1) {
@@ -1376,7 +1385,7 @@
             try {
                 $.confirm({
                     title: 'Confirm delete!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to delete this record,this action cannot be undone',
                     buttons: {
                         'Delete': {
@@ -1575,7 +1584,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are you sure you want to dispatch,this action can not be undone! ',
                     buttons: {
                         'Dispatch Shipment': {
@@ -1666,7 +1675,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm action, action can not be undone! ' +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +
@@ -1876,7 +1885,7 @@
             if (correctData) {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Are  you sure you want to submit the results anti microbacterial data? ',
                     buttons: {
                         'Confirm Action': {
@@ -2003,7 +2012,7 @@
         $scope.samples.saveFeedbackFormData = function (userFeedbackData, tablename) {
 
             var sampleData = $scope.samples.currentSampleForResponse;
-            console.log(sampleData)
+            console.log(userFeedbackData)
             userFeedbackData.userId = sampleData.userId;
             userFeedbackData.sampleId = sampleData.sampleId;
             userFeedbackData.participantId = sampleData.participantId;
@@ -2011,15 +2020,25 @@
             userFeedbackData.panelToSampleId = sampleData.panelToSampleId;
             var edit = false;
             var message = 'Are  you sure you want to submit the results? ';
+            
             if (angular.isDefined($scope.samples.userFeedbackFormData.id)) {
+                
                 edit = true;
+                
                 message = 'Are you sure you want to edit this record ?'
             }
-
+            if(angular.isDefined(userFeedbackData.discManufacturer)){
+                console.log('sample checked');
+                if(angular.isUndefined(userFeedbackData.id)){
+                    console.log('id checked');
+                    edit = false; 
+                }
+            }
+            console.log(edit)
             try {
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message,
                     buttons: {
                         'Confirm Action': {
@@ -2112,7 +2131,7 @@
 
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: 'Please confirm cancellation of shipment,this cant be undone !' +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +
@@ -2345,7 +2364,7 @@
 
                         $.confirm({
                             title: 'Confirm!',
-                            theme: 'supervan',
+                            theme: 'light',
                             content: 'Please confirm issue of samples,this action can not be undone to ' + users.length + ' User(s)',
                             buttons: {
                                 'Issue Sample': {
@@ -2610,7 +2629,7 @@
                 }
                 $.confirm({
                     title: 'Confirm!',
-                    theme: 'supervan',
+                    theme: 'light',
                     content: message +
                             '<form action="" class="formName">' +
                             '<div class="form-group">' +
@@ -2799,14 +2818,14 @@
         $scope.samples.saveReceiveShipmentForm = function (receiveShipmentData) {
             try {
 
-                receiveShipmentData.shipmentStatus = 3;
+//                receiveShipmentData.shipmentStatus = 3;
                 console.log(receiveShipmentData);
-
+                receiveShipmentData.dateReceived = new Date();
 
                 var postedData = {};
                 postedData.tableName = 'tbl_bac_shipments';
                 postedData.updateData = receiveShipmentData;
-                postedData.where = {id: $scope.samples.currentShipment.id};
+                postedData.where = {id: $scope.samples.currentShipment.id, participantId: $scope.samples.loginDetails.participant_id};
                 if (angular.isDefined(postedData)) {
                     $scope.samples.updateWhere(postedData, 0);
                 }
