@@ -1,6 +1,6 @@
 
 <h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
-    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">Participants
+    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;"> <x id="header-p">Participants</x>
         <i class="fa fa-spin fa-spinner" id="loader" style="display: none"></i>
     </div>
     <div style="margin-top:10px;">
@@ -57,10 +57,11 @@
                                                 + '</td></tr>';
                                     });
                                     $('#participants_div').html(trHTML);
-
+                                    $("#header-p").html("Participants -" + shipmentCode);
                                 } else {
                                     trHTML += "<tr ><td  colspan=7 class='text-center'>No participants added to this lab</td></tr>";
                                     $('#participants_div').html(trHTML);
+                                    $("#header-p").html("Participants");
                                 }
                             },
                             error: function (data) {
@@ -113,7 +114,7 @@
                         var excelData = returnRoundExcelData(data);
                         console.log(excelData);
                         var opts = [{
-                                sheetid: 'PARTICIPANTS ON SHIPMENT '+shipmentCode, header: true,
+                                sheetid: 'PARTICIPANTS ON SHIPMENT ' + shipmentCode, header: true,
                                 style: "background:#00ff00",
 
                                 caption: {
@@ -130,7 +131,7 @@
                                 }
                             }]
                                 ;
-                        var res = alasql('SELECT INTO XLSX("PARTICIPANTS ON SHIPMENT '+shipmentCode+' ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+                        var res = alasql('SELECT INTO XLSX("PARTICIPANTS ON SHIPMENT ' + shipmentCode + ' ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
                     } else {
                         $.alert({title: "<i class='fa fa-close text-danger'> </i>Error !", content: "Data is not loaded"});
                     }
