@@ -1,5 +1,5 @@
 <div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink == 'viewPackaging'">
-    <div class="main-div" ng-show="!samples.showPanelModal" ng-init="samples.getAllSamples('tbl_bac_panel_mst',samples.where)">
+    <div class="main-div" ng-show="!samples.showPanelModal" ng-init="samples.getAllSamples('tbl_bac_panel_mst', samples.where)">
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -27,7 +27,7 @@
                     <button class=" btn btn-default btn-sm"
                             data-placement="right" data-container="body" data-animation="am-fade-and-scale"
                             data-trigger="hover" data-type="success" data-title="Load data" bs-tooltip
-                            ng-click="samples.getAllSamples('tbl_bac_panel_mst',samples.where)"><i
+                            ng-click="samples.getAllSamples('tbl_bac_panel_mst', samples.where)"><i
                             class="fa fa-refresh"></i>
                     </button>
                     &nbsp;
@@ -49,7 +49,7 @@
                             <div class="panel-heading">
                                 <div class="panel-title">
                                     <a data-toggle="collapse" href="#{{panel.id}}"
-                                       ng-click="samples.getSampleFromPanel(panel, 'tbl_bac_sample_to_panel',true)"
+                                       ng-click="samples.getSampleFromPanel(panel, 'tbl_bac_sample_to_panel', true)"
                                        data-parent="#accordion">{{$index + 1}}.
                                         {{panel.panelName}}</a>
                                     <a href="#{{panel.id}}" style="color:white;" data-toggle="collapse"
@@ -195,6 +195,10 @@
 
 
             <div ng-if="expand">
+                <div class="pull-right">
+                    <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="samples.where.addedStatus"
+                           ng-change="samples.getAllSamples('tbl_bac_panel_mst', samples.where)">Show Inactive
+                </div>
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
@@ -309,7 +313,7 @@
                         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                         <small class="">
                             <a href="#" class=" btn btn-default btn-sm"
-                               ng-click="samples.getAllSamples('tbl_bac_samples',samples.where)">
+                               ng-click="samples.getAllSamples('tbl_bac_samples', samples.where)">
                                 <i class="fa fa-refresh"></i>
                             </a>
                         </small>
