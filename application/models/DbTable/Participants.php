@@ -433,6 +433,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'created_by' => $authNameSpace->primary_email,
             'ModuleID' => 1,
             'IsVl' => '1',
+            'IsModule' => '1',
             'status' => 'active'
         );
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {

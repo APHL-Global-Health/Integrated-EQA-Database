@@ -61,8 +61,8 @@ class ContactUsController extends Zend_Controller_Action {
             $participantService->selfRegistration($params, $this->getallsysadmins());
 
 
-
-            $this->_redirect("/auth/login?status=Account created successfully. Check your email for login credentials.");
+            $status = "Account created successfully. Check your email for login credentials.";
+            $this->_redirect("/auth/login?status=$status");
         }
 
         $this->view->affiliates = $participantService->getAffiliateList();
