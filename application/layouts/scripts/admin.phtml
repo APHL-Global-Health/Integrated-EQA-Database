@@ -183,7 +183,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <?php if ($vl != 2) { ?>
                                         <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
-                        <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                     ?>">Test Kits</a></li>-->
+                        <!--            <li><a href="<?php //echo $this->url(array('module'=>'admin','controller'=>'testkits'),'default',true);                      ?>">Test Kits</a></li>-->
                                         <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'samples'), 'default', true); ?>">Samples</a></li>
                                         <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'resultcodes'), 'default', true); ?>">Result Codes</a></li>
                                     <?php } ?>
@@ -255,8 +255,10 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'dts-settings'), 'default', true); ?>">DTS Settings</a></li>
                                 <?php } ?>
-                                <li><a href="/admin/mail-template/index/9u690s3/new_shipment/"> New Shipment Mail Template</a></li>
-                                <li><a href="/admin/mail-template/index/9u690s3/not_participated/"> Not Participated Mail Template</a></li>				
+
+<!--                                <li><a href="/admin/mail-template/index/9u690s3/new_shipment/"> New Shipment Mail Template</a></li>
+                                <li><a href="/admin/mail-template/index/9u690s3/not_participated/"> Not Participated Mail Template</a></li>				-->
+
                                 <li class="divider"></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'partners'), 'default', true); ?>">Partners</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'vl-assay'), 'default', true); ?>">Vl Assay</a></li>
@@ -268,11 +270,11 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions'), 'default', true); ?>">PT Survey</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment'), 'default', true); ?>">Shipments</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean','action' => 'index'), 'default', true); ?>">
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'index'), 'default', true); ?>">
                                         Apply Peer Means</a>
                                 </li>
-<!--                                <li class="divider"></li>-->
-<!--                                <li><a href="javascript:void(0);">Packaging</a></li>-->
+                                <!--                                <li class="divider"></li>-->
+                                <!--                                <li><a href="javascript:void(0);">Packaging</a></li>-->
                             </ul>
                         </li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -342,7 +344,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">
-                                       <i class="fa fa-user"></i> System  Admin</a>
+                                        <i class="fa fa-user"></i> System  Admin</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
@@ -350,19 +352,19 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                         <i class="fa fa-gear"></i>  Setup Round
                                     </a>
                                 </li>
-                               
+
                                 <li class="divider"></li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">
-                                       <i class="fa fa-hospital-o"></i>  Micro Labs</a></li>
+                                        <i class="fa fa-hospital-o"></i>  Micro Labs</a></li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">
-                                      <i class="fa fa-users"></i>  Users</a>
+                                        <i class="fa fa-users"></i>  Users</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true);
-                ?>">
-                                   <i class="fa fa-link"></i>     Lab & User Mapping
+                    ?>">
+                                        <i class="fa fa-link"></i>     Lab & User Mapping
                                     </a></li>
 
 
