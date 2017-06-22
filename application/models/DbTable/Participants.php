@@ -610,9 +610,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $dmId = $db->insert('data_manager', $datam);
         $lastInsertId = $this->getAdapter()->lastInsertId('data_manager');
         $db->insert('participant_manager_map', array('dm_id' => $lastInsertId,
-            'participant_id' => $this->getParticipantLab(), 'Parent_id' => $authNameSpace->dm_id));
-
-
+            'participant_id' => $participantId, 'Parent_id' => $authNameSpace->dm_id));
         $participantName = $params['pfname'] . " " . $params['plname'];
         $dataManager = $authNameSpace->first_name . " " . $authNameSpace->last_name;
 
