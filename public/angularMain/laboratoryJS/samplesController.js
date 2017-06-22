@@ -420,9 +420,9 @@
                             $scope.samples.receivedShipments = data.data;
                             $scope.samples.loaderProgressSpinner = '';
 
-                            if (data.status == 0) {
-                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                            }
+//                            if (data.status == 0) {
+//                                EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+//                            }
                         })
                         .error(function (error) {
                             console.log(error)
