@@ -105,6 +105,7 @@ class Admin_PeerMeanController extends Zend_Controller_Action {
         
         if (is_numeric($id)) {
             $this->db->delete('vl_peer_mean', " id = $id");
+            $this->updatesampletableActions($_POST);
             echo json_encode(array('status' => 1, 'message' => 'Record deleted'));
         } else {
             echo json_encode(array('status' => 0, 'message' => '  '));

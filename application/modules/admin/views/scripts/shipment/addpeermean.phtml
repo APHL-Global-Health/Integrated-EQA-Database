@@ -215,7 +215,7 @@
                                     + '</td><td>' + item.dateCreated
                                     + '</td><td>' + item.primary_email
                                     + "</td><td> <button class='btn btn-xs btn-danger' \n\
-                                                                    onclick='deletePeerScore(" + item.id + ")'><i class='fa fa-close'></i> </button>\n"
+                                                                    onclick='deletePeerScore(" + JSON.stringify(item) + ")'><i class='fa fa-close'></i> </button>\n"
                                     + '</td></tr>';
                         });
                         $('#mean_reports_table').html(trHTML);
@@ -231,12 +231,13 @@
 
 
 
-    function deletePeerScore(id) {
-        if (id) {
+    function deletePeerScore(sample) {
+    console.log(sample)
+        if (typeof sample !=='undefined') {
 
             $('#loader').show();
             var data = {};
-            data.id = id;
+            data = sample;
             $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'deletepeermean'), 'default', true);
 ?>/sid/<?php echo $this->shipmentId; ?>',
                     {
