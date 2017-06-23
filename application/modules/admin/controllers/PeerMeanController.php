@@ -63,12 +63,12 @@ class Admin_PeerMeanController extends Zend_Controller_Action {
 
     public function getpeermeansAction() {
         $shipmentServce = new Application_Service_Shipments();
-        
+
         $shipmentId = $this->getRequest()->getParam('shipmentId');
         $sampleId = $this->getRequest()->getParam('sampleId');
-        
-        $sampleDetails = $shipmentServce->getsamplemeans($shipmentId,$sampleId);
-        
+
+        $sampleDetails = $shipmentServce->getsamplemeans($shipmentId, $sampleId);
+
         echo json_encode($sampleDetails);
         exit;
     }
@@ -91,7 +91,24 @@ class Admin_PeerMeanController extends Zend_Controller_Action {
             }
         }
 
+        exit;
+    }
 
+    public function deleteFromPeerMeans($id) {
+
+        $where['id'] = $id;
+    }
+
+    public function deletepeermeanAction() {
+
+        $id = $_POST['id'];
+        
+        if (is_numeric($id)) {
+            $this->db->delete('vl_peer_mean', " id = $id");
+            echo json_encode(array('status' => 1, 'message' => 'Record deleted'));
+        } else {
+            echo json_encode(array('status' => 0, 'message' => '  '));
+        }
 
         exit;
     }

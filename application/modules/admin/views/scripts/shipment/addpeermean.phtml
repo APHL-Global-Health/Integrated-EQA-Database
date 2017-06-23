@@ -8,7 +8,7 @@
             <div class="col-md-12 h3" id="sampleTitle">
 
             </div>
-            <form class="form-horizontal" novalidate="" action="">
+            <form class="form-horizontal" novalidate="" action="#">
 
 
                 <div class="col-md-12">
@@ -150,87 +150,128 @@
 
                 function getShipmentSample() {
                     $('#loader').show();
-                    $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'getallsamplesinfo'), 'default', true); ?>/sid/<?php echo $this->shipmentId; ?>',
-                                    {
+                    $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'getallsamplesinfo'), 'default', true);
+?>/sid/<?php echo $this->shipmentId; ?>',
+                {
 
-                                        success: function (response) {
+                    success: function (response) {
 //                        console.log(response);
-                                            $('#loader').hide();
-                                            var trHTML = '';
-                                            response = JSON.parse(response);
-                                            $.each(response, function (i, item) {
+                        $('#loader').hide();
+                        var trHTML = '';
+                        response = JSON.parse(response);
+                        $.each(response, function (i, item) {
 
 
-                                                trHTML += '<tr><td>' + item.sample_label
-                                                        + '</td><td>' + item.shipment_code
-                                                        + '</td><td>' + item.low_limit
-                                                        + '</td><td>' + item.mean
-                                                        + '</td><td>' + item.high_limit
-                                                        + '</td><td>' + item.sd
+                            trHTML += '<tr><td>' + item.sample_label
+                                    + '</td><td>' + item.shipment_code
+                                    + '</td><td>' + item.low_limit
+                                    + '</td><td>' + item.mean
+                                    + '</td><td>' + item.high_limit
+                                    + '</td><td>' + item.sd
 
-                                                        + "</td><td> <button class='btn btn-xs btn-primary' \n\
+                                    + "</td><td> <button class='btn btn-xs btn-primary' \n\
                         onclick='updatePeer(" + JSON.stringify(item) + ")'> Add peer Mean </button>\n"
-                                                        + "</td><td> <button class='btn btn-xs btn-warning' \n\
+                                    + "</td><td> <button class='btn btn-xs btn-warning' \n\
                         onclick='viewPeerResults(" + JSON.stringify(item) + ")'> View Peer Results </button>\n"
-                                                        + '</td></tr>';
-                                            });
-                                            $('#records_table').html(trHTML);
-                                        },
-                                        error: function (data) {
-                                            console.log(data);
-                                            $('#loader').hide();
-                                        }
-                                    });
+                                    + '</td></tr>';
+                        });
+                        $('#records_table').html(trHTML);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        $('#loader').hide();
+                    }
+                });
 
-                        }
-                        getShipmentSample();
+    }
+    getShipmentSample();
+    var shipment = {};
+    function viewPeerResults(item) {
+        console.log(item)
+        $('#loader').show();
+        $('.added-means').show('slow');
+        $('.samples-table').hide('slow');
 
-                        function viewPeerResults(item) {
-                            console.log(item)
-                            $('#loader').show();
-                            $('.added-means').show('slow');
-                            $('.samples-table').hide('slow');
+        var text = 'Peer lab results ' + item.shipment_code + " | " + item.sample_label;
+        $('#added-header').html(text);
+        shipment = item
 
-                            var text = 'Peer lab results ' + item.shipment_code + " | " + item.sample_label;
-                            $('#added-header').html(text);
-
-
-                            $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'getpeermeans'), 'default', true);
+        $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'getpeermeans'), 'default', true);
 ?>/shipmentId/' + item.shipment_id + '/sampleId/' + item.sample_id,
-                                    {
+                {
 
-                                        success: function (response) {
+                    success: function (response) {
 //                        console.log(response);
-                                            $('#loader').hide();
-                                            var trHTML = '';
-                                            response = JSON.parse(response);
-                                            $.each(response, function (i, item) {
+                        $('#loader').hide();
+                        var trHTML = '';
+                        response = JSON.parse(response);
+                        $.each(response, function (i, item) {
 
 
-                                                trHTML += '<tr><td>' + item.sample_label
-                                                        + '</td><td>' + item.shipment_code
-                                                        + '</td><td>' + item.result
-                                                        + '</td><td>' + item.peerName
-                                                        + '</td><td>' + item.dateCreated
-                                                        + '</td><td>' + item.primary_email
-                                                        + "</td><td> <button class='btn btn-xs btn-danger' \n\
-                                                                    onclick='delete(" + JSON.stringify(item) + ")'><i class='fa fa-close'></i> </button>\n"
-                                                        + '</td></tr>';
-                                            });
-                                            $('#mean_reports_table').html(trHTML);
-                                        },
-                                        error: function (data) {
-                                            console.log(data);
-                                            $('#loader').hide();
-                                        }
-                                    });
+                            trHTML += '<tr><td>' + item.sample_label
+                                    + '</td><td>' + item.shipment_code
+                                    + '</td><td>' + item.result
+                                    + '</td><td>' + item.peerName
+                                    + '</td><td>' + item.dateCreated
+                                    + '</td><td>' + item.primary_email
+                                    + "</td><td> <button class='btn btn-xs btn-danger' \n\
+                                                                    onclick='deletePeerScore(" + item.id + ")'><i class='fa fa-close'></i> </button>\n"
+                                    + '</td></tr>';
+                        });
+                        $('#mean_reports_table').html(trHTML);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        $('#loader').hide();
+                    }
+                });
 
 
+    }
+
+
+
+    function deletePeerScore(id) {
+        if (id) {
+
+            $('#loader').show();
+            var data = {};
+            data.id = id;
+            $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'deletepeermean'), 'default', true);
+?>/sid/<?php echo $this->shipmentId; ?>',
+                    {
+                        data: data,
+                        method: 'POST',
+                        success: function (response) {
+                            console.log(response);
+                            $('#loader').hide();
+
+                            response = JSON.parse(response);
+                            if (response.status == 1) {
+                                viewPeerResults(shipment);
+                                $.alert({title: "<i class='fa fa-check text-success'></i> Success",
+                                    content: 'sample mean deleted successfully'
+                                });
+                            } else {
+                                $.alert(
+                                        {title: "<i class='fa fa-close text-danger'></i> Error",
+                                            content: 'Error occured,couldn\'t'
+                                        });
+                            }
+
+                        },
+                        error: function (error) {
+                            console.log(error);
                         }
-                        function hidePeerResults() {
-                            $('.added-means').hide('slow');
-                            $('.samples-table').show('slow');
+                    });
+        }
+
+    }
+
+    function hidePeerResults() {
+        $('.added-means').hide('slow');
+        $('.samples-table').show('slow');
 
 
-                        }
+    }
 </script>
