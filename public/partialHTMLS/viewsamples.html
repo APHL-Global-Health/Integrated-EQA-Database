@@ -63,7 +63,7 @@
                     <tbody>
                         <tr dir-paginate="sample in samples.samplesData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|filter:samples.where">
                             <td>{{$index + 1}}</td>
-                            <td><a href="#" ng-click="samples.showRoundFullUsers(sample)">{{sample.batchName}}</a></td>
+                            <td>{{sample.batchName}}</td>
                             <td>{{sample.datePrepared}}</td>
                             <td>{{sample.lifespan}}</td>
                             <td>{{sample.preparedBy}}</td>

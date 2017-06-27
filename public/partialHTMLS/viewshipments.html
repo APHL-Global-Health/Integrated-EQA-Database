@@ -33,7 +33,7 @@
             </h3>
         </div>
 
-        <div class="panel panel-body text-sm bg-aqua no-padding" ng-show="!expanded">
+        <div class="panel panel-body text-sm bg-aqua col-md-12 no-padding" ng-show="!expanded">
             <div class="fullInfoDiv">
                 <hr>
                 <div class="panel-group" id="accordion">
@@ -243,7 +243,7 @@
             </div>
         </div>
 
-        <div class=" pull-left">
+        <div class=" col-md-12 text-right no-padding">
             <input type="checkbox" class="" ng-true-value="1" ng-false-value="0" ng-model="samples.whereShipment.evaluated"
                    ng-change="samples.getAllSamples('tbl_bac_shipments', samples.whereShipment)"> show inactive
         </div>
