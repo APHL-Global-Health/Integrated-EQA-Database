@@ -416,11 +416,13 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 <?php echo $this->layout()->content; ?>
                     </div>
                     <br/>
+                    <?php  if ($authNameSpace->IsVl == 3) {  ?>
                     <div ng-hide="samples.showPhmtlPages">
                         <ng-include src='samples.linksLabObject.currentTemplate' onload="samples.createNanobar(100)">
 
                         </ng-include>
                     </div>
+                    <?php } ?>
                     <!--            <div ng-show="reports.loaderStatus" class="text-center">-->
                     <!--                <hr>-->
                     <!--                <br>-->
