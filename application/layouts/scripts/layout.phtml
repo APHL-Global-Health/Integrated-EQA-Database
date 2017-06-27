@@ -253,7 +253,9 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     <a href="#" class="" data-toggle="" role="" aria-haspopup="true" aria-expanded="false"><i class="icon icon-user"></i> <span>My Account</span> <i class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
                                     <ul class="treeview-menu">
                                         <li class="<?php echo ($activeSubMenu == 'user-info') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "user-info"), null, true) ?>">My Login Information</a></li>
-                                        <li class="<?php echo ($activeSubMenu == 'testers') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "testers"), null, true) ?>">PT Participant Info</a></li>
+                                        <li class="<?php echo ($activeSubMenu == 'testers') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "testers"), null, true) ?>">
+                                                PT Participant Info</a>
+                                        </li>
                                         <li class="<?php echo ($activeSubMenu == 'scheme') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "scheme"), null, true) ?>">Scheme Information</a></li>
                                         <li class="<?php echo ($activeSubMenu == 'change-password') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "password"), null, true) ?>">Change Password</a></li>                                
                                     </ul>
@@ -367,8 +369,9 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <li class="<?php echo ($activeSubMenu == 'user-info') ? ' active ' : ''; ?>"><a
                                                 href="<?php echo $this->url(array("controller" => "participant", "action" => "user-info"), null, true) ?>">My
                                                 Login Information</a></li>
+                                                
                                         <li class="<?php echo ($activeSubMenu == 'testers') ? ' active ' : ''; ?>"><a
-                                                href="<?php echo $this->url(array("controller" => "participant", "action" => "testers"), null, true) ?>">Laboratory Info</a></li>
+                                                href="<?php echo $this->url(array("controller" => "participant", "action" => "participantinfo"), null, true) ?>">Laboratory Info</a></li>
 
                                         <li class="<?php echo ($activeSubMenu == 'change-password') ? ' active ' : ''; ?>">
                                             <a

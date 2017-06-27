@@ -73,7 +73,9 @@ class ParticipantController extends Zend_Controller_Action {
             $this->view->isEditable = true;
         }
     }
-
+public function participantinfoAction(){
+    
+}
     public function schemeAction() {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $dbUsersProfile = new Application_Service_Participants();
