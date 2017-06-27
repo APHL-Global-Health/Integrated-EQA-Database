@@ -32,20 +32,18 @@ class Application_Service_Shipments {
                                 ->order('vl_peer_mean.sampleId ASC')
         );
     }
-    
-    public function getparticipatingLabs($sid){
-         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+
+    public function getparticipatingLabs($sid) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll(
                         $db->select()
                                 ->from('shipment_participant_map')
                                 ->join(array('pp' => 'participant'), 'shipment_participant_map.participant_id=pp.participant_id')
                                 ->join(array('sp' => 'shipment'), 'shipment_participant_map.shipment_id=sp.shipment_id')
                                 ->where("shipment_participant_map.shipment_id=" . $sid)
-
         );
     }
-    
-    
+
     public function getAllShipments($parameters) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -192,7 +190,7 @@ class Application_Service_Shipments {
             if ($aRow['status'] == 'ready') {
                 $btn = "btn-success";
             } else if ($aRow['status'] == 'pending') {
-                $btn = "btn-danger";
+                $btn = "btn-warning";
             } else {
                 $btn = "btn-primary";
             }
@@ -216,7 +214,7 @@ class Application_Service_Shipments {
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = Pt_Commons_General::humanDateFormat($aRow['lastdate_response']);
             $row[] = $aRow['number_of_samples'];
-            $row[] = "<a href='/admin/shipment/showparticipant/sid/".($aRow['shipment_id'])."'>". $aRow['total_participants']."</a>";
+            $row[] = "<a href='/admin/shipment/showparticipant/sid/" . ($aRow['shipment_id']) . "'>" . $aRow['total_participants'] . "</a>";
             $row[] = $responseSwitch;
             $row[] = ucfirst($aRow['status']);
 //             $row[] = $mailedOn;
@@ -226,7 +224,7 @@ class Application_Service_Shipments {
             $delete = '';
             $announcementMail = '';
             $manageEnroll = '';
-
+            $peermean = '';
             if ($aRow['status'] != 'finalized') {
                 $edit = '&nbsp;<a class="btn btn-primary btn-xs" href="/admin/shipment/edit/sid/' . base64_encode($aRow['shipment_id']) . '"><span><i class="icon-edit"></i> Edit</span></a>';
             } else {
@@ -235,7 +233,7 @@ class Application_Service_Shipments {
 
             if ($aRow['status'] != 'shipped' && $aRow['status'] != 'evaluated' && $aRow['status'] != 'finalized') {
                 $enrolled = '&nbsp;<a class="btn ' . $btn . ' btn-xs" href="/admin/shipment/ship-it/sid/' . base64_encode($aRow['shipment_id']) . '"><span><i class="icon-user"></i> Enroll</span></a>';
-            } else if ($aRow['status'] == 'shipped') {
+            } else if ($aRow['status'] == 'ready') {
                 $enrolled = '&nbsp;<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
                 $announcementMail = '&nbsp;<a class="btn btn-warning btn-xs" href="javascript:void(0);" onclick="mailShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-bullhorn"></i> New Shipment Mail</span></a>';
             }
@@ -244,10 +242,10 @@ class Application_Service_Shipments {
             }
 
             if ($aRow['status'] != 'finalized') {
-                $delete = '&nbsp;<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="removeShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-remove"></i> Delete</span></a>';
+                $delete = '&nbsp;<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="removeShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-remove"></i> Delete</span></a>';
             }
             if ($aRow['status'] != 'finalized') {
-                $delete = '&nbsp;<a class="btn btn-info btn-xs" href="/admin/shipment/addpeermean/sid/' . $aRow['shipment_id'] . '"><span><i class="icon-remove"></i> Peer Mean</span></a>';
+                $peermean = '&nbsp;<a class="btn btn-info btn-xs" href="/admin/shipment/addpeermean/sid/' . $aRow['shipment_id'] . '"><span><i class="icon-remove"></i> Peer Mean</span></a>';
             }
 
 //           if ($aRow['status'] != null && $aRow['status'] != "" && $aRow['status'] != 'shipped' && $aRow['status'] != 'evaluated' && $aRow['status'] != 'closed' && $aRow['status'] != 'finalized') {
@@ -260,7 +258,7 @@ class Application_Service_Shipments {
 //                $row[] = $edit.'<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
 //            }
 
-            $row[] = $edit . $enrolled . $delete . $announcementMail . $manageEnroll;
+            $row[] = $edit . $enrolled . $delete . $announcementMail . $manageEnroll . $peermean;
             $output['aaData'][] = $row;
         }
 
