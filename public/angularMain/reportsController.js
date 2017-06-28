@@ -849,7 +849,11 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             }
 
         } else {
-            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
+            $.alert(
+                    {
+                        title: "<i class='fa fa-exclamation-circle'></i> warning",
+                        content: "ASTs will be ignored since none has been filled"
+                    });
         }
     }
 
