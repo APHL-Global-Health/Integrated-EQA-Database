@@ -25,7 +25,7 @@
                             <button class="btn btn-default" type="button" ng-click="samples.getAllSamples('tbl_bac_panel_mst')">
                                 <i class="fa fa-refresh"></i>
                             </button>
-                            <button class="btn btn-default" type="button" ng-click="expand = !expand">
+                            <button class="btn btn-default" style="margin-left: 1px;" type="button" ng-click="expand = !expand">
                                 <i class="fa fa-expand"></i>
                             </button>
                         </span>
@@ -53,11 +53,11 @@
                                        class="no-padding pull-right"
                                        data-parent="#accordion"
                                        ng-click="samples.getSampleFromPanel(panel,'tbl_bac_sample_to_panel')">
-                                        <i class="fa fa-chevron-down fa-2x no-padding"
+                                        <i class="fa fa-chevron-up no-padding"
                                            ng-show="samples.panelArrowDown&&samples.clickedPanel==panel.id">
 
                                         </i>
-                                        <i class="fa fa-chevron-up fa-2x no-padding"
+                                        <i class="fa fa-chevron-down no-padding"
                                            ng-hide="samples.panelArrowDown&&samples.clickedPanel==panel.id"></i>
                                     </a>
                                     <small class="pull-right">{{panel.dateCreated}}

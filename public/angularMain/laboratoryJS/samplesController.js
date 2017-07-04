@@ -560,8 +560,8 @@
         $scope.samples.courierFormData = {};
         $scope.samples.gradingFormData = {};
         $scope.samples.testTypesFormData = {};
-        function emptyFormData(tableName, type) {
 
+        function emptyFormData(tableName, type) {
 
             if (!type) {
                 $scope.samples.showMainTable(tableName, false);
@@ -667,10 +667,9 @@
             $scope.samples.currentShipment = shipment;
             $scope.samples.showShipmentModal = true;
             $scope.samples.panelsToShipmentArray = [];
-            $scope.samples.showPanel = 'panels'
-
-
+            $scope.samples.showPanel = 'panels';
         }
+
         $scope.samples.hideShipmentModal = function () {
             $scope.samples.showShipmentModal = false;
         }
@@ -890,19 +889,20 @@
             try {
                 // if ($scope.samples.loginDetails.length == 0) {
                 var url = serverSamplesURL + 'getusersessions';
+                console.log("URL: " + url);
 
                 $http
                         .post(url)
                         .success(function (response) {
-                            console.log(response)
+                            console.log(response);
                             if (response.status == 1) {
                                 loginDataCache.put('loginData', response.data);
                                 loginCacheMemory();
                                 console.log($scope.samples.loginDetails);
                             } else {
                                 alertStartRound = $.alert({
-                                    title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning !',
-                                    content: 'You have not been added to any lab,please contact admin add you to a lab.'
+                                    title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning!',
+                                    content: 'You have not been added to any lab! <br />Please contact the System Administrator requesting to be added to a lab.'
                                 });
                             }
                         })

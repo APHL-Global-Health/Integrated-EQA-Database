@@ -3,11 +3,9 @@
 
         <div class=" panel panel-primary" ng-init="samples.showRoundInfo=true">
             <div class="panel panel-heading">
-                <h3><i class="fa fa-download"> </i>DOWNLOAD RESULTS
-                    <small>{{reports.responseInfoData.length}} records</small>
-                    <i class="fa fa-spin {{reports.loader}}"></i>
-
-                </h3>
+                <i class="fa fa-download"> </i> Download Results
+                <small ng-show="reports.responseInfoData.length">{{reports.responseInfoData.length}} records</small>
+                <i class="fa fa-spin {{reports.loader}}"></i>
             </div>
             <div class="panel panel-body">
                 <div id="alert" tabindex="1"></div>
@@ -20,7 +18,7 @@
                         <div class="col-md-12">
                             <h4>
                                 <div class="pull-left col-md-4 col-sm-12">Rounds
-                                    <small>{{samples.rounds.length}} records</small>
+                                    <small ng-show="{{samples.rounds.length}}">{{samples.rounds.length}} records</small>
                                     <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
                                 </div>
                                 <div class="pull-right col-md-8 col-sm-12">

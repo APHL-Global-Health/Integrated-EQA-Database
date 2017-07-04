@@ -26,14 +26,16 @@
             } else {
                 $scope.samples.menuLength = 2;
             }
-
         }
+
         $scope.samples.getRoundsWithFactorySave = function (round) {
             EptFactory.setRoundsData(round)
         }
+
         $scope.samples.changeItemsPerPage = function (pages) {
             $scope.samples.itemsPerPage = pages;
         }
+
         function changeFb(data) {
             $scope.samples.feedbackObject = data;
             $('.alert').show('slow');
@@ -145,12 +147,14 @@
                 return '?'
             }
         }
+
         $scope.samples.returnRange = function (range) {
             range = Number(range);
             range++;
 
             return range;
         }
+
         $scope.samples.returnSoundStatus = function (status, days) {
             if (Number(days) > 0) {
                 return 'Active';
@@ -230,6 +234,7 @@
             $scope.samples.showShipmentInfoStatus = false;
             $scope.samples.getAllSamples(tableName, whereData, 1)
         }
+
         $scope.samples.getParticipantPanel = function (tableName) {
             var whereData = {
                 participantId: $scope.samples.loginDetails.participant_id,
@@ -237,6 +242,7 @@
             }
             $scope.samples.getAllSamples(tableName, whereData)
         }
+
         var alertStartRound = ''
         $scope.samples.startRound = function (round) {
 
@@ -263,6 +269,7 @@
             })
 
         }
+
         $scope.samples.startRoundHttp = function (round) {
             try {
                 var postedData = {
@@ -306,6 +313,7 @@
                 console.log(error);
             }
         }
+
         $scope.samples.roundStatus = function (days, status) {
             if (days > 0 && status == 1) {
                 return 'Running';
@@ -320,6 +328,7 @@
             }
 
         }
+
         $scope.samples.getAllSamples = function (tableName, where, whereDelivery) {
 
             try {
@@ -366,12 +375,13 @@
                         console.log(error)
                         $scope.samples.loaderProgressSpinner = '';
                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                    })
+                    });
             } catch (e) {
                 console.log(e)
             }
 
         }
+
         $scope.samples.returnSampleStatus = function (panelStatus) {
             if (panelStatus == 1) {
                 return 'Delivered';
@@ -392,6 +402,7 @@
                 return 'Delivered & Rejected';
             }
         }
+
         $scope.samples.returnPanelStatus = function (panelStatus) {
             if (panelStatus == 2) {
                 return 'Dispatched';
@@ -597,7 +608,7 @@
         $scope.samples.savingSpinner = '';
         $scope.samples.savingInProgress = false;
         $scope.samples.showPanelModal = false;
-        
+
         $scope.samples.hidePanelModal = function () {
             $scope.samples.showPanelModal = false;
         }
@@ -1142,7 +1153,7 @@
 
         }
         $scope.samples.returnCheckedRow = function (id, data) {
-            console.log(data)
+            // console.log(data)
             var position = false;
             if (data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
@@ -1235,23 +1246,25 @@
 
         }
 
-        /*--------------------------------------------------------------------End of saving function------------------------------------------------------------------------------------------*/
+        /*--______________ End of saving function ___________ */
 
-        /*---------------------------------------------------------------------Save Data to DB generic function------------------------------------------------------------------------ */
+        /*--______________ Save Data to DB generic function ___________ */
         $scope.samples.saveSampleFormData = function (tableName, data) {
 
             try {
                 if (angular.isDefined(tableName) && angular.isDefined(data)) {
                     var postedData = {};
+
+                    if (tableName == 'tbl_bac_samples') {
+                        data.sampleType = JSON.stringify(data.sampleType);
+                    }
+                        
                     if (angular.isUndefined(data.id)) {
 
                         if (tableName == 'tbl_bac_panel_mst' || tableName == 'tbl_bac_samples') {
                             data.barcode = EptServices.EptServiceObject.returnBarcode();
                         }
-                        if (tableName == 'tbl_bac_samples') {
-                            data.sampleType = JSON.stringify(data.sampleType);
-                        }
-                        
+
                         if(tableName == 'tbl_bac_shipments'){
                             if(angular.isDefined(postedData.roundInfo)) {
                                 delete postedData.roundInfo;
@@ -1263,13 +1276,14 @@
 
                         var url = serverSamplesURL + 'insert';
                         changeSavingSpinner(true);
+                        
                         try {
                             console.log(data)
                             $http.post(url, postedData)
                                 .success(function (response) {
 
-                                    console.log('data')
-                                    console.log(response.data)
+                                    console.log('data');
+                                    console.log(response.data);
                                     changeSavingSpinner(false);
                                     if (angular.isDefined(response.data)) {
                                         if (response.data.status == 1) {
@@ -1302,7 +1316,7 @@
                                     changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
                                 })
                         } catch (error) {
-                            console.log(error)
+                            console.log(error);
                         }
 
                     } else {
@@ -1315,7 +1329,7 @@
                             tableName: tableName,
                             updateData: data
                         }
-                        console.log(postedData)
+                        console.log(postedData);
                         $scope.samples.updateWhere(postedData, 1);
                     }
                 } else {
@@ -1575,6 +1589,7 @@
                 var url = serverSamplesURL + 'updatetablewhere';
                 changeSavingSpinner(true);
                 console.log(postedData)
+                console.log("URL: " + url);
                 $http.post(url, postedData)
                     .success(function (response) {
                         console.log(response)

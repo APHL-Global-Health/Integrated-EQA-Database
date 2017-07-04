@@ -80,7 +80,7 @@
                     </div>
                     <div class="form-group " ng-if="samples.sampleFormData.materialOrigin!='NPHL'"
                          ng-class="{ 'has-error'  : sampleData.originExtraInfo.$invalid && !sampleData.originExtraInfo.$pristine }">
-                        <label class="col-2 col-form-label">Origin Info</label>
+                        <label class="col-2 col-form-label">Additional Origin Information</label>
                         <div class="col-">
                             <input class="form-control" required="" ng-model="samples.sampleFormData.originExtraInfo"
                                    name="originExtraInfo" ng-pattern="samples.alphaNumHyDashSpaceRegExp">
@@ -111,7 +111,7 @@
                         <div class="col-10" ng-init="samples.getMicrobiologyTestTypes()">
                             <select required="" multiple="" class="form-control"
                                     ng-model="samples.sampleFormData.sampleType" name="sampleType">
-                                <option ng-repeat="testType in samples.testTypes" value="{{testType.id}}" title="{{testType.testDesc}}">
+                                <option ng-repeat="testType in samples.testTypes" value="{{testType.id}}" title="{{testType.testDesc}}" ng-selected="{{samples.sampleFormData.sampleType.indexOf(testType.id)!==-1}}">
                                     {{testType.testName}}</option>
                             </select>
                             <small class="text-danger col-md-12"
@@ -142,10 +142,10 @@
                          ng-class="{ 'has-error'  : sampleData.sampleDetails.$invalid && !sampleData.sampleDetails.$pristine }">
                         <label class="col-2 col-form-label">Clinical Details</label>
                         <div class="col-10">
-                    <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleDetails"
-                              name="sampleDetails" >
+                            <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleDetails"
+                                      name="sampleDetails" >
 
-                    </textarea>
+                            </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="sampleData.sampleDetails.$invalid && !sampleData.sampleDetails.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
@@ -157,10 +157,10 @@
                          ng-class="{ 'has-error'  : sampleData.sampleInstructions.$invalid && !sampleData.sampleInstructions.$pristine }">
                         <label class="col-2 col-form-label">Instructions</label>
                         <div class="col-10">
-                    <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleInstructions"
-                              name="sampleInstructions" >
+                            <textarea class="form-control" required="" ng-model="samples.sampleFormData.sampleInstructions"
+                                      name="sampleInstructions" >
 
-                    </textarea>
+                            </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="sampleData.sampleInstructions.$invalid && !sampleData.sampleInstructions.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed

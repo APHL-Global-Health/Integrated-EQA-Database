@@ -1,4 +1,3 @@
-<!--<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">-->
 <link rel="stylesheet" href="<?php echo $this->baseUrl("css/morris-0.4.3.css"); ?>" type="text/css" media="all">
 <?php
 $file = APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini";
@@ -224,15 +223,20 @@ if ($auth->hasIdentity()) {
 <?php if ($vl == 3) { ?>
 
             <div class="jumbotron">
-                <h1>MICROBIOLOGY ADMIN MODULE</h1> 
-                  <small>Welcome back, f<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
-                <p>On this module you will be able to add other Microbiology Users,create rounds,create tests and views reports.</p> 
+                <h2>Microbiology Administration Module</h2> 
+                  <small>
+                    <p>Welcome <?php echo $_SESSION['loggedInDetails']["first_name"] . ' ' . $_SESSION['loggedInDetails']["last_name"]; ?>.</p>
+                      <p>You have logged in as a system administrator for Microbiology.</p>
+                  </small>
+                <p>On this module you will be able to:
+                    <ul>
+                        <li>add other System Administrators</li>
+                        <li>add lab users</li>
+                        <li>create and configure PT events</li>
+                        <li>view reports</li>
+                    </ul>
+                </p> 
             </div>
-            <p class="lead">To add a module add click here 
-                <a class="btn btn-primary" 
-                   href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'add'), 'default', true); ?>">
-                    Add Microbiology Users </a>
-            </p> 
         
 <?php } ?>
 <?php if ($vl == 2) { ?>
@@ -256,8 +260,8 @@ if ($auth->hasIdentity()) {
         <div class="jumbotron">
           
             <h1>SYSTEM ADMIN MODULE</h1> 
-              <small>Welcome back,  <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
-            <p>On this module you will be able to add Viral Load,Microbiology and Repository Users.</p> 
+              <small>Welcome back, <?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
+            <p>On this module you will be able to add Viral Load, Microbiology and Repository Users.</p> 
         </div>
         <p class="lead">To add a module add click here 
             <a class="btn btn-primary" 
@@ -271,12 +275,9 @@ if ($auth->hasIdentity()) {
 
 <div class="col-lg-13" id="map-canvas" style="width:100%; height: 450px;margin-top:10px !important;"></div>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
-<script src="<?php echo $this->baseUrl("js/raphael.min.js"); ?>" type="text/javascript"></script>
-<script src="<?php echo $this->baseUrl("js/morris_0.4.3.js"); ?>" type="text/javascript"></script>
-<!--<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>-->
-
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/maps-googleapis-v3.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/raphael.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/morris_0.4.3.js'); ?>"></script>
 
 <script>
             var ppercentage = [<?php echo implode(",", $ppercentage); ?>]
