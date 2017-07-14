@@ -902,7 +902,7 @@
                             } else {
                                 alertStartRound = $.alert({
                                     title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning!',
-                                    content: 'You have not been added to any lab! <br />Please contact the System Administrator requesting to be added to a lab.'
+                                    content: '<b>You have not been added to any lab!</b> <br /><br />Please contact the System Administrator requesting to be added to a lab.'
                                 });
                             }
                         })

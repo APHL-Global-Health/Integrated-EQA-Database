@@ -8,6 +8,12 @@ $lastmonthShipped = 0;
 $shippedCount = 0;
 $configuredCount = 0;
 $createdCount = 0;
+$ppercentage = array();
+$ppsSchemeType = array();
+$ppsShipmentLastDate = array();
+$dataScheme = array();
+$dataShipment = array();
+
 foreach ($this->events as $events) {
     $distributionDate = date("F", strtotime($events["distribution_date"]));
     if ($events["status"] == 'shipped') {
@@ -158,7 +164,6 @@ if ($auth->hasIdentity()) {
                 <div class="panel-body">
                     <div id="participant-per-scheme" width="450" height="450"></div>
                     <?php
-                    $dataScheme = array();
                     foreach ($this->schemeCountResult as $schemeName => $pCount) {
                         $dataScheme[] = "{ x: '" . strtoupper($schemeName) . "', y: " . $pCount . " }";
                     }
@@ -179,10 +184,6 @@ if ($auth->hasIdentity()) {
                     <div id="participant-per-shipment" width="450" height="450"></div>
                     <?php
                     $code = array();
-                    $dataShipment = array();
-                    $ppsSchemeType = array();
-                    $ppercentage = array();
-                    $ppsShipmentLastDate = array();
                     foreach ($this->shipmentCountResult as $pc) {
                         $per = 0;
                         if (isset($pc['receivedCount'])) {
@@ -285,9 +286,7 @@ if ($auth->hasIdentity()) {
             var ppsShipmentLastDate = [<?php echo implode(",", $ppsShipmentLastDate); ?>]
             Morris.Bar({
                 element: 'participant-per-scheme',
-                data: [
-<?php echo implode(",", $dataScheme); ?>
-                ],
+                data: [<?php echo implode(",", $dataScheme); ?>],
                 xLabelAngle: 45,
                 hideHover: true,
                 xkey: 'x',
@@ -296,9 +295,7 @@ if ($auth->hasIdentity()) {
             });
             Morris.Bar({
                 element: 'participant-per-shipment',
-                data: [
-<?php echo implode(",", $dataShipment); ?>
-                ],
+                data: [<?php echo implode(",", $dataShipment); ?>],
                 xLabelAngle: 45,
                 hideHover: true,
                 xkey: 'y',

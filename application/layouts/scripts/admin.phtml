@@ -278,8 +278,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                               <i class="fa fa-users"></i> Lab Users </a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true); ?>">
-                                           <i class="fa fa-link"></i> Lab-user Mapping
+                                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'labmapping'), 'default', true); ?>" style="white-space: nowrap;">
+                                                <i class="fa fa-link"></i> Lab-user Mapping
                                             </a></li>
                                     </ul>
                                 </li>
@@ -290,7 +290,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     </a>
                                 </li>
                                
-                                <li class="divider"></li>
+                                <!-- <li class="divider"></li> -->
 
                             </ul>
                         </li>
@@ -312,17 +312,19 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 <?php } ?>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;&nbsp;Account
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="white-space: nowrap;">
+                            <i class="fa fa-user"></i>&nbsp;&nbsp;
+                            <?php echo $adminSession->first_name . " " . $adminSession->last_name; ?>
                             <b class="caret"></b></a>
 
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
-                                    <i class="icon-signout"></i> Logout</a>
+                                <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
+                                    <i class="icon-user"></i> My Profile</a>
                             </li>
                             <li>
-                                <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
-                                    <i class="icon-user"></i> Profile</a>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
+                                    <i class="icon-signout"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
