@@ -888,7 +888,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 foreach ($labs as $key => $value) {
 
                     $whereSearch['participantId'] = $value->participant_id;
-                    $orderArray = array('id', 'dateCreated');
+                    $orderArray = array('count(sampleId)', 'dateCreated');
                     $col = array('*');
 
                     $groupArray = array('id');
@@ -949,7 +949,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                     echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
                     exit;
                 }
-                $orderArray = array('id', 'dateCreated');
+                $orderArray = array('count(sampleId)', 'dateCreated');
                 $col = array('*');
 
                 $groupArray = array('id');
