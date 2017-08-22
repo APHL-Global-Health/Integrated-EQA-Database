@@ -52,19 +52,23 @@
             <table class="table table-striped">
                 <td>No.</td>
                 <td>Batch Name</td>
+                <td>Round Code</td>
                 <td>Date Prep'd</td>
                 <td>Date Del'd</td>
+                <td>Day Left</td>
                 <td>Material Origin</td>
                 <td>action</td>
                 <tr dir-paginate="sample in samples.sampleToPanel | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                     <td>{{$index+1}}</td>
                     <td>{{sample.batchName}}</td>
+                    <td>{{sample.roundCode}}</td>
                     <td>{{sample.datePrepared}}</td>
                     <td>{{sample.dateDelivered}}</td>
+                    <td>{{sample.daysLeftOnTen}}</td>
                     <td>{{sample.materialOrigin}}</td>
                     <td>
-                        <button class="btn btn-sm btn-info" ng-disabled="sample.allowedOnTenDays==0"
-                                ng-click="samples.showMultiSelect(sample,0)">Issue
+                        <button class="btn btn-sm btn-primary" ng-disabled="sample.allowedOnTenDays==0"
+                                ng-click="samples.showMultiSelect(sample,0)"><i class="fa fa-user"></i> Issue
                         </button>
                     </td>
                 </tr>
@@ -78,7 +82,10 @@
             <div class="panel panel-default bg-info">
                 <div class="h4 col-md-12 text-capitalize">
                     <br>
-                    Distribute Samples <b> {{samples.clickedSample.batchName}} </b>
+                    Issue Samples <b> {{samples.clickedSample.batchName}}  </b>
+                    <button class="btn btn-xs btn-xs" ng-click="samples.getAllFacilityUsers('data_manager')">
+                        <i class="fa fa-refresh"></i>
+                        </button>
 
                     <small><i>-({{samples.clickedSample.datePrepared}})</i></small>
                 </div>

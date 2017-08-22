@@ -1,84 +1,39 @@
-<div id='ng-app' ng-app="ReportModule" ng-cloak="">
-    <div class="bacteriology" ng-controller="samplesController">
+<div id='ng-app' ng-app="ReportModule" ng-cloak="" style="">
+    <div class="bacteriology col-xs-12 no-padding micro" ng-controller="samplesController">
 
         <div ng-controller="ReportController">
             <div class="">
-                <ul class="nav nav-tabs" ng-init="clickedTab = 'samples'">
+                <ul class="nav nav-tabs" ng-init="clickedTab = 'samples';">
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
-                        <a href="" ng-click="clickedTab = 'samples'">Manage Samples</a>
+                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('listSamples');">Manage Samples</a>
                     </li>
-                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'Packaging'}">
-                        <a href="" ng-click="clickedTab = 'Packaging'">Manage Packaging</a>
+                    <li class='pull-left ' ng-class="{'active' : clickedTab == 'packaging'}">
+                        <a href="" ng-click="clickedTab = 'packaging';samples.samplesActivePage('listPackaging');">Manage Panels</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
-                        <a href="" ng-click="clickedTab = 'shipments'">Manage Shipments</a>
+                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('listShipments');">Manage Shipments</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
-                        <a href="" ng-click="clickedTab = 'rounds'">Config Rounds</a>
+                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('listRounds');">Manage Rounds</a>
                     </li>
-                    <li class='pull-right'>
-                        <div class="dropdown">
-
-                            <button class="text-capitalize btn btn-default btn-sm dropdown-toggle" type="button"
-                                    id="menu1" data-toggle="dropdown">{{clickedTab|capitalizeLetter}} &nbsp;
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab)"><i
-                                                class="fa fa-fw fa-save"></i> Add {{clickedTab|capitalizeLetter}}</a>
-
-                                </li>
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('view'+clickedTab)"><i
-                                                class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
-
-                                </li>
-                                <!--
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab)"><i
-                                                class="fa fa-fw fa-search-plus"></i>
-                                        {{clickedTab|capitalizeLetter}} Report </a>
-                                </li>
-                                -->
-                            </ul>
-
-                        </div>
-
-                        <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
-                        -->
-
-                    </li>
-
-
                 </ul>
             </div>
             <div class="col-md-12 no-padding">
-                <!--                <div class="btn btn-warning pull-right col-md-2 col-sm-4" ng-click="samples.samplesActivePage('reports'+clickedTab)">-->
-                <!--                    <i class="fa fa-list"></i> {{clickedTab|capitalizeLetter}} Extras-->
-                <!---->
-                <!--                </div>-->
                 <div class="dropdown btn-sm btn btn-success pull-right ">
                     <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
                         <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" ng-click="samples.samplesActivePage('viewCouriers')">Couriers</a></li>
-<!--                        <li><a href="#" ng-click="samples.samplesActivePage('viewprograms')">Programs</a></li>-->
+                    <ul class="dropdown-menu" style="text-align: left;">
+                        <li><a href="#" ng-click="clickedTab = 'couriers';samples.samplesActivePage('listCouriers')">Couriers</a></li>
 
-                        <li><a href="#"  ng-click="samples.samplesActivePage('viewTestAgents')">Test Reagents</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'reagents';samples.samplesActivePage('listReagents')">Reagents</a></li>
 
-<!--                        <li><a href="#"  ng-click="samples.samplesActivePage('calendar')">Round Calendar</a></li>-->
-                        <li><a href="#"  ng-click="samples.samplesActivePage('addGradingLevels')">Grades</a></li>
-                        <li><a href="#"  ng-click="samples.samplesActivePage('testTypes')">Test Types</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'grading';samples.samplesActivePage('listGrading')">Grades</a></li>
+                        <li><a href="#" ng-click="clickedTab = 'testTypes';samples.samplesActivePage('listTestTypes')">Test Types</a></li>
                     </ul>
                 </div>
-                <div class="btn btn-info btn-sm pull-right "
-                     ng-click="samples.samplesActivePage('view'+clickedTab)">
-                    <i class="fa fa-eye"></i> View {{clickedTab|capitalizeLetter}}
-                </div>
                 <div class="btn btn-sm btn-primary pull-right "
-                     ng-click="samples.samplesActivePage('add'+clickedTab)">
-                    <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
+                     ng-click="samples.samplesActivePage('add'+samples.roundFiles[clickedTab])">
+                    <i class="fa fa-plus"></i> Add {{samples.roundLabels[clickedTab]}}
                 </div>
             </div>
 
@@ -96,37 +51,6 @@
 
                 </div>
             </div>
-
-
-            <!--        <div class="col-md-{{samples.menuLength}} side-menu">-->
-            <!---->
-            <!--            <!-- Sidebar -->
-            <!---->
-            <!--            <ul class="list-group" ng-hide="samples.menuLength==0">-->
-            <!--                <li class="list-group-item">-->
-            <!---->
-            <!--                    Menu <a href="#" class="pull-right" ng-click="samples.toggleSamplesMenu()"><i-->
-            <!--                                class="fa fa-list"></i></a>-->
-            <!---->
-            <!--                </li>-->
-            <!--                <li class="list-group-item">-->
-            <!--                    <a href="#" ng-click="samples.samplesActivePage('add')"><i class="fa fa-fw fa-save"></i> Add-->
-            <!--                        Save</a>-->
-            <!--                </li>-->
-            <!--                <li class="list-group-item">-->
-            <!--                    <a href="#" ng-click="samples.samplesActivePage('view')"><i class="fa fa-fw fa-folder"></i> View-->
-            <!--                        Samples</a>-->
-            <!--                </li>-->
-            <!--                <li class="list-group-item">-->
-            <!--                    <a href="#" ng-click="samples.samplesActivePage('nonnphls')"><i class="fa fa-fw fa-search-plus"></i>-->
-            <!--                        Non-NPHLS </a>-->
-            <!--                </li>-->
-            <!--            </ul>-->
-            <!---->
-            <!---->
-            <!--        </div>-->
-
-
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>

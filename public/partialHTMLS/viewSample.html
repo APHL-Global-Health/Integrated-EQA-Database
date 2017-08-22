@@ -1,0 +1,83 @@
+<div class="text-capitalize">
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Sample Information <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                <div class="label btn pull-right" ng-click="samples.samplesActivePage('listSamples', 0)" title="Close">
+                    <i class="fa fa-close"></i>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Batch Name :</div>
+                        <div class="col-md-8">{{samples.clickedSample.batchName}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Sample Type :</div>
+                        <div class="col-md-8">{{samples.clickedSample.materialType}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Material Source :</div>
+                        <div class="col-md-8">{{samples.clickedSample.materialSource}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Material Origin :</div>
+                        <div class="col-md-8">{{samples.clickedSample.materialOrigin}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Life Span (days) :</div>
+                        <div class="col-md-8">{{samples.clickedSample.lifespan}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;" ng-init="samples.getMicrobiologyTestTypesString(samples.clickedSample.sampleType)">
+                        <div class="col-md-4">Test Type(s) :</div>
+                        <div class="col-md-8">{{samples.testTypesString.substring(0,samples.testTypesString.length-2)}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Clinical Details :</div>
+                        <div class="col-md-8">{{samples.clickedSample.sampleDetails}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Instructions :</div>
+                        <div class="col-md-8">{{samples.clickedSample.sampleInstructions}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Date Prepared :</div>
+                        <div class="col-md-8">{{samples.clickedSample.datePrepared}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Prepared At :</div>
+                        <div class="col-md-8">{{samples.clickedSample.preparedAt}}</div>
+                    </div>
+                    <div class="row" style="padding: 5px;border-bottom: 1px solid #E0E0E0;">
+                        <div class="col-md-4">Prepared By :</div>
+                        <div class="col-md-8">{{samples.clickedSample.preparedBy}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary hide">
+            <div class="panel-heading text-uppercase">
+                Users,response status,result
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-responsive">
+                 <tr>
+                    <tr>  <td><b>Total Participating Labs</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total Participating Individuals</b></td><td>0</td></tr>
+                    <tr><td><b>Total  Responded Labs</b></td><td>0</td></tr>
+                    <tr><td><b>Total  Responded Individuals</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Not-Responded Labs</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Not-Responded Individuals</b></td><td>0</td></tr>
+                    <tr>  <td><b>Total  Failed Labs</b></td><td>Waiting</td></tr>
+                    <tr>  <td><b>Total Passed Individuals</b></td><td>Waiting</td></tr>
+                    <tr>  <td><b>Total  Cancelled</b></td><td>0</td></tr>
+
+                 </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

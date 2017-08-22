@@ -1,0 +1,236 @@
+<section class="content-header">
+    <h2>Add peer Means To Samples <i class="fa fa-spin fa-spinner" id="loader" style="display: none"></i></h2>
+</section>
+<div class="col-md-12">
+    <div class="add-means" style="display:none;">
+
+        <div class="col-md-12 well">
+            <div class="col-md-12 h3" id="sampleTitle">
+
+            </div>
+            <form class="form-horizontal" novalidate="" action="">
+
+
+                <div class="col-md-12">
+                    <label>Mean</label>
+                    <input class="form-control" min="1" required="" type="number" id="score">
+                </div>
+
+                <div class="col-md-12">
+                    <label>Peer Lab Name</label>
+                    <input class="form-control" id="peerName">
+                    <input class="form-control" id="sampleId" type="hidden">
+                    <input class="form-control" id="shipmentId" type="hidden">
+                </div>
+
+                <div class="col-md-12 text-center">
+                    <hr>
+                    <button class="btn btn-success btn-md" onclick="savePeerScore()">
+                        Save
+                    </button>
+                    <button class="btn btn-danger btn-md" onclick="hideAddMeans()">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div class="col-md-12 added-means" style="display: none">
+        <h3>
+            <i id="added-header"></i>  <button class="btn btn-danger pull-right btn-md" onclick="hidePeerResults()"><i class="fa fa-close"></i></button>
+        </h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sample Name</th>
+                    <th>Shipment Code</th>
+                    <th>Result</th>
+                    <th>peer Name</th>
+                    <th>Date Created</th>
+                    <th>Added By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="mean_reports_table">
+
+            </tbody>
+
+        </table>
+    </div>
+    <div class="samples-table">
+        <table class="table table-striped table-bordered">
+            <thead class="">
+                <tr>
+                    <th>Sample</th>
+                    <th>Shipment</th>
+                    <th>Lower</th>
+                    <th>Mean</th>
+                    <th>Upper</th>
+                    <th>SD</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="records_table">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+
+
+    function savePeerScore() {
+        var data = {};
+        data.result = $("#score").val();
+        data.peerName = $("#peerName").val();
+        data.shipmentId = $("#shipmentId").val();
+        data.sampleId = $("#sampleId").val();
+        console.log(data);
+        if (data.result === "") {
+            alert('Please fill the result field');
+        } else {
+            $('#loader').show();
+            $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'savepeermean'), 'default', true); ?>/sid/<?php echo $this->shipmentId; ?>',
+                                {
+                                    data: data,
+                                    method: 'POST',
+
+                                    success: function (response) {
+                                        $('#loader').hide();
+                                        var trHTML = '';
+                                        response = JSON.parse(response);
+                                        console.log(response);
+
+                                        if (response.status == 1) {
+                                            $.alert(
+                                                    {title: "<i class='fa fa-check text-success'></i> Success",
+                                                        content: 'Sample score saved successfully'
+                                                    });
+                                            $('.add-means').hide('slow');
+                                            $('.samples-table').show('slow');
+                                            $("#score").val('');
+                                            $("#peerName").val('');
+                                            getShipmentSample();
+                                        } else {
+                                            $.alert(
+                                                    {title: "<i class='fa fa-close text-danger'></i> Error",
+                                                        content: 'Error occured,likely due to duplicate data'
+                                                    });
+                                        }
+
+                                    },
+                                    error: function (data) {
+                                        console.log(data);
+                                        $('#loader').show();
+                                    }
+                                });
+                    }
+
+                }
+                function updatePeer(sample) {
+                    console.log(sample)
+                    $('.add-means').show('slow');
+                    $('.samples-table').hide('slow');
+                    $('#shipmentId').val(sample.shipment_id);
+                    $('#sampleId').val(sample.sample_id);
+                    var text = sample.shipment_code + " | " + sample.sample_label;
+                    $('#sampleTitle').text(text);
+                }
+
+                function hideAddMeans() {
+                    $('.add-means').hide('slow');
+                    $('.samples-table').show('slow');
+                }
+
+                function getShipmentSample() {
+                    $('#loader').show();
+                    $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'getallsamplesinfo'), 'default', true); ?>/sid/<?php echo $this->shipmentId; ?>',
+                                    {
+
+                                        success: function (response) {
+//                        console.log(response);
+                                            $('#loader').hide();
+                                            var trHTML = '';
+                                            response = JSON.parse(response);
+                                            $.each(response, function (i, item) {
+
+
+                                                trHTML += '<tr><td>' + item.sample_label
+                                                        + '</td><td>' + item.shipment_code
+                                                        + '</td><td>' + item.low_limit
+                                                        + '</td><td>' + item.mean
+                                                        + '</td><td>' + item.high_limit
+                                                        + '</td><td>' + item.sd
+
+                                                        + "</td><td> <button class='btn btn-xs btn-primary' \n\
+                        onclick='updatePeer(" + JSON.stringify(item) + ")'> Add peer Mean </button>\n"
+                                                        + "</td><td> <button class='btn btn-xs btn-warning' \n\
+                        onclick='viewPeerResults(" + JSON.stringify(item) + ")'> View Peer Results </button>\n"
+                                                        + '</td></tr>';
+                                            });
+                                            $('#records_table').html(trHTML);
+                                        },
+                                        error: function (data) {
+                                            console.log(data);
+                                            $('#loader').hide();
+                                        }
+                                    });
+
+                        }
+                        getShipmentSample();
+
+                        function viewPeerResults(item) {
+                            console.log(item)
+                            $('#loader').show();
+                            $('.added-means').show('slow');
+                            $('.samples-table').hide('slow');
+
+                            var text = 'Peer lab results ' + item.shipment_code + " | " + item.sample_label;
+                            $('#added-header').html(text);
+
+
+                            $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'getpeermeans'), 'default', true);
+?>/shipmentId/' + item.shipment_id + '/sampleId/' + item.sample_id,
+                                    {
+
+                                        success: function (response) {
+//                        console.log(response);
+                                            $('#loader').hide();
+                                            var trHTML = '';
+                                            response = JSON.parse(response);
+                                            $.each(response, function (i, item) {
+
+
+                                                trHTML += '<tr><td>' + item.sample_label
+                                                        + '</td><td>' + item.shipment_code
+                                                        + '</td><td>' + item.result
+                                                        + '</td><td>' + item.peerName
+                                                        + '</td><td>' + item.dateCreated
+                                                        + '</td><td>' + item.primary_email
+                                                        + "</td><td> <button class='btn btn-xs btn-danger' \n\
+                                                                    onclick='delete(" + JSON.stringify(item) + ")'><i class='fa fa-close'></i> </button>\n"
+                                                        + '</td></tr>';
+                                            });
+                                            $('#mean_reports_table').html(trHTML);
+                                        },
+                                        error: function (data) {
+                                            console.log(data);
+                                            $('#loader').hide();
+                                        }
+                                    });
+
+
+                        }
+                        function hidePeerResults() {
+                            $('.added-means').hide('slow');
+                            $('.samples-table').show('slow');
+
+
+                        }
+</script>

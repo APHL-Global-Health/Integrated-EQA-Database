@@ -12,6 +12,20 @@
                     <input type="hidden" value="<?php echo $this->participantId; ?>" name="ParticipantID" id="ParticipantID"/>
                     <table class="table table-striped table-bordered">
                         <tr>
+                            <th>Test Event <span class="mandatory">*</span></th>
+                            <td>
+                                <select id="roundId" name="roundId" class="form-control"  data-selected-text-format="count>3" title="Please choose assays">
+                                    <?php
+                                    foreach ($this->roundsList as $round) {
+                                        ?>
+                                        <option value="<?php echo $round['distribution_id']; ?>"><?php echo $round['distribution_code']; ?></option>	
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Are you available to participate in the EQA? <span class="mandatory">*</span></th>
                             <td>
                                 <select class="form-control isRequired" name="q1" id="q1">
@@ -42,14 +56,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>If the answer to any of the above questions is NO, please specify the challenge(s) <span class="mandatory">*</span></th>
-                            <td>
-                                <select class="form-control isRequired" name="q4" id="q4">
-                                    <option value="">Select Value</option>
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
-                            </td>
+                            <th>If the answer to any of the above questions is NO, please specify the challenge(s)</th>
+                            <td><textarea class="form-control isRequired" name="q4" id="q4"></textarea></td>
                         </tr>
                         <tr>
                             <th>Will they be resolved within 2 weeks? <span class="mandatory">*</span></th>

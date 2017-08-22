@@ -26,10 +26,10 @@
 
                         </tr>
                         <tr>
-                            <th>Participant System Id <span class="mandatory">*</span></th>
+                            <th>Participant Unique ID <span class="mandatory">*</span></th>
                             <td>
-                                <input type="text" id="pid" name="pid" class="form-control isRequired" title="Please enter the Participant's ID here" placeholder="Please enter the Participant's Unique ID here"
-                                       onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')" />
+                                <input type="text" id="pid" name="pid" class="form-control isRequired" title="Please enter the Participant's ID here" placeholder="Please enter the Participant's Unique ID here" value="<?php echo $this->uniqueid;?>"
+                                       onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')" readonly="readonly"/>
                             </td>
                             <th id="firstNameLable">Participant First Name <span class="mandatory">*</span></th>
                             <td><input type="text" id="pfname" name="pfname" size="25" maxlength="45"  class="form-control isRequired"  title="Please enter the Participant's Lab/First Name here" placeholder="Please enter the Participant's First Name here" /></td>
@@ -42,20 +42,47 @@
                             <th><label>Institute Name <span class="mandatory">*</span></label></th>
                             <td><input type="text" id="instituteName" name="instituteName" size="25" maxlength="45"
                                        class="form-control isRequired" title="Please enter the Institute Name here"
-                                       placeholder="Please enter the Institute Name here" /></td>
+                                       placeholder="Please enter the Institute Name here" value="<?php echo $this->institute;?>" readonly="readonly"/></td>
                         </tr>
 
                         <tr>
                             <th>Participant Phone Number</th>
-                            <td><input type="text" id="pphone1" name="pphone1" size="25" maxlength="45" value="<?php echo $this->rsParticipant['phone']; ?>" title="Please enter the Participant's Phone here" placeholder="Please enter the Participant's Phone here" class=" form-control isNumeric" /></td>
+                            <td>
+                                <input type="text" id="pphone1" name="pphone1" size="25" maxlength="45" value="<?php echo $this->rsParticipant['phone']; ?>" title="Please enter the Participant's Phone here" placeholder="Please enter the Participant's Phone here" class=" form-control isNumeric" />
+                            </td>
                             <th>Participant e-mail Address <span class="mandatory">*</span></th>
                             <td><input type="text" id="pemail" name="pemail" size="25" maxlength="45" value="<?php echo $this->rsParticipant['email']; ?>" title="Please enter the Participant's Email here" placeholder="Please enter the Participant's Email here" class="form-control isRequired isEmail" 
                                        onblur="checkDuplicate('participant', 'email',this, null, 'This Email already exists for another contact. Please try something else.'); cheackEmailId()"/></td>
-                        </tr>    
+                        </tr> 
                         <tr>
+                            <th>Enrolled Schemes <span class="mandatory">*</span></th>
+                            <td>
+                                <select name="scheme[]" id="scheme"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled schemes" >
+                        <?php foreach ($this->schemeList as $sch) {
+                                ?>
+                                <option value="<?php echo $sch['ID']; ?>"><?php echo $sch['SchemeName']; ?></option>
+                                <?php
+                            }
+                            ?>
+                    </select>
+                            </td>
+                            <th>Assay <span class="mandatory">*</span></th>
+                            <td>
+                                <select id="assay" name="assay[]" multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose assays">
+                                    <?php
+                                    foreach ($this->assay as $scheme) {
+                                        ?>
+                                        <option value="<?php echo $scheme['id']; ?>"><?php echo $scheme['name']; ?></option>	
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr> 
+<!--                        <tr>
                             <th><span class="mandatory"></span></th>
                             <td>
-<!--                                <select id="assay" name="assay[]" multiple="multiple" style="width:285px;">-->
+                                <select id="assay" name="assay[]" multiple="multiple" style="width:285px;">
                                     <?php
                                     //foreach ($this->assay as $scheme) {
                                         ?>
@@ -63,11 +90,11 @@
                                         <?php
                                     //}
                                     ?>
-<!--                                </select>-->
+                                </select>
                             </td>
                             <td></td>
                             <td></td>
-                        </tr>
+                        </tr>-->
 
                     </table>
                     <br>
@@ -95,11 +122,12 @@
         </div>    
     </div>
 </section>
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap/bootstrap-select.min.js'); ?>"></script>
 <script>
 
                                 $(document).ready(function () {
-                                    $("#assay").select2({
+                                    $('#scheme').selectpicker();
+                                    $("#assay").selectpicker({
                                         placeholder: "Select one or more",
                                         allowClear: true
                                     });
@@ -108,12 +136,12 @@
                                         placeholder: "Select one or more Enrolled Programs",
                                         allowClear: true
                                     });
-<?php if (!$this->isEditable) {
-    ?>
-                                        $("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
-    <?php
-}
-?>
+                                    <?php if (!$this->isEditable) {
+                                        ?>
+                                          $("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
+                                        <?php
+                                    }
+                                    ?>
                                 })
 
                                 function goto_testers() {

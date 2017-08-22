@@ -1,17 +1,4 @@
 <div>
-    <!--<h3>Receive Shipments-->
-    <!--<small>{{samples.shipmentsData.length}} records-->
-    <!--</small>-->
-    <!--<small><i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i></small>-->
-    <!--<div class="col-md-1 pull-right">-->
-    <!--<a href="#" class=" btn btn-default btn-sm"-->
-    <!--ng-click="samples.getShipmentsForDelivery('tbl_bac_shipments','shipmentStatus','2,3,4,5')"><i-->
-    <!--class="fa fa-refresh"></i>-->
-    <!--</a>-->
-    <!--</div>-->
-
-    <!--</h3>-->
-    <br>
     <div class="panel panel-primary">
         <div class="panel panel-heading">
             Receive Shipments
@@ -50,13 +37,14 @@
                     <th>Shipment Name</th>
                     <th>No Of Panels</th>
                     <th>Courier</th>
+                    <th>Courier Contact</th>
                     <th>Days Left</th>
 
                     <th>Round ID</th>
-                    <th>Created By</th>
+                    <th>Dispatched On</th>
                     <th>Prepared On</th>
                     <!--                                <th>Date Saved</th>-->
-                    <th>Prepared By</th>
+                    <th>Days Left</th>
                     <th>Ship't Status</th>
                     <th></th>
                 </tr>
@@ -78,12 +66,13 @@
                     </td>
                     <td>{{shipment.totalPanelsAdded}}</td>
                     <td>{{shipment.dispatchCourier}}</td>
+                    <td>{{shipment.courierContactNumber}}</td>
                     <td>{{shipment.daysLeft}}</td>
                     <td nowrap>{{shipment.roundCode}}</td>
-                    <td nowrap>{{shipment.createdBy}}</td>
+                    <td nowrap>{{shipment.dateDispatched}}</td>
 
                     <td nowrap>{{shipment.datePrepared}}</td>
-                    <td nowrap>{{shipment.preparedBy}}</td>
+                    <td nowrap>{{shipment.daysLeft}}</td>
                     <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
                     <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
 

@@ -43,6 +43,7 @@ class AuthController extends Zend_Controller_Action
     			$authNameSpace = new Zend_Session_Namespace('datamanagers');
     			$authNameSpace->UserID = $params['username'];
 	    		$authNameSpace->dm_id = $rs->dm_id;
+                        $authNameSpace->institute = $rs->institute;
 	    		$authNameSpace->first_name = $rs->first_name;
 	    		$authNameSpace->last_name = $rs->last_name;
 	    		$authNameSpace->phone = $rs->phone;

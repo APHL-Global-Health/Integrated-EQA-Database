@@ -1,22 +1,5 @@
-
-<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
-<!--<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>-->
-<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
-
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-<style>
-    @media print {
-        .dontPrint, #shipmentTable_filter, #shipmentTable_info{
-            display:none;
-        </style>
-
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font-awesome.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/highcharts.css"); ?>" type="text/css" media="all">
         <style>
             @media print {
                 .dontPrint, #shipmentTable_filter, #shipmentTable_info {
@@ -36,9 +19,6 @@
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reports & Graphs
                                     <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-
-
-
 
                                     <li ng-class="{'active' : clickedTab == 'reports'}">
 
@@ -504,23 +484,29 @@
 
         </div>
     </div>
-    <!--s<script src="http://code.highcharts.com/highcharts.js"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highchart.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
+
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts/highcharts-ng.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
+
+    <!-- <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts/highcharts.js'); ?>"></script> -->
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/raphael.min.js'); ?>"></script>
-    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/html2canvas_1.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.base64.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery/jquery.base64.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery/jquery.table2excel.js'); ?>"></script>
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/sprintf.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/jspdf.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/base64.js'); ?>"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/htmlPdf/jspdf.min.js'); ?>"></script>
     <script type="text/javascript">
 
                                                         var startDate = "";

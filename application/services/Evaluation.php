@@ -240,7 +240,7 @@ class Application_Service_Evaluation {
                                 $totalScore += $result['sample_score'];
                             } else {
                                 if ($result['sample_score'] > 0) {
-                                    $failureReason[]['warning'] = "Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+                                    $failureReason[]['warning'] = "Sample <strong>" . $result['sample_label'] . "</strong> out of range";
                                 }
                             }
                         }
@@ -254,7 +254,7 @@ class Application_Service_Evaluation {
                             }
                             //else if(($result['reference_result'] != $result['reported_result'])){
                             //	$mandatoryResult = 'Fail';
-                            //	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> was reported wrongly";
+                            //	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> out of range";
                             //}
                         }
                     }
@@ -1514,7 +1514,7 @@ class Application_Service_Evaluation {
 								$calcResult = "pass";
 							} else {
 								if ($result['sample_score'] > 0) {
-									$failureReason[]['warning'] = "Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+									$failureReason[]['warning'] = "Sample <strong>" . $result['sample_label'] . "</strong> out of range";
 								}
 								$calcResult = "fail";
 							}
@@ -1536,7 +1536,7 @@ class Application_Service_Evaluation {
 					//	}
 					//	//else if(($result['reported_viral_load'] != $result['reported_viral_load'])){
 					//	//	$mandatoryResult = 'Fail';
-					//	//	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> was reported wrongly";
+					//	//	$failureReason[]= "Mandatory Sample <strong>".$result['sample_label']."</strong> out of range";
 					//	//}
 					//}
 				}
@@ -1662,7 +1662,7 @@ class Application_Service_Evaluation {
 								}
                             } else {
                                 if ($result['sample_score'] > 0) {
-                                    $failureReason[]['warning'] = "Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+                                    $failureReason[]['warning'] = "Control/Sample <strong>" . $result['sample_label'] . "</strong> out of range";
                                 }
                             }
                         }
@@ -1677,7 +1677,7 @@ class Application_Service_Evaluation {
                         //        $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was not reported";
                         //    } else if (($result['reference_result'] != $result['reported_result'])) {
                         //        $mandatoryResult = 'Fail';
-                        //        $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> was reported wrongly";
+                        //        $failureReason[]['warning'] = "Mandatory Control/Sample <strong>" . $result['sample_label'] . "</strong> out of range";
                         //    }
                         //}
                     }

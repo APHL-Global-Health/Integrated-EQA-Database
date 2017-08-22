@@ -1,6 +1,6 @@
 <div class="" ng-hide="reports.loaderStatus">
     <div class="col-md-12 clearfix">
-        <h3>Evaluation Report
+        <h3>Rounds Evaluation
             <small>{{reports.generalRoundData.length}} records</small>
             <i class="fa fa-spin {{reports.loader}}"></i>
             <input ng-model="searchRounds" class="pull-right" placeholder="">
@@ -85,7 +85,7 @@
                 <td>{{samples.roundStatus(round.daysLeft,round.startRoundFlag)}}</td>
                 <td>
                     <button
-                            ng-disabled="round.totalShipmentsAdded==0 || round.startRoundFlag==0 || round.totalResponded==0||round.daysLeft < 1"
+                            ng-disabled="round.totalShipmentsAdded==0 || round.startRoundFlag==0 || round.totalResponded==0"
                             ng-click="reports.showShipmentEvaluationForRound(round)" class="btn btn-danger btn-sm">
                         <i class="fa fa-check"></i>
                         <x ng-show="round.evaluated==0">evaluate</x>

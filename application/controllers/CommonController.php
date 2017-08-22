@@ -8,6 +8,7 @@ class CommonController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('check-duplicate', 'html')
                     ->addActionContext('delete-response', 'html')
+                    ->addActionContext('check-duplicates', 'html')
                    ->initContext();
     }
 
@@ -22,6 +23,16 @@ class CommonController extends Zend_Controller_Action
     }
 
     public function checkDuplicateAction()
+    {
+        if (!$this->_hasParam('tableName')) {
+            $this->view->data = "";
+        } else {
+            $params = $this->_getAllParams();
+            $commonServices = new Application_Service_Common();
+            $this->view->data = $commonServices->checkDuplicate($params);
+        }        
+    }
+    public function checkDuplicatesAction()
     {
         if (!$this->_hasParam('tableName')) {
             $this->view->data = "";

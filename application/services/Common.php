@@ -6,7 +6,9 @@ class Application_Service_Common {
 
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
         //Send to email
-        $to = explode(",", $to);
+        if (is_string($to)) {
+            $to = explode(",", $to);
+        }
         $conf = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         $smtpTransportObj = new Zend_Mail_Transport_Smtp($conf->email->host, $conf->email->config->toArray());
 
@@ -79,29 +81,28 @@ class Application_Service_Common {
     }
 
     public function sendPasswordEmailToUser($sendTo, $password, $fullname) {
-//        $common = new Application_Service_Common();
+
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
                 . $config->emailRegistrationBody
                 . "<br>Username : $sendTo <br>"
                 . "Password : $password <br>"
                 . $config->emailRegistrationSignature;
-        $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
+
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
-public function sendGeneralEmail($sendTo, $Message, $fullname) {
-//        $common = new Application_Service_Common();
+
+    public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
+
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $fullname = isset($fullname) ? $fullname : 'user';
         $message = "Dear $fullname,"
-                
                 . "<br> $Message <br>"
-               
                 . $config->emailRegistrationSignature;
-        $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
-        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+
+        $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
     }
+
     public function generateRandomPassword($len) {
 
         $min_lenght = 0;
@@ -132,21 +133,40 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
         return $CodeEX;
     }
 
+    function generate_id() {
+        $participantDb = new Application_Model_DbTable_Participants();
+        $t = $participantDb->CountParticipants();
+
+        $start_dig = 5;
+        $num = $t;
+        $num_dig = strlen($num);
+
+        $id = $num;
+        if ($num_dig <= $start_dig) {
+            $num_zero = $start_dig - $num_dig;
+
+            for ($i = 0; $i < $num_zero; $i++) {
+                $id = '0' . $id;
+            }
+        }
+        $id = 'P' . $id;
+        return $id;
+    }
+
     public static function getConfig($name) {
         $gc = new Application_Model_DbTable_GlobalConfig();
         return $gc->getValue($name);
     }
 
+    public function getINIConfig($parameter) {
+
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+
+        return $config->$parameter;
+    }
+
     public function contactForm($params) {
-//		$message = "<h3>The following details were entered by ".$params['first_name']." " .$params['last_name']."</h3>";
-//		$message .= "Name : ".$params['first_name']." " .$params['last_name']."<br/>";
-//		$message .= "Email : ".$params['email']."<br/>";
-//		$message .= "Phone/Mobile : ".$params['phone']."<br/>";
-//		$message .= "Selected Reason to Contact : ".$params['reason']."<br/>";
-//		$message .= "Lab/Agency : ".$params['agency']."<br/>";
-//		$message .= "Additional Info : ".$params['additionalInfo']."<br/>";
-        print_r($params['platform']);
-        exit;
+
         $db = new Application_Model_DbTable_Facility();
         $dbs = Zend_Db_Table_Abstract::getAdapter();
         $data = array('FacilityName' => $params['facilityname'], 'MFLCode' => $params['mflcode'], 'Department' => $params['department'], 'PhysicalAddress' => $params['physicaladdress'], 'PostalAddress' => $params['postaladdress'], 'Email' => $params['email'], 'Town' => $params['town'], 'Telephone' => $params['telephone'], 'County' => $params['county'], 'Country' => $params['Country'], 'Partner' => $params['Partner'], 'ContactName' => $params['contactname'], 'ContactEmail' => $params['contactemail'], 'ContactTelephone' => $params['contacttel'], 'additionalinfo' => $params['additionalInfo']);
@@ -161,17 +181,6 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
             }
         }
         return 1;
-//		$fromEmail = $params['email'];
-//		$fromName  = $params['first_name']." " .$params['last_name'];
-//		
-//		$to = Application_Service_Common::getConfig('admin_email');
-//		
-//		$mailSent = $this->sendMail($to,null,null,"New contact message from the ePT program",$message,$fromEmail,$fromName);
-//		if($mailSent){
-//			return 1;
-//		}else{
-//			return 0;
-//		}		
     }
 
     public function checkDuplicate($params) {
@@ -202,6 +211,35 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
         return $data;
     }
 
+    public function checkDuplicates($params) {
+        $session = new Zend_Session_Namespace('credo');
+        $tableName = $params['tableName'];
+        $fieldName = $params['fieldName'];
+        $fieldName1 = $params['fieldName1'];
+        $value = trim($params['value']);
+        $fnct = $params['fnct'];
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        if ($fnct == '' || $fnct == 'null') {
+            $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'");
+            $result = $db->fetchAll($sql);
+            $data = count($result);
+        } else {
+            $table = explode("##", $fnct);
+            // first trying $table[1] without quotes. If this does not work, then in catch we try with single quotes
+            try {
+
+                $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'")->where($table[0] . "!=" . $table[1]);
+                $result = $db->fetchAll($sql);
+                $data = count($result);
+            } catch (Exception $e) {
+                $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'")->where($fieldName1 . "=" . "'$value'")->where($table[0] . "!='" . $table[1] . "'");
+                $result = $db->fetchAll($sql);
+                $data = count($result);
+            }
+        }
+        return $data;
+    }
+
     public function removespecials($url) {
         $url = str_replace(" ", "-", $url);
 
@@ -216,6 +254,11 @@ public function sendGeneralEmail($sendTo, $Message, $fullname) {
     public function getCountriesList() {
         $countriesDb = new Application_Model_DbTable_Countries();
         return $countriesDb->getAllCountries();
+    }
+
+    public function getUnshippedDistributions() {
+        $disrtibutionDb = new Application_Model_DbTable_Distribution();
+        return $disrtibutionDb->getUnshippedDistributions();
     }
 
     public function getCountiesList() {
