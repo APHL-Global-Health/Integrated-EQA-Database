@@ -1,0 +1,82 @@
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git status
+On branch merged-modules
+Your branch is up-to-date with 'origin/merged-modules'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   application/models/DbTable/Uploadreports.php
+        modified:   application/modules/admin/controllers/UploadreportsController.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git stash
+Saved working directory and index state WIP on merged-modules: 06df889 main.php
+HEAD is now at 06df889 main.php
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git pull
+remote: Counting objects: 64, done.
+remote: Compressing objects: 100% (59/59), done.
+remote: Total 64 (delta 26), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (64/64), done.
+From https://github.com/APHLK/ePT-Repository
+   06df889..0a9d702  merged-modules -> origin/merged-modules
+Updating 06df889..0a9d702
+Fast-forward
+ .gitignore                                         |   9 +
+ application/layouts/scripts/admin.phtml            |   8 +-
+ application/models/DbTable/Uploadreports.php       |   4 +-
+ .../reports/views/scripts/repository/index.phtml   |  23 +-
+ public/angularMain/constants.js                    |   3 +-
+ public/files/UAT DOCUMENT.xlsx                     | Bin 0 -> 13876 bytes
+ public/js/reportSearch.js                          | 241 +++++++++++++++++++--
+ 7 files changed, 254 insertions(+), 34 deletions(-)
+ create mode 100644 public/files/UAT DOCUMENT.xlsx
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git stash pop
+Auto-merging application/models/DbTable/Uploadreports.php
+On branch merged-modules
+Your branch is up-to-date with 'origin/merged-modules'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   application/models/DbTable/Uploadreports.php
+        modified:   application/modules/admin/controllers/UploadreportsController.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (82b0718201c57f7dffd05d6d79881a42e0d78d17)
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git add --all
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git status
+On branch merged-modules
+Your branch is up-to-date with 'origin/merged-modules'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   application/models/DbTable/Uploadreports.php
+        modified:   application/modules/admin/controllers/UploadreportsController.php
+
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git commit -m "Fixed download link on report upload"
+[merged-modules bf7c95c] Fixed download link on report upload
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+
+ABN35+bvidolo@ABN35 MINGW64 /c/webserver/htdocs/EPTR (merged-modules)
+$ git push
+Counting objects: 10, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (10/10), done.
+Writing objects: 100% (10/10), 804 bytes | 0 bytes/s, done.
+Total 10 (delta 7), reused 0 (delta 0)
+remote: Resolving deltas: 100% (7/7), completed with 7 local objects.
+To https://github.com/APHLK/ePT-Repository.git
+   0a9d702..bf7c95c  merged-modules -> merged-modules
