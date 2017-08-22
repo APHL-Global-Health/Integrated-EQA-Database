@@ -35,7 +35,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
         /*
          * Ordering
          */
-        $sOrder = "";
+        $sOrder = "ProgramCode";
         if (isset($parameters['iSortCol_0'])) {
             $sOrder = "";
             for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
@@ -150,11 +150,15 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
         echo json_encode($output);
     }
     public function getPrograms(){
-		$sql = $this->select();
-		return $this->fetchAll($sql);
-	}
+  		$sql = $this->select()->order('ProgramCode');
+  		return $this->fetchAll($sql);
+  	}
     public function addPrograms($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    	$authNameSpace = new Zend_Session_Namespace('administrators');
+        //Check if program exists
+        $program = $this->fetchRow($this->select()->where("ProgramCode = ?", $params['ProgramCode']));
+        if(isset($program->ProgramID)) return $program->ProgramID;
         $data = array(
                       'ProgramCode'=>$params['ProgramCode'],
                       'Description'=>$params['Description'],
@@ -170,7 +174,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
     }
     
     public function updatePrograms($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+    	$authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
                       'ProgramCode'=>$params['ProgramCode'],
                       'Description'=>$params['Description'],
