@@ -1,16 +1,18 @@
 <h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
-    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">List of All PT Participant Logins</div>
- <?php    if ($_SESSION['loggedInDetails']["IsVl"] != 3) { ?>
-    <div style="margin-top:10px;">
-	<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers', 'action' => 'add'), 'default', true); ?>" 
-           class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Add New PT Participant Login</a>
-    </div>
- <?php }else{ ?>
-    <div style="margin-top:10px;">
-	<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers', 'action' => 'addmicrouser'), 'default', true); ?>" 
-           class="btn btn-success" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Laboratory Manager</a>
-    </div>
- <?php } ?>
+
+    <?php if ($_SESSION['loggedInDetails']["IsVl"] != 3) { ?>
+        <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">PT Participants</div>
+        <div style="margin-top:10px;">
+            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers', 'action' => 'add'), 'default', true); ?>" 
+               class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Add New PT Participant Login</a>
+        </div>
+    <?php } else { ?>
+        <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">Laboratory Managers</div>
+        <div style="margin-top:10px;">
+            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers', 'action' => 'addmicrouser'), 'default', true); ?>" 
+               class="btn btn-success" style="float:right;"><i class="icon-user"></i>&nbsp;&nbsp;Add Laboratory Manager</a>
+        </div>
+    <?php } ?>
 </h4>
 
 
@@ -22,56 +24,62 @@
             <th>Last Name</th>
             <th>Cell/Mobile</th>
             <th>Primary Email</th>
-            <th>Is Lab Manager</th>
+            <?php if ($_SESSION['loggedInDetails']["IsVl"] != 3) { ?>
+                <th>Is Lab Manager</th>
+            <?php } else { ?>
+<th>Secondary Email</th>
+            <?php } ?>
             <th>Status</th>
-            <th>Action</th>
+
+            <th><i class="fa fa-edit"></i></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-             <td colspan="10" class="dataTables_empty">Loading data from server</td>
+            <td colspan="10" class="dataTables_empty">Loading data from server</td>
         </tr>
     </tbody>
 </table>
- <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-  </div><!-- /.modal -->
+</div><!-- /.modal -->
 
 <script type="text/javascript" charset="utf-8">
-	
-	$('#myModal').on('hidden.bs.modal', function () {
-	    
-	  $(this).removeData('bs.modal');
-	});		
+
+    $('#myModal').on('hidden.bs.modal', function () {
+
+        $(this).removeData('bs.modal');
+    });
     /* Table initialisation */
     var oTable = null;
-    $(document).ready(function() {
-        oTable = $('#usersTable').dataTable( {	
+    $(document).ready(function () {
+        oTable = $('#usersTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
             "bJQueryUI": false,
             "bAutoWidth": false,
-            "bInfo": true,            
+            "bInfo": true,
             "bScrollCollapse": true,
-			"sPaginationType": "bootstrap",
-            "bRetrieve": true,                        
+            "sPaginationType": "bootstrap",
+            "bRetrieve": true,
             "aoColumns": [
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center","bSortable":false}
+                {"sClass": "center"},
+                {"sClass": "center"},
+                {"sClass": "center"},
+                {"sClass": "center"},
+                {"sClass": "center"},
+                {"sClass": "center"},
+                {"sClass": "center"},
+//                {"sClass": "center"},
+                {"sClass": "center", "bSortable": false}
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[0, "asc"]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers', 'action' => 'index', 'format' => 'html')); ?>",
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
+            "fnServerData": function (sSource, aoData, fnCallback) {
                 $.ajax({
                     "dataType": 'json',
                     "type": "POST",
@@ -80,8 +88,8 @@
                     "success": fnCallback
                 });
             }
-        } );
-       
-    } );
+        });
+
+    });
 
 </script>

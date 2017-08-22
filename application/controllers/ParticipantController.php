@@ -95,6 +95,7 @@ class ParticipantController extends Zend_Controller_Action {
             $newPassword = $this->getRequest()->getPost('newpassword');
             $oldPassword = $this->getRequest()->getPost('oldpassword');
             $response = $user->changePassword($oldPassword, $newPassword);
+           
             if ($response) {
                 $this->_redirect('/participant/current-schemes');
             }
@@ -136,6 +137,7 @@ class ParticipantController extends Zend_Controller_Action {
     public function addAction() {
         $this->_helper->layout()->activeMenu = 'my-account';
         $this->_helper->layout()->activeSubMenu = 'testers';
+        $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $participantService = new Application_Service_Participants();
         $commonService = new Application_Service_Common();
         if ($this->getRequest()->isPost()) {
@@ -152,7 +154,9 @@ class ParticipantController extends Zend_Controller_Action {
         $this->view->countriesList = $commonService->getcountriesList();
         $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
-        $authNameSpace = new Zend_Session_Namespace('datamanagers');
+        $this->view->uniqueid=$commonService->generate_id();
+        $this->view->institute=$authNameSpace->institute;
+        $this->view->schemeList = $commonService->getSchemesList();
 		if($authNameSpace->view_only_access=='yes'){
             $this->view->isEditable = false;
         }else{
@@ -239,19 +243,26 @@ class ParticipantController extends Zend_Controller_Action {
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetail($pID);
-       
+        $commonService = new Application_Service_Common();
         foreach ($t as $k){
             $id=$k["participant_id"];
         }
+        $this->view->roundsList = $commonService->getUnshippedDistributions();
         $this->view->participantId = $id;
     }
     public function addReadinessAction(){
-        
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $partnerService = new Application_Model_DbTable_Readiness();
             $partnerService->addReadiness($params);
-            $this->_redirect("/participant/readiness");
+            $this->_redirect("/participant/readinesslist");
+        }
+    }
+    public function readinesslistAction() {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            $shipmentService = new Application_Model_DbTable_Readiness();
+            $shipmentService->fetchAllReadiness($params);
         }
     }
 }

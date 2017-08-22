@@ -1,5 +1,6 @@
 var reportsModule = angular.module('ReportModule');
-reportsModule.constant('serverReportURL', 'http://localhost:8082/admin/reports/')
+// var BASE_URL = window.location.href.replace(window.location.pathname, "/");
+reportsModule.constant('serverReportURL', BASE_URL + 'admin/reports/')
 reportsModule.controller('ReportsController', function ($scope, $log, $http, EptServices, EptFactory, $timeout, loginDataCache) {
     var serverSamplesURL = SERVER_API_URL.sampleURL;
     var serverReportURL = SERVER_API_URL.reportsURL;
@@ -245,13 +246,41 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
         }
     }
+    $scope.reports.getParticipatingLabsReport = function (where) {
+        try {
+            showAjaxLoader(true)
 
+            console.log(where);
+            var url = serverReportURL + 'getparticipatinglabs';
+            $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        showAjaxLoader(false)
+                        if (response.status == 1) {
+                            $scope.reports.labParticipatingData = response.data;
+
+                        } else {
+                            EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                            $scope.reports.labParticipatingData = {};
+
+                        }
+                    })
+                    .error(function (error) {
+                        showAjaxLoader(false)
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+                    })
+
+        } catch (exc) {
+
+        }
+    }
     $scope.reports.whereLabGenStatResults = {};
     $scope.reports.genStatPerformance = {};
     $scope.reports.genStatPerformanceStat = {};
     $scope.reports.getGenStatPerformanceReport = function (where) {
         try {
-            showAjaxLoader(true)
+            showAjaxLoader(true);
+            console.log(where);
             var url = serverReportURL + 'getgenstatperformance';
             $http.post(url, where)
                     .success(function (response) {
@@ -365,11 +394,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                     title: '<i class="fa fa-spin fa-spinner  text-danger"></i> Enrolling..',
                     content: 'Enrolling,please wait ....'
                 });
-                $scope.samples.loaderProgressSpinner = 'fa-spinner';
+               
                 $http
                         .post(url, dataLab)
                         .success(function (data) {
                             console.log(data)
+                            $scope.samples.loaderProgressSpinner = '';
                             alertStartRound.close();
                             if (data.status == 0) {
                                 alertStartRound = $.alert({
@@ -662,12 +692,12 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             $log.debug('Serious error occurred');
         }
     }
-    
+
     $scope.reports.calculateTotalScore = function (agent) {
 
         console.log(agent)
         var sumOfMicro = 0;
-        if ( agent != '' && angular.isDefined(agent)) {
+        if (agent != '' && angular.isDefined(agent)) {
 
             for (var i = 0; i < agent.length; i++) {
                 sumOfMicro += Number(agent[i].score);

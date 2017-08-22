@@ -1,23 +1,20 @@
 <?php
 $authNameSpace = new Zend_Session_Namespace('datamanagers');
-$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini",APPLICATION_ENV);
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
 ?>
 <div class="col-lg-12">
     <?php
-    if (isset($this->banner['image']) && trim($this->banner['image']) != '' 
-            && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'home-banner' . DIRECTORY_SEPARATOR . $this->banner['image'])) {
+    if (isset($this->banner['image']) && trim($this->banner['image']) != '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'home-banner' . DIRECTORY_SEPARATOR . $this->banner['image'])) {
         ?>
         <img src="/uploads/home-banner/<?php echo $this->banner['image']; ?>" style="width:100%;" />
     <?php } ?>
 </div>
 <?php if (!isset($authNameSpace->dm_id)) { ?>
     <div class="col-lg-12">
-        <a class="btn btn-danger btn-lg col-lg-6" style="color:#fff;" 
+        <a class="btn btn-danger btn-lg col-lg-12" style="color:#fff;" 
            href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i class="icon icon-lock"></i> <span>Click here for Participant Login</span></a>
         <span class="col-lg-1"></span>
-        <a class="btn btn-danger btn-lg  col-lg-5" style="color:#fff;" 
-           href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
-        <br>   
+       <br>   
     </div>
 <?php } ?>
 <div class="col-lg-12" style="float: left;margin-top:30px;">
@@ -27,8 +24,9 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
             <?php echo $config->applicationNarrative; ?>
         </p>
         <h3 class="p2">The application comprises of the following core features:</h3>
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="container">
+            <div class="row">
+
                 <div class="col-lg-6">
 
                     <h3 class="txt">Repository Module</h3>
@@ -44,6 +42,25 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     </div>
                     <br class="clear" />
                 </div>
+
+                <div class="col-lg-6">
+                    
+
+                        <h3 class="txt">Microbiology Module</h3>
+                        <div style="float:left;">
+                            <img alt="" src="<?php echo $this->baseUrl("images/1page_img6.jpg"); ?>" class="img-left" />
+                        </div>
+                        <div style="margin-left:5px;float:left;width:210px;">
+                            <ul style="float:left;">
+                                <li>Panel preparation assistance</li>
+                                <li>Results entry, validation and analysis</li>
+                                <li>Reports viewing and download</li>
+                            </ul>
+                        </div>
+                        <br class="clear" />  
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-6">
 
                     <h3 class="txt">HIV VL/EID Module</h3>
@@ -61,25 +78,9 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     </div>
                     <br class="clear" />
                 </div>
+
             </div>
 
-            <div class="col-lg-12">
-                <div class="col-lg-6">
-
-                    <h3 class="txt">Microbiology Module</h3>
-                    <div style="float:left;">
-                        <img alt="" src="<?php echo $this->baseUrl("images/1page_img6.jpg"); ?>" class="img-left" />
-                    </div>
-                    <div style="margin-left:5px;float:left;width:210px;">
-                        <ul style="float:left;">
-                            <li>Panel preparation assistance</li>
-                            <li>Results entry, validation and analysis</li>
-                            <li>Reports viewing and download</li>
-                        </ul>
-                    </div>
-                    <br class="clear" />
-                </div>
-            </div>
 
         </div>
 

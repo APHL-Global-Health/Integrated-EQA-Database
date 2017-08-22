@@ -197,6 +197,7 @@ Class Main extends pdfCreator {
         }
     }
 
+    
     public function returnReportsWhereStmnt($array, $orderBy, $group = '', $groupArray = '', $tableName = '') {
 
         $where = ' where ';
@@ -296,6 +297,31 @@ Class Main extends pdfCreator {
         // output data of each row
     }
 
+    public function returnParticipatinglabs($where){
+        $columns = array('participant.MflCode','mfl_facility_codes.County','institute_name','roundName','tbl_bac_rounds_labs.dateCreated','OperationStatus','participant.contact_name');
+//        tbl_bac_rounds_labs,mfl_facility_codes,participant
+        
+        $selecetColumns = implode(',', $columns);
+        $sql = "SELECT $selecetColumns FROM  tbl_bac_rounds_labs "
+                . " JOIN participant ON tbl_bac_rounds_labs.labId =participant.participant_id "
+                . " JOIN tbl_bac_rounds ON tbl_bac_rounds.id =tbl_bac_rounds_labs.roundId "
+                . " JOIN mfl_facility_codes ON mfl_facility_codes.MflCode = participant.MflCode $where";
+
+        $result = $this->connect_db->query($sql);
+//echo $sql;exit;
+        if ($result->num_rows > 0) {
+            // output data of each row
+            
+            while ($row = $result->fetch_object()) {
+                $user_arr[] = $row;
+            }
+
+            return $user_arr;
+        } else {
+            return false;
+        }
+    }
+    
     function selectFromDStatusTable($tableName, $where = "") {
         $col = $where['column'];
         $status = $where['status'];
@@ -411,7 +437,7 @@ Class Main extends pdfCreator {
             function returnUpdateStatement($updateInfo) {
         try {
             $updateInfo['lastUpdatePerson'] = $this->getUserSession();
-//            $updateInfo['updateDate'] = $this->getUserSession();
+
             $updateStatement = ' ';
             if (sizeof($updateInfo) > 0) {
                 $updateStatement .= ' set ';

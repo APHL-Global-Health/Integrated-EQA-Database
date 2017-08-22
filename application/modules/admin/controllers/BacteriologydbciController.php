@@ -48,7 +48,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $idArray = (array) $idArray;
 
             if (is_array($jsPostData)) {
-                $response = [];
+                $response = array();
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
                     $value = ((array) $value);
@@ -74,7 +74,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $idArray = $jsPostData['userIds'];
 
             if (is_array($jsPostData)) {
-                $response = [];
+                $response = array();
                 foreach ($idArray as $value) {
                     //   $connection = new Main();
                     $data['userId'] = $value;
@@ -169,15 +169,23 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         return $mess;
     }
 
-    public function sendemailAction($body, $to = '', $send = '') {
+    public function testconfigAction() {
+        $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
+
+        print_r($config['production']['email.config.username']);
+        exit;
+    }
+
+    public function sendemailAction($body='', $to = '', $send = '') {
         try {
-
-            $config = array('ssl' => 'tls',
+            $config = parse_ini_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "application.ini", APPLICATION_ENV);
+          
+            $configMail = array('ssl' => 'tls',
                 'auth' => 'login',
-                'username' => 'osoromichael@gmail.com',
-                'password' => 'w@r10r@90');
+                'username' => $config['production']['email.config.username'],
+                'password' => $config['production']['email.config.password']);
 
-            $transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
+            $transport = new Zend_Mail_Transport_Smtp($config['production']['email.host'], $configMail);
 
 
             $mail = new Zend_Mail();
@@ -189,7 +197,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             if ($to != '') {
                 $mail->addTo($to, '');
             } else {
-                $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
+                $mail->addTo($config['production']['email.config.username'], 'EQA NMRL');
             }
             $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
             $mail->setSubject($subject);
@@ -418,7 +426,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function returnValueWhere($id, $tableName) {
-        $returnArray = [];
+        $returnArray = array();
         if (!is_array($id)) {
             if ($tableName == 'data_manager') {
                 $whereId['dm_id'] = $id;
@@ -447,7 +455,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     return '';
                 }
             } else {
-                
+                return false;
             }
         }
         return (array) $returnArray;
@@ -500,6 +508,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 //print_r($sample);
 //exit;
+
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
@@ -697,6 +706,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $where['shipmentId'] = $value->id;
                     $whereRound['id'] = $value->roundId;
                     $array[$key]->roundInfo = $this->returnValueWhere($whereRound, 'tbl_bac_rounds');
+                    $whereCreatedBy['admin_id'] = $value->createdBy;
+                    $created = $this->returnValueWhere($whereCreatedBy, 'system_admin');
+                    $array[$key]->createdBy = $created['first_name'] . ' ' . $created['last_name'];
                     $array[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $where, 'shipmentId');
                 }
             }
@@ -810,7 +822,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 //        print_r($where);
 //          exit();
         $tableName = 'tbl_bac_panels_shipments';
-        $where['deliveryStatus'] = 0;
+        $where['participantId'] = null;
         $dataDB = $this->dbConnection->selectFromTable($tableName, $where, true);
 
         if ($dataDB != false) {
@@ -827,7 +839,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                     $dataDB[$key]->panelDatePrepared = $panel['panelDatePrepared'];
                     $dataDB[$key]->dateCreated = $panel['dateCreated'];
                     $dataDB[$key]->barcode = $panel['barcode'];
-                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
+                    $wherCnt['participantId'] = null;
+                    $wherCnt['id'] = $value->panelId;
+                    $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $wherCnt, 'panelId');
                 }
             }
         }
@@ -1257,7 +1271,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $round[$key]->totalMarks = $this->dbConnection->selectCount('tbl_bac_response_results', $where, 'finalScore', true);
 
                 $roundId = $where['roundId'];
-                $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(distinct sampleID) as totalSamples from tbl_bac_sample_to_panel where roundId = $roundId  group by roundId", true);
+                $round[$key]->totalSamples = $this->dbConnection->doQuery("select count(sampleID) as totalSamples from tbl_bac_response_results where roundId = $roundId  group by roundId", true);
                 $round[$key]->averageScore = $roundInfo['evaluated'] == 0 ? 'N/A' : round($round[$key]->totalMarks / $round[$key]->totalSamples);
                 $round[$key]->roundName = $roundInfo['roundName'];
                 $round[$key]->roundCode = $roundInfo['roundCode'];
@@ -1317,11 +1331,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         $updatetbl_bac_panels_shipments['quantity'] = 1;
         $updatetbl_bac_panels_shipments['receivedBy'] = $shipmentData['addressedTo'];
         $whereTBPS['shipmentId'] = $shipmentId;
-        $whereTBPS['deliveryStatus >'] = 0;
+//        $whereTBPS['deliveryStatus >'] = 0;
 //        $whereTBPS['roundId >'] = 0;
         if ($shipmentData['roundId'] > 0) {
-            $updatetbl_bac_panels_shipments['deliveryStatus'] = 0;
-            $shipmentStatus;
+            $updatetbl_bac_panels_shipments['deliveryStatus'] = $shipmentStatus;
         }
         $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
         /*         * ****************************************************************************************** */
@@ -1336,7 +1349,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
 
                 $updateTBPM['dateDelivered'] = $shipmentData['dateReceived'];
                 $updateTBPM['shipmentNumber'] = 'S-0' . $shipmentId;
-                $updateTBPM['panelStatus'] = 0;
+                $updateTBPM['panelStatus'] = $shipmentStatus;
                 if ($whereShipmentData[$key]->roundId > 0) {
                     $updateTBPM['panelStatus'] = $shipmentData['shipmentStatus'];
                 }
@@ -1352,7 +1365,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $updateTBSP['shipmentId'] = $shipmentId;
 
                 $whereTBSP['panelId'] = $whereShipmentData[$key]->panelId;
-                $whereTBSP['participantId'] = null;
+//                $whereTBSP['participantId'] = null;
 //                $whereTBSP['r$whereTBSP['participantId'] = null;oundId > '] = 0;
                 $updateTBPMfeedback = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereTBSP, $updateTBSP);
 //                print_r($updateTBPMfeedback);
@@ -1370,13 +1383,32 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             $data['status'] = 0;
             $dataArray = $this->returnArrayFromInput();
 
-            if (is_array($dataArray)) {
+//            print_r($dataArray);
+//            exit;
 
-                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], (array) $dataArray['updateData']);
+            if (is_array($dataArray)) {
+                $updateInfo = (array) $dataArray['updateData'];
+                if ($dataArray['tableName'] == 'tbl_bac_shipments') {
+                    if (isset($updateInfo['roundInfo'])) {
+                        unset($updateInfo['roundInfo']);
+                    }
+                }
+                if ($dataArray['tableName'] == 'tbl_bac_rounds') {
+                    if (isset($updateInfo['totalLabsAdded'])) {
+                        unset($updateInfo['totalLabsAdded']);
+                    }
+                }
+
+                $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], $updateInfo);
 
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
                     if ($data['status'] == 1) {
                         $this->updateShipmentRelatedTables((array) $dataArray['where'], (array) $dataArray['updateData']);
+                    }
+                    $posted = (array) $dataArray['updateData'];
+                    if ($posted['shipmentStatus'] == 2) {
+
+                        $this->sendemailondispatchAction((array)$dataArray['where']);
                     }
                 }
             } else {
@@ -1389,6 +1421,47 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
         exit();
     }
 
+    public function sendemailondispatchAction($shipmentWhere = null) {
+
+
+        $shipmentInfo = $this->returnValueWhere($shipmentWhere['id'], 'tbl_bac_shipments');
+        $round = $this->returnValueWhere($shipmentInfo['roundId'], 'tbl_bac_rounds');
+
+        
+        if (count($shipmentInfo)>0) {
+//            print_r($shipmentInfo);
+//exit;
+            $roundId = $shipmentInfo['roundId'];
+            $sql_query = "select email from tbl_bac_rounds_labs"
+                    . " join participant on participant.participant_id=tbl_bac_rounds_labs.labId"
+                    . " where roundId = $roundId ";
+
+
+//            print_r($sql_query);
+//            exit;
+            $data = $this->dbConnection->doQuery($sql_query);
+            $email = array();
+            foreach ($data as $key => $value) {
+
+
+                if (!in_array($value['email'], $email)) {
+                    array_push($email, $value['email']);
+                }
+            }
+
+            $shipmentInfo['date'] = $shipmentInfo['dateDispatched'];
+            $shipmentInfo['courier'] = $shipmentInfo['dispatchCourier'];
+            $message = $this->generateMessage($shipmentInfo, 3);
+            $common = new Application_Service_Common();
+            $message['message'] .= " of round <b>" . $round['roundName'] ."</b> ";
+            $message['message'] = "This is to notify you <br> ".$message['message'];
+            $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
+
+          
+        }
+     return true;
+    }
+
     public function saveshipmentstoroundAction() {
         $postedData = $this->returnArrayFromInput();
         if (is_array($postedData)) {
@@ -1397,8 +1470,8 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                 $where['id'] = $shipments[$i];
                 $updateData['roundId'] = $postedData['roundCode'];
                 $data = $this->dbConnection->updateTable('tbl_bac_shipments', $where, $updateData);
-                $whereShipment['id'] = $where['id']; 
-                $this-> updateShipmentRelatedTables($where);
+                $whereShipment['id'] = $where['id'];
+                $this->updateShipmentRelatedTables($where);
                 print_r($data);
             }
         }

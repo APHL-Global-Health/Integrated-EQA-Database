@@ -107,13 +107,13 @@
                 </div>
             </div>
 
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6" style="display: none;">
                 <label class="col-lg-4 control-label">Latitude</label>
                 <div class="col-lg-8"><input type="text" id="lat" name="lat" size="50" maxlength="255" class="form-control" title="Please enter the latitude here" placeholder="Please enter the latitude here" value="<?php echo $this->participant['lat']; ?>"/>
                 </div>
             </div>
 
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6" style="display: none;">
                 <label class="col-lg-4 control-label">Longitude</label>
 
                 <div class="col-lg-8"><input type="text" id="long" name="long" size="50" maxlength="255" 
@@ -121,7 +121,7 @@
                                              placeholder="Please enter the longitude here"
                                              value="<?php echo $this->participant['long']; ?>"/></div>
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6" style="display: none;">
                 <label class="col-lg-4 control-label">Funding Source</label>
 
                 <div class="col-lg-8"><input type="text" id="fundingSource" name="fundingSource" size="50" maxlength="255" 
@@ -132,21 +132,25 @@
                 <label class="col-lg-4 control-label">Testing Volume</label>
 
                 <div class="col-lg-8">
-                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" 
-                           class="form-control" title="Please enter testing volume here"
-                           placeholder="Please enter the testing volume here" value="<?php echo $this->participant['testing_volume']; ?>"/></div>
+                    <select id="testingVolume" name="testingVolume"
+                            class="form-control" title="Please enter testing volume here">
+                                <?php for ($i = 1; $i <= 1000; $i++) { ?>
+                            <option <?php echo $this->participant['testing_volume'] == $i ? 'selected' : '' ?>><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6" style="display: none;">
                 <label class="col-lg-4 control-label">Enrolled Programs </label>
 
                 <div class="col-lg-8">
                     <select name="enrolledProgram[]" id="enrolledProgram"   multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
                         <?php
                         $enrolledProg = explode(",", $this->participant['enrolled_prog']);
-                        
+
                         foreach ($this->enrolledPrograms as $enrolledPrograms) {
                             ?>
-                            
+
                             <option value="<?php echo $enrolledPrograms['r_epid']; ?>" <?php echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? "selected='selected'" : "" ?>><?php echo $enrolledPrograms['enrolled_programs']; ?></option>
                             <?php
                         }
@@ -155,7 +159,7 @@
                 </div>
             </div>
             <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Site Type</label>
+                <label class="col-lg-4 control-label">Facility Type</label>
                 <div class="col-lg-8">
                     <select name="siteType" id="siteType"  class="form-control">
                         <option value="">--Select--</option>
@@ -189,7 +193,7 @@
                     </select>
                 </div>
             </div>
-             <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Contact Name </label>
 
                 <div class="col-lg-8"><input type="text" id="contactname" name="contactname" size="50" maxlength="255" class="form-control" title="Please enter the contact name here" placeholder="Please enter the contact name here"  value="<?php echo $this->participant['contact_name']; ?>" /></div>
@@ -252,16 +256,17 @@
             </div>
 
             <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Affiliation <span class="mandatory">*</span></label>
+                <label class="col-lg-4 control-label">Partner <span class="mandatory">*</span></label>
 
                 <div class="col-lg-8">
                     <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">
                         <option value="">--Select--</option>
-                        <?php foreach ($this->affiliates as $aff) {
+                        <?php foreach ($this->partners as $aff) {
                             ?>
-                            <option value="<?php echo $aff['affiliate']; ?>" <?php echo ($this->participant['affiliation'] == $aff['affiliate']) ? "selected='selected'" : "" ?>><?php echo $aff['affiliate']; ?></option>
-                        <?php }
-                        ?>
+                            <option value="<?php echo $aff['partner_name']; ?>"
+                                    <?php echo ($this->participant['affiliation'] == $aff['partner_name']) ? "selected='selected'" : "" ?>><?php echo $aff['partner_name']; ?></option>
+                                <?php }
+                                ?>
                     </select>
                 </div>
             </div>
@@ -310,11 +315,11 @@
         </fieldset>
     </form>
 </div>
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap/bootstrap-select.min.js'); ?>"></script>
 <script type="text/javascript">
                     var duplicated = false;
 
-                    $(document).ready(function() {
+                    $(document).ready(function () {
                         $('#dataManager').selectpicker();
                         $('#enrolledProgram').selectpicker();
                         $('#country').selectpicker();
@@ -323,16 +328,15 @@
 
                     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
                         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
-                        function(data) {
-                            if (data > 0) {
-                                alert(msg, "err");
-                                duplicated = true;
-                                obj.focus();
-                            }
-                            else {
-                                duplicated = false;
-                            }
-                        });
+                                function (data) {
+                                    if (data > 0) {
+                                        alert(msg, "err");
+                                        duplicated = true;
+                                        obj.focus();
+                                    } else {
+                                        duplicated = false;
+                                    }
+                                });
                     }
 
                     function validateNow() {
@@ -358,14 +362,14 @@
                         }
                         $("#firstNameDiv").html(tag);
                     }
-                    
-                    <?php
-                    if(isset($this->participant['individual']) && trim($this->participant['individual'])=='no'){
-                    ?>
-                        document.getElementById("individualParticipant").checked=false;
+
+<?php
+if (isset($this->participant['individual']) && trim($this->participant['individual']) == 'no') {
+    ?>
+                        document.getElementById("individualParticipant").checked = false;
                         tag = '<label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label><div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here" value="<?php echo $this->participant['first_name']; ?>"/></div>';
                         $("#lastNameDiv").hide();
                         $("#plname").val('');
                         $("#firstNameDiv").html(tag);
-                    <?php } ?>
+<?php } ?>
 </script>

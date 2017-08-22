@@ -299,6 +299,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                 roundId: round,
                 labId: participant
             }
+            console.log(dataLab);
             var url = serverSamplesURL + 'saveenrollinglab';
             try {
                 alertStartRound = $.alert({
@@ -310,12 +311,13 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                         .post(url, dataLab)
                         .success(function (data) {
                             console.log(data)
-                            alertStartRound.close();
                             $scope.samples.loaderProgressSpinner = '';
+                            alertStartRound.close();
+
                             if (data.status == 0) {
                                 alertStartRound = $.alert({
                                     title: '<i class="fa fa-remove  text-danger"></i> Error',
-                                    content: 'You have successfully enrolled for the round.'
+                                    content: 'Could not enroll for the round.'
                                 });
                             } else {
                                 alertStartRound = $.alert({
@@ -518,7 +520,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
     $scope.reports.showRoundResults = false;
     $scope.reports.roundInfo = {};
-    $scope.reports.roundAllResults ={}
+    $scope.reports.roundAllResults = {}
     $scope.reports.getRRoundResults = function (round) {
         var where = {roundId: round.id};
         var url = serverReportURL + 'getresultsonround';
@@ -528,25 +530,25 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         console.log(round)
         showAjaxLoader(true);
         $http
-            .post(url, where)
-            .success(function (response) {
+                .post(url, where)
+                .success(function (response) {
 
-                showAjaxLoader(false);
-                if (response.status == 1) {
-                    console.log(response);
-                    $scope.reports.roundAllResults = response.data;
-                } else {
+                    showAjaxLoader(false);
+                    if (response.status == 1) {
+                        console.log(response);
+                        $scope.reports.roundAllResults = response.data;
+                    } else {
 
-                    EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
 
-                    $scope.reports.roundAllResults = {};
-                }
-            })
-            .error(function (error) {
-                console.log(error)
-                showAjaxLoader(false);
-                EptServices.EptServiceObject.returnServerErrorAlert();
-            })
+                        $scope.reports.roundAllResults = {};
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    showAjaxLoader(false);
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
 
 
     }

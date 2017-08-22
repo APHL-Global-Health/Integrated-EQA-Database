@@ -8,10 +8,10 @@ EptServices.service('EptServices', function () {
     this.EptServiceObject = {};
     this.EptServiceObject.loaderStatus = {};
     var itemsPerPage = 10;
-    var alphaNumHyDashRegExp = /^[a-zA-Z0-9\-\/]+$/;
-    var numericRegex = /^[0-9]*$/;
+    var alphaNumHyDashRegExp = /^[a-zA-Z0-9\'-\/]+$/;
+    var numericRegex = /^[0-9+-]*$/;
     var emailRegex = '';
-    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9](?:[_\-. /]?[a-zA-Z0-9]+)*$/; ///^[a-zA-Z0-9. _\-\/]+$/;
+    var alphaNumHyDashSpaceRegExp = /^[a-zA-Z0-9](?:[_\-.'", /]?[a-zA-Z0-9 "' .]+)*$/; ///^[a-zA-Z0-9. _\-\/]+$/;
     this.EptServiceObject.loaderStatus = {
 
         fbMessage: '',

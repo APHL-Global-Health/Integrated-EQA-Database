@@ -32,7 +32,7 @@
                     <input class="form-control input-sm" placeholder="Round Name"
                            ng-model="reports.wherePublishRounds.roundName">
                 </div>
-                <div class="col-md-2 " ng-init="reports.wherePublishRounds.evaluated=1">
+                <div class="col-md-2 " ng-init="reports.wherePublishRounds.evaluated = 1">
                     <select class="form-control input-sm" ng-model="reports.wherePublishRounds.evaluated">
 
                         <option value="1" selected>Evaluated</option>
@@ -49,57 +49,57 @@
             </table>
         </form>
     </div>
-    <div class="col-md-12 no-padding">
+    <div class="col-md-12 no-padding" ng-init="reports.generalRoundData = {}">
         <table class="table table-bordered table-striped">
             <thead>
-            <tr>
-                <td>#</td>
-                <th>Round Name</th>
-                <th>Round Code</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Date Created</th>
+                <tr>
+                    <td>#</td>
+                    <th>Round Name</th>
+                    <th>Round Code</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Date Created</th>
 
-                <th>Day(s) to go</th>
-                <th>Total Shipments</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
+                    <th>Day(s) to go</th>
+                    <th>Total Shipments</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="round in reports.generalRoundData|filter:{evaluated :1} | itemsPerPage: samples.itemsPerPage ">
-                <td>{{$index+1}}</td>
-                <td><a href="#/{{round.id}}"
-                       data-placement="right" data-type="info" data-container="body"
-                       data-animation="am-fade-and-scale"
-                       data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
-                       bs-tooltip
-                       ng-click="samples.showRoundFullDetails(round)"
-                       class="">{{round.roundName}}</a>
-                </td>
-                <td>{{round.roundCode}}</td>
-                <td>{{round.startDate}}</td>
-                <td>{{round.endDate}}</td>
-                <td nowrap>{{round.dateCreated}}</td>
-                <td nowrap>{{round.daysLeft}}</td>
-                <td nowrap>{{round.totalShipmentsAdded}}</td>
-                <td>{{round.currentStatus}}</td>
-                <td>
-                    <button ng-disabled="round.totalShipmentsAdded==0 || round.daysLeft < 1" ng-show="round.published==0"
-                            ng-click="reports.publishRoundResults(round,1)" class="btn btn-success btn-sm">
-                        <i class="fa fa-check"></i> Publish
-                    </button>
-                    <button ng-disabled="round.totalShipmentsAdded==0" ng-show="round.published==1"
-                            ng-click="reports.publishRoundResults(round,0)" class="btn btn-danger btn-sm">
-                        <i class="fa fa-close"></i> Cancel publication
+                <tr dir-paginate="round in reports.generalRoundData|filter:{evaluated :1} | itemsPerPage: samples.itemsPerPage ">
+                    <td>{{$index + 1}}</td>
+                    <td><a href="#/{{round.id}}"
+                           data-placement="right" data-type="info" data-container="body"
+                           data-animation="am-fade-and-scale"
+                           data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
+                           bs-tooltip
+                           ng-click="samples.showRoundFullDetails(round)"
+                           class="">{{round.roundName}}</a>
+                    </td>
+                    <td>{{round.roundCode}}</td>
+                    <td>{{round.startDate}}</td>
+                    <td>{{round.endDate}}</td>
+                    <td nowrap>{{round.dateCreated}}</td>
+                    <td nowrap>{{round.daysLeft}}</td>
+                    <td nowrap>{{round.totalShipmentsAdded}}</td>
+                    <td>{{round.currentStatus}}</td>
+                    <td>
+                        <button ng-disabled="round.totalShipmentsAdded == 0 || round.daysLeft > 1" ng-show="round.published == 0"
+                                ng-click="reports.publishRoundResults(round, 1)" class="btn btn-success btn-sm">
+                            <i class="fa fa-check"></i> Publish
+                        </button>
+                        <button ng-disabled="round.totalShipmentsAdded == 0" ng-show="round.published == 1"
+                                ng-click="reports.publishRoundResults(round, 0)" class="btn btn-danger btn-sm">
+                            <i class="fa fa-close"></i> Cancel publication
 
-                    </button>
-                </td>
+                        </button>
+                    </td>
 
-            </tr>
-            <tr ng-hide="reports.generalRoundData.length >0">
-                <td colspan="10" class="text-center">No records available</td>
-            </tr>
+                </tr>
+                <tr ng-hide="reports.generalRoundData.length > 0">
+                    <td colspan="10" class="text-center">No records available</td>
+                </tr>
             </tbody>
         </table>
 

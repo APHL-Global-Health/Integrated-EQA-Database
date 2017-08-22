@@ -9,7 +9,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $common = new Application_Service_Common();
         $email = $params['userId'];
-        $password = MD5($common->generateRandomPassword(9));
+        $plainPass = $common->generateRandomPassword(9);
+        $password = MD5($plainPass);
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
@@ -35,8 +36,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         }
 
         $fullname = $data['first_name'] . ' ' . $data['last_name'];
-        
-        $common->sendPasswordEmailToUser($email, $password, $fullname);
+
+        $common->sendPasswordEmailToUser($email, $plainPass, $fullname);
         return $this->insert($data);
     }
 
@@ -46,7 +47,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute','u.first_name','u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email','p.first_name', 'u.status','u.IsTester');
+        $aColumns = array('u.institute', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'p.first_name', 'u.status', 'u.IsTester');
 
 
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -126,7 +127,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('u' => $this->_name))
-                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array())
+                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array('participant_id'))
                 ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"), 'p.participant_id'))
                 ->group('u.dm_id');
 
@@ -187,20 +188,27 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-            
-          
-            if($_SESSION['loggedInDetails']["IsVl"] == 3){
-                $row[] = $aRow['IsTester']==0?'YES':'';
-            }else{
-                 $row[] = $aRow['IsTester']==1?'Yes':'No'; 
+
+//            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
+
+
+
+            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+                $row[] = $aRow['secondary_email'] ;
+            } else {
+                $row[] = $aRow['IsTester'] == 1 ? 'Yes' : 'No';
             }
+
             //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
 
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             } else {
-                $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+                $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs"'
+                        . ' style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>'
+                        . '<a href="/admin/data-managers/changelaboratory/id/' . $aRow['dm_id'] . '" class="btn btn-info btn-xs"'
+                        . ' style="margin-right: 2px;"><i class="icon-pencil"></i> Change Lab</a>';
             }
             $output['aaData'][] = $row;
         }
@@ -212,8 +220,37 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         return $this->fetchRow("primary_email = '" . $userId . "'")->toArray();
     }
 
+    public function getUserRecords($userId) {
+        return count($this->fetchRow("dm_id = '" . $userId . "'")->toArray());
+    }
+
     public function getUserDetailsBySystemId($userSystemId) {
         return $this->fetchRow("dm_id = '" . $userSystemId . "'")->toArray();
+    }
+
+    public function updateUserLaboratory($params) {
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $where = $params['dm_id'];
+
+        $bind['participant_id'] = $params['participant_id'];
+        $numberRows = $db->update('participant_manager_map', $bind, "dm_id = $where");
+        $exists = $this->getUserRecords($params['dm_id']);
+        if ($numberRows == 0) {
+            $bind['dm_id'] = $params['dm_id'];
+            if ($exists == 0) {
+                $numberRows = $db->insert('participant_manager_map', $bind);
+            }
+            $message = '<br>You have added to a facility : ';
+        } else {
+            $message = '<br>You have been change from you current facility to : ';
+        }
+        $participant = new Application_Model_DbTable_Participants();
+        $partpnt = $participant->getParticipant($bind['participant_id']);
+
+        $common = new Application_Service_Common();
+        if ($numberRows == 1) {
+            $common->sendGeneralEmail($params['email'], $message . $partpnt["institute_name"]);
+        }
     }
 
     public function updateUser($params) {
@@ -262,8 +299,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     public function resetpasswordForEmail($email) {
         $row = $this->fetchRow("primary_email = '" . $email . "'");
         if ($row != null && count($row) == 1) {
-            $randompassword = Application_Service_Common::getRandomString(15);
-            $row->password = $randompassword;
+            $randompassword = Application_Service_Common::getRandomString(10);
+            $row->password = md5($randompassword);
             $row->force_password_reset = 1;
             $row->save();
             return $randompassword;
@@ -289,7 +326,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $email = $authNameSpace->email;
         $noOfRows = $this->update(array('password' => md5($newpassword), 'force_password_reset' => 0), "primary_email = '" . $email . "' and password = '" . md5($oldpassword) . "'");
-        
+
         if ($noOfRows != null && count($noOfRows) == 1) {
             $authNameSpace->force_password_reset = 0;
             return true;
