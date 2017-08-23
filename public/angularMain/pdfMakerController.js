@@ -320,6 +320,16 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
+                    text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() + ' | Your score ' + dataDetails.results.totalMicroAgentsScore,
+                    style: ['content', 'leftData'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
+                    text: 'Expected Micro Agents : ' + expectedResults.microAst.length + ' : ' + expectedResults.microAst.toString() + ' | Total Possible score ' + expectedResults.totalScore,
+                    style: ['content', 'leftData','contentBold'],
+                    margin: [0, 0, 0, 5]
+                },
+                {
                     text: "_______________________________________________________________________________________________",
                     margin: [0, 0, 0, 5]
                 },

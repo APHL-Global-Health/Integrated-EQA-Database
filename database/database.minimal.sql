@@ -1,8 +1,3 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
---
--- Host: 127.0.0.1    Database: eanalyze
--- ------------------------------------------------------
--- Server version	5.5.5-10.1.19-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -2245,7 +2240,7 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org',md5('system@17'),'','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','mapesa@gmail.com',md5('repository@17'),'','0788492586',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30');
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','nphleqa@gmail.com',md5('system@17'),'','0700000000',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL);
 
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -3361,13 +3356,6 @@ INSERT INTO `vl_scheme` VALUES (1,'Viral Load'),(2,'EID');
 /*!40000 ALTER TABLE `vl_scheme` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Dumping events for database 'eanalyze'
---
-
---
--- Dumping routines for database 'eanalyze'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

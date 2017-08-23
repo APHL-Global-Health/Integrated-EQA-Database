@@ -2,13 +2,13 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/multi-select.css'); ?>" />
 <div class="well">
     <fieldset>
-        <legend>Participant - PT Login Mapping</legend>
+        <legend>Laboratory - Lab Manager Mapping</legend>
         <div class="row">
             <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Choose a Participant</label>
+                <label class="col-lg-4 control-label">Choose a Laboratory</label>
 
                 <div class="col-lg-8">
-                    <select class="form-control isRequired" name="allparticipant" id="allparticipant" title="Please choose a Participant" onchange="getDataManager(this.value)">
+                    <select class="form-control isRequired" name="allparticipant" id="allparticipant" title="Please choose a Laboraotory" onchange="getDataManager(this.value)">
                         <option value=""></option>
                         <?php
                         foreach ($this->participants as $participant) {
@@ -21,10 +21,10 @@
                 </div>
             </div>
             <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Choose a PT Login</label>
+                <label class="col-lg-4 control-label">Choose a Laboratory Manager</label>
 
                 <div class="col-lg-8">
-                    <select class="form-control isRequired" name="alldatamangers" id="alldatamangers" title="Please choose a PT Login" onchange="getParticipants(this.value)">
+                    <select class="form-control isRequired" name="alldatamangers" id="alldatamangers" title="Please choose a Laboratory Manager" onchange="getParticipants(this.value)">
                         <option value=""></option>
                         <?php
                         foreach ($this->dataManagers as $dataManagers) {
@@ -40,7 +40,7 @@
         </div>
         <form name="submitdatamanager" id="submitdatamanager" method="post" action="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>" class="hide">
 
-            <div class="text-info" style="text-align:center;padding:10px 0;">Click on the PT Participant Login Name to move them between the two sections<br/><br/>
+            <div class="text-info" style="text-align:center;padding:10px 0;">Click on the Laboratory Manager to move them between the two sections<br/><br/>
                 <div style="width:500px;margin:0 auto;clear:both;">
                     <a href='#' id='select-all-datamanager' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-datamanager' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;&nbsp;&nbsp;Deselect All</a>
                 </div>
@@ -57,7 +57,7 @@
         </form>
         <form name="submitParticipant" id="submitParticipant" method="post" action="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>" class="hide">
 
-            <div class="text-info" style="text-align:center;padding:10px 0;">Click on the Participant Name to move them between the two sections<br/><br/>
+            <div class="text-info" style="text-align:center;padding:10px 0;">Click on the Laboratory Name to move them between the two sections<br/><br/>
                 <div style="width:500px;margin:0 auto;clear:both;">
                     <a href='#' id='select-all-participant' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-participant' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;&nbsp;&nbsp;Deselect All</a>
                 </div>
@@ -76,9 +76,9 @@
     </fieldset>
 
 </div>
-<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.multi-select.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.quicksearch.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap/bootstrap-select.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery/jquery.multi-select.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery/jquery.quicksearch.js"); ?>"></script>
 <script>
                     $(document).ready(function() {
                         $('#allparticipant').selectpicker();
@@ -96,10 +96,10 @@
                             $('#submitdatamanager').removeClass('hide');
                             $('#datamangers').html(data);
                             $('#datamangers').multiSelect("destroy").multiSelect({
-                                selectableFooter: "<div class='custom-header'>Unselected PT Logins (<span id='msUnselectedCountHolder'></span>)</div>",
-                                selectionFooter: "<div class='custom-header'>Selected PT Logins (<span id='msSelectedCountHolder'></span>)</div>",
-                                selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type PT Login Name To Filter'>",
-                                selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type PT Login Name To Filter'>",
+                                selectableFooter: "<div class='custom-header'>Unselected Lab Managers (<span id='msUnselectedCountHolder'></span>)</div>",
+                                selectionFooter: "<div class='custom-header'>Selected Lab Managers (<span id='msSelectedCountHolder'></span>)</div>",
+                                selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type Lab Manager Name To Filter'>",
+                                selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type  Lab Manager Name To Filter'>",
                                 afterInit: function(ms) {
                                     var that = this,
                                             $selectableSearch = that.$selectableUl.prev(),
@@ -156,10 +156,10 @@
                             $('#submitParticipant').removeClass('hide');
                             $('#participants').html(data);
                             $('#participants').multiSelect("destroy").multiSelect({
-                                selectableFooter: "<div class='custom-header'>Unselected Participants (<span id='msUnselectedCountHolder'></span>)</div>",
-                                selectionFooter: "<div class='custom-header'>Selected Participants (<span id='msSelectedCountHolder'></span>)</div>",
-                                selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type Participant Name or Code To Filter'>",
-                                selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type Participant Name or Code To Filter'>",
+                                selectableFooter: "<div class='custom-header'>Unselected Laboraotory (<span id='msUnselectedCountHolder'></span>)</div>",
+                                selectionFooter: "<div class='custom-header'>Selected Laboraotory (<span id='msSelectedCountHolder'></span>)</div>",
+                                selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type Laboraotory Name or Code To Filter'>",
+                                selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Type Laboraotory Name or Code To Filter'>",
                                 afterInit: function(ms) {
                                     var that = this,
                                             $selectableSearch = that.$selectableUl.prev(),

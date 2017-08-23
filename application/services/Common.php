@@ -1,5 +1,7 @@
 <?php
-
+require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
+    . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Bacteriology' . DIRECTORY_SEPARATOR . 'application'
+    . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'main.php';
 class Application_Service_Common {
 
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
@@ -79,27 +81,25 @@ class Application_Service_Common {
     }
 
     public function sendPasswordEmailToUser($sendTo, $password, $fullname) {
-//        $common = new Application_Service_Common();
+
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
                 . $config->emailRegistrationBody
                 . "<br>Username : $sendTo <br>"
                 . "Password : $password <br>"
                 . $config->emailRegistrationSignature;
-        $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
+
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
 
     public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
-//        $common = new Application_Service_Common();
+
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $fullname = isset($fullname) ? $fullname : 'user';
         $message = "Dear $fullname,"
                 . "<br> $Message <br>"
                 . $config->emailRegistrationSignature;
-        $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
+
         $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
     }
 
@@ -158,16 +158,15 @@ class Application_Service_Common {
         return $gc->getValue($name);
     }
 
+    public function getINIConfig($parameter) {
+
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+
+        return $config->$parameter;
+    }
+
     public function contactForm($params) {
-//		$message = "<h3>The following details were entered by ".$params['first_name']." " .$params['last_name']."</h3>";
-//		$message .= "Name : ".$params['first_name']." " .$params['last_name']."<br/>";
-//		$message .= "Email : ".$params['email']."<br/>";
-//		$message .= "Phone/Mobile : ".$params['phone']."<br/>";
-//		$message .= "Selected Reason to Contact : ".$params['reason']."<br/>";
-//		$message .= "Lab/Agency : ".$params['agency']."<br/>";
-//		$message .= "Additional Info : ".$params['additionalInfo']."<br/>";
-        print_r($params['platform']);
-        exit;
+
         $db = new Application_Model_DbTable_Facility();
         $dbs = Zend_Db_Table_Abstract::getAdapter();
         $data = array('FacilityName' => $params['facilityname'], 'MFLCode' => $params['mflcode'], 'Department' => $params['department'], 'PhysicalAddress' => $params['physicaladdress'], 'PostalAddress' => $params['postaladdress'], 'Email' => $params['email'], 'Town' => $params['town'], 'Telephone' => $params['telephone'], 'County' => $params['county'], 'Country' => $params['Country'], 'Partner' => $params['Partner'], 'ContactName' => $params['contactname'], 'ContactEmail' => $params['contactemail'], 'ContactTelephone' => $params['contacttel'], 'additionalinfo' => $params['additionalInfo']);
@@ -182,17 +181,6 @@ class Application_Service_Common {
             }
         }
         return 1;
-//		$fromEmail = $params['email'];
-//		$fromName  = $params['first_name']." " .$params['last_name'];
-//		
-//		$to = Application_Service_Common::getConfig('admin_email');
-//		
-//		$mailSent = $this->sendMail($to,null,null,"New contact message from the ePT program",$message,$fromEmail,$fromName);
-//		if($mailSent){
-//			return 1;
-//		}else{
-//			return 0;
-//		}		
     }
 
     public function checkDuplicate($params) {

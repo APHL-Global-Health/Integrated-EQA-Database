@@ -438,7 +438,7 @@ Class Main extends pdfCreator {
             function returnUpdateStatement($updateInfo) {
         try {
             $updateInfo['lastUpdatePerson'] = $this->getUserSession();
-//            $updateInfo['updateDate'] = $this->getUserSession();
+
             $updateStatement = ' ';
             if (sizeof($updateInfo) > 0) {
                 $updateStatement .= ' set ';

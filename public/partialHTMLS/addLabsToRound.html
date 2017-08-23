@@ -3,7 +3,7 @@
         <small>{{samples.currentRound.roundCode}}</small>
         <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
         <button type="button" class="pull-right btn btn-sm btn-danger"
-                ng-click="samples.samplesActivePage('viewrounds', 0)"><i class="fa fa-remove"></i> close
+                ng-click="samples.samplesActivePage('listRounds', 0)"><i class="fa fa-remove"></i> close
         </button>
         <hr>
 
@@ -12,7 +12,7 @@
 
         <div class="panel panel-heading">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                    ng-click="samples.samplesActivePage('viewrounds', 0)">&times;</button>
+                    ng-click="samples.samplesActivePage('listRounds', 0)">&times;</button>
             <h4 class="modal-title"> Enroll Ready Labs :
                 {{samples.currentRound.roundName| capitalizeLetter}} :
                 {{samples.currentRound.roundCode| capitalizeLetter}}

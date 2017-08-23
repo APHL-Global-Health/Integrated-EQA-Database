@@ -16,7 +16,6 @@ class Pt_Helper_View_GetCaptcha extends Zend_View_Helper_Abstract {
         if (!function_exists('gd_info')) {
             throw new Exception('Required GD library is missing');
         }
-        
         // Default values
         $captcha_config = array(
             'code' => '',
@@ -24,7 +23,6 @@ class Pt_Helper_View_GetCaptcha extends Zend_View_Helper_Abstract {
             'max_length' => 5,
             'png_backgrounds' => array(UPLOAD_PATH . '/../images/captchabg/default.png',UPLOAD_PATH . '/../images/captchabg/ravenna.png'),
             'fonts' => array(UPLOAD_PATH . '/../fonts/Idolwild/idolwild.ttf'),
-            //'characters' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             'characters' => 'abcdefghijkmpsxyz23456789abcdefghijkmpsxyz23456789abcdefghijkmpsxyz23456789',
             'min_font_size' => 22,
             'max_font_size' => 26,

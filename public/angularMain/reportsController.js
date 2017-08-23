@@ -1,5 +1,6 @@
 var reportsModule = angular.module('ReportModule');
-reportsModule.constant('serverReportURL', 'http://localhost:8082/admin/reports/')
+// var BASE_URL = window.location.href.replace(window.location.pathname, "/");
+reportsModule.constant('serverReportURL', BASE_URL + 'admin/reports/')
 reportsModule.controller('ReportsController', function ($scope, $log, $http, EptServices, EptFactory, $timeout, loginDataCache) {
     var serverSamplesURL = SERVER_API_URL.sampleURL;
     var serverReportURL = SERVER_API_URL.reportsURL;
@@ -309,6 +310,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
         }
     }
+
+    $scope.reports.whereLabGenStatResults = {};
+    $scope.reports.genStatPerformance = {};
+    $scope.reports.genStatPerformanceStat ={};
+    $scope.reports.getGenStatPerformanceReport = function (where) {
+        try {
+            showAjaxLoader(true)
+            var url = serverReportURL + 'getgenstatperformance';
+            $http.post(url, where)
+                .success(function (response) {
+                    console.log(response)
+                    showAjaxLoader(false)
+                    if (response.status == 1) {
+                        $scope.reports.genStatPerformance = response.data;
+                        $scope.reports.genStatPerformanceStat = response.stat;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                        $scope.reports.genStatPerformance = {};
+                        $scope.reports.genStatPerformanceStat = {};
+                    }
+                })
+                .error(function (error) {
+                    showAjaxLoader(false)
+                    EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+
+        } catch (exc) {
+
+        }
+    }
+
 
 
 

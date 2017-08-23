@@ -1,0 +1,120 @@
+<div class="col-md-12" ng-cloak="">
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading ">
+                <h5>
+                    <x ng-show="samples.roundFormData.id > 0">Edit {{samples.roundFormData.roundCode}}</x>
+                    <x ng-hide="samples.roundFormData.id > 0">Add</x>
+                    Round
+                    <div class="label btn pull-right" title="Close"
+                         ng-click="samples.emptyFormData('tbl_bac_rounds',0)">
+                        <i class="fa fa-close"></i>
+                    </div>
+                </h5>
+            </div>
+            <div class="panel-body" style="margin: 10px !important;">
+                <div id='alert' tabindex='1'>
+                    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+                    </div>
+                </div>
+                <form name="roundData" novalidate="" class="form-horizontal ">
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : roundData.roundCode.$invalid && !roundData.roundCode.$pristine }">
+                        <label class="col-2 col-form-label">Round Code</label>
+                        <div class="col-10">
+                            <input class="form-control" required="" ng-model="samples.roundFormData.roundCode"
+                               name="roundCode"
+                               ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                            <small class="text-danger col-md-12"
+                               ng-show="roundData.roundCode.$invalid && !roundData.roundCode.$pristine">
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : roundData.roundName.$invalid && !roundData.roundName.$pristine }">
+                        <label class="col-2 col-form-label">Name</label>
+                        <div class="col-10">
+                            <input class="form-control" required="" ng-model="samples.roundFormData.roundName"
+                               name="roundName"
+                               ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                            <small class="text-danger col-md-12"
+                               ng-show="roundData.roundName.$invalid && !roundData.roundName.$pristine">
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group row"
+                         ng-class="{ 'has-error'  : roundData.roundDesc.$invalid && !roundData.roundDesc.$pristine }">
+                        <label class="col-2 col-form-label">Description</label>
+                        <div class="col-10">
+                            <input class="form-control" required="" ng-model="samples.roundFormData.roundDesc"
+                               name="roundDesc"
+                               ng-pattern="samples.alphaNumHyDashSpaceRegExp">
+                            <small class="text-danger col-md-12"
+                                ng-show="roundData.roundDesc.$invalid && !roundData.roundDesc.$pristine">
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{ 'has-error'  : roundData.startDate.$invalid && !roundData.startDate.$pristine }">
+                        <label class="col-2 col-form-label">Start Date</label>
+                        <div class="col-10">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon2"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control" ng-model="samples.roundFormData.startDate"
+                                   data-date-format="yyyy-MM-dd" required=""
+                                   data-min-date="" data-max-date="{{samples.roundFormData.endDate}}"
+                                   data-autoclose="1" aria-describedby="basic-addon2"
+                                   name="startDate"
+                                   bs-datepicker>
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="roundData.startDate.$invalid && !roundData.startDate.$pristine">
+                                Error : Please use the `yyyy-MM-DD` date format : e.g 2016-10-22
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                         ng-class="{ 'has-error'  : roundData.endDate.$invalid && !roundData.endDate.$pristine }">
+                        <label class="col-2 col-form-label">End Date</label>
+                        <div class="col-10">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control" ng-model="samples.roundFormData.endDate"
+                                       data-date-format="yyyy-MM-dd" required="" aria-describedby="basic-addon1"
+                                       data-min-date="{{samples.roundFormData.startDate}}" data-max-date=""
+                                       data-autoclose="1"
+                                       name="endDate"
+                                       bs-datepicker>
+                            </div>
+                            <small class="text-danger col-md-12"
+                                   ng-show="roundData.endDate.$invalid && !roundData.endDate.$pristine">
+                                Error : Please use the `yyyy-MM-DD` date format : e.g 2016-10-22
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-success" ng-class="{ 'has-error'  : roundData.dispatchable.$invalid && !roundData.dispatchable.$pristine }"
+                            ng-click="samples.saveSampleFormData('tbl_bac_rounds',samples.roundFormData)"
+                            ng-disabled="roundData.$invalid || samples.savingInProgress">
+                            Save <i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+                        <button class="btn" ng-click="samples.emptyFormData('tbl_bac_rounds',0)">
+                            Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix">&nbsp;</div>

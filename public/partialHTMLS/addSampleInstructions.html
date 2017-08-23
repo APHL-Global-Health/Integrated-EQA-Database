@@ -1,17 +1,17 @@
 <div class="col-md-12 text-capitalize" ng-cloak="">
     <div class="clearfix">&nbsp;</div>
     <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-default">
-            <div class="panel panel-heading ">
+        <div class="panel panel-primary">
+            <div class="panel-heading ">
                 <h5>
                     <x >Edit Sample Instructions -({{samples.instructionSample.batchName}})  <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-                    <div class="label btn label-default pull-right"
+                    <div class="label btn pull-right" title="Close" 
                          ng-click="samples.emptyFormData('tbl_bac_samples',0)">
-                        <i class="fa fa-close"></i> Cancel
+                        <i class="fa fa-close"></i>
                     </div>
                 </h5>
             </div>
-            <div class="panel panel-body" style="margin: 10px !important;">
+            <div class="panel-body" style="margin: 10px !important;">
                 <div id='alert' tabindex='1'></div>
                 <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
                     <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -21,7 +21,7 @@
                 <form name="instructionsData" novalidate="" class="form-horizontal ">
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.introduction.$invalid && !instructionsData.introduction.$pristine }">
-                        <label class="col-2 col-form-label">a). introduction</label>
+                        <label class="col-2 col-form-label">a). Introduction</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control " required=""
                                       ng-model="samples.instructionsFormData.introduction"
@@ -29,7 +29,7 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.introduction.$invalid && !instructionsData.introduction.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
@@ -37,7 +37,7 @@
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.scope.$invalid && !instructionsData.scope.$pristine }">
-                        <label class="col-2 col-form-label">b). scope</label>
+                        <label class="col-2 col-form-label">b). Scope</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.scope"
@@ -45,14 +45,14 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.scope.$invalid && !instructionsData.scope.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.proficiency.$invalid && !instructionsData.proficiency.$pristine }">
-                        <label class="col-2 col-form-label">c). proficiency test item - treatment and analysis</label>
+                        <label class="col-2 col-form-label">c). Proficiency Test Item - Treatment and Analysis</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.proficiency"
@@ -60,7 +60,7 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.proficiency.$invalid && !instructionsData.proficiency.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
@@ -68,7 +68,7 @@
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.surveyRequirement.$invalid && !instructionsData.surveyRequirement.$pristine }">
-                        <label class="col-2 col-form-label">d). survey requirement</label>
+                        <label class="col-2 col-form-label">d). Survey Requirements</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.surveyRequirement"
@@ -76,14 +76,14 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.surveyRequirement.$invalid && !instructionsData.surveyRequirement.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group"
                          ng-class="{ 'has-error'  : instructionsData.factorsInfluenceTesting.$invalid && !instructionsData.factorsInfluenceTesting.$pristine }">
-                        <label class="col-2 col-form-label">e). factors that could influence the testing </label>
+                        <label class="col-2 col-form-label">e). Factors that could influence the testing </label>
                         <div class="col-">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.factorsInfluenceTesting"
@@ -91,14 +91,14 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.factorsInfluenceTesting.$invalid && !instructionsData.factorsInfluenceTesting.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.selectionOfSample.$invalid && !instructionsData.selectionOfSample.$pristine }">
-                        <label class="col-2 col-form-label">f). selection of sample</label>
+                        <label class="col-2 col-form-label">f). Selection of sample</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.selectionOfSample"
@@ -106,7 +106,7 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.selectionOfSample.$invalid && !instructionsData.selectionOfSample.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
@@ -115,7 +115,7 @@
 
                     <div class="form-group"
                          ng-class="{ 'has-error'  : instructionsData.homogeneityAndStability.$invalid && !instructionsData.homogeneityAndStability.$pristine }">
-                        <label class="col-2 col-form-label">g). homogeneity and stability</label>
+                        <label class="col-2 col-form-label">g). Homogeneity and Stability</label>
                         <div class="col-10">
                             <div class="col-10">
 
@@ -127,7 +127,7 @@
 
                                 <small class="text-danger col-md-12"
                                        ng-show="instructionsData.homogeneityAndStability.$invalid && !instructionsData.homogeneityAndStability.$pristine">
-                                    Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                    Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                                 </small>
 
 
@@ -139,7 +139,7 @@
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.clinicalDetails.$invalid && !instructionsData.clinicalDetails.$pristine }">
-                        <label class="col-2 col-form-label">h). clinical details and sample preparation</label>
+                        <label class="col-2 col-form-label">h). Clinical Details and Sample Preparation</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.clinicalDetails"
@@ -147,15 +147,15 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.clinicalDetails.$invalid && !instructionsData.clinicalDetails.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.specialHandling.$invalid && !instructionsData.specialHandling.$pristine }">
-                        <label class="col-2 col-form-label">i). special handling instructions and safety
-                            requirements</label>
+                        <label class="col-2 col-form-label">i). Special Handling Instructions and Safety
+                            Requirements</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" required="" class="form-control"
                                       ng-model="samples.instructionsFormData.specialHandling"
@@ -164,14 +164,14 @@
                             </select>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.specialHandling.$invalid && !instructionsData.specialHandling.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.specificEnvirons.$invalid && !instructionsData.specificEnvirons.$pristine }">
-                        <label class="col-2 col-form-label">j). specific environmental conditions</label>
+                        <label class="col-2 col-form-label">j). Specific Environmental Conditions</label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" required="" multiple="" class="form-control"
                                       ng-model="samples.instructionsFormData.specificEnvirons"
@@ -181,14 +181,14 @@
 
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.specificEnvirons.$invalid && !instructionsData.specificEnvirons.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine }">
-                        <label class="col-2 col-form-label">k). sample dispatch notifications and actions </label>
+                        <label class="col-2 col-form-label">k). Sample Dispatch Notifications and Actions </label>
                         <div class="col-10">
                             <textarea rows="8" cols="50" required="" class="form-control"
                                       ng-model="samples.instructionsFormData.sampleDispatch"
@@ -197,7 +197,7 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
@@ -205,7 +205,7 @@
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.sampleInstructions.$invalid && !instructionsData.sampleInstructions.$pristine }">
-                        <label class="col-2 col-form-label">i). sample reception</label>
+                        <label class="col-2 col-form-label">i). Sample Reception</label>
                         <div class="col-10">
                     <textarea textarea rows="8" cols="50" class="form-control" required=""
                               ng-model="samples.instructionsFormData.sampleInstructions"
@@ -214,15 +214,15 @@
                     </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.sampleInstructions.$invalid && !instructionsData.sampleInstructions.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
                     <div class="form-group "
                          ng-class="{ 'has-error'  : instructionsData.returnInstructions.$invalid && !instructionsData.returnInstructions.$pristine }">
-                        <label class="col-2 col-form-label">m). instructions on returning of proficiency test
-                            results</label>
+                        <label class="col-2 col-form-label">m). Instructions on Returning of Proficiency Test
+                            Results</label>
                         <div class="col-10">
                             <textarea textarea rows="8" cols="50" class="form-control" required=""
                                       ng-model="samples.instructionsFormData.returnInstructions"
@@ -231,38 +231,33 @@
                             </textarea>
                             <small class="text-danger col-md-12"
                                    ng-show="instructionsData.returnInstructions.$invalid && !instructionsData.returnInstructions.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
+                                Error : Required & Only numbers, alphabets, hyphen and dashes allowed
                             </small>
 
                         </div>
                     </div>
 
                     <div class="clearfix">&nbsp;</div>
-                    <div class="form-group"
-                         ng-class="{ 'has-error'  : instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine }">
-
-                        <div class="col-10">
-
-                            <button class="btn btn-primary col-md-12"
-                                    ng-click="samples.saveSampleInstructions('tbl_bac_sample_instructions',samples.instructionsFormData)"
-                                    ng-disabled="instructionsData.$invalid || samples.savingInProgress"
-                            >Save Instructions<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                            </button>
+                    <div class="container-fluid">
+                      <div class="col-md-6">
+                        <div class="form-group"
+                           ng-class="{ 'has-error'  : instructionsData.sampleDispatch.$invalid && !instructionsData.sampleDispatch.$pristine }">
+                              <button class="btn btn-primary col-md-12"
+                                ng-click="samples.saveSampleInstructions('tbl_bac_sample_instructions',samples.instructionsFormData)"
+                                ng-disabled="instructionsData.$invalid || samples.savingInProgress"
+                              >Save Instructions<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                              </button>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-
-                        <div class="col-10">
-
-                            <button class="btn btn-danger col-md-12"
-                                    ng-click="samples.emptyFormData('tbl_bac_samples',0)"
-                            >Cancel</i>
-                            </button>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <button class="btn btn-danger col-md-12"
+                            ng -click="samples.emptyFormData('tbl_bac_samples',0)"
+                          >Cancel
+                          </button>
                         </div>
+                      </div>
                     </div>
-
-
                 </form>
             </div>
         </div>

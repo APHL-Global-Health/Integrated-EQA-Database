@@ -1,0 +1,218 @@
+<div class="row" ng-init="samples.showRoundInfo=true">
+    <div id="alert" tabindex="1"></div>
+    <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
+    </div>
+    <div ng-if="samples.showAddShipment"   ng-init="samples.getShipmentsForDelivery('tbl_bac_rounds', 'evaluated', '0')">
+        <div class="col-md-12" ng-if="samples.showRoundInfo">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>
+                            Rounds
+                            <small ng-show="samples.rounds.length">{{samples.rounds.length}} records</small>
+                        </h3>
+                    </div>
+
+                    <div class="col-md-6">
+                        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                        <div style="margin-bottom: 0;"><items-per-page></items-per-page></div>
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="search rounds"
+                                   ng-model="samples.searchData">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="samples.getShipmentsForDelivery('tbl_bac_rounds','evaluated','0')">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-left">
+                <input type="checkbox"  ng-true-value="1" ng-false-value="0" ng-model="samples.whereShipment.evaluated"
+                       ng-change="samples.getShipmentsForDelivery('tbl_bac_rounds', 'evaluated', samples.whereShipment.evaluated)"> show inactive
+
+            </div>
+            <table class="table table-striped table-condensed table-bordered" id="printableTable">
+                <thead>
+                    <tr>
+                        <th>#.</th>
+                        <th>Round Name</th>
+                        <th>Round Code</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Date Created</th>
+
+                        <th>Day(s) to go</th>
+                        <th>Total Shipments</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage|filter:samples.whereShipment |filter : samples.searchData|orderBy: '-dateCreated'">
+                        <td>{{$index + 1}}</td>
+                        <td><a href="#"
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="More infor on {{round.roundCode}}"
+                               bs-tooltip
+                               ng-click="samples.showRoundFullDetails(round)"
+                               class="">{{round.roundName}}</a>
+                        </td>
+                        <td>{{round.roundCode}}</td>
+                        <td>{{round.startDate}}</td>
+                        <td>{{round.endDate}}</td>
+                        <td nowrap>{{round.dateCreated}}</td>
+                        <td nowrap>{{round.daysLeft}}</td>
+                        <td nowrap>{{round.totalShipmentsAdded}}</td>
+
+                        <td nowrap>
+                            <button class="btn btn-info btn-sm" ng-disabled="round.daysLeft ==0 || round.startRoundFlag==1"
+
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Edit Round" bs-tooltip
+
+                               ng-click="samples.editFunction(round,'tbl_bac_rounds')"><i
+                                    class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm" ng-disabled="round.daysLeft ==0|| round.startRoundFlag==1|| round.totalShipmentsAdded > 0"
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Shipments" bs-tooltip
+
+                               ng-click="samples.addShipmentsToRound(round)"><i
+                                    class="fa fa-plus"></i>
+                            </button>
+
+                            <button class="btn btn-success btn-sm"
+                                    ng-disabled="round.daysLeft ==0||round.totalShipmentsAdded ==0|| round.startRoundFlag==1"
+
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Enroll lab" bs-tooltip
+
+                               ng-click="samples.addLabsToRound(round)"><i class="fa fa-hospital-o"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="demos"></div>
+
+            <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
+        </div>
+        <div ng-if="!samples.showRoundInfo">
+            <h4>Round Basic Info
+                <small>{{samples.currentRound.roundName}}</small>
+                <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                <button type="button" class="pull-right btn btn-sm btn-danger  position-static"
+                        ng-click="samples.showRoundFullDetails('')"><i class="fa fa-remove"></i> close
+                </button>
+                <hr>
+
+            </h4>
+
+            <div class="panel panel-primary">
+                <div class="panel panel-heading"><h4>Round Information
+                        <!--<i class="btn btn-sm btn-success pull-right" ng-click="samples.showRoundFullDetails('')"> Back</i>-->
+                    </h4>
+                </div>
+                <p class="panel panel-body">
+                    <b> Round Name : </b> {{samples.currentRound.roundName}}<br>
+                    <b> Date Created : </b> {{samples.currentRound.dateCreated}} <br>
+                    <b> Starts : </b> {{samples.currentRound.startDate}} <br>
+                    <b> Ends : </b> {{samples.currentRound.endDate}}<br>
+                    <b> Days Left : </b>
+                <x class="label label-sm label-info">
+                    {{samples.currentRound.daysLeft}}
+
+                </x>
+                <br>
+                <b> Status : </b>
+                {{samples.roundStatus(samples.currentRound.daysLeft, samples.currentRound.startRoundFlag)}}
+                </p>
+
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel panel-heading ">
+                    <h4>Enrolled Labs <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
+                        <small class="text-black"><i>{{samples.readyLabs.length}} records</i></small>
+                        <a href="#" ng-click="samples.addLabsToRound(samples.currentRound, 1)" class="pull-right"><i
+                                class="fa fa-refresh"></i> </a>
+                    </h4>
+                </div>
+                <input class="form-control col-md-12" placeholder="Search Labs" ng-model="samples.searchLab">
+                <table class="table table-striped table-condensed table-bordered no-padding">
+                    <thead>
+                        <tr>
+                            <th>#.</th>
+                            <th>Lab Name</th>
+                            <th>Date Enrolled</th>
+                            <th>Unique /MFL Code</th>
+                            <th>Region</th>
+                            <th>Email</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            <th>#.</th>
+                            <th>Shipment Name</th>
+                            <th>No Of Panels</th>
+                            <th>Courier</th>
+                            <th>ship't Desc</th>
+
+                            <th>Round ID</th>
+                            <th>Created By</th>
+                            <th>Prepared On</th>
+                            <th>Panel Added</th>
+                            <th>Prepared By</th>
+                            <th>Ship't Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="shipment in samples.shipmentsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                            <td>{{$index + 1}}</td>
+                            <td>{{shipment.shipmentName}}</td>
+                            <td>{{shipment.numberOfPanels}}</td>
+                            <td>{{shipment.courier}}</td>
+                            <td>{{shipment.shipmentDsc}}</td>
+                            <td nowrap>{{shipment.roundId}}</td>
+                            <td nowrap>{{shipment.createdBy}}</td>
+
+                            <td nowrap>{{shipment.datePrepared}}</td>
+                            <td>{{shipment.totalPanelsAdded}}</td>
+                            <td nowrap>{{shipment.preparedBy}}</td>
+                            <td nowrap>{{samples.returnShipmentStatus(shipment.shipmentStatus)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="5" direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+
+            </div>
+
+            <div class="btn btn-warning col-md-12 text-uppercase"
+                 ng-disabled="samples.currentRound.startRoundFlag == 1
+                             || samples.currentRound.totalShipmentsAdded == 0 || samples.currentRound.totalLabsAdded == 0"
+                 ng-click="samples.startRound(samples.currentRound)"
+                 >
+                START ROUND {{samples.currentRound.roundName}}
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <div ng-include="'../partialHTMLS/modals/addShipmentsToRounds.html'">
+
+        </div>
+    </div>
+</div>
