@@ -2286,6 +2286,7 @@
             lab.enrolled = 1;
 
             var url = serverSamplesURL + 'saveparticipatinglabs';
+            console.log(lab);
             var varData = {labData: lab}
             $http
                     .post(url, varData)
