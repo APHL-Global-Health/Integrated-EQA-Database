@@ -58,7 +58,7 @@
                 </button>
                 <button class="btn btn-sm btn-info" ng-show="sample.responseStatus==1"
                         ng-click="samples.showAddResponse(sample,0)"
-                        ng-disabled="sample.daysLeftOnTen==0"
+                        ng-disabled="sample.daysLeftOnTen==0 || sample.published==1"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" data-title="Click to edit feedback" bs-tooltip
                 ><i

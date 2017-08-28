@@ -428,7 +428,7 @@
             console.log($scope.samples.linksObject)
 
         };
-        
+
         $scope.samples.currentRound = {};
         $scope.samples.getCurrentActiveRound = function () {
             try {
@@ -1719,7 +1719,7 @@
                 var index = angular.isDefined(indexPos) ? indexPos : $scope.samples.resultFields.length - 1
                 $scope.samples.resultFields.splice(index, 1);
             } else {
-
+                
                 $scope.samples.resultFields.push({id: ($scope.samples.resultFields.length + 1)})
 
             }

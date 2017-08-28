@@ -1239,10 +1239,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
                         $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
                         $where['participantId'] = $postedData['participantId'];
 
-                        $update['published'] = 0;
+                        $update['published'] = 1;
 //                        $update['markedStatus'] = 0;
-                        $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, $update);
-                        $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $update);
+                      //  $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, $update);
+                        //$data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $update);
                     }
                 }
             }
@@ -1631,7 +1631,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $groupArray = array('id');
         $userDetails = $this->returnUserLabDetails();
         if (!$userDetails) {
-            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available,laboratory is not defined'));
             exit;
         } else {
             $postedData['participantId'] = $userDetails['participant_id'];

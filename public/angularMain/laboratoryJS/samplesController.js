@@ -1714,8 +1714,11 @@
                 $scope.samples.resultFields.splice(index, 1);
             } else {
 
-                $scope.samples.resultFields.push({id: ($scope.samples.resultFields.length + 1)})
-
+                if ($scope.samples.resultFields == false) {
+                    $scope.samples.resultFields = [{id: 1}];
+                } else {
+                    $scope.samples.resultFields.push({id: ($scope.samples.resultFields.length + 1)})
+                }
             }
 
         }
@@ -2020,18 +2023,18 @@
             userFeedbackData.panelToSampleId = sampleData.panelToSampleId;
             var edit = false;
             var message = 'Are  you sure you want to submit the results? ';
-            
+
             if (angular.isDefined($scope.samples.userFeedbackFormData.id)) {
-                
+
                 edit = true;
-                
+
                 message = 'Are you sure you want to edit this record ?'
             }
-            if(angular.isDefined(userFeedbackData.discManufacturer)){
+            if (angular.isDefined(userFeedbackData.discManufacturer)) {
                 console.log('sample checked');
-                if(angular.isUndefined(userFeedbackData.id)){
+                if (angular.isUndefined(userFeedbackData.id)) {
                     console.log('id checked');
-                    edit = false; 
+                    edit = false;
                 }
             }
             console.log(edit)
