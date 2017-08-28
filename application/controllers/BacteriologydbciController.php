@@ -2247,6 +2247,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $sampleInstructions = $this->returnValueWhere($sampleWhere, 'tbl_bac_expected_results');
 
         $returnFinalASTExpectedResults = array();
+        $returnFinalASTExpectedResults['expectedResults'] =array();
         if ($sampleInstructions != null) {
             $returnFinalASTExpectedResults['expectedResults'] = $sampleInstructions;
         }

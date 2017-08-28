@@ -481,7 +481,11 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         var expectedResults = returnExpectedAsts(data.expectedResults.expectedASTs);
         console.log(data);
         expectedResults.expectedBacterialResults = data.expectedResults.expectedResults;
-
+        expectedResults.expectedBacterialResults.finalIdentification = angular.isDefined(expectedResults.expectedBacterialResults.finalIdentification) ? expectedResults.expectedBacterialResults.finalIdentification : "None";
+        expectedResults.expectedBacterialResults.finalIdentificationScore = angular.isDefined(expectedResults.expectedBacterialResults.finalIdentificationScore) ? expectedResults.expectedBacterialResults.finalIdentificationScore : "None";
+        expectedResults.expectedBacterialResults.grainStainReaction = angular.isDefined(expectedResults.expectedBacterialResults.grainStainReaction) ? expectedResults.expectedBacterialResults.grainStainReaction : "None";
+        expectedResults.expectedBacterialResults.grainStainReactionScore = angular.isDefined(expectedResults.expectedBacterialResults.grainStainReactionScore) ? expectedResults.expectedBacterialResults.grainStainReactionScore : "None";
+       
         var reportSubHeader = 'USER/LAB PERFORMANCE REPORT';
         var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
 
@@ -590,7 +594,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
 
     $scope.pdfMake.generateLabPerformancePdf = function (data) {
         var reportData = new Array();
-        var tableWidth = ['auto', '*','*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
+        var tableWidth = ['auto', '*', '*', '*', 'auto', '*', '*', 'auto', '*', '*', 'auto']
         var reportHeader =
                 [
                     {text: ' # ', style: 'subHeader'},
@@ -619,7 +623,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
-                    {text: ' ' +  EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore,lab.finalIdentificationScore), style: ['content']},
+                    {text: ' ' + EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore, lab.finalIdentificationScore), style: ['content']},
                     {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
                     {text: ' ' + lab.remarks, style: ['content']},
                     {text: ' ' + lab.grade, style: ['content']},
@@ -669,10 +673,10 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: ' ' + lab.county, style: ['content']},
                     {text: ' ' + lab.batchName, style: ['content']},
                     {text: ' ' + lab.roundCode, style: ['content']},
-                    
-                    {text: ' ' + EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore,lab.finalIdentificationScore),
+
+                    {text: ' ' + EptServices.EptServiceObject.checkForGramStnFi(lab.grainStainReactionScore, lab.finalIdentificationScore),
                         style: ['content']},
-                    
+
                     {text: ' ' + lab.totalMicroAgentsScore, style: ['content']},
                     {text: ' ' + lab.remarks, style: ['content']},
                     {text: ' ' + lab.grade, style: ['content']},
