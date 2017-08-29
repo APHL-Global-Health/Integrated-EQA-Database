@@ -1,23 +1,5 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : mysql57
-Source Server Version : 50717
-Source Host           : localhost:3306
-Source Database       : eanalyze_new
-
-Target Server Type    : MYSQL
-Target Server Version : 50717
-File Encoding         : 65001
-
-Date: 2017-05-26 09:22:50
-*/
-
 SET FOREIGN_KEY_CHECKS=0;
 
--- ----------------------------
--- Table structure for `readinesschecklist`
--- ----------------------------
 DROP TABLE IF EXISTS `readinesschecklist`;
 CREATE TABLE `readinesschecklist` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -37,7 +19,4 @@ CREATE TABLE `readinesschecklist` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- ----------------------------
--- Records of readinesschecklist
--- ----------------------------
 INSERT INTO `readinesschecklist` VALUES ('11', '18', '1', '1', '1', 'None', '1', '1', 'Complete', 'Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support', 'Good to go!', null, '2017-05-19 11:06:26', '7');
