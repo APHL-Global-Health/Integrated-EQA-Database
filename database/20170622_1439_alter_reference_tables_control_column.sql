@@ -11,7 +11,7 @@ CHANGE COLUMN `control` `control` INT(11) NULL DEFAULT 0 ;
 ALTER TABLE `reference_result_tb` 
 CHANGE COLUMN `control` `control` INT(11) NULL DEFAULT 0 ;
 
-ALTER TABLE `eanalyze_test`.`reference_result_vl` 
+ALTER TABLE `reference_result_vl` 
 CHANGE COLUMN `control` `control` INT(11) NULL DEFAULT 0 ;
 
 
