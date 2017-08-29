@@ -1,6 +1,7 @@
 <?php
 $authNameSpace = new Zend_Session_Namespace('datamanagers');
 
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini",APPLICATION_ENV);
 $activeMenu = isset($this->layout()->activeMenu) ? $this->layout()->activeMenu : "";
 $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->activeSubMenu : "";
 ?>
@@ -9,7 +10,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>ePT - Online Lab Proficiency Testing</title>
+        <title><?php echo $config->applicationName; ?></title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.5 -->
@@ -144,11 +145,11 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
             <header class="main-header" ng-init="clickedTab = 'ReceivedSamples'">
                 <!-- Logo -->
-                <a href="/" class="logo">
+                <a href="/" class="logo" title="<?php echo $config->applicationName; ?>">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>e</b>PT</span>
+                    <span class="logo-mini">iEQA</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>e</b>PT</span>
+                    <span class="logo-lg"><?php echo $config->applicationShortName; ?></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
@@ -442,10 +443,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
             </div>
 
             <footer class="main-footer">
-                <div class="pull-right hidden-xs">
-                    <strong><a href="http://www.taskforce.org/">Funded by TaskForce</a></strong>
-                </div>
-                <span>ePT-Online Proficiency Testing</span>
+                <div class="container"><center><?php echo $config->applicationCopyright; ?></center></div>
             </footer>
 
             <div class="control-sidebar-bg"></div>

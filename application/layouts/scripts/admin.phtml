@@ -242,48 +242,57 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <i class="icon-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                         </li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'configMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-cog"></i>&nbsp;&nbsp;Configure <b class="caret"></b></a>
                             <ul class="dropdown-menu" style="overflow-y:scroll;">
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">PT Managers</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins'), 'default', true); ?>">
+                                    PT Managers</a></li>
                                 <li class="divider"></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">PT Participants</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">PT Participant Login</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">Participant Login Map</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness', 'action' => 'index'), 'default', true); ?>">Readiness Checklist</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'enrollments'), 'default', true); ?>">Scheme Enrollments</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants'), 'default', true); ?>">
+                                    PT Participants</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">
+                                    PT Participant Login</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">
+                                    Participant Login Map</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness', 'action' => 'index'), 'default', true); ?>">
+                                    Readiness Checklist</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'enrollments'), 'default', true); ?>">
+                                    Scheme Enrollments</a></li>
                                 <li class="divider"></li>
                                 <?php if (in_array('dts', $adminSession->activeSchemes)) { ?>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'dts-settings'), 'default', true); ?>">DTS Settings</a></li>
+                                    <li class="divider"></li>
                                 <?php } ?>
 
-<!--                                <li><a href="/admin/mail-template/index/9u690s3/new_shipment/"> New Shipment Mail Template</a></li>
-                                <li><a href="/admin/mail-template/index/9u690s3/not_participated/"> Not Participated Mail Template</a></li>				-->
-
-                                <li class="divider"></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'partners'), 'default', true); ?>">Partners</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'vl-assay'), 'default', true); ?>">Vl Assay</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'eid-assay'), 'default', true); ?>">Eid Assay</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'partners'), 'default', true); ?>">
+                                    Partners</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'vl-assay'), 'default', true); ?>">
+                                    VL Assay</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'eid-assay'), 'default', true); ?>">
+                                    EID Assay</a></li>
                             </ul>
                         </li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'manageMenu') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-beaker"></i>&nbsp;&nbsp;Manage <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-beaker"></i>&nbsp;&nbsp;Manage <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions'), 'default', true); ?>">PT Survey</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment'), 'default', true); ?>">Shipments</a></li>
-<!--                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'peermean', 'action' => 'index'), 'default', true); ?>">
-                                        Apply Peer Means</a>
-                                </li>-->
-                                <!--                                <li class="divider"></li>-->
-                                <!--                                <li><a href="javascript:void(0);">Packaging</a></li>-->
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions'), 'default', true); ?>">
+                                    PT Survey</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment'), 'default', true); ?>">
+                                    Shipments</a></li>
                             </ul>
                         </li>
-                        <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
+                        <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'evaluate'), 'default', true); ?>">Evaluate Responses</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'distribution'), 'default', true); ?>">Generate Reports</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize'), 'default', true); ?>">Finalize Reports</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize', 'action' => 'shipments'), 'default', true); ?>">View Finalized Shipments</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'evaluate'), 'default', true); ?>">
+                                    Evaluate Responses</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'distribution'), 'default', true); ?>">
+                                    Generate Reports</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize'), 'default', true); ?>">
+                                    Finalize Reports</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'finalize', 'action' => 'shipments'), 'default', true); ?>">
+                                    View Finalized Shipments</a></li>
                             </ul>
                         </li>
                         <li  <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'report') ? "class='active dropdown'" : "class='dropdown'"; ?>>
@@ -299,8 +308,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'testkit'), 'default', true); ?>">TestKit Report For DTS</a></li>
                                 <?php } ?>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments'), 'default', true); ?>">Shipments Report</a></li>		
-                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-sample-analysis'), 'default', true); ?>">Vl Sample Analysis</a></li>
-                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-assay-distribution'), 'default', true); ?>">Vl Assay Distribution</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-sample-analysis'), 'default', true); ?>">VL Sample Analysis</a></li>
+                                <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'shipments', 'action' => 'vl-assay-distribution'), 'default', true); ?>">VL Assay Distribution</a></li>
                                 <li><a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'annual', 'action' => 'index'), 'default', true); ?>">Annual Report</a></li>
                             </ul>
                         </li>
@@ -393,12 +402,12 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
-                                    <i class="icon-signout"></i> Logout</a>
-                            </li>
-                            <li>
                                 <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
                                     <i class="icon-user"></i> Profile</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
+                                    <i class="icon-signout"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
