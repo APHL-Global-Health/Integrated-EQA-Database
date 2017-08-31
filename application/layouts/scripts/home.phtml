@@ -10,6 +10,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <title><?php echo $config->applicationName; ?></title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
         <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
@@ -19,104 +20,66 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery-ui.min.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>">
 
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
-          <script src="<?php echo $this->baseUrl('js/respond.min.js'); ?>"></script>
-        <![endif]-->
-        <!-- Theme style -->
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/AdminLTE.min.css'); ?>">
-        <!-- AdminLTE Skins. Choose a skin from the css/skins
-             folder instead of downloading all of them to reduce the load. -->
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/dist/css/skins/_all-skins.min.css'); ?>">
-
-        <style>
-            .layout-boxed,.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side,.content-wrapper{
-                /*background: none;
-                border:0;
-                box-shadow : none;*/
-            }
-            .layout-boxed{
-                background: #fff;
+        <style type="text/css">
+            .footer-items {
+                color: #FFF;
+                display: inline-block;
+                padding: 10px;
             }
 
-            .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side,.content-wrapper{
-                background: #ecf0f5;
-                border:0;
-                box-shadow : none;
+            a.footer-items:hover{
+                color: #FFF;
+                text-decoration: none;
+                background: #000;
             }
-
-            .layout-boxed .wrapper{
-                box-shadow : none;
-            }
-            .layout-boxed .wrapper, header, header .navbar .container{
-                max-width:1100px !important;
-            }
-
-
-            .layout-boxed .wrapper {
-                max-width: 1150px;
-                margin: 0 auto;
-                min-height: 100%;
-                /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);*/
-                position: relative;
-            }
-
         </style>
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="js/html5shiv.min.js"></script>
-            <script src="js/respond.min.js"></script>
-        <![endif]-->
-        <script src="<?php echo $this->baseUrl('assets/plugins/jQuery/jQuery-2.1.4.min.js'); ?>"></script>
+
     </head>
 
-    <body class="hold-transition skin-blue layout-top-nav layout-boxed">
-        <div class="wrapper">
+    <body class="hold-transition skin-blue layout-top-nav layout-boxed" style="background-image: url('/images/background_image_nmrl.jpg');background-repeat: no-repeat">
+        <div class="navbar navbar-default navbar-fixed-top" style="background-color: #3c8dbc;">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-custom-menu">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a style="color: #FFF;" class="navbar-brand" href="/" title="<?php echo $config->applicationName; ?>"><?php echo $config->applicationShortName; ?></a>
+                </div>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu" style="float: right; color: #FFF;">
+                    <ul class="nav navbar-nav">
+                        <?php if (isset($authNameSpace->dm_id)) { ?>
+                            <li class="dropdown user user-menu">
+                                <a href="<?php echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true) ?>" style="color: #FFF;">
+                                    <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
+                                </a>
+                            </li>
+                        <?php } else { ?>
+                            <li>
+                                <a href="/auth/login"" style="color: #FFF;"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
+                            </li>
+                            <li>
+                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Admin Login</a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div><!-- /.navbar-custom-menu -->
+            </div>
+        </div>
 
-            <header class="main-header">
-                <nav class="navbar navbar-static-top">
-                    <div class="container">
-                        <div class="navbar-header">
-                            <a class="navbar-brand" href="/" title="<?php echo $config->applicationName; ?>"><?php echo $config->applicationShortName; ?></a>
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                        </div>
-
-                        <!-- Navbar Right Menu -->
-                        <div class="navbar-custom-menu">
-                            <ul class="nav navbar-nav">
-                                <?php if (isset($authNameSpace->dm_id)) { ?>
-                                    <li class="dropdown user user-menu">
-                                        <a href="<?php echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true) ?>">
-                                            <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
-                                        </a>
-                                    </li>
-                                <?php } else { ?>
-                                    <li>
-                                        <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo $this->url(array("controller" => "admin", "action" => ""), null, true) ?>"><i class="icon icon-lock"></i> Admin Login</a>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div><!-- /.navbar-custom-menu -->
-                    </div><!-- /.container-fluid -->
-                </nav>
-            </header>      <!-- Left side column. contains the logo and sidebar -->
+        <div class="container" style="margin-top: 50px; position: absolute;top:0;bottom: 0;left:0; right:0;">
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="float:left;clear:both;background: #F9F9F9;width:100%;padding-bottom:20px;margin-bottom:10px;">
+            <div>
                 <!-- Content Header (Page header) -->
                 <section class="content">
                     <div class="col-lg-12">
                         <div class="col-lg-2" style="text-align: center;padding:10px;">
                             <img src="<?php echo $this->baseUrl().$config->countryFlagLogo;?>" style="max-height:100px;"/>
                         </div>
-                        <div class="col-lg-8" style="text-align: center;padding:10px;">
+                        <div class="col-lg-8" style="text-align: center;padding:10px;background-color: rgba(255, 255, 255, 0.85);">
                             <h2><?php echo $config->applicationName; ?></h2>
                         </div>
                         <div class="col-lg-2" style="text-align: center;padding:10px;">
@@ -128,14 +91,30 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 </section>
 
             </div><!-- /.content-wrapper -->
-            <footer class="main-footer">
-                <div><center><?php echo $config->applicationCopyright; ?></center></div>
-            </footer>
 
             <div class="control-sidebar-bg"></div>
         </div><!-- ./wrapper -->
 
+        <footer class="main-footer" style="position: absolute;bottom: 0;width: 100%;background: #333; color: #FFF; padding: 20px;">
+            <div>
+                <center>
+                    <a class="footer-items" href="/">Home</a> | 
+                    <a class="footer-items" href="/about-us">About Us</a> | 
+                    <a class="footer-items" href="/resources">Resources</a> | 
+                    <a class="footer-items" href="http://www.nphls.or.ke/helpdesk/">NPHL Help Desk</a> |
+                    <span class="footer-items"><?php echo $config->applicationCopyright; ?></span>
+                </center>
+            </div>
+        </footer>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
+            <script src="<?php echo $this->baseUrl('js/respond.min.js'); ?>"></script>
+        <![endif]-->
+
         <!-- jQuery 2.1.4 -->
+        <script src="<?php echo $this->baseUrl('assets/plugins/jQuery/jQuery-2.1.4.min.js'); ?>"></script>
 
         <!-- jQuery UI 1.11.4 -->
         <script src="<?php echo $this->baseUrl("assets/plugins/jQueryUI/jquery-ui.min.js"); ?>"></script>
@@ -144,7 +123,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
             $.widget.bridge('uibutton', $.ui.button);
         </script>
         <!-- Bootstrap 3.3.5 -->
-        <script src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
 
         <script type="text/javascript" src="<?php echo $this->baseUrl("assets/plugins/datatables/jquery.dataTables.min.js"); ?>"></script>
@@ -153,9 +132,6 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>	
-
-        <!-- AdminLTE App -->
-        <script type="text/javascript" src="<?php echo $this->baseUrl('assets/dist/js/app.min.js'); ?>"></script>
 
     </body>
 </html>

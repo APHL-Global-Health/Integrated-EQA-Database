@@ -1,22 +1,19 @@
 
 <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
-<!--<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>-->
 <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/reportSearch.js'); ?>"></script>
 
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/eptServices.js'); ?>"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="<?php echo $this->baseUrl('css/font-awesome.min.css'); ?>" rel="stylesheet">
 <style>
     @media print {
         .dontPrint, #shipmentTable_filter, #shipmentTable_info{
             display:none;
         </style>
 
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link href="<?php echo $this->baseUrl('css/font-awesome.min.css'); ?>" rel="stylesheet">
         <style>
             @media print {
                 .dontPrint, #shipmentTable_filter, #shipmentTable_info {
@@ -58,14 +55,6 @@
                                 </ul>
                             </div>
                         </li>
-                        <!--
-                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'reports'}">
-                            <a href="" ng-click="clickedTab = 'reports'">Reports</a>
-                        </li>
-                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
-                            <a href="" ng-click="clickedTab = 'graphs'">Graphs</a>
-                        </li>
-                        -->
                         <li class='pull-right'>
 
 
@@ -99,11 +88,6 @@
                                  ng-click="reports.generateParticipantRCExcel(reports.participantionResultCode)">
                                 <i class="fa fa-excel"></i> CSV
                             </div>
-                            
-                            
-                            
-                            
-                            
 
                             <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'summary'" ng-click="reports.generateSummaryExcel(reports.performanceLabs)">
                                 <i class="fa fa-excel"></i> Excel
@@ -112,15 +96,9 @@
                                 <i class="fa fa-excel"></i> Excel
                             </div>
 
-
-                    <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
-                            -->
-
                         </li>
 
-
                     </ul>
-
 
                 </div>
                 <div class="alert alert-dismissible {{reports.graphMessageCSS}}" ng-show="reports.graphMessageStatus">
@@ -501,10 +479,8 @@
 
         </div>
     </div>
-    <!--s<script src="http://code.highcharts.com/highcharts.js"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highchart.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/raphael.min.js'); ?>"></script>
-    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
 
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/html2canvas_1.js'); ?>"></script>
@@ -517,411 +493,379 @@
     <script type="text/javascript" src="<?php echo $this->baseUrl('js/base64.js'); ?>"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jspdf.min.js'); ?>"></script>
     <script type="text/javascript">
 
-                                                        var startDate = "";
-                                                        var endDate = "";
-                                                        var paginate = true;
-                                                        $(document).ready(function () {
-                                                        $('#dateRange').daterangepicker({
-                                                        format: 'YYYY-MM-DD',
-                                                                ranges: {
-                                                                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                                                                        'Last 90 Days': [moment().subtract('days', 89), moment()],
-                                                                        'Last 180 Days': [moment().subtract('days', 179), moment()],
-                                                                        'Last 12 Months': [moment().subtract('month', 12), moment()],
-                                                                        'Last 18 Months': [moment().subtract('month', 18), moment()],
-                                                                }
-                                                        },
-                                                                function (start, end) {
-                                                                startDate = start.format('YYYY-MM-DD');
-                                                                endDate = end.format('YYYY-MM-DD');
-                                                                });
-                                                        });
-                                                        function drawGraph() {
-                                                        if ($("#reportType").val() == '') {
-                                                        alert('Please select the report type');
-                                                        return;
-                                                        }
-                                                        drawTable();
-                                                        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {startDate: startDate, endDate: endDate, scheme: $("#provider").val(), reportType: $("#reportType").val(), format: "html"},
-                                                                function (response) {
-                                                                response = response.split('##');
-                                                                var passedvalues = [];
-                                                                var failedvalues = [];
-                                                                var othervalues = [];
-                                                                var latevalues = [];
-                                                                var excluded = [];
-                                                                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
-                                                                passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
-                                                                failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
-                                                                othervalues.push(parseInt(JSON.parse(response[3])[ln]));
-                                                                latevalues.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                excluded.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                }
-                                                                $("#participant").html('');
-                                                                if (JSON.parse(response[0]).length > 0) {
-                                                                $("#participant").css("display", "block");
-                                                                } else {
-                                                                $("#participant").css("display", "none");
-                                                                }
-                                                                $('#participant').highcharts({
-                                                                colors: [
-                                                                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
-                                                                ],
-                                                                        chart: {
-                                                                        type: 'column'
-                                                                        },
-                                                                        title: {
-                                                                        text: 'Participant Response Chart'
-                                                                        },
-                                                                        xAxis: {
-                                                                        categories: JSON.parse(response[0])
-                                                                        },
-                                                                        yAxis: {
-                                                                        allowDecimals: false,
-                                                                                min: 0,
-                                                                                title: {
-                                                                                text: 'Number Of Results'
-                                                                                },
-                                                                                stackLabels: {
-                                                                                enabled: true,
-                                                                                        style: {
-                                                                                        fontWeight: 'bold'
-                                                                                        }
-                                                                                }
-                                                                        },
-                                                                        legend: {
-                                                                        align: 'right',
-                                                                                x: - 70,
-                                                                                verticalAlign: 'top',
-                                                                                y: 20,
-                                                                                floating: true,
-                                                                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                                                                                borderColor: '#CCC',
-                                                                                borderWidth: 1,
-                                                                                shadow: false
-                                                                        },
-                                                                        tooltip: {
-                                                                        formatter: function () {
-                                                                        return '<b>' + this.x + '</b><br/>' +
-                                                                                this.series.name + ': ' + this.y + '<br/>' +
-                                                                                'Total: ' + this.point.stackTotal;
-                                                                        }
-                                                                        },
-                                                                        plotOptions: {
-                                                                        column: {
-                                                                        stacking: 'normal',
-                                                                                dataLabels: {
-                                                                                enabled: true,
-                                                                                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-                                                                                        style: {
-                                                                                        textShadow: '0 0 3px black, 0 0 3px black'
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                        },
-                                                                        series: [{
-                                                                        name: 'Passed',
-                                                                                data: passedvalues
-                                                                        }, {
-                                                                        name: 'Failed',
-                                                                                data: failedvalues
-                                                                        }, {
-                                                                        name: 'Not Responded',
-                                                                                data: othervalues
-                                                                        }, {
-                                                                        name: 'Late Response',
-                                                                                data: latevalues
-                                                                        }, {
-                                                                        name: 'Excluded',
-                                                                                data: excluded
-                                                                        }
-                                                                        ]
-                                                                });
-                                                                });
-                                                        }
-                                                        function drawTable() {
-                                                        $("#shipmentTable").removeClass("hide");
-                                                        $.blockUI;
-                                                        oTable = $('#shipmentTable').dataTable({
-                                                        "oLanguage": {
-                                                        "sLengthMenu": "_MENU_ records per page",
-                                                                "sEmptyTable": "No data to show"
-                                                        },
-                                                                "bPaginate": paginate,
-                                                                "bJQueryUI": false,
-                                                                "bAutoWidth": false,
-                                                                "bInfo": true,
-                                                                "bScrollCollapse": true,
-                                                                "sPaginationType": "bootstrap",
-                                                                "bRetrieve": false,
-                                                                "bDestroy": true,
-                                                                "aoColumns": [
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                {"sClass": ""},
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                ],
-                                                                "aaSorting": [[1, "desc"]],
-                                                                "bProcessing": true,
-                                                                "bServerSide": true,
-                                                                "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
-                                                                "fnServerParams": function (aoData) {
-                                                                aoData.push({"name": "startDate", "value": startDate});
-                                                                aoData.push({"name": "endDate", "value": endDate});
-                                                                aoData.push({"name": "scheme", "value": $("#scheme").val()});
-                                                                aoData.push({"name": "reportType", "value": $("#reportType").val()});
-                                                                },
-                                                                "fnServerData": function (sSource, aoData, fnCallback) {
-                                                                $.ajax({
-                                                                "dataType": 'json',
-                                                                        "type": "POST",
-                                                                        "url": sSource,
-                                                                        "data": aoData,
-                                                                        "success": fnCallback
-                                                                });
-                                                                }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                                                        $.unblockUI;
-                                                        },
-                                                        });
-                                                        newcolumnHeading = $("#reportType option:selected").text();
-                                                        $('#reportText').html(newcolumnHeading);
-                                                        }
-                                                        ;
-                                                        function GetPrint() {
-                                                        paginate = false;
-                                                        drawTable()
-                                                                window.print();
-                                                        }
-                                                        jQuery(document).bind("keyup keydown", function (e) {
-                                                        if (e.ctrlKey && e.keyCode == 80) {
-                                                        paginate = false;
-                                                        drawTable()
-                                                        }
-                                                        });
-                                                        //                function createTable() {
-                                                        //                   var res = new Array();
-                                                        //                   
-                                                        //                   res = [['1','2','3','4','5']];
-                                                        //                        $("#reportTable").DataTable
-                                                        //                        ({
-                                                        //                            data: res,
-                                                        //                            columns: [
-                                                        //                                {title: "Provider"},
-                                                        //                                {title: "Lab"},
-                                                        //                                {title: "Round"},
-                                                        //                                {title: "Program"},
-                                                        //                                {title: "Analytre"}
-                                                        //                            ]
-                                                        //                        })
-                                                        //                                   }
+            var startDate = "";
+            var endDate = "";
+            var paginate = true;
+            $(document).ready(function () {
+            $('#dateRange').daterangepicker({
+            format: 'YYYY-MM-DD',
+                    ranges: {
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                            'Last 90 Days': [moment().subtract('days', 89), moment()],
+                            'Last 180 Days': [moment().subtract('days', 179), moment()],
+                            'Last 12 Months': [moment().subtract('month', 12), moment()],
+                            'Last 18 Months': [moment().subtract('month', 18), moment()],
+                    }
+            },
+                    function (start, end) {
+                    startDate = start.format('YYYY-MM-DD');
+                    endDate = end.format('YYYY-MM-DD');
+                    });
+            });
+            function drawGraph() {
+            if ($("#reportType").val() == '') {
+            alert('Please select the report type');
+            return;
+            }
+            drawTable();
+            $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {startDate: startDate, endDate: endDate, scheme: $("#provider").val(), reportType: $("#reportType").val(), format: "html"},
+                    function (response) {
+                    response = response.split('##');
+                    var passedvalues = [];
+                    var failedvalues = [];
+                    var othervalues = [];
+                    var latevalues = [];
+                    var excluded = [];
+                    for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
+                    passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
+                    failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
+                    othervalues.push(parseInt(JSON.parse(response[3])[ln]));
+                    latevalues.push(parseInt(JSON.parse(response[4])[ln]));
+                    excluded.push(parseInt(JSON.parse(response[4])[ln]));
+                    }
+                    $("#participant").html('');
+                    if (JSON.parse(response[0]).length > 0) {
+                    $("#participant").css("display", "block");
+                    } else {
+                    $("#participant").css("display", "none");
+                    }
+                    $('#participant').highcharts({
+                    colors: [
+                            '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
+                    ],
+                            chart: {
+                            type: 'column'
+                            },
+                            title: {
+                            text: 'Participant Response Chart'
+                            },
+                            xAxis: {
+                            categories: JSON.parse(response[0])
+                            },
+                            yAxis: {
+                            allowDecimals: false,
+                                    min: 0,
+                                    title: {
+                                    text: 'Number Of Results'
+                                    },
+                                    stackLabels: {
+                                    enabled: true,
+                                            style: {
+                                            fontWeight: 'bold'
+                                            }
+                                    }
+                            },
+                            legend: {
+                            align: 'right',
+                                    x: - 70,
+                                    verticalAlign: 'top',
+                                    y: 20,
+                                    floating: true,
+                                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                                    borderColor: '#CCC',
+                                    borderWidth: 1,
+                                    shadow: false
+                            },
+                            tooltip: {
+                            formatter: function () {
+                            return '<b>' + this.x + '</b><br/>' +
+                                    this.series.name + ': ' + this.y + '<br/>' +
+                                    'Total: ' + this.point.stackTotal;
+                            }
+                            },
+                            plotOptions: {
+                            column: {
+                            stacking: 'normal',
+                                    dataLabels: {
+                                    enabled: true,
+                                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                            style: {
+                                            textShadow: '0 0 3px black, 0 0 3px black'
+                                            }
+                                    }
+                            }
+                            },
+                            series: [{
+                            name: 'Passed',
+                                    data: passedvalues
+                            }, {
+                            name: 'Failed',
+                                    data: failedvalues
+                            }, {
+                            name: 'Not Responded',
+                                    data: othervalues
+                            }, {
+                            name: 'Late Response',
+                                    data: latevalues
+                            }, {
+                            name: 'Excluded',
+                                    data: excluded
+                            }
+                            ]
+                    });
+                    });
+            }
+            function drawTable() {
+            $("#shipmentTable").removeClass("hide");
+            $.blockUI;
+            oTable = $('#shipmentTable').dataTable({
+            "oLanguage": {
+            "sLengthMenu": "_MENU_ records per page",
+                    "sEmptyTable": "No data to show"
+            },
+                    "bPaginate": paginate,
+                    "bJQueryUI": false,
+                    "bAutoWidth": false,
+                    "bInfo": true,
+                    "bScrollCollapse": true,
+                    "sPaginationType": "bootstrap",
+                    "bRetrieve": false,
+                    "bDestroy": true,
+                    "aoColumns": [
+                    {"sClass": ""},
+                    {"sClass": "center"},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": "center"},
+                    ],
+                    "aaSorting": [[1, "desc"]],
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
+                    "fnServerParams": function (aoData) {
+                    aoData.push({"name": "startDate", "value": startDate});
+                    aoData.push({"name": "endDate", "value": endDate});
+                    aoData.push({"name": "scheme", "value": $("#scheme").val()});
+                    aoData.push({"name": "reportType", "value": $("#reportType").val()});
+                    },
+                    "fnServerData": function (sSource, aoData, fnCallback) {
+                    $.ajax({
+                    "dataType": 'json',
+                            "type": "POST",
+                            "url": sSource,
+                            "data": aoData,
+                            "success": fnCallback
+                    });
+                    }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+            $.unblockUI;
+            },
+            });
+            newcolumnHeading = $("#reportType option:selected").text();
+            $('#reportText').html(newcolumnHeading);
+            }
+            ;
+            function GetPrint() {
+            paginate = false;
+            drawTable()
+                    window.print();
+            }
+            jQuery(document).bind("keyup keydown", function (e) {
+            if (e.ctrlKey && e.keyCode == 80) {
+            paginate = false;
+            drawTable()
+            }
+            });
 
-                                                        var startDate = "";
-                                                        var endDate = "";
-                                                        var paginate = true;
-                                                        $(document).ready(function () {
-                                                        $('#dateRange').daterangepicker({
-                                                        format: 'DD-MMM-YYYY',
-                                                                ranges: {
-                                                                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                                                                        'Last 90 Days': [moment().subtract('days', 89), moment()],
-                                                                        'Last 180 Days': [moment().subtract('days', 179), moment()],
-                                                                        'Last 12 Months': [moment().subtract('month', 12), moment()],
-                                                                        'Last 18 Months': [moment().subtract('month', 18), moment()],
-                                                                }
-                                                        },
-                                                                function (start, end) {
-                                                                startDate = start.format('YYYY-MM-DD');
-                                                                endDate = end.format('YYYY-MM-DD');
-                                                                });
-                                                        });
-                                                        function drawGraph() {
-                                                        if ($("#reportType").val() == '') {
-                                                        alert('Please select the report type');
-                                                        return;
-                                                        }
-                                                        drawTable();
-                                                        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {
-                                                        startDate: startDate,
-                                                                endDate: endDate,
-                                                                scheme: $("#provider").val(),
-                                                                reportType: $("#reportType").val(),
-                                                                format: "html"
-                                                        },
-                                                                function (response) {
-                                                                response = response.split('##');
-                                                                var passedvalues = [];
-                                                                var failedvalues = [];
-                                                                var othervalues = [];
-                                                                var latevalues = [];
-                                                                var excluded = [];
-                                                                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
-                                                                passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
-                                                                failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
-                                                                othervalues.push(parseInt(JSON.parse(response[3])[ln]));
-                                                                latevalues.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                excluded.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                }
-                                                                $("#participant").html('');
-                                                                if (JSON.parse(response[0]).length > 0) {
-                                                                $("#participant").css("display", "block");
-                                                                } else {
-                                                                $("#participant").css("display", "none");
-                                                                }
-                                                                $('#participant').highcharts({
-                                                                colors: [
-                                                                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
-                                                                ],
-                                                                        chart: {
-                                                                        type: 'column'
-                                                                        },
-                                                                        title: {
-                                                                        text: 'Participant Response Chart'
-                                                                        },
-                                                                        xAxis: {
-                                                                        categories: JSON.parse(response[0])
-                                                                        },
-                                                                        yAxis: {
-                                                                        allowDecimals: false,
-                                                                                min: 0,
-                                                                                title: {
-                                                                                text: 'Number Of Results'
-                                                                                },
-                                                                                stackLabels: {
-                                                                                enabled: true,
-                                                                                        style: {
-                                                                                        fontWeight: 'bold'
-                                                                                        }
-                                                                                }
-                                                                        },
-                                                                        legend: {
-                                                                        align: 'right',
-                                                                                x: - 70,
-                                                                                verticalAlign: 'top',
-                                                                                y: 20,
-                                                                                floating: true,
-                                                                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                                                                                borderColor: '#CCC',
-                                                                                borderWidth: 1,
-                                                                                shadow: false
-                                                                        },
-                                                                        tooltip: {
-                                                                        formatter: function () {
-                                                                        return '<b>' + this.x + '</b><br/>' +
-                                                                                this.series.name + ': ' + this.y + '<br/>' +
-                                                                                'Total: ' + this.point.stackTotal;
-                                                                        }
-                                                                        },
-                                                                        plotOptions: {
-                                                                        column: {
-                                                                        stacking: 'normal',
-                                                                                dataLabels: {
-                                                                                enabled: true,
-                                                                                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-                                                                                        style: {
-                                                                                        textShadow: '0 0 3px black, 0 0 3px black'
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                        },
-                                                                        series: [{
-                                                                        name: 'Passed',
-                                                                                data: passedvalues
-                                                                        }, {
-                                                                        name: 'Failed',
-                                                                                data: failedvalues
-                                                                        }, {
-                                                                        name: 'Not Responded',
-                                                                                data: othervalues
-                                                                        }, {
-                                                                        name: 'Late Response',
-                                                                                data: latevalues
-                                                                        }, {
-                                                                        name: 'Excluded',
-                                                                                data: excluded
-                                                                        }
-                                                                        ]
-                                                                });
-                                                                });
-                                                        }
-                                                        function drawTable() {
-                                                        $("#shipmentTable").removeClass("hide");
-                                                        $.blockUI;
-                                                        oTable = $('#shipmentTable').dataTable({
-                                                        "oLanguage": {
-                                                        "sLengthMenu": "_MENU_ records per page",
-                                                                "sEmptyTable": "No data to show"
-                                                        },
-                                                                "bPaginate": paginate,
-                                                                "bJQueryUI": false,
-                                                                "bAutoWidth": false,
-                                                                "bInfo": true,
-                                                                "bScrollCollapse": true,
-                                                                "sPaginationType": "bootstrap",
-                                                                "bRetrieve": false,
-                                                                "bDestroy": true,
-                                                                "aoColumns": [
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                {"sClass": ""},
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                ],
-                                                                "aaSorting": [[1, "desc"]],
-                                                                "bProcessing": true,
-                                                                "bServerSide": true,
-                                                                "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
-                                                                "fnServerParams": function (aoData) {
-                                                                aoData.push({"name": "startDate", "value": startDate});
-                                                                aoData.push({"name": "endDate", "value": endDate});
-                                                                aoData.push({"name": "scheme", "value": $("#scheme").val()});
-                                                                aoData.push({"name": "reportType", "value": $("#reportType").val()});
-                                                                },
-                                                                "fnServerData": function (sSource, aoData, fnCallback) {
-                                                                $.ajax({
-                                                                "dataType": 'json',
-                                                                        "type": "POST",
-                                                                        "url": sSource,
-                                                                        "data": aoData,
-                                                                        "success": fnCallback
-                                                                });
-                                                                }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                                                        $.unblockUI;
-                                                        },
-                                                        });
-                                                        newcolumnHeading = $("#reportType option:selected").text();
-                                                        $('#reportText').html(newcolumnHeading);
-                                                        }
-                                                        ;
-                                                        function GetPrint() {
-                                                        paginate = false;
-                                                        drawTable()
-                                                                window.print();
-                                                        }
-                                                        jQuery(document).bind("keyup keydown", function (e) {
-                                                        if (e.ctrlKey && e.keyCode == 80) {
-                                                        paginate = false;
-                                                        drawTable()
-                                                        }
-                                                        });
-                                                        //                function createTable() {
-                                                        //                   var res = new Array();
-                                                        //
-                                                        //                   res = [['1','2','3','4','5']];
-                                                        //                        $("#reportTable").DataTable
-                                                        //                        ({
-                                                        //                            data: res,
-                                                        //                            columns: [
-                                                        //                                {title: "Provider"},
-                                                        //                                {title: "Lab"},
-                                                        //                                {title: "Round"},
-                                                        //                                {title: "Program"},
-                                                        //                                {title: "Analytre"}
-                                                        //                            ]
-                                                        //                        })
-                                                        //                                   }
+            var startDate = "";
+            var endDate = "";
+            var paginate = true;
+            $(document).ready(function () {
+            $('#dateRange').daterangepicker({
+            format: 'DD-MMM-YYYY',
+                    ranges: {
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                            'Last 90 Days': [moment().subtract('days', 89), moment()],
+                            'Last 180 Days': [moment().subtract('days', 179), moment()],
+                            'Last 12 Months': [moment().subtract('month', 12), moment()],
+                            'Last 18 Months': [moment().subtract('month', 18), moment()],
+                    }
+            },
+                    function (start, end) {
+                    startDate = start.format('YYYY-MM-DD');
+                    endDate = end.format('YYYY-MM-DD');
+                    });
+            });
+            function drawGraph() {
+            if ($("#reportType").val() == '') {
+            alert('Please select the report type');
+            return;
+            }
+            drawTable();
+            $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {
+            startDate: startDate,
+                    endDate: endDate,
+                    scheme: $("#provider").val(),
+                    reportType: $("#reportType").val(),
+                    format: "html"
+            },
+                    function (response) {
+                    response = response.split('##');
+                    var passedvalues = [];
+                    var failedvalues = [];
+                    var othervalues = [];
+                    var latevalues = [];
+                    var excluded = [];
+                    for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
+                    passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
+                    failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
+                    othervalues.push(parseInt(JSON.parse(response[3])[ln]));
+                    latevalues.push(parseInt(JSON.parse(response[4])[ln]));
+                    excluded.push(parseInt(JSON.parse(response[4])[ln]));
+                    }
+                    $("#participant").html('');
+                    if (JSON.parse(response[0]).length > 0) {
+                    $("#participant").css("display", "block");
+                    } else {
+                    $("#participant").css("display", "none");
+                    }
+                    $('#participant').highcharts({
+                    colors: [
+                            '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
+                    ],
+                            chart: {
+                            type: 'column'
+                            },
+                            title: {
+                            text: 'Participant Response Chart'
+                            },
+                            xAxis: {
+                            categories: JSON.parse(response[0])
+                            },
+                            yAxis: {
+                            allowDecimals: false,
+                                    min: 0,
+                                    title: {
+                                    text: 'Number Of Results'
+                                    },
+                                    stackLabels: {
+                                    enabled: true,
+                                            style: {
+                                            fontWeight: 'bold'
+                                            }
+                                    }
+                            },
+                            legend: {
+                            align: 'right',
+                                    x: - 70,
+                                    verticalAlign: 'top',
+                                    y: 20,
+                                    floating: true,
+                                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                                    borderColor: '#CCC',
+                                    borderWidth: 1,
+                                    shadow: false
+                            },
+                            tooltip: {
+                            formatter: function () {
+                            return '<b>' + this.x + '</b><br/>' +
+                                    this.series.name + ': ' + this.y + '<br/>' +
+                                    'Total: ' + this.point.stackTotal;
+                            }
+                            },
+                            plotOptions: {
+                            column: {
+                            stacking: 'normal',
+                                    dataLabels: {
+                                    enabled: true,
+                                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                            style: {
+                                            textShadow: '0 0 3px black, 0 0 3px black'
+                                            }
+                                    }
+                            }
+                            },
+                            series: [{
+                            name: 'Passed',
+                                    data: passedvalues
+                            }, {
+                            name: 'Failed',
+                                    data: failedvalues
+                            }, {
+                            name: 'Not Responded',
+                                    data: othervalues
+                            }, {
+                            name: 'Late Response',
+                                    data: latevalues
+                            }, {
+                            name: 'Excluded',
+                                    data: excluded
+                            }
+                            ]
+                    });
+                    });
+            }
+            function drawTable() {
+            $("#shipmentTable").removeClass("hide");
+            $.blockUI;
+            oTable = $('#shipmentTable').dataTable({
+            "oLanguage": {
+            "sLengthMenu": "_MENU_ records per page",
+                    "sEmptyTable": "No data to show"
+            },
+                    "bPaginate": paginate,
+                    "bJQueryUI": false,
+                    "bAutoWidth": false,
+                    "bInfo": true,
+                    "bScrollCollapse": true,
+                    "sPaginationType": "bootstrap",
+                    "bRetrieve": false,
+                    "bDestroy": true,
+                    "aoColumns": [
+                    {"sClass": ""},
+                    {"sClass": "center"},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": "center"},
+                    ],
+                    "aaSorting": [[1, "desc"]],
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
+                    "fnServerParams": function (aoData) {
+                    aoData.push({"name": "startDate", "value": startDate});
+                    aoData.push({"name": "endDate", "value": endDate});
+                    aoData.push({"name": "scheme", "value": $("#scheme").val()});
+                    aoData.push({"name": "reportType", "value": $("#reportType").val()});
+                    },
+                    "fnServerData": function (sSource, aoData, fnCallback) {
+                    $.ajax({
+                    "dataType": 'json',
+                            "type": "POST",
+                            "url": sSource,
+                            "data": aoData,
+                            "success": fnCallback
+                    });
+                    }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+            $.unblockUI;
+            },
+            });
+            newcolumnHeading = $("#reportType option:selected").text();
+            $('#reportText').html(newcolumnHeading);
+            }
+            ;
+            function GetPrint() {
+            paginate = false;
+            drawTable()
+                    window.print();
+            }
+            jQuery(document).bind("keyup keydown", function (e) {
+            if (e.ctrlKey && e.keyCode == 80) {
+            paginate = false;
+            drawTable()
+            }
+        });
 
     </script>

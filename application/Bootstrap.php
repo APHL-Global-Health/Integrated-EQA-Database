@@ -12,6 +12,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$router->addRoute("captchaRoute", new Zend_Controller_Router_Route('captcha/:r', array('controller' => 'captcha', 'action' => 'index', 'r'=>'')));
 		$router->addRoute("checkCaptchaRoute", new Zend_Controller_Router_Route_Static('captcha/check-captcha', array('controller' => 'captcha', 'action' => 'check-captcha')));
 		
+		$router->addRoute("aboutus", new Zend_Controller_Router_Route_Static('about-us', array('controller' => 'about-us', 'action' => 'index')));
+		$router->addRoute("resources", new Zend_Controller_Router_Route_Static('resources', array('controller' => 'resources', 'action' => 'index')));
 		
 		//Database Cache
 		
