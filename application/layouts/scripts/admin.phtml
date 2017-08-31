@@ -44,12 +44,15 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/jquery-confirm.min.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css" media="all">
  
         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/global.css'); ?>" type="text/css">
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>"></script>
 
     </head>
     <!-- Fixed navbar -->
@@ -337,11 +340,11 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <div style="text-align:center"><span onclick="closeLayoutModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
         <iframe id="dFrame" src="" style="border:none;" scrolling='yes' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' >some problem</iframe> 
     </div>
-    <footer style="padding:40px 0 20px 0;color:grey;">
-        <div class="container"><center><?php echo $config->applicationCopyright; ?></center></div>
-    </footer>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>"></script>
+    <!-- FOOTER -->
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/partialHTMLS/footer.html'; ?>
+    <!-- /FOOTER -->
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

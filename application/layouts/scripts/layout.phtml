@@ -36,7 +36,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('css/jquery-confirm.min.css'); ?>">
 
@@ -52,6 +52,10 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
         </style>
 
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/global.css'); ?>" type="text/css">
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>" ></script>
+        
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini bacteriology" ng-controller="samplesController">
@@ -356,14 +360,13 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                 <iframe id="dFrame" src="" style="border:none;" scrolling='yes' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' >some problem</iframe> 
             </div>
 
-            <footer class="main-footer">
-                <div class="container"><center><?php echo $config->applicationCopyright; ?></center></div>
-            </footer>
-
             <div class="control-sidebar-bg"></div>
         </div><!-- ./wrapper -->
 
-        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>" ></script>
+        <!-- FOOTER -->
+        <?php include $_SERVER['DOCUMENT_ROOT'].'/partialHTMLS/footer.html'; ?>
+        <!-- /FOOTER -->
+
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script type="text/javascript" src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
@@ -397,8 +400,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfmake/vfs_fonts.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/pdfMakerController.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/alasql.min.js'); ?>"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl('highcharts.js'); ?>"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl('exporting.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('js/exporting.js'); ?>"></script>
 
         <script type="text/javascript" src="<?php echo $this->baseUrl('js/highcharts-ng.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('js/app.js'); ?>"></script>

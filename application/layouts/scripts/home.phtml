@@ -12,27 +12,17 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
         <!-- Bootstrap 3.3.5 -->
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>" type="text/css">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
         <!--[if IE 7]>
             <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
         <![endif]-->	
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery-ui.min.css"); ?>" type="text/css" media="all">
-        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>" type="text/css">
 
-        <style type="text/css">
-            .footer-items {
-                color: #FFF;
-                display: inline-block;
-                padding: 10px;
-            }
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/global.css'); ?>" type="text/css">
 
-            a.footer-items:hover{
-                color: #FFF;
-                text-decoration: none;
-                background: #000;
-            }
-        </style>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>"></script>
 
     </head>
 
@@ -95,17 +85,9 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
             <div class="control-sidebar-bg"></div>
         </div><!-- ./wrapper -->
 
-        <footer class="main-footer" style="position: absolute;bottom: 0;width: 100%;background: #333; color: #FFF; padding: 20px;">
-            <div>
-                <center>
-                    <a class="footer-items" href="/">Home</a> | 
-                    <a class="footer-items" href="/about-us">About Us</a> | 
-                    <a class="footer-items" href="/resources">Resources</a> | 
-                    <a class="footer-items" href="http://www.nphls.or.ke/helpdesk/">NPHL Help Desk</a> |
-                    <span class="footer-items"><?php echo $config->applicationCopyright; ?></span>
-                </center>
-            </div>
-        </footer>
+        <!-- FOOTER -->
+        <?php include $_SERVER['DOCUMENT_ROOT'].'/partialHTMLS/footer.html'; ?>
+        <!-- /FOOTER -->
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
