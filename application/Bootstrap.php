@@ -14,6 +14,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		$router->addRoute("aboutus", new Zend_Controller_Router_Route_Static('about-us', array('controller' => 'about-us', 'action' => 'index')));
 		$router->addRoute("resources", new Zend_Controller_Router_Route_Static('resources', array('controller' => 'resources', 'action' => 'index')));
+		$router->addRoute("resourcesFAQ", new Zend_Controller_Router_Route_Static('resources/faq', array('controller' => 'resources', 'action' => 'faq')));
 		
 		//Database Cache
 		

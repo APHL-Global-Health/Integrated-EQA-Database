@@ -23,3 +23,11 @@ a.footer-items:hover{
     text-decoration: none;
     background: #000;
 }
+
+.faq-question {
+	color: #F33;
+}
+
+.faq-question, .faq-answer {
+	padding: 10px;
+}

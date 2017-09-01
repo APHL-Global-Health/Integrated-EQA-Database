@@ -14,6 +14,11 @@ class ResourcesController extends Zend_Controller_Action
         // action body
     }
 
+    public function faqAction()
+    {
+        // action body
+    }
+
 
 }
 
