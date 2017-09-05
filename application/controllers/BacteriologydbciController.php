@@ -1876,7 +1876,11 @@ class BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function getresultsonroundAction() {
-        $where['roundId'] = 1;
+        //$where['roundId'] = 2;
+        $where = $this->returnArrayFromInput();
+//        print_r($posted);
+//        exit;
+        
         $where['markedStatus'] = 1;
         $whereLab = $this->returnUserLabDetails();
         $where['participantId'] = $whereLab['participant_id'];
@@ -1926,7 +1930,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 //            $holding['resultInfo'] = $arrayASTExpectedResults;
             echo json_encode(array('status' => 1, 'data' => $arrayASTExpectedResults));
         } else {
-            
+            echo json_encode(array('status' => 0, 'message' => "No rounds available"));
         }
         exit;
     }

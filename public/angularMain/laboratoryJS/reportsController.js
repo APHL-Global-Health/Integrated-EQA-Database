@@ -522,7 +522,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.roundInfo = {};
     $scope.reports.roundAllResults = {}
     $scope.reports.getRRoundResults = function (round) {
-        var where = {roundId: round.id};
+        var where = {roundId: round.roundId};
         var url = serverReportURL + 'getresultsonround';
         $scope.reports.showRoundResults = true;
         // var where = where;
