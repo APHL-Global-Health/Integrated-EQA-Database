@@ -56,6 +56,7 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
                     $adminId = (int) $this->_getParam('id');
                 }
                 $this->view->admin = $adminService->getSystemAdminDetails($adminId);
+                $this->view->adminCounties = $adminService->getSystemAdminCounties($adminId);
             }
         }
         $this->view->countyList = $commonService->getCountiesList();

@@ -161,8 +161,6 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->where($sWhere);
         }
 
-        
-
         //error_log($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
@@ -202,6 +200,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
     public function addSystemAdmin($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        error_log(json_encode($params));
         $common = new Application_Service_Common();
         $email = $params['primaryEmail'];
         $password = $this->generateRandomPassword(9);
@@ -241,15 +240,34 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
         $common->sendPasswordEmailToUser($email, $password, $fullname);
 
-        return $this->insert($data);
+        $newSystemAdmin = $this->insert($data);
+
+        if ($_SESSION['loggedInDetails']['IsVl'] == 2) {
+
+            $db = Zend_Db_Table::getDefaultAdapter();
+
+            foreach ($params['County'] as $county) {
+                $query = "INSERT IGNORE INTO system_admin_counties (userID, countyID) VALUES ($newSystemAdmin, $county)";
+                $db->query($query);
+            }
+        }
+
+        return $newSystemAdmin;
     }
 
     public function getSystemAdminDetails($adminId) {
         return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
     }
 
+    public function getSystemAdminCounties($adminId) {
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        return $db->fetchCol("SELECT countyID FROM system_admin_counties WHERE userID = ?", $adminId);
+    }
+
     public function updateSystemAdmin($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        error_log(json_encode($params));
         $data = array(
             'first_name' => $params['firstName'],
             'last_name' => $params['lastName'],
@@ -267,7 +285,6 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         }
         if (isset($params['password']) && $params['password'] != "") {
             $data['password'] = MD5($params['password']);
-//            $data['force_password_reset'] = 1;
         }
         if (isset($params['force_password_reset'])) {
             $data['force_password_reset'] = 0;
@@ -285,7 +302,21 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             }
         }
 
-        return $this->update($data, "admin_id=" . $params['adminId']);
+        $systemAdmin =  $this->update($data, "admin_id=" . $params['adminId']);
+
+        if ($_SESSION['loggedInDetails']['IsVl'] == 2) {
+
+            $db = Zend_Db_Table::getDefaultAdapter();
+
+            $db->query("DELETE FROM system_admin_counties WHERE userID = " . $params['adminId']);
+            
+            foreach ($params['County'] as $county) {
+                $query = "INSERT IGNORE INTO system_admin_counties (countyID, userID) VALUES ($county, " . $params['adminId'] . ")";
+                $db->query($query);
+            }
+        }
+
+        return $systemAdmin;
     }
 
 }

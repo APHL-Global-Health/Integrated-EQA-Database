@@ -18,6 +18,10 @@ class Application_Service_SystemAdmin {
 		$adminDb = new Application_Model_DbTable_SystemAdmin();
 		return $adminDb->getSystemAdminDetails($adminId);		
 	}
+	public function getSystemAdminCounties($adminId){
+		$adminDb = new Application_Model_DbTable_SystemAdmin();
+		return $adminDb->getSystemAdminCounties($adminId);		
+	}
 
 }
 

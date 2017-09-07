@@ -262,13 +262,13 @@ class Application_Service_Common {
     }
 
     public function getCountiesList() {
-        $countriesDb = new Application_Model_DbTable_Counties();
-        return $countriesDb->getAllCounties();
+        $countiesDb = new Application_Model_DbTable_Counties();
+        return $countiesDb->getAllCounties();
     }
 
     public function getPartnersList() {
-        $countriesDb = new Application_Model_DbTable_Partners();
-        return $countriesDb->fetchAllActivePartners();
+        $partnersDb = new Application_Model_DbTable_Partners();
+        return $partnersDb->fetchAllActivePartners();
     }
 
     public function getDepartmentList() {

@@ -51,7 +51,7 @@
                            id="primaryEmail" name="primaryEmail" size="50" class="isRequired form-control isEmail"
                            title="Please enter the primary email id here" placeholder="Please enter the primary email id here"
                            value="<?php echo $this->admin['primary_email']; ?>"
-                           onblur="checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "admin_id##" . $this->admin['admin_id']; ?>', 'This Email already exists for another Admin. Please try something else.');cheackEmailId();"/>
+                           onblur="checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "admin_id##" . $this->admin['admin_id']; ?>', 'This Email already exists for another Admin. Please try something else.');checkEmailId();"/>
                 </div>
             </div>
             <?php
@@ -71,7 +71,8 @@
 
                     </div>
                 </div>
-<?php } ?>
+            <?php } ?>
+
             <div class="form-group">
                 <label class="col-lg-3 control-label">Cell/Mobile Number <span class="mandatory">*</span></label>
 
@@ -85,10 +86,11 @@
                 <label class="col-lg-3 control-label">Secondary Email</label>
 
                 <div class="col-lg-5">
-                    <input  type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45" value="<?php echo $this->admin['secondary_email']; ?>" placeholder="Please enter secondary email here" class="form-control isEmail" onblur="cheackEmailId()" />
+                    <input  type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45" value="<?php echo $this->admin['secondary_email']; ?>" placeholder="Please enter secondary email here" class="form-control isEmail" onblur="checkEmailId()" />
                 </div>
             </div>
-<?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
+
+            <?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Module <span class="mandatory">*</span></label>
 
@@ -105,15 +107,14 @@
                     </div>
                 </div>
             <?php } ?>
-<?php if ($_SESSION['loggedInDetails']['IsVl'] == 2 && !in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) { ?>
+
+            <?php if ($_SESSION['loggedInDetails']['IsVl'] == 2 && !in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Sub Module <span class="mandatory">*</span></label>
 
                     <div class="col-lg-5">
                         <select type="text" id="IsProvider" name="IsProvider" class="isRequired form-control"
                                 title="Please select user sub module here">
-
-                                                         <!--<option value="2" <?php echo ($this->admin['IsProvider'] == "2") ? "selected='selected'" : ""; ?>>Provider</option>-->
                             <option value="3" <?php echo ($this->admin['IsProvider'] == "3") ? "selected='selected'" : ""; ?>>QA Manager</option>
                             <option value="1" <?php echo ($this->admin['IsProvider'] == "1") ? "selected='selected'" : ""; ?>>System Admin</option>
                         </select>
@@ -122,20 +123,20 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">County <span class="mandatory">*</span></label>
                     <div class="col-lg-5">
-                        <select class="form-control isRequired" required name="County" id="County" value="<?php echo $this->admin['County']; ?>"
-                                title="Please choose the county here">
-                            <option value="N/A" selected="">--SELECT COUNTY--</option>
-                            <?php foreach ($this->countyList as $prov) {
-                                ?>
+                        <select class="form-control isRequired" required name="County[]" id="County"
+                                multiple title="Please choose the county here. (CTRL+CLICK to select multiple counties)">
+                            <option value="N/A">--SELECT COUNTY--</option>
+                            <?php foreach ($this->countyList as $prov) { ?>
                                 <option value="<?php echo $prov['CountyID']; ?>" 
-                                        <?php echo ($this->admin['County'] == $prov['CountyID']) ? "selected='selected'" : "" ?>><?php echo $prov['Description']; ?></option>
-                                        <?php
-                                    }
-                                    ?>
+                                    <?php echo (in_array($prov['CountyID'], $this->adminCounties)) ? "selected='selected'" : "" ?>>
+                                    <?php echo $prov['Description']; ?>
+                                </option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
-<?php } ?>
+            <?php } ?>
+
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>
 
@@ -164,14 +165,15 @@
                     ?>
                     <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/system-admins';"
                            tabindex="8" value="Cancel"/>
-<?php } else { ?>
+                <?php } else { ?>
                     <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/';"
                            tabindex="8" value="Cancel Save"/>
-<?php } ?>
+                <?php } ?>
             </div>
         </fieldset>
     </form>
 </div>
+
 <script type="text/javascript">
     var duplicated = false;
     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
@@ -200,7 +202,7 @@
         }
         //}
     }
-    function cheackEmailId() {
+    function checkEmailId() {
         primaryEmail = document.getElementById("primaryEmail").value;
         secondaryEmail = document.getElementById("secondaryEmail").value;
         if (secondaryEmail != "") {
