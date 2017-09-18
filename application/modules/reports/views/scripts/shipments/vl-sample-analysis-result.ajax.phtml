@@ -1,6 +1,6 @@
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="<?php echo $this->baseUrl('js/highcharts/highcharts.js'); ?>"></script>
+<script src="<?php echo $this->baseUrl('js/highcharts/modules/exporting.js'); ?>"></script>
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <script type="text/javascript">
             $(document).ready(function() {
@@ -15,7 +15,6 @@
             text: ''
         },
         xAxis: {
-            //categories: ['Name1','Name2','Name3','Name4','Name5','Name6']
             categories: [<?php
             foreach($this->vlSampleResult['nameList'][0] as $assay){
                 echo "'".$assay['name']."',";

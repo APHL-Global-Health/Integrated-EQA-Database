@@ -172,9 +172,6 @@ Class Main extends pdfCreator {
     }
 
     public function doQuery($sql, $count = null) {
-//        echo$sql;
-//        exit;
-//        var_dump($this->connect_db->error);
 
         if (isset($count)) {
             return $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
@@ -187,9 +184,6 @@ Class Main extends pdfCreator {
             while ($assoc = $result->fetch_assoc()) {
                 $results [count($results)] = $assoc; // Return rows
             }
-//            while ($row = $result->fetch_object()) {
-//                $user_arr[] = $row;
-//            }
 
             return $results;
         } else {

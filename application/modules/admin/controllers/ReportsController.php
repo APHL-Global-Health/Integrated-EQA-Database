@@ -19,8 +19,6 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         
     }
 
-    /* selectReportFromTable($tableName,$colArray, $where ,$orderArray, $group='',$groupArray='') */
-
     public function getgeneralroundreportAction() {
         $postedData = $this->returnArrayFromInput();
         $col = array('*');
@@ -1620,6 +1618,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
     public function getcountiesAction() {
         $where['status'] = 1;
         $counties = $this->dbConnection->selectFromTable('rep_counties', $where);
+        echo $this->returnJson(array('status' => 1, 'data' => $counties));
+
+        exit;
+    }
+
+    public function getmycountiesAction($userID) {
+
+        $query = "SELECT c.* FROM system_admin_counties AS s LEFT JOIN rep_counties AS c ON s.countyID = c.CountyID WHERE s.userID = ? AND s.status = 1";
+        $counties = json_encode($this->dbConnection->doQuery($query));
         echo $this->returnJson(array('status' => 1, 'data' => $counties));
 
         exit;

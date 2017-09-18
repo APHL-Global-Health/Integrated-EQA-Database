@@ -10,6 +10,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     $scope.reports.currentReports = 'Issued Samples Report';
     console.log($scope.reports.currentReports)
     $scope.reports.loadedCurrentUrl = '../partialHTMLS/reports/generalReport.html';
+
     $scope.reports.changeCurrentReport = function (htmlFile, report) {
         $scope.reports.loaderStatus = true;
         $scope.reports.currentReports = report;
@@ -543,7 +544,6 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         published == 1 ? action = 'published' : action = 'cancelled';
 
         function publishResults() {
-            //console.log($scope.reports.whereGenRounds);
             var where = {id: round.id, published: published};
             var url = serverReportURL + 'updatepublication';
             alertStartRound = $.alert('<i class="fa fa-spin fa-spinner"> </i>publishing results,please wait,participnats are being notified through mail...')
@@ -709,6 +709,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
     }
     $scope.reports.currentClickedLabResults = {};
     $scope.reports.microagentsData = {};
+
     $scope.reports.evaluateIndividual = function (individual) {
         $scope.reports.currentClickedLabResults = individual;
         $scope.reports.changeCurrentReport('evaluateIndividualLabs');

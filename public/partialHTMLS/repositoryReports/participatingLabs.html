@@ -28,32 +28,27 @@
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search lab name" ng-model='reports.stringSearch.MflCode'>
+                                   placeholder="Search MFL Code" ng-model='reports.stringSearch.MflCode'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search county" ng-model='reports.stringSearch.Name'>
+                                   placeholder="Search Lab Name" ng-model='reports.stringSearch.Name'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search contact name" ng-model='reports.stringSearch.County'>
+                                   placeholder="Search County" ng-model='reports.stringSearch.County'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search email" ng-model='reports.stringSearch.Constituency'>
+                                   placeholder="Search PT Round" ng-model='reports.stringSearch.RoundID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
 
-                                   placeholder="Search tel." ng-model='reports.stringSearch.Approved'>
-                        </th>
-                        <th style="text-align: center;">
-                            <input class="form-control col-md-12 input-sm"
-
-                                   placeholder="Search status" ng-model='reports.stringSearch.AnalyteID'>
+                                   placeholder="Search Program" ng-model='reports.stringSearch.ProgramID'>
                         </th>
                     </tr>
                 </thead>
@@ -63,9 +58,8 @@
                         <th style="text-align: center;">MFL Code</th>
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
-                        <th style="text-align: center;">Constituency</th>
-                        <th style="text-align: center;">Approved</th>
-                        <th style="text-align: center;">Analyte</th>
+                        <th style="text-align: center;">Round</th>
+                        <th style="text-align: center;">Program</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,18 +78,11 @@
                             {{record.County}}
                         </td>
                         <td>
-                            {{record.Constituency}}
-                        </td>
-                        <!--<td>
-                            Inclassified
-                        </td>-->
-                        <td>
-                            {{record.Approved}}
+                            {{record.RoundID}}
                         </td>
                         <td>
-                            {{record.AnalyteID}}
+                            {{record.ProgramID}}
                         </td>
-
                     </tr>
                 </tbody>
             </table>
