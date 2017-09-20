@@ -130,10 +130,10 @@
                                 </select>
                             </td>
                             <?php if ($_SESSION['loggedInDetails']['IsProvider'] == 1) { ?> <!-- Repository Admin -->
-                                <td ng-init="reports.getMyCounties(<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>)">
+                                <td ng-init="reports.getCounties()">
                                    <select id="county" class="form-control input-sm"  ng-model="county" ng-change="reports.countyChange(county)">
-                                        <option value="">--Select County--</option>
-                                        <option ng-repeat="county in reports.myCounties track by $index" value="{{county.Description}}">
+                                        <option value="">--Select County---</option>
+                                        <option ng-repeat="county in reports.allCounties track by $index" value="{{county.Description}}">
                                             {{county.Description}}
                                         </option>
                                     </select>
@@ -195,8 +195,6 @@
                                                     || clickedTab == 'participants' || clickedTab == 'summary' || clickedTab == 'resultcode'"
                                         name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
                                     <option value=""> -- Select Program --</option>
-                                    <!--                <option value="network">Network Tier</option>
-                                                    <option value="affiliation">Affiliation</option>-->
                                     <option ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">
                                         {{programs.Description}}
                                     </option>

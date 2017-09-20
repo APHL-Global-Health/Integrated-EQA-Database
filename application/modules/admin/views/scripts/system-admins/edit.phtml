@@ -125,7 +125,6 @@
                     <div class="col-lg-5">
                         <select class="form-control isRequired" required name="County[]" id="County"
                                 multiple title="Please choose the county here. (CTRL+CLICK to select multiple counties)">
-                            <option value="N/A">--SELECT COUNTY--</option>
                             <?php foreach ($this->countyList as $prov) { ?>
                                 <option value="<?php echo $prov['CountyID']; ?>" 
                                     <?php echo (in_array($prov['CountyID'], $this->adminCounties)) ? "selected='selected'" : "" ?>>
