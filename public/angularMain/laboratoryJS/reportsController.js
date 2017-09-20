@@ -63,7 +63,6 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         })
     }
 
-
     $scope.reports.counties = {};
     $scope.reports.getCounties = function () {
         var url = serverReportURL + 'getcounties';

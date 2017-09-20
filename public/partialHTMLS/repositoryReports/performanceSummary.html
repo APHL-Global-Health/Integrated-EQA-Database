@@ -10,8 +10,6 @@
 
         <br>
         <div>
-
-
             <div class="bg-gray-active col-md-12  text-center" ng-show="reports.showLoader">
                 <i class="fa fa-spin fa-spinner"></i> Loading...
             </div>
@@ -27,42 +25,26 @@
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
                                    placeholder="Search lab name" ng-model='reports.stringSearch.LID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
                                    placeholder="Search county" ng-model='reports.stringSearch.county'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
-                                   placeholder="Search round name" ng-model='reports.stringSearch.RoundID'>
-                        </th>
-<!--                        <th style="text-align: center;" >
-                            <input class="form-control col-md-12 input-sm"
-
-                                   placeholder="Search sample name" ng-model='reports.stringSearch.SampleCode'>
-                        </th>-->
-                        <th style="text-align: center;">
-                            <input class="form-control col-md-12 input-sm"
-
-                                   placeholder="Search email" ng-model='reports.stringSearch.ReleaseDate'>
+                                   placeholder="Search round" ng-model='reports.stringSearch.RoundID'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
-                                   placeholder="Search tel." ng-model='reports.stringSearch.acceptable'>
+                                   placeholder="Search status" ng-model='reports.stringSearch.acceptable'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
                                    placeholder="Search status" ng-model='reports.stringSearch.unacceptable'>
                         </th>
                         <th style="text-align: center;">
                             <input class="form-control col-md-12 input-sm"
-
                                    placeholder="Search status" ng-model='reports.stringSearch.percent'>
                         </th>
                     </tr>
@@ -73,16 +55,13 @@
                         <th style="text-align: center;">Lab Name</th>
                         <th style="text-align: center;">County</th>
                         <th style="text-align: center;">Round</th>
-                        <!--<th style="text-align: center;">Sample</th>-->
-                        <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
-                        <th style="text-align: center;">Date</th>
                         <th style="text-align: center;">Acceptable</th>
                         <th style="text-align: center;">Not Accepted</th>
                         <th style="text-align: center;">Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="record in reports.performanceLabs| itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
+                    <tr dir-paginate="record in reports.performanceLabs | itemsPerPage: reports.itemsPerPage | filter :reports.stringSearch"
                         >
                         <td>{{$index + 1}}</td>
                         <td>
@@ -94,15 +73,6 @@
                         </td>
                         <td>
                             {{record.RoundID}}
-                        </td>
-<!--                        <td>
-                            {{record.SampleCode}}
-                        </td>-->
-                        <!--<td>
-                            Inclassified
-                        </td>-->
-                        <td>
-                            {{record.ReleaseDate}}
                         </td>
                         <td>
                             {{record.acceptable}}

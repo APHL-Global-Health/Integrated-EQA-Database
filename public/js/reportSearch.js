@@ -34,6 +34,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.showLoader = false;
 
     $scope.reports.itemsPerPage = 50;
+    $scope.reports.pageNumber = 1;
     $scope.reports.countyChange = function (county) {
 
         for (var i = 0; i < $scope.reports.allCounties.length; i++) {
@@ -350,12 +351,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         $scope.reports.searchFilters = searchColumns;
 
         $scope.reports.countyChange(searchColumns.county);
-//        console.log(searchColumns);
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
             $scope.reports.showLoader = true;
             updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -371,11 +370,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .error(function (error) {
                         $scope.reports.showLoader = false;
                     })
-
-
-//            } else {
-//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-//            }
 
         }
     }
@@ -400,7 +394,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
             $scope.reports.showLoader = true;
             updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -424,11 +417,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         $scope.reports.showLoader = false;
                     })
 
-
-//            } else {
-//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-//            }
-
         }
     }
 
@@ -448,12 +436,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.ResultCode = $scope.reports.reportFilter.ResultCode;
         $scope.reports.countyChange(searchColumns.county);
 
-//        console.log(searchColumns);
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
             $scope.reports.showLoader = true;
             updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -477,11 +463,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         $scope.reports.showLoader = false;
                     })
 
-
-//            } else {
-//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-//            }
-
         }
     }
 
@@ -501,12 +482,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         searchColumns.MflCode = $scope.reports.reportFilter.MflCode;
         $scope.reports.countyChange(searchColumns.county);
 
-//        console.log(searchColumns);
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
             $scope.reports.showLoader = true;
             updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -529,11 +508,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .error(function (error) {
                         $scope.reports.showLoader = false;
                     })
-
-
-//            } else {
-//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-//            }
 
         }
     }
@@ -587,7 +561,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(error);
                         alertStartRound.close();
                         EptServices.EptServiceObject.returnServerErrorAlert();
-//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
                     })
         }
 
@@ -616,7 +589,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 cancel: {
                     btnClass: 'btn-red',
                     action: function () {
-                        // $.alert('cancelled !');
                     }
                 }
             }
@@ -645,7 +617,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         console.log(error);
                         alertStartRound.close();
                         EptServices.EptServiceObject.returnServerErrorAlert();
-//                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
                     })
         }
     }
@@ -662,12 +633,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         $scope.reports.searchFilters = searchColumns;
         searchColumns.sample = $scope.reports.reportFilter.sample;
         $scope.reports.countyChange(searchColumns.county);
-//        console.log(searchColumns);
         console.log(searchColumns);
         if (searchColumns.dateRange == '' || angular.isUndefined(searchColumns.dateRange)) {
             updateGraphMessages("Please choose date range", true, 'btn-danger');
         } else {
-//            if (searchColumns.ProviderId != '' && angular.isDefined(searchColumns.ProviderId)) {
             $scope.reports.showLoader = true;
             updateGraphMessages("No records found", false, 'btn-warning');
 
@@ -690,11 +659,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     .error(function (error) {
                         $scope.reports.showLoader = false;
                     })
-
-
-//            } else {
-//                updateGraphMessages("Please choose a provider", true, 'btn-danger');
-//            }
 
         }
     }
@@ -719,8 +683,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.$watch('reports.chartProgramResults', function () {
         if ($scope.reports.chartProgramResults.length > 0) {
-            //      console.log(reports.chartProgramResults);
-            //        $scope.reports.pieChartData =$scope.reports.chartProgramResults.series;
         }
     }
     )
@@ -781,33 +743,11 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
     $scope.reports.exportToPDF = function () {
         try {
-//
-//            var divContents = $("#repoReport").html();
-//            var printWindow = window.open('', '', 'height=400,width=800');
-//            printWindow.document.write('<html><head><title>DIV Contents</title>');
-//            printWindow.document.write('</head><body >');
-//            printWindow.document.write(divContents);
-//            printWindow.document.write('</body></html>');
-//            printWindow.document.close();
-//            printWindow.print();
 
             var printDoc = new jsPDF();
             printDoc.fromHTML($('#repoReport').get(0), 10, 10, {'width': 180});
             printDoc.autoPrint();
             printDoc.output("dataurlnewwindow");
-//            $('#repoReport').tableExport(
-//                    {
-//
-//                        type: 'pdf',
-//                        pdfFontSize: '10',
-//                        escape: 'false',
-//                        bootstrap: true,
-//                        tableName: 'repoReport',
-//                        pdfLeftMargin: 10,
-//                        htmlContent: 'true',
-//                        consoleLog: 'false'
-//                    }
-//            );
         } catch (E) {
             console.log(E)
         }
@@ -830,13 +770,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
 
     $scope.reports.exportToExcelFile = function () {
-        // try {
-        //     $('#repoReport').tableExport(
-        //         {type: 'excel', escape: 'false'}
-        //     );
-        // } catch (E) {
-        //
-        // }
         if ($scope.reports.repositoryData.length > 0) {
             var url = serverURL + 'generatecsv';
 
@@ -1045,6 +978,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
 
     $scope.reports.allCounties = {};
+    $scope.reports.myCounties = {};
 
     $scope.reports.getCounties = function () {
         try {
@@ -1066,6 +1000,27 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     }
 
+    $scope.reports.getMyCounties = function (userID) {
+        try {
+            var url = serverURL + 'getmycounties';
+            console.log(url);
+            $http.post(url, {'userID': userID})
+                .success(function (data) {
+                    console.log(data);
+
+                    if (data.length > 0) {
+                        $scope.reports.myCounties = data;
+                    }
+                })
+                .error(function (error) {
+
+                })
+        } catch (E) {
+            console.log(E);
+        }
+
+    }
+
 
     $scope.reports.changeGraphType = function (graphType) {
         $scope.reports.chartProgramResults.options.chart.type = graphType;
@@ -1074,13 +1029,9 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.reports.chartTypes = [
         {"id": "line", "title": "Line"},
-        //  {"id": "spline", "title": "Smooth line"},
-//        {"id": "area", "title": "Area"},
-        //      {"id": "areaspline", "title": "Smooth area"},
         {"id": "column", "title": "Column"},
         {"id": "bar", "title": "Bar"},
-        {"id": "pie", "title": "Pie"},
-                //    {"id": "scatter", "title": "Scatter"}
+        {"id": "pie", "title": "Pie"}
     ];
     $scope.reports.chartProgramResults = {};
 
@@ -1220,6 +1171,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.reports.dateRange = '';
     $scope.reports.searchFilters = {};
+
     $scope.reports.showGraphClicked = function (graphType, graphName) {
         $scope.reports.searchedReport = '';
         $scope.reports.reportTypes = graphName;
@@ -1275,21 +1227,18 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         try {
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'countyagainstlabs';
-            $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        $scope.reports.showGraph = true;
-                        console.log(data);
-                        $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
-                        $scope.reports.showGraphLoader = false;
-
-
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+            $http.post(url, filterData)
+                .success(function (data) {
+                    $scope.reports.showGraph = true;
+                    console.log(data);
+                    $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
+                    $scope.reports.showGraphLoader = false;
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1538,7 +1487,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         } else {
             updateGraphMessages("OK,proceed", true, "btn-info");
         }
-        //$scope.reports.dateRange = $("#dateRange").val();
     })
 
     $scope.reports.exportToExcel = function (filename, id) {

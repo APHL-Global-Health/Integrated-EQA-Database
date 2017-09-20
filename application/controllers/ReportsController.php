@@ -22,7 +22,6 @@ class ReportsController extends Zend_Controller_Action
         exit;
     }
 
-    /* selectReportFromTable($tableName,$colArray, $where ,$orderArray, $group='',$groupArray='') */
 
     public function getgeneralroundreportAction()
     {
@@ -126,7 +125,6 @@ class ReportsController extends Zend_Controller_Action
         $wherePub['id'] = $where['id'];
 
         $update['published'] = $where['published'];
-//print_r($where);exit;
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_rounds', $wherePub, $update);
 
         $whereRound['roundId'] = $where['id'];
@@ -139,8 +137,6 @@ class ReportsController extends Zend_Controller_Action
             $this->sendEmailToEnrolledLabsForPublish($wherePub['id']);
         }
         exit;
-
-
     }
 
     public function sendEmailToEnrolledLabsForPublish($roundId)
@@ -270,8 +266,6 @@ class ReportsController extends Zend_Controller_Action
         unset($updateEval['finalScore']);
         unset($updateEval['totalMicroAgentsScore']);
 
-//        print_r($updateEval);
-//        exit;
         $finalScore = 0;
         $score = '';
         $updateEval['markedStatus'] = 1;
@@ -297,8 +291,6 @@ class ReportsController extends Zend_Controller_Action
         $posted = $this->returnArrayFromInput();
 
         $responseResults = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $posted);
-//        print_r($posted);
-//        exit;
         if ($responseResults != false) {
             echo $this->returnJson(array('status' => 1, "data" => $responseResults));
         } else {
@@ -310,7 +302,7 @@ class ReportsController extends Zend_Controller_Action
 
     public function evaluateresultsAction($whereRoundData = '')
     {
-        /*select results for evaluation*/
+
         $postedData = $this->returnArrayFromInput();
         $where = [];
 
@@ -338,8 +330,7 @@ class ReportsController extends Zend_Controller_Action
 
 
             $panelSamples = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $where, $orderArray, true, $groupArray);
-//            var_dump($panelSamples);
-//            exit;
+
             if ($panelSamples != false) {
                 foreach ($panelSamples as $key => $value) {
                     $whereSampleId['sampleId'] = $panelSamples[$key]->sampleId;
@@ -375,8 +366,7 @@ class ReportsController extends Zend_Controller_Action
                 $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_shipments', $whereEvaluation, $updateEval);
 
                 $arr = array('status' => 1, 'message' => 'Shipment Evaluation was successful !');
-//                var_dump(!empty($whereRoundData));
-//                exit;
+
                 if (!empty($whereRoundData)) {
 
                     return true;
@@ -484,7 +474,6 @@ class ReportsController extends Zend_Controller_Action
                         $updateLabResults = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereResponse, $update);
 
                         if ($updateLabResults['status'] == 0) {
-//                            var_dump($updateLabResults);
                         }
                     }
                 }
@@ -548,7 +537,6 @@ class ReportsController extends Zend_Controller_Action
         $orderArray = ['id', 'dateCreated'];
 
         $postedData['startRoundFlag'] = 1;
-//        $postedData['roundId'] = 33;
 
         $groupArray = ['id'];
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_shipments', $col, $postedData, $orderArray, true, $groupArray);
@@ -567,9 +555,7 @@ class ReportsController extends Zend_Controller_Action
 
                 if ($samplesToPanel != false) {
                     foreach ($samplesToPanel as $keyPan => $valPan) {
-//                        $whereSamPan['roundId'] = $valPan->id;
                         $whereSamPan['panelToSampleId'] = $valPan->id;
-//                        $totalRespondedSamples++;
                         $totalRespondedSamples += $this->dbConnection->selectCount('tbl_bac_response_results', $whereSamPan['panelToSampleId'], 'panelToSampleId');
 
                         $data[$key]->totalRespondedSamples = $totalRespondedSamples;
@@ -584,7 +570,6 @@ class ReportsController extends Zend_Controller_Action
 
 
             }
-//            var_dump($totalRespondedSamples);exit;
             echo $this->returnJson(array('status' => 1, 'data' => $data));
         } else {
             echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
@@ -610,10 +595,7 @@ class ReportsController extends Zend_Controller_Action
                     foreach ($microAgents as $key => $value) {
                         $score['score'] = 0;
                         foreach ($microExpectedAgents as $ekey => $evalue) {
-//                            echo $microAgents[$ekey]->antiMicroAgent .' = '. $microExpectedAgents[$key]->antiMicroAgent.'<br>';
                             if ($evalue->antiMicroAgent == $value->antiMicroAgent) {
-
-//                                $score['score'] =0.5*(round(($microExpectedAgents[$key]->agentScore)/(sizeof($microExpectedAgents)),2));
 
                                 if ($microAgents[$key]->finalScore == $microExpectedAgents[$ekey]->finalScore) {
                                     $score['score'] = round(($microExpectedAgents[$key]->agentScore) / (sizeof($microExpectedAgents)), 2);
@@ -626,8 +608,6 @@ class ReportsController extends Zend_Controller_Action
                                 break;
                             }
                         }
-//                        print_r($score);
-//                        exit;
                         $returnScore += $score['score'];
                         $whereResponse['antiMicroAgent'] = $microAgents[$key]->antiMicroAgent;
                         $whereResponse['adminMarked'] = 0;
@@ -758,9 +738,8 @@ class ReportsController extends Zend_Controller_Action
 
 
                     }
-
-
                 }
+
                 $stat['total'] = $sum;
                 $stat['mean'] = round($sum / sizeof($report), 4);
                 $stat['labs'] = sizeof($report);
@@ -815,14 +794,12 @@ class ReportsController extends Zend_Controller_Action
                 } else {
                     echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
                 }
-//                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
             }
         } else {
             echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
         }
 
         exit;
-
     }
 
     public function getshipmentsreportsAction()
@@ -926,7 +903,6 @@ class ReportsController extends Zend_Controller_Action
             }
         } else {
 
-//            $postedData['shipmentId >'] = 0;
             $sampleToPanel = $this->dbConnection->selectReportFromTable('tbl_bac_sample_to_panel', $col, $postedData, $orderArray, true, $groupArray);
 
             if ($sampleToPanel != false) {
@@ -1132,8 +1108,6 @@ class ReportsController extends Zend_Controller_Action
 
         $groupArray = ['participantId', 'roundId', 'sampleId'];
 
-//        var_dump($labs);
-//        exit;
         $report = [];
 
         $data['totalResponded'] = 0;
@@ -1289,12 +1263,9 @@ class ReportsController extends Zend_Controller_Action
                             $sum += ($val->finalScore + $val->totalMicroAgentsScore);
                             array_push($report, (array)$reportData[$keys]);
                         }
-
-
                     }
-
-
                 }
+
                 $stat['total'] = $sum;
                 $stat['mean'] = round($sum / sizeof($report), 4);
                 $stat['labs'] = sizeof($report);
