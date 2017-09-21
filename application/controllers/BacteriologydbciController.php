@@ -1239,10 +1239,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
                         $where['panelToSampleId'] = $newFinalArray['panelToSampleId'];
                         $where['participantId'] = $postedData['participantId'];
 
-                        $update['published'] = 0;
+                        $update['published'] = 1;
 //                        $update['markedStatus'] = 0;
-                        $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, $update);
-                        $data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $update);
+                      //  $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, $update);
+                        //$data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $update);
                     }
                 }
             }
@@ -1631,7 +1631,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $groupArray = array('id');
         $userDetails = $this->returnUserLabDetails();
         if (!$userDetails) {
-            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available with the selected filters'));
+            echo $this->returnJson(array('status' => 0, "msg" => 'No Records available,laboratory is not defined'));
             exit;
         } else {
             $postedData['participantId'] = $userDetails['participant_id'];
@@ -1876,7 +1876,11 @@ class BacteriologydbciController extends Zend_Controller_Action {
     }
 
     public function getresultsonroundAction() {
-        $where['roundId'] = 1;
+        //$where['roundId'] = 2;
+        $where = $this->returnArrayFromInput();
+//        print_r($posted);
+//        exit;
+        
         $where['markedStatus'] = 1;
         $whereLab = $this->returnUserLabDetails();
         $where['participantId'] = $whereLab['participant_id'];
@@ -1926,7 +1930,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
 //            $holding['resultInfo'] = $arrayASTExpectedResults;
             echo json_encode(array('status' => 1, 'data' => $arrayASTExpectedResults));
         } else {
-            
+            echo json_encode(array('status' => 0, 'message' => "No rounds available"));
         }
         exit;
     }
@@ -2247,6 +2251,7 @@ class BacteriologydbciController extends Zend_Controller_Action {
         $sampleInstructions = $this->returnValueWhere($sampleWhere, 'tbl_bac_expected_results');
 
         $returnFinalASTExpectedResults = array();
+        $returnFinalASTExpectedResults['expectedResults'] =array();
         if ($sampleInstructions != null) {
             $returnFinalASTExpectedResults['expectedResults'] = $sampleInstructions;
         }

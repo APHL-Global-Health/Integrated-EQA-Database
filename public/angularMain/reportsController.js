@@ -370,7 +370,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                         } else {
                             $.alert({
                                 title: '<i class="fa fa-exclamation-triangle fa-warning"></i> Error',
-                                content: 'Round Evaluation was unsuccessful'
+                                content: response.message
                             });
                         }
 

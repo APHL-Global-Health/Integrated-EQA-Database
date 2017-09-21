@@ -116,7 +116,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation was Unsuccessful !'));
             }
         } else {
-            echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation was Unsuccessful !'));
+            echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation Unsuccessful.no shipments found !'));
         }
         exit;
     }
@@ -636,6 +636,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
                 }
             }
         }
+        $whereResponse['sampleId'] = $responseResults['sampleId'];
+        $whereResponse['roundId'] = $responseResults['roundId'];
+        $whereResponse['participantId'] = $responseResults['participantId'];
+        $whereResponse['adminMarked'] = 0;
+
+
+        $score['markedStatus'] = 1;
+        
+        $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
         return true;
     }
 
