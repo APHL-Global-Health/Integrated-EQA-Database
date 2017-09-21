@@ -149,8 +149,6 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-//        die($sQuery);
-
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
 
@@ -177,21 +175,12 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         foreach ($rResult as $aRow) {
             $row = array();
-            //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
-            //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
-            //}else{
-            //$participantDetails='';
-            //}
+
             $row[] = $aRow['institute'];
-            // $row[] = $participantDetails.' '.$aRow['institute'];
             $row[] = $aRow['first_name'];
             $row[] = $aRow['last_name'];
             $row[] = $aRow['mobile'];
             $row[] = $aRow['primary_email'];
-
-//            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
-
-
 
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = $aRow['secondary_email'] ;
@@ -199,8 +188,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
                 $row[] = $aRow['IsTester'] == 1 ? 'Yes' : 'No';
             }
 
-            //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
-            $row[] = $aRow['status'];
+           $row[] = $aRow['status'];
 
             if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
                 $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';

@@ -136,52 +136,6 @@
                                                  placeholder="Please enter the funding source here"/></div>
                 </div>
             </div>
-            <!--            <div class="form-group col-lg-6">-->
-            <!--                <label class="col-lg-4 control-label">Testing Volume</label>-->
-            <!---->
-            <!--                <div class="col-lg-8">-->
-            <!--                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" -->
-            <!--                           class="form-control" title="Please enter testing volume here"-->
-            <!--                           placeholder="Please enter the testing volume here"/></div>-->
-            <!--            </div>-->
-            <!--            <div class="form-group col-lg-6">-->
-            <!--                <label class="col-lg-4 control-label">Enrolled Programs </label>-->
-            <!---->
-            <!--                <div class="col-lg-8">-->
-            <!--                    <select name="enrolledProgram[]" id="enrolledProgram"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >-->
-            <!--                        --><?php
-            //foreach ($this->enrolledPrograms as $enrolledPrograms) {
-            //                            
-            ?>
-            <!--                            <option value="--><?php //echo $enrolledPrograms['r_epid']; ?><!--">-->
-            <?php //echo $enrolledPrograms['enrolled_programs'];   ?><!--</option>-->
-            <!--                            --><?php
-            //                        }
-            //                        
-            ?>
-            <!--                    </select>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-            <!--            <div class="form-group col-lg-6">-->
-            <!--                <label class="col-lg-4 control-label">Site Type</label>-->
-            <!--                <div class="col-lg-8">-->
-            <!--                    <select name="siteType" id="siteType"  class="form-control">-->
-            <!--                        <option value="">--Select--</option>-->
-            <!--                        --><?php
-            //foreach ($this->siteType as $siteType) {
-            //                            
-            ?>
-            <!--                            <option value="--><?php //echo $siteType['r_stid'];  ?><!--">-->
-            <?php //echo $siteType['site_type']; ?><!--</option>-->
-            <!--                            --><?php
-            //                        }
-            //                        
-            ?>
-            <!--                    </select>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
             <hr style="border:1px solid #ccc;background: #ccc;width:90%;"/>
 
             <div class="form-group col-lg-12">
@@ -252,7 +206,7 @@
                 <label class="col-lg-4 control-label">Level<span class="mandatory">*</span></label>
                 <div class="col-lg-8">
                     <select name="network" id="network" class="form-control isRequired"
-                            title="Please choose the network tier">
+                            title="Please choose the facility level">
                         <option value="">--Select Level--</option>
 
                         <option value="level 1">level 1</option>
@@ -265,25 +219,6 @@
                     </select>
                 </div>
             </div>
-            <!--            <div class="form-group col-lg-6">-->
-            <!--                <label class="col-lg-4 control-label">Affiliation<span class="mandatory">*</span></label>-->
-            <!---->
-            <!--                <div class="col-lg-8">-->
-            <!--                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">-->
-            <!--                        <option value="">--Select--</option>-->
-            <!--                        --><?php
-                        //foreach ($this->affiliates as $aff) {
-//                            
-                        ?>
-            <!--                            <option value="--><?php //echo $aff['affiliate'];  ?><!--">-->
-            <?php //echo $aff['affiliate'];  ?><!--</option>-->
-            <!--                        --><?php
-            //}
-//                        
-            ?>
-            <!--                    </select>-->
-            <!--                </div>-->
-            <!--            </div>-->
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
 
@@ -343,7 +278,6 @@
 
                     function validateNow() {
                         $(".bootstrap-select").removeClass('isRequired');
-                        //checkDuplicate('participant', 'unique_identifier', $("#pid"), null, 'This Participant ID already exists for another Participant. Please try something else.')
                         flag = deforayValidator.init({
                             formId: 'addParticipantForm'
                         });

@@ -1,6 +1,3 @@
-<?php
-//Zend_Debug::dump($this->participant);die;
-?>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/bootstrap-select.min.css'); ?>" />
 <div class="well" id='ng-app' ng-app="ReportModule" ng-cloak="">
     <form name="editParticipantForm"  ng-controller="ReportsController"
@@ -142,46 +139,6 @@
                                              class="form-control" title="Please enter the funding source here"
                                              placeholder="Please enter the funding source here" value="<?php echo $this->participant['funding_source']; ?>"/></div>
             </div>
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Testing Volume</label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <input type="text" id="testingVolume" name="testingVolume" size="50" maxlength="255" -->
-<!--                           class="form-control" title="Please enter testing volume here"-->
-<!--                           placeholder="Please enter the testing volume here" value="--><?php //echo $this->participant['testing_volume']; ?><!--"/></div>-->
-<!--            </div>-->
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Enrolled Programs </label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="enrolledProgram[]" id="enrolledProgram"   multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >-->
-<!--                        --><?php
-//                        $enrolledProg = explode(",", $this->participant['enrolled_prog']);
-//
-//                        foreach ($this->enrolledPrograms as $enrolledPrograms) {
-//                            ?>
-<!--                            -->
-<!--                            <option value="--><?php //echo $enrolledPrograms['r_epid']; ?><!--" --><?php //echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? "selected='selected'" : "" ?><?php //echo $enrolledPrograms['enrolled_programs']; ?><!--</option>-->
-<!--                            --><?php
-//                        }
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Site Type</label>-->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="siteType" id="siteType"  class="form-control">-->
-<!--                        <option value="">--Select--</option>-->
-<!--                        --><?php //foreach ($this->siteType as $siteType) {
-//                            ?>
-<!--                            <option value="--><?php //echo $siteType['r_stid']; ?><!--" --><?php //echo ($this->participant['site_type'] == $siteType['r_stid']) ? "selected='selected'" : ""; ?><?php //echo $siteType['site_type']; ?><!--</option>-->
-<!--                            --><?php
-//                        }
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
 
             <hr style="border:1px solid #ccc;background: #ccc;width:90%;"/>
 
@@ -254,7 +211,7 @@
                 <label class="col-lg-4 control-label">Network Tier <span class="mandatory">*</span></label>
 
                 <div class="col-lg-8">
-                    <select name="network" id="network"  class="form-control isRequired" title="Please choose the network tier">
+                    <select name="network" id="network"  class="form-control isRequired" title="Please choose the facility level">
 
                         <option value="">--Select Level--</option>
 
@@ -268,37 +225,6 @@
                 </div>
             </div>
 
-<!--            <div class="form-group col-lg-6">-->
-<!--                <label class="col-lg-4 control-label">Affiliation <span class="mandatory">*</span></label>-->
-<!---->
-<!--                <div class="col-lg-8">-->
-<!--                    <select name="partAff" id="partAff"  class="form-control isRequired" title="Please choose the affiliation here">-->
-<!--                        <option value="">--Select--</option>-->
-<!--                        --><?php //foreach ($this->affiliates as $aff) {
-//                            ?>
-<!--                            <option value="--><?php //echo $aff['affiliate']; ?><!--" --><?php //echo ($this->participant['affiliation'] == $aff['affiliate']) ? "selected='selected'" : "" ?><?php //echo $aff['affiliate']; ?><!--</option>-->
-<!--                        --><?php //}
-//                        ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            --><?php //if ($this->participant['status'] == "pending") { ?>
-<!--                <div class="form-group col-lg-6">-->
-<!--                    <label class="col-lg-4 control-label">Schemes <span class="mandatory">*</span></label>-->
-<!---->
-<!--                    <div class="col-lg-8">-->
-<!--                        <select id="scheme" name="scheme[]"  class="form-control isRequired" multiple="multiple" title="Please choose one or more Schemes" data-selected-text-format="count>3">-->
-<!--                            --><?php
-//                            foreach ($this->schemes as $scheme) {
-//                                ?>
-<!--                                <option value="--><?php //echo $scheme['scheme_id']; ?><!--" --><?php //echo (in_array($scheme['scheme_id'], $this->participantSchemes) ? "selected='selected'" : ""); ?><!--><?php //echo $scheme['scheme_name']; ?><!--</option>	-->
-<!--                                --><?php
-//                            }
-//                            ?>
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            --><?php //} ?>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                 <div class="col-lg-8">
@@ -354,7 +280,6 @@
 
                     function validateNow() {
                         $(".bootstrap-select").removeClass('isRequired');
-                        //checkDuplicate('participants', 'unique_identifier', $("#pid"), '<?php echo "participant_id##" . $this->participant['participant_id']; ?>', 'This Participant ID already exists for another Participant. Please try something else.')
                         flag = deforayValidator.init({
                             formId: 'editParticipantForm'
                         });

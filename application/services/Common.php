@@ -16,7 +16,7 @@ class Application_Service_Common {
             $fromMail = $conf->email->config->username;
         }
         if ($fromName == null || $fromName == "") {
-            $fromName = "ePT";
+            $fromName = "iEQA";
         }
         $originalMessage = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
         $systemMail = new Zend_Mail();
@@ -89,7 +89,7 @@ class Application_Service_Common {
                 . "Password : $password <br>"
                 . $config->emailRegistrationSignature;
 
-        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "iEQA Admin Credentials");
     }
 
     public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
@@ -100,7 +100,7 @@ class Application_Service_Common {
                 . "<br> $Message <br>"
                 . $config->emailRegistrationSignature;
 
-        $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
+        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Email", $message, null, "iEQA Admin Mail");
     }
 
     public function generateRandomPassword($len) {

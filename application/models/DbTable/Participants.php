@@ -386,15 +386,15 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
 
-        ////////insert into data_manager if its selft registraion////////////////////
+        ////////insert into data_manager if its self registraion////////////////////
 //        $participantId = $this->insert($data);
-        $sendTo = $params['pemail'];
-        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-            $common = new Application_Service_Common();
-            $message = $common->getINIConfig("participantRegistration");
+        // $sendTo = $params['pemail'];
+        // if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
+        //     $common = new Application_Service_Common();
+        //     $message = $common->getINIConfig("participantRegistration");
 
-            $common->sendGeneralEmail($sendTo, $message, "Sir/Madam");
-        }
+        //     $common->sendGeneralEmail($sendTo, $message, "Sir/Madam");
+        // }
 
 
         return $participantId;
