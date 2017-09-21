@@ -1301,7 +1301,7 @@
                         try {
                             console.log(data)
                             $http.post(url, postedData)
-                                    .success(function (response) {
+                                .success(function (response) {
 
                                     console.log('data');
                                     console.log(response.data);
@@ -1323,17 +1323,16 @@
                                                 $.alert("<i class='fa fa-check-circle text-success'></i> 1 record saved successfully");
                                             } else {
                                                 EptServices.EptServiceObject.returnDuplicateAlert();
-                                                // $.alert("<i class='fa fa-remove text-danger'></i> data could not be inserted,please try again !");
                                             }
-
                                         }
 
-                                    })
-                                    .error(function (error) {
-                                        changeSavingSpinner(false);
+                                    }
+                                })
+                                .error(function (error) {
+                                    changeSavingSpinner(false);
 
-                                        changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
-                                    })
+                                    changeFb(EptServices.EptServiceObject.returnLoaderStatus(0));
+                                })
                         } catch (error) {
                             console.log(error);
                         }
