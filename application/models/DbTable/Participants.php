@@ -11,13 +11,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
                                     ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
                                     ->where("pmm.dm_id = ?", $userSystemId)
-                                    //->where("p.status = 'active'")
                                     ->group('p.participant_id'));
         } else {
             return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name))
                                     ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
                                     ->where("pmm.parent_id = ?", $userSystemId)
-                                    //->where("p.status = 'active'")
                                     ->group('p.participant_id'));
         }
     }
@@ -194,8 +192,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-        //error_log($sQuery);
-
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -288,6 +284,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         } else {
             $data['individual'] = 'no';
         }
+
         if (isset($params['MflCode'])) {
             $data['MflCode'] = $params['MflCode'];
         }
@@ -312,7 +309,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
             $db->delete('participant_enrolled_programs_map', "participant_id = " . $params['participantId']);
-            //var_dump($params['enrolledProgram']);die;
             foreach ($params['enrolledProgram'] as $epId) {
                 $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $params['participantId']));
             }
@@ -336,8 +332,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     public function addParticipants($params) {
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
-//print_r($params);
-//exit;
+
         $data = array(
             'unique_identifier' => $params['pid'],
             'institute_name' => $params['instituteName'],
@@ -357,10 +352,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'phone' => isset($params['phone1']) ? $params['phone1'] : '',
             'email' => $params['pemail'],
             'contact_name' => $params['pfname'] . ' ' . $params['plname'],
-//            'affiliation' => $params['partAff'],
             'network_tier' => isset($params['network']) ? $params['network'] : '',
-//            'testing_volume' => $params['testingVolume'],
-//            'funding_source' => $params['fundingSource'],
             'site_type' => isset($params['siteType']) ? $params['siteType'] : '',
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
@@ -375,9 +367,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
         $participantName = $params['instituteName'];
-//        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
         $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
-//        }
+
         if (isset($params['MflCode'])) {
             $data['MflCode'] = $params['MflCode'];
         }
@@ -385,17 +376,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();
-
-        ////////insert into data_manager if its self registraion////////////////////
-//        $participantId = $this->insert($data);
-        // $sendTo = $params['pemail'];
-        // if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-        //     $common = new Application_Service_Common();
-        //     $message = $common->getINIConfig("participantRegistration");
-
-        //     $common->sendGeneralEmail($sendTo, $message, "Sir/Madam");
-        // }
-
 
         return $participantId;
     }
@@ -423,10 +403,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'phone' => isset($params['phone1']) ? $params['phone1'] : '',
             'email' => $params['pemail'],
             'contact_name' => $params['pfname'] . ' ' . $params['plname'],
-//            'affiliation' => $params['partAff'],
             'network_tier' => isset($params['network']) ? $params['network'] : '',
-//            'testing_volume' => $params['testingVolume'],
-//            'funding_source' => $params['fundingSource'],
             'site_type' => isset($params['siteType']) ? $params['siteType'] : '',
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
@@ -486,8 +463,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $this->savePlatformInfo($params['platform'], $participantId);
         }
         $sendTo = $params['pemail'];
-
-
 
         $common = new Application_Service_Common();
 
@@ -549,11 +524,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $data['individual'] = 'yes';
         }
 
-
-        //Zend_Debug::dump($data);die;
-        //Zend_Debug::dump($data);die;
         $participantId = $this->insert($data);
-
 
         if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
             $db = Zend_Db_Table_Abstract::getAdapter();
@@ -792,7 +763,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             "aaData" => array()
         );
 
-
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = ucwords($aRow['first_name'] . " " . $aRow['last_name']);
@@ -893,7 +863,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-
         $sQuery = $this->getAdapter()->select()->from(array('p' => 'participant'), array('p.participant_id'))
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array())
                 ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id', array())
@@ -927,7 +896,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
         /* Total data set length */
 
-
         $sQuery = $this->getAdapter()->select()->from(array("p" => $this->_name), array('p.participant_id'))
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array())
                 ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id', array())
@@ -951,7 +919,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             "aaData" => array()
         );
 
-
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = '<input type="checkbox" class="isRequired" name="participants[]" id="' . $aRow['participant_id'] . '" value="' . base64_encode($aRow['participant_id']) . '" onclick="checkParticipantName(' . $aRow['participant_id'] . ',this)" title="Select atleast one participant">';
@@ -959,7 +926,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row[] = ucwords($aRow['iso_name']);
             $row[] = $aRow['mobile'];
             $row[] = $aRow['email'];
-            // $row[] = ucwords($aRow['status']);
             $row[] = 'Unenrolled';
 
             $output['aaData'][] = $row;
