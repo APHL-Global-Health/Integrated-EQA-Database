@@ -83,10 +83,6 @@ class Admin_LoginController extends Zend_Controller_Action {
             }
         }
     }
-    public function emailtestAction(){
-         $common = new Application_Service_Common();
-        $common->sendGeneralEmail('osoromichael@gmail.com', 'test email', 'User');
-        exit;
-    }
+
 
 }
