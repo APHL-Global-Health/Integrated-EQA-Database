@@ -71,10 +71,10 @@
                                 <td>{{round.startDate}}</td>
                                 <td>{{round.endDate}}</td>
                                 <td nowrap>{{round.dateCreated}}</td>
-                                <td nowrap>{{round.evaluatedStatus}}</td>
+                                <td nowrap>{{round.evaluatedStatus}}/{{round.publishedStatus}}</td>
                                 <td nowrap>Enrolled</td>
                                 <td nowrap>
-                                    <button class="btn btn-primary btn-sm" ng-disabled="round.evaluated==0"
+                                    <button class="btn btn-primary btn-sm" ng-disabled="round.published==0"
                                             ng-click="reports.getRRoundResults(round)"
                                     >
                                         <i class="fa fa-download"></i> download

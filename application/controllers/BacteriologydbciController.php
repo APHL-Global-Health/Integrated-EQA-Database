@@ -265,7 +265,10 @@ class BacteriologydbciController extends Zend_Controller_Action {
                 $round[$key]->startDate = $roundInfo['startDate'];
                 $round[$key]->endDate = $roundInfo['endDate'];
                 $round[$key]->evaluated = $roundInfo['evaluated'];
+                $round[$key]->published = $roundInfo['published'];
                 $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
+                $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
+                $round[$key]->publishedStatus = $roundInfo['published'] == 0 ? 'UnPublished' : 'published';
                 $round[$key]->DaysLeft = $this->converttodays($round[$key]->endDate);
             }
             echo $this->returnJson(array('status' => 1, 'data' => $round));
