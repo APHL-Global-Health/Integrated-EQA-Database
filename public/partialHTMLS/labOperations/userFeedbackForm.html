@@ -1,4 +1,8 @@
 <div class="col-md-12">
+  
+    <button class="btn btn-sm btn-primary pull-right"
+                ng-click="samples.printDiv('print-form')"><i class="fa fa-print"></i> print
+        </button>
     <button ng-click="samples.samplesActivePage('addResults', '1')"
             class="btn btn-sm btn-danger pull-right">
         <i class="fa fa-close"></i> close
@@ -10,6 +14,7 @@
 
         </h3>
     </div>
+    <div id="print-form">
     <div class="col-md-12 col-xs-12">
         <h4 class="text-center"><b>INSTRUCTIONS TO PARTICIPANT – BACTERIOLOGY</b></h4>
         <table class="table text-capitalize">
@@ -487,7 +492,7 @@
                     </tr>
                 </tbody>
             </table>
-
+        
             <button class="btn btn-primary col-md-12" ng-disabled="true"
                     ng-click="samples.saveUserBothResponse(samples.resultFields, samples.susceptibilityFormData)"
                     ng-disabled="susceptibilityData.$invalid || samples.savingInProgress">
@@ -495,5 +500,6 @@
             </button>
         </div>
 
+    </div>
     </div>
 </div>
