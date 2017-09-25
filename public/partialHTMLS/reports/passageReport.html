@@ -1,0 +1,113 @@
+<div class="" ng-hide="reports.loaderStatus">
+    <div class="col-md-12 clearfix">
+        <h3>Passage Total Counts
+            <small>{{reports.labPerformanceData.length}} records</small>
+            <i class="fa fa-spin {{reports.loader}}"></i>
+            <input ng-model="searchRounds" class="pull-right btn-sm" placeholder="">
+        </h3>
+    </div>
+    <div class="col-md-12 no-padding text-center">
+        <form name="search" novalidate>
+            <table class="table table-bordered">
+
+                <div class="col-md-3 no-padding" ng-init="reports.getRounds()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereRoundsResults.round"
+                           required placeholder="Search Round"
+                           id="rounds" name="rounds"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.roundName as icon.roundName for icon in reports.rounds"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-3" ng-init="reports.getSamples()">
+
+                    <input type="text" class="form-control input-sm" ng-model="reports.whereRoundsResults.sample"
+                           placeholder="Sample"
+                           id="sample" name="sample"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.batchName as icon.batchName for icon in reports.samples"
+                           bs-typeahead>
+                </div>
+                <div class="col-md-2 no-padding" ng-init="reports.getCounties()">
+                    <input class="form-control input-sm"
+                           ng-model="reports.whereRoundsResults.region"
+                           id="region" name="region"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.Description as icon.Description for icon in reports.counties"
+                           placeholder="Search County" bs-typeahead>
+                </div>
+                <div class="col-md-2 ">
+                    <input class="form-control input-sm" ng-model="reports.whereRoundsResults.grade"
+                           id="grade" name="grade" ng-init="reports.getGrades()"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="true" data-animation="am-flip-x" data-container="body"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.grade as icon.grade for icon in reports.grades"
+                           placeholder="Search grade" bs-typeahead
+                    >
+                </div>
+                <div ng-controller="PdfController">
+                    &nbsp;
+                    <button class="btn btn-sm btn-info" ng-disabled="search.$invalid"
+                            ng-click="reports.getPassagePerformanceReport(reports.whereRoundsResults)">get report
+                    </button>
+
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="pdfMake.generateSurveyReportPdf(reports.roundsPerformanceData)"><i class="fa fa-print"></i>
+                    </button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="pdfMake.generateSurveyReportExcel(reports.roundsPerformanceData,reports.whereRoundsResults)"><i class="fa fa-file-excel-o"></i>
+                    </button>
+                </div>
+
+            </table>
+        </form>
+
+    </div>
+    <div class="col-md-12 no-padding">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th>Sample Name</th>
+                <th>Round</th>
+                <th>Average Score</th>
+                <th>Total Count</th>
+                <th>Grade</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="lab in reports.passagePerformanceData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
+                <td>{{$index+1}}</td>
+                <td>{{lab.batchName}}</td>
+                <td>{{lab.roundName}}</td>
+                <td>{{lab.avgMarks}}</td>
+                <td>{{lab.count}}</td>
+                <td>{{lab.grade}}</td>
+            </tr>
+            <!--<tr ng-hide="reports.generalRoundData.length >0">-->
+            <!--<td colspan="10" class="text-center">No records available</td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="25"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+
+
+</div>
+</div>

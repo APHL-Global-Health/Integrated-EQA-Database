@@ -224,7 +224,37 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         }
     }
     $scope.reports.roundsPerformanceData = {};
+     $scope.reports.paasagePerformanceData = {};
     $scope.reports.roundsPerformanceDataStat = {};
+    
+    $scope.reports.getPassagePerformanceReport=function(where){
+        try{   
+        showAjaxLoader(true)
+           
+            var url = serverReportURL + 'passage';
+            $http.post(url, where)
+                    .success(function (response) {
+                        console.log(response)
+                        showAjaxLoader(false)
+                        if (response.status == 1) {
+                            $scope.reports.passagePerformanceData = response.data;
+                           
+                        } else {
+                            EptServices.EptServiceObject.returnNoRecordsFoundFiltersAlert();
+                            $scope.reports.passagePerformanceData = {};
+                           
+                        }
+                    })
+                    .error(function (error) {
+                        showAjaxLoader(false)
+                        EptServices.EptServiceObject.returnServerErrorAlert();
+                    })
+
+        } catch (exc) {
+
+        }
+    }
+    
     $scope.reports.getRoundPerformanceReport = function (where) {
         try {
             showAjaxLoader(true)

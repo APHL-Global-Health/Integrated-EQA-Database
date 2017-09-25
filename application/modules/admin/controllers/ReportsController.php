@@ -552,6 +552,131 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         return ($matches / $maxwords) * 100;
     }
 
+    public function passageAction(){
+        
+        
+        $postedData = $this->returnArrayFromInput();
+
+
+        if (isset($postedData['grade'])) {
+            if ($postedData['grade'] == '') {
+                unset($postedData['grade']);
+            } else {
+                $whereSearch['grade'] = $postedData['grade'];
+            }
+        }
+        if (isset($postedData['sample'])) {
+            if ($postedData['sample'] == '') {
+                unset($postedData['sample']);
+            } else {
+                $wheresample['batchName'] = $postedData['sample'];
+                $sampleDetails = $this->returnValueWhere($wheresample, 'tbl_bac_samples');
+
+                $whereSearch['sampleId'] = $sampleDetails['id'];
+            }
+        }
+
+        if (isset($postedData['region'])) {
+            if ($postedData['region'] == '') {
+                unset($postedData['region']);
+            } else {
+                $whereCounty['region'] = $postedData['region'];
+                $labs = $this->dbConnection->selectFromTable('participant', $whereCounty);
+            }
+        }
+
+        $where['roundName'] = $postedData['round'];
+
+        $roundDetails = $this->returnValueWhere($where, 'tbl_bac_rounds');
+
+        $whereSearch['roundId'] = $roundDetails['id'];
+        $sum = 0;
+        $samples = array();
+        
+                            $orderArray = array('sampleId');
+                    $col = array('COUNT(sampleId) as count','avg(finalScore) as avgMarks','grade','sampleId','roundId');
+
+                    $groupArray = array('grade');
+                    
+        if ($roundDetails != false) {
+            if (isset($labs) && $labs != false) {
+
+                $report = array();
+                foreach ($labs as $key => $value) {
+
+                    $whereSearch['participantId'] = $value->participant_id;
+
+                    $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true,
+                            $groupArray);
+                    if ($reportData != false) {
+
+                        foreach ($reportData as $keys => $val) {
+
+                            $whereSampleId['id'] = $val->sampleId;
+                        $whereRoundId['id'] = $val->roundId;
+                        $whereLabId['participant_id'] = $val->participantId;
+
+                        $roundInfo = $this->returnValueWhere($whereRoundId, 'tbl_bac_rounds');
+                        $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                    
+                        $reportData[$keys]->roundName = $roundInfo['roundName'];
+                        $reportData[$keys]->roundCode = $roundInfo['roundCode'];
+
+                        $reportData[$keys]->batchName = $sampleInfo['batchName'];
+                        
+                            }
+                    }
+                }
+                $stat['total'] = $sum;
+                $stat['mean'] = round($sum / sizeof($report), 4);
+                $stat['labs'] = sizeof($report);
+                $stat['sd'] = $this->standard_deviation($samples);
+
+                if (!empty($report)) {
+                    echo $this->returnJson(array('status' => 1, 'data' => $report, 'stat' => $stat));
+                }
+            } else {
+                if (isset($labs)) {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                    exit;
+                }
+
+                $reportData = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $whereSearch, $orderArray, true, $groupArray);
+                if ($reportData != false) {
+
+                    foreach ($reportData as $keys => $val) {
+
+                        $whereSampleId['id'] = $val->sampleId;
+                        $whereRoundId['id'] = $val->roundId;
+                     
+
+                        $roundInfo = $this->returnValueWhere($whereRoundId, 'tbl_bac_rounds');
+                        $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                    
+                        $reportData[$keys]->roundName = $roundInfo['roundName'];
+                        $reportData[$keys]->roundCode = $roundInfo['roundCode'];
+
+                        $reportData[$keys]->batchName = $sampleInfo['batchName'];
+                        
+                    }
+//                    $stat['total'] = $sum;
+//                    $stat['mean'] = round($sum / sizeof($reportData), 4);
+//                    $stat['sd'] = $this->standard_deviation($samples);
+//                    $stat['labs'] = sizeof($reportData);
+                    echo $this->returnJson(array('status' => 1, 'data' => $reportData, 'stat' => ''));
+                } else {
+                    echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+                }
+//                echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+            }
+        } else {
+            echo $this->returnJson(array('status' => 0, 'message' => 'No records Available'));
+        }
+
+        exit;
+    }
+    
+    
     public function updateResponseResults($responseResults) {
         if (is_array($responseResults)) {
             $whereSampleExpectedResult['sampleId'] = $responseResults['sampleId'];
