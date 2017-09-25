@@ -695,6 +695,49 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
         }
     }
 
+   
+    $scope.pdfMake.generatePassageReportPdf = function (data) {
+        var reportData = new Array();
+        var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*'];
+        var reportHeader =
+                [
+                    {text: ' # ', style: 'subHeader'},
+                    {text: 'Batch Name', style: 'subHeader'},
+                    {text: 'Round Code', style: 'subHeader'},
+                    {text: 'Average Marks', style: 'subHeader'},
+                    {text: 'Total Count', style: 'subHeader'},
+                    {text: 'Grade', style: 'subHeader'}
+                ];
+
+        reportData.push(reportHeader);
+        console.log(data)
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var lab = data[i];
+                var rowData = [
+                    {text: '' + (i + 1), style: ['content']},
+                    {text: ' ' + lab.batchName, style: ['content']},
+                    {text: ' ' + lab.roundCode, style: ['content']},
+                    {text: ' ' + lab.avgMarks, style: ['content']},
+                    {text: ' ' + lab.count, style: ['content']},
+                    {text: ' ' + lab.grade, style: ['content']},
+
+                ];
+
+                reportData.push(rowData);
+            }
+
+
+            var reportSubHeader = 'PASSAGE PERFORMANCE REPORT';
+            var reportTitle = 'NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA';
+            $scope.pdfMake.mainGeneratorFunction(reportSubHeader, reportData, tableWidth, reportTitle);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+
+
+
 
     function returnRoundExcelData(excelData) {
 
@@ -773,6 +816,64 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
+    
+    
+    function returnPassageExcelData(excelData) {
+
+        if (excelData.length > 0) {
+            var returnArray = [];
+
+            for (var i = 0; i < excelData.length; i++) {
+                var tempArray = {
+                    'Batch Name': excelData[i].batchName,
+                    'Round Code': excelData[i].roundCode,
+                    'Average Marks': excelData[i].avgMarks,
+                    'Total count': excelData[i].count,
+                    'Grade': excelData[i].grade
+                    
+
+                }
+                returnArray.push(tempArray);
+            }
+            console.log(returnArray);
+            return returnArray;
+        } else {
+            return {};
+        }
+    }
+    
+    
+    $scope.pdfMake.generatePassageReportExcel = function (data, searchData) {
+        if (data.length > 0) {
+            var excelData = returnPassageExcelData(data);
+            console.log(excelData);
+            var opts = [{
+                    sheetid: 'PASSAGE SHEET', header: true,
+                    style: "background:#00ff00",
+
+                    caption: {
+                        title: 'Passage Data,Round ',
+                        style: 'font-size: 50px; color:blue;'
+                    },
+                    caption: {
+                        title: 'My Big Table',
+                        style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                    },
+                    style: 'background:#00FF00',
+                    column: {
+                        style: 'font-size:30px'
+                    }
+                }]
+                    ;
+            var res = alasql('SELECT INTO XLSX("PASSAGE REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+        } else {
+            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+        }
+    }
+    
+    
+    
+    
 
 
     function returnLabPerformanceExcelData(excelData) {
