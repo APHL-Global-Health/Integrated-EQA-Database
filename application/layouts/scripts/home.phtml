@@ -8,7 +8,6 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title><?php echo $config->applicationName; ?></title>
-        <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
         <!-- Bootstrap 3.3.5 -->
@@ -27,7 +26,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
     </head>
 
     <body class="hold-transition skin-blue layout-top-nav layout-boxed" style="background-image: url('/images/background_image_nmrl.jpg');background-repeat: no-repeat">
-        <div class="navbar navbar-default navbar-fixed-top" style="background-color: #3c8dbc;">
+        <div class="navbar navbar-default navbar-fixed-top" style="background-color: #3c8dbc; height: 51px;">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-custom-menu">
@@ -40,7 +39,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     </a>
                 </div>
                 <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu" style="float: right; color: #FFF; z-index: 300;background-color: #3c8dbc;overflow: hidden;">
+                <div class="navbar-custom-menu" style="float: right; color: #FFF;background-color: #3c8dbc;padding: 0 10px;">
                     <ul class="nav navbar-nav">
                         <?php if (isset($authNameSpace->dm_id)) { ?>
                             <li class="dropdown user user-menu">
@@ -61,7 +60,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
             </div>
         </div>
 
-        <div class="container" style="margin-top: 50px; position: absolute;top:0;bottom: 0;left:0; right:0;">
+        <div class="container">
 
             <!-- Content Wrapper. Contains page content -->
             <div>
@@ -69,7 +68,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 <section class="content">
                     <div class="col-lg-12">
                         <div class="col-lg-2" style="text-align: center;padding:10px;">
-                            <img src="<?php echo $this->baseUrl().$config->countryFlagLogo;?>" style="max-height:100px;"/>
+                            <img src="<?php echo $this->baseUrl().$config->countryFlagLogo;?>" class="country-flag" style="max-height:100px;"/>
                         </div>
                         <div class="col-lg-8" style="text-align: center;padding:10px;background-color: rgba(255, 255, 255, 0.85);">
                             <h2><?php echo $config->applicationName; ?></h2>

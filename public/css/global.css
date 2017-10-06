@@ -98,7 +98,11 @@ a.footer-items:hover{
 
 @media only screen and (max-width: 768px){
 
-	.navbar .container .country-flag{
+	.navbar .container .country-flag, .country-flag{
 		display: none;
+	}
+
+	body {
+		background-image: 0;
 	}
 }

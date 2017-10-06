@@ -11,7 +11,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title><?php echo $config->applicationName; ?></title>
-        <!-- Tell the browser to be responsive to screen width -->
+
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>">
@@ -79,7 +79,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         <ul class="nav navbar-nav">
                             <?php if ($authNameSpace->IsVl == 3) { ?>
                                 <li class="dropdown user user-menu">
-                                    <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)        ?>
                                     <a href="#">
                                         <i class="icon icon-dashboard"></i> <span
                                             class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
@@ -120,8 +119,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     <i class="icon icon-home"></i> <span>Program Information</span>
                                 </a>
                             </li>
-
-
 
                             <?php if (isset($authNameSpace->dm_id)) { ?>
                                 <li class="<?php echo ($activeMenu == 'dashboard') ? ' active ' : ''; ?>">
@@ -182,7 +179,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
                             <?php } ?>				 
 
-
                             <?php if (!isset($authNameSpace->dm_id)) { ?>
                                 <li>
                                     <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
@@ -211,18 +207,12 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 </a>
                             </li>
 
-
                             <?php if (isset($authNameSpace->dm_id)) { ?>
                                 <li class="">
                                     <a href="#" ng-click="samples.samplesActivePage('participantDashboard', 1)">
                                         <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                                     </a>
                                 </li>
-                                <!--                    <li class="">-->
-                                <!--                        <a href="#">-->
-                                <!--                            <i class="icon icon-list-ul"></i> <span>Report PT Data</span>-->
-                                <!--                        </a>-->
-                                <!--                    </li>-->
                                 <li class="treeview " ng-class="{'active' : clickedTab == 'ReceivedSampless'}">
                                     <a href="" class="" target="_self" ng-click="clickedTab = 'ReceivedSamples'"
                                        aria-haspopup="true" aria-expanded="false"><i class="fa fa-ship"></i>
@@ -233,10 +223,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                             <a href="" target="_self" ng-click="samples.samplesActivePage('add' + clickedTab, 1)"
                                                ng-click="">
                                                 Receive Shipment</a></li>
-<!--                                        <li class=""><a
-                                                href="" target="_self"
-                                                ng-click="samples.samplesActivePage('view' + clickedTab, 1)">
-                                                View Received Samples</a></li>-->
                                     </ul>
                                 </li>
 
@@ -270,7 +256,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                                 View Results</a></li>
                                     </ul>
                                 </li>
-
 
                                 <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
                                     <a href=""  target="_self"  ng-click="samples.samplesActivePage('downloadReports', 1)">
@@ -307,7 +292,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 ?>
 
 
-    <?php if (!isset($authNameSpace->dm_id)) { ?>
+                            <?php if (!isset($authNameSpace->dm_id)) { ?>
                                 <li>
                                     <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i
                                             class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
@@ -316,16 +301,16 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i
                                             class="icon icon-lock"></i> <span>Participant Login</span></a>
                                 </li>
-    <?php } else { ?>
+                            <?php } else { ?>
                                 <li>
                                     <a class=""
                                        href="<?php echo $this->url(array("controller" => "auth", "action" => "logout"), null, true) ?>"><i
                                             class="icon icon-signout"></i> <span>Logout</span></a>
                                 </li>
-                                samples.showPhmtlPages    <?php } ?>
-
+                                samples.showPhmtlPages
+                            <?php } ?>
                         </ul>
-<?php } ?>
+                    <?php } ?>
                 </section>
                 <!-- /.sidebar -->
             </aside>
@@ -335,7 +320,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                 <!-- Content Header (Page header) -->
                 <section class="content" style="background-color: white !important;">
                     <div ng-show="samples.showPhmtlPages">
-<?php echo $this->layout()->content; ?>
+                        <?php echo $this->layout()->content; ?>
                     </div>
                     <br/>
                     <?php  if ($authNameSpace->IsVl == 3) {  ?>
@@ -345,12 +330,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                         </ng-include>
                     </div>
                     <?php } ?>
-                    <!--            <div ng-show="reports.loaderStatus" class="text-center">-->
-                    <!--                <hr>-->
-                    <!--                <br>-->
-                    <!--                <i class="fa fa-spin fa-spinner fa-3x"></i><br>-->
-                    <!--                loading...-->
-                    <!--            </div>-->
                 </section>
 
             </div><!-- /.content-wrapper -->
