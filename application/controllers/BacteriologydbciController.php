@@ -850,13 +850,13 @@ class BacteriologydbciController extends Zend_Controller_Action {
 
         $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
 
-        if (sizeof($sampleInstructions) == 0) {
+        if (!$sampleInstructions) {
             $where['status'] = 9;
 
             $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
         }
 
-        if (sizeof($sampleInstructions) > 0) {
+        if (isset($sampleInstructions['sampleId'])) {
             $sampleInstructions['currentId'] = $sampleInstructions['sampleId'];
             unset($sampleInstructions['batchName']);
             echo $this->returnJson(array('status' => 1, 'data' => $sampleInstructions));
