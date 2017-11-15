@@ -388,7 +388,31 @@ public function getCounties() {
 
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
-        $common = new Application_Service_Common();
+        $common = new Application_Service_Common();        
+        
+        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
+            $db->delete('participant_enrolled_programs_map', "participant_id = " . $participantId);
+            //var_dump($params['enrolledProgram']);die;
+            foreach ($params['enrolledProgram'] as $epId) {
+                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
+            }
+        }
+
+        if (isset($params['dataManager']) && $params['dataManager'] != "") {
+            $db->delete('participant_manager_map', "participant_id = " . $participantId);
+            foreach ($params['dataManager'] as $dataManager) {
+                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
+            }
+        }
+
+        if (isset($params['scheme']) && $params['scheme'] != "") {
+            $enrollDb = new Application_Model_DbTable_Enrollments();
+            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
+        }
+        
+        
+        
+
 
         ////////insert into data_manager if its selft registraion////////////////////
 //        $participantId = $this->insert($data);
