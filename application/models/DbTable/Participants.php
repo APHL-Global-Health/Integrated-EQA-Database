@@ -339,7 +339,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 //print_r($params);
 //exit;
         $data = array(
-            'unique_identifier' => $params['pid'],
+            'MflCode' => $params['MflCode'],
             'institute_name' => $params['instituteName'],
             'department_name' => $params['departmentName'],
             'address' => $params['address'],
@@ -368,6 +368,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'ModuleID' => 1,
             'status' => 'active'
         );
+        
         if (isset($params['individualParticipant']) && $params['individualParticipant'] == 'on') {
             $data['individual'] = 'yes';
         } else {
@@ -396,7 +397,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $common->sendGeneralEmail($sendTo, "New Participant Registered <br>  $message", $participantName);
         }
 
-
+        $updateInfo['unique_identifier'] = $params['MflCode'].'/'.$participantId;
+        
+      $this->update($updateInfo, "participant_id = " . $participantId);;
+        
+        
         return $participantId;
     }
 
