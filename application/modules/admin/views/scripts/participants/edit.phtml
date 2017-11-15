@@ -9,9 +9,20 @@
             <legend>Edit Participant (<?php echo ucwords($this->participant['status']); ?>)</legend>
 
             <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label"></label>
-                <div class="col-lg-8">
+
+                <div class="col-lg-8 hidden">
                     <input type="checkbox" name="individualParticipant" id="individualParticipant" checked="checked" onclick="checkIndividualParticipant(this)"><b> Individual Participant</b>
+                </div>
+                  <label class="col-lg-4 control-label">MFL Code <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <input type="text" id="MflCode" name="MflCode" size="50" class="isRequired form-control"
+                           title="Please enter a valid Mfl Code" 
+                           value="<?php echo $this->participant['MflCode']; ?>"
+                           placeholder="Please enter a valid Mfl Code"
+                           onblur="checkDuplicate('participant', 'MflCode', this, '<?php echo "participant_id##" . $this->participant['participant_id']; ?>',
+                                       'This Mfl Code  already exists for another Participant. Please try something another one.')"/>
+                    <span class="text-danger" id="mflError"></span>
                 </div>
             </div>
 
@@ -20,10 +31,10 @@
 
                 <div class="col-lg-8">
                     <input type="text" id="pid" name="pid" size="50" class="isRequired form-control"
-                           title="Please enter the Participant id here"
+                           title="Please enter the Participant id here" readonly=""
                            placeholder="Please enter the Participant id here"
                            value="<?php echo $this->participant['unique_identifier']; ?>"
-                           onblur="checkDuplicate('participant', 'unique_identifier', this, '<?php echo "participant_id##" . $this->participant['participant_id']; ?>', 'This Participant ID already exists for another Participant. Please try something else.')"/>
+                           />
                 </div>
                 <input type="hidden" id="participantId" name="participantId" size="50" maxlength=tip"255" class="isRequired form-control" value="<?php echo $this->participant['participant_id']; ?>"/>
             </div>
@@ -330,10 +341,11 @@
                         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
                                 function (data) {
                                     if (data > 0) {
-                                        alert(msg, "err");
+                                        $("#mflError").text(msg);
                                         duplicated = true;
                                         obj.focus();
                                     } else {
+                                        $("#mflError").text('');
                                         duplicated = false;
                                     }
                                 });
