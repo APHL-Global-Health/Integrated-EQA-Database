@@ -41,7 +41,10 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('partners')->order('partner_id ASC'));
     }
-
+public function getCounties() {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+       return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
+    }
     public function getNetworkTierList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_network_tiers')->order('network_name ASC'));

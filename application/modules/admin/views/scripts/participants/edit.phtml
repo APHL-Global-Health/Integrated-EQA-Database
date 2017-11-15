@@ -114,7 +114,24 @@
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Region <span class="mandatory">*</span></label>
                 <div class="col-lg-8">
-                    <input type="text" id="region" name="region" size="50" maxlength="255" class="form-control isRequired" title="Please enter region here" placeholder="Please enter the region here" value="<?php echo $this->participant['region']; ?>"/>
+<!--                    <input type="text" id="region" name="region" size="50" maxlength="255" 
+                           class="form-control isRequired" title="Please enter region here"
+                           placeholder="Please enter the region here" value="<?php echo $this->participant['region']; ?>"/>
+                    -->
+                    <select class="form-control isRequired" name="region" id="country" title="Please County the country here">
+                        <option value="">--SELECT COUNTY--</option>
+                        <?php foreach ($this->counties as $county) {
+                            ?>
+                            <option value="<?php echo $county['CountyID']; ?>" 
+                                <?php echo(($this->participant["region"] == $county['CountyID']) ? "selected='selected'" : "") ?> >
+                                    <?php echo $county['Description']; ?>
+                            </option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                    
+                    
                 </div>
             </div>
 
