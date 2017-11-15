@@ -357,7 +357,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             'phone' => isset($params['phone1']) ? $params['phone1'] : '',
             'email' => $params['pemail'],
             'contact_name' => $params['pfname'] . ' ' . $params['plname'],
-//            'affiliation' => $params['partAff'],
+            'affiliation' => $params['partAff'],
             'network_tier' => isset($params['network']) ? $params['network'] : '',
 //            'testing_volume' => $params['testingVolume'],
 //            'funding_source' => $params['fundingSource'],
