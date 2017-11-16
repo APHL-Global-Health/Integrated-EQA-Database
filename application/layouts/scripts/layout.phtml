@@ -93,7 +93,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     </li>
                                 <?php } else { ?>
                                     <li>
-                                        <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
+                                        <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>">
+                                            <i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
                                     </li>
                                     <li>
                                         <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
@@ -176,7 +177,9 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <li class="<?php echo ($activeSubMenu == 'change-password') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "password"), null, true) ?>">Change Password</a></li>                                
                                     </ul>
                                 </li>
-                                <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "contact-us"), null, true) ?>"><i class="icon icon-envelope"></i> <span>Contact Us </span></a></li>
+                                <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>">
+                                    <a href="<?php echo $this->url(array("controller" => "contact"), null, true) ?>"><i class="icon icon-envelope"></i>
+                                        <span>Contact Us </span></a></li>
                             <?php } ?>				 
 
                             <?php if (!isset($authNameSpace->dm_id)) { ?>

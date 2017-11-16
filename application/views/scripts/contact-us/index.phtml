@@ -9,10 +9,21 @@
                 <label class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span></label>
 
                 <div class="col-lg-8">
-                    <input type="text" id="pid" name="pid" size="50" class="isRequired form-control"
-                           title="Please enter a unique identifier here"
-                           placeholder="Please enter a unique identifier here"
-                           onblur="checkDuplicate('participant', 'unique_identifier', this, null, 'This Participant ID already exists for another Participant. Please try something else.')"/>
+                    <input type="text" id="pid" name="pid" size="50" class=" form-control"
+                           title="Please enter a unique identifier here" readonly=""
+                           placeholder="this code is system generated"
+                           />
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label class="col-lg-4 control-label">Mfl Code <span class="mandatory">*</span></label>
+
+                <div class="col-lg-8">
+                    <input type="text" id="MflCode" name="MflCode" size="50" class="isRequired form-control"
+                           title="Please enter a unique Mfl Code here"
+                           placeholder="Please enter a unique Mfl Code here"
+                           onblur="checkDuplicate('MflCode', 'unique_identifier', this,
+                                       null, 'This Mfl Code already exists for another Participant. Please try another Mfl Code.')"/>
                 </div>
             </div>
             <div class="form-group col-lg-6">

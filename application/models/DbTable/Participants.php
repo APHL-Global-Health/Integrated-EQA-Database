@@ -480,6 +480,10 @@ public function getCounties() {
             $data['MflCode'] = $params['MflCode'];
         }
         $participantId = $this->insert($data);
+        
+         $updateInfo['unique_identifier'] = $params['MflCode'].'/'.$participantId;
+        
+      $this->update($updateInfo, "participant_id = " . $participantId);
         ///////end of inserting to participants table
 
         $db = Zend_Db_Table_Abstract::getAdapter();

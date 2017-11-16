@@ -28,6 +28,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             'enable_choosing_mode_of_receipt' => $params['modeOfReceiptOption'],
             'view_only_access' => $params['viewOnlyAccess'],
             'status' => $params['status'],
+            'isTester' => $params['isTester'],
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()')
         );
@@ -260,6 +261,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             'last_name' => $params['lname'],
             'phone' => $params['phone2'],
             'mobile' => $params['phone1'],
+             'IsTester' => $params['IsTester'],
             'secondary_email' => $params['semail'],
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')

@@ -924,10 +924,10 @@
                                 loginCacheMemory();
                                 console.log($scope.samples.loginDetails);
                             } else {
-                                alertStartRound = $.alert({
-                                    title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning !',
-                                    content: 'You have not been added to any lab,please contact admin add you to a lab.'
-                                });
+//                                alertStartRound = $.alert({
+//                                    title: '<i class="fa fa-exclamation-triangle  text-danger"></i> Warning !',
+//                                    content: 'You have not been added to any lab,please contact admin add you to a lab.'
+//                                });
                             }
                         })
                         .error(function (error) {

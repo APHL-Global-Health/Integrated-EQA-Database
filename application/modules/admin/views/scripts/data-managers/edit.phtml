@@ -12,6 +12,7 @@
                 <input type="hidden" id="userSystemId" name="userSystemId" value="<?php echo $this->rsUser['dm_id']; ?>" />
             </div>
         </div>
+                  <!--
         <div class="form-group">
             <label class="col-lg-3 control-label">Password <br/> <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small></label>
             <div class="col-lg-5"><input type="text" id="password" name="password" size="50" maxlength="255" value="" class="form-control"  title="" placeholder="Please enter new password here" onchange="validatePassword(this)"/></div>
@@ -20,6 +21,7 @@
             <label class="col-lg-3 control-label">Confirm Password <br/> <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small></label>
             <div class="col-lg-5"><input type="text" id="password1" name="password" size="50" maxlength="255" value="" class="confirmPassword form-control"  title="" placeholder="Please re-enter new password here"  /></div>
         </div>
+                  -->
         <div class="form-group">
             <label class="col-lg-3 control-label">Institute <span class="mandatory">*</span></label>
             <div class="col-lg-5"><input type="text" id="institute" name="institute" size="50" maxlength="255" class="isRequired form-control"  title="Please enter the institute name here" placeholder="Please enter the institute name here"  value="<?php echo $this->rsUser['institute']; ?>" /></div>
@@ -34,15 +36,30 @@
         </div>
         <div class="form-group">
             <label class="col-lg-3 control-label">Secondary e-mail Address <span class="mandatory">*</span></label>
-            <div class="col-lg-5"><input type="text" id="semail" name="semail" size="50" maxlength="255" value="<?php echo $this->rsUser['secondary_email']; ?>" class="isRequired isEmail form-control" title="Please enter a secondary email id here" placeholder="Please enter a secondary email id here"  /></div>
+            <div class="col-lg-5"><input type="text" id="semail" 
+                                         name="semail" size="50" maxlength="255"
+                                         value="<?php echo $this->rsUser['secondary_email']; ?>" class=" isEmail form-control" title="Please enter a secondary email id here" placeholder="Please enter a secondary email id here"  /></div>
         </div>
         <div class="form-group">
             <label class="col-lg-3 control-label">Cell Phone Number <span class="mandatory">*</span></label>
-            <div class="col-lg-5"><input type="text" id="phone1" name="phone1" size="50" maxlength="255" value="<?php echo $this->rsUser['mobile']; ?>" class="isRequired form-control checkNum"   title="Please enter the contact number here" placeholder="Please enter the contact number here"/></div>
+            <div class="col-lg-5"><input type="text" id="phone1" name="phone1" size="50" maxlength="255"
+                                         value="<?php echo $this->rsUser['mobile']; ?>" class="isRequired form-control checkNum"   title="Please enter the contact number here" placeholder="Please enter the contact number here"/></div>
         </div>
         <div class="form-group"> 
             <label class="col-lg-3 control-label">Phone Number</label>
             <div class="col-lg-5"><input type="text" id="phone2" name="phone2" size="50" maxlength="255" value="<?php echo $this->rsUser['phone']; ?>" class=" form-control checkNum"/></div>
+        </div>
+                  <div class="form-group"> 
+            <label class="col-lg-3 control-label">User Level</label>
+           
+            <div class="col-lg-5">
+                <select  class="isRequired form-control" title="Please enter a user level here"  name="IsTester"
+                                         placeholder="Please enter a user level here"  >
+                    <option>--SELECT USER LEVEL--</option>
+                    <option value="0" <?php echo ($this->rsUser['IsTester']==0?'selected':''); ?>>Supervisor</option>
+                    <option value="1" <?php echo ($this->rsUser['IsTester']==1?'selected':''); ?>>Lab Manager</option>
+                </select>
+            </div>
         </div>
 		<div class="form-group"> 
             <label class="col-lg-3 control-label">QC Access <span class="mandatory">*</span></label>
