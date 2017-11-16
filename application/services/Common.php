@@ -2,8 +2,14 @@
 
 class Application_Service_Common {
 
+    
+      public function baseUrl() {
+        return $_SERVER['SERVER_NAME'];//Zend_Controller_Front::getInstance()->getBaseUrl();
+    }
+    
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
         //Send to email
+        
         if (is_string($to)) {
             $to = explode(",", $to);
         }

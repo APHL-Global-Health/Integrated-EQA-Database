@@ -5,6 +5,46 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
     protected $_name = 'shipment_participant_map';
     protected $_primary = 'map_id';
 
+    
+    
+    public function sendEnrollingEmail($data){
+         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        
+        
+         $labShipmentDetails = $db->fetchAll($db->select()
+                 ->from(array('s' => 'shipment'),array('shipment_code','lastdate_response','scheme_type',''))
+                 
+                 
+                        ->join(array('d' => 'shipment_participant_map'), 'd.shipment_id = s.shipment_id',
+                                array('participant_id', 'shipment_id'))
+                         
+                         ->join(array('p' => 'participant'), 'p.participant_id = d.participant_id',
+                                array('email', 'institute_name'))
+                  ->join(array('di' => 'distributions'), 'di.distribution_id = s.distribution_id',
+                                array('distribution_code', 'readinessdate'))
+                        ->where("d.shipment_id = ?", $data['shipment_id']));
+         
+          foreach($labShipmentDetails as $key=>$value){
+               $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+                $common = new Application_Service_Common();
+              $message = "".
+                      "This is a notification of an impending EQA round(".$value['distribution_code'].") for Viral Load/EID from the NHRL Proficiency Testing programme.".
+                       "<br>Kindly let us know if you will be able to participate by filling the readiness assessment ".
+                         "checklist using the link below:<br>".
+                      
+                      "<br><a href='".$common->baseUrl().'/distributions'."' style='padding:14px;width:20%;".
+                       "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
+                      "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>".
+                      "Please complete by ".$value['readinessdate']." Failure to comply will result in exclusion from the round<br>". 
+                      "We appreciate your support. In case of any clarification, please do not hesitate to contact us at nhrlvleid@gmail.com<br>".
+                      "<br>".$config->vleidEmailFooter;
+                      
+              
+               $common->sendGeneralEmail($value['email'],  $message, null);
+              
+          }
+         
+    }
     public function shipItNow($params) {
         try {
             $this->getAdapter()->beginTransaction();
@@ -27,16 +67,20 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                     'evaluation_status' => '19901190',
                     'created_by_admin' => $authNameSpace->admin_id,
                     "created_on_admin" => new Zend_Db_Expr('now()'));
+                
+                $this->sendEnrollingEmail($data);
                 $this->insert($data);
                 //}
             }
 
+            
             $shipmentDb = new Application_Model_DbTable_Shipments();
             $shipmentDb->updateShipmentStatus($params['shipmentId'], 'ready');
 
             $shipmentRow = $shipmentDb->fetchRow('shipment_id=' . $params['shipmentId']);
 
-            $resultSet = $shipmentDb->fetchAll($shipmentDb->select()->where("status = 'pending' AND distribution_id = " . $shipmentRow['distribution_id']));
+            $resultSet = $shipmentDb->fetchAll($shipmentDb->select()->where("status = 'pending' AND distribution_id = " 
+                    . $shipmentRow['distribution_id']));
 
             if (count($resultSet) == 0) {
                 $distroService = new Application_Service_Distribution();

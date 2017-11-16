@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/multi-select.css'); ?>" />
 <fieldset>
-    <legend><?php echo strtoupper($this->shipment->scheme_type); ?> Shipment : <?php echo $this->shipment->shipment_code . "(" . $this->dateFormat($this->shipment->shipment_date) . ") "; ?></legend>
+    <legend><?php echo strtoupper($this->shipment->scheme_type); ?> Shipment :
+ <?php echo $this->shipment->shipment_code . "(" . $this->dateFormat($this->shipment->shipment_date) . ") "; ?></legend>
     <form method="post" action="" id="shipForm">
         <div class="form-group">
             <div class="text-info" style="text-align:center;padding:10px 0;">Click on the Participant name to move them between the two sections<br/><br/>

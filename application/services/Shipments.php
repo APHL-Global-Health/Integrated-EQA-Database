@@ -1060,6 +1060,10 @@ class Application_Service_Shipments {
         $participantDb = new Application_Model_DbTable_Participants();
         return $participantDb->checkParticipantAccess($participantId);
     }
+    public function sendEnrollingEmail(){
+           $shipmentDb = new Application_Model_DbTable_ShipmentParticipantMap();
+        return $shipmentDb->sendEnrollingEmail();
+    }
 
     public function getShipmentForEdit($sid) {
 

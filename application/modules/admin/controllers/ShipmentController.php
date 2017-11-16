@@ -150,6 +150,12 @@ class Admin_ShipmentController extends Zend_Controller_Action {
             }
         }
     }
+    public function semailAction(){
+       $shipmentService = new Application_Service_Shipments();
+       
+       print_r($shipmentService->sendEnrollingEmail());
+       exit;
+    }
 
     public function removeAction() {
         if ($this->_hasParam('sid')) {
