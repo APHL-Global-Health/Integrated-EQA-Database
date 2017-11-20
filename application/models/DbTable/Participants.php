@@ -452,7 +452,7 @@ public function getCounties() {
             'lat' => isset($params['lat']) ? $params['lat'] : '',
             'shipping_address' => $params['shippingAddress'],
             'first_name' => $params['pfname'],
-            'lab_name' => $params['pfname'],
+            'lab_name' => $params['lab_name'],//lab_name
             'last_name' => $params['plname'],
             'mobile' => isset($params['phone2']) ? $params['phone2'] : '',
             'phone' => isset($params['phone1']) ? $params['phone1'] : '',
