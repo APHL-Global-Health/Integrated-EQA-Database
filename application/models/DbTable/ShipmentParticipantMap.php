@@ -47,6 +47,54 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
           }
          
     }
+    
+      
+    public function sendResultsPublishingEmail($data){
+         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        
+        
+         $labShipmentDetails = $db->fetchAll($db->select()
+                 ->from(array('s' => 'shipment'),array('shipment_code','lastdate_response','scheme_type',''))
+                 
+                 
+                        ->join(array('d' => 'shipment_participant_map'), 'd.shipment_id = s.shipment_id',
+                                array('participant_id', 'shipment_id'))
+                         
+                         ->join(array('p' => 'participant'), 'p.participant_id = d.participant_id',
+                                array('email', 'institute_name'))
+                  ->join(array('di' => 'distributions'), 'di.distribution_id = s.distribution_id',
+                                array('distribution_code', 'readinessdate'))
+                        ->where("d.shipment_id = ?", $data['shipment_id']));
+         $emails=array();
+          foreach($labShipmentDetails as $key=>$value){
+               $common = new Application_Service_Common();
+                
+               $config = new Zend_Config_Ini($common->configFileUrl(), APPLICATION_ENV);
+              
+              $message = "".
+                      "This to notify you that your viral load/EID EQA panel results from the NHRL proficiency testing programme are available online. Please log in to view:<br>".
+                      
+                      "<br><a href='".$common->baseUrl().'/participant/all-schemes'."' style='padding:14px;width:auto;".
+                       "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
+                      "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>".
+                      "<br>". 
+                      "<br>".$config->vleidEmailFooter;
+              array_push($emails, $value['email']);
+              
+             
+              
+          }
+          if(count($emails)>0){
+            $common->sendGeneralEmail($emails,  $message, "participant");
+          }
+    }
+
+    
+    
+    
+    
+    
+    
     public function shipItNow($params) {
         try {
             $this->getAdapter()->beginTransaction();
@@ -70,11 +118,11 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                     'created_by_admin' => $authNameSpace->admin_id,
                     "created_on_admin" => new Zend_Db_Expr('now()'));
                 
-                $this->sendEnrollingEmail($data);
+               
                 $this->insert($data);
                 //}
             }
-
+ $this->sendEnrollingEmail($data);
             
             $shipmentDb = new Application_Model_DbTable_Shipments();
             $shipmentDb->updateShipmentStatus($params['shipmentId'], 'ready');

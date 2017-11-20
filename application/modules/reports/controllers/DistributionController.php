@@ -49,7 +49,13 @@ class Reports_DistributionController extends Zend_Controller_Action
             $this->_redirect("/reports/distribution/");
         }
     }
-
+public function emailParticipatedLabs($sId){
+    $shipment_map= new Application_Model_DbTable_ShipmentParticipantMap();
+    $shipmentArray['shipment_id']=$sId;
+    $shipment_map->sendResultsPublishingEmail($shipmentArray);
+    
+    
+}
     public function generateReportsAction()
     {
         $this->_helper->layout()->disableLayout();
@@ -79,7 +85,7 @@ class Reports_DistributionController extends Zend_Controller_Action
             $this->view->customField1 = $globalConfigDb->getValue('custom_field_1');
             $this->view->customField2 = $globalConfigDb->getValue('custom_field_2');
             $this->view->haveCustom = $globalConfigDb->getValue('custom_field_needed');
-        
+          //  $this->emailParticipatedLabs($id);
         }
     }
 

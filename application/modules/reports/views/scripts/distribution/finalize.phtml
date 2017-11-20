@@ -186,7 +186,8 @@ if (count($this->shipment) > 0) {
                }
           }
         ?>
-        <a href="javascript:void(0)" class="btn btn-sm  btn-danger" style="margin-top:10px;" onclick="generateReport('<?php echo base64_encode($this->shipment[0]['shipment_id']); ?>','50','<?php echo ($start-1);?>','<?php echo $start; ?>','<?php echo $end; ?>')"><i class="icon-ok"></i>&nbsp&nbsp Generate <?php echo $start; ?> to <?php echo $end;?> Reports for this Shipment</a>
+        <a href="javascript:void(0)" class="btn btn-sm  btn-danger" style="margin-top:10px;" 
+           onclick="generateReport('<?php echo base64_encode($this->shipment[0]['shipment_id']); ?>','50','<?php echo ($start-1);?>','<?php echo $start; ?>','<?php echo $end; ?>')"><i class="icon-ok"></i>&nbsp&nbsp Generate <?php echo $start; ?> to <?php echo $end;?> Reports for this Shipment</a>
         <?php
         $m++;
         }

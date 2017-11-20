@@ -173,13 +173,22 @@ class Admin_EvaluateController extends Zend_Controller_Action
         }
     }
 
+    public function emailParticipatedLabs($sId){
+    $shipment_map= new Application_Model_DbTable_ShipmentParticipantMap();
+    $shipmentArray['shipment_id']=$sId;
+    $shipment_map->sendResultsPublishingEmail($shipmentArray);
+    
+    
+}
     public function updateShipmentStatusAction()
     {
         if($this->_hasParam('sid')){            
             $sid = (int)base64_decode($this->_getParam('sid'));
             $status = $this->_getParam('status');
             $evalService = new Application_Service_Evaluation();
+             $this->emailParticipatedLabs($sid);
             $this->view->message = $evalService->updateShipmentStatus($sid,$status);
+           
         }else{
             $this->view->message = "Unable to update shipment status. Please try again later.";
         }
