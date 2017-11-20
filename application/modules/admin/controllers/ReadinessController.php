@@ -27,7 +27,6 @@ class Admin_ReadinessController extends Zend_Controller_Action {
         
     }
 
-
     public function addAction(){
         
         if ($this->getRequest()->isPost()) {

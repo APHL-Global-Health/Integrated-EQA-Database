@@ -75,4 +75,9 @@ class ReadinessController extends Zend_Controller_Action {
         $this->view->roundInfo = $roundInfo;
     }
 
+    
+    public function correctiveAction(){
+    
+}
+
 }

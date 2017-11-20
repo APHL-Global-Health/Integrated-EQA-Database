@@ -128,16 +128,22 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                     </a>
                                 </li>
                                 <li class="treeview <?php echo ($activeMenu == 'reasdiness') ? ' active ' : ''; ?>">
-                                    <a href="#" class="" aria-haspopup="true" aria-expanded="false"><i class="icon icon-edit"></i> <span>Readiness Checklist </span> <i class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
+                                    <a href="#" class="" aria-haspopup="true" aria-expanded="false"><i class="icon icon-edit"></i> <span>Readiness/Corrective </span> <i class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
                                     <ul class="treeview-menu">
                                         <li class="<?php echo ($activeMenu == 'readinesss') ? ' active ' : ''; ?>">
                                             <a href="<?php echo $this->url(array("controller" => "distributions", "action" => "index"), null, true) ?>">
-                                                <i class="icon icon-list-ul"></i> <span>Active Test Events</span>
+                                                <i class="icon icon-pencil"></i> <span>Active Test Events</span>
                                             </a>
                                         </li>
                                         <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?>">
                                             <a href="<?php echo $this->url(array("controller" => "readiness", "action" => "index"), null, true) ?>">
                                                 <i class="icon icon-list-ul"></i> <span>Readiness Status</span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?>">
+                                            <a href="<?php echo $this->url(array("controller" => "readiness", "action" => "corrective"), null, true) ?>">
+                                                <i class="icon icon-check"></i> <span>Corrective</span>
                                             </a>
                                         </li>
                                     </ul>
