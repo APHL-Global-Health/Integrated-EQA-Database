@@ -207,7 +207,14 @@ if ($this->scheme == 'eid') {
                     <?php echo $this->dropdownSelectedText($possibleResults, $result['reported_result'], true); ?>
                     <input type="hidden" name="sampleId[]" value="<?php echo $result['sample_id']; ?>" />
                 </td>
-                <td><h1>-</h1></td>
+                <td><?php
+							if($result['reported_result'] == $result['reference_result']){
+								echo "Pass";
+							}else{
+								echo "Fail";
+							}
+							?>
+                </td>
             </tr>
         <?php
         $counter++;
