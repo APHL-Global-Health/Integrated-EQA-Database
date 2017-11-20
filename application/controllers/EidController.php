@@ -78,7 +78,9 @@ class EidController extends Zend_Controller_Action
 
             $shipment = $schemeService->getShipmentData($sID,$pID);
 	    $shipment['attributes'] = json_decode($shipment['attributes'],true);
+           
             $this->view->shipment = $shipment;
+            $this->view->sampleConditions = $shipment['sample_conditions'];
             $this->view->shipId = $sID;
             $this->view->participantId = $pID;
             $this->view->eID = $eID;

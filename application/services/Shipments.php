@@ -336,6 +336,13 @@ class Application_Service_Shipments {
                     $data['qc_created_on'] = NULL;
                 }
             }
+            
+            if(isset($params['sample_conditions'])){
+                 $data['sample_conditions']=$params['sample_conditions'];
+            }
+            
+//            print_r($params);
+//            exit;
             $noOfRowsAffected = $shipmentParticipantDb->updateShipment($data, $params['smid'], $params['hdLastDate']);
 
             $eidResponseDb = new Application_Model_DbTable_ResponseEid();

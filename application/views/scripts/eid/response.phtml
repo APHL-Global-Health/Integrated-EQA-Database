@@ -141,14 +141,33 @@ if(isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment["
 				</td>
                 <td><label>Detection Assay Lot No.</label></td> 
                 <td>
-					<input type="text" id="detectionAssayLotNo" name="detectionAssayLotNo"  style=""  maxlength="11" value="<?php  echo ($this->shipment['attributes']['detection_assay_lot_no']); ?>"  class="isRequired form-control" />
+					<input type="text" id="detectionAssayLotNo" name="detectionAssayLotNo"  style=""  
+                                               maxlength="11" value="<?php  echo ($this->shipment['attributes']['detection_assay_lot_no']); ?>"  class="isRequired form-control" />
 				</td>
             </tr>
+            
+            <tr>
+                <td><label>Sample Condition</label></td>
+                <td colspan="3"> 
+                    
+                    <textarea name="sample_conditions" 
+                              
+                              id="sampleCondition" size="120" maxlength="40" class="form-control isRequired">
+                                  <?php  echo  $this->sampleConditions; ?>
+                    </textarea>
+                   
+                </td>
+            </tr>
+            
+            
             <tr>
                 <td><label>Extraction Assay Expiry Date</label></td> 
                 <td>
-					<input type="text" id="extractionAssayExpiryDate" name="extractionAssayExpiryDate"  style="width:180px;float:left;"  maxlength="11" value="<?php  echo  $this->dateFormat($this->shipment['attributes']['extraction_assay_expiry_date']); ?>"  class="datepicker form-control" readonly="readonly" />
-					<i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('extractionAssayExpiryDate')"> Clear</i>					
+					<input type="text" id="extractionAssayExpiryDate" name="extractionAssayExpiryDate"  
+                                               style="width:180px;float:left;"  maxlength="11" 
+                                               value="<?php  echo  $this->dateFormat($this->shipment['attributes']['extraction_assay_expiry_date']); ?>"  class="datepicker form-control" readonly="readonly" />
+					<i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;"
+                                           alt="Clear Date" title="Clear Date"  onclick="clearDate('extractionAssayExpiryDate')"> Clear</i>					
 				</td>
                 <td><label>Detection Assay Expiry Date</label></td> 
                 <td>
