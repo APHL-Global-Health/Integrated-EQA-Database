@@ -69,7 +69,7 @@ class Application_Service_Distribution {
     public function getShippedLabList($shipmentId) {
         try {
             $shipmentDb = new Application_Model_DbTable_Shipments();
-            $participantData = $shipmentDb->returnEnrolledLabs($shipmentId);
+            $participantData = $shipmentDb->returnEnrolledLabsForMail($shipmentId);
             $email = array();
             $shippingCode = '';
             if (count($participantData) > 0) {

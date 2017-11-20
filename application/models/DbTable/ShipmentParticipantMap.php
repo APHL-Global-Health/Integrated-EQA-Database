@@ -23,7 +23,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                   ->join(array('di' => 'distributions'), 'di.distribution_id = s.distribution_id',
                                 array('distribution_code', 'readinessdate'))
                         ->where("d.shipment_id = ?", $data['shipment_id']));
-         
+         $emails=array();
           foreach($labShipmentDetails as $key=>$value){
                $common = new Application_Service_Common();
                 
@@ -41,9 +41,13 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                       "<br>".
                       "<br>".$config->vleidEmailFooter;
                       
+              array_push($emails, $value['email']);
               
-               $common->sendGeneralEmail($value['email'],  $message, "participant");
               
+          }
+          
+          if(count($emails)>0){
+            $common->sendGeneralEmail($emails,  $message, "participant");
           }
          
     }

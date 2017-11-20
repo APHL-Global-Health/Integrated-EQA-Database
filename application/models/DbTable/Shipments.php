@@ -32,6 +32,20 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         return  $rResult = $this->getAdapter()->fetchAll($sQuery);
     }
     
+    public function returnEnrolledLabsForMail($shipmentId) {
+        $sQuery = $this->getAdapter()->select()
+                ->from(array('s' => 'shipment'), array('s.shipment_id','shipment_code', 's.status'))
+                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array('spm.map_id'))
+                ->join(array('p' => 'participant'),
+                        'p.participant_id=spm.participant_id', array('p.unique_identifier','email', 'p.first_name', 'p.last_name'))
+               ->where("s.shipment_id=?", $shipmentId)
+                ->where("s.status!='shipped' OR s.status!='evaluated'");
+        
+        return  $rResult = $this->getAdapter()->fetchAll($sQuery);
+    }
+    
+    
+    
     
     public function getShipmentRowInfo($sId) {
         $result = $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => 'shipment'))

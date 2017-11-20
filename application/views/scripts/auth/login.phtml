@@ -3,11 +3,15 @@
 	<div class="login-box" style="max-width: 430px; margin: auto; padding:15px; background-color: rgba(255, 255, 255, 0.85);">
 		<div class="login-logo">
 	        <h2><a href="javascript:void(0);">Login - <span> Proficiency Testing</span></a></h2>
+                
 	    </div><!-- /.login-logo -->
 
 		<div class="login-box-body">
-
-			
+                    <?php if(isset($_GET['status'])){ ?>
+               <div class="btn btn-success">
+                    <?php echo  $_GET['status']  ?>
+                </div>
+                    <?php } ?>	
 		<form name="loginForm" id="loginForm" class="form-vertical" method="post" onsubmit="validateLogin();return false;"
 			action="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>">
 
