@@ -46,9 +46,23 @@ class Application_Service_Distribution {
     }
 
     public function returnshippingMessage($shipmentName) {
-        $message = "Dear Participant,<br>"
-                . "Shipment <b> $shipmentName </b> has been shipped to your location.Pleas receive and do the neccessary";
+        $common = new Application_Service_Common();
+                
+               $config = new Zend_Config_Ini($common->configFileUrl(), APPLICATION_ENV);
+        $message = ""
+                . "This to notify you that your flow cytometry EQA panel (".$shipmentName.") from the NHRL proficiency testing programme is en route to your facility.".
+                " Please expect delivery within 1-2 working days.<br>".
+                
+                
+                
+                "Kindly acknowledge receipt and the condition of the panel immediately it is delivered using the link below:".
+                "<br><a href='".$common->baseUrl().'/participant/current-schemes'."' style='padding:14px;width:auto;".
+                       "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
+                      "NHRL Proficiency Testing Programme:<br> Viral Load/EID receipt</a><br>"
+                .$config->vleidEmailFooter;
 
+        
+        
         return $message;
     }
 

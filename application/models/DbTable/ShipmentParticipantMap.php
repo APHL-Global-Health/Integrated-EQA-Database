@@ -25,22 +25,24 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                         ->where("d.shipment_id = ?", $data['shipment_id']));
          
           foreach($labShipmentDetails as $key=>$value){
-               $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-                $common = new Application_Service_Common();
+               $common = new Application_Service_Common();
+                
+               $config = new Zend_Config_Ini($common->configFileUrl(), APPLICATION_ENV);
+              
               $message = "".
                       "This is a notification of an impending EQA round(".$value['distribution_code'].") for Viral Load/EID from the NHRL Proficiency Testing programme.".
                        "<br>Kindly let us know if you will be able to participate by filling the readiness assessment ".
                          "checklist using the link below:<br>".
                       
-                      "<br><a href='".$common->baseUrl().'/distributions'."' style='padding:14px;width:20%;".
+                      "<br><a href='".$common->baseUrl().'/distributions'."' style='padding:14px;width:auto;".
                        "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
                       "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>".
                       "Please complete by ".$value['readinessdate']." Failure to comply will result in exclusion from the round<br>". 
-                      "We appreciate your support. In case of any clarification, please do not hesitate to contact us at nhrlvleid@gmail.com<br>".
+                      "<br>".
                       "<br>".$config->vleidEmailFooter;
                       
               
-               $common->sendGeneralEmail($value['email'],  $message, null);
+               $common->sendGeneralEmail($value['email'],  $message, "participant");
               
           }
          

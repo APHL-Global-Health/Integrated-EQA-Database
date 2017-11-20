@@ -3,10 +3,13 @@
 class Application_Service_Common {
 
     
-      public function baseUrl() {
+    public function baseUrl() {
         return $_SERVER['SERVER_NAME'];//Zend_Controller_Front::getInstance()->getBaseUrl();
     }
     
+    public function configFileUrl() {
+        return APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini";
+    }
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
         //Send to email
         
@@ -100,7 +103,7 @@ class Application_Service_Common {
     public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-        $fullname = isset($fullname) ? $fullname : 'user';
+        $fullname = isset($fullname) ? $fullname : 'Participant';
         $message = "Dear $fullname,"
                 . "<br> $Message <br>"
                 . $config->emailRegistrationSignature;
