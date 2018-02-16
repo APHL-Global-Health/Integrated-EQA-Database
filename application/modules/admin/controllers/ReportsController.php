@@ -35,14 +35,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             $postedData['id'] = $roundInfo['id'];
             unset($postedData['round']);
         }
-        $counter =0;
+        $counter = 0;
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
             foreach ($data as $key => $value) {
                 $round = $this->returnValueWhere($value->id, 'tbl_bac_rounds');
-                $data[$key]->index =++$counter;
+                $data[$key]->index = ++$counter;
                 $data[$key]->daysLeft = $this->converttodays($data[$key]->endDate);
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
@@ -196,13 +196,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             }
         }
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $postedData, $orderArray, true, $groupArray);
-
+        $counter = 0;
         if ($data != false) {
 
             foreach ($data as $key => $value) {
                 $labDetails = $this->returnValueWhere($value->participantId, 'participant');
                 $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
                 $data[$key]->labDetails = $labDetails;
+                $data[$key]->index = ++$counter;
                 $data[$key]->batchName = $sample['batchName'];
                 $data[$key]->sampleInstructions = $sample['sampleInstructions'];
                 $data[$key]->sampleDetails = $sample['sampleDetails'];
