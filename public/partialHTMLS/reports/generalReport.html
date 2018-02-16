@@ -67,7 +67,7 @@
             </thead>
             <tbody>
             <tr dir-paginate="round in reports.generalRoundData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
-                <td>{{$index+1}}</td>
+                <td>{{round.index}}</td>
                 <td><a href="#/{{round.id}}"
                        data-placement="right" data-type="info" data-container="body"
                        data-animation="am-fade-and-scale"

@@ -35,14 +35,14 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             $postedData['id'] = $roundInfo['id'];
             unset($postedData['round']);
         }
-
+        $counter =0;
 
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_rounds', $col, $postedData, $orderArray, true, $groupArray);
 
         if ($data != false) {
             foreach ($data as $key => $value) {
                 $round = $this->returnValueWhere($value->id, 'tbl_bac_rounds');
-
+                $data[$key]->index =++$counter;
                 $data[$key]->daysLeft = $this->converttodays($data[$key]->endDate);
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
