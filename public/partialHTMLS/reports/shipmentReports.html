@@ -99,7 +99,7 @@
             </thead>
             <tbody>
             <tr dir-paginate="shipment in reports.shipmentReportData|filter:searchRounds | itemsPerPage: samples.itemsPerPage ">
-                <td>{{$index+1}}</td>
+                <td>{{shipment.index}}</td>
                 <td>{{shipment.lab.institute_name}}</td>
                 <td>{{shipment.round.roundName}}</td>
                 <td>{{shipment.sample.batchName}}</td>
