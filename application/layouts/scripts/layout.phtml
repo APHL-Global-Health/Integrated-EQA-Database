@@ -170,15 +170,18 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 <?php if (isset($authNameSpace->dm_id)) { ?>
                                     <li class="dropdown user user-menu">
                                         <a href="<?php echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true) ?>">
-                                            <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
+                                            <i class="icon icon-dashboard"></i> <span class="">
+                                                <?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
                                         </a>
                                     </li>
                                 <?php } else { ?>
                                     <li>
-                                        <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>"><i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
+                                        <a href="<?php echo $this->url(array("controller" => "contact-us", "action" => "index"), null, true) ?>">
+                                            <i class="icon icon-group"></i> <span>Request for PT Enrollment</span></a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
+                                        <a href="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>">
+                                            <i class="icon icon-lock"></i> <span>Participant Login</span></a>
                                     </li>
                                     <?php
                                 }
