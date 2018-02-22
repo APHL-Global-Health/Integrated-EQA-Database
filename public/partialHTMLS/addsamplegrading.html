@@ -18,6 +18,7 @@
     <strong>Response : </strong> {{samples.feedbackObject.fbMessage}}
 </div>
 
+
 <h3>MICROBIOLOGY IDENTIFICATION REPORT FORM</h3>
 <div class="">
     <table class="table table-bordered">
@@ -49,6 +50,145 @@
     </table>
 </div>
 <div class="clearfix">&nbsp;</div>
+<div class="" ng-init="samples.get">
+
+    <h3><u>ANTIMICROBIAL AGENT(AST)</u></h3>
+    <div class="panel panel-default bg-info" ng-show="!samples.checkSampleType(samples.clickedSample.sampleType,3)">
+        <div class="h4 col-md-12 text-capitalize">
+            <br>
+            <b> {{samples.clickedSample.batchName}}</b> Does not requires AST Testing
+        </div>
+        <br>
+    </div>
+    <div ng-show="samples.checkSampleType(samples.clickedSample.sampleType,3)">
+        <table class="table table-bordered">
+            <thead class="btn-primary">
+            <tr>
+                <th>
+                    ANTIMICROBIAL
+                    AGENT
+
+                </th>
+                <th>
+                    Reported to
+                    Clinician(Yes or No)
+
+                </th>
+                <th>
+                    DISK CONTENT
+                    (&micro;g or Units)
+
+                </th>
+                <!--<th>Score</th>-->
+                <th>
+                    S <sup>1</sup>
+                </th>
+                <th>
+                    I <sup>2</sup>
+                </th>
+                <th>
+                    R <sup>3</sup>
+                </th>
+                <th ng-init="where.testAgentType=3">
+                    <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length >1"
+                            ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                            class="fa fa-plus"></i></button>
+                </th>
+            </tr>
+            </thead>
+            <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
+
+            <tr ng-repeat="fields in samples.resultFields"
+                ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
+                <td nowrap>
+                    <input type="text" class="form-control"
+                           ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           id="antiMicroAgent" name="antiMicroAgent"
+                           class="form-control"
+                           data-min-length="0"
+                           data-html="0" data-auto-select="false" data-animation="am-flip-x" data-container="body"
+                           required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                           bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
+                           placeholder="Search Reagent" bs-typeahead
+
+                           ng-model="fields.antiMicroAgent">
+
+                </td>
+                <td>
+                    <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                            ng-model="fields.reportedToStatus">
+                        <option class="" selected disabled>--select reported--</option>
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                    </select>
+                </td>
+
+                <td><input type="text" class="form-control"
+                           ng-change="" ng-pattern="samples.numericOnly"
+                           ng-model="fields.diskContent"></td>
+
+                <td>
+                    <input type="radio" class="form-control" ng-change="" value="S" name="score{{$index}}"
+                           ng-model="fields.finalScore">
+                </td>
+                <td>
+                    <input type="radio" class="form-control" ng-change="" value="I" name="score{{$index}}"
+                           ng-model="fields.finalScore">
+                </td>
+                <td>
+                    <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"
+                           ng-model="fields.finalScore">
+                </td>
+                <td ng-init="samples.resultActiveFields=fields">
+                    <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
+                            ng-click="samples.resultAddField(0,$index)"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
+                            class="fa fa-plus"></i></button>
+                </td>
+            </tr>
+            <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
+              (resultsData.isolateProcessingScore.$invalid && !resultsData.isolateProcessingScore.$pristine ) }">
+                <td>Total Score</td>
+                <td colspan="6">
+                    <input class="form-control col-md-12" type="text" ng-pattern="samples.numericOnly"
+                           placeholder="enter total score"
+                           ng-model="samples.agentsScore" required name="agentScore">
+                </td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-warning col-md-12" ng-disabled="false"
+                                ng-click="samples.susceptibilityFormData =''"
+                        >Reset
+                        </button>
+                    </div>
+                </td>
+                <td colspan="6">
+                    <div class="col-md-12 no-padding">
+
+                        <button class="btn btn-success col-md-12"
+                                ng-click="samples.saveAntiMicroAgent(samples.resultFields,1,samples.agentsScore)"
+                                ng-disabled=" samples.savingInProgress||
+                                samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
+                        >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                        </button>
+
+
+                    </div>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 <form class="form-horizontal" novalidate="" name="resultsData">
     <table class="table table-bordered">
         <thead class="btn-primary">
@@ -74,12 +214,15 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter the grain stain results"
-                       ng-model="samples.resultsFormData.grainStainReaction"  name="grainStainReaction">
+                       ng-model="samples.resultsFormData.grainStainReaction" name="grainStainReaction">
             </td>
-            <td width="15%"><input class="form-control col-md-12"
-                                   ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="samples.resultsFormData.grainStainReactionScore" 
-                                   name="grainStainReactionScore"></td>
+            <td width="15%">
+                <input class="form-control col-md-12" ng-disabled="!samples.checkSampleType(samples.clickedSample.sampleType,1)
+                    ||!samples.checkSampleType(samples.clickedSample.sampleType,2)"
+                       ng-pattern="samples.numericOnly" placeholder="score"
+                       ng-model="samples.resultsFormData.grainStainReactionScore"
+                       name="grainStainReactionScore">
+            </td>
         </tr>
         <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
               (resultsData.primaryMediaScore.$invalid && !resultsData.primaryMediaScore.$pristine ) }">
@@ -88,11 +231,11 @@
                 <input class="form-control col-md-12" type="text"
                        ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Details of primary media "
-                        ng-init="samples.resultsFormData.primaryMedia='NONE'"
+                       ng-init="samples.resultsFormData.primaryMedia='NONE'"
                        ng-model="samples.resultsFormData.primaryMedia" value="NONE"
                        name="primaryMedia">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
                                    ng-model="samples.resultsFormData.primaryMediaScore"
                                    name="primaryMediaScore"></td>
@@ -103,7 +246,8 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Incubation conditions"
-                       ng-model="samples.resultsFormData.incubationConditions" ng-init="samples.resultsFormData.incubationConditions='NONE'"
+                       ng-model="samples.resultsFormData.incubationConditions"
+                       ng-init="samples.resultsFormData.incubationConditions='NONE'"
                        name="incubationConditions">
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
@@ -117,9 +261,10 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Colonial morphology"
-                       ng-model="samples.resultsFormData.colonialMorphology" ng-init="samples.resultsFormData.colonialMorphology='NONE'" name="colonialMorphology">
+                       ng-model="samples.resultsFormData.colonialMorphology"
+                       ng-init="samples.resultsFormData.colonialMorphology='NONE'" name="colonialMorphology">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
                                    ng-model="samples.resultsFormData.colonialMorphologyScore"
                                    name="colonialMorphologyScore"></td>
@@ -130,10 +275,11 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Bacterial quantification"
-                       ng-model="samples.resultsFormData.bacterialQualification" ng-init="samples.resultsFormData.bacterialQualification='NONE'"
+                       ng-model="samples.resultsFormData.bacterialQualification"
+                       ng-init="samples.resultsFormData.bacterialQualification='NONE'"
                        name="bacterialQualification">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
                                    ng-model="samples.resultsFormData.bacterialQualificationScore"
                                    name="bacterialQualificationScore"></td>
@@ -148,9 +294,10 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.bacterialReagents"
                        placeholder="Please enter Biochemical reagents"
-                       ng-model="samples.resultsFormData.bacterialReagents" ng-init="samples.resultsFormData.bacterialReagents='NONE'" name="bacterialReagents">
+                       ng-model="samples.resultsFormData.bacterialReagents"
+                       ng-init="samples.resultsFormData.bacterialReagents='NONE'" name="bacterialReagents">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
                                    ng-pattern="samples.numericOnly" placeholder="N/A"
                                    ng-model="samples.resultsFormData.bacterialReagentsScore"
                                    name="bacterialReagentsScore"></td>
@@ -160,11 +307,12 @@
             <td width="30%">Discuss further processing of isolate e.g. serotyping:</td>
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       placeholder="Please Discuss further processing" ng-init="samples.resultsFormData.isolateProcessing='NONE'"
+                       placeholder="Please Discuss further processing"
+                       ng-init="samples.resultsFormData.isolateProcessing='NONE'"
                        ng-model="samples.resultsFormData.isolateProcessing" required name="isolateProcessing">
             </td>
-            <td width="15%"><input class="form-control col-md-12" type="text"  ng-disabled="false"
-                                   ng-pattern="samples.numericOnly" placeholder="N/A" 
+            <td width="15%"><input class="form-control col-md-12" type="text" ng-disabled="false"
+                                   ng-pattern="samples.numericOnly" placeholder="N/A"
                                    ng-model="samples.resultsFormData.isolateProcessingScore"
                                    name="isolateProcessingScore"></td>
         </tr>
@@ -175,12 +323,12 @@
             <td width="55%">
                 <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                        placeholder="Please enter Final identification "
-                       ng-model="samples.resultsFormData.finalIdentification"  name="finalIdentification">
+                       ng-model="samples.resultsFormData.finalIdentification" name="finalIdentification">
 
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
                                    ng-pattern="samples.numericOnly" placeholder="score"
-                                   ng-model="samples.resultsFormData.finalIdentificationScore" 
+                                   ng-model="samples.resultsFormData.finalIdentificationScore"
                                    name="finalIdentificationScore"></td>
         </tr>
         <tr>
@@ -213,127 +361,4 @@
     </table>
 </form>
 </div>
-<div class="" ng-init="samples.get">
-    <h3><u>ANTIMICROBIAL AGENT</u></h3>
-    <table class="table table-bordered">
-        <thead class="btn-primary">
-        <tr>
-            <th>
-                ANTIMICROBIAL
-                AGENT
 
-            </th>
-            <th>
-                Reported to
-                Clinician(Yes or No)
-
-            </th>
-            <th>
-                DISK CONTENT
-                (&micro;g or Units)
-
-            </th>
-            <!--<th>Score</th>-->
-            <th>
-                S <sup>1</sup>
-            </th>
-            <th>
-                I <sup>2</sup>
-            </th>
-            <th>
-                R <sup>3</sup>
-            </th>
-            <th ng-init="where.testAgentType=3">
-                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length >1"
-                        ng-click="samples.resultAddField(0)"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                        class="fa fa-plus"></i></button>
-            </th>
-        </tr>
-        </thead>
-        <tbody ng-init="samples.getShipmentsForDelivery('tbl_bac_test_agents','testAgentType','3')">
-
-        <tr ng-repeat="fields in samples.resultFields"
-            ng-class="{ 'has-error'  :samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange' }">
-            <td nowrap>
-                <input type="text" class="form-control"
-                       ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       id="antiMicroAgent" name="antiMicroAgent"
-                       class="form-control"
-                       data-min-length="0"
-                       data-html="0" data-auto-select="false" data-animation="am-flip-x" data-container="body"
-                       required ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                       bs-options="icon.testAgentName as icon.testAgentName for icon in samples.testAgents"
-                       placeholder="Search Reagent" bs-typeahead
-
-                       ng-model="fields.antiMicroAgent">
-
-            </td>
-            <td>
-                <select class="form-control" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
-                        ng-model="fields.reportedToStatus">
-                    <option class="" selected disabled>--select reported--</option>
-                    <option value="yes">YES</option>
-                    <option value="no">NO</option>
-                </select>
-            </td>
-
-            <td><input type="text" class="form-control"
-                       ng-change="" ng-pattern="samples.numericOnly"
-                       ng-model="fields.diskContent"></td>
-
-            <td>
-                <input type="radio" class="form-control" ng-change="" value="S"  name="score{{$index}}" ng-model="fields.finalScore">
-            </td>
-            <td>
-                <input type="radio" class="form-control" ng-change=""  value="I" name="score{{$index}}"  ng-model="fields.finalScore">
-            </td>
-            <td>
-                <input type="radio" class="form-control" ng-change="" value="R" name="score{{$index}}"  ng-model="fields.finalScore">
-            </td>
-            <td ng-init="samples.resultActiveFields=fields">
-                <button class="btn btn-sm btn-success" ng-show="samples.resultFields.length > 1"
-                        ng-click="samples.resultAddField(0,$index)"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-sm btn-danger" ng-click="samples.resultAddField(1)"><i
-                        class="fa fa-plus"></i></button>
-            </td>
-        </tr>
-        <tr ng-class="{ 'has-error'  : resultsData.isolateProcessing.$invalid && !resultsData.isolateProcessing.$pristine ||
-              (resultsData.isolateProcessingScore.$invalid && !resultsData.isolateProcessingScore.$pristine ) }">
-            <td>Total Score</td>
-            <td colspan="6">
-                <input class="form-control col-md-12" type="text" ng-pattern="samples.numericOnly"
-                       placeholder="enter total score"
-                       ng-model="samples.agentsScore" required name="agentScore">
-            </td>
-
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <div class="col-md-12 no-padding">
-                    <button class="btn btn-warning col-md-12" ng-disabled="false"
-                            ng-click="samples.susceptibilityFormData =''"
-                    >Reset
-                    </button>
-                </div>
-            </td>
-            <td colspan="6">
-                <div class="col-md-12 no-padding">
-
-                    <button class="btn btn-success col-md-12"
-                            ng-click="samples.saveAntiMicroAgent(samples.resultFields,1,samples.agentsScore)"
-                            ng-disabled=" samples.savingInProgress||
-                                samples.checkReagentLevel(fields.antiMicroAgent,fields.diskContent)=='outOfRange'"
-                    >Save<i class="fa fa-spin {{samples.savingSpinner}}"></i>
-                    </button>
-
-
-                </div>
-            </td>
-
-        </tr>
-
-        </tbody>
-    </table>
-</div>

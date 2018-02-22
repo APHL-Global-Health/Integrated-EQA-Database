@@ -521,6 +521,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
+                        $dataDB[$key]->sampleType = $sample['sampleType'];
                     } else if ($tableName == 'tbl_bac_panel_mst') {
 
                         $dataDB[$key]->totalSamplesAdded = $this->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
@@ -1021,7 +1022,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
             }
 
 
-            $where = sizeof($where) > 0 ? $where : "";
+            $where = is_array($where)  ? $where : "";
 //print_r($postedData);
 //exit;
 
@@ -1492,6 +1493,13 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action {
                         unset($updateInfo['totalLabsAdded']);
                     }
                 }
+
+                if ($dataArray['tableName'] == 'tbl_bac_expected_results') {
+                    if (isset($updateInfo['sampleType'])) {
+                        unset($updateInfo['sampleType']);
+                    }
+                }
+
 
                 $data = $this->dbConnection->updateTable($dataArray['tableName'], (array) $dataArray['where'], $updateInfo);
 

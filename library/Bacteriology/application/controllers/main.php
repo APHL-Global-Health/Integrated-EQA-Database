@@ -1,14 +1,16 @@
 <?php
 
 require_once substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-        . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
+    . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'tcpdf.php';
 require_once 'pdfCreator.php';
 
-Class Main extends pdfCreator {
+Class Main extends pdfCreator
+{
 
     public $connect_db;
 
-    public function __construct() {
+    public function __construct()
+    {
 
 
         $conf = parse_ini_file(APPLICATION_PATH . "/configs/application.ini");
@@ -23,12 +25,14 @@ Class Main extends pdfCreator {
         return true;
     }
 
-    public function returnFileImagePath($imageName) {
+    public function returnFileImagePath($imageName)
+    {
         return substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, stripos($_SERVER['CONTEXT_DOCUMENT_ROOT'], 'public'))
-                . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
+            . 'library' . DIRECTORY_SEPARATOR . 'tcpdf' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageName;
     }
 
-    public function createInsertStatement($tableName, $dataArray) {
+    public function createInsertStatement($tableName, $dataArray)
+    {
         $query['status'] = false;
         $dataArray['createdBy'] = $this->getUserSession();
         try {
@@ -58,7 +62,8 @@ Class Main extends pdfCreator {
         return $query;
     }
 
-    public function insertData($tableName, $dataArray) {
+    public function insertData($tableName, $dataArray)
+    {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {
@@ -92,11 +97,13 @@ Class Main extends pdfCreator {
         return ($error);
     }
 
-    public function deleteWhereCols($where, $table) {
-        
+    public function deleteWhereCols($where, $table)
+    {
+
     }
 
-    public function returnWhereStatement($array, $group = "", $tableName = "") {
+    public function returnWhereStatement($array, $group = "", $tableName = "")
+    {
 
         $where = ' where ';
         if (is_array($array)) {
@@ -136,7 +143,8 @@ Class Main extends pdfCreator {
         }
     }
 
-    public function selectFromTable($tableName, $where = "", $group = "") {
+    public function selectFromTable($tableName, $where = "", $group = "")
+    {
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
@@ -156,7 +164,10 @@ Class Main extends pdfCreator {
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_object()) {
+
+
                 $user_arr[] = $row;
+
             }
 
             return $user_arr;
@@ -165,14 +176,16 @@ Class Main extends pdfCreator {
         }
     }
 
-    public function updateAndDelete($sql) {
+    public function updateAndDelete($sql)
+    {
 
         $result = $this->connect_db->query($sql);
 
         return true;
     }
 
-    public function doQuery($sql, $count = null) {
+    public function doQuery($sql, $count = null)
+    {
 //        echo$sql;
 //        exit;
 //        var_dump($this->connect_db->error);
@@ -198,8 +211,9 @@ Class Main extends pdfCreator {
         }
     }
 
-    
-    public function returnReportsWhereStmnt($array, $orderBy, $group = '', $groupArray = '', $tableName = '') {
+
+    public function returnReportsWhereStmnt($array, $orderBy, $group = '', $groupArray = '', $tableName = '')
+    {
 
         $where = ' where ';
         if (is_array($array)) {
@@ -243,7 +257,8 @@ Class Main extends pdfCreator {
         return $where;
     }
 
-    public function selectReportFromTable($tableName, $col, $where, $order, $group = '', $groupArray = '') {
+    public function selectReportFromTable($tableName, $col, $where, $order, $group = '', $groupArray = '')
+    {
 
         $sql = "SELECT " . implode(',', $col) . " FROM $tableName";
 //        print_r($sql);
@@ -271,7 +286,8 @@ Class Main extends pdfCreator {
         }
     }
 
-    public function selectCount($tableName, $where, $col, $sum = '') {
+    public function selectCount($tableName, $where, $col, $sum = '')
+    {
 
         if ($sum) {
             $sql = "SELECT sum($col) FROM $tableName";
@@ -298,21 +314,22 @@ Class Main extends pdfCreator {
         // output data of each row
     }
 
-    public function returnParticipatinglabs($where){
-        $columns = array('participant.MflCode','mfl_facility_codes.County','institute_name','roundName','tbl_bac_rounds_labs.dateCreated','OperationStatus','participant.contact_name');
+    public function returnParticipatinglabs($where)
+    {
+        $columns = array('participant.MflCode', 'mfl_facility_codes.County', 'institute_name', 'roundName', 'tbl_bac_rounds_labs.dateCreated', 'OperationStatus', 'participant.contact_name');
 //        tbl_bac_rounds_labs,mfl_facility_codes,participant
-        
+
         $selecetColumns = implode(',', $columns);
         $sql = "SELECT $selecetColumns FROM  tbl_bac_rounds_labs "
-                . " JOIN participant ON tbl_bac_rounds_labs.labId =participant.participant_id "
-                . " JOIN tbl_bac_rounds ON tbl_bac_rounds.id =tbl_bac_rounds_labs.roundId "
-                . " JOIN mfl_facility_codes ON mfl_facility_codes.MflCode = participant.MflCode $where";
+            . " JOIN participant ON tbl_bac_rounds_labs.labId =participant.participant_id "
+            . " JOIN tbl_bac_rounds ON tbl_bac_rounds.id =tbl_bac_rounds_labs.roundId "
+            . " JOIN mfl_facility_codes ON mfl_facility_codes.MflCode = participant.MflCode $where";
 
         $result = $this->connect_db->query($sql);
 //echo $sql;exit;
         if ($result->num_rows > 0) {
             // output data of each row
-            
+
             while ($row = $result->fetch_object()) {
                 $user_arr[] = $row;
             }
@@ -322,8 +339,9 @@ Class Main extends pdfCreator {
             return false;
         }
     }
-    
-    function selectFromDStatusTable($tableName, $where = "") {
+
+    function selectFromDStatusTable($tableName, $where = "")
+    {
         $col = $where['column'];
         $status = $where['status'];
         $sql = "SELECT * FROM $tableName where $col in ($status)";
@@ -342,7 +360,8 @@ Class Main extends pdfCreator {
         }
     }
 
-    function selectFromDStatusTableSamples($tableName, $where = "", $participantId) {
+    function selectFromDStatusTableSamples($tableName, $where = "", $participantId)
+    {
         $col = $where['column'];
         $status = $where['status'];
         $sql = "SELECT * FROM $tableName where $col in ($status) and roundId is not NULL and participantId=$participantId";
@@ -361,7 +380,8 @@ Class Main extends pdfCreator {
         }
     }
 
-    public function deleteFromWhere($tableName, $where) {
+    public function deleteFromWhere($tableName, $where)
+    {
         $error['status'] = 0;
         try {
             if (isset($tableName)) {
@@ -395,12 +415,14 @@ Class Main extends pdfCreator {
     }
 
     public
-            function generataPile() {
-        
+    function generataPile()
+    {
+
     }
 
     public
-            function updateTable($tableName, $where, $updateData) {
+    function updateTable($tableName, $where, $updateData)
+    {
         try {
             $error['status'] = 0;
             if (isset($tableName)) {
@@ -435,7 +457,8 @@ Class Main extends pdfCreator {
     }
 
     public
-            function returnUpdateStatement($updateInfo) {
+    function returnUpdateStatement($updateInfo)
+    {
         try {
             $updateInfo['lastUpdatePerson'] = $this->getUserSession();
 //            $updateInfo['updateDate'] = $this->getUserSession();
@@ -444,7 +467,7 @@ Class Main extends pdfCreator {
                 $updateStatement .= ' set ';
                 $counter = 0;
                 foreach ($updateInfo as $key => $value) {
-
+                    $value = is_array($value) ? implode(",", $value) : $value;
                     $updateStatement .= $key . "=" . " '$value' ";
 
                     $counter++;
@@ -456,12 +479,13 @@ Class Main extends pdfCreator {
 
             return $updateStatement;
         } catch (Exception $e) {
-            
+
         }
     }
 
     public
-            function getUserSession() {
+    function getUserSession()
+    {
         if (isset($_SESSION)) {
             if (isset($_SESSION['administrators'])) {
                 return $_SESSION['administrators']['admin_id'];
@@ -475,8 +499,9 @@ Class Main extends pdfCreator {
     }
 
     public
-            function generatePanelLabels() {
-        
+    function generatePanelLabels()
+    {
+
     }
 
 }
