@@ -10,103 +10,114 @@
         <h3> Test Samples
             <small>{{samples.samplesData.length}} records</small>
             <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-            <div class="pull-right col-mod-12">
-
-                <items-per-page></items-per-page>
-                <div class="col-md-8 pull-right">
-                    <input type="search" class="col-md-12 btn-sm"  placeholder="search samples"
-                           ng-model="samples.searchData">
-                </div>
-                <div class="col-md-1 pull-right">
-                    <button class=" btn btn-default btn-sm"
-                            ng-click="samples.getAllSamples('tbl_bac_samples', samples.where)"><i
-                            class="fa fa-refresh"></i>
-                    </button>
-                    &nbsp;
-                </div>
-            </div>
-        </h3>
-
-
-        <div class="panel panel-body text-sm no-padding">
-
             <div class="pull-right">
-                <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="samples.where.addedStatus"
-                  ng-change="samples.getAllSamples('tbl_bac_samples',samples.where)">Show Inactive
+
                 <a class="label label-success" href="#"
                    ng-click="samples.samplesActivePage('viewExpectedResults', 0)">
                     <i class="fa fa-eye"></i> view expected results
                 </a>
 
             </div>
+        </h3>
+        <div class="panel panel-default bg-info">
+            <div class=" col-md-12 text-capitalize panel-body">
+                <items-per-page></items-per-page>
+                <div class="col-md-6 ">
+                    <input type="search" class="form-control" class="col-md-12 btn-sm" placeholder="search samples"
+                           ng-model="samples.searchData">
+                </div>
+                <div class="col-md-2 ">
+                    <div class="form-control btn-sm">
+                        <input type="checkbox"
+                               ng-true-value="1" ng-false-value="0" ng-model="samples.where.addedStatus"
+                               ng-change="samples.getAllSamples('tbl_bac_samples',samples.where)">Show Inactive
+                    </div>
+
+                </div>
+                <div class="col-md-1 ">
+                    <button class=" btn btn-default form-control"
+                            ng-click="samples.getAllSamples('tbl_bac_samples', samples.where)"><i
+                            class="fa fa-refresh"></i>
+                    </button>
+                    &nbsp;
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="panel panel-body text-sm no-padding">
+
+
             <br>
             <div class="table-responsive">
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
-                        <tr>
-                            <th>#.</th>
-                            <th>Batch name</th>
-                            <th>Date prepared</th>
-                            <th>Lifespan</th>
-                            <th>Prepared By</th>
+                    <tr>
+                        <th>#.</th>
+                        <th>Batch name</th>
+                        <th>Date prepared</th>
+                        <th>Lifespan</th>
+                        <th>Prepared By</th>
 
-                            <th>Prepared At</th>
-                            <th>Material Type</th>
-                            <th>Material Origin</th>
-                            <!--                                <th>Date Saved</th>-->
-                            <th>Material Source</th>
+                        <th>Prepared At</th>
+                        <th>Material Type</th>
+                        <th>Material Origin</th>
+                        <!--                                <th>Date Saved</th>-->
+                        <th>Material Source</th>
 
-                            <th>Exp'd Results</th>
-                            <th></th>
-                        </tr>
+                        <th>Exp'd Results</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr dir-paginate="sample in samples.samplesData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|filter:samples.where">
-                            <td>{{$index + 1}}</td>
-                            <td><a href="#" ng-click="samples.showRoundFullUsers(sample)">{{sample.batchName}}</a></td>
-                            <td>{{sample.datePrepared}}</td>
-                            <td>{{sample.lifespan}}</td>
-                            <td>{{sample.preparedBy}}</td>
-                            <td nowrap>{{sample.preparedAt}}</td>
-                            <td nowrap>{{sample.materialType}}</td>
-                            <td nowrap>{{sample.materialOrigin}}</td>
-                            <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
-                            <td nowrap>{{sample.materialSource}}</td>
-                            <td nowrap>
-                                <a href="" target="_self" ng-show="sample.expectedResults == 0" target="_self" ng-click="samples.addSampleGrading(sample)">Add expected
-                                    Results</a>
-                    <x  ng-show="sample.expectedResults == 1">
-                        Results added
-                    </x>
+                    <tr dir-paginate="sample in samples.samplesData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|filter:samples.where">
+                        <td>{{$index + 1}}</td>
+                        <td><a href="#" ng-click="samples.showRoundFullUsers(sample)">{{sample.batchName}}</a></td>
+                        <td>{{sample.datePrepared}}</td>
+                        <td>{{sample.lifespan}}</td>
+                        <td>{{sample.preparedBy}}</td>
+                        <td nowrap>{{sample.preparedAt}}</td>
+                        <td nowrap>{{sample.materialType}}</td>
+                        <td nowrap>{{sample.materialOrigin}}</td>
+                        <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
+                        <td nowrap>{{sample.materialSource}}</td>
+                        <td nowrap>
+                            <a href="" target="_self" ng-show="sample.expectedResults == 0" target="_self"
+                               ng-click="samples.addSampleGrading(sample)">Add expected
+                                Results</a>
+                            <x ng-show="sample.expectedResults == 1">
+                                Results added
+                            </x>
 
-                    </td>
-                    <td nowrap>
-                        <button class="btn btn-info btn-sm"
-                                data-placement="right" data-type="info" data-container="body"
-                                data-animation="am-fade-and-scale"
-                                data-trigger="hover" data-type="success" data-title="Edit Sample" bs-tooltip
-                                ng-click="samples.editFunction(sample, 'tbl_bac_samples')"><i
-                                class="fa fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm"
-                                data-placement="right" data-type="info" data-container="body"
-                                data-animation="am-fade-and-scale"
-                                data-trigger="hover" data-type="success" data-title="Remove Sample" bs-tooltip
-                                ng-click="samples.deleteCustomRow(sample.id, 'tbl_bac_samples')"
-                                ><i class="fa fa-remove"></i></button>
+                        </td>
+                        <td nowrap>
+                            <button class="btn btn-info btn-sm"
+                                    data-placement="right" data-type="info" data-container="body"
+                                    data-animation="am-fade-and-scale"
+                                    data-trigger="hover" data-type="success" data-title="Edit Sample" bs-tooltip
+                                    ng-click="samples.editFunction(sample, 'tbl_bac_samples')"><i
+                                    class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"
+                                    data-placement="right" data-type="info" data-container="body"
+                                    data-animation="am-fade-and-scale"
+                                    data-trigger="hover" data-type="success" data-title="Remove Sample" bs-tooltip
+                                    ng-click="samples.deleteCustomRow(sample.id, 'tbl_bac_samples')"
+                            ><i class="fa fa-remove"></i></button>
 
-                        <button class="btn btn-success btn-sm"
-                                data-placement="right" data-type="info" data-container="body"
-                                data-animation="am-fade-and-scale" ng-click="samples.addSampleInstructions(sample)"
-                                data-trigger="hover" data-type="success" data-title="Add Instructions" bs-tooltip
-                                ><i class="fa fa-info"></i></button>
-                        <!--                            <a class="btn btn-primary btn-sm" href="#barcodeModal"
-                                                       data-placement="right" data-type="info" data-container="body"
-                                                       data-animation="am-fade-and-scale" ng-disabled="true"
-                                                       data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip
-                                                       data-backdrop="false" data-toggle="modal"
-                                                       ng-click="samples.generateBarcode(sample)"><i class="fa fa-barcode"></i>
-                                                    </a>-->
-                    </td>
+                            <button class="btn btn-success btn-sm"
+                                    data-placement="right" data-type="info" data-container="body"
+                                    data-animation="am-fade-and-scale" ng-click="samples.addSampleInstructions(sample)"
+                                    data-trigger="hover" data-type="success" data-title="Add Instructions" bs-tooltip
+                            ><i class="fa fa-info"></i></button>
+                            <!--                            <a class="btn btn-primary btn-sm" href="#barcodeModal"
+                                                           data-placement="right" data-type="info" data-container="body"
+                                                           data-animation="am-fade-and-scale" ng-disabled="true"
+                                                           data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip
+                                                           data-backdrop="false" data-toggle="modal"
+                                                           ng-click="samples.generateBarcode(sample)"><i class="fa fa-barcode"></i>
+                                                        </a>-->
+                        </td>
                     </tr>
 
                     </tbody>

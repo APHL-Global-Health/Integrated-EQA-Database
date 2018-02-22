@@ -1575,8 +1575,8 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         .directive('itemsPerPage', function () {
             return {
                 restrict: 'EA',
-                template: "<div class='dropdown col-md-3 col-sm-12  pull-right'>" +
-                        "<button class='text-capitalize btn btn-success btn-sm dropdown-toggle' type='button'" +
+                template: "<div class='dropdown  col-md-3 col-sm-12  pull-right'>" +
+                        "<button class='text-capitalize  btn btn-success btn-sm dropdown-toggle' type='button'" +
                         "id='menu1' data-toggle='dropdown'>Items Per Page {{samples.itemsPerPage}}" +
                         "<span class='caret'></span></button>" +
                         "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>" +

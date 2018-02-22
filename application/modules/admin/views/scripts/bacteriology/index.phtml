@@ -5,45 +5,37 @@
             <div class="">
                 <ul class="nav nav-tabs" ng-init="clickedTab = 'samples'">
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'samples'}">
-                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('viewsamples')"">Manage Samples</a>
+                        <a href="" ng-click="clickedTab = 'samples';samples.samplesActivePage('viewsamples')"">Manage
+                        Samples</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'Packaging'}">
-                        <a href="" ng-click="clickedTab = 'Packaging';samples.samplesActivePage('viewPackaging')">Manage Packaging</a>
+                        <a href="" ng-click="clickedTab = 'Packaging';samples.samplesActivePage('viewPackaging')">Manage
+                            Packaging</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'shipments'}">
-                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('viewshipments')">Manage Shipments</a>
+                        <a href="" ng-click="clickedTab = 'shipments';samples.samplesActivePage('viewshipments')">Manage
+                            Shipments</a>
                     </li>
                     <li class='pull-left ' ng-class="{'active' : clickedTab == 'rounds'}">
-                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('viewrounds')">Config Rounds</a>
+                        <a href="" ng-click="clickedTab = 'rounds';samples.samplesActivePage('viewrounds')">Config
+                            Rounds</a>
                     </li>
                     <li class='pull-right'>
-                        <div class="dropdown">
 
-                            <button class="text-capitalize btn btn-default btn-sm dropdown-toggle" type="button"
-                                    id="menu1" data-toggle="dropdown">{{clickedTab|capitalizeLetter}} &nbsp;
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <div class="dropdown  pull-right text-capitalize btn btn-success btn-sm">
+                            <x class=" dropdown-toggle"
+                                    data-toggle="dropdown" style="color:white !important;"> Extras
+                                <span class="caret"  style="color:white !important;"></span></x>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" ng-click="samples.samplesActivePage('viewCouriers')">Couriers</a></li>
 
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('add'+clickedTab)"><i
-                                                class="fa fa-fw fa-save"></i> Add {{clickedTab|capitalizeLetter}}</a>
-
+                                <li><a href="#" ng-click="samples.samplesActivePage('viewTestAgents')">Test Reagents</a>
                                 </li>
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('view'+clickedTab)"><i
-                                                class="fa fa-fw fa-folder"></i> View {{clickedTab|capitalizeLetter}}</a>
-
-                                </li>
-                                <!--
-                                <li role="presentation">
-                                    <a href="#" ng-click="samples.samplesActivePage('reports'+clickedTab)"><i
-                                                class="fa fa-fw fa-search-plus"></i>
-                                        {{clickedTab|capitalizeLetter}} Report </a>
-                                </li>
-                                -->
+                                <li><a href="#" ng-click="samples.samplesActivePage('addGradingLevels')">Grades</a></li>
+                                <li><a href="#" ng-click="samples.samplesActivePage('testTypes')">Test Types</a></li>
                             </ul>
-
                         </div>
+
 
                         <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
                         -->
@@ -59,22 +51,8 @@
                 <!---->
                 <!--                </div>-->
                 <div>
-                    <div class="dropdown btn-sm btn btn-success pull-right ">
-                        <a class="dropdown-toggle" data-toggle="dropdown" style="color:white !important;"> Extras
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" ng-click="samples.samplesActivePage('viewCouriers')">Couriers</a></li>
-                            <!--                        <li><a href="#" ng-click="samples.samplesActivePage('viewprograms')">Programs</a></li>-->
 
-                            <li><a href="#" ng-click="samples.samplesActivePage('viewTestAgents')">Test Reagents</a>
-                            </li>
 
-                            <!--                        <li><a href="#"  ng-click="samples.samplesActivePage('calendar')">Round Calendar</a></li>-->
-                            <li><a href="#" ng-click="samples.samplesActivePage('addGradingLevels')">Grades</a></li>
-                            <li><a href="#" ng-click="samples.samplesActivePage('testTypes')">Test Types</a></li>
-                        </ul>
-                    </div>
-                
                     <div class="btn btn-sm btn-primary pull-right "
                          ng-click="samples.samplesActivePage('add'+clickedTab)">
                         <i class="fa fa-plus"></i> Add {{clickedTab|capitalizeLetter}}
