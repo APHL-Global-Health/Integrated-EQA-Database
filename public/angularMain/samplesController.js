@@ -3100,7 +3100,7 @@
             if (tableName == 'tbl_bac_expected_results') {
                 $scope.samples.resultsFormData = data;
                 console.log(data)
-                $scope.samples.clickedSample.sampleType = data.sampleType;
+                //$scope.samples.clickedSample.sampleType = data.sampleType;
                 $scope.samples.samplesActivePage('addsamplegrading', 0);
                 getMicroAgents(data)
 
