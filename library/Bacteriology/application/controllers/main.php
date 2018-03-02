@@ -62,6 +62,15 @@ Class Main extends pdfCreator
         return $query;
     }
 
+    public function generateThatDuplicateError($tableName)
+    {
+        if($tableName=='tbl_bac_samples'){
+            return 'Duplicate sample name,please try another sample name';
+        }
+
+        return '';
+    }
+
     public function insertData($tableName, $dataArray)
     {
         $error['status'] = 0;
@@ -82,7 +91,10 @@ Class Main extends pdfCreator
                             $error['status'] = 1;
                             $error['message'] = $this->connect_db->insert_id;
                         } else {
-                            $error['message'] = $this->connect_db->error;
+                            $message = $this->generateThatDuplicateError($tableName);
+
+                            $error['message'] = $message == '' ? $this->connect_db->error : $message;
+
                         }
                     }
                 } else {

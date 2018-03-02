@@ -22,72 +22,73 @@ EptServices.service('EptServices', function () {
 
     this.EptServiceObject.returnServerErrorAlert = function (message) {
         $.alert(
-                {
-                    title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
-                    content: angular.isDefined(message) ? message : ' Server error occurred,please try again.'
-                }
+            {
+                title: '<i class="fa fa-exclamation-triangle text-danger"></i> Warning',
+                content: angular.isDefined(message) ? message : ' Server error occurred,please try again.'
+            }
         );
     }
     this.EptServiceObject.returnNoRecordsFoundAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                    content: ' No Records found.'
-                }
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' No Records found.'
+            }
         );
 
     }
     this.EptServiceObject.returnNoRecordsFoundFiltersAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                    content: ' No Records found with selected filters.'
-                }
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' No Records found with selected filters.'
+            }
         );
 
     }
     this.EptServiceObject.returnDuplicateAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
-                    content: ' You are try to re-submit already submitted data,please go back and edit instead.'
-                }
+            {
+                title: '<i class="fa fa-exclamation-triangle text-warning"></i> Notice',
+                content: ' You are try to re-submit already submitted data,please go back and edit instead.'
+            }
         );
 
     }
     this.EptServiceObject.returnProgressAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
-                    content: 'Action in progress,please wait ...'
-                }
+            {
+                title: '<i class="fa fa-spin fa-spinner  text-info"></i> In progress',
+                content: 'Action in progress,please wait ...'
+            }
         );
 
     }
     this.EptServiceObject.returnActionSuccessAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-check-circle text-success"></i> Success',
-                    content: ' Action was successful.'
-                }
+            {
+                title: '<i class="fa fa-check-circle text-success"></i> Success',
+                content: ' Action was successful.'
+            }
         );
 
     }
     this.EptServiceObject.returnDeleteAlert = function () {
         $.alert(
-                {
-                    title: '<i class="fa fa-check-circle text-success"></i> Success',
-                    content: '1 row deleted successfully.'
-                }
+            {
+                title: '<i class="fa fa-check-circle text-success"></i> Success',
+                content: '1 row deleted successfully.'
+            }
         );
 
     }
-    this.EptServiceObject.returnActionUnSuccessAlert = function () {
+    this.EptServiceObject.returnActionUnSuccessAlert = function (message) {
+
         $.alert(
-                {
-                    title: '<i class="fa fa-exclamation-circle text-warning"></i> Alert',
-                    content: ' Action was Unsuccessful,please retry'
-                }
+            {
+                title: '<i class="fa fa-times-circle text-danger"></i> Alert',
+                content: angular.isDefined(message) ? message : ' Action was Unsuccessful,please retry'
+            }
         );
 
     }
@@ -118,7 +119,7 @@ EptServices.service('EptServices', function () {
                 return num + "%";
 
                 break;
-    }
+        }
     }
     this.EptServiceObject.returnBarcode = function () {
         var barcode = Math.random().toString();

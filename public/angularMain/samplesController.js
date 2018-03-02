@@ -1251,15 +1251,18 @@
                                 .success(function (response) {
 
                                     console.log('data')
-                                    console.log(response.data)
+                                    console.log(response.data.message)
                                     changeSavingSpinner(false);
                                     if (angular.isDefined(response.data)) {
+
                                         if (response.data.status == 1) {
                                             emptyFormData(tableName, false);
                                             changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status));
                                         } else {
-                                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                                            EptServices.EptServiceObject.returnActionUnSuccessAlert(response.data.message);
                                         }
+
+
                                     } else {
                                         var message = EptServices.EptServiceObject.returnTableColumn(tableName)
                                         changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.data.status, message));
