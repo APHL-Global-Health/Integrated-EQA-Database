@@ -555,6 +555,10 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->institute = $lab['institute_name'];
 //                        $dataDB[$key]->batchName = $sample['batchName'];
                     }
+                    else if($tableName == 'tbl_bac_samples'){
+                        $dataDB[$key]->sampleType=str_replace('"','',str_replace("]",'',
+                            str_replace("[",'',$value->sampleType)));
+                    }
                 }
             }
             return $dataDB;
@@ -1116,7 +1120,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             if ($tableName == 'tbl_bac_panels_shipments') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
-            } else if ($tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs' || $tableName == 'tbl_bac_expected_results') {
+            } else if ($tableName == 'tbl_bac_samples' ||$tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs' || $tableName == 'tbl_bac_expected_results') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);

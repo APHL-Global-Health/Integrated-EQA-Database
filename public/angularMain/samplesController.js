@@ -52,6 +52,8 @@
         }
         $scope.samples.returnArraySampleTypes = function (sampleType) {
             console.log(sampleType)
+
+
             return JSON.parse("[" + sampleType + "]");
 
         }

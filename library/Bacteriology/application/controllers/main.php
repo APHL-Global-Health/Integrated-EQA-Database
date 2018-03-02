@@ -68,6 +68,17 @@ Class Main extends pdfCreator
             return 'Duplicate sample name,please try another sample name';
         }
 
+        if($tableName=="tbl_bac_panel_mst"){
+            return 'Duplicate panel name,please try another panel name';
+        }
+        if($tableName=="tbl_bac_shipments"){
+            return 'Duplicate shipment name,please try another shipment name';
+        }
+
+        if($tableName=="tbl_bac_rounds"){
+            return 'Duplicate round name,please try another round name';
+        }
+
         return '';
     }
 
@@ -79,7 +90,7 @@ Class Main extends pdfCreator
                 if (isset($dataArray) && is_array($dataArray)) {
 
                     $queryStatement = $this->createInsertStatement($tableName, $dataArray);
-                    if ($tableName == 'tbl_bac_sample_to_panel') {
+                    if ($tableName == 'tbl_bac_samples') {
 //                        echo $queryStatement;
 //                        exit;
                     }

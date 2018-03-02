@@ -12,6 +12,17 @@
     </div>
     <br>
 </div>
+<div class="panel panel-default bg-info">
+    <div class="col-md-12 text-capitalize">
+        <div class=""> Tests To Be Done</div>
+        <ul>
+            <li ng-repeat="item in samples.returnArraySampleTypes(samples.clickedSample.sampleType)">
+                {{samples.returnSampleType(item)}}
+
+            </li>
+        </ul>
+    </div>
+</div>
 <div id='alert' tabindex='1'></div>
 <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-show="samples.feedbackObject.fbStatus">
     <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -217,8 +228,7 @@
                        ng-model="samples.resultsFormData.grainStainReaction" name="grainStainReaction">
             </td>
             <td width="15%">
-                <input class="form-control col-md-12" ng-disabled="!samples.checkSampleType(samples.clickedSample.sampleType,1)
-                    ||!samples.checkSampleType(samples.clickedSample.sampleType,2)"
+                <input class="form-control col-md-12" ng-disabled="!samples.checkSampleType(samples.clickedSample.sampleType,1)"
                        ng-pattern="samples.numericOnly" placeholder="score"
                        ng-model="samples.resultsFormData.grainStainReactionScore"
                        name="grainStainReactionScore">
@@ -327,6 +337,7 @@
 
             </td>
             <td width="15%"><input class="form-control col-md-12" type="text"
+                                   ng-disabled="!samples.checkSampleType(samples.clickedSample.sampleType,2)"
                                    ng-pattern="samples.numericOnly" placeholder="score"
                                    ng-model="samples.resultsFormData.finalIdentificationScore"
                                    name="finalIdentificationScore"></td>
