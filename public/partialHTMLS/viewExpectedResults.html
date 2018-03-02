@@ -33,29 +33,31 @@
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Server Response : </strong> {{samples.feedbackObject.fbMessage}}
     </div>
-    <div ng-init="scoreCols=false" class="col-md-12 text-primary">
 
-        <a href="#" ng-click="scoreCols=false" ng-show="scoreCols"><i class="fa fa-check-circle"></i> hide score columns</a>
-        <a href="#" ng-click="scoreCols=true" ng-hide="scoreCols"><i class="fa fa-minus-circle"></i> show score columns</a>
-    </div>
     <div class="col-md-12 no-padding" style="overflow-x:auto;">
         <table class="table table-bordered text-capitalize">
             <thead>
             <tr class="btn-primary">
                 <th>#</th>
                 <th>Sample</th>
+                <th>Test</th>
                 <!--<th>Round</th>-->
                 <th>grain Stain Reaction</th>
-                <th ng-show="scoreCols">grain StainScore</th>
-                <th>primary Media</th>
-                <th ng-show="scoreCols">primaryMedia Score</th>
-                <th>incubation Conditions</th>
-                
-                <th>colonial Morphology</th>
-                <th>bacterial Qualification</th>
-                <th>bacterial Reagents</th>
+
+                <!--
+                ========================================================================================
+                ----------------------------Colmuns Other information-----------------------------------
+                =========================================================================================
+                -->
+
+                <th>Other Information</th>
+                <!--
+                ========================================================================================
+                ----------------------------+++++++++++++------------------------------------------
+                =========================================================================================
+                -->
+
                 <th>final Identification</th>
-                <th ng-show="scoreCols">final Identification Score</th>
                 <th>Date Created</th>
                 <th></th>
             </tr>
@@ -64,16 +66,37 @@
             <tr dir-paginate="expectedResults in samples.expectedResults | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
                 <td>{{$index+1}}</td>
                 <td>{{expectedResults.batchName}}</td>
-                <td>{{expectedResults.grainStainReaction}}</td>
-                <td ng-show="scoreCols">{{expectedResults.grainStainReactionScore}}</td>
-                <td>{{expectedResults.primaryMedia}}</td>
-                <td ng-show="scoreCols">{{expectedResults.primaryMediaScore}}</td>
-                <td>{{expectedResults.incubationConditions}}</td>
-                <td>{{expectedResults.colonialMorphology}}</td>
-                <td>{{expectedResults.bacterialQualification}}</td>
-                <td>{{expectedResults.bacterialReagents}}</td>
-                <td>{{expectedResults.finalIdentification}}</td>
-                <td ng-show="scoreCols">{{expectedResults.finalIdentificationScore}}</td>
+                <td>
+                    <b ng-repeat="item in samples.returnArraySampleTypes(expectedResults.sampleType)">
+                        {{samples.returnSampleType(item)}}<br>
+
+                    </b>
+                </td>
+                <td>{{expectedResults.grainStainReaction}}<br>
+                    <b>  Score :  {{expectedResults.grainStainReactionScore}}</b></td>
+                <!--
+                ========================================================================================
+                ----------------------------Other Information------------------------------------------
+                =========================================================================================
+                -->
+                <td>
+                    <x>Primary Media : {{expectedResults.primaryMedia}}</x>
+                    <x ng-show="scoreCols"> Primary Media Score: {{expectedResults.primaryMediaScore}}</x>
+                    <br>
+
+                    <x>incubation Conditions : {{expectedResults.incubationConditions}}</x><br>
+                    <x>colonial Morphology : {{expectedResults.colonialMorphology}}</x><br>
+                    <x>bacterial Qualification: {{expectedResults.bacterialQualification}}</x><br>
+                    <x>bacterial Reagents : {{expectedResults.bacterialReagents}}</x>
+                    <!--
+                    ========================================================================================
+                    ----------------------------++++++++++++++++++------------------------------------------
+                    =========================================================================================
+                    -->
+                </td>
+                <td>{{expectedResults.finalIdentification}} <br>
+                    <b>Score : {{expectedResults.finalIdentificationScore}}</b>
+                </td>
                 <td nowrap>{{samples.returnSubstring(expectedResults.dateCreated ,10)}}</td>
                 <td>
                     <a href="#" class="label label-info"

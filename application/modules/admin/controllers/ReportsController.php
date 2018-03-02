@@ -707,24 +707,46 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $score['finalIdentificationScore'] = 0;
                 $scoreGS = 0;
                 $scoreFIS = 0;
-                if ($responseResults['grainStainReaction'] == $sampleExpectedResult['grainStainReaction']) {
-                    $scoreGS = $sampleExpectedResult['grainStainReactionScore'];
-                } else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
 
-                    $scoreGS = 0.75 * $sampleExpectedResult['grainStainReactionScore'];
+
+                $whereSampleId['id'] = $responseResults['sampleId'];
+                $whereSampleId['status'] = 1;
+
+                $sampleTypeDetails = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+
+                if (count($sampleTypeDetails) == 0)
+                    goto finishExecution;
+
+                if ($sampleTypeDetails['sampleType'] == null || empty($sampleTypeDetails['sampleType']))
+                    goto finishExecution;
+
+                $sampleTypes = explode(',', $sampleTypeDetails['sampleType']);
+
+                if (in_array(1, $sampleTypes)) {
+                    if ($responseResults['grainStainReaction'] == $sampleExpectedResult['grainStainReaction']) {
+                        $scoreGS = $sampleExpectedResult['grainStainReactionScore'];
+                    } else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
+
+                        $scoreGS = 0.75 * $sampleExpectedResult['grainStainReactionScore'];
+                    }
+
+
+                    $score['grainStainReactionScore'] = $sampleExpectedResult['grainStainReactionScore'] > 0 ?
+                        round(($scoreGS / $sampleExpectedResult['grainStainReactionScore']) * 100, 3) : null;
                 }
+                if (in_array(2, $sampleTypes)) {
 
-                $score['grainStainReactionScore'] = $sampleExpectedResult['grainStainReactionScore'] > 0 ? round(($scoreGS / $sampleExpectedResult['grainStainReactionScore']) * 100, 3) : -1;
+                    if ($responseResults['finalIdentification'] == $sampleExpectedResult['finalIdentification']) {
 
-
-                if ($responseResults['finalIdentification'] == $sampleExpectedResult['finalIdentification']) {
-
-                    $scoreFIS = $sampleExpectedResult['finalIdentificationScore'];
-                }
+                        $scoreFIS = $sampleExpectedResult['finalIdentificationScore'];
+                    }
 
 //                echo $scoreFIS;
 //                exit();
-                $score['finalIdentificationScore'] = $sampleExpectedResult['finalIdentificationScore'] > 0 ? round(($scoreFIS / $sampleExpectedResult['finalIdentificationScore']) * 100, 3) : -1;
+                    $score['finalIdentificationScore'] = $sampleExpectedResult['finalIdentificationScore'] > 0 ?
+                        $scoreFIS : null;
+
+                }
 
                 $whereResponse['sampleId'] = $responseResults['sampleId'];
                 $whereResponse['roundId'] = $responseResults['roundId'];
@@ -737,6 +759,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 if ($updateLabResults['status'] == 0) {
                     return false;
                 } else {
+                    if (!in_array(3, $sampleTypes))
+                        goto finishExecution;
+
                     $updateSuscepibility = $this->updateSuscepibilityScore($whereResponse);
 //                    print_r($updateSuscepibility);
 //                    exit;
@@ -754,7 +779,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             $part = 2;
                             $score['totalMicroAgentsScore'] = 0;
                         }
-                        $total = round(($score['totalMicroAgentsScore'] + $score['finalIdentificationScore'] + $score['grainStainReactionScore']) / $part, 2);
+                        $total = round(($score['totalMicroAgentsScore'] + $score['finalIdentificationScore'] + $score['grainStainReactionScore']) / $part, 2)
+
+                        ;
                         $gradingArray = $this->getGradeRemark($total);
 
                         $update['grade'] = $gradingArray['grade'];
@@ -785,6 +812,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $score['markedStatus'] = 1;
 
         $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
+
+        finishExecution:
         return true;
     }
 
