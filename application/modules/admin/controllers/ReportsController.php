@@ -210,8 +210,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
 
                 $data[$key]->daysLeft = $this->converttodays($round['endDate']);
-
-
+                $data[$key]->published = $round['published'];
                 $sampleInfo = $this->returnSampleInfo($value->panelToSampleId);
                 $data[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
                 $data[$key]->allowedOnTenDays = $sampleInfo['endDaysLeft'] > 10 ? 0 : 1;

@@ -86,7 +86,7 @@
                 <td>
                     <button
                             ng-disabled="round.totalShipmentsAdded==0 || round.daysLeft > 0
-                            || round.startRoundFlag==0 || round.totalResponded==0 "
+                            || round.startRoundFlag==0 || round.totalResponded==0 || round.published==1 "
                             ng-click="reports.showShipmentEvaluationForRound(round)" class="btn btn-danger btn-sm">
                         <i class="fa fa-check"></i>
                         <x ng-show="round.evaluated==0">evaluate</x>
