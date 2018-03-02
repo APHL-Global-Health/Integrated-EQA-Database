@@ -29,7 +29,7 @@
         }
 
 
-        $scope.samples.checkSampleType = function (sampleType,test) {
+        $scope.samples.checkSampleType = function (sampleType, test) {
             var sampleTypeArray = $scope.samples.returnArraySampleTypes(sampleType);
 
             if (sampleTypeArray.indexOf(test) >= 0)
@@ -909,11 +909,14 @@
         }
         $scope.samples.labsToRoundArray = [];
         $scope.samples.addLabsToRoundArray = function (id, checker) {
+            console.log(id, checker)
             try {
                 $scope.samples.labsToRoundArray = EptServices.EptServiceObject.returnIdArray($scope.samples.labsToRoundArray, id, checker);
+                console.log($scope.samples.labsToRoundArray);
             } catch (error) {
                 console.log(error);
             }
+
         }
 
         $scope.samples.shipmentsToRoundArray = [];
@@ -2345,6 +2348,35 @@
                 })
 
         }
+
+        $scope.samples.unEnrolLab = function (lab) {
+            lab.enrolled = 0;
+
+            var url = serverSamplesURL + 'removeenrolledlab';
+            console.log(lab);
+            var varData = {labData: lab}
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.samples.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        EptServices.EptServiceObject.returnActionSuccessAlert(data.message);
+                    } else {
+
+                        EptServices.EptServiceObject.returnServerErrorAlert(data.message);
+                    }
+
+                })
+                .error(function (error) {
+                    console.log(error)
+
+                })
+
+        }
+
+
+
 
 
         $scope.samples.returnFormattedLeft = function (daysLeft) {

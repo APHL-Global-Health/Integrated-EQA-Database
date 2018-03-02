@@ -64,11 +64,11 @@ EptServices.service('EptServices', function () {
         );
 
     }
-    this.EptServiceObject.returnActionSuccessAlert = function () {
+    this.EptServiceObject.returnActionSuccessAlert = function (message) {
         $.alert(
             {
                 title: '<i class="fa fa-check-circle text-success"></i> Success',
-                content: ' Action was successful.'
+                content: angular.isDefined(message) ? message :' Action was successful.'
             }
         );
 

@@ -554,10 +554,9 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->region = $lab['region'];
                         $dataDB[$key]->institute = $lab['institute_name'];
 //                        $dataDB[$key]->batchName = $sample['batchName'];
-                    }
-                    else if($tableName == 'tbl_bac_samples'){
-                        $dataDB[$key]->sampleType=str_replace('"','',str_replace("]",'',
-                            str_replace("[",'',$value->sampleType)));
+                    } else if ($tableName == 'tbl_bac_samples') {
+                        $dataDB[$key]->sampleType = str_replace('"', '', str_replace("]", '',
+                            str_replace("[", '', $value->sampleType)));
                     }
                 }
             }
@@ -598,11 +597,11 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $start = date('Y-m-d');
         }
 
-        if($start > $end)
+        if ($start > $end)
             return 0;
 
-        $start = new DateTime("".$start."");
-        $end = new DateTime("".$end."");
+        $start = new DateTime("" . $start . "");
+        $end = new DateTime("" . $end . "");
 // otherwise the  end date is excluded (bug?)
         $end->modify('+1 day');
 
@@ -620,7 +619,6 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
         foreach ($period as $dt) {
             $curr = $dt->format('D');
-
 
 
             // substract if Saturday or Sunday
@@ -1036,6 +1034,48 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
         exit;
     }
 
+
+    public function removeenrolledlabAction()
+    {
+        try {
+            $postedData = file_get_contents('php://input');
+            $postedData = (array)json_decode($postedData);
+            $labInfo = (array)$postedData['labData'];
+
+            $where['participantId'] = $labInfo['participant_id'];
+            $where['roundId'] = $labInfo['roundId'];
+
+            $status['status'] = 0;
+
+
+            $status = $this->dbConnection->deleteFromWhere("tbl_bac_sample_to_panel", $where);
+            if ($status['status'] == 1) {
+                $status['message'] = 'Lab successfully removed from samples';
+                $labShipment = $this->dbConnection->deleteFromWhere("  tbl_bac_panels_shipments", $where);
+                if ($labShipment['status'] == 1) {
+                    $status['message'] .= ', panel';
+                    $removeLabWhere['labId'] =$where['participantId'];
+                    $removeLabWhere['roundId'] =$where['roundId'];
+                    $labRound = $this->dbConnection->deleteFromWhere(" tbl_bac_rounds_labs", $removeLabWhere);
+                    if ($labRound['status'] == 1) {
+                        $status['message'] .= '& round';
+                        $status['status'] = 1;
+                    }
+                }
+
+            }
+
+
+        } catch (Exception $e) {
+            $status['status'] = 0;
+            $status['message'] = $e->getMessage();
+        }
+
+        echo($this->returnJson($status));
+        exit;
+    }
+
+
     public function addSamplesToLab($jsPostData)
     {
         $where['participantId'] = $jsPostData['labId'];
@@ -1120,7 +1160,7 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
 
             if ($tableName == 'tbl_bac_panels_shipments') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
-            } else if ($tableName == 'tbl_bac_samples' ||$tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs' || $tableName == 'tbl_bac_expected_results') {
+            } else if ($tableName == 'tbl_bac_samples' || $tableName == 'tbl_bac_sample_to_panel' || $tableName == 'tbl_bac_ready_labs' || $tableName == 'tbl_bac_expected_results') {
                 $dataDB = $this->returnWithRefColNames($tableName, $where);
             } else {
                 $dataDB = $this->dbConnection->selectFromTable($tableName, $where);

@@ -30,9 +30,9 @@
         </div>
 
         <div class="panel-body">
-            <input class="form-control col-md-12" placeholder="Search Sample" ng-model="searchSample">
+            <input class="form-control col-md-12" placeholder="Search Laboratory" ng-model="searchSample">
             <p class="pre-scrollable">
-
+                <i>Please search the last above incase its not shown below</i>
             <table class="table table-bordered table-responsive">
                 <tr>
                     <td></td>
@@ -50,22 +50,27 @@
 
                         <div class="[ form-group ]" ng-show="lab.enrolled == 0">
 
-                            <input type="checkbox"  ng-hidden="true"  name="{{panel.labId}}" id="{{lab.labId}}" autocomplete="off"
-                                   ng-checked="samples.indexOfId(panel.labId, samples.labsToRoundArray)"
-                                   ng-click="samples.addLabsToRoundArray(lab.labId, labCheck)"
+                            <input type="checkbox"  ng-hidden="true"
+                                   name="{{panel.participant_id}}" id="{{lab.participant_id}}" autocomplete="off"
+                                   ng-checked="samples.indexOfId(panel.participant_id, samples.labsToRoundArray)"
+                                   ng-click="samples.addLabsToRoundArray(lab.participant_id, labCheck)"
                                    ng-model="labCheck">
-                            <div class="[ no-padding]">
-                                <label for="{{lab.labId}}" class="[ btn-round ]">
-                                    <span class="[ fa fa-check-circle  ]" ng-show="labCheck"
 
-                                          data-placement="right" data-type="info" data-container="body"
+
+
+                            <div class="[ no-padding]">
+                                <label for="{{lab.participant_id}}" class="[ btn-round ]">
+                                    <span class="[ fa fa-check-circle text-blue  ]" ng-show="labCheck"
+
+                                          data-placement="bottom" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
-                                          data-trigger="hover" data-title="remove panel"
+                                          data-trigger="hover" data-title="remove lab"
                                           ></span>
                                     <span class="[ fa fa-minus-circle  ]" ng-show="!labCheck"
-                                          data-placement="right" data-type="info" data-container="body"
+
+                                          data-placement="bottom" data-type="info" data-container="body"
                                           data-animation="am-fade-and-scale" bs-tooltip
-                                          data-trigger="hover" data-title="add panel"
+                                          data-trigger="hover" data-title="add lab"
                                           > </span>
                                 </label>
                             </div>
@@ -81,9 +86,11 @@
                         <button class="btn btn-primary btn-sm" ng-show="lab.enrolled == 0" ng-click="samples.enrolLab(lab)">
                              Enrol
                         </button>
-                        <b ng-hide="lab.enrolled == 0">
-                            Enrolled
-                        </b>
+
+                        <button class="btn btn-danger btn-sm" ng-show="lab.enrolled != 0" ng-click="samples.unEnrolLab(lab)">
+                            Remove
+                        </button>
+
                     </td>
                 </tr>
             </table>
