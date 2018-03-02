@@ -87,19 +87,7 @@
 
                         </div>
                     </div>
-                    <div class="form-group "
-                         ng-class="{ 'has-error'  : sampleData.lifespan.$invalid && !sampleData.lifespan.$pristine }">
-                        <label class="col-2 col-form-label">Lifespan</label>
-                        <div class="col-10">
-                            <input class="form-control" required="" ng-model="samples.sampleFormData.lifespan"
-                                   name="lifespan" ng-pattern="samples.numericOnly">
-                            <small class="text-danger col-md-12"
-                                   ng-show="sampleData.lifespan.$invalid && !sampleData.lifespan.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                            </small>
-
-                        </div>
-                    </div>
+                   
 
 
                     <div class="form-group"
@@ -182,22 +170,7 @@
 
                         </div>
                     </div>
-                    <div class="form-group "
-                         ng-class="{ 'has-error'  : sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine }">
-                        <label class="col-2 col-form-label">Collectable</label>
-                        <div class="col-10">
-                            <select required="" class="form-control" ng-model="samples.sampleFormData.dispatchable"
-                                    name="dispatchable">
-                                <option value="1">--YES--</option>
-                                <option value="0">--NO--</option>
-                            </select>
-                            <small class="text-danger col-md-12"
-                                   ng-show="sampleData.dispatchable.$invalid && !sampleData.dispatchable.$pristine">
-                                Error : Required & Only numbers,alphabets,hyphen and dashes allowed
-                            </small>
 
-                        </div>
-                    </div>
 
                     <div class="form-group "
                          ng-class="{ 'has-error'  : sampleData.sampleDetails.$invalid && !sampleData.sampleDetails.$pristine }">
