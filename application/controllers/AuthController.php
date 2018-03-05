@@ -84,6 +84,46 @@ class AuthController extends Zend_Controller_Action
         $this->_redirect('/');
     }
 
+    public function resetpasswordcodeAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $password = $this->getRequest()->getPost('password');
+
+            var_dump($password);
+            exit;
+
+        } else {
+
+
+        }
+    }
+
+    public function setpasswordAction()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $dbUsersProfile = new Application_Service_Participants();
+        if ($this->getRequest()->isPost()) {
+            $resetcode = $this->getRequest()->getPost('resetCode');
+
+
+            if ($dbUsersProfile->updatefromcodePassword($this->getRequest()->getPost('password'), $this->getRequest()->getPost('dm_id'))) {
+                $this->_redirect('/auth/login?resetStatus=1');
+            } else {
+                $this->_redirect('/auth/setpassword?rc=' . $resetcode . '&status=0');
+            }
+
+
+        } else {
+            $resetcode = $request->getParam('rc');
+
+
+            $resetDetails = $dbUsersProfile->getUserResetCodeDetails($resetcode);
+            //$resetDetails['resetcode'] = $resetcode;
+            $this->view->data = $resetDetails;
+
+        }
+    }
+
     public function resetPasswordAction()
     {
         if ($this->getRequest()->isPost()) {

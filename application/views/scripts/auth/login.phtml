@@ -18,7 +18,20 @@
         <a href="javascript:void(0);">Login - <span> Proficiency Testing</span></a>
       </div><!-- /.login-logo -->
 	<div class="login-box-body">
+<div>
+    <?php
+    $request = new Zend_Controller_Request_Http();
 
+//    if(isset($request->getParam('resetStatus')))
+        if($request->getParam('resetStatus')){
+            ?>
+            <div class="btn btn-success col-md-12"> Password set successfully,login to proceed </div>
+            <?php
+        }
+
+
+    ?>
+</div>
 		
 <form name="loginForm" id="loginForm" class="form-vertical" method="post" action="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>" onsubmit="validateLogin();return false;">
 

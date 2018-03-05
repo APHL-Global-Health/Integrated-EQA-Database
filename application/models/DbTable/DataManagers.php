@@ -10,6 +10,9 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         $common = new Application_Service_Common();
         $email = $params['userId'];
         $plainPass = $common->generateRandomPassword(9);
+        $resetcode = $common->generateRandomPassword(64);
+
+
         $password = MD5($plainPass);
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
@@ -29,6 +32,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             'view_only_access' => $params['viewOnlyAccess'],
             'status' => $params['status'],
             'created_by' => $authNameSpace->admin_id,
+            'resetCode' =>$resetcode,
             'created_on' => new Zend_Db_Expr('now()')
         );
         if (isset($_SESSION['loggedInDetails']["IsVl"])) {
@@ -37,7 +41,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $fullname = $data['first_name'] . ' ' . $data['last_name'];
 
-        $common->sendPasswordEmailToUser($email, $plainPass, $fullname);
+        $common->sendPasswordEmailToUser($email, $resetcode, $fullname);
         return $this->insert($data);
     }
 
@@ -296,12 +300,15 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         return $this->update($data, "dm_id = " . $params['userSystemId']);
     }
 
-    public function resetpasswordForEmail($email) {
+    public function resetpasswordForEmail($email,$resetCode) {
         $row = $this->fetchRow("primary_email = '" . $email . "'");
         if ($row != null && count($row) == 1) {
             $randompassword = Application_Service_Common::getRandomString(10);
+          //  $resetCode = Application_Service_Common::getRandomString(64);
+
             $row->password = md5($randompassword);
             $row->force_password_reset = 1;
+            $row->resetCode = $resetCode;
             $row->save();
             return $randompassword;
         } else {
@@ -344,5 +351,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             return false;
         }
     }
+
+
+
 
 }

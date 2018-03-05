@@ -78,13 +78,17 @@ class Application_Service_Common {
         return $randStr; //turn the array into a string
     }
 
-    public function sendPasswordEmailToUser($sendTo, $password, $fullname) {
+    public function sendPasswordEmailToUser($sendTo, $link, $fullname) {
 //        $common = new Application_Service_Common();
+
+        $link ="<a href='http://ept.nphls.or.ke/auth/setpassword?rc=$link' 
+style='padding:5px;margin : 20px;background-color: blue;color: white;'>ept.nphls.or.ke/auth/setpassword?rc=$link</a> ";
+
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
-                . $config->emailRegistrationBody
-                . "<br>Username : $sendTo <br>"
-                . "Password : $password <br>"
+                . $config->emailResetMessage
+
+                . "<br><br> : $link <br><br>"
                 . $config->emailRegistrationSignature;
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
@@ -108,8 +112,8 @@ class Application_Service_Common {
         $min_lenght = 0;
         $max_lenght = 100;
         $bigL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789&$@";
-        $number = "0123456789&$@";
+        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789$@";
+        $number = "0123456789$@";
         $bigB = str_shuffle($bigL);
         $smallS = str_shuffle($smallL);
         $numberS = str_shuffle($number);
