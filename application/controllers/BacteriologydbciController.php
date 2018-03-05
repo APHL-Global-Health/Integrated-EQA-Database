@@ -968,7 +968,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                     $dataDB[$key]->roundCode = $round['roundCode'];
                     $dataDB[$key]->startDate = $round['startDate'];
                     $dataDB[$key]->endDate = $round['endDate'];
-                    $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                    $dataDB[$key]->daysLeft = $this->returnDaysWithoutWeekends($dataDB[$key]->endDate);
                     $dataDB[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $whereS, 'panelId');
                 }
             }
@@ -1199,7 +1199,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
 
                         $dataDB[$key]->materialSource = $sample['materialSource'];
-                        $dataDB[$key]->sampleType =str_replace('"', '', str_replace("]", '',
+                        $dataDB[$key]->sampleType = str_replace('"', '', str_replace("]", '',
                             str_replace("[", '', $sample['sampleType'])));;
 
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
@@ -1217,10 +1217,9 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
 
 
-
                         $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
 
-                        $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
+                        $dataDB[$key]->daysLeft = $this->returnDaysWithoutWeekends($dataDB[$key]->endDate);
 
 
                         $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft; //$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
@@ -1244,6 +1243,55 @@ class BacteriologydbciController extends Zend_Controller_Action
         }
         exit;
     }
+
+    public function returnDaysWithoutWeekends($end, $start = null)
+    {
+
+        if ($start == null) {
+            $start = date('Y-m-d');
+        }
+
+        if ($start > $end)
+            return 0;
+
+        $start = new DateTime("" . $start . "");
+        $end = new DateTime("" . $end . "");
+// otherwise the  end date is excluded (bug?)
+        $end->modify('+1 day');
+
+        $interval = $end->diff($start);
+
+// total days
+        $days = $interval->days;
+
+// create an iterateable period of date (P1D equates to 1 day)
+        $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// best stored as array, so you can add more than one
+        $holidays = array();
+
+
+        foreach ($period as $dt) {
+            $curr = $dt->format('D');
+
+
+            // substract if Saturday or Sunday
+            if ($curr == 'Sat' || $curr == 'Sun') {
+
+                $days--;
+            } // (optional) for the updated question
+            elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                $days--;
+            }
+
+        }
+
+
+        return $days; // 4
+
+
+    }
+
 
     public function editusermicroagentsAction()
     {
