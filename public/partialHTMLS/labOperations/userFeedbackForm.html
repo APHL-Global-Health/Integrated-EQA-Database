@@ -305,9 +305,13 @@
                     <tr ng-class="{ 'has-error'  : susceptibilityData.methodUsed.$invalid && !susceptibilityData.methodUsed.$pristine }">
                         <td width="30%">Method used for disc diffusion (Kirby Bauer, Stroke etc.)</td>
                         <td width="70%">
-                            <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
+                            <select class="form-control col-md-12" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                    placeholder="Please enter Method used for disc diffusion (Kirby Bauer, Stroke etc.)"
                                    ng-model="samples.susceptibilityFormData.methodUsed" required name="methodUsed">
+                                <option selected="" disabled>--Method of disc--</option>
+                                <option>Kirby Bauer</option>
+                                <option>Stroke</option>
+                            </select>
                         </td>
 
                     </tr>
