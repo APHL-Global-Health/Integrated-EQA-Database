@@ -15,7 +15,12 @@
     border-color: red;
     color: red;
 }
-
+.content-wrapper{
+ background-color: white!important;
+}
+.pre-scrollable{
+    max-height: 600px!important;
+}
 * {
     border-radius: 0 !important;
 }

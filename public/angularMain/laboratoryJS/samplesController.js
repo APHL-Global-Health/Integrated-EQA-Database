@@ -2525,6 +2525,45 @@
 
         }
 
+        $scope.samples.returnSampleType = function (type) {
+            switch (type) {
+                case 1:
+                    return 'ID';
+                case 2:
+                    return 'Gram Stain';
+                case 3:
+                    return 'AST';
+                default:
+                    return 'Unknown';
+            }
+        }
+        $scope.samples.returnArraySampleTypes = function (sampleType) {
+            console.log(sampleType)
+
+
+            return JSON.parse("[" + sampleType + "]");
+
+        }
+
+        $scope.samples.checkSampleType = function (sampleType, test) {
+            var sampleTypeArray = $scope.samples.returnArraySampleTypes(sampleType);
+
+            if (sampleTypeArray.indexOf(test) >= 0)
+                return true;
+
+            return false;
+
+        }
+
+
+
+
+
+
+
+
+
+
         $scope.samples.updateStatus = function (tableName, status, id) {
             var postedData = {};
             try {

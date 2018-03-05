@@ -1199,6 +1199,9 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->materialOrigin = $sample['materialOrigin'];
 
                         $dataDB[$key]->materialSource = $sample['materialSource'];
+                        $dataDB[$key]->sampleType =str_replace('"', '', str_replace("]", '',
+                            str_replace("[", '', $sample['sampleType'])));;
+
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
 
@@ -1212,6 +1215,9 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->endDate = $round['endDate'];
                         $dataDB[$key]->roundCode = $round['roundCode'];
                         $dataDB[$key]->roundStatus = $round['roundStatus'];
+
+
+
                         $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
 
                         $dataDB[$key]->daysLeft = $this->converttodays($dataDB[$key]->endDate);
