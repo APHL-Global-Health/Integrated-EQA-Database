@@ -1704,10 +1704,34 @@ class Admin_BacteriologydbciController extends Zend_Controller_Action
             $message['message'] .= " of round <b>" . $round['roundName'] . "</b> ";
             $message['message'] = "This is to notify you <br> " . $message['message'];
 
-            $common->sendMail($email, null, null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
+            $common->sendMail($email, $this->returnMicroAdmins(), null, $message['subject'], $message['message'], null, "ePT Microbiology Admin");
         }
         return true;
     }
+
+
+    public function returnMicroAdmins()
+    {
+        $where['IsVl'] = 3;
+        $systemAdmin = $this->dbConnection->selectFromTable('system_admin', $where);
+
+
+        if (count($systemAdmin) > 0) {
+
+            $email = array();
+            foreach ($systemAdmin as $key => $value) {
+
+
+                if (!in_array($systemAdmin[$key]->primary_email, $email)) {
+                    array_push($email, $systemAdmin[$key]->primary_email);
+                }
+            }
+            return $email;
+        }
+        return false;
+    }
+
+
 
     public function saveshipmentstoroundAction()
     {
