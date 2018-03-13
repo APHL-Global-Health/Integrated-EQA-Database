@@ -130,9 +130,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $wherePub['id'] = $where['id'];
 
         $update['published'] = $where['published'];
-//print_r($where);exit;
+        $update['publishedDate'] = date('Y-m-d h:i:j', time());
+//print_r($update);exit;
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_rounds', $wherePub, $update);
-
+        unset($update['publishedDate']);
         $whereRound['roundId'] = $where['id'];
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereRound, $update);
         $updatePublication = $this->dbConnection->updateTable('tbl_bac_response_results', $whereRound, $update);
@@ -763,7 +764,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $whereResponse['participantId'] = $responseResults['participantId'];
                 $whereResponse['adminMarked'] = 0;
                 $score['finalScore'] = array_sum($score);
-                $score['grade'] =  $this->getGradeRemark($score['finalScore']);
+                $score['grade'] = $this->getGradeRemark($score['finalScore']);
                 $score['markedStatus'] = 1;
                 $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
                 if ($updateLabResults['status'] == 0) {

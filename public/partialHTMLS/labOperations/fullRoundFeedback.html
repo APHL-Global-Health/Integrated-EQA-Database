@@ -1,110 +1,105 @@
 <div style="">
-    <button class="btn btn-sm btn-danger pull-right" ng-click="reports.showRoundResults = false"><i class="fa fa-close"></i> Close</button>
+    <button class="btn btn-sm btn-danger pull-right" ng-click="reports.showRoundResults = false"><i
+            class="fa fa-close"></i> Close
+    </button>
     <button class="btn btn-sm btn-primary pull-right" ng-click="samples.printDiv('full-results')">
         <i class="fa fa-print"></i> print
     </button>
     <div id="full-results">
         <div class="text-center">
-            <img src="images/nphl-logo-2.png"/>
-            <h3>SURVEY REPORT</h3>
-            <h4>{{reports.roundInfo.roundName}} : {{reports.roundInfo.roundCode}}</h4>
-            <h5>starts {{reports.roundInfo.startDate}} To {{reports.roundInfo.endDate}}
+
+
+            <h4>
+                <img src="../images/nphl-logo-2.png"/><br>
+                <b> MINISTRY OF HEALTH<br>
+                    NATIONAL PUBLIC HEALTH LABORATORY SERVICES<br>
+                    NATIONAL MICROBIOLOGY REFERENCE LABORATORY, NAIROBI, KENYA<br>
+                </b>
+            </h4>
+            <h2>
+                <b> NPHLS/NMRL<br>
+                    PROFICIENCY TESTING PROGRAMME - BACTERIOLOGY.<br>
+                </b>
+            </h2>
+            <h5 class="text-left">
+                <b>
+                    INDIVIDUAL REPORT: {{reports.roundInfo.roundName}} PERFORMANCE REPORT.<br>
+                    Name of Laboratory:- {{reports.roundInfo.participantName}}<br>
+                    Laboratory Code: {{reports.roundInfo.participantCode}} Date received by participating laboratory:-
+                    {{reports.roundInfo.receivedDate}}<br>
+                    County:{{reports.roundInfo.County}} Date Returned:- {{reports.roundInfo.publishedDate}}<br>
+                </b>
             </h5>
-            <small>{{reports.roundInfo.dateCreated}}</small>
+
         </div>
         <hr>
-        <div class="col-md-12 well" ng-repeat="mainResult in reports.roundAllResults"
-             style="background-color: white !important;">
-            <h4 class="border-bottom">{{$index + 1}}. {{mainResult.sampleDetails.batchName}}</h4>
-            <div class="col-md-12 no-padding">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Batch Name</th>
-                            <th>Final Score(%)</th>
-                            <th>AST</th>
-                            <th>Gram Stain</th>
-                            <th>Gram Stain Score</th>
-                            <th>Expected</th>
-                            <th>Exp'Score</th>
+        <div>
+            <table ng-repeat="mainResult in reports.roundAllResults" class="table table-bordered table-striped">
+                <tbody ng-repeat="results in mainResult.arrayResultsAndExpected">
+                <tr class="btn-default">
+                    <td>Specimen: {{results.batchName}}</td>
 
-                            <th>Final Id</th>
-                            <th>Final Id Score</th>
-                            <th>Expected</th>
-                            <th>Exp'Score</th>
+                    <td>Expected Results</td>
+                    <td>Score:</td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>{{results.materialType}}</b><br>
+                        <i ng-show="samples.checkSampleType(results.sampleType,1)">
+                            gram Stain : {{results.grainStainReactionResult}}
+                        </i><br>
+                        <i ng-show="samples.checkSampleType(results.sampleType,2)">
+                            final Id : {{results.finalIdentificationResult}}
 
-                            <td>Grade</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="results in mainResult.arrayResultsAndExpected">
-                            <td>{{$index + 1}}</td>
-                            <td>{{results.batchName}}</td>
-                            <td>{{results.finalScore}}%</td>
-                            <td>{{results.microSco}}%</td>
-                            <td>{{results.grainStainReactionResult}}</td>
-                            <td> {{reports.checkScore(results.grainStainReactionScoreResult)}}</td>
+                        </i><br>
+                        <div>
+                            AST :
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr ng-repeat="astResults in mainResult.arrayASTResults"
+                                    ng-hide="astResults.antiMicroAgent==''">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{astResults.antiMicroAgent}}</td>
+                                    <td>{{astResults.diskContent}}</td>
+                                    <td>{{astResults.finalScore}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <b>Assessment:</b><br>
+                        Grading total: {{results.totalScore}}/{{results.totalExpectedScore}} Percentage:-
+                        {{results.totalPercentScore}}%
+                    </td>
 
-                            <td>{{results.grainStainReaction}}</td>
-                            <td>{{reports.checkScore(results.grainStainReactionScore, true)}}</td>
+                    <td>
+                        <b>{{results.materialType}}</b><br>
+                        <i ng-show="samples.checkSampleType(results.sampleType,1)">
+                            gram Stain : {{results.grainStainReaction}}
+                        </i><br>
+                        <i ng-show="samples.checkSampleType(results.sampleType,2)">
+                            final Id : {{results.finalIdentification}}
+                        </i><br>
+                        <div>
+                            AST :
+                            <table class="table table-bordered ">
+                                <tbody>
+                                <tr ng-repeat="astResultsExpected in mainResult.arrayASTExpectedResults">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{astResultsExpected.antiMicroAgent}}</td>
+                                    <td>{{astResultsExpected.diskContent}}</td>
+                                    <td>{{astResultsExpected.finalScore}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                            <td>{{results.finalIdentificationResult}}</td>
-                            <td>{{reports.checkScore(results.finalIdentificationScoreResult)}}</td>
+                    </td>
+                    <td>{{results.totalScore}}/{{results.totalExpectedScore}}</td>
+                </tr>
+                </tbody>
 
-                            <td>{{results.finalIdentification}}</td>
-                            <td>{{reports.checkScore(results.finalIdentificationScore, true)}}</td>
-                            <td>{{results.grade}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-            <div class="col-md-12 no-padding">
-                <div class="col-md-6 ">
-                    <h4 class="border-bottom">AST Results</h4>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>AST</th>
-                                <th>Level</th>
-                                <th>Disk Content</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="astResults in mainResult.arrayASTResults">
-                                <td>{{$index + 1}}</td>
-                                <td>{{astResults.antiMicroAgent}}</td>
-                                <td>{{astResults.diskContent}}</td>
-                                <td>{{astResults.finalScore}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-6 ">
-
-                    <h4 class="border-bottom">AST Expected Results</h4>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>AST</th>
-                                <th>Level</th>
-                                <th>Disk Content</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="astResultsExpected in mainResult.arrayASTExpectedResults">
-                                <td>{{$index + 1}}</td>
-                                <td>{{astResultsExpected.antiMicroAgent}}</td>
-                                <td>{{astResultsExpected.diskContent}}</td>
-                                <td>{{astResultsExpected.finalScore}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </table>
         </div>
+
     </div>
 </div>

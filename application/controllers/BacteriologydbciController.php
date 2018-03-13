@@ -274,13 +274,23 @@ class BacteriologydbciController extends Zend_Controller_Action
         $round = $this->dbConnection->selectFromTable('tbl_bac_rounds_labs', $where);
         if ($round != false) {
             foreach ($round as $key => $value) {
+
                 $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                $labInfo = $this->returnValueWhere($value->labId, 'participant');
+
                 $round[$key]->roundName = $roundInfo['roundName'];
                 $round[$key]->roundCode = $roundInfo['roundCode'];
                 $round[$key]->startDate = $roundInfo['startDate'];
                 $round[$key]->endDate = $roundInfo['endDate'];
                 $round[$key]->evaluated = $roundInfo['evaluated'];
                 $round[$key]->published = $roundInfo['published'];
+                $round[$key]->publishedDate = $roundInfo['publishedDate'];
+
+                $round[$key]->participantName = $labInfo['institute_name'];
+                $round[$key]->participantCode = $labInfo['unique_identifier'];
+
                 $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
                 $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
                 $round[$key]->publishedStatus = $roundInfo['published'] == 0 ? 'UnPublished' : 'published';
@@ -2082,15 +2092,45 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $tempArray['finalScore'] = $value->finalScore;
 
                 $tempArray['batchName'] = $sampleInfo['batchName'];
+                $tempArray['materialType'] = $sampleInfo['materialType'];
+                $tempArray['sampleType'] = str_replace('"', '', str_replace("]", '',
+                    str_replace("[", '', $sampleInfo['sampleType'])));
+
+                $sampleTypes = explode(',', $tempArray['sampleType']);
+
+
+
                 $tempArray['grainStainReaction'] = $expectedResults['grainStainReaction'];
                 $tempArray['grainStainReactionScore'] = $expectedResults['grainStainReactionScore'];
                 $tempArray['finalIdentification'] = $expectedResults['finalIdentification'];
                 $tempArray['finalIdentificationScore'] = $expectedResults['finalIdentificationScore'];
 
+                $tempArray['totalScore'] = 0;
+                $tempArray['totalExpectedScore'] = 0;
+
+                if (in_array(1, $sampleTypes)) {
+                    $tempArray['totalExpectedScore'] +=$expectedResults['grainStainReactionScore'];
+                    $tempArray['totalScore'] +=$tempArray['grainStainReactionScoreResult'];
+                }
+                if (in_array(2, $sampleTypes)) {
+                    $tempArray['totalExpectedScore'] +=$expectedResults['finalIdentificationScore'];
+                    $tempArray['totalScore'] +=$tempArray['finalIdentificationScoreResult'];
+                }
+
+
                 $sampleASTs = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $whereSampleID);
 
                 $sampleASTsExptectedResults = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $whereSampleID);
+
+                if (in_array(3, $sampleTypes)) {
+                    $microExpectedScore= $this->returnValueWhere($getSampleResults[$key]->sampleId, 'tbl_bac_expected_micro_bacterial_agents');
+                    $tempArray['totalExpectedScore'] +=$microExpectedScore['agentScore'];
+                    $tempArray['totalScore'] +=$tempArray['microSco'];
+                }
+
+                $tempArray['totalPercentScore']=round($tempArray['totalScore']/$tempArray['totalExpectedScore'],1)*100;
                 array_push($arrayResultsAndExpected, $tempArray);
+
                 $holdEvery['arrayResultsAndExpected'] = $arrayResultsAndExpected;
                 $holdEvery['arrayASTResults'] = $sampleASTs;
                 $holdEvery['arrayASTExpectedResults'] = $sampleASTsExptectedResults;
