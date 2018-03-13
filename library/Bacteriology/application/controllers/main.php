@@ -459,7 +459,7 @@ Class Main extends pdfCreator
                     $sql .= $this->returnWhereStatement($where);
                 }
                 if (is_string($sql)) {
-                    if ($tableName == 'tbl_bac_sample_to_panel') {
+                    if ($tableName == 'tbl_bac_response_results') {
 //                        echo $sql;
 //                    exit;
                     }
@@ -491,7 +491,12 @@ Class Main extends pdfCreator
                 $counter = 0;
                 foreach ($updateInfo as $key => $value) {
                     $value = is_array($value) ? implode(",", $value) : $value;
-                    $updateStatement .= $key . "=" . " '$value' ";
+                    if($value===null){
+                        $updateStatement .= $key . "=" . "NULL";
+                    }else{
+                        $updateStatement .= $key . "=" . " '$value' ";
+                    }
+
 
                     $counter++;
                     if ($counter < sizeof($updateInfo)) {

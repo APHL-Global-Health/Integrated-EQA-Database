@@ -86,12 +86,16 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter the grain stain results"
-                           ng-model="reports.currentClickedLabResults.grainStainReaction" required
+                           ng-model="reports.currentClickedLabResults.grainStainReaction"
+                           ng-required="samples.checkSampleType(reports.currentClickedLabResults.sampleType,1)"
+                           ng-disabled="!samples.checkSampleType(reports.currentClickedLabResults.sampleType,1)"
                            name="grainStainReaction">
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.grainStainReactionScore" required
+                                       ng-model="reports.currentClickedLabResults.grainStainReactionScore"
+                                       ng-required="samples.checkSampleType(reports.currentClickedLabResults.sampleType,1)"
+                                       ng-disabled="!samples.checkSampleType(reports.currentClickedLabResults.sampleType,1)"
                                        name="grainStainReactionScore"></td>
             </tr>
             <tr ng-class="{ 'has-error'  : resultsData.primaryMedia.$invalid && !resultsData.primaryMedia.$pristine ||
@@ -188,13 +192,17 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter Final identification "
-                           ng-model="reports.currentClickedLabResults.finalIdentification" required
+                           ng-model="reports.currentClickedLabResults.finalIdentification"
+                           ng-required="samples.checkSampleType(reports.currentClickedLabResults.sampleType,2)"
+                           ng-disabled="!samples.checkSampleType(reports.currentClickedLabResults.sampleType,2)"
                            name="finalIdentification">
 
                 </td>
                 <td width="15%"><input class="form-control col-md-12" type="text"
                                        ng-pattern="samples.numericOnly" placeholder="score"
-                                       ng-model="reports.currentClickedLabResults.finalIdentificationScore" required
+                                       ng-model="reports.currentClickedLabResults.finalIdentificationScore"
+ng-required="samples.checkSampleType(reports.currentClickedLabResults.sampleType,2)"
+                                       ng-disabled="!samples.checkSampleType(reports.currentClickedLabResults.sampleType,2)"
                                        name="finalIdentificationScore"></td>
             </tr>
 
@@ -222,7 +230,7 @@
                 <td width="55%">
                     <input class="form-control col-md-12" type="text" ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                            placeholder="Please enter remarks  "
-                           ng-model="reports.currentClickedLabResults.remarks" required
+                           ng-model="reports.currentClickedLabResults.remarks"
                            name="remarks">
 
                 </td>
@@ -242,7 +250,7 @@
                 </td>
                 <td width="15%">
                     <select class="form-control col-md-12" type="text" placeholder="score"
-                            ng-model="reports.currentClickedLabResults.correctiveAction" required
+                            ng-model="reports.currentClickedLabResults.correctiveAction"
                             name="correctiveAction">
                         <option selected disabled>--Corrective Action--</option>
                         <option value="1">YES</option>
@@ -273,7 +281,15 @@
     </table>
 </form>
 </div>
-<div class="" ng-init="samples.get">
+<div class="panel panel-default bg-info" ng-show="!samples.checkSampleType(reports.currentClickedLabResults.sampleType,3)">
+    <div class="h4 col-md-12 text-capitalize">
+        <br>
+        <b> {{reports.currentClickedLabResults.batchName}}</b> Does not requires AST Testing
+    </div>
+    <br>
+</div>
+
+<div class="" ng-init="samples.get" ng-if="samples.checkSampleType(reports.currentClickedLabResults.sampleType,3)">
     <h3><u>ANTIMICROBIAL AGENT</u></h3>
     <table class="table table-bordered">
         <thead class="btn-primary">
@@ -396,8 +412,9 @@
         AST marks have exceeded allowed 100%
     </div>
 
-    <div class="col-md-12 btn btn-warning"
-         ng-click="reports.evaluateBoth(reports.currentClickedLabResults, reports.microagentsData.microAgents)"
-         ng-disabled="resultsData.$invalid"> Evaluate Both
-    </div>
+
+</div>
+<div class="col-md-12 btn btn-warning"
+     ng-click="reports.evaluateBoth(reports.currentClickedLabResults, reports.microagentsData.microAgents)"
+     ng-disabled="resultsData.$invalid"> Evaluate Both
 </div>
