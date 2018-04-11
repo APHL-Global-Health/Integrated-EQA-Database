@@ -45,7 +45,7 @@ class Admin_DataManagersController extends Zend_Controller_Action {
         $userService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {
             $params = $this->_request->getPost();
-            $userService->addUser($params);
+            $userService->addMicroUser($params);
             $this->_redirect("/admin/data-managers");
         }
 

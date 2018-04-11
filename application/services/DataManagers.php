@@ -9,6 +9,12 @@ class Application_Service_DataManagers
         return $userDb->addUser($params);
     }
 
+    public function addMicroUser($params)
+    {
+        $userDb = new Application_Model_DbTable_DataManagers();
+        return $userDb->addMicroUser($params);
+    }
+
     public function updateUser($params)
     {
         $userDb = new Application_Model_DbTable_DataManagers();

@@ -45,6 +45,49 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         return $this->insert($data);
     }
 
+
+    public function addMicroUser($params) {
+
+        $common = new Application_Service_Common();
+        $email = $params['userId'];
+        $plainPass = $common->generateRandomPassword(9);
+        $resetcode = $common->generateRandomPassword(64);
+
+
+        $password = MD5($plainPass);
+
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $data = array(
+            'first_name' => $params['fname'],
+            'last_name' => $params['lname'],
+            'institute' => $params['institute'],
+            'phone' => $params['phone2'],
+            'mobile' => $params['phone1'],
+            'secondary_email' => $params['semail'],
+            'primary_email' => $params['userId'],
+            'password' => $password,
+            'force_password_reset' => 1,
+            'qc_access' => $params['qcAccess'],
+            'enable_adding_test_response_date' => $params['receiptDateOption'],
+            'enable_choosing_mode_of_receipt' => $params['modeOfReceiptOption'],
+            'view_only_access' => $params['viewOnlyAccess'],
+            'status' => $params['status'],
+            'created_by' => $authNameSpace->admin_id,
+            'resetCode' =>$resetcode,
+            'created_on' => new Zend_Db_Expr('now()')
+        );
+        if (isset($_SESSION['loggedInDetails']["IsVl"])) {
+            $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
+        }
+
+        $fullname = $data['first_name'] . ' ' . $data['last_name'];
+
+        $common->sendMicroEmailLink($email, $resetcode, $fullname);
+        return $this->insert($data);
+    }
+
+
+
     public function getAllUsers($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
