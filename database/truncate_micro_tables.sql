@@ -13,6 +13,6 @@ truncate table tbl_bac_samples_to_users;
 
 truncate table tbl_bac_expected_micro_bacterial_agents;
 truncate table tbl_bac_expected_results;
-truncate table tbl_bac_micro_bacterial_agents;
+--truncate table tbl_bac_micro_bacterial_agents;
 truncate table tbl_bac_suscepitibility;
 truncate table tbl_bac_response_results;

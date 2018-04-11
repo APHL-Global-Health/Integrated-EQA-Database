@@ -256,10 +256,19 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
 
         $fullname = $params['firstName'] . ' ' . $params['lastName'];
 
-        $common->sendPasswordEmailToUser($email, $password, $fullname);
+        $common->sendEmailWithPWDToUser($email, $password, $fullname);
 
         return $this->insert($data);
     }
+
+
+
+    ///send email and password to user
+    ///
+    ///
+    ///
+    ///
+    ///
 
     public function getSystemAdminDetails($adminId) {
         return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));

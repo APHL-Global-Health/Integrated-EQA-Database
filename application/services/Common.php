@@ -78,6 +78,19 @@ class Application_Service_Common {
         return $randStr; //turn the array into a string
     }
 
+    public function sendEmailWithPWDToUser($sendTo, $password, $fullname) {
+//        $common = new Application_Service_Common();
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $message = "Dear $fullname,"
+            . $config->emailRegistrationBody
+            . "<br>Username : $sendTo <br>"
+            . "Password : $password <br>"
+            . $config->emailRegistrationSignature;
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        //$fromName = Application_Service_Common::getConfig('admin-name');
+        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+    }
+
     public function sendPasswordEmailToUser($sendTo, $link, $fullname) {
 //        $common = new Application_Service_Common();
 
