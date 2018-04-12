@@ -3,8 +3,9 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'mgcrea.ngStrap.datepicker', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
-        graphDataCache, $filter, filterFilter, EptServices) {
+                                                      graphDataCache, $filter, filterFilter, EptServices) {
     var serverURL = SERVER_API_URL.repositoryURL;
+
     function checkCacheMemory() {
         var cache = reportCache.get('reportData');
         if (cache) {
@@ -154,6 +155,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         pdfMake.createPdf(docDefinition).open();
     }
+
     function today() {
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -167,16 +169,16 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var reportData = new Array();
         var tableWidth = ['auto', 'auto', 'auto', '*', '*', 'auto', 'auto']
         var reportHeader =
-                [
-                    {text: ' # ', style: 'subHeader'},
-                    {text: 'MFL Code', style: 'subHeader'},
-                    {text: 'Lab Name', style: 'subHeader'},
-                    {text: 'County', style: 'subHeader'},
-                    {text: 'Constituency', style: 'subHeader'},
-                    {text: 'Approved', style: 'subHeader'},
-                    {text: 'Analyte', style: 'subHeader'}
+            [
+                {text: ' # ', style: 'subHeader'},
+                {text: 'MFL Code', style: 'subHeader'},
+                {text: 'Lab Name', style: 'subHeader'},
+                {text: 'County', style: 'subHeader'},
+                {text: 'Constituency', style: 'subHeader'},
+                {text: 'Approved', style: 'subHeader'},
+                {text: 'Analyte', style: 'subHeader'}
 
-                ];
+            ];
 
         reportData.push(reportHeader);
 
@@ -209,16 +211,16 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var reportData = new Array();
         var tableWidth = ['auto', 'auto', 'auto', '*', '*', 'auto', 'auto']
         var reportHeader =
-                [
-                    {text: ' # ', style: 'subHeader'},
-                    {text: 'MFL Code', style: 'subHeader'},
-                    {text: 'Lab Name', style: 'subHeader'},
-                    {text: 'County', style: 'subHeader'},
-                    {text: 'Constituency', style: 'subHeader'},
-                    {text: 'Result Code', style: 'subHeader'},
-                    {text: 'Count', style: 'subHeader'}
+            [
+                {text: ' # ', style: 'subHeader'},
+                {text: 'MFL Code', style: 'subHeader'},
+                {text: 'Lab Name', style: 'subHeader'},
+                {text: 'County', style: 'subHeader'},
+                {text: 'Constituency', style: 'subHeader'},
+                {text: 'Result Code', style: 'subHeader'},
+                {text: 'Count', style: 'subHeader'}
 
-                ];
+            ];
 
         reportData.push(reportHeader);
 
@@ -251,17 +253,17 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var reportData = new Array();
         var tableWidth = ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']
         var reportHeader =
-                [
-                    {text: ' # ', style: 'subHeader'},
-                    {text: 'Lab Name', style: 'subHeader'},
-                    {text: 'County', style: 'subHeader'},
-                    {text: 'Round', style: 'subHeader'},
-                    {text: 'Date', style: 'subHeader'},
-                    {text: 'Acceptable', style: 'subHeader'},
-                    {text: 'Not Accepted', style: 'subHeader'},
-                    {text: 'Percentage', style: 'subHeader'}
+            [
+                {text: ' # ', style: 'subHeader'},
+                {text: 'Lab Name', style: 'subHeader'},
+                {text: 'County', style: 'subHeader'},
+                {text: 'Round', style: 'subHeader'},
+                {text: 'Date', style: 'subHeader'},
+                {text: 'Acceptable', style: 'subHeader'},
+                {text: 'Not Accepted', style: 'subHeader'},
+                {text: 'Percentage', style: 'subHeader'}
 
-                ];
+            ];
 
         reportData.push(reportHeader);
 
@@ -296,18 +298,18 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         var reportData = new Array();
         var tableWidth = ['auto', '*', 'auto', 'auto', '*', '*', 'auto', 'auto', '*']
         var reportHeader =
-                [
-                    {text: ' # ', style: 'subHeader'},
-                    {text: 'Provider Name', style: 'subHeader'},
-                    {text: 'Program', style: 'subHeader'},
-                    {text: 'Lab', style: 'subHeader'},
-                    {text: 'PT Round Code', style: 'subHeader'},
-                    {text: 'Release Date', style: 'subHeader'},
-                    {text: 'Grade', style: 'subHeader'},
-                    {text: 'Analyte ID', style: 'subHeader'},
-                    {text: 'Sample Code', style: 'subHeader'}
+            [
+                {text: ' # ', style: 'subHeader'},
+                {text: 'Provider Name', style: 'subHeader'},
+                {text: 'Program', style: 'subHeader'},
+                {text: 'Lab', style: 'subHeader'},
+                {text: 'PT Round Code', style: 'subHeader'},
+                {text: 'Release Date', style: 'subHeader'},
+                {text: 'Grade', style: 'subHeader'},
+                {text: 'Analyte ID', style: 'subHeader'},
+                {text: 'Sample Code', style: 'subHeader'}
 
-                ];
+            ];
 
         reportData.push(reportHeader);
 
@@ -361,16 +363,16 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var url = serverURL + 'results';
             $http
-                    .post(url, searchColumns)
-                    .success(function (data) {
-                        $scope.reports.createDataTable(data)
+                .post(url, searchColumns)
+                .success(function (data) {
+                    $scope.reports.createDataTable(data)
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showLoader = false;
+                })
 
 
 //            } else {
@@ -406,23 +408,23 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var url = serverURL + 'participantlabsresults';
             $http
-                    .post(url, searchColumns)
-                    .success(function (data) {
-                        $scope.reports.showLoader = false;
-                        $scope.reports.reportShowTable = true;
-                        if (data.length > 0) {
-                            $scope.reports.participantingLabs = data;
-                        } else {
-                            $scope.reports.participantingLabs = {};
-                            updateGraphMessages("No records found", true, 'btn-warning');
-                        }
+                .post(url, searchColumns)
+                .success(function (data) {
+                    $scope.reports.showLoader = false;
+                    $scope.reports.reportShowTable = true;
+                    if (data.length > 0) {
+                        $scope.reports.participantingLabs = data;
+                    } else {
+                        $scope.reports.participantingLabs = {};
+                        updateGraphMessages("No records found", true, 'btn-warning');
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showLoader = false;
+                })
 
 
 //            } else {
@@ -459,23 +461,23 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var url = serverURL + 'getparticipantionresultcode';
             $http
-                    .post(url, searchColumns)
-                    .success(function (data) {
-                        $scope.reports.showLoader = false;
-                        $scope.reports.reportShowTable = true;
-                        if (data.length > 0) {
-                            $scope.reports.participantionResultCode = data;
-                        } else {
-                            $scope.reports.participantionResultCode = {};
-                            updateGraphMessages("No records found", true, 'btn-warning');
-                        }
+                .post(url, searchColumns)
+                .success(function (data) {
+                    $scope.reports.showLoader = false;
+                    $scope.reports.reportShowTable = true;
+                    if (data.length > 0) {
+                        $scope.reports.participantionResultCode = data;
+                    } else {
+                        $scope.reports.participantionResultCode = {};
+                        updateGraphMessages("No records found", true, 'btn-warning');
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showLoader = false;
+                })
 
 
 //            } else {
@@ -512,23 +514,23 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var url = serverURL + 'getvalidationdata';
             $http
-                    .post(url, searchColumns)
-                    .success(function (data) {
-                        $scope.reports.showLoader = false;
-                        $scope.reports.reportShowTable = true;
-                        if (data.length > 0) {
-                            $scope.reports.validationData = data;
-                        } else {
-                            $scope.reports.validationData = {};
-                            updateGraphMessages("No records found", true, 'btn-warning');
-                        }
+                .post(url, searchColumns)
+                .success(function (data) {
+                    $scope.reports.showLoader = false;
+                    $scope.reports.reportShowTable = true;
+                    if (data.length > 0) {
+                        $scope.reports.validationData = data;
+                    } else {
+                        $scope.reports.validationData = {};
+                        updateGraphMessages("No records found", true, 'btn-warning');
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showLoader = false;
+                })
 
 
 //            } else {
@@ -551,7 +553,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     btnClass: 'btn-blue',
                     action: function () {
 
-                        alertStartRound = $.alert({title: 'Progess', content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Approving batch,please wait...!'});
+                        alertStartRound = $.alert({
+                            title: 'Progess',
+                            content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Approving batch,please wait...!'
+                        });
                         qaAproveBatchFinal(BatchID)
 
                     }
@@ -564,31 +569,32 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 }
             }
         })
+
         function qaAproveBatchFinal(BatchID) {
             var url = serverURL + 'qaapprovevalidationdata';
             $http
-                    .post(url, BatchID)
-                    .success(function (data) {
+                .post(url, BatchID)
+                .success(function (data) {
 
-                        console.log(data);
-                        alertStartRound.close();
-                        if (data.status == 1) {
-                            $scope.reports.getValidationData();
-                            EptServices.EptServiceObject.returnActionSuccessAlert();
+                    console.log(data);
+                    alertStartRound.close();
+                    if (data.status == 1) {
+                        $scope.reports.getValidationData();
+                        EptServices.EptServiceObject.returnActionSuccessAlert();
 
-                        } else {
-                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
-                        }
+                    } else {
+                        EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        console.log(error);
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+                .error(function (error) {
+                    console.log(error);
+                    alertStartRound.close();
+                    EptServices.EptServiceObject.returnServerErrorAlert();
 //                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
         }
 
     }
@@ -605,10 +611,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                     action: function () {
 
                         alertStartRound = $.alert(
-                                {
-                                    title: 'Progess',
-                                    content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Revoking batch,please wait...!'
-                                });
+                            {
+                                title: 'Progess',
+                                content: '<i class="fa fa-spin fa-spinner fa-2x"></i> Revoking batch,please wait...!'
+                            });
                         qaRevokeUserDataFinal(BatchID)
 
                     }
@@ -621,32 +627,33 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 }
             }
         })
+
         function qaRevokeUserDataFinal(BatchID) {
             BatchID.Status = 0;
             var url = serverURL + 'qaapprovevalidationdata';
             $http
-                    .post(url, BatchID)
-                    .success(function (data) {
+                .post(url, BatchID)
+                .success(function (data) {
 
-                        console.log(data);
-                        alertStartRound.close();
-                        if (data.status == 1) {
-                            $scope.reports.getValidationData();
-                            EptServices.EptServiceObject.returnActionSuccessAlert();
+                    console.log(data);
+                    alertStartRound.close();
+                    if (data.status == 1) {
+                        $scope.reports.getValidationData();
+                        EptServices.EptServiceObject.returnActionSuccessAlert();
 
-                        } else {
-                            EptServices.EptServiceObject.returnActionUnSuccessAlert();
-                        }
+                    } else {
+                        EptServices.EptServiceObject.returnActionUnSuccessAlert();
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        console.log(error);
-                        alertStartRound.close();
-                        EptServices.EptServiceObject.returnServerErrorAlert();
+                })
+                .error(function (error) {
+                    console.log(error);
+                    alertStartRound.close();
+                    EptServices.EptServiceObject.returnServerErrorAlert();
 //                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
         }
     }
 
@@ -673,23 +680,23 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
             var url = serverURL + 'getlabperformance';
             $http
-                    .post(url, searchColumns)
-                    .success(function (data) {
-                        $scope.reports.showLoader = false;
-                        $scope.reports.reportShowTable = true;
-                        if (data.length > 0) {
-                            $scope.reports.performanceLabs = data;
-                        } else {
-                            $scope.reports.performanceLabs = {};
-                            updateGraphMessages("No records found", true, 'btn-warning');
-                        }
+                .post(url, searchColumns)
+                .success(function (data) {
+                    $scope.reports.showLoader = false;
+                    $scope.reports.reportShowTable = true;
+                    if (data.length > 0) {
+                        $scope.reports.performanceLabs = data;
+                    } else {
+                        $scope.reports.performanceLabs = {};
+                        updateGraphMessages("No records found", true, 'btn-warning');
+                    }
 
-                        console.log(data);
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showLoader = false;
+                })
 
 
 //            } else {
@@ -698,10 +705,6 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
         }
     }
-
-
-
-
 
 
     $scope.reports.stringSearch = {}
@@ -718,11 +721,11 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
 
     $scope.$watch('reports.chartProgramResults', function () {
-        if ($scope.reports.chartProgramResults.length > 0) {
-            //      console.log(reports.chartProgramResults);
-            //        $scope.reports.pieChartData =$scope.reports.chartProgramResults.series;
+            if ($scope.reports.chartProgramResults.length > 0) {
+                //      console.log(reports.chartProgramResults);
+                //        $scope.reports.pieChartData =$scope.reports.chartProgramResults.series;
+            }
         }
-    }
     )
 
     $scope.reports.graphTest = 'Works';
@@ -748,17 +751,17 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         try {
             var url = serverURL + 'testgraph';
             $http
-                    .get(url)
-                    .success(function (data) {
-                        console.log("Graphical test Data");
-                        console.log(JSON.stringify(data));
-                        if (data.length > 0) {
-                            $scope.reports.testData = data;
-                        }
-                    })
-                    .error(function (error) {
+                .get(url)
+                .success(function (data) {
+                    console.log("Graphical test Data");
+                    console.log(JSON.stringify(data));
+                    if (data.length > 0) {
+                        $scope.reports.testData = data;
+                    }
+                })
+                .error(function (error) {
 
-                    })
+                })
         } catch (E) {
             console.log(E)
         }
@@ -819,10 +822,10 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     $scope.reports.exportToCSV = function () {
         try {
             $('#repoReport').tableExport(
-                    {
-                        type: 'csv',
-                        escape: 'true'
-                    }
+                {
+                    type: 'csv',
+                    escape: 'true'
+                }
             );
         } catch (E) {
             console.log(E)
@@ -901,7 +904,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         style: 'font-size:30px'
                     }
                 }]
-                    ;
+            ;
             var res = alasql('SELECT INTO XLSX("PERFORMANCE SUMMARY REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -956,13 +959,12 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         style: 'font-size:30px'
                     }
                 }]
-                    ;
+            ;
             var res = alasql('SELECT INTO XLSX("PARTICIPANTS REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
         }
     }
-
 
 
     function returnParticpantsRCExcelData(excelData) {
@@ -988,6 +990,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             return {};
         }
     }
+
     $scope.reports.generateParticipantRCExcel = function (data) {
         if (data.length > 0) {
             var excelData = returnParticpantsRCExcelData(data);
@@ -1009,7 +1012,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                         style: 'font-size:30px'
                     }
                 }]
-                    ;
+            ;
             var res = alasql('SELECT INTO XLSX("PARTICIPATION ON RESULT CODE COUNT REPORTS ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
         } else {
             EptServices.EptServiceObject.returnNoRecordsFoundAlert();
@@ -1028,16 +1031,16 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         try {
             var url = serverURL + 'getprograms';
             $http
-                    .get(url)
-                    .success(function (data) {
+                .get(url)
+                .success(function (data) {
 
-                        if (data.length > 0) {
-                            $scope.reports.allPrograms = data;
-                        }
-                    })
-                    .error(function (error) {
+                    if (data.length > 0) {
+                        $scope.reports.allPrograms = data;
+                    }
+                })
+                .error(function (error) {
 
-                    })
+                })
         } catch (E) {
             console.log(E)
         }
@@ -1046,20 +1049,39 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
 
     $scope.reports.allCounties = {};
 
+    $scope.reports.returnQACounties = function (counties) {
+        try {
+            var url = serverURL + 'getqacounties';
+            $http
+                .get(url)
+                .success(function (data) {
+
+                    if (data.length > 0) {
+                        $scope.reports.allCounties = data;
+                    }
+                })
+                .error(function (error) {
+
+                })
+        } catch (E) {
+            console.log(E)
+        }
+    }
+
     $scope.reports.getCounties = function () {
         try {
             var url = serverURL + 'getcounties';
             $http
-                    .get(url)
-                    .success(function (data) {
+                .get(url)
+                .success(function (data) {
 
-                        if (data.length > 0) {
-                            $scope.reports.allCounties = data;
-                        }
-                    })
-                    .error(function (error) {
+                    if (data.length > 0) {
+                        $scope.reports.allCounties = data;
+                    }
+                })
+                .error(function (error) {
 
-                    })
+                })
         } catch (E) {
             console.log(E)
         }
@@ -1080,7 +1102,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         {"id": "column", "title": "Column"},
         {"id": "bar", "title": "Bar"},
         {"id": "pie", "title": "Pie"},
-                //    {"id": "scatter", "title": "Scatter"}
+        //    {"id": "scatter", "title": "Scatter"}
     ];
     $scope.reports.chartProgramResults = {};
 
@@ -1096,6 +1118,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
         }
 
     }
+
     function changeGraphTableHeaders(title, dataName) {
         $scope.reports.graphTableHeaders.title = title;
         $scope.reports.graphTableHeaders.dataName = dataName;
@@ -1276,20 +1299,20 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'countyagainstlabs';
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        $scope.reports.showGraph = true;
-                        console.log(data);
-                        $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
-                        $scope.reports.showGraphLoader = false;
+                .post(url, filterData)
+                .success(function (data) {
+                    $scope.reports.showGraph = true;
+                    console.log(data);
+                    $scope.reports.loadGraphParameters(data, 'County VS Total Labs', 'County Name', 'Total Labs');
+                    $scope.reports.showGraphLoader = false;
 
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1303,20 +1326,20 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'roundagainstresults';
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        $scope.reports.showGraph = true;
+                .post(url, filterData)
+                .success(function (data) {
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphLabsResults(data, 'Round vs Results Count', 'Round Name', 'Round vs Results');
-                        $scope.reports.showGraphLoader = false;
-                        console.log(data);
+                    $scope.reports.loadGraphLabsResults(data, 'Round vs Results Count', 'Round Name', 'Round vs Results');
+                    $scope.reports.showGraphLoader = false;
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1328,20 +1351,20 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'labagainstresults';
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        $scope.reports.showGraph = true;
+                .post(url, filterData)
+                .success(function (data) {
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphLabsResults(data, 'Lab vs Results Count', 'Lab Code', 'Labs vs Results');
-                        $scope.reports.showGraphLoader = false;
-                        console.log(data);
+                    $scope.reports.loadGraphLabsResults(data, 'Lab vs Results Count', 'Lab Code', 'Labs vs Results');
+                    $scope.reports.showGraphLoader = false;
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1353,20 +1376,20 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'labagainstsamples';
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
+                .post(url, filterData)
+                .success(function (data) {
 
-                        $scope.reports.showGraph = true;
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Lab vs Samples Graph', 'Lab Code', 'Total Samples');
-                        $scope.reports.showGraphLoader = false;
-                        ;
+                    $scope.reports.loadGraphParameters(data, 'Lab vs Samples Graph', 'Lab Code', 'Total Samples');
+                    $scope.reports.showGraphLoader = false;
+                    ;
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraph = false;
-                        $scope.reports.showGraphLoader = false;
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraph = false;
+                    $scope.reports.showGraphLoader = false;
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1378,20 +1401,20 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             $scope.reports.showGraphLoader = true;
             var url = serverURL + 'samples';
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        $scope.reports.showGraph = true;
+                .post(url, filterData)
+                .success(function (data) {
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Round vs Test Count Graph', 'Round', 'Total Test');
-                        $scope.reports.showGraphLoader = false;
-                        console.log(data);
+                    $scope.reports.loadGraphParameters(data, 'Round vs Test Count Graph', 'Round', 'Total Test');
+                    $scope.reports.showGraphLoader = false;
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1404,21 +1427,21 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             var url = serverURL + 'providervslabs';
             console.log(filterData);
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.reports.showGraph = true;
+                .post(url, filterData)
+                .success(function (data) {
+                    console.log(data)
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Provider-lab count Graph', 'Provider', 'Total Labs');
-                        $scope.reports.showGraphLoader = false;
-                        console.log(data);
+                    $scope.reports.loadGraphParameters(data, 'Provider-lab count Graph', 'Provider', 'Total Labs');
+                    $scope.reports.showGraphLoader = false;
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1431,21 +1454,21 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             var url = serverURL + 'programsvslabs';
             console.log(filterData);
             $http
-                    .post(url, filterData)
-                    .success(function (data) {
-                        console.log(data)
-                        $scope.reports.showGraph = true;
+                .post(url, filterData)
+                .success(function (data) {
+                    console.log(data)
+                    $scope.reports.showGraph = true;
 
-                        $scope.reports.loadGraphParameters(data, 'Program-lab count Graph', 'Program', 'Total Labs');
-                        $scope.reports.showGraphLoader = false;
-                        console.log(data);
+                    $scope.reports.loadGraphParameters(data, 'Program-lab count Graph', 'Program', 'Total Labs');
+                    $scope.reports.showGraphLoader = false;
+                    console.log(data);
 
-                    })
-                    .error(function (error) {
-                        $scope.reports.showGraphLoader = false;
-                        $scope.reports.showGraph = false;
-                        updateGraphMessages("Server error,please try again", true, 'btn-danger');
-                    })
+                })
+                .error(function (error) {
+                    $scope.reports.showGraphLoader = false;
+                    $scope.reports.showGraph = false;
+                    updateGraphMessages("Server error,please try again", true, 'btn-danger');
+                })
         } catch (e) {
             console.log(e)
         }
@@ -1469,59 +1492,59 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             if (filterData.ProgramId != '' && angular.isDefined(filterData.ProgramId)) {
                 updateGraphMessages("please select a program to proceed", false, 'btn-danger')
                 $http.post(result, filterData)
-                        .success(function (data) {
-                            $scope.reports.showGraphLoader = false;
-                            $scope.reports.showGraph = true;
-                            $scope.reports.searchedReport = filterData.ProgramId;
-                            console.log(data);
-                            if (data.length > 0) {
-                                changeGraphTableHeaders('Program', 'Result Count');
-                                $timeout(function () {
-                                    $scope.reports.chartProgramResults = {
-                                        options: {
-                                            chart: {
-                                                type: $scope.reports.graphType
-                                            },
-                                            plotOptions: {
-                                                series: {
-                                                    stacking: ''
-                                                }
+                    .success(function (data) {
+                        $scope.reports.showGraphLoader = false;
+                        $scope.reports.showGraph = true;
+                        $scope.reports.searchedReport = filterData.ProgramId;
+                        console.log(data);
+                        if (data.length > 0) {
+                            changeGraphTableHeaders('Program', 'Result Count');
+                            $timeout(function () {
+                                $scope.reports.chartProgramResults = {
+                                    options: {
+                                        chart: {
+                                            type: $scope.reports.graphType
+                                        },
+                                        plotOptions: {
+                                            series: {
+                                                stacking: ''
                                             }
-                                        },
+                                        }
+                                    },
 
-                                        series: data,
-                                        title: {
-                                            text: reportFilter.programId
+                                    series: data,
+                                    title: {
+                                        text: reportFilter.programId
 
-                                        },
-                                        credits: {
-                                            enabled: true
-                                        },
-                                        xAxis: {
-                                            tickInterval: 1,
-                                            labels: {
-                                                enabled: true,
-                                                formatter: function () {
-                                                    return data[this.value].title;
-                                                },
+                                    },
+                                    credits: {
+                                        enabled: true
+                                    },
+                                    xAxis: {
+                                        tickInterval: 1,
+                                        labels: {
+                                            enabled: true,
+                                            formatter: function () {
+                                                return data[this.value].title;
                                             },
-                                            categories: [0, 1, 2, 3, 4]
                                         },
-                                        loading: false,
-                                        size: {}
-                                    };
-                                    $scope.showGraph = false;
+                                        categories: [0, 1, 2, 3, 4]
+                                    },
+                                    loading: false,
+                                    size: {}
+                                };
+                                $scope.showGraph = false;
 
-                                }, 30)
-                            } else {
-                                $scope.reports.showGraphLoader = false;
-                                $scope.reports.showGraph = false;
-                                updateGraphMessages("No Records available", true, 'btn-warning');
-                            }
-                        })
-                        .error(function (error) {
-                            console.log(error)
-                        })
+                            }, 30)
+                        } else {
+                            $scope.reports.showGraphLoader = false;
+                            $scope.reports.showGraph = false;
+                            updateGraphMessages("No Records available", true, 'btn-warning');
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error)
+                    })
             } else {
                 updateGraphMessages("please select a program to proceed", true, 'btn-danger')
             }
@@ -1564,36 +1587,36 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
     }
 
 })
-        .factory('reportCache', function ($cacheFactory) {
-            return $cacheFactory('reportData');
+    .factory('reportCache', function ($cacheFactory) {
+        return $cacheFactory('reportData');
 
-        })
-        .factory('graphDataCache', function ($cacheFactory) {
-            return $cacheFactory('graphData');
+    })
+    .factory('graphDataCache', function ($cacheFactory) {
+        return $cacheFactory('graphData');
 
-        })
-        .directive('itemsPerPage', function () {
-            return {
-                restrict: 'EA',
-                template: "<div class='dropdown  col-md-3 col-sm-12  pull-right'>" +
-                        "<button class='text-capitalize  btn btn-success btn-sm dropdown-toggle' type='button'" +
-                        "id='menu1' data-toggle='dropdown'>Items Per Page {{samples.itemsPerPage}}" +
-                        "<span class='caret'></span></button>" +
-                        "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>" +
-                        "<li role='presentation'>" +
-                        "<a href='#' ng-click='samples.changeItemsPerPage(10)'>10</a>" +
-                        "</li>" +
-                        "<li role='presentation'>" +
-                        "<a href='#' ng-click='samples.changeItemsPerPage(25)'>25</a>" +
-                        "</li>" +
-                        "<li role='presentation'>" +
-                        "<a href='#' ng-click='samples.changeItemsPerPage(50)'>50 </a>" +
-                        "</li>" +
-                        "<li role='presentation'>" +
-                        "<a href='#' ng-click='samples.changeItemsPerPage(100)'>100</a>" +
-                        "</li>" +
-                        "</ul>" +
-                        "</div>"
-            }
-        })
+    })
+    .directive('itemsPerPage', function () {
+        return {
+            restrict: 'EA',
+            template: "<div class='dropdown  col-md-3 col-sm-12  pull-right'>" +
+            "<button class='text-capitalize  btn btn-success btn-sm dropdown-toggle' type='button'" +
+            "id='menu1' data-toggle='dropdown'>Items Per Page {{samples.itemsPerPage}}" +
+            "<span class='caret'></span></button>" +
+            "<ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(10)'>10</a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(25)'>25</a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(50)'>50 </a>" +
+            "</li>" +
+            "<li role='presentation'>" +
+            "<a href='#' ng-click='samples.changeItemsPerPage(100)'>100</a>" +
+            "</li>" +
+            "</ul>" +
+            "</div>"
+        }
+    })
 

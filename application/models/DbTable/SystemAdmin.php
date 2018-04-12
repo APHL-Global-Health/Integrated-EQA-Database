@@ -1,11 +1,13 @@
 <?php
 
-class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
+{
 
     protected $_name = 'system_admin';
     protected $_primary = 'admin_id';
 
-    public function getAllAdmin($parameters) {
+    public function getAllAdmin($parameters)
+    {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -142,7 +144,9 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             $row[] = $aRow['last_name'];
             $row[] = $aRow['primary_email'];
             $row[] = $aRow['phone'];
-            $row[] = '<a href="/admin/system-admins/edit/id/' . $aRow['admin_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url = '<a href="/admin/system-admins/edit/id/' . $aRow['admin_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url .= '<a href="/admin/system-admins/addcounty/id/' . $aRow['admin_id'] . '" class="btn btn-success btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> add County</a>';
+            $row[] = $url;
 
             $output['aaData'][] = $row;
         }
@@ -150,18 +154,18 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
-    public function getAllSystemAdmins($systemType = null) {
+    public function getAllSystemAdmins($systemType = null)
+    {
 
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
         $sWhere = '';
-        if(isset($systemType)){
+        if (isset($systemType)) {
             $sWhere .= " IsVl = $systemType";
         }
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
 
-        
 
         //error_log($sQuery);
 
@@ -170,7 +174,8 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         return $rResult;
     }
 
-    public function generateRandomPassword($len) {
+    public function generateRandomPassword($len)
+    {
 
         $min_lenght = 0;
         $max_lenght = 100;
@@ -200,24 +205,26 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         return $CodeEX;
     }
 
-    public function sendEmailToUser($sendTo, $password, $fullname) {
+    public function sendEmailToUser($sendTo, $password, $fullname)
+    {
         $common = new Application_Service_Common();
         $message = "Dear $fullname,"
-                . "You have been granted access to the NPHL Integrated EQA Database application."
-                . "Please click the following link to access the application in your computer browser."
-                . "Kindly log in with below credentials to access the system <br>"
-                . "<br>Username : $sendTo <br>"
-                . "Password : $password <br>"
-                . "If you have received this email in error or have any other queries, "
-                . "please notify the system administrator at info@nphl.or.ke."
-                . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
-                . "<small>This is a system generated email. Please do not reply.</small>";
+            . "You have been granted access to the NPHL Integrated EQA Database application."
+            . "Please click the following link to access the application in your computer browser."
+            . "Kindly log in with below credentials to access the system <br>"
+            . "<br>Username : $sendTo <br>"
+            . "Password : $password <br>"
+            . "If you have received this email in error or have any other queries, "
+            . "please notify the system administrator at info@nphl.or.ke."
+            . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
+            . "<small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $common->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
 
-    public function addSystemAdmin($params) {
+    public function addSystemAdmin($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $common = new Application_Service_Common();
         $email = $params['primaryEmail'];
@@ -245,7 +252,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
             if ($data['IsVl'] == 2) {
-                $data['County'] = $params['County'];
+                $data['County'] = implode(',',$params['County']);
             }
         }
         if ($_SESSION['loggedInDetails']['IsVl'] == 4) {
@@ -253,6 +260,8 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 $data['IsProvider'] = 1;
             }
         }
+
+//print_r($data);exit;
 
         $fullname = $params['firstName'] . ' ' . $params['lastName'];
 
@@ -270,11 +279,13 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
     ///
     ///
 
-    public function getSystemAdminDetails($adminId) {
+    public function getSystemAdminDetails($adminId)
+    {
         return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
     }
 
-    public function updateSystemAdmin($params) {
+    public function updateSystemAdmin($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'first_name' => $params['firstName'],
@@ -306,7 +317,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
             if ($data['IsVl'] == 2) {
                 if (isset($data['County'])) {
-                    $data['County'] = $params['County'];
+                    $data['County'] = implode(',',$params['County']);
                 }
             }
         }

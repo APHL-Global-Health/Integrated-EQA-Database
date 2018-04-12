@@ -89,11 +89,14 @@
              <div class="form-group">
                 <label class="col-lg-3 control-label">County <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" required name="County" id="County" title="Please choose the county here">
+                    <select multiple
+                            class="form-control isRequired"
+                            required name="County[]" id="County" title="Please choose the county here">
                        
                         <?php foreach ($this->countyList as $prov) {
                             ?>
-                            <option <?php if($prov['Description']=='NAIROBI') echo 'SELECTED'; ?>  value="<?php echo $prov['CountyID']; ?>"><?php echo $prov['Description']; ?></option>
+                            <option <?php  ?>
+                                    value="<?php echo $prov['CountyID']; ?>"><?php echo $prov['Description']; ?></option>
                             <?php
                         }
                         ?>

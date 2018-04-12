@@ -326,6 +326,17 @@ class Reports_RepositoryController extends Zend_Controller_Action {
         exit();
     }
 
+    public function getqacountiesAction() {
+
+
+        $countyId =$_SESSION['loggedInDetails']['County'];
+
+        $query = "Select*from rep_counties where countyid in( $countyId )";
+
+        echo json_encode($this->dbConnection->doQuery($query));
+        exit();
+    }
+
     public function getprogramsAction() {
 
 

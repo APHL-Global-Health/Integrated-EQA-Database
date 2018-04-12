@@ -1,4 +1,3 @@
-
 <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
 <!--<script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/dirPagination.js'); ?>"></script>-->
 <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/ui-bootstrap-tpls-0.9.0.js'); ?>"></script>
@@ -11,917 +10,944 @@
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <style>
     @media print {
-        .dontPrint, #shipmentTable_filter, #shipmentTable_info{
-            display:none;
-        </style>
+        .dontPrint, #shipmentTable_filter, #shipmentTable_info {
+            display: none;
+</style>
 
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <style>
-            @media print {
-                .dontPrint, #shipmentTable_filter, #shipmentTable_info {
-                    display: none;
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<style>
+    @media print {
+        .dontPrint, #shipmentTable_filter, #shipmentTable_info {
+            display: none;
 
-                }
-            }
-        </style>
-        <div id='ng-app' ng-app="ReportModule" ng-cloak="">
+        }
+    }
+</style>
+<div id='ng-app' ng-app="ReportModule" ng-cloak="">
 
-            <div ng-controller="ReportController">
-                <div class="">
-                    <ul class="nav nav-tabs" ng-init="clickedTab = 'reports'">
+    <div ng-controller="ReportController">
+        <div class="">
+            <ul class="nav nav-tabs" ng-init="clickedTab = 'reports'">
 
-                        <li class="pull-left">
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reports & Graphs
-                                    <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
+                <li class="pull-left">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reports &
+                            Graphs
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
 
-                                    <li ng-class="{'active' : clickedTab == 'reports'}">
+                            <li ng-class="{'active' : clickedTab == 'reports'}">
 
-                                        <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
-                                    </li>
-                                    <li ng-class="{'active' : clickedTab == 'participants'}">
-                                        <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
-                                    </li>
-                                    <li ng-class="{'active' : clickedTab == 'resultcode'}">
-                                        <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
-                                    </li>
-                                    <li ng-class="{'active' : clickedTab == 'summary'}">
-                                        <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
-                                    </li>
+                                <a href="#" ng-click="clickedTab = 'reports'">General Report</a>
+                            </li>
+                            <li ng-class="{'active' : clickedTab == 'participants'}">
+                                <a href="#" ng-click="clickedTab = 'participants'">Participant Reports</a>
+                            </li>
+                            <li ng-class="{'active' : clickedTab == 'resultcode'}">
+                                <a href="#" ng-click="clickedTab = 'resultcode'">Participation on Resultcode</a>
+                            </li>
+                            <li ng-class="{'active' : clickedTab == 'summary'}">
+                                <a href="#" ng-click="clickedTab = 'summary'">Performance Summary</a>
+                            </li>
 
-                                    <li ng-class="{'active' : clickedTab == 'graphs'}">
-                                        <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
-                                    </li>
+                            <li ng-class="{'active' : clickedTab == 'graphs'}">
+                                <a href="#" ng-click="clickedTab = 'graphs'">Graphs</a>
+                            </li>
 
-                                </ul>
-                            </div>
-                        </li>
-                        <!--
-                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'reports'}">
-                            <a href="" ng-click="clickedTab = 'reports'">Reports</a>
-                        </li>
-                        <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
-                            <a href="" ng-click="clickedTab = 'graphs'">Graphs</a>
-                        </li>
-                        -->
-                        <li class='pull-right'>
-
-
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
-                                 ng-click="reports.generateRepositoryGenPdf(reports.repositoryData)">
-                                <i class="fa fa-file-pdf-o"></i> PDF
-                            </div>
-
-                            <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
-                                 ng-click="reports.generateRepositoryParticipantPdf(reports.participantingLabs)">
-                                <i class="fa fa-file-pdf-o"></i> PDF
-                            </div>
-                            <div class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"
-                                 ng-click="reports.generateRepositorySummaryPdf(reports.performanceLabs)">
-                                <i class="fa fa-file-pdf-o"></i> PDF
-                            </div>
+                        </ul>
+                    </div>
+                </li>
+                <!--
+                <li class='pull-left ' ng-class="{'active' : clickedTab == 'reports'}">
+                    <a href="" ng-click="clickedTab = 'reports'">Reports</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : clickedTab == 'graphs'}">
+                    <a href="" ng-click="clickedTab = 'graphs'">Graphs</a>
+                </li>
+                -->
+                <li class='pull-right'>
 
 
-                            <div class="btn btn-info btn-sm" ng-show="clickedTab == 'reports'" ng-click="reports.exportToExcelFile()">
-                                <i class="fa fa-excel"></i> CSV
-                            </div>
-                            
-                            
-                            <div class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"
-                                 ng-click="reports.generateParticipationRCPdf(reports.participantionResultCode)">
-                                <i class="fa fa-file-pdf-o"></i> PDF
-                            </div>
+                    <div class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
+                         ng-click="reports.generateRepositoryGenPdf(reports.repositoryData)">
+                        <i class="fa fa-file-pdf-o"></i> PDF
+                    </div>
+
+                    <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
+                         ng-click="reports.generateRepositoryParticipantPdf(reports.participantingLabs)">
+                        <i class="fa fa-file-pdf-o"></i> PDF
+                    </div>
+                    <div class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"
+                         ng-click="reports.generateRepositorySummaryPdf(reports.performanceLabs)">
+                        <i class="fa fa-file-pdf-o"></i> PDF
+                    </div>
 
 
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'resultcode'" 
-                                 ng-click="reports.generateParticipantRCExcel(reports.participantionResultCode)">
-                                <i class="fa fa-excel"></i> CSV
-                            </div>
-                            
-                            
-                            
-                            
-                            
+                    <div class="btn btn-info btn-sm" ng-show="clickedTab == 'reports'"
+                         ng-click="reports.exportToExcelFile()">
+                        <i class="fa fa-excel"></i> CSV
+                    </div>
 
-                            <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'summary'" ng-click="reports.generateSummaryExcel(reports.performanceLabs)">
-                                <i class="fa fa-excel"></i> Excel
-                            </div>
-                            <div class="btn btn-success btn-sm" ng-show="clickedTab == 'participants'" ng-click="reports.generateParticipantsExcel(reports.participantingLabs)">
-                                <i class="fa fa-excel"></i> Excel
-                            </div>
+
+                    <div class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"
+                         ng-click="reports.generateParticipationRCPdf(reports.participantionResultCode)">
+                        <i class="fa fa-file-pdf-o"></i> PDF
+                    </div>
+
+
+                    <div class="btn btn-success btn-sm" ng-show="clickedTab == 'resultcode'"
+                         ng-click="reports.generateParticipantRCExcel(reports.participantionResultCode)">
+                        <i class="fa fa-excel"></i> CSV
+                    </div>
+
+
+                    <div class="btn btn-primary btn-sm" ng-show="clickedTab == 'summary'"
+                         ng-click="reports.generateSummaryExcel(reports.performanceLabs)">
+                        <i class="fa fa-excel"></i> Excel
+                    </div>
+                    <div class="btn btn-success btn-sm" ng-show="clickedTab == 'participants'"
+                         ng-click="reports.generateParticipantsExcel(reports.participantingLabs)">
+                        <i class="fa fa-excel"></i> Excel
+                    </div>
 
 
                     <!--<div class="btn btn-info btn-sm" ng-click="reports.exportToCSV()"> <i class="fa fa-excel"></i> CSV</div>
                             -->
 
-                        </li>
+                </li>
 
 
-                    </ul>
+            </ul>
 
 
-                </div>
-                <div class="alert alert-dismissible {{reports.graphMessageCSS}}" ng-show="reports.graphMessageStatus">
-                    {{reports.graphMessage}}
-                </div>
-                <form novalidate="" name="search">
-                    <table style="margin:20px 0;" class="table table-bordered">
-                        <tr>
-                            <td style="width:200px;text-align: center;font-weight:bold;">
-                                Pick a Date Range (Optional)
-                            </td>
-                            <td style="width:200px;text-align: center;font-weight:bold;">
-                                Select Provider
-                            </td>
-                            <td style="width:200px;text-align: center;font-weight:bold;">
-                                County
-                            </td>
-                            <td style="width:200px;text-align: center;font-weight:bold;">
+        </div>
+        <div class="alert alert-dismissible {{reports.graphMessageCSS}}" ng-show="reports.graphMessageStatus">
+            {{reports.graphMessage}}
+        </div>
+        <form novalidate="" name="search">
+            <table style="margin:20px 0;" class="table table-bordered">
+                <tr>
+                    <td style="width:200px;text-align: center;font-weight:bold;">
+                        Pick a Date Range (Optional)
+                    </td>
+                    <td style="width:200px;text-align: center;font-weight:bold;">
+                        Select Provider
+                    </td>
+                    <td style="width:200px;text-align: center;font-weight:bold;">
+                        County
+                    </td>
+                    <td style="width:200px;text-align: center;font-weight:bold;">
 
-                        <x ng-if="clickedTab == 'participants'">  Analyte and</x>
-                        <x ng-if="clickedTab == 'graphs'"> Graphs and </x>
-                        <x ng-if="clickedTab == 'summary'"> Sample name and </x>
+                        <x ng-if="clickedTab == 'participants'"> Analyte and</x>
+                        <x ng-if="clickedTab == 'graphs'"> Graphs and</x>
+                        <x ng-if="clickedTab == 'summary'"> Sample name and</x>
                         Program
-                        </td>
-                        <td class="dontPrint" style="width:5px;text-align: center;font-weight:bold;">Action</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="text" id="dateRange" name="dateRange" ng-model="reports.reportFilter.dateRange"
-                                       class="form-control input-sm" readonly="readonly" 
-                                       style="background: #fff" placeholder="Click here to pick a Date Range"/>
-                                </td>
-                                <td>
-                                    <select id="provider" name="provider" ng-model="reports.reportFilter.providerID"
-                                            class="form-control input-sm">
-                                        <option value=""> -- Select Provider --</option>
-                                        <?php
-                                        foreach ($this->providers as $provider) {
-                                            ?>
-                                            <option value="<?php echo $provider['ProviderName']; ?>">
-                                                <?php echo $provider['ProviderName']; ?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </td>
-                                <td ng-init="reports.getCounties()">
-                                    <?php if ($_SESSION['loggedInDetails']['IsProvider'] == 1) { ?>
-                                        <select id="county" class="form-control input-sm"  ng-model="county"
-                                                ng-change="reports.countyChange(county)"
-                                                >
-                                            <option value="">--Select County--</option>
-                                            <option ng-repeat="county in reports.allCounties" value="{{county.Description}}">
-                                                {{county.Description}}
-                                            </option>
-                                        </select>
-                                    <?php } if ($_SESSION['loggedInDetails']['IsProvider'] == 3) { ?>
-                                        County : 
-                                        <b ng-repeat="county in reports.allCounties" ng-if="county.CountyID ==<?php echo $_SESSION['loggedInDetails']['County']; ?>">
-                                            <input type="text" id="county" name="county" ng-hide="true" value="{{county.Description}}"/>
+                    </td>
+                    <td class="dontPrint" style="width:5px;text-align: center;font-weight:bold;">Action</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" id="dateRange" name="dateRange" ng-model="reports.reportFilter.dateRange"
+                               class="form-control input-sm" readonly="readonly"
+                               style="background: #fff" placeholder="Click here to pick a Date Range"/>
+                    </td>
+                    <td>
+                        <select id="provider" name="provider" ng-model="reports.reportFilter.providerID"
+                                class="form-control input-sm">
+                            <option value=""> -- Select Provider --</option>
+                            <?php
+                            foreach ($this->providers as $provider) {
+                                ?>
+                                <option value="<?php echo $provider['ProviderName']; ?>">
+                                    <?php echo $provider['ProviderName']; ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
+                    <td >
+                        <?php if ($_SESSION['loggedInDetails']['IsProvider'] == 1) { ?>
+                            <select id="county" class="form-control input-sm" ng-model="county"
+                                    ng-change="reports.countyChange(county)" ng-init="reports.getCounties()"
+                            >
+                                <option value="">--Select County--</option>
+                                <option ng-repeat="county in reports.allCounties" value="{{county.Description}}">
+                                    {{county.Description}}
+                                </option>
+                            </select>
+                        <?php }
+                        if ($_SESSION['loggedInDetails']['IsProvider'] == 3) { ?>
 
-                                            {{county.Description}}
-                                        </b>
-                                    <?php } ?>
-                                </td>
-                                <td>
-                                    <select class="form-control input-sm" ng-model="reports.reportType"
+                            <select id="county" class="form-control input-sm" ng-model="county"
+                                    ng-change="reports.countyChange(county)" ng-init="reports.returnQACounties()"
+                            >
+                                <option value="" selected>--Select County--</option>
+                                <option ng-repeat="county in reports.allCounties" value="{{county.Description}}">
+                                    {{county.Description}}
+                                </option>
+                            </select>
 
-                                            ng-show="clickedTab == 'graphs'">
-                                        <option value="Provider-lab Graph">Provider-lab Graph</option>
-                                        <option value="Program-Results Graph">Program-Results Graph</option>
-                                        <option value="Program-lab count Graph">Program-lab count Graph</option>
-                                        <option value="Round-tests Graph">Round-tests Graph</option>
-                                        <option value="Round-results Graph">Round-results Graph</option>
-                                        <option value="Lab-samples Graph">Lab-samples Graph</option>
-                                        <option value="Lab-results Graph">Lab-results Graph</option>
-                                        <option value="County-labs Graph">County-labs Graph</option>
-                                    </select>
-                                    <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'graphs'"
-                                            name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
-                                        <option value=""> -- Select Program --</option>
-                                        <!--                <option value="network">Network Tier</option>
-                                                        <option value="affiliation">Affiliation</option>-->
-                                        <option ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">
-                                            {{programs.Description}}
-                                        </option>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" ng-model="reports.reportType"
 
-                                    </select>
+                                ng-show="clickedTab == 'graphs'">
+                            <option value="Provider-lab Graph">Provider-lab Graph</option>
+                            <option value="Program-Results Graph">Program-Results Graph</option>
+                            <option value="Program-lab count Graph">Program-lab count Graph</option>
+                            <option value="Round-tests Graph">Round-tests Graph</option>
+                            <option value="Round-results Graph">Round-results Graph</option>
+                            <option value="Lab-samples Graph">Lab-samples Graph</option>
+                            <option value="Lab-results Graph">Lab-results Graph</option>
+                            <option value="County-labs Graph">County-labs Graph</option>
+                        </select>
+                        <select id="program" ng-init="reports.getPrograms()" ng-if="clickedTab == 'graphs'"
+                                name="reportType" ng-model="reports.reportFilter.programId"
+                                class="form-control input-sm">
+                            <option value=""> -- Select Program --</option>
+                            <!--                <option value="network">Network Tier</option>
+                                            <option value="affiliation">Affiliation</option>-->
+                            <option ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">
+                                {{programs.Description}}
+                            </option>
 
-
-                                    <input type="text" id="AnalyteID" name="AnalyteID" ng-model="reports.reportFilter.AnalyteID"
-                                           ng-if="clickedTab == 'participants' || clickedTab == 'resultcode'"
-                                           class="form-control input-sm"
-                                           style="background: #fff" placeholder="fill analyte id/name"/>
-                                    <input type="text" id="AnalyteID" name="ResultCode" ng-model="reports.reportFilter.ResultCode"
-                                           ng-if="clickedTab == 'resultcode'"
-                                           class="form-control input-sm"
-                                           style="background: #fff" placeholder="fill Result Code"/>
-
-                                    <input type="text" id="sample" name="sample" ng-model="reports.reportFilter.sample"
-                                           ng-if="clickedTab == 'summary'"
-                                           class="form-control input-sm" 
-                                           style="background: #fff" placeholder="sample code/sample name"/>
-                                    <input type="text" id="MflCode" name="MflCode" ng-model="reports.reportFilter.MflCode"
-                                           ng-if="clickedTab == 'validateData'"
-                                           class="form-control input-sm" 
-                                           style="background: #fff" placeholder="MFL Code"/>
+                        </select>
 
 
-                                    <select id="program" ng-init="reports.getPrograms()" 
-                                            ng-if="clickedTab == 'reports' || clickedTab == 'validateData'
+                        <input type="text" id="AnalyteID" name="AnalyteID" ng-model="reports.reportFilter.AnalyteID"
+                               ng-if="clickedTab == 'participants' || clickedTab == 'resultcode'"
+                               class="form-control input-sm"
+                               style="background: #fff" placeholder="fill analyte id/name"/>
+                        <input type="text" id="AnalyteID" name="ResultCode" ng-model="reports.reportFilter.ResultCode"
+                               ng-if="clickedTab == 'resultcode'"
+                               class="form-control input-sm"
+                               style="background: #fff" placeholder="fill Result Code"/>
+
+                        <input type="text" id="sample" name="sample" ng-model="reports.reportFilter.sample"
+                               ng-if="clickedTab == 'summary'"
+                               class="form-control input-sm"
+                               style="background: #fff" placeholder="sample code/sample name"/>
+                        <input type="text" id="MflCode" name="MflCode" ng-model="reports.reportFilter.MflCode"
+                               ng-if="clickedTab == 'validateData'"
+                               class="form-control input-sm"
+                               style="background: #fff" placeholder="MFL Code"/>
+
+
+                        <select id="program" ng-init="reports.getPrograms()"
+                                ng-if="clickedTab == 'reports' || clickedTab == 'validateData'
                                                         || clickedTab == 'participants' || clickedTab == 'summary' || clickedTab == 'resultcode'"
-                                            name="reportType" ng-model="reports.reportFilter.programId" class="form-control input-sm">
-                                        <option value=""> -- Select Program --</option>
-                                        <!--                <option value="network">Network Tier</option>
-                                                        <option value="affiliation">Affiliation</option>-->
-                                        <option ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">
-                                            {{programs.Description}}
-                                        </option>
+                                name="reportType" ng-model="reports.reportFilter.programId"
+                                class="form-control input-sm">
+                            <option value=""> -- Select Program --</option>
+                            <!--                <option value="network">Network Tier</option>
+                                            <option value="affiliation">Affiliation</option>-->
+                            <option ng-repeat="programs in reports.allPrograms" value="{{programs.Description}}">
+                                {{programs.Description}}
+                            </option>
 
-                                    </select>
-
-
-                                </td>
-                                <td class="dontPrint">
-                                    <button class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.doAjaxRequest()"><span>Get Report</span></button>
-
-                                    <button class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.getParticipants()"><span>Get Report</span>
-                                    </button>
-                                    <button class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.getLabPerformance()"><span>Get Report</span>
-                                    </button>
-                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
-                                    </button>
-                                    <!--                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
-                                                                                ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
-                                                                        </button>-->
-
-                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'validateData'"  ng-disabled="search.$invalid"
-                                            ng-click="reports.getValidationData()"><span>Get Data</span>
-                                    </button>
-
-                                    <button class="btn btn-success btn-sm"  ng-disabled="search.$invalid"
-                                            ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"
-                                            ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span>
-                                    </button>
-
-                                    <button class="btn btn-info btn-sm" ng-disabled="search.$invalid"
-                                            ng-show="clickedTab == 'graphs' && reports.reportType != 'Program-Results Graph'"
-                                            ng-click="reports.showGraphClicked(reports.reportType)"><span>Fetch</span></button>
+                        </select>
 
 
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    <div class="alert alert-dismissible alert-info">
-                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Date Range : <strong>{{reports.searchFilters.dateRange}} |</strong>
-                        Provider : <strong>{{reports.searchFilters.ProviderId}} |</strong>
-                        Program : <strong>{{reports.searchFilters.ProgramID}}{{reports.searchFilters.ProgramId}} |</strong>
-                        County : <strong>{{reports.searchFilters.countyName}}</strong>
-                    </div>
-                    <div ng-if="clickedTab == 'reports'" ng-init="reports.stringSearch = {}">
+                    </td>
+                    <td class="dontPrint">
+                        <button class="btn btn-success btn-sm" ng-show="clickedTab == 'reports'"
+                                ng-disabled="search.$invalid"
+                                ng-click="reports.doAjaxRequest()"><span>Get Report</span></button>
 
-                        <legend>
-                            <h3>Repository Report
-                                <small class="text-gray">{{reports.repositoryData.length}} Records</small>
-                            </h3>
-                        </legend>
+                        <button class="btn btn-primary btn-sm" ng-show="clickedTab == 'participants'"
+                                ng-disabled="search.$invalid"
+                                ng-click="reports.getParticipants()"><span>Get Report</span>
+                        </button>
+                        <button class="btn btn-warning btn-sm" ng-show="clickedTab == 'summary'"
+                                ng-disabled="search.$invalid"
+                                ng-click="reports.getLabPerformance()"><span>Get Report</span>
+                        </button>
+                        <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"
+                                ng-disabled="search.$invalid"
+                                ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
+                        </button>
+                        <!--                                    <button class="btn btn-info btn-sm" ng-show="clickedTab == 'resultcode'"  ng-disabled="search.$invalid"
+                                                                    ng-click="reports.getParticipantionResultCode()"><span>Get Report</span>
+                                                            </button>-->
 
-                        <br>
-                        <div>
+                        <button class="btn btn-info btn-sm" ng-show="clickedTab == 'validateData'"
+                                ng-disabled="search.$invalid"
+                                ng-click="reports.getValidationData()"><span>Get Data</span>
+                        </button>
+
+                        <button class="btn btn-success btn-sm" ng-disabled="search.$invalid"
+                                ng-show="clickedTab == 'graphs' && reports.reportType == 'Program-Results Graph'"
+                                ng-click="reports.getBackendJason(reports.reportFilter)"><span>Get Graph</span>
+                        </button>
+
+                        <button class="btn btn-info btn-sm" ng-disabled="search.$invalid"
+                                ng-show="clickedTab == 'graphs' && reports.reportType != 'Program-Results Graph'"
+                                ng-click="reports.showGraphClicked(reports.reportType)"><span>Get Data</span></button>
 
 
-                            <div class="bg-gray-active col-md-12  text-center" ng-show="reports.showLoader">
-                                <i class="fa fa-spin fa-spinner"></i> Loading...
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="alert alert-dismissible alert-info">
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            Date Range : <strong>{{reports.searchFilters.dateRange}} |</strong>
+            Provider : <strong>{{reports.searchFilters.ProviderId}} |</strong>
+            Program : <strong>{{reports.searchFilters.ProgramID}}{{reports.searchFilters.ProgramId}} |</strong>
+            County : <strong>{{reports.searchFilters.countyName}}</strong>
+        </div>
+        <div ng-if="clickedTab == 'reports'" ng-init="reports.stringSearch = {}">
+
+            <legend>
+                <h3>Repository Report
+                    <small class="text-gray">{{reports.repositoryData.length}} Records</small>
+                </h3>
+            </legend>
+
+            <br>
+            <div>
+
+
+                <div class="bg-gray-active col-md-12  text-center" ng-show="reports.showLoader">
+                    <i class="fa fa-spin fa-spinner"></i> Loading...
+                </div>
+                <table cellpadding="0" id="repoReport" cellspacing="0" ng-if='reports.reportShowTable'
+                       border="0" class="table table-striped table-bordered table-hover"
+                >
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="btn btn-warning btn-sm" ng-click="reports.clearSearch()">
+                                reset
                             </div>
-                            <table cellpadding="0" id="repoReport" cellspacing="0" ng-if='reports.reportShowTable'
-                                   border="0" class="table table-striped table-bordered table-hover"
-                                   >
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <div class="btn btn-warning btn-sm" ng-click="reports.clearSearch()">
-                                                reset
-                                            </div>
-                                        </th>
-                                        <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Provider" ng-model='reports.stringSearch.ProviderID'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Program" ng-model='reports.stringSearch.ProgramID'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Lab" ng-model='reports.stringSearch.LabID'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Round" ng-model='reports.stringSearch.RoundID'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Date" ng-model='reports.stringSearch.ReleaseDate'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Grade" ng-model='reports.stringSearch.Grade'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search Analyte" ng-model='reports.stringSearch.AnalyteID'>
-                                    </th>
-                                    <th style="text-align: center;">
-                                        <input class="form-control col-md-12 input-sm"
-                                               ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
-                                               placeholder="Search sample" ng-model='reports.stringSearch.SampleCode'>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center;"> #</th>
-                                    <th style="text-align: center;">Provider Name</th>
-                                    <th style="text-align: center;">Program</th>
-                                    <th style="text-align: center;">Lab</th>
-                                    <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
-                                    <th style="text-align: center;">PT Round Code</th>
-                                    <th style="text-align: center;">Release Date</th>
-                                    <th style="text-align: center;">Grade</th>
-                                    <th style="text-align: center;">Analyte ID</th>
-                                    <th style="text-align: center;">Sample Code</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr dir-paginate="record in reports.repositoryData| itemsPerPage: reports.itemsPerPage | filter :reports.search"
-                                    >
-                                    <td>{{$index + 1}}</td>
-                                    <td>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Provider" ng-model='reports.stringSearch.ProviderID'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Program" ng-model='reports.stringSearch.ProgramID'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Lab" ng-model='reports.stringSearch.LabID'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Round" ng-model='reports.stringSearch.RoundID'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Date" ng-model='reports.stringSearch.ReleaseDate'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Grade" ng-model='reports.stringSearch.Grade'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search Analyte" ng-model='reports.stringSearch.AnalyteID'>
+                        </th>
+                        <th style="text-align: center;">
+                            <input class="form-control col-md-12 input-sm"
+                                   ng-keyup="reports.filterRepositoryData(reports.stringSearch)"
+                                   placeholder="Search sample" ng-model='reports.stringSearch.SampleCode'>
+                        </th>
+                    </tr>
+                    </thead>
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;"> #</th>
+                        <th style="text-align: center;">Provider Name</th>
+                        <th style="text-align: center;">Program</th>
+                        <th style="text-align: center;">Lab</th>
+                        <!--  <th style="text-align: center;" id="reportText">Report Type</th>-->
+                        <th style="text-align: center;">PT Round Code</th>
+                        <th style="text-align: center;">Release Date</th>
+                        <th style="text-align: center;">Grade</th>
+                        <th style="text-align: center;">Analyte ID</th>
+                        <th style="text-align: center;">Sample Code</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr dir-paginate="record in reports.repositoryData| itemsPerPage: reports.itemsPerPage | filter :reports.search"
+                    >
+                        <td>{{$index + 1}}</td>
+                        <td>
 
-                                        {{record.ProviderID}}
-                                    </td>
-                                    <td>
-                                        {{record.ProgramID}}
-                                    </td>
-                                    <td>
-                                        {{record.Name}}
-                                    </td>
-                                    <!--<td>
-                                        Inclassified
-                                    </td>-->
-                                    <td>
-                                        {{record.RoundID}}
-                                    </td>
-                                    <td>
-                                        {{record.ReleaseDate}}
-                                    </td>
-                                    <td>
-                                        {{record.Grade}}
-                                    </td>
-                                    <td>
-                                        {{record.AnalyteID}}
-                                    </td>
-                                    <td>
-                                        {{record.SampleCode}}
-                                    </td>
+                            {{record.ProviderID}}
+                        </td>
+                        <td>
+                            {{record.ProgramID}}
+                        </td>
+                        <td>
+                            {{record.Name}}
+                        </td>
+                        <!--<td>
+                            Inclassified
+                        </td>-->
+                        <td>
+                            {{record.RoundID}}
+                        </td>
+                        <td>
+                            {{record.ReleaseDate}}
+                        </td>
+                        <td>
+                            {{record.Grade}}
+                        </td>
+                        <td>
+                            {{record.AnalyteID}}
+                        </td>
+                        <td>
+                            {{record.SampleCode}}
+                        </td>
 
-                                </tr>
-                            </tbody>
-                        </table>
+                    </tr>
+                    </tbody>
+                </table>
 
-                        <dir-pagination-controls  on-page-change="pageChanged(newPageNumber)" max-size="10" direction-links="true"
-                                                  boundary-links="true">
-                        </dir-pagination-controls>
+                <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" max-size="10"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
 
-                    </div>
-                </div>
-                <div ng-if="clickedTab == 'participants'">
-                    <div ng-include="'../partialHTMLS/repositoryReports/participatingLabs.html'">
+            </div>
+        </div>
+        <div ng-if="clickedTab == 'participants'">
+            <div ng-include="'../partialHTMLS/repositoryReports/participatingLabs.html'">
 
-                    </div>
-                </div>
-                <div ng-if="clickedTab == 'summary'">
-                    <div ng-include="'../partialHTMLS/repositoryReports/performanceSummary.html'">
+            </div>
+        </div>
+        <div ng-if="clickedTab == 'summary'">
+            <div ng-include="'../partialHTMLS/repositoryReports/performanceSummary.html'">
 
-                    </div>
-                </div>
-                <div ng-if="clickedTab == 'resultcode'">
-                    <div ng-include="'../partialHTMLS/repositoryReports/resultcode.html'">
+            </div>
+        </div>
+        <div ng-if="clickedTab == 'resultcode'">
+            <div ng-include="'../partialHTMLS/repositoryReports/resultcode.html'">
 
-                    </div>
-                </div>
-                <div ng-if="clickedTab == 'validateData'">
-                    <div ng-include="'../partialHTMLS/repositoryReports/validateData.html'">
+            </div>
+        </div>
+        <div ng-if="clickedTab == 'validateData'">
+            <div ng-include="'../partialHTMLS/repositoryReports/validateData.html'">
 
-                    </div>
-                </div>
+            </div>
+        </div>
 
-                <div ng-show="clickedTab == 'graphs'">
-                    <legend>
-                        <h3 class="text-capitalize">{{reports.reportType}} {{reports.searchedReport}}
+        <div ng-show="clickedTab == 'graphs'">
+            <legend>
+                <h3 class="text-capitalize">{{reports.reportType}} {{reports.searchedReport}}
 
-                            <i class="fa fa-spin fa-spinner" ng-show="reports.showGraphLoader"></i>
+                    <i class="fa fa-spin fa-spinner" ng-show="reports.showGraphLoader"></i>
 
-                        </h3>
-                    </legend>
-                    <ul class="list-unstyled">
-                        <li class="dropdown pull-right">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{reports.graphType}} <b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li ng-repeat="chartType in reports.chartTypes">
-                                    <a href="#" ng-click="reports.changeGraphType(chartType.id)">{{chartType.title}}</a>
-                                </li>
-
-                            </ul>
+                </h3>
+            </legend>
+            <ul class="list-unstyled">
+                <li class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{reports.graphType}} <b
+                                class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="chartType in reports.chartTypes">
+                            <a href="#" ng-click="reports.changeGraphType(chartType.id)">{{chartType.title}}</a>
                         </li>
+
                     </ul>
+                </li>
+            </ul>
 
-                    <div>
+            <div>
 
-                        <div>
-                            <div ng-controller="myctrl">
+                <div>
+                    <div ng-controller="myctrl">
 
-                                <div class="row" ng-if="reports.showGraph">
-                                    <div class="col-md-9 pull-left">
+                        <div class="row" ng-if="reports.showGraph">
+                            <div class="col-md-9 pull-left">
 
-                                        <div class="row" ng-if="reports.graphType != 'pie'">
-                                            <highchart id="chart1" config="reports.chartProgramResults"></highchart>
-                                        </div>
-                                        <div ng-include="'<?php echo $this->baseUrl('partialHTMLS/graphs.html'); ?>'"
-                                             ng-if="reports.graphType == 'pie'">
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-3 pull-right pre-scrollable">
-
-                                        <table class="table table-bordered table-responsive">
-                                            <thead class="btn-info">
-                                                <tr>
-                                                    <th>{{reports.graphTableHeaders.title}}</th>
-                                                    <th>{{reports.graphTableHeaders.dataName}}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="data in reports.chartProgramResults.series">
-                                                    <td>{{data.name}}</td>
-                                                    <td>{{data.data}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
+                                <div class="row" ng-if="reports.graphType != 'pie'">
+                                    <highchart id="chart1" config="reports.chartProgramResults"></highchart>
+                                </div>
+                                <div ng-include="'<?php echo $this->baseUrl('partialHTMLS/graphs.html'); ?>'"
+                                     ng-if="reports.graphType == 'pie'">
                                 </div>
 
                             </div>
+                            <div class="col-md-3 pull-right pre-scrollable">
+
+                                <table class="table table-bordered table-responsive">
+                                    <thead class="btn-info">
+                                    <tr>
+                                        <th>{{reports.graphTableHeaders.title}}</th>
+                                        <th>{{reports.graphTableHeaders.dataName}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="data in reports.chartProgramResults.series">
+                                        <td>{{data.name}}</td>
+                                        <td>{{data.data}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
+
                     </div>
-
-
                 </div>
-
-
             </div>
 
+
         </div>
+
+
     </div>
-    <!--s<script src="http://code.highcharts.com/highcharts.js"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/highchart.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/raphael.min.js'); ?>"></script>
-    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/html2canvas_1.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.base64.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
+</div>
+</div>
+<!--s<script src="http://code.highcharts.com/highcharts.js"></script>-->
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/highchart.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/raphael.min.js'); ?>"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/sprintf.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/jspdf.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->baseUrl('js/base64.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/html2canvas_1.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.base64.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/tableExport.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/jquery.table2excel.js'); ?>"></script>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/sprintf.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/jspdf.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/base64.js'); ?>"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
-    <script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+<script type="text/javascript">
 
-                                                        var startDate = "";
-                                                        var endDate = "";
-                                                        var paginate = true;
-                                                        $(document).ready(function () {
-                                                        $('#dateRange').daterangepicker({
-                                                        format: 'YYYY-MM-DD',
-                                                                ranges: {
-                                                                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                                                                        'Last 90 Days': [moment().subtract('days', 89), moment()],
-                                                                        'Last 180 Days': [moment().subtract('days', 179), moment()],
-                                                                        'Last 12 Months': [moment().subtract('month', 12), moment()],
-                                                                        'Last 18 Months': [moment().subtract('month', 18), moment()],
-                                                                }
-                                                        },
-                                                                function (start, end) {
-                                                                startDate = start.format('YYYY-MM-DD');
-                                                                endDate = end.format('YYYY-MM-DD');
-                                                                });
-                                                        });
-                                                        function drawGraph() {
-                                                        if ($("#reportType").val() == '') {
-                                                        alert('Please select the report type');
-                                                        return;
-                                                        }
-                                                        drawTable();
-                                                        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {startDate: startDate, endDate: endDate, scheme: $("#provider").val(), reportType: $("#reportType").val(), format: "html"},
-                                                                function (response) {
-                                                                response = response.split('##');
-                                                                var passedvalues = [];
-                                                                var failedvalues = [];
-                                                                var othervalues = [];
-                                                                var latevalues = [];
-                                                                var excluded = [];
-                                                                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
-                                                                passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
-                                                                failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
-                                                                othervalues.push(parseInt(JSON.parse(response[3])[ln]));
-                                                                latevalues.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                excluded.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                }
-                                                                $("#participant").html('');
-                                                                if (JSON.parse(response[0]).length > 0) {
-                                                                $("#participant").css("display", "block");
-                                                                } else {
-                                                                $("#participant").css("display", "none");
-                                                                }
-                                                                $('#participant').highcharts({
-                                                                colors: [
-                                                                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
-                                                                ],
-                                                                        chart: {
-                                                                        type: 'column'
-                                                                        },
-                                                                        title: {
-                                                                        text: 'Participant Response Chart'
-                                                                        },
-                                                                        xAxis: {
-                                                                        categories: JSON.parse(response[0])
-                                                                        },
-                                                                        yAxis: {
-                                                                        allowDecimals: false,
-                                                                                min: 0,
-                                                                                title: {
-                                                                                text: 'Number Of Results'
-                                                                                },
-                                                                                stackLabels: {
-                                                                                enabled: true,
-                                                                                        style: {
-                                                                                        fontWeight: 'bold'
-                                                                                        }
-                                                                                }
-                                                                        },
-                                                                        legend: {
-                                                                        align: 'right',
-                                                                                x: - 70,
-                                                                                verticalAlign: 'top',
-                                                                                y: 20,
-                                                                                floating: true,
-                                                                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                                                                                borderColor: '#CCC',
-                                                                                borderWidth: 1,
-                                                                                shadow: false
-                                                                        },
-                                                                        tooltip: {
-                                                                        formatter: function () {
-                                                                        return '<b>' + this.x + '</b><br/>' +
-                                                                                this.series.name + ': ' + this.y + '<br/>' +
-                                                                                'Total: ' + this.point.stackTotal;
-                                                                        }
-                                                                        },
-                                                                        plotOptions: {
-                                                                        column: {
-                                                                        stacking: 'normal',
-                                                                                dataLabels: {
-                                                                                enabled: true,
-                                                                                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-                                                                                        style: {
-                                                                                        textShadow: '0 0 3px black, 0 0 3px black'
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                        },
-                                                                        series: [{
-                                                                        name: 'Passed',
-                                                                                data: passedvalues
-                                                                        }, {
-                                                                        name: 'Failed',
-                                                                                data: failedvalues
-                                                                        }, {
-                                                                        name: 'Not Responded',
-                                                                                data: othervalues
-                                                                        }, {
-                                                                        name: 'Late Response',
-                                                                                data: latevalues
-                                                                        }, {
-                                                                        name: 'Excluded',
-                                                                                data: excluded
-                                                                        }
-                                                                        ]
-                                                                });
-                                                                });
-                                                        }
-                                                        function drawTable() {
-                                                        $("#shipmentTable").removeClass("hide");
-                                                        $.blockUI;
-                                                        oTable = $('#shipmentTable').dataTable({
-                                                        "oLanguage": {
-                                                        "sLengthMenu": "_MENU_ records per page",
-                                                                "sEmptyTable": "No data to show"
-                                                        },
-                                                                "bPaginate": paginate,
-                                                                "bJQueryUI": false,
-                                                                "bAutoWidth": false,
-                                                                "bInfo": true,
-                                                                "bScrollCollapse": true,
-                                                                "sPaginationType": "bootstrap",
-                                                                "bRetrieve": false,
-                                                                "bDestroy": true,
-                                                                "aoColumns": [
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                {"sClass": ""},
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                ],
-                                                                "aaSorting": [[1, "desc"]],
-                                                                "bProcessing": true,
-                                                                "bServerSide": true,
-                                                                "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
-                                                                "fnServerParams": function (aoData) {
-                                                                aoData.push({"name": "startDate", "value": startDate});
-                                                                aoData.push({"name": "endDate", "value": endDate});
-                                                                aoData.push({"name": "scheme", "value": $("#scheme").val()});
-                                                                aoData.push({"name": "reportType", "value": $("#reportType").val()});
-                                                                },
-                                                                "fnServerData": function (sSource, aoData, fnCallback) {
-                                                                $.ajax({
-                                                                "dataType": 'json',
-                                                                        "type": "POST",
-                                                                        "url": sSource,
-                                                                        "data": aoData,
-                                                                        "success": fnCallback
-                                                                });
-                                                                }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                                                        $.unblockUI;
-                                                        },
-                                                        });
-                                                        newcolumnHeading = $("#reportType option:selected").text();
-                                                        $('#reportText').html(newcolumnHeading);
-                                                        }
-                                                        ;
-                                                        function GetPrint() {
-                                                        paginate = false;
-                                                        drawTable()
-                                                                window.print();
-                                                        }
-                                                        jQuery(document).bind("keyup keydown", function (e) {
-                                                        if (e.ctrlKey && e.keyCode == 80) {
-                                                        paginate = false;
-                                                        drawTable()
-                                                        }
-                                                        });
-                                                        //                function createTable() {
-                                                        //                   var res = new Array();
-                                                        //                   
-                                                        //                   res = [['1','2','3','4','5']];
-                                                        //                        $("#reportTable").DataTable
-                                                        //                        ({
-                                                        //                            data: res,
-                                                        //                            columns: [
-                                                        //                                {title: "Provider"},
-                                                        //                                {title: "Lab"},
-                                                        //                                {title: "Round"},
-                                                        //                                {title: "Program"},
-                                                        //                                {title: "Analytre"}
-                                                        //                            ]
-                                                        //                        })
-                                                        //                                   }
+    var startDate = "";
+    var endDate = "";
+    var paginate = true;
+    $(document).ready(function () {
+        $('#dateRange').daterangepicker({
+                format: 'YYYY-MM-DD',
+                ranges: {
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 90 Days': [moment().subtract('days', 89), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'Last 12 Months': [moment().subtract('month', 12), moment()],
+                    'Last 18 Months': [moment().subtract('month', 18), moment()],
+                }
+            },
+            function (start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+            });
+    });
 
-                                                        var startDate = "";
-                                                        var endDate = "";
-                                                        var paginate = true;
-                                                        $(document).ready(function () {
-                                                        $('#dateRange').daterangepicker({
-                                                        format: 'DD-MMM-YYYY',
-                                                                ranges: {
-                                                                'Last 60 Days': [moment().subtract('days', 59), moment()],
-                                                                        'Last 90 Days': [moment().subtract('days', 89), moment()],
-                                                                        'Last 180 Days': [moment().subtract('days', 179), moment()],
-                                                                        'Last 12 Months': [moment().subtract('month', 12), moment()],
-                                                                        'Last 18 Months': [moment().subtract('month', 18), moment()],
-                                                                }
-                                                        },
-                                                                function (start, end) {
-                                                                startDate = start.format('YYYY-MM-DD');
-                                                                endDate = end.format('YYYY-MM-DD');
-                                                                });
-                                                        });
-                                                        function drawGraph() {
-                                                        if ($("#reportType").val() == '') {
-                                                        alert('Please select the report type');
-                                                        return;
-                                                        }
-                                                        drawTable();
-                                                        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {
-                                                        startDate: startDate,
-                                                                endDate: endDate,
-                                                                scheme: $("#provider").val(),
-                                                                reportType: $("#reportType").val(),
-                                                                format: "html"
-                                                        },
-                                                                function (response) {
-                                                                response = response.split('##');
-                                                                var passedvalues = [];
-                                                                var failedvalues = [];
-                                                                var othervalues = [];
-                                                                var latevalues = [];
-                                                                var excluded = [];
-                                                                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
-                                                                passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
-                                                                failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
-                                                                othervalues.push(parseInt(JSON.parse(response[3])[ln]));
-                                                                latevalues.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                excluded.push(parseInt(JSON.parse(response[4])[ln]));
-                                                                }
-                                                                $("#participant").html('');
-                                                                if (JSON.parse(response[0]).length > 0) {
-                                                                $("#participant").css("display", "block");
-                                                                } else {
-                                                                $("#participant").css("display", "none");
-                                                                }
-                                                                $('#participant').highcharts({
-                                                                colors: [
-                                                                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
-                                                                ],
-                                                                        chart: {
-                                                                        type: 'column'
-                                                                        },
-                                                                        title: {
-                                                                        text: 'Participant Response Chart'
-                                                                        },
-                                                                        xAxis: {
-                                                                        categories: JSON.parse(response[0])
-                                                                        },
-                                                                        yAxis: {
-                                                                        allowDecimals: false,
-                                                                                min: 0,
-                                                                                title: {
-                                                                                text: 'Number Of Results'
-                                                                                },
-                                                                                stackLabels: {
-                                                                                enabled: true,
-                                                                                        style: {
-                                                                                        fontWeight: 'bold'
-                                                                                        }
-                                                                                }
-                                                                        },
-                                                                        legend: {
-                                                                        align: 'right',
-                                                                                x: - 70,
-                                                                                verticalAlign: 'top',
-                                                                                y: 20,
-                                                                                floating: true,
-                                                                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                                                                                borderColor: '#CCC',
-                                                                                borderWidth: 1,
-                                                                                shadow: false
-                                                                        },
-                                                                        tooltip: {
-                                                                        formatter: function () {
-                                                                        return '<b>' + this.x + '</b><br/>' +
-                                                                                this.series.name + ': ' + this.y + '<br/>' +
-                                                                                'Total: ' + this.point.stackTotal;
-                                                                        }
-                                                                        },
-                                                                        plotOptions: {
-                                                                        column: {
-                                                                        stacking: 'normal',
-                                                                                dataLabels: {
-                                                                                enabled: true,
-                                                                                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-                                                                                        style: {
-                                                                                        textShadow: '0 0 3px black, 0 0 3px black'
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                        },
-                                                                        series: [{
-                                                                        name: 'Passed',
-                                                                                data: passedvalues
-                                                                        }, {
-                                                                        name: 'Failed',
-                                                                                data: failedvalues
-                                                                        }, {
-                                                                        name: 'Not Responded',
-                                                                                data: othervalues
-                                                                        }, {
-                                                                        name: 'Late Response',
-                                                                                data: latevalues
-                                                                        }, {
-                                                                        name: 'Excluded',
-                                                                                data: excluded
-                                                                        }
-                                                                        ]
-                                                                });
-                                                                });
-                                                        }
-                                                        function drawTable() {
-                                                        $("#shipmentTable").removeClass("hide");
-                                                        $.blockUI;
-                                                        oTable = $('#shipmentTable').dataTable({
-                                                        "oLanguage": {
-                                                        "sLengthMenu": "_MENU_ records per page",
-                                                                "sEmptyTable": "No data to show"
-                                                        },
-                                                                "bPaginate": paginate,
-                                                                "bJQueryUI": false,
-                                                                "bAutoWidth": false,
-                                                                "bInfo": true,
-                                                                "bScrollCollapse": true,
-                                                                "sPaginationType": "bootstrap",
-                                                                "bRetrieve": false,
-                                                                "bDestroy": true,
-                                                                "aoColumns": [
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                {"sClass": ""},
-                                                                {"sClass": ""},
-                                                                {"sClass": "center"},
-                                                                ],
-                                                                "aaSorting": [[1, "desc"]],
-                                                                "bProcessing": true,
-                                                                "bServerSide": true,
-                                                                "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
-                                                                "fnServerParams": function (aoData) {
-                                                                aoData.push({"name": "startDate", "value": startDate});
-                                                                aoData.push({"name": "endDate", "value": endDate});
-                                                                aoData.push({"name": "scheme", "value": $("#scheme").val()});
-                                                                aoData.push({"name": "reportType", "value": $("#reportType").val()});
-                                                                },
-                                                                "fnServerData": function (sSource, aoData, fnCallback) {
-                                                                $.ajax({
-                                                                "dataType": 'json',
-                                                                        "type": "POST",
-                                                                        "url": sSource,
-                                                                        "data": aoData,
-                                                                        "success": fnCallback
-                                                                });
-                                                                }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                                                        $.unblockUI;
-                                                        },
-                                                        });
-                                                        newcolumnHeading = $("#reportType option:selected").text();
-                                                        $('#reportText').html(newcolumnHeading);
-                                                        }
-                                                        ;
-                                                        function GetPrint() {
-                                                        paginate = false;
-                                                        drawTable()
-                                                                window.print();
-                                                        }
-                                                        jQuery(document).bind("keyup keydown", function (e) {
-                                                        if (e.ctrlKey && e.keyCode == 80) {
-                                                        paginate = false;
-                                                        drawTable()
-                                                        }
-                                                        });
-                                                        //                function createTable() {
-                                                        //                   var res = new Array();
-                                                        //
-                                                        //                   res = [['1','2','3','4','5']];
-                                                        //                        $("#reportTable").DataTable
-                                                        //                        ({
-                                                        //                            data: res,
-                                                        //                            columns: [
-                                                        //                                {title: "Provider"},
-                                                        //                                {title: "Lab"},
-                                                        //                                {title: "Round"},
-                                                        //                                {title: "Program"},
-                                                        //                                {title: "Analytre"}
-                                                        //                            ]
-                                                        //                        })
-                                                        //                                   }
+    function drawGraph() {
+        if ($("#reportType").val() == '') {
+            alert('Please select the report type');
+            return;
+        }
+        drawTable();
+        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {
+                startDate: startDate,
+                endDate: endDate,
+                scheme: $("#provider").val(),
+                reportType: $("#reportType").val(),
+                format: "html"
+            },
+            function (response) {
+                response = response.split('##');
+                var passedvalues = [];
+                var failedvalues = [];
+                var othervalues = [];
+                var latevalues = [];
+                var excluded = [];
+                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
+                    passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
+                    failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
+                    othervalues.push(parseInt(JSON.parse(response[3])[ln]));
+                    latevalues.push(parseInt(JSON.parse(response[4])[ln]));
+                    excluded.push(parseInt(JSON.parse(response[4])[ln]));
+                }
+                $("#participant").html('');
+                if (JSON.parse(response[0]).length > 0) {
+                    $("#participant").css("display", "block");
+                } else {
+                    $("#participant").css("display", "none");
+                }
+                $('#participant').highcharts({
+                    colors: [
+                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
+                    ],
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Participant Response Chart'
+                    },
+                    xAxis: {
+                        categories: JSON.parse(response[0])
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        min: 0,
+                        title: {
+                            text: 'Number Of Results'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        x: -70,
+                        verticalAlign: 'top',
+                        y: 20,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.x + '</b><br/>' +
+                                this.series.name + ': ' + this.y + '<br/>' +
+                                'Total: ' + this.point.stackTotal;
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                style: {
+                                    textShadow: '0 0 3px black, 0 0 3px black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Passed',
+                        data: passedvalues
+                    }, {
+                        name: 'Failed',
+                        data: failedvalues
+                    }, {
+                        name: 'Not Responded',
+                        data: othervalues
+                    }, {
+                        name: 'Late Response',
+                        data: latevalues
+                    }, {
+                        name: 'Excluded',
+                        data: excluded
+                    }
+                    ]
+                });
+            });
+    }
 
-    </script>
+    function drawTable() {
+        $("#shipmentTable").removeClass("hide");
+        $.blockUI;
+        oTable = $('#shipmentTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page",
+                "sEmptyTable": "No data to show"
+            },
+            "bPaginate": paginate,
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "sPaginationType": "bootstrap",
+            "bRetrieve": false,
+            "bDestroy": true,
+            "aoColumns": [
+                {"sClass": ""},
+                {"sClass": "center"},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": "center"},
+            ],
+            "aaSorting": [[1, "desc"]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
+            "fnServerParams": function (aoData) {
+                aoData.push({"name": "startDate", "value": startDate});
+                aoData.push({"name": "endDate", "value": endDate});
+                aoData.push({"name": "scheme", "value": $("#scheme").val()});
+                aoData.push({"name": "reportType", "value": $("#reportType").val()});
+            },
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $.unblockUI;
+            },
+        });
+        newcolumnHeading = $("#reportType option:selected").text();
+        $('#reportText').html(newcolumnHeading);
+    }
+    ;
+
+    function GetPrint() {
+        paginate = false;
+        drawTable()
+        window.print();
+    }
+
+    jQuery(document).bind("keyup keydown", function (e) {
+        if (e.ctrlKey && e.keyCode == 80) {
+            paginate = false;
+            drawTable()
+        }
+    });
+    //                function createTable() {
+    //                   var res = new Array();
+    //
+    //                   res = [['1','2','3','4','5']];
+    //                        $("#reportTable").DataTable
+    //                        ({
+    //                            data: res,
+    //                            columns: [
+    //                                {title: "Provider"},
+    //                                {title: "Lab"},
+    //                                {title: "Round"},
+    //                                {title: "Program"},
+    //                                {title: "Analytre"}
+    //                            ]
+    //                        })
+    //                                   }
+
+    var startDate = "";
+    var endDate = "";
+    var paginate = true;
+    $(document).ready(function () {
+        $('#dateRange').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                ranges: {
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 90 Days': [moment().subtract('days', 89), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'Last 12 Months': [moment().subtract('month', 12), moment()],
+                    'Last 18 Months': [moment().subtract('month', 18), moment()],
+                }
+            },
+            function (start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+            });
+    });
+
+    function drawGraph() {
+        if ($("#reportType").val() == '') {
+            alert('Please select the report type');
+            return;
+        }
+        drawTable();
+        $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'index'), "default", true); ?>", {
+                startDate: startDate,
+                endDate: endDate,
+                scheme: $("#provider").val(),
+                reportType: $("#reportType").val(),
+                format: "html"
+            },
+            function (response) {
+                response = response.split('##');
+                var passedvalues = [];
+                var failedvalues = [];
+                var othervalues = [];
+                var latevalues = [];
+                var excluded = [];
+                for (var ln = 0; ln < JSON.parse(response[1]).length; ln++) {
+                    passedvalues.push(parseInt(JSON.parse(response[1])[ln]));
+                    failedvalues.push(parseInt(JSON.parse(response[2])[ln]));
+                    othervalues.push(parseInt(JSON.parse(response[3])[ln]));
+                    latevalues.push(parseInt(JSON.parse(response[4])[ln]));
+                    excluded.push(parseInt(JSON.parse(response[4])[ln]));
+                }
+                $("#participant").html('');
+                if (JSON.parse(response[0]).length > 0) {
+                    $("#participant").css("display", "block");
+                } else {
+                    $("#participant").css("display", "none");
+                }
+                $('#participant').highcharts({
+                    colors: [
+                        '#1a987e', '#eb513c', '#606060', '#f2f760', '#000'
+                    ],
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Participant Response Chart'
+                    },
+                    xAxis: {
+                        categories: JSON.parse(response[0])
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        min: 0,
+                        title: {
+                            text: 'Number Of Results'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        x: -70,
+                        verticalAlign: 'top',
+                        y: 20,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.x + '</b><br/>' +
+                                this.series.name + ': ' + this.y + '<br/>' +
+                                'Total: ' + this.point.stackTotal;
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                style: {
+                                    textShadow: '0 0 3px black, 0 0 3px black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Passed',
+                        data: passedvalues
+                    }, {
+                        name: 'Failed',
+                        data: failedvalues
+                    }, {
+                        name: 'Not Responded',
+                        data: othervalues
+                    }, {
+                        name: 'Late Response',
+                        data: latevalues
+                    }, {
+                        name: 'Excluded',
+                        data: excluded
+                    }
+                    ]
+                });
+            });
+    }
+
+    function drawTable() {
+        $("#shipmentTable").removeClass("hide");
+        $.blockUI;
+        oTable = $('#shipmentTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page",
+                "sEmptyTable": "No data to show"
+            },
+            "bPaginate": paginate,
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "sPaginationType": "bootstrap",
+            "bRetrieve": false,
+            "bDestroy": true,
+            "aoColumns": [
+                {"sClass": ""},
+                {"sClass": "center"},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": "center"},
+            ],
+            "aaSorting": [[1, "desc"]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'reports', 'controller' => 'repository', 'action' => 'report', 'format' => 'html')); ?>",
+            "fnServerParams": function (aoData) {
+                aoData.push({"name": "startDate", "value": startDate});
+                aoData.push({"name": "endDate", "value": endDate});
+                aoData.push({"name": "scheme", "value": $("#scheme").val()});
+                aoData.push({"name": "reportType", "value": $("#reportType").val()});
+            },
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }, "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $.unblockUI;
+            },
+        });
+        newcolumnHeading = $("#reportType option:selected").text();
+        $('#reportText').html(newcolumnHeading);
+    }
+    ;
+
+    function GetPrint() {
+        paginate = false;
+        drawTable()
+        window.print();
+    }
+
+    jQuery(document).bind("keyup keydown", function (e) {
+        if (e.ctrlKey && e.keyCode == 80) {
+            paginate = false;
+            drawTable()
+        }
+    });
+    //                function createTable() {
+    //                   var res = new Array();
+    //
+    //                   res = [['1','2','3','4','5']];
+    //                        $("#reportTable").DataTable
+    //                        ({
+    //                            data: res,
+    //                            columns: [
+    //                                {title: "Provider"},
+    //                                {title: "Lab"},
+    //                                {title: "Round"},
+    //                                {title: "Program"},
+    //                                {title: "Analytre"}
+    //                            ]
+    //                        })
+    //                                   }
+
+</script>
