@@ -170,6 +170,12 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                             <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'importcsv'), 'default', true); ?>"><i class="icon-upload"></i>&nbsp;&nbsp;Import Data
                                             </a>
                                         </li>
+
+                                        <li >
+                                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'corrective'),
+                                                'default', true); ?>"><i class="icon-check"></i>&nbsp;&nbsp;Corrective Action
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
