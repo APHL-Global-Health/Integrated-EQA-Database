@@ -47,7 +47,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         $shipmentId = $this->getRequest()->getParam('sid');
 
         $sampleDetails = $shipmentServce->getSampleShipment($shipmentId);
-       
+
         echo json_encode($sampleDetails);
         exit;
     }
@@ -147,8 +147,10 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                     $this->view->enrolledParticipants = $participantService->getEnrolledBySchemeCode($shipmentDetails['scheme_type']);
 
-                    $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'], $shipmentDetails['distribution_id']);
-
+                    $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'],
+                        $shipmentDetails['distribution_id']);
+//var_dump($this->view->unEnrolledParticipants);
+//exit;
                 } else {
                     $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid, $shipmentDetails['distribution_id']);
 
