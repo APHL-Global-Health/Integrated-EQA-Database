@@ -47,6 +47,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         $shipmentId = $this->getRequest()->getParam('sid');
 
         $sampleDetails = $shipmentServce->getSampleShipment($shipmentId);
+       
         echo json_encode($sampleDetails);
         exit;
     }
@@ -81,6 +82,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         $sInfo['shipment_Id'] = $this->getRequest()->getParam('sid');
 
         $this->view->shipmentId = $sInfo['shipment_Id'];
+
     }
 
     public function addAction() {
@@ -138,14 +140,18 @@ class Admin_ShipmentController extends Zend_Controller_Action {
                 $participantService = new Application_Service_Participants();
                 $sid = (int) base64_decode($this->_getParam('sid'));
                 $this->view->shipment = $shipmentDetails = $shipmentService->getShipment($sid);
-//                var_dump($shipmentDetails['distribution_id']);
-//                exit;
+
                 $this->view->previouslySelected = $previouslySelected = $participantService->getEnrolledByShipmentId($sid);
+
                 if ($previouslySelected == "" || $previouslySelected == null) {
+
                     $this->view->enrolledParticipants = $participantService->getEnrolledBySchemeCode($shipmentDetails['scheme_type']);
+
                     $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'], $shipmentDetails['distribution_id']);
+
                 } else {
                     $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid, $shipmentDetails['distribution_id']);
+
                 }
             }
         }
@@ -175,20 +181,25 @@ class Admin_ShipmentController extends Zend_Controller_Action {
             $shipmentService->updateShipment($params);
             $this->_redirect("/admin/shipment");
         } else {
+
             if ($this->_hasParam('sid')) {
+
                 $sid = (int) base64_decode($this->_getParam('sid'));
                 $shipmentService = new Application_Service_Shipments();
                 $this->view->shipmentData = $response = $shipmentService->getShipmentForEdit($sid);
 
                 $schemeService = new Application_Service_Schemes();
-                if ($response['shipment']['scheme_type'] == 'dts') {
+
+                if ($response['shipment']['scheme_type'] == 'dts' || $response['shipment']['scheme_type'] == 'dbs') {
                     $this->view->wb = $schemeService->getDbsWb();
                     $this->view->eia = $schemeService->getDbsEia();
+
                     $this->view->dtsPossibleResults = $schemeService->getPossibleResults('dts');
                     $this->view->allTestKits = $schemeService->getAllDtsTestKit();
                 } else if ($response['shipment']['scheme_type'] == 'vl') {
 
                     $this->view->vlAssay = $schemeService->getVlAssay();
+
                 }
 
 // oOps !! Nothing to edit....

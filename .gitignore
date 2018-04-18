@@ -6,5 +6,6 @@ nbproject
 *.hgignore
 .idea
 *.log
+bugs/
 public/angularMain/constants.js
 

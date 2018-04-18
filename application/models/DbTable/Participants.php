@@ -27,6 +27,16 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                                 ->where("p.email = ?", $userSystemId));
     }
 
+    public function getParticipantsByUserEmail($userSystemId) {
+
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $sql = $db->select()->from(array('p' => 'data_manager'))
+            ->join(array('sp' => 'participant_manager_map'), 'p.dm_id=sp.dm_id')
+            ->join(array('s' => 'participant'), 's.participant_id=sp.participant_id')
+            ->where("p.primary_email= ?" , $userSystemId);
+        return $db->fetchAll($sql);
+    }
+
     public function getAffiliateList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('r_participant_affiliates')->order('affiliate ASC'));

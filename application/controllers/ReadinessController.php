@@ -23,7 +23,7 @@ class ReadinessController extends Zend_Controller_Action {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
-        $t = $participantService->getParticipantDetail($pID);
+        $t = $participantService->getParticipantDetailByUserEmail($pID);
 
         foreach ($t as $k) {
             $id = $k["participant_id"];
@@ -47,7 +47,7 @@ class ReadinessController extends Zend_Controller_Action {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
-        $t = $participantService->getParticipantDetail($pID);
+        $t = $participantService->getParticipantDetailByUserEmail($pID);
 
         foreach ($t as $k) {
             $id = $k["participant_id"];

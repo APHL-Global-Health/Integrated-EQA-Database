@@ -51,6 +51,12 @@ class Application_Service_Participants {
         return $participantDb->getParticipantsByUserm($partSysId);
     }
 
+    public function getParticipantDetailByUserEmail($partSysId) {
+
+        $participantDb = new Application_Model_DbTable_Participants();
+        return $participantDb->getParticipantsByUserEmail($partSysId);
+    }
+
     public function addParticipant($params) {
         $participantDb = new Application_Model_DbTable_Participants();
         return $participantDb->addParticipant($params);
@@ -109,7 +115,7 @@ class Application_Service_Participants {
 
         $sql = $db->select()
                 ->from(array('p' => 'participant'))
-                ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
+                ->joinLeft(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
                 ->where("sl.verdict='Approved'")
                 ->where("sl.RoundId='$roundId'")
                 ->where("p.status='active'")

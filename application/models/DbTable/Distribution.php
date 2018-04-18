@@ -295,7 +295,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = ucwords($aRow['readinessdate']);
             $row[] = ucwords($aRow['status']);
-            if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured') {
+            if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured'|| $aRow['status'] == 'pending') {
                 $row[] = '<a href="/readiness/add/roundId/'.$aRow['distribution_id'].'/code/'.str_replace('/', "*",$aRow['distribution_code']).'" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
                         . '<i class="icon-pencil"></i> Readiness Checklist</a>';
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
