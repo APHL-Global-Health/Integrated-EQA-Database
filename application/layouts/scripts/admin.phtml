@@ -374,8 +374,12 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">Micro
-                                        Reports</a>
+                                    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">
+                                        Analysize &Reports</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'graphs'), 'default', true); ?>">
+                                        Graphs</a>
                                 </li>
 
                             </ul>
