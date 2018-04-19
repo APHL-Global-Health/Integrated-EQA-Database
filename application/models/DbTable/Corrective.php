@@ -132,6 +132,10 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
             $sQuery = $sQuery->where($sWhere);
         }
 
+        if (in_array($_SESSION['loggedInDetails']["IsProvider"], array(2, 3))) {
+            $sQuery = $sQuery->where("pt.createdBy = ".$_SESSION['loggedInDetails']["admin_id"]);;
+        }
+
         if (isset($sOrder) && $sOrder != "") {
             $sQuery = $sQuery->order($sOrder);
         }
