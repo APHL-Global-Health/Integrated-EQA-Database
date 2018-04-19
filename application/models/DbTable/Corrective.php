@@ -24,7 +24,7 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
 
 
         try {
-            unset($params['module'], $params['controller']);
+            unset($params['module'], $params['controller'],$params['action']);
 
             $params['createdBy'] = $_SESSION['loggedInDetails']["admin_id"];
             $insert_id = $this->_db->insert($this->_name, $params);
@@ -44,7 +44,8 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
     {
 
         $aColumns = array('pt.ID', 'action', 'DATE_FORMAT(dateCreated,"%d-%b-%Y")',
-            'pt.createdBy', 'Description', 'PeriodDescription', 'p.ProviderName', 'primary_email');
+            'pt.createdBy', 'Description', 'PeriodDescription', 'p.ProviderName', 'primary_email',
+        "mflCode","datePerformed","elementCaptured");
         $orderColumns = array('pt.ID');
 
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -183,10 +184,23 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
             $row[] = $aRow['Description'];
             $row[] = $aRow['ProviderName'];
             $row[] = $aRow['PeriodDescription'];
-            $row[] = $aRow['action'];
+            $row[] = $aRow['actionDone'];
+
+            $row[] = $aRow['datePerformed'];
+            $row[] = $aRow['elementCaptured'];
+            $row[] = $aRow['mflCode'];
+
+
+
             $row[] = $aRow['primary_email'] . "(" . $aRow['first_name'] . ")";
             $row[] = $aRow['dateCreated'];
-            $row[] = '<a href="/admin/corrective/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> Delete</a>';
+            $dis='';
+
+            if (in_array($_SESSION['loggedInDetails']["IsProvider"], array(3))) {
+                $dis='disabled';
+            }
+
+            $row[] = '<a href="/admin/corrective/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs '.$dis.' style="margin-right: 2px;"><i class="icon-remove"></i> Delete</a>';
 
             $output['aaData'][] = $row;
         }

@@ -49,12 +49,47 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Date Performed<span class="mandatory">*</span></label>
 
+                <div class="col-lg-5">
+                    <input type="text" id="datePerformed" name="datePerformed" size="50" maxlength="45"
+                           class="isRequired form-control datepicker" required
+                           title="Please enter the date the corrective action was performed"
+                           placeholder="Please enter the date the corrective action was performed"/>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Lab  MFl Code<span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                    <input type="text" id="mflCode" name="mflCode" size="50" maxlength="45"
+                           class="isRequired form-control"
+                           title="Enter lab mfl code" required
+                           placeholder="Enter lab mfl code"/>
+
+                </div>
+
+            </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Action <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
                     <textarea class="form-control isRequired"
-                              required="" name="action" id="action" title="Please type the action">
+                              required="" name="actionDone" id="actionDone" title="Please type the action">
+
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Element Captured<span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <textarea class="form-control isRequired" required=""
+                              required="" name="elementCaptured" id="elementCaptured" title="Please enter element captured">
 
                     </textarea>
                 </div>
@@ -120,6 +155,9 @@
             e.preventDefault();
             return;
         });
+        $(function () {
+            $(".datepicker" ).datepicker({dateFormat: 'yy-mm-dd'});
 
+        });
 
 </script>
