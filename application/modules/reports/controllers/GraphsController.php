@@ -38,6 +38,7 @@ class Reports_GraphsController extends Zend_Controller_Action {
 
     public function indexAction() {
         
+
     }
 
     public function reportAction() {
