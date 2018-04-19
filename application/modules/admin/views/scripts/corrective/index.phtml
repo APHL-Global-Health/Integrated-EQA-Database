@@ -1,0 +1,83 @@
+
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
+    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">Corrective Action</div>
+    <div style="margin-top:10px;">
+        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'corrective', 'action' => 'add'), 'default', true); ?>"
+           class="btn btn-primary" style="float:right;"><i class="icon-check"></i>&nbsp;&nbsp;Add Corrective Action</a>
+    </div>
+</h4>
+<section class="content">
+    <div class="box">
+        <div class="box-body">
+            <?php if (isset($this->message)) : ?>
+                <div class="alert alert-dismissable alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <ul>
+                        <li><?php echo $this->message; ?></li>
+                    </ul>
+                </div>
+
+            <?php endif; ?>
+            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentScheme">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Program</th>
+                    <th>Provider</th>
+                    <th>Round/Survey</th>
+                    <th>Action</th>
+                    <th>Created By</th>
+                    <th>Date Created</th>
+
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="9" class="dataTables_empty">Loading data from server</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" charset="utf-8">
+    /* Table initialisation */
+    var oTable = null;
+    $(document).ready(function() {
+        oTable = $('#currentScheme').dataTable( {
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "sPaginationType": "bootstrap",
+            "bRetrieve": true,
+            "aoColumns": [
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":"center","bSortable":false}
+            ],
+            "aaSorting": [[ 0, "asc" ]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'admin', 'controller' => 'corrective', 'action' => 'index', 'format' => 'html')); ?>",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        } );
+    } );
+</script>

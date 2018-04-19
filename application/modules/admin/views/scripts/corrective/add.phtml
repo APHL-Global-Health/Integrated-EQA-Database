@@ -86,13 +86,14 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'add',
+                url: 'savecorrection',
                 dataType: 'json',
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
                 success: function (data) {
                     console.log(data);
+                    data = JSON.parse(data);
                     $("#loader").hide();
 
                     if (data.status == 1) {

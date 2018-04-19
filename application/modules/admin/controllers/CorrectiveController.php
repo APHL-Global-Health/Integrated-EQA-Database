@@ -8,23 +8,34 @@
 
 class Admin_CorrectiveController extends Zend_Controller_Action
 {
+protected $_corrective;
     public function init()
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
             ->initContext();
         $this->_helper->layout()->pageName = 'repository';
+        $this->_corrective = new Application_Model_DbTable_Corrective();
     }
 
     public function indexAction()
     {
+
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-            $clientsServices = new Application_Service_Labs();
-            $clientsServices->getAllLabs($params);
+
+
+            $this->_corrective->getCorrective($params);
         }
 
 
+    }
+    public function deleteAction(){
+        $correctiveId = (int)$this->_getParam('id');
+        if(is_numeric($correctiveId)){
+            $this->_corrective->deleteCorrectiveAction($correctiveId);
+        }
+        $this->_redirect("admin/corrective/");
     }
 
     public function addAction()
@@ -33,19 +44,22 @@ class Admin_CorrectiveController extends Zend_Controller_Action
         $this->view->providerList = $commonService->getproviderList();
         $this->view->programList = $commonService->getprogramList();
         $this->view->periodList = $commonService->getperiodList();
+
+
+    }
+
+    public function savecorrectionAction()
+    {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-            $partnerService = new Application_Model_DbTable_Readiness();
-            $ca = $partnerService->addReadiness($params);
+            $correctiveAction = new Application_Model_DbTable_Corrective();
 
-            if ($ca) {
-                $this->_helper->flashMessenger("Your readiness checklist has been submitted successfully.");
-                $this->_redirect("/corrective/index");
-            } else {
-                $this->_helper->flashMessenger("Sorry, you have already submitted the readiness checklist for the selected test event.");
-                $this->_redirect("/readiness/index");
-            }
+            echo json_encode($correctiveAction->addCorrectiveAction($params));
         }
+
+        exit;
     }
+
+
 }
 

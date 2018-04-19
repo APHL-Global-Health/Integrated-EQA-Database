@@ -45,6 +45,7 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         $this->view->distributionDates = $distributionService->getDistributionDates();
     }
 
+
     public function viewShipmentAction() {
         $this->_helper->layout()->disableLayout();
         if ($this->_hasParam('id')) {
