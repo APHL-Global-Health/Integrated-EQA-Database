@@ -2,6 +2,19 @@ var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirP
     'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'highcharts-ng', 'nvd3ChartDirectives', 'ui.calendar',
     'mgcrea.ngStrap.datepicker','ngRoute', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
 
+ReportModule.config(function ($httpProvider, $routeProvider, $locationProvider) {
+    $httpProvider.defaults.headers.common = {};
+    $httpProvider.defaults.headers.post = {};
+    $httpProvider.defaults.headers.put = {};
+    $httpProvider.defaults.headers.patch = {};
+    $locationProvider.hashPrefix('');
+    //
+    // $routeProvider.when('/labs', {
+    //     templateUrl: '../partialHTMLS/LabIndexs.html'
+    // });
+
+})
+
 ReportModule.controller("ReportController", function ($scope, $rootScope, $timeout, $http, reportCache,
         graphDataCache, $filter, filterFilter, EptServices) {
     var serverURL = SERVER_API_URL.repositoryURL;

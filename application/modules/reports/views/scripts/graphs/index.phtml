@@ -1,5 +1,24 @@
-<div ng-controller="ReportsController">
-    <h2>Graphs</h2>
+<div id='ng-app' ng-app="ReportModule" ng-cloak="">
+    <div ng-controller="GraphsController">
+        <h2>Graphs</h2>
+
+        <nav class="navbar navbar-default" ng-init="Graphs.currentPage='labindex'">
+            <div class="container-fluid">
+
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#/sample">Sample</a></li>
+                    <li><a href="#/labs">Labs</a></li>
+                    <li><a href="#/participant">Participant</a></li>
+                    <li><a href="#/response">Response</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div ng-init="Graphs.currentPage=='labindex'">
+            <div ng-include="'../partialHTMLS/graphs/LabIndex.html'">
+
+            </div>
+        </div>
 
 
+    </div>
 </div>
