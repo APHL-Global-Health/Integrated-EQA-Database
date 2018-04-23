@@ -319,6 +319,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $updateEval = (array)$posted['update'];
 
         unset($updateEval['id']);
+        unset($updateEval['index']);
+        unset($updateEval['sampleType']);
         unset($updateEval['batchName']);
         unset($updateEval['materialSource']);
         unset($updateEval['sampleDetails']);

@@ -106,7 +106,135 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
         ]
 
     }
-    $scope.Graphs.getGraph
+    $scope.Graphs.filter = {
+        rounds: {}, counties: {},labs:{}
+    }
+
+    $scope.Graphs.getRounds = function (where) {
+
+
+        try {
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+
+            var url = SERVER_API_URL.MICROGRAPHS + GETROUNDS;
+
+
+            var varData = {};
+
+            if (angular.isDefined(where)) {
+                varData.where = where;
+            }
+
+            console.log(varData);
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.filter.rounds = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            console.log(e)
+        }
+
+
+    }
+
+    $scope.Graphs.getCounties = function (roundId) {
+        try {
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+
+            var url = SERVER_API_URL.MICROGRAPHS + GETCOUNTIES;
+
+
+            var varData = {};
+
+            if (angular.isDefined(roundId)) {
+                varData.where = where;
+            }
+
+
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.filter.counties = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            console.log(e)
+        }
+
+
+    }
+    $scope.Graphs.getLabs = function (filter) {
+        try {
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+            $scope.Graphs.filter.labs ={};
+            var url = SERVER_API_URL.MICROGRAPHS + GETLABS;
+
+
+            var varData = {};
+
+            if (angular.isDefined(filter)) {
+                varData.where = filter;
+            }
+
+
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.filter.labs = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
 
 
 })

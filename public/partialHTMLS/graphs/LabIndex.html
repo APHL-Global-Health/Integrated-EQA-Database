@@ -1,12 +1,38 @@
 <div>
     <h3>Percentage of acceptables</h3>
 
-    <div >
-        <button ng-click="Graphs.loadGraph()">Test G</button>
-        <button ng-click="Graphs.printGraph()">Print</button>
-
-        <div class="table-bordered" id="printgraph">
-            <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
+    <div>
+        <!--<button ng-click="Graphs.getRounds()">Refresh</button>-->
+        <div class="row col-md-3" ng-init="Graphs.getRounds()">
+            <select class="form-control">
+                <option disabled selected>---SELECT ROUND-</option>
+                <option value="{{round.id}}" ng-repeat="round in Graphs.filter.rounds">{{round.roundName}}</option>
+            </select>
         </div>
+
+        <div class="col-md-3 row" ng-init="Graphs.getCounties()">
+            <select class="form-control">
+                <option disabled selected>---SELECT COUNTY-</option>
+                <option value="{{county.CountyID}}" ng-repeat="county in Graphs.filter.counties">
+                    {{county.Description}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-3 row" ng-init="Graphs.getLabs()">
+            <select class="form-control">
+                <option disabled selected>---SELECT LAB---</option>
+                <option value="{{lab.participant_id}}" ng-repeat="lab in Graphs.filter.labs">
+                    {{lab.first_name}}({{lab.MflCode}})
+                </option>
+            </select>
+        </div>
+
+
     </div>
+
+
+    <div class="table-bordered" id="printgraph">
+        <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
+    </div>
+</div>
 </div>

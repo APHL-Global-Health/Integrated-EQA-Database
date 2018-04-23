@@ -51,7 +51,7 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
 
     //has an option parameter of county
-    public function getLabsAction()
+    public function getlabsAction()
     {
         $params = $this->returnArrayFromInput();
         $where = null;
@@ -124,6 +124,21 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
         exit;
     }
+
+    public function getresultsAction()
+    {
+        $params = $this->returnArrayFromInput();
+        $where = null;
+        if (isset($where)) {
+
+            $where['roundId'] = $params['roundId'];
+            $where['dateCreated'] = $params['dateCreated'];
+        }
+        echo json_encode($this->_microReportModel->getResults($where));
+
+        exit;
+    }
+
     //
 
 

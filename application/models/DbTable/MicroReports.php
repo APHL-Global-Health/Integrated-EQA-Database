@@ -31,7 +31,7 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
         }
 
 
-        return $rResult = $this->getAdapter()->fetchAll($sQuery);
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'rounds available');
     }
 
     public function getLabs($where = null)
@@ -42,10 +42,11 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
         if (isset($where)) {
             $sQuery->where($where);
         }
-        return $rResult = $this->getAdapter()->fetchAll($sQuery);
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'counties available');
 
 
     }
+
     public function getSamples($where = null)
     {
         $sQuery = $this->getAdapter()->select()
@@ -80,7 +81,7 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
         if (isset($where)) {
             $sQuery->where($where);
         }
-        return $rResult = $this->getAdapter()->fetchAll($sQuery);
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'counties available');
 
     }
 
@@ -100,16 +101,21 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
 
     public function getResults($where = null)
     {
-        $sQuery = $this->getAdapter()->select()
-            ->from(array('s' => $this->_responsesTable));
+        $select = array('count(if(grade="UNACCEPTABLE",1,null)) as UNACCEPTABLE','count(if(grade="ACCEPTABLE",1,null)) as ACCEPTABLE', 'sampleId');
+
+        $sQuery = $this->getAdapter()->select();
+
+        $sQuery->group('grade');
+        $sQuery->group('sampleId');
+
+        $sQuery->from(array('s' => $this->_responsesTable), $select);
 
         if (isset($where)) {
             $sQuery->where($where);
         }
-        return $rResult = $this->getAdapter()->fetchAll($sQuery);
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
 
     }
-
 
 
 }
