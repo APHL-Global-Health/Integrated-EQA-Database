@@ -70,7 +70,13 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullCalendar.css'); ?>">
         <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
+<!--        <link rel="stylesheet" href="--><?php //echo $this->baseUrl('css/graphs/main.css'); ?><!--">-->
+
         <script src="<?php echo $this->baseUrl('angularMain/constants.js'); ?>"></script>
+        <script src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.5/angular-nvd3.min.js"></script>
         <!--[if IE 7]>
         <link rel="stylesheet" href="<?php echo $this->baseUrl("
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
@@ -84,6 +90,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/d3.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/graphs/angular-nvd3.js'); ?>"></script>
 
         <script type="text/javascript"
         src="<?php echo $this->baseUrl('angularMain/angularStrap/angular-strap.min.js'); ?>"></script>

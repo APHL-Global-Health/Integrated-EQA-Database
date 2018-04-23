@@ -1,6 +1,6 @@
 var ReportModule = angular.module('ReportModule', ['angularUtils.directives.dirPagination',
     'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'highcharts-ng', 'nvd3ChartDirectives', 'ui.calendar',
-    'mgcrea.ngStrap.datepicker','ngRoute', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead']);
+    'mgcrea.ngStrap.datepicker','ngRoute', 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.typeahead','nvd3']);
 
 ReportModule.config(function ($httpProvider, $routeProvider, $locationProvider) {
     $httpProvider.defaults.headers.common = {};

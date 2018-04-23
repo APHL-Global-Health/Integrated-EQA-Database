@@ -1,5 +1,12 @@
 <div>
-    <h3>Percentage of acceptable</h3>
+    <h3>Percentage of acceptables</h3>
 
+    <div >
+        <button ng-click="Graphs.loadGraph()">Test G</button>
+        <button ng-click="Graphs.printGraph()">Print</button>
 
+        <div class="table-bordered" id="printgraph">
+            <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
+        </div>
+    </div>
 </div>
