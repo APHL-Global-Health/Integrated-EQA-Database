@@ -1,15 +1,11 @@
 var graphsController = angular.module('ReportModule');
-// graphsController.config(function ($httpProvider, $routeProvider, $locationProvider) {
-//     $httpProvider.defaults.headers.common = {};
-//     $httpProvider.defaults.headers.post = {};
-//     $httpProvider.defaults.headers.put = {};
-//     $httpProvider.defaults.headers.patch = {};
-//     $locationProvider.hashPrefix('');
-//
-//     $routeProvider.when('/labs', {
-//         templateUrl: '../partialViews/LabIndex.html'
-//     });
+graphsController.config(function ($httpProvider, $routeProvider, $locationProvider) {
 
+
+    $routeProvider.when('/labs', {
+        templateUrl: '../partialViews/LabIndex.html'
+    });
+})
 graphsController.controller('GraphsController', function ($scope, $http, $location, serverSamplesURL, EptServices, $timeout) {
     $scope.Graphs = {};
 
@@ -43,71 +39,89 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
     }
     $scope.Graphs.loadGraph = function () {
         $scope.Graphs.options = {
-            chart: {
-                type: 'multiBarChart',
-                height: 450,
-                margin: {
-                    top: 20,
-                    right: 20,
-                    bottom: 50,
-                    left: 55
+            "chart": {
+                "type": "multiBarChart",
+                "height": 450,
+                "stacked":false,
+                "margin": {
+                    "top": 20,
+                    "right": 20,
+                    "bottom": 45,
+                    "left": 45
                 },
-                x: function (d) {
-                    return d.label;
+                "clipEdge": true,
+                "duration": 500,
+                "stacked": true,
+                "xAxis": {
+                    "axisLabel": "Samples",
+                    "showMaxMin": false
                 },
-                y: function (d) {
-                    return d.value;
-                },
-                showValues: true,
-                valueFormat: function (d) {
-                    return d3.format(',.4f')(d);
-                },
-                duration: 500,
-                xAxis: {
-                    axisLabel: 'Samples'
-                },
-                yAxis: {
-                    axisLabel: 'Total Score'
+                "yAxis": {
+                    "axisLabel": "Y Axis",
+                    "axisLabelDistance": -20
                 }
             }
         };
 
-        $scope.Graphs.data = [
-            {
-
-                key: "sample A",
-                values: [
-                    {
-                        "label": "Acceptable",
-                        "value": -29.765957771107
-                    },
-                    {
-                        "label": "Unacceptable",
-                        "value": 12.565
-                    }
-                ]
-            },
-            {
-
-                key: "Sample B",
-                values: [
-                    {
-                        "label": "Acceptable",
-                        "value": 3.765957771107
-                    },
-                    {
-                        "label": "Unacceptable",
-                        "value": 15.565
-                    }
-                ]
-            }
-
-
-        ]
+        $scope.Graphs.data = [{
+            "key": "ACCEPTABLE",
+            "values": [{"x": "S001", "y": "2"}, {"x": "S002", "y": "2"}, {"x": "S003", "y": "3"}]
+        }, {
+            "key": "UNACCEPTABLE",
+            "values": [{"x": "S001", "y": "2"}, {"x": "S002", "y": "1"}, {"x": "S003", "y": "1"}]
+        }]
 
     }
+
+    $scope.Graphs.getResponseDataOnRoundLabCounty = function (where) {
+
+        try {
+            $scope.Graphs.data =[];
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+
+            var url = SERVER_API_URL.MICROGRAPHS + GETGENRESPONSE;
+
+
+            var varData = {};
+
+            if (angular.isDefined(where)) {
+                varData.where = where;
+            }
+
+            console.log(varData);
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.data = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            console.log(e)
+        }
+
+
+    }
+    $scope.Graphs.genFilter = {};
+
+
+
     $scope.Graphs.filter = {
-        rounds: {}, counties: {},labs:{}
+        rounds: {}, counties: {}, labs: {}
     }
 
     $scope.Graphs.getRounds = function (where) {
@@ -198,7 +212,7 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
     $scope.Graphs.getLabs = function (filter) {
         try {
             $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
-            $scope.Graphs.filter.labs ={};
+            $scope.Graphs.filter.labs = {};
             var url = SERVER_API_URL.MICROGRAPHS + GETLABS;
 
 

@@ -348,3 +348,6 @@ padding: 0px !important;
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+.filterDiv{
+    margin-right: 1px!important;
+}

@@ -11,3 +11,5 @@ const SERVER_API_URL = {
 const GETROUNDS = 'getrounds';
 const GETCOUNTIES = 'getcounties';
 const GETLABS = 'getlabs';
+// const GETGENRESPONSE = 'getgenresponse';
+const GETGENRESPONSE = 'sampletypes';
