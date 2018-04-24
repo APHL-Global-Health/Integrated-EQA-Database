@@ -6,18 +6,39 @@
             <div class="container-fluid">
 
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#/sample">Sample</a></li>
-                    <li><a href="#/labs">Labs</a></li>
-                    <li><a href="#/participant">Participant</a></li>
-                    <li><a href="#/response">Response</a></li>
+                    <li class="active"><a href=""  ng-click="Graphs.currentPage='labindex'">Samples</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='labs'">Labs</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='rounds'">Rounds</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='counties'">Counties</a></li>
+
                 </ul>
             </div>
         </nav>
-        <div ng-init="Graphs.currentPage=='labindex'">
+        <div ng-if="Graphs.currentPage=='labindex'">
             <div ng-include="'../partialHTMLS/graphs/LabIndex.html'">
 
             </div>
         </div>
+
+        <div ng-if="Graphs.currentPage=='labs'">
+            <div ng-include="'../partialHTMLS/graphs/labs.html'">
+
+            </div>
+        </div>
+
+        <div ng-if="Graphs.currentPage=='counties'">
+            <div ng-include="'../partialHTMLS/graphs/counties.html'">
+
+            </div>
+        </div>
+
+
+        <div ng-if="Graphs.currentPage=='rounds'">
+            <div ng-include="'../partialHTMLS/graphs/rounds.html'">
+
+            </div>
+        </div>
+
 
 
     </div>

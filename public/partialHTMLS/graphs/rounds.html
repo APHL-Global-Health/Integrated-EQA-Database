@@ -1,0 +1,57 @@
+<div>
+    <h3>Round Performance
+    <i class="fa fa-spin {{Graphs.loaderProgressSpinner}}"></i>
+    </h3>
+
+    <form name="genGraph" class="filters">
+        <i ng-init="Graphs.loadGraph()"></i>
+        <div class="row col-md-3 filterDiv " ng- ng-init="Graphs.getRounds()">
+            <select class="form-control input-sm" ng-model="Graphs.genFilter.roundId">
+                <option disabled selected>---SELECT ROUND-</option>
+                <option ng-value="0" selected>SELECT ALL</option>
+                <option value="{{round.id}}" ng-repeat="round in Graphs.filter.rounds">{{round.roundName}}</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 row filterDiv" ng-init="Graphs.getCounties()">
+            <select class="form-control input-sm" ng-model="Graphs.genFilter.region">
+                <option disabled selected>---SELECT COUNTY-</option>
+                <option ng-value="0" selected>SELECT ALL</option>
+                <option value="{{county.CountyID}}" ng-repeat="county in Graphs.filter.counties">
+                    {{county.Description}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-3 row filterDiv" ng-init="Graphs.getLabs()">
+            <select class="form-control input-sm" ng-model="Graphs.genFilter.participantId">
+                <option disabled selected>---SELECT LAB---</option>
+                <option ng-value="0" >---SELECT ALL---</option>
+                <option value="{{lab.participant_id}}" ng-repeat="lab in Graphs.filter.labs">
+                    {{lab.first_name}}({{lab.MflCode}})
+                </option>
+            </select>
+        </div>
+        <div class="col-md-1 row filterDiv">
+            <button class="btn btn-primary btn-sm"
+                    ng-click="Graphs.getResponseDataOnRoundLabCounty(Graphs.genFilter)"> Generate </button>
+        </div>
+        <div class="col-md-1 row filterDiv">
+            <button class="btn btn-info btn-sm"
+                    ng-click="Graphs.printGraph()"> print </button>
+        </div>
+
+
+    </form>
+
+
+    <div class="table-bordered" id="printgraph">
+        <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
+
+
+
+
+
+
+    </div>
+</div>
+</div>
