@@ -335,14 +335,52 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
                 $sQuery->join(array('p' => 'participant'), 'p.participant_id=r.participantId', array('region'));
             }
             if (isset($where['dateFrom'])) {
-                $sQuery->where("s.dateCreated >=?",$where['dateFrom']);
+                $sQuery->where("s.dateCreated >=?", $where['dateFrom']);
                 unset($where['dateFrom']);
             }
             if (isset($where['dateTo'])) {
-                $sQuery->where("s.dateCreated <=?",$where['dateTo']);
+                $sQuery->where("s.dateCreated <=?", $where['dateTo']);
                 unset($where['dateTo']);
             }
-            if(!empty($where)) {
+            if (!empty($where)) {
+                $sQuery->where($this->returnWhereStatement($where));
+            }
+        }
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
+
+    }
+
+    public function getCountiesResults()
+    {
+        $select = array('count(if(grade="UNACCEPTABLE",1,null)) as UNACCEPTABLE', 'count(if(grade="ACCEPTABLE",1,null)) as ACCEPTABLE', 'sp.participantId');
+
+        $sQuery = $this->getAdapter()->select();
+
+        $sQuery->join(array('p' => $this->_participantsTable), 'p.participant_id=sp.participantId', array('region'));
+
+        $sQuery->join(array('c' => $this->_countiesTable), 'c.CountyID=p.region', array('Description'));
+
+
+        $sQuery->group('grade');
+        $sQuery->group('region');
+
+        $sQuery->joinLeft(array('r' => $this->_responsesTable), 'r.sampleId=sp.sampleId', array('sampleId', 'grade', 'participantId'));
+
+        $sQuery->from(array('sp' => $this->_sampleToPanelTable), $select);
+
+        if (isset($where)) {
+            if (isset($where['region'])) {
+
+            }
+            if (isset($where['dateFrom'])) {
+                $sQuery->where("r.dateCreated >=?", $where['dateFrom']);
+                unset($where['dateFrom']);
+            }
+            if (isset($where['dateTo'])) {
+                $sQuery->where("r.dateCreated <=?", $where['dateTo']);
+                unset($where['dateTo']);
+            }
+            if (!empty($where)) {
                 $sQuery->where($this->returnWhereStatement($where));
             }
         }

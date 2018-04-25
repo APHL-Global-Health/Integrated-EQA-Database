@@ -1,9 +1,26 @@
 <div>
     <h3>Performance Countywise
-    <i class="fa fa-spin {{Graphs.loaderProgressSpinner}}"></i>
+        <i class="fa fa-spin {{Graphs.loaderProgressSpinner}}"></i>
     </h3>
 
     <form name="genGraph" class="filters">
+
+        <div class="row col-md-3 filterDiv " >
+            <input type="text" class="form-control input-sm" ng-model="Graphs.genFilter.dateFrom"
+                   data-date-format="yyyy-MM-dd" placeholder="select from date"
+                   data-min-date="" data-max-date="today"
+                   data-autoclose="1" aria-describedby="basic-addon2"
+                   name="datePrepared"
+                   bs-datepicker>
+        </div>
+        <div class="row col-md-3 filterDiv ">
+            <input type="text" class="form-control input-sm" ng-model="Graphs.genFilter.dateTo"
+                   data-date-format="yyyy-MM-dd" placeholder="select to date"
+                   data-min-date="Graphs.genFilter.dateFrom" data-max-date="today"
+                   data-autoclose="1" aria-describedby="basic-addon2"
+                   name="datePrepared"
+                   bs-datepicker>
+        </div>
 
         <div class="row col-md-3 filterDiv " ng- ng-init="Graphs.getRounds()">
             <select class="form-control input-sm" ng-model="Graphs.genFilter.roundId">
@@ -22,22 +39,16 @@
                 </option>
             </select>
         </div>
-        <div class="col-md-3 row filterDiv" ng-init="Graphs.getLabs()">
-            <select class="form-control input-sm" ng-model="Graphs.genFilter.participantId">
-                <option disabled selected>---SELECT LAB---</option>
-                <option ng-value="0" >---SELECT ALL---</option>
-                <option value="{{lab.participant_id}}" ng-repeat="lab in Graphs.filter.labs">
-                    {{lab.first_name}}({{lab.MflCode}})
-                </option>
-            </select>
-        </div>
+
         <div class="col-md-1 row filterDiv">
             <button class="btn btn-primary btn-sm"
-                    ng-click="Graphs.getResponseDataOnRoundLabCounty(Graphs.genFilter)"> Generate </button>
+                    ng-click="Graphs.getResultsOnCounties(Graphs.genFilter)"> Generate
+            </button>
         </div>
         <div class="col-md-1 row filterDiv">
             <button class="btn btn-info btn-sm"
-                    ng-click="Graphs.printGraph()"> print </button>
+                    ng-click="Graphs.printGraph()"> print
+            </button>
         </div>
 
 
@@ -45,11 +56,7 @@
 
 
     <div class="table-bordered" id="printgraph">
-        <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
-
-
-
-
+        <nvd3 options="Graphs.options" data="Graphs.countiesGraphData"></nvd3>
 
 
     </div>

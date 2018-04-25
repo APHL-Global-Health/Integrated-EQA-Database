@@ -51,12 +51,14 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
         $scope.Graphs.options = {
             "chart": {
                 "type": "multiBarChart",
-                "height": 450,
+                "height": 500,
                 "stacked": false,
+                "rotateLabels": 0,
+                "noData":"There is currently no data or you have not selected the filters",
                 "margin": {
                     "top": 20,
                     "right": 20,
-                    "bottom": 45,
+                    "bottom": 100,
                     "left": 45
                 },
                 "clipEdge": true,
@@ -349,6 +351,50 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
                     $scope.Graphs.loaderProgressSpinner = '';
                     if (data.status == 1) {
                         $scope.Graphs.roundsGraphData = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            EptServices.EptServiceObject.returnServerErrorAlert();
+            $scope.Graphs.loaderProgressSpinner = '';
+            console.log(e)
+        }
+
+    }
+    $scope.Graphs.countiesGraphData = [];
+    $scope.Graphs.getResultsOnCounties = function (where) {
+        try {
+            $scope.Graphs.countiesGraphData = [];
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+
+            var url = SERVER_API_URL.MICROGRAPHS + GETRESULTSONCOUNTIES;
+
+
+            var varData = {};
+
+            if (angular.isDefined(where)) {
+                varData.where = where;
+            }
+
+            console.log(varData);
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.countiesGraphData = data.data;
                     } else {
 
 

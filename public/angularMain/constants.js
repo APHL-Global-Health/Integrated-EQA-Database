@@ -16,3 +16,4 @@ const GETGENRESPONSE = 'sampletypes';
 const GETRESULSONLABS = 'getlabsresults';
 
 const GETRESULTSONROUNDS = 'getroundsresults';
+const GETRESULTSONCOUNTIES = 'getcountiesresults';
