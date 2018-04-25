@@ -13,3 +13,6 @@ const GETCOUNTIES = 'getcounties';
 const GETLABS = 'getlabs';
 // const GETGENRESPONSE = 'getgenresponse';
 const GETGENRESPONSE = 'sampletypes';
+const GETRESULSONLABS = 'getlabsresults';
+
+const GETRESULTSONROUNDS = 'getroundsresults';

@@ -2,14 +2,14 @@
     <div ng-controller="GraphsController">
         <h2>Graphs</h2>
 
-        <nav class="navbar navbar-default" ng-init="Graphs.currentPage='labindex'">
+        <nav class="navbar navbar-default" ng-init="Graphs.currentPage='labindex';Graphs.loadGraphConfigs(Graphs.xAxisLabel.exampleXLabel)">
             <div class="container-fluid">
 
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href=""  ng-click="Graphs.currentPage='labindex'">Samples</a></li>
-                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='labs'">Labs</a></li>
-                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='rounds'">Rounds</a></li>
-                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='counties'">Counties</a></li>
+                    <li class="active"><a href=""  ng-click="Graphs.currentPage='labindex';Graphs.loadGraphConfigs(Graphs.xAxisLabel.exampleXLabel)">Samples</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='labs';Graphs.loadGraphConfigs(Graphs.xAxisLabel.labsXLabel)">Labs</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='rounds';Graphs.loadGraphConfigs(Graphs.xAxisLabel.roundsXLabel)">Rounds</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='counties';Graphs.loadGraphConfigs(Graphs.xAxisLabel.countiesXLabel)">Counties</a></li>
 
                 </ul>
             </div>

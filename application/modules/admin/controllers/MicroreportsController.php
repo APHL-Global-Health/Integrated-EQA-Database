@@ -129,7 +129,8 @@ class Admin_MicroreportsController extends Zend_Controller_Action
     {
         $where = null;
         isset($params['roundId']) && !$params['roundId'] == 0 ? $where['roundId'] = $params['roundId'] : false;
-        isset($params['dateCreated']) ? $where['dateCreated'] = $params['dateCreated'] : false;
+        isset($params['dateFrom']) ? $where['dateFrom'] = $params['dateFrom'] : false;
+        isset($params['dateTo']) ? $where['dateTo'] = $params['dateTo'] : false;
         isset($params['participantId']) && !$params['participantId'] == 0 ? $where[$table . '.participantId'] = $params['participantId'] : false;
         isset($params['region']) && !$params['region'] == 0 ? $where['region'] = $params['region'] : false;
 
@@ -168,9 +169,8 @@ class Admin_MicroreportsController extends Zend_Controller_Action
                 $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
 
 
-
                 array_push($arrayAcceptable, array("x" => $value['newSampleName'], "y" => $aP));
-                array_push($arrayUnacceptable, array("x" => $value['newSampleName'], "y" => 100-$aP));
+                array_push($arrayUnacceptable, array("x" => $value['newSampleName'], "y" => 100 - $aP));
 
 
             }
@@ -223,8 +223,81 @@ class Admin_MicroreportsController extends Zend_Controller_Action
         exit;
     }
 
+    public function getlabsresultsAction()
+    {
+
+        $params = (array)$this->returnArrayFromInput()['where'];
+        $where = null;
+
+
+        if (isset($params)) {
+
+            $where = $this->returnValidWhereArray($params, 'r');
+        }
+
+        $response = $this->_microReportModel->getLabsResults($where);
+        $arrayAcceptable = array();
+        $arrayUnacceptable = array();
+        foreach ($response['data'] as $key => $value) {
+            $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
+
+            $lab_name = $value['lab_name'] == '' || $value['lab_name'] == null ? $value['first_name'] . " " . $value['last_name'] : $value['lab_name'];
+
+            array_push($arrayAcceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => 100 - $aP));
+            array_push($arrayUnacceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => $aP));
+
+
+        }
+        $structuredArray = array("status" => 1, "data" => array(
+            array('key' => 'ACCEPTABLE','color' => "green", "values" => $arrayAcceptable),
+            array('key' => 'UNACCEPTABLE','color' => "orange", "values" => $arrayUnacceptable)
+        ), "message" => null);
+
+        echo json_encode($structuredArray);
+
+        exit;
+
+    }
+
     //
 
+
+    public function getroundsresultsAction()
+    {
+
+        $params = (array)$this->returnArrayFromInput()['where'];
+        $where = null;
+
+
+        if (isset($params)) {
+
+            $where = $this->returnValidWhereArray($params, 'r');
+        }
+
+        $response = $this->_microReportModel->getRoundsResults($where);
+        $arrayAcceptable = array();
+        $arrayUnacceptable = array();
+        foreach ($response['data'] as $key => $value) {
+            $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
+
+
+            $roundName = $value['roundName'] ."(".$value['roundCode'].")";
+
+            array_push($arrayAcceptable, array("x" => $roundName , "y" => 100 - $aP));
+            array_push($arrayUnacceptable, array("x" => $roundName , "y" => $aP));
+
+
+        }
+        $structuredArray = array("status" => 1, "data" => array(
+            array('key' => 'ACCEPTABLE','color' => "green", "values" => $arrayAcceptable),
+            array('key' => 'UNACCEPTABLE','color' => "orange", "values" => $arrayUnacceptable)
+        ), "message" => null);
+
+        echo json_encode($structuredArray);
+
+        exit;
+
+    }
 
 }
 

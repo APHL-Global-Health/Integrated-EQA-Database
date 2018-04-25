@@ -4,13 +4,22 @@
     </h3>
 
     <form name="genGraph" class="filters">
-        <i ng-init="Graphs.loadGraph()"></i>
-        <div class="row col-md-3 filterDiv " ng- ng-init="Graphs.getRounds()">
-            <select class="form-control input-sm" ng-model="Graphs.genFilter.roundId">
-                <option disabled selected>---SELECT ROUND-</option>
-                <option ng-value="0" selected>SELECT ALL</option>
-                <option value="{{round.id}}" ng-repeat="round in Graphs.filter.rounds">{{round.roundName}}</option>
-            </select>
+
+        <div class="row col-md-3 filterDiv " >
+            <input type="text" class="form-control input-sm" ng-model="Graphs.genFilter.dateFrom"
+                   data-date-format="yyyy-MM-dd" placeholder="select from date"
+                   data-min-date="" data-max-date="today"
+                   data-autoclose="1" aria-describedby="basic-addon2"
+                   name="datePrepared"
+                   bs-datepicker>
+        </div>
+        <div class="row col-md-3 filterDiv ">
+            <input type="text" class="form-control input-sm" ng-model="Graphs.genFilter.dateTo"
+                   data-date-format="yyyy-MM-dd" placeholder="select to date"
+                   data-min-date="" data-max-date="today"
+                   data-autoclose="1" aria-describedby="basic-addon2"
+                   name="datePrepared"
+                   bs-datepicker>
         </div>
 
         <div class="col-md-3 row filterDiv" ng-init="Graphs.getCounties()">
@@ -22,18 +31,18 @@
                 </option>
             </select>
         </div>
-        <div class="col-md-3 row filterDiv" ng-init="Graphs.getLabs()">
-            <select class="form-control input-sm" ng-model="Graphs.genFilter.participantId">
-                <option disabled selected>---SELECT LAB---</option>
-                <option ng-value="0" >---SELECT ALL---</option>
-                <option value="{{lab.participant_id}}" ng-repeat="lab in Graphs.filter.labs">
-                    {{lab.first_name}}({{lab.MflCode}})
-                </option>
-            </select>
-        </div>
+        <!--<div class="col-md-3 row filterDiv" ng-init="Graphs.getLabs()">-->
+            <!--<select class="form-control input-sm" ng-model="Graphs.genFilter.participantId">-->
+                <!--<option disabled selected>-&#45;&#45;SELECT TEST TYPE-&#45;&#45;</option>-->
+                <!--<option ng-value="0" >-&#45;&#45;SELECT ALL-&#45;&#45;</option>-->
+                <!--<option value="1">ID</option>-->
+                <!--<option value="2">AST</option>-->
+                <!--<option value="3">Gram Stain</option>-->
+            <!--</select>-->
+        <!--</div>-->
         <div class="col-md-1 row filterDiv">
             <button class="btn btn-primary btn-sm"
-                    ng-click="Graphs.getResponseDataOnRoundLabCounty(Graphs.genFilter)"> Generate </button>
+                    ng-click="Graphs.getResultsOnRound(Graphs.genFilter)"> Generate </button>
         </div>
         <div class="col-md-1 row filterDiv">
             <button class="btn btn-info btn-sm"
@@ -45,7 +54,7 @@
 
 
     <div class="table-bordered" id="printgraph">
-        <nvd3 options="Graphs.options" data="Graphs.data"></nvd3>
+        <nvd3 options="Graphs.options" data="Graphs.roundsGraphData"></nvd3>
 
 
 

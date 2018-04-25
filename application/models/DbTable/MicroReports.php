@@ -296,5 +296,59 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
 
     }
 
+    public function getLabsResults($where)
+    {
+        $select = array('count(if(grade="UNACCEPTABLE",1,null)) as UNACCEPTABLE', 'count(if(grade="ACCEPTABLE",1,null)) as ACCEPTABLE', 'r.participantId');
+
+        $sQuery = $this->getAdapter()->select();
+
+        $sQuery->join(array('p' => $this->_participantsTable), 'p.participant_id=r.participantId', array('lab_name', 'first_name', 'mflCode', 'last_name'));
+        $sQuery->group('grade');
+        $sQuery->group('participantId');
+
+        $sQuery->from(array('r' => $this->_responsesTable), $select);
+
+        if (isset($where)) {
+            if (isset($where['region'])) {
+                //   $sQuery->join(array('p' => 'participant'), 'p.participant_id=r.participantId', array('region'));
+            }
+            $sQuery->where($this->returnWhereStatement($where));
+        }
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
+
+    }
+
+    public function getRoundsResults($where)
+    {
+        $select = array('count(if(grade="UNACCEPTABLE",1,null)) as UNACCEPTABLE', 'count(if(grade="ACCEPTABLE",1,null)) as ACCEPTABLE', 'r.roundId');
+
+        $sQuery = $this->getAdapter()->select();
+
+        $sQuery->join(array('s' => $this->_roundsTable), 's.id=r.roundId', array('roundName', 'roundCode'));
+        $sQuery->group('grade');
+        $sQuery->group('roundId');
+
+        $sQuery->from(array('r' => $this->_responsesTable), $select);
+
+        if (isset($where)) {
+            if (isset($where['region'])) {
+                $sQuery->join(array('p' => 'participant'), 'p.participant_id=r.participantId', array('region'));
+            }
+            if (isset($where['dateFrom'])) {
+                $sQuery->where("s.dateCreated >=?",$where['dateFrom']);
+                unset($where['dateFrom']);
+            }
+            if (isset($where['dateTo'])) {
+                $sQuery->where("s.dateCreated <=?",$where['dateTo']);
+                unset($where['dateTo']);
+            }
+            if(!empty($where)) {
+                $sQuery->where($this->returnWhereStatement($where));
+            }
+        }
+        return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
+
+    }
+
 
 }
