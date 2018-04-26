@@ -79,7 +79,7 @@
                 <label class="col-lg-3 control-label">Action <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
                     <textarea class="form-control isRequired"
-                              required="" name="actionDone" id="actionDone" title="Please type the action">
+                              required name="actionDone" id="actionDone" title="Please type the action">
 
                     </textarea>
                 </div>
@@ -88,8 +88,8 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Element Captured<span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <textarea class="form-control isRequired" required=""
-                              required="" name="elementCaptured" id="elementCaptured" title="Please enter element captured">
+                    <textarea class="form-control isRequired"
+                              required name="elementCaptured" id="elementCaptured" title="Please enter element captured">
 
                     </textarea>
                 </div>
@@ -117,6 +117,7 @@
 
 
         $("#correctiveAction").submit(function (e) {
+
 
 
             $.ajax({
