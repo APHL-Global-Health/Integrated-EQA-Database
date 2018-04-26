@@ -10,6 +10,7 @@
                     <li><a href="" target="_self"  ng-click="Graphs.currentPage='labs';Graphs.loadGraphConfigs(Graphs.xAxisLabel.labsXLabel)">Labs</a></li>
                     <li><a href="" target="_self"  ng-click="Graphs.currentPage='rounds';Graphs.loadGraphConfigs(Graphs.xAxisLabel.roundsXLabel)">Rounds</a></li>
                     <li><a href="" target="_self"  ng-click="Graphs.currentPage='counties';Graphs.loadGraphConfigs(Graphs.xAxisLabel.countiesXLabel)">Counties</a></li>
+                    <li><a href="" target="_self"  ng-click="Graphs.currentPage='responses';Graphs.loadPieChart(Graphs.xAxisLabel.responsesXLabel)">Response</a></li>
 
                 </ul>
             </div>
@@ -35,6 +36,11 @@
 
         <div ng-if="Graphs.currentPage=='rounds'">
             <div ng-include="'../partialHTMLS/graphs/rounds.html'">
+
+            </div>
+        </div>
+        <div ng-if="Graphs.currentPage=='responses'">
+            <div ng-include="'../partialHTMLS/graphs/responses.html'">
 
             </div>
         </div>
