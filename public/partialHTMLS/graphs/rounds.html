@@ -3,7 +3,7 @@
     <i class="fa fa-spin {{Graphs.loaderProgressSpinner}}"></i>
     </h3>
 
-    <form name="genGraph" class="filters">
+    <form name="genGraph" class="filters" ng-init="Graphs.genFilter={}">
 
         <div class="row col-md-3 filterDiv " >
             <input type="text" class="form-control input-sm" ng-model="Graphs.genFilter.dateFrom"

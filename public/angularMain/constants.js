@@ -17,3 +17,4 @@ const GETRESULSONLABS = 'getlabsresults';
 
 const GETRESULTSONROUNDS = 'getroundsresults';
 const GETRESULTSONCOUNTIES = 'getcountiesresults';
+const GETSAMPLERESPONSES = 'getsamplesresponses';

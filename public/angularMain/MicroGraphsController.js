@@ -416,6 +416,50 @@ graphsController.controller('GraphsController', function ($scope, $http, $locati
         }
 
     }
+    $scope.Graphs.responsesGraphData = [];
+    $scope.Graphs.getSampleResponses=function(where) {
+        try {
+            $scope.Graphs.responsesGraphData = [];
+            $scope.Graphs.loaderProgressSpinner = 'fa-spinner'
+
+            var url = SERVER_API_URL.MICROGRAPHS + GETSAMPLERESPONSES;
+
+
+            var varData = {};
+
+            if (angular.isDefined(where)) {
+                varData.where = where;
+            }
+
+            console.log(varData);
+            $http
+                .post(url, varData)
+                .success(function (data) {
+                    console.log(data);
+                    $scope.Graphs.loaderProgressSpinner = '';
+                    if (data.status == 1) {
+                        $scope.Graphs.responsesGraphData = data.data;
+                    } else {
+
+
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                    if (data.data == false) {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
+                    console.log(error)
+                    $scope.Graphs.loaderProgressSpinner = '';
+
+                })
+        } catch (e) {
+            EptServices.EptServiceObject.returnServerErrorAlert();
+            $scope.Graphs.loaderProgressSpinner = '';
+            console.log(e)
+        }
+
+    }
 
 
 })

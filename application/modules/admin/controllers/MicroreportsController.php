@@ -249,8 +249,8 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
         }
         $structuredArray = array("status" => 1, "data" => array(
-            array('key' => 'ACCEPTABLE','color' => "green", "values" => $arrayAcceptable),
-            array('key' => 'UNACCEPTABLE','color' => "orange", "values" => $arrayUnacceptable)
+            array('key' => 'ACCEPTABLE', 'color' => "green", "values" => $arrayAcceptable),
+            array('key' => 'UNACCEPTABLE', 'color' => "orange", "values" => $arrayUnacceptable)
         ), "message" => null);
 
         echo json_encode($structuredArray);
@@ -281,16 +281,16 @@ class Admin_MicroreportsController extends Zend_Controller_Action
             $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
 
 
-            $roundName = $value['roundName'] ."(".$value['roundCode'].")";
+            $roundName = $value['roundName'] . "(" . $value['roundCode'] . ")";
 
-            array_push($arrayAcceptable, array("x" => $roundName , "y" => 100 - $aP));
-            array_push($arrayUnacceptable, array("x" => $roundName , "y" => $aP));
+            array_push($arrayAcceptable, array("x" => $roundName, "y" => 100 - $aP));
+            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP));
 
 
         }
         $structuredArray = array("status" => 1, "data" => array(
-            array('key' => 'ACCEPTABLE','color' => "green", "values" => $arrayAcceptable),
-            array('key' => 'UNACCEPTABLE','color' => "orange", "values" => $arrayUnacceptable)
+            array('key' => 'ACCEPTABLE', 'color' => "green", "values" => $arrayAcceptable),
+            array('key' => 'UNACCEPTABLE', 'color' => "orange", "values" => $arrayUnacceptable)
         ), "message" => null);
 
         echo json_encode($structuredArray);
@@ -299,7 +299,8 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
     }
 
-    public function getcountiesresultsAction(){
+    public function getcountiesresultsAction()
+    {
 
         $params = (array)$this->returnArrayFromInput()['where'];
         $where = null;
@@ -317,21 +318,62 @@ class Admin_MicroreportsController extends Zend_Controller_Action
             $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
 
 
-            $roundName = $value['Description'] ;
+            $roundName = $value['Description'];
 
-            array_push($arrayAcceptable, array("x" => $roundName , "y" => 100 - $aP));
-            array_push($arrayUnacceptable, array("x" => $roundName , "y" => $aP));
+            array_push($arrayAcceptable, array("x" => $roundName, "y" => 100 - $aP));
+            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP));
 
 
         }
         $structuredArray = array("status" => 1, "data" => array(
-            array('key' => 'ACCEPTABLE','color' => "green", "values" => $arrayAcceptable),
-            array('key' => 'UNACCEPTABLE','color' => "orange", "values" => $arrayUnacceptable)
+            array('key' => 'ACCEPTABLE', 'color' => "green", "values" => $arrayAcceptable),
+            array('key' => 'UNACCEPTABLE', 'color' => "orange", "values" => $arrayUnacceptable)
         ), "message" => null);
 
         echo json_encode($structuredArray);
 
         exit;
+
+    }
+
+    public function getsamplesresponsesAction()
+    {
+        $params = (array)$this->returnArrayFromInput()['where'];
+        $where = null;
+
+
+        if (isset($params)) {
+
+            $where = $this->returnValidWhereArray($params, 'r');
+        }
+
+        $samples = $this->_microReportModel->getSampleResponses($where);
+        $arrayUnresponded = array();
+        $arrayTotal= array();
+        $arrayResponded = array();
+        if (count($samples) > 0) {
+
+            foreach ($samples['data'] as $key => $value) {
+
+                $totalResponded = $this->_microReportModel->totalRespondedOnSample($value['sampleId']);
+//                $totalResponded = round(($totalResponded / $value['total']) * 100,0);
+                array_push($arrayTotal, array('x' => $value['batchName'], 'y' => $value['total']));
+                array_push($arrayResponded, array('x' => $value['batchName'], 'y' => $totalResponded));
+                array_push($arrayUnresponded, array('x' => $value['batchName'], 'y' => $value['total'] - $totalResponded));
+            }
+
+        }
+        $structuredArray = array("status" => 1, "data" => array(
+            array('key' => 'TOTAL', 'color' => "blue", "values" => $arrayTotal),
+            array('key' => 'RESPONDED', 'color' => "green", "values" => $arrayResponded),
+
+            array('key' => 'UNRESPONDED', 'color' => "orange", "values" => $arrayUnresponded)
+        ), "message" => null);
+
+        echo json_encode($structuredArray);
+
+        exit;
+
 
     }
 
