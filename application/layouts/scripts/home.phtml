@@ -37,7 +37,9 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                         <span class="icon-bar"></span>
                     </button>
                     <a style="color: #FFF;" class="navbar-brand" href="/" title="<?php echo $config->applicationName; ?>">
-                        <?php echo $config->applicationShortName; ?>
+<!--                        --><?php //echo $config->applicationShortName; ?>
+                        <img src='/images/country/moh-logo.png' height="60" width="60"/>
+
                     </a>
                 </div>
                 <!-- Navbar Right Menu -->
@@ -54,10 +56,10 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <a href="/about-us"" style="color: #FFF;"><i class="icon icon-lock"></i> <span>About Us</span></a>
                             </li>
                             <li  class="home-menu">
-                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Library</a>
+                                <a href="/resources" style="color: #FFF;"><i class="icon icon-lock"></i> Library</a>
                             </li>
                             <li class="home-menu">
-                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Contact Us</a>
+                                <a href="/contact-us" style="color: #FFF;"><i class="icon icon-lock"></i> Contact Us</a>
                             </li>
                         <?php } ?>
                     </ul>

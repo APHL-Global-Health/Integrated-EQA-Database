@@ -13,7 +13,14 @@
  */
 class ContactController extends Zend_Controller_Action{
     //put your code here
-    
+    public function init()
+    {
+        /* Initialize action controller here */
+//        $this->_helper->layout()->setLayout('home');
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('index', 'html')
+            ->initContext();
+    }
     public function indexAction(){
         
     }

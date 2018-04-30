@@ -80,4 +80,8 @@ class ContactUsController extends Zend_Controller_Action {
         $this->view->PartnersList = $common->getPartnersList();
     }
 
+    public function contactAction(){
+
+    }
+
 }

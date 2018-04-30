@@ -1,4 +1,28 @@
-<div class="container">
-    Email :  
-    
-</div>
+<section class="content">
+
+    <div class="login-box home-purple" style="max-width: 430px; margin: auto; padding:15px;opacity: 0.7; ">
+        <div class="login-logo">
+            <h2 class="color:white;">Contact Us</h2>
+
+        </div><!-- /.login-logo -->
+
+        <div class="login-box-body">
+            <?php if(isset($_GET['status'])){ ?>
+                <div class="btn btn-success">
+                    <?php echo  $_GET['status']  ?>
+                </div>
+            <?php } ?>
+            <form name="loginForm" id="loginForm" class="form-vertical" method="post" onsubmit="validateLogin();return false;"
+                  action="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>">
+
+
+                <div class="form-group">
+                    <label for="username" class="uname" data-icon="u"> Email address </label>
+
+                    <input id="username" name="username" class="isRequired form-control" title="Please enter your email address" type="text" placeholder="mymail@mail.com"/>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

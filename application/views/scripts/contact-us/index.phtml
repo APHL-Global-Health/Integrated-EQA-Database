@@ -1,10 +1,12 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/bootstrap-select.min.css'); ?>" />
-<div class="col-md-12">
+<div class="col-md-12 home-purple" style="opacity: 0.8!important;" >
     <form name="addParticipantForm" id="addParticipantForm" method="post" action="<?php echo $this->url(array("module" => "default",
         "controller" => "contact-us", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
             return false;">
+        <div class="clearfix">&nbsp;</div>
         <fieldset>
-            <legend>Request Enrollment</legend>
+
+            <legend style="color:white;">Request Enrollment</legend>
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span></label>
 
@@ -191,6 +193,7 @@
             </div>
         </fieldset>
     </form>
+    <div class="clearfix">&nbsp;</div>
 </div>
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
 <script type="text/javascript">
