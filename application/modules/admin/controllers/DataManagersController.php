@@ -40,7 +40,11 @@ class Admin_DataManagersController extends Zend_Controller_Action {
             $this->view->contact = $contact->getContact($this->_getParam('contact'));
         }
     }
-
+public function testEmailAction(){
+    $common = new Application_Service_Common();
+    echo $common->sendPasswordEmailToUser("osoromichael@gmail.com",'1232456','test');
+        exit;
+}
     public function addmicrouserAction() {
         $userService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {

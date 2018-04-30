@@ -1,18 +1,23 @@
 <?php
 
-class Application_Service_Common {
+class Application_Service_Common
+{
 
-    
-    public function baseUrl() {
+
+    public function baseUrl()
+    {
         return $_SERVER['SERVER_NAME'];//Zend_Controller_Front::getInstance()->getBaseUrl();
     }
-    
-    public function configFileUrl() {
+
+    public function configFileUrl()
+    {
         return APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini";
     }
-    public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array()) {
+
+    public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array())
+    {
         //Send to email
-        
+
         if (is_string($to)) {
             $to = explode(",", $to);
         }
@@ -76,7 +81,8 @@ class Application_Service_Common {
         }
     }
 
-    public static function getRandomString($length = 8) {
+    public static function getRandomString($length = 8)
+    {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
         $randStr = "";
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
@@ -87,38 +93,75 @@ class Application_Service_Common {
         return $randStr; //turn the array into a string
     }
 
-    public function sendPasswordEmailToUser($sendTo, $password, $fullname) {
-//        $common = new Application_Service_Common();
-        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-        $message = "Dear $fullname,"
-                . $config->emailRegistrationBody
-                . "<br>Username : $sendTo <br>"
-                . "Password : $password <br>"
-                . $config->emailRegistrationSignature;
-        $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
-        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
+    public function urlLinkButton($link, $btnLabel)
+    {
+        return "<br><a href='" . $this->baseUrl() . "/" . $link . "' style='padding:14px;width:40%;" .
+            "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>" .
+            "" . $btnLabel . "</a><br>" .
+            "";
     }
 
-    public function sendGeneralEmail($sendTo, $Message, $fullname = null) {
+    public function createFooterWithLogo()
+    {
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+
+        $footerDiv =
+            "<br><div>"
+            . "<div style='width:100%'>"
+            . "<div style='float: left' >"
+            . "<img height='100px' width='100px' src='" . $config->mohLogo . "'/>"
+            . " </div>"
+            . "<div style='width: 90%;float: right;text-align: left;'>"
+            . "<br><br>" . $config->vlLogoFooterMessage . ""
+            . "</div>"
+            . "</div > "
+            . "</div > ";
+        return $footerDiv;
+
+    }
+
+
+    public function sendPasswordEmailToUser($sendTo, $password, $fullname = null)
+    {
+//        $common = new Application_Service_Common();
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $message = ""
+            . $config->emailRegistrationBody
+            . $this->urlLinkButton("auth/login", "NHRL Proficiency Testing Programme:<br > Viral Load / EID log in")
+            . "Kindly use below credentials to logo in.This is a one time password.Please change after you logo in "
+            ."<br><b>Username : $sendTo </b><br>"
+            . "<b>Password : $password </b><br>"
+            . $config->emailRegistrationFooter;
+
+
+        $toMail = Application_Service_Common::getConfig('admin_email');
+
+         $message .= $this->createFooterWithLogo();
+        $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials",
+            $message, null, "VLEID ePT ");
+    }
+
+    public function sendGeneralEmail($sendTo, $Message, $fullname = null)
+    {
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $fullname = isset($fullname) ? $fullname : 'Participant';
         $message = "Dear $fullname,"
-                . "<br> $Message <br>"
-                . $config->emailRegistrationSignature;
+            . " <br> $Message <br>"
+            . $config->emailRegistrationSignature;
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
     }
 
-    public function generateRandomPassword($len) {
+    public function generateRandomPassword($len)
+    {
 
         $min_lenght = 0;
         $max_lenght = 100;
         $bigL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789&$@";
-        $number = "0123456789&$@";
+        $smallL = "abcdefghijklmnopqrstuvwxyz0123456789 & $@";
+        $number = "0123456789 & $@";
         $bigB = str_shuffle($bigL);
         $smallS = str_shuffle($smallL);
         $numberS = str_shuffle($number);
@@ -142,7 +185,8 @@ class Application_Service_Common {
         return $CodeEX;
     }
 
-    function generate_id() {
+    function generate_id()
+    {
         $participantDb = new Application_Model_DbTable_Participants();
         $t = $participantDb->CountParticipants();
 
@@ -162,19 +206,21 @@ class Application_Service_Common {
         return $id;
     }
 
-    public static function getConfig($name) {
+    public static function getConfig($name)
+    {
         $gc = new Application_Model_DbTable_GlobalConfig();
         return $gc->getValue($name);
     }
 
-    public function contactForm($params) {
-//		$message = "<h3>The following details were entered by ".$params['first_name']." " .$params['last_name']."</h3>";
-//		$message .= "Name : ".$params['first_name']." " .$params['last_name']."<br/>";
-//		$message .= "Email : ".$params['email']."<br/>";
-//		$message .= "Phone/Mobile : ".$params['phone']."<br/>";
-//		$message .= "Selected Reason to Contact : ".$params['reason']."<br/>";
-//		$message .= "Lab/Agency : ".$params['agency']."<br/>";
-//		$message .= "Additional Info : ".$params['additionalInfo']."<br/>";
+    public function contactForm($params)
+    {
+//		$message = " < h3>The following details were entered by ".$params['first_name']." " .$params['last_name']." </h3 > ";
+//		$message .= "Name : ".$params['first_name']." " .$params['last_name']." < br />";
+//		$message .= "Email : ".$params['email']." < br />";
+//		$message .= "Phone / Mobile : ".$params['phone']." < br />";
+//		$message .= "Selected Reason to Contact : ".$params['reason']." < br />";
+//		$message .= "Lab / Agency : ".$params['agency']." < br />";
+//		$message .= "Additional Info : ".$params['additionalInfo']." < br />";
         print_r($params['platform']);
         exit;
         $db = new Application_Model_DbTable_Facility();
@@ -204,7 +250,8 @@ class Application_Service_Common {
 //		}		
     }
 
-    public function checkDuplicate($params) {
+    public function checkDuplicate($params)
+    {
         $session = new Zend_Session_Namespace('credo');
         $tableName = $params['tableName'];
         $fieldName = $params['fieldName'];
@@ -212,7 +259,7 @@ class Application_Service_Common {
         $fnct = $params['fnct'];
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         if ($fnct == '' || $fnct == 'null') {
-            $sql = $db->select()->from($tableName)->where($fieldName . "=" . "'$value'");
+            $sql = $db->select()->from($tableName)->where($fieldName . " = " . "'$value'");
             $result = $db->fetchAll($sql);
             $data = count($result);
         } else {
@@ -232,7 +279,9 @@ class Application_Service_Common {
         return $data;
     }
 
-    public function checkDuplicates($params) {
+    public
+    function checkDuplicates($params)
+    {
         $session = new Zend_Session_Namespace('credo');
         $tableName = $params['tableName'];
         $fieldName = $params['fieldName'];
@@ -261,7 +310,9 @@ class Application_Service_Common {
         return $data;
     }
 
-    public function removespecials($url) {
+    public
+    function removespecials($url)
+    {
         $url = str_replace(" ", "-", $url);
 
         $url = preg_replace('/[^a-zA-Z0-9\-]/', '', $url);
@@ -272,77 +323,107 @@ class Application_Service_Common {
         return strtolower($url);
     }
 
-    public function getCountriesList() {
+    public
+    function getCountriesList()
+    {
         $countriesDb = new Application_Model_DbTable_Countries();
         return $countriesDb->getAllCountries();
     }
 
-    public function getUnshippedDistributions() {
+    public
+    function getUnshippedDistributions()
+    {
         $disrtibutionDb = new Application_Model_DbTable_Distribution();
         return $disrtibutionDb->getUnshippedDistributions();
     }
 
-    public function getCountiesList() {
+    public
+    function getCountiesList()
+    {
         $countriesDb = new Application_Model_DbTable_Counties();
         return $countriesDb->getAllCounties();
     }
 
-    public function getPartnersList() {
+    public
+    function getPartnersList()
+    {
         $countriesDb = new Application_Model_DbTable_Partners();
         return $countriesDb->fetchAllActivePartners();
     }
 
-    public function getDepartmentList() {
+    public
+    function getDepartmentList()
+    {
         $countriesDb = new Application_Model_DbTable_Departments();
         return $countriesDb->getAllDepartments();
     }
 
-    public function getMflList() {
+    public
+    function getMflList()
+    {
         $countriesDb = new Application_Model_DbTable_Mfls();
         return $countriesDb->getAllMfls();
     }
 
-    public function getPlatformList() {
+    public
+    function getPlatformList()
+    {
         $countriesDb = new Application_Model_DbTable_Platforms();
         return $countriesDb->getAllPlatforms();
     }
 
-    public function getSchemesList() {
+    public
+    function getSchemesList()
+    {
         $countriesDb = new Application_Model_DbTable_Schemes();
         return $countriesDb->getAllSchemes();
     }
 
-    public function getAllnetwork() {
+    public
+    function getAllnetwork()
+    {
         $networkDb = new Application_Model_DbTable_NetworkTires();
         return $networkDb->getAllnetwork();
     }
 
-    public function getAllParticipantAffiliates() {
+    public
+    function getAllParticipantAffiliates()
+    {
         $participantAffiliateDb = new Application_Model_DbTable_ParticipantAffiliates();
         return $participantAffiliateDb->getAllParticipantAffiliates();
     }
 
-    public function getGlobalConfigDetails() {
+    public
+    function getGlobalConfigDetails()
+    {
         $db = new Application_Model_DbTable_GlobalConfig();
         return $db->getGlobalConfig();
     }
 
-    public function getFullSchemesDetails() {
+    public
+    function getFullSchemesDetails()
+    {
         $db = new Application_Model_DbTable_SchemeList();
         return $db->getFullSchemeList();
     }
 
-    public function updateConfig($params) {
+    public
+    function updateConfig($params)
+    {
         $db = new Application_Model_DbTable_GlobalConfig();
         $db->updateConfigDetails($params);
     }
 
-    public function getEmailTemplate($purpose) {
+    public
+    function getEmailTemplate($purpose)
+    {
         $db = new Application_Model_DbTable_MailTemplate();
         return $db->getEmailTemplateDetails($purpose);
     }
 
-    public function updateTemplate($params) {
+    public
+    function updateTemplate($params)
+    {
         $filterRules = array(
             '*' => 'StripTags',
             '*' => 'StringTrim'
@@ -367,17 +448,23 @@ class Application_Service_Common {
         }
     }
 
-    public function insertTempMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null) {
+    public
+    function insertTempMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null)
+    {
         $db = new Application_Model_DbTable_TempMail();
         return $db->insertTempMailDetails($to, $cc, $bcc, $subject, $message, $fromMail, $fromName);
     }
 
-    public function getAllModeOfReceipt() {
+    public
+    function getAllModeOfReceipt()
+    {
         $db = new Application_Model_DbTable_ModeOfReceipt();
         return $db->fetchAllModeOfReceipt();
     }
 
-    public function updateHomeBanner($params) {
+    public
+    function updateHomeBanner($params)
+    {
         $filterRules = array(
             '*' => 'StripTags',
             '*' => 'StringTrim'
@@ -402,37 +489,51 @@ class Application_Service_Common {
         }
     }
 
-    public function getHomeBannerDetails() {
+    public
+    function getHomeBannerDetails()
+    {
         $db = new Application_Model_DbTable_HomeBanner();
         return $db->fetchHomeBannerDetails();
     }
 
-    public function getHomeBanner() {
+    public
+    function getHomeBanner()
+    {
         $db = new Application_Model_DbTable_HomeBanner();
         return $db->fetchHomeBanner();
     }
 
-    public function getproviderList() {
+    public
+    function getproviderList()
+    {
         $providerDb = new Application_Model_DbTable_Providers();
         return $providerDb->getProviders();
     }
 
-    public function getprogramList() {
+    public
+    function getprogramList()
+    {
         $programDb = new Application_Model_DbTable_Programs();
         return $programDb->getPrograms();
     }
 
-    public function getperiodList() {
+    public
+    function getperiodList()
+    {
         $periodDb = new Application_Model_DbTable_Periods();
         return $periodDb->getPeriods();
     }
 
-    public function getlabList() {
+    public
+    function getlabList()
+    {
         $labsDb = new Application_Model_DbTable_Labs();
         return $labsDb->getLabs();
     }
 
-    public function getRepositoryColumns() {
+    public
+    function getRepositoryColumns()
+    {
         $repDb = new Application_Model_DbTable_Importcsv();
         return $repDb->getAllColumns();
     }
