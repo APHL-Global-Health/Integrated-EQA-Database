@@ -6,7 +6,7 @@ class Application_Service_Common
 
     public function baseUrl()
     {
-        return $_SERVER['SERVER_NAME'];//Zend_Controller_Front::getInstance()->getBaseUrl();
+        return "http://" . $_SERVER['SERVER_NAME'];//Zend_Controller_Front::getInstance()->getBaseUrl();
     }
 
     public function configFileUrl()
@@ -93,6 +93,7 @@ class Application_Service_Common
         return $randStr; //turn the array into a string
     }
 
+
     public function urlLinkButton($link, $btnLabel)
     {
         return "<br><a href='" . $this->baseUrl() . "/" . $link . "' style='padding:14px;width:40%;" .
@@ -128,18 +129,35 @@ class Application_Service_Common
         $message = ""
             . $config->emailRegistrationBody
             . $this->urlLinkButton("auth/login", "NHRL Proficiency Testing Programme:<br > Viral Load / EID log in")
-            . "Kindly use below credentials to logo in.This is a one time password.Please change after you logo in "
-            ."<br><b>Username : $sendTo </b><br>"
+
+            . "Kindly use below credentials to logo in.This is a one time password.Please change the password after you log in "
+            . "<br><b>Username : $sendTo </b><br>"
             . "<b>Password : $password </b><br>"
             . $config->emailRegistrationFooter;
 
 
-        $toMail = Application_Service_Common::getConfig('admin_email');
-
-         $message .= $this->createFooterWithLogo();
+        $message .= $this->createFooterWithLogo();
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials",
             $message, null, "VLEID ePT ");
     }
+
+
+    public function sendReadinessEmail($email, $subject, $deadline)
+    {
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+        $message = ""
+            . $config->vlSurveyReadinessMessage
+            . $this->urlLinkButton("auth/login", "NHRL Proficiency Testing Programme:<br> Viral Load/EID readiness checklist");
+
+
+        $toMail = Application_Service_Common::getConfig('admin_email');
+        $message .= "Please complete by ".date($deadline).". Failure to comply will result in exclusion from the round ";
+        $message .= $this->createFooterWithLogo();
+        $this->sendMail($email, null, null, $subject,
+            $message, null, "VLEID ePT ");
+
+    }
+
 
     public function sendGeneralEmail($sendTo, $Message, $fullname = null)
     {

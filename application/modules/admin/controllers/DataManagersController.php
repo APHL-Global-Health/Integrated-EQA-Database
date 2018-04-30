@@ -42,7 +42,7 @@ class Admin_DataManagersController extends Zend_Controller_Action {
     }
 public function testEmailAction(){
     $common = new Application_Service_Common();
-    echo $common->sendPasswordEmailToUser("osoromichael@gmail.com",'1232456','test');
+    echo $common->sendPasswordEmailToUser("mosoro@abnosoftwares.co.ke",'1232456','test');
         exit;
 }
     public function addmicrouserAction() {

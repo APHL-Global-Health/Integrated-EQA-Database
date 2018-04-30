@@ -374,19 +374,16 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         $db->update('distributions', $updateInfo, "distribution_id ='" . $insertId . "' ");
 
         if (isset($labEmail)) {
-            $message = "Hi,<br/> "
-                    . " A new PT Round was added. "
-                    . "Kindly go to the system and login using your credentials,"
-                    . " access the readiness checklist form which is to be filled and"
-                    . " submited on or before $date. <br/><br/><br/>Regards,<br/><br/>"
-                    . "ePT Admin<br/><br/><small>This is a system generated email. "
-                    . "Please do not reply.</small>";
 
-            $subject = "New Round Starts  " . $params['distributionCode'] . "";
+
+
+
+
+            $subject = "New Round Readiness Checklist  " . $params['distributionCode'] . "";
             if (count($labEmail) > 0) {
-                $common->sendMail($labEmail, null, null, $subject, $message, null, "ePT Admin");
+                $common->sendReadinessEmail($labEmail,$subject,$date);
             }
-            return $insert;
+            return $insertId;
         }
     }
 
