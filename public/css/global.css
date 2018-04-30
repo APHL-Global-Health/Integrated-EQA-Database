@@ -131,3 +131,7 @@ a.footer-items:hover {
 a .home-menu {
     color: white;
 }
+.footer-items:hover{
+    background-color: purple!important;
+    color:purple;
+}

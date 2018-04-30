@@ -38,8 +38,16 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     </button>
                     <a style="color: #FFF;" class="navbar-brand" href="/" title="<?php echo $config->applicationName; ?>">
 <!--                        --><?php //echo $config->applicationShortName; ?>
-                        <img src='/images/country/moh-logo.png' height="60" width="60"/>
-
+                        <div>
+                            <div class="pull-left">
+                                <img src='/images/country/moh-logo.png' height="60" width="60"/>
+                            </div>
+                            <div class="pull-right" style="font-size:0.8em;margin-left: 10px;">
+                                Ministry of health<br>
+                                National Public Health Laboratories<br>
+                                National HIV Reference Laboratory
+                            </div>
+                        </div>
                     </a>
                 </div>
                 <!-- Navbar Right Menu -->
@@ -53,13 +61,16 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                             </li>
                         <?php } else { ?>
                             <li class="home-menu">
-                                <a href="/about-us"" style="color: #FFF;"><i class="icon icon-lock"></i> <span>About Us</span></a>
+                                <a href="/about-us"" style="color: #FFF;"><i class="icon icon-question"></i> <span>About Us</span></a>
                             </li>
                             <li  class="home-menu">
-                                <a href="/resources" style="color: #FFF;"><i class="icon icon-lock"></i> Library</a>
+                                <a href="/resources" style="color: #FFF;"><i class="icon icon-question"></i> Library</a>
                             </li>
                             <li class="home-menu">
-                                <a href="/contact-us" style="color: #FFF;"><i class="icon icon-lock"></i> Contact Us</a>
+                                <a href="/contact-us" style="color: #FFF;"><i class="icon icon-pencil"></i> Enroll</a>
+                            </li>
+                            <li class="home-menu">
+                                <a href="/contact" style="color: #FFF;"><i class="icon icon-envelope"></i> Contact Us</a>
                             </li>
                         <?php } ?>
                     </ul>
