@@ -27,8 +27,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
     <body class="hold-transition skin-blue layout-top-nav layout-boxed"
           style="background-image: url('/images/home-bg/vlbg.png');background-repeat: no-repeat;background-size: cover;">
-        <div class="navbar navbar-default navbar-fixed-top"
-             style="background-color: #3c8dbc; height: 51px;opacity: 0.0;">
+        <div class="navbar navbar-default navbar-fixed-top home-navbar"
+             style="height: 51px;">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-custom-menu">
@@ -41,7 +41,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                     </a>
                 </div>
                 <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu" style="float: right; color: #FFF;background-color: #3c8dbc;padding: 0 10px;">
+                <div class="navbar-custom-menu" style="float: right; padding: 0 10px;">
                     <ul class="nav navbar-nav">
                         <?php if (isset($authNameSpace->dm_id)) { ?>
                             <li class="dropdown user user-menu">
@@ -50,11 +50,14 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 </a>
                             </li>
                         <?php } else { ?>
-                            <li>
-                                <a href="/auth/login"" style="color: #FFF;"><i class="icon icon-lock"></i> <span>Participant Login</span></a>
+                            <li class="home-menu">
+                                <a href="/about-us"" style="color: #FFF;"><i class="icon icon-lock"></i> <span>About Us</span></a>
                             </li>
-                            <li>
-                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Admin Login</a>
+                            <li  class="home-menu">
+                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Library</a>
+                            </li>
+                            <li class="home-menu">
+                                <a href="/admin" style="color: #FFF;"><i class="icon icon-lock"></i> Contact Us</a>
                             </li>
                         <?php } ?>
                     </ul>
@@ -68,17 +71,17 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
             <div>
                 <!-- Content Header (Page header) -->
                 <section class="content">
-                    <div class="col-lg-12">
-                        <div class="col-lg-2" style="text-align: center;padding:10px;">
-                            <img src="<?php echo $this->baseUrl().$config->countryFlagLogo;?>" class="country-flag" style="max-height:100px;"/>
-                        </div>
-                        <div class="col-lg-8" style="text-align: center;padding:10px;background-color: rgba(255, 255, 255, 0.85);">
-                            <h2><?php echo $config->applicationName; ?></h2>
-                        </div>
-                        <div class="col-lg-2" style="text-align: center;padding:10px;">
-                            <img src="<?php echo $this->baseUrl().$config->instituteLogo;?>" style="max-height:100px;" />
-                        </div>						
-                    </div>
+<!--                    <div class="col-lg-12">-->
+<!--                        <div class="col-lg-2" style="text-align: center;padding:10px;">-->
+<!--                            <img src="--><?php //echo $this->baseUrl().$config->countryFlagLogo;?><!--" class="country-flag" style="max-height:100px;"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-8" style="text-align: center;padding:10px;background-color: rgba(255, 255, 255, 0.85);">-->
+<!--                            <h2>--><?php //echo $config->applicationName; ?><!--</h2>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-2" style="text-align: center;padding:10px;">-->
+<!--                            <img src="--><?php //echo $this->baseUrl().$config->instituteLogo;?><!--" style="max-height:100px;" />-->
+<!--                        </div>						-->
+<!--                    </div>-->
                     <?php echo $this->layout()->content; ?>
 
                 </section>

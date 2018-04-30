@@ -6,7 +6,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 <div>
     <div class="clearfix">&nbsp;</div>
     <div class="home-purple">
-        <center>
+        <center class="home-app-info">
             <div class="clearfix">&nbsp;</div>
             <p>
                 <?php echo $config->vleidNarrative; ?>
@@ -17,6 +17,13 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                 <?php echo $config->applicationHelpNarrative; ?>
             </p>
             <div class="clearfix">&nbsp;</div>
+
         </center>
     </div>
-</div>
+    <div class="text-center">
+        <div class="clearfix">&nbsp;</div>
+        <div>
+            <a href="/auth/login" class="btn home-purple btn-lg purple-button">Click to login</a>
+        </div>
+        </p>
+    </div>

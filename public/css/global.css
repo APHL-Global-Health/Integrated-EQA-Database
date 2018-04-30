@@ -69,7 +69,7 @@ body {
     width: 100%;
     /*height: 100px;*/
     overflow: hidden;
-    background: #2C3E50;
+    background: unset;
     color: #FFF;
     padding-bottom: 10px;
     padding-top: 10px;
@@ -106,10 +106,28 @@ a.footer-items:hover {
         background-image: 0;
     }
 }
-
+.home-navbar{
+    opacity: 1.5;
+    background-color: unset;
+    border: none;
+}
 .home-purple {
     margin: auto;
     background-color: purple;
     color: white;
-    opacity: 0.7;
+    opacity: 0.5;
+}
+
+.purple-button:hover{
+    color: white;
+    background-color: rgba(173,76,198,0.93);
+}
+
+.home-menu {
+    background-color: purple !important;
+    opacity: 1.0;
+}
+
+a .home-menu {
+    color: white;
 }
