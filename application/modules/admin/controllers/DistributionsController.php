@@ -31,6 +31,16 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
         return $emails;
     }
+    public function getVlEidDataManagers(){
+        $sysAdmin = new Application_Model_DbTable_Participants();
+
+        $systemAdmins = $sysAdmin->AllVlEIdDataManagers();
+        $emails = array();
+        foreach ($systemAdmins as $key => $value) {
+            array_push($emails, $value['email']);
+        }
+        return $emails;
+    }
 
     public function addAction() {
         $distributionService = new Application_Service_Distribution();
@@ -38,7 +48,7 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
 
-            $distributionService->addDistribution($params, $this->getAllDataManagers());
+            $distributionService->addDistribution($params, $this->getVlEidDataManagers());
             $this->_redirect("/admin/distributions");
         }
 

@@ -110,7 +110,7 @@ class Application_Service_Common
             "<br><div>"
             . "<div style='width:100%'>"
             . "<div style='float: left' >"
-            . "<img height='100px' width='100px' src='" . $config->mohLogo . "'/>"
+            . "<img height='100px' width='100px' src='".$this->baseUrl()."/" . $config->mohLogo . "'/>"
             . " </div>"
             . "<div style='width: 90%;float: right;text-align: left;'>"
             . "<br><br>" . $config->vlLogoFooterMessage . ""
@@ -151,7 +151,7 @@ class Application_Service_Common
 
 
         $toMail = Application_Service_Common::getConfig('admin_email');
-        $message .= "Please complete by ".date($deadline).". Failure to comply will result in exclusion from the round ";
+        $message .= "Please complete by ".($deadline).". Failure to comply will result in exclusion from the round ";
         $message .= $this->createFooterWithLogo();
         $this->sendMail($email, null, null, $subject,
             $message, null, "VLEID ePT ");

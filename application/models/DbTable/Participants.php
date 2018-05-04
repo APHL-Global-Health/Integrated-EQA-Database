@@ -1519,5 +1519,10 @@ public function getCounties() {
                                 where e.`status`='enrolled' and p.`status`='active' and p.ModuleID=1");
         return $count;
     }
+    public function AllVlEIdDataManagers(){
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $count = $db->fetchAll("select DISTINCT p.primary_email as email from data_manager p");
+        return $count;
+    }
 
 }

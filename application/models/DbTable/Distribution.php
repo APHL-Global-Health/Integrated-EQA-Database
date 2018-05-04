@@ -364,8 +364,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()'));
         //get participant emails
-        $participantService = new Application_Service_Participants();
-        $emails = $participantService->AllEnrolledParticipants();
         $date = $params['readinessDate'];
 
         $insertId = $this->insert($data);
@@ -379,7 +377,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
 
 
 
-            $subject = "New Round Readiness Checklist  " . $params['distributionCode'] . "";
+            $subject = "New Round Readiness Checklist  " . $updateInfo['distribution_code'] . "";
             if (count($labEmail) > 0) {
                 $common->sendReadinessEmail($labEmail,$subject,$date);
             }
