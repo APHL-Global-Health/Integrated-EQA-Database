@@ -42,6 +42,7 @@ class Admin_ReadinessController extends Zend_Controller_Action {
         $commonService = new Application_Service_Common();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
+            
             $adminService->updateReadiness($params);
             $this->_redirect("/admin/readiness");
         }else{

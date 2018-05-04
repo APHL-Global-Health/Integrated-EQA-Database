@@ -1,11 +1,13 @@
 <?php
 
-class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract
+{
 
     protected $_name = 'readinesschecklist';
     protected $_primary = 'ID';
 
-    public function addReadinessDetails($params) {
+    public function addReadinessDetails($params)
+    {
         $partnerId = 0;
         $authNameSpace = new Zend_Session_Namespace('administrators');
 
@@ -27,13 +29,14 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
         return $partnerId;
     }
 
-    public function addReadiness($params) {
+    public function addReadiness($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $checkquery = $db->select()
-                ->from("readinesschecklist", array("num" => "COUNT(*)"))
-                ->where("ParticipantID = ?", $params['ParticipantID'])
-                ->where("RoundID = ?", $params['roundId']);
+            ->from("readinesschecklist", array("num" => "COUNT(*)"))
+            ->where("ParticipantID = ?", $params['ParticipantID'])
+            ->where("RoundID = ?", $params['roundId']);
 
         $checkrequest = $db->fetchRow($checkquery);
         $r = $checkrequest["num"];
@@ -59,9 +62,9 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
             $fromMail = $authNameSpace->UserID;
             $message = "Hi,<br/>  Participant ($participantName) has submitted their rediness checklist for review.<br/><br/>Regards,<br/><br/>ePT Admin <br/><br/><small>This is a system generated email. Please do not reply.</small>";
             $emails = $db->select()
-                    ->from("system_admin", array("email" => "primary_email"))
-                    ->where("IsVl = ?", 1)
-                    ->where("status = ?", 'active');
+                ->from("system_admin", array("email" => "primary_email"))
+                ->where("IsVl = ?", 1)
+                ->where("status = ?", 'active');
             foreach ($emails as $e) {
                 $common->sendMail($e, null, null, "New Readiness checklist ($participantName)", $message, $fromMail, "ePT Admin");
             }
@@ -69,7 +72,8 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
         }
     }
 
-    public function getAllReadiness($parameters, $id = null) {
+    public function getAllReadiness($parameters, $id = null)
+    {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
 
         $aColumns = array('ID', 'participantName', 'verdict', 'DATE_FORMAT(added_on,"%d-%b-%Y")', 'status', 'distribution_code');
@@ -150,9 +154,9 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()
-                ->from(array('pt' => $this->_name))
-                ->join(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID', 'institute_name')
-                ->join(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID', 'distribution_code');
+            ->from(array('pt' => $this->_name))
+            ->join(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID', 'institute_name')
+            ->join(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID', 'distribution_code');
 
 
         if (isset($sWhere) && $sWhere != "") {
@@ -218,7 +222,8 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
-    public function getReadiness($parameters) {
+    public function getReadiness($parameters)
+    {
 
         $aColumns = array('ID', 'verdict', 'DATE_FORMAT(added_on,"%d-%b-%Y")', 'distribution_code');
         $orderColumns = array('ID', 'participantName', 'verdict', 'added_on', 'status');
@@ -298,9 +303,10 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()
-                ->from(array('pt' => $this->_name))
-                ->joinLeft(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID', 'institute_name')
-                ->joinLeft(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID', 'distribution_code');
+            ->from(array('pt' => $this->_name))
+            ->joinLeft(array('pmm' => 'participant'), 'pmm.participant_id=pt.ParticipantID', 'institute_name')
+            ->joinLeft(array('r' => 'distributions'), 'r.distribution_id=pt.RoundID', 'distribution_code')
+            ->order('ParticipantID', "desc");
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -360,16 +366,19 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
-    public function fetchPartner($partnerId) {
+    public function fetchPartner($partnerId)
+    {
         return $this->fetchRow("partner_id = " . $partnerId);
     }
 
-    public function fetchAllActivePartners() {
+    public function fetchAllActivePartners()
+    {
         $sql = $this->select()->where("status = ? ", "active")->order("sort_order ASC");
         return $this->fetchAll($sql);
     }
 
-    public function updateReadiness($params) {
+    public function updateReadiness($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'verdict' => $params['verdict'],
@@ -379,7 +388,8 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract {
         return $this->update($data, "ID=" . $params['ID']);
     }
 
-    public function getReadinessDetails($adminId) {
+    public function getReadinessDetails($adminId)
+    {
         return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
     }
 

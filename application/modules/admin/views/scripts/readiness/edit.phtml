@@ -69,8 +69,8 @@
                         <select class="form-control isRequired" name="verdict" id="verdict">
                             <option value="">Select Value</option>
                             <option value="Pending" <?php echo(($this->admin["verdict"] == 1) ? "selected='selected'" : "") ?>>Pending</option>
-                            <option value="Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support" <?php echo(($this->admin["verdict"] == "Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support") ? "selected='selected'" : "") ?>>Approved</option>
-                            <option value="We sincerely regret to inform you that you will not be participating in this round of EQA. We hope you will resolve the pending issues and join us again for te next round. We greatly appreciate your continued support." <?php echo(($this->admin["verdict"] == "We sincerely regret to inform you that you will not be participating in this round of EQA. We hope you will resolve the pending issues and join us again for te next round. We greatly appreciate your continued support.") ? "selected='selected'" : "") ?>>Rejected</option>
+                            <option value="Approved"<?php echo(($this->admin["verdict"] == "Approved") ? "selected='selected'" : "") ?>>Approved</option>
+                            <option value="Rejected" <?php echo(($this->admin["verdict"] == "Rejected") ? "selected='selected'" : "") ?>>Rejected</option>
                         </select>
                     </td>
                 </tr>
