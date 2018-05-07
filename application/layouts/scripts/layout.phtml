@@ -106,6 +106,14 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.4.0.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
 
+    <!--------------------graphs------------------------------->
+    <script src="<?php echo $this->baseUrl('angularMain/nv.d3.js'); ?>"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.5/angular-nvd3.min.js"></script>
+    <!---------------------------------------------------------->
+
+    <script type="text/javascript" src="<?php echo $this->baseUrl('angularMain/angular-route.js'); ?>"></script>
 
     <!---------------------------------Calendar Module-------------------------------------->
     <!--    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>-->
