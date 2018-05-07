@@ -47,6 +47,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $data[$key]->currentStatus = $data[$key]->daysLeft > 0 ? "RUNNING" : "ENDED";
                 $data[$key]->totalShipmentsAdded = $this->dbConnection->selectCount('tbl_bac_shipments', $value->id, 'roundId');
                 $data[$key]->totalResponded = $this->dbConnection->selectCount('tbl_bac_response_results', $value->id, 'roundId');
+                $data[$key]->totalResponded = $data[$key]->totalResponded > 0 ? $data[$key]->totalResponded : $this->dbConnection->selectCount('tbl_bac_micro_bacterial_agents', $value->id, 'roundId');
+
             }
             echo $this->returnJson(array('status' => 1, 'data' => $data));
         } else {
