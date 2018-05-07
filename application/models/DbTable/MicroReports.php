@@ -314,6 +314,7 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
             }
             $sQuery->where($this->returnWhereStatement($where));
         }
+        $sQuery->where(" grade is not null");
         return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
 
     }
@@ -346,6 +347,7 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
                 $sQuery->where($this->returnWhereStatement($where));
             }
         }
+        $sQuery->where(" grade is not null");
         return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
 
     }
@@ -384,6 +386,7 @@ class Application_Model_DbTable_MicroReports extends Zend_Db_Table_Abstract
                 $sQuery->where($this->returnWhereStatement($where));
             }
         }
+//        $sQuery->where(" grade is not null");
         return $rResult = array('status' => 1, 'data' => $this->getAdapter()->fetchAll($sQuery), 'message' => 'results available');
 
     }

@@ -243,8 +243,9 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
             $lab_name = $value['lab_name'] == '' || $value['lab_name'] == null ? $value['first_name'] . " " . $value['last_name'] : $value['lab_name'];
 
-            array_push($arrayAcceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => 100 - $aP));
-            array_push($arrayUnacceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => $aP));
+            array_push($arrayAcceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => $aP));
+
+            array_push($arrayUnacceptable, array("x" => $lab_name . "(" . $value['mflCode'] . ")", "y" => $aP > 0 ? 100 - $aP : 0));
 
 
         }
@@ -260,7 +261,26 @@ class Admin_MicroreportsController extends Zend_Controller_Action
     }
 
     //
+    public function returnAcceptables($acceptable, $unacceptable, $ty = 1)
+    {
+        $counts = array('acceptable' => 0, 'unacceptable' => 0);
+        if ($acceptable == 0 && $unacceptable == 0) {
 
+            return $counts;
+        }
+        $total = $acceptable + $unacceptable;
+        if ($ty == 1) {
+            $counts['acceptable'] = round(($acceptable / $total) * 100, 0);
+            $counts['unacceptable'] = $counts['acceptable'] > 0 ? $unacceptable > 0 ? (100 - $counts['acceptable']) : 0 : 100;
+            return $counts;
+        }
+        $counts['acceptable'] = $acceptable;
+        $counts['unacceptable'] = $unacceptable;
+
+        return $counts;
+
+
+    }
 
     public function getroundsresultsAction()
     {
@@ -278,13 +298,13 @@ class Admin_MicroreportsController extends Zend_Controller_Action
         $arrayAcceptable = array();
         $arrayUnacceptable = array();
         foreach ($response['data'] as $key => $value) {
-            $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
+            $aP = $this->returnAcceptables($value['ACCEPTABLE'], $value['UNACCEPTABLE']);
 
 
             $roundName = $value['roundName'] . "(" . $value['roundCode'] . ")";
 
-            array_push($arrayAcceptable, array("x" => $roundName, "y" => 100 - $aP));
-            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP));
+            array_push($arrayAcceptable, array("x" => $roundName, "y" => $aP['acceptable']));
+            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP['unacceptabble']));
 
 
         }
@@ -314,14 +334,15 @@ class Admin_MicroreportsController extends Zend_Controller_Action
         $response = $this->_microReportModel->getCountiesResults($where);
         $arrayAcceptable = array();
         $arrayUnacceptable = array();
+//        var_dump($response);exit;
         foreach ($response['data'] as $key => $value) {
-            $aP = ($value['ACCEPTABLE'] + $value['UNACCEPTABLE']) > 0 ? ($value['ACCEPTABLE'] / ($value['ACCEPTABLE'] + $value['UNACCEPTABLE'])) * 100 : 0;
+            $aP = $this->returnAcceptables($value['ACCEPTABLE'], $value['UNACCEPTABLE']);
 
 
             $roundName = $value['Description'];
 
-            array_push($arrayAcceptable, array("x" => $roundName, "y" => 100 - $aP));
-            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP));
+            array_push($arrayAcceptable, array("x" => $roundName, "y" => $aP['acceptable']));
+            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP['unacceptable']));
 
 
         }
@@ -349,7 +370,7 @@ class Admin_MicroreportsController extends Zend_Controller_Action
 
         $samples = $this->_microReportModel->getSampleResponses($where);
         $arrayUnresponded = array();
-        $arrayTotal= array();
+        $arrayTotal = array();
         $arrayResponded = array();
         if (count($samples) > 0) {
 
