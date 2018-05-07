@@ -1,92 +1,173 @@
-
 <div>
     <div class="h3 text-center">
         <b>NHRL HIV VIRAL LOAD AND EARLY INFANT DIAGNOSIS EQA SCHEME
-CORRECTIVE AND PREVENTIVE ACTION FORM
-</b>
+            CORRECTIVE AND PREVENTIVE ACTION FORM
+        </b>
     </div>
-    <table class="table table-bordered">
-        <tr>
-            <td colspan="2" class="btn-default text-uppercase text-center">occurance details</td>
-            
-        </tr>
-        <tr>
-            <td class="text-left">Facility Id</td>
-            <td class=" text-left">Participant Id</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="text-left">Descripition Occurence</td>          
-        </tr>
-        
-        
-        
-        <tr>
-            <td colspan="2" class="btn-default text-uppercase text-center">Root Cause</td>
-            
-        </tr>
-        <tr>
-            <td class="text-left">Please select applicable testing phase(s)</td>
-            <td class=" text-left">  Pre-analytical      Analytical      Post-analytical</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="text-left">Description of root cause: <br></td>          
-        </tr>
-        <tr>
-            <td colspan="2" class="">
-                Attributing factor(s):
-        Equipment failure             Personnel error               Other (Please specify):
+    <div class="">
+        <form>
+            <table class="table table-bordered">
+                <tr>
+                    <td colspan="2" class="btn-default text-uppercase text-center" ><label>occurance
+                            details</label></td>
 
-            </td>
-            
-        </tr>
-        
-        
-         <tr>
-            <td colspan="2" class="btn-default text-uppercase text-center">CORRECTIVE ACTION</td>
-            
-        </tr>
-        <tr>
-            <td colspan="2" class="">
-               Describe corrective measures taken:
+                </tr>
+                <tr>
+                    <td class="text-left">Facility Id : 874512 Participant Id : 7845</td>
+                    <td class=" text-left">
+                        <label>Survey</label>
+                        <select name="roundId" class="form-control" required>
+                            <option>Survey One</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-left">
+                        <div>
+                            <label>Descripition Occurence</label>
+                            <textarea class="form-control" name="descriptionOccurence" required>
 
-            </td>
-    </tr>
-        <tr>
-            <td class="text-left">Was the corrective action effective?</td>
-            <td class=" text-left">Yes No</td>
-        </tr>
-        
-         <tr>
-            <td colspan="2" class="btn-default text-uppercase text-center">PREVENTIVE ACTION</td>
-            
-        </tr>
-        <tr>
-            <td colspan="2" class="">
-               Describe action(s) taken to prevent recurrence:
+                           </textarea>
+                        </div>
+                    </td>
+                </tr>
 
-            </td>
-    </tr>
-    
-  
-        
-         <tr>
-            <td colspan="2" class="btn-default text-uppercase text-center">RESOLUTION/REVIEW</td>
-            
-        </tr>
-        <tr>
-            <td class="text-left">Date of completion(DD/MM/YYYY):</td>
-            <td class=" text-left">Participant sign:</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="">
-               Supervisor/QA review: Name______________________________________Sign__________________________________Date____________________________
 
-            </td>
-    </tr>
-    
-    
-        
-        
-    </table>
-    
+                <tr>
+                    <td colspan="2" class="btn-default text-uppercase text-center">
+
+                        <label>Root Cause</label>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="text-left">
+
+                        <div>
+                            <label>Please select applicable testing phase(s)</label>
+
+                        </div>
+                    </td>
+                    <td class=" text-left">
+
+                        <div>
+
+                            <input type="checkbox" name="preanalytical" value="Yes">Pre-analytical
+                            <input type="checkbox" name="analytical" value="Yes">Analytical
+                            <input type="checkbox" name="postanalytical" value="Yes">Post-analytical
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-left">
+                        <label>Description of root cause: </label>
+                        <textarea class="form-control" name="rootCause" required>
+
+                           </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="">
+
+                        <div>
+                            <label>Attributing factor(s)</label>
+                            <input type="checkbox" name="preanalytical" value="Yes">Equipment failure
+                            <input type="checkbox" name="preanalytical" value="Yes">Personnel error
+                            <input type="checkbox" name="preanalytical" value="Yes">Other (Please
+                            specify):
+                        </div>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="2" class="btn-default text-uppercase text-center">
+                        <div>
+                            <label>CORRECTIVE ACTION</label>
+
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" class="">
+
+                        <div>
+                            <label>Describe corrective measures taken:</label>
+                            <textarea class="form-control" required name="measuresTaken">
+
+                           </textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left">
+                        <label>Was the corrective action effective?</label>
+
+                    </td>
+                    <td class=" text-left">
+                        <input type="radio" name="actionEffective" value="Yes"> Yes
+                        <input type="radio" name="actionEffective" value="No"> No
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="btn-default text-uppercase text-center"><label>PREVENTIVE ACTION</label></td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" class="">
+
+                        <div>
+                            <label>Describe action(s) taken to prevent recurrence:</label>
+                            <textarea name="preventRecurrence" class="form-control" name="stepsTaken">
+
+                           </textarea>
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td colspan="2" class="btn-default text-uppercase text-center"><label>RESOLUTION/REVIEW</label></td>
+
+                </tr>
+                <tr>
+                    <td class="text-left">Date of completion(DD/MM/YYYY):<?php echo date("d/m/Y", time()) ?></td>
+                    <td class=" text-left">Participant sign: ______________________________________________________</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="">
+                        Supervisor/QA review : <br>
+                        Name______________________________________Sign__________________________________Date____________________________
+
+                    </td>
+                </tr>
+
+
+            </table>
+            <div>
+                <button class="btn btn-primary pull-right" id="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
+<script>
+    $("form").submit(function (event) {
+        console.log(this.preventRecurrence)
+        var data = $(this)
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'readiness', 'action' => 'savecorrective')); ?>",
+
+            {
+                data: data
+            },
+
+            function (data) {
+                console.log(data)
+            }
+        )
+        ;
+        event.preventDefault();
+    })
+</script>

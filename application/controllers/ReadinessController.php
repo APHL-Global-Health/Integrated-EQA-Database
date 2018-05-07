@@ -1,25 +1,28 @@
 <?php
 
-class ReadinessController extends Zend_Controller_Action {
+class ReadinessController extends Zend_Controller_Action
+{
 
-    public function init() {
+    public function init()
+    {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')
-                ->addActionContext('defaulted-schemes', 'html')
-                ->addActionContext('current-schemes', 'html')
-                ->addActionContext('all-schemes', 'html')
-                ->addActionContext('report', 'html')
-                ->addActionContext('summary-report', 'html')
-                ->addActionContext('shipment-report', 'html')
-                ->addActionContext('add-qc', 'html')
-                ->addActionContext('scheme', 'html')
-                ->initContext();
+            ->addActionContext('defaulted-schemes', 'html')
+            ->addActionContext('current-schemes', 'html')
+            ->addActionContext('all-schemes', 'html')
+            ->addActionContext('report', 'html')
+            ->addActionContext('summary-report', 'html')
+            ->addActionContext('shipment-report', 'html')
+            ->addActionContext('add-qc', 'html')
+            ->addActionContext('scheme', 'html')
+            ->initContext();
         $messages = $this->_helper->flashMessenger->getMessages();
         if (!empty($messages))
             $this->_helper->layout->getView()->message = $messages[0];
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
@@ -31,11 +34,12 @@ class ReadinessController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $rService = new Application_Model_DbTable_Readiness();
-            $rService->getAllReadiness($params,$id);
+            $rService->getAllReadiness($params, $id);
         }
     }
 
-    public function getreadinessAction() {
+    public function getreadinessAction()
+    {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
             $rService = new Application_Model_DbTable_Readiness();
@@ -43,7 +47,8 @@ class ReadinessController extends Zend_Controller_Action {
         }
     }
 
-    public function addAction() {
+    public function addAction()
+    {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
@@ -75,9 +80,21 @@ class ReadinessController extends Zend_Controller_Action {
         $this->view->roundInfo = $roundInfo;
     }
 
-    
-    public function correctiveAction(){
-    
-}
+
+    public function correctiveAction()
+    {
+
+    }
+    public function savecorrectiveAction(){
+
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            print_r($params['data']);
+        }
+        exit;
+    }
+
+
+
 
 }
