@@ -1,0 +1,39 @@
+<h3>Corrective Action Feedback</h3>
+<table  style="margin:20px 0;" class="table table-bordered">
+    <tr>
+        <td style="width:150px;text-align: center;font-weight:bold;">
+            Pick a Date Range
+        </td>
+        <td style="width:100px;text-align: center;font-weight:bold;">
+            Select Survey
+        </td>
+        <td style="width:200px;text-align: center;font-weight:bold;">
+            Select Laboratory
+        </td>
+        <td class="dontPrint" style="width:115px;text-align: center;font-weight:bold;">Action</td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" id="dateRange" name="dateRange"  onchange="" class="form-control input-sm" readonly="readonly" style="background: #fff" placeholder ="Click here to pick a Date Range"/>
+        </td>
+        <td>
+            <select id="scheme" name="scheme"  class="form-control input-sm" onchange="getShipmentCodes(this.value)">
+                <option value=""> -- Select Survey --</option>
+                <?php
+                foreach ($this->schemes as $scheme) {
+                    ?>
+                    <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>
+                    <?php
+
+                }
+                ?>
+            </select>
+        </td>
+        <td>
+            <select id="shipmentId" name="shipmentId"  class="form-control input-sm">
+                <option value=''>-- select laboratory --</option>
+            </select>
+        </td>
+        <td class="dontPrint" ><button class="btn btn-success btn-sm disabled" id="getReportBtn" onclick="drawTable()"><span>Get Report</span></button>  <button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button> <button class="btn btn-info btn-sm hide" id="exportExcel" onclick="correctiveExcel()"><i class="icon-download"></i> Excel</button> <a href="#" class="btn btn-primary btn-sm hide" id="exportPdf" target="_blank"><i class="icon-download"></i> PDF</a></td>
+    </tr>
+</table>
