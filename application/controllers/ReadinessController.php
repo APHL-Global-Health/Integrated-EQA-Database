@@ -83,18 +83,36 @@ class ReadinessController extends Zend_Controller_Action
 
     public function correctiveAction()
     {
+        if ($this->getRequest()->isPost()) {
 
+
+        }
+        $rService = new Application_Model_DbTable_Distribution();
+
+        $this->view->surveys = $rService->getFinalizedDistributions();
     }
-    public function savecorrectiveAction(){
+
+    public function savecorrectiveAction()
+    {
 
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-            print_r($params['data']);
+            $params = $params['data'];
+
+            $authNameSpace = new Zend_Session_Namespace('datamanagers');
+
+            var_dump($_SESSION);
+            exit;
+            $rService = new Application_Model_DbTable_Capa();
+            $params['dmId'] = $authNameSpace->dm_id;
+            $params['participantId'] =$rService->getParticipantId($authNameSpace->dm_id);
+
+
+            $rService->saveCorrectiveAction($params);
+
         }
         exit;
     }
-
-
 
 
 }

@@ -1,11 +1,13 @@
 <?php
 
-class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
+{
 
     protected $_name = 'distributions';
     protected $_primary = 'distribution_id';
 
-    public function getAllDistributions($parameters) {
+    public function getAllDistributions($parameters)
+    {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -94,8 +96,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('d' => $this->_name))
-                ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')")))
-                ->group('d.distribution_id');
+            ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')")))
+            ->group('d.distribution_id');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -164,7 +166,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
-    public function getDistributions($parameters) {
+    public function getDistributions($parameters)
+    {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
@@ -295,28 +298,30 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = ucwords($aRow['readinessdate']);
             $row[] = ucwords($aRow['status']);
-            if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured'|| $aRow['status'] == 'pending') {
-                $row[] = '<a href="/readiness/add/roundId/'.$aRow['distribution_id'].'/code/'.str_replace('/', "*",$aRow['distribution_code']).'" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
-                        . '<i class="icon-pencil"></i> Readiness Checklist</a>';
+            if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured' || $aRow['status'] == 'pending') {
+                $row[] = '<a href="/readiness/add/roundId/' . $aRow['distribution_id'] . '/code/' . str_replace('/', "*", $aRow['distribution_code']) . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                    . '<i class="icon-pencil"></i> Readiness Checklist</a>';
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
                 $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;">'
-                        . '<i class="icon-pencil"></i> Readiness Checklist'
-                        . '</a>';
+                    . '<i class="icon-pencil"></i> Readiness Checklist'
+                    . '</a>';
             } else {
                 $row[] = '<a href="/readiness/add" class="btn btn-danger btn-xs disabled" style="margin-right: 2px;">'
-                        . '<i class="icon-pencil"></i> Not Allowed'
-                        . '</a>';
+                    . '<i class="icon-pencil"></i> Not Allowed'
+                    . '</a>';
             }
             $output['aaData'][] = $row;
         }
         echo json_encode($output);
     }
 
-    public function returnFilledForm() {
-            
+    public function returnFilledForm()
+    {
+
     }
 
-    public function returnYearQuarter() {
+    public function returnYearQuarter()
+    {
         $month = date('m', time());
         switch ($month) {
             case $month >= 1 && $month <= 3:
@@ -337,7 +342,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         }
     }
 
-    public function generateroundcode($id = null) {
+    public function generateroundcode($id = null)
+    {
         $roundName = '';
         $year = date('Y', time());
         $yearQuearter = $this->returnYearQuarter();
@@ -353,7 +359,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         return $roundName;
     }
 
-    public function addDistribution($params, $labEmail = null) {
+    public function addDistribution($params, $labEmail = null)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $common = new Application_Service_Common();
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -374,30 +381,31 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         if (isset($labEmail)) {
 
 
-
-
-
             $subject = "New Round Readiness Checklist  " . $updateInfo['distribution_code'] . "";
             if (count($labEmail) > 0) {
-                $common->sendReadinessEmail($labEmail,$subject,$date);
+                $common->sendReadinessEmail($labEmail, $subject, $date);
             }
             return $insertId;
         }
     }
 
-    public function shipDistribution($params) {
-        
+    public function shipDistribution($params)
+    {
+
     }
 
-    public function getDistributionDates() {
+    public function getDistributionDates()
+    {
         return $this->getAdapter()->fetchCol($this->select()->from($this->_name, new Zend_Db_Expr("DATE_FORMAT(distribution_date,'%d-%b-%Y')")));
     }
 
-    public function getDistribution($did) {
+    public function getDistribution($did)
+    {
         return $this->fetchRow("distribution_id = " . $did);
     }
 
-    public function updateDistribution($params) {
+    public function updateDistribution($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array('distribution_code' => $params['distributionCode'],
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
@@ -407,11 +415,20 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         return $this->update($data, "distribution_id=" . base64_decode($params['distributionId']));
     }
 
-    public function getUnshippedDistributions() {
+    public function getUnshippedDistributions()
+    {
         return $this->fetchAll($this->select()->where("status != 'shipped'"));
     }
 
-    public function updateDistributionStatus($distributionId, $status) {
+    public function getFinalizedDistributions()
+    {
+        return $this
+            ->fetchAll($this->select()
+                ->where("status = 'finalized'"));
+    }
+
+    public function updateDistributionStatus($distributionId, $status)
+    {
         if (isset($status) && $status != null && $status != "") {
             return $this->update(array('status' => $status), "distribution_id=" . $distributionId);
         } else {
@@ -419,7 +436,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         }
     }
 
-    public function getAllDistributionReports($parameters) {
+    public function getAllDistributionReports($parameters)
+    {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
@@ -506,9 +524,9 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('d' => 'distributions'))
-                ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')"), 'not_finalized_count' => new Zend_Db_Expr("SUM(IF(s.status!='finalized',1,0))")))
-                ->where("d.status='shipped'")
-                ->group('d.distribution_id');
+            ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')"), 'not_finalized_count' => new Zend_Db_Expr("SUM(IF(s.status!='finalized',1,0))")))
+            ->where("d.status='shipped'")
+            ->group('d.distribution_id');
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -567,7 +585,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract {
         echo json_encode($output);
     }
 
-    public function getAllDistributionStatusDetails() {
+    public function getAllDistributionStatusDetails()
+    {
         return $this->fetchAll($this->select());
     }
 

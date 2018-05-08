@@ -393,4 +393,10 @@ class Application_Model_DbTable_Readiness extends Zend_Db_Table_Abstract
         return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
     }
 
+    public function saveCorrectiveAction($params){
+        $insertId = $this->insert($params);
+    }
+
+
+
 }
