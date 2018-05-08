@@ -101,14 +101,14 @@ class ReadinessController extends Zend_Controller_Action
 
             $authNameSpace = new Zend_Session_Namespace('datamanagers');
 
-            var_dump($_SESSION);
-            exit;
+//            var_dump($_SESSION);
+//            exit;
             $rService = new Application_Model_DbTable_Capa();
             $params['dmId'] = $authNameSpace->dm_id;
-            $params['participantId'] =$rService->getParticipantId($authNameSpace->dm_id);
+            $params['participantId'] = $rService->getParticipantId($authNameSpace->dm_id);
 
-
-            $rService->saveCorrectiveAction($params);
+            echo $rService->saveCorrectiveAction($params);
+            
 
         }
         exit;

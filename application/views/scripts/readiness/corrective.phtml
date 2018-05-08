@@ -5,6 +5,12 @@
         </b>
     </div>
     <div class="">
+        <div class="btn btn-success" id="success" style="display: none">
+
+        </div>
+        <div class="btn btn-danger" id="error" style="display: none">
+
+        </div>
         <form>
             <table class="table table-bordered">
                 <tr>
@@ -19,11 +25,11 @@
                         <label>Survey</label>
                         <select name="surveyId" id="surveyId" class="form-control" required>
                             <?php
-                            foreach($this->surveys as $key=>$value){
+                            foreach ($this->surveys as $key => $value) {
                                 ?>
                                 <option value="<?php echo $value['distribution_id']; ?>"><?php echo $value['distribution_code']; ?></option>;
 
-                           <?php }
+                            <?php }
                             ?>
                         </select>
                     </td>
@@ -32,7 +38,8 @@
                     <td colspan="2" class="text-left">
                         <div>
                             <label>Descripition Occurence</label>
-                            <textarea class="form-control" name="descriptionOccurence" id="descriptionOccurence" required>
+                            <textarea class="form-control" name="descriptionOccurence" id="descriptionOccurence"
+                                      required>
 
                            </textarea>
                         </div>
@@ -60,15 +67,15 @@
                         <div>
 
                             <input type="checkbox" name="preanalytical" id="preanalytical" value="Yes">Pre-analytical
-                            <input type="checkbox" name="analytical"  id="analytical"  value="Yes">Analytical
-                            <input type="checkbox" name="postanalytical"  id="postanalytical"  value="Yes">Post-analytical
+                            <input type="checkbox" name="analytical" id="analytical" value="Yes">Analytical
+                            <input type="checkbox" name="postanalytical" id="postanalytical" value="Yes">Post-analytical
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-left">
                         <label>Description of root cause: </label>
-                        <textarea class="form-control" name="rootCause" required>
+                        <textarea class="form-control" name="rootCause" id="rootCause" required>
 
                            </textarea>
                     </td>
@@ -78,7 +85,7 @@
 
                         <div>
                             <label>Attributing factor(s)</label>
-                            <select name="attributingFactors" id="attributingFactors"  class="form-control" multiselect>
+                            <select name="attributingFactors" id="attributingFactors" class="form-control" multiselect>
                                 <option value="Equipment failure">Equipment failure</option>
                                 <option value="Personnel error">Personnel error</option>
                                 <option value="Other (Please specify)">Other (Please specify)</option>
@@ -115,8 +122,8 @@
 
                     </td>
                     <td class=" text-left">
-                        <input type="radio"  name="actionEffective" id="actionEffective" value="Yes"> Yes
-                        <input type="radio" name="actionEffective"  id="actionEffective" value="No"> No
+                        <input type="radio" name="actionEffective" id="actionEffective" value="Yes"> Yes
+                        <input type="radio" name="actionEffective" id="actionEffective" value="No"> No
                     </td>
                 </tr>
 
@@ -129,7 +136,7 @@
 
                         <div>
                             <label>Describe action(s) taken to prevent recurrence:</label>
-                            <textarea  class="form-control" name="preventRecurrence" id="preventRecurrence">
+                            <textarea class="form-control" name="preventRecurrence" id="preventRecurrence">
 
                            </textarea>
                         </div>
@@ -164,6 +171,9 @@
 <script>
     $("form").submit(function (event) {
 
+        $("#success").hide();
+        $("#error").hide();
+
         $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'readiness', 'action' => 'savecorrective')); ?>",
 
             {
@@ -182,7 +192,14 @@
             },
 
             function (data) {
-                console.log(data)
+                if (data == 1) {
+                    $("#success").show().html("You corrective action has been successfully created");
+                }
+                else if (data == 2) {
+                    $("#error").show().html("You already submitted correction action for this survey");
+                } else {
+                    $("#error").show().html("Corrective action could not be submitted,please try again");
+                }
             }
         )
         ;
