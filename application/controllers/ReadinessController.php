@@ -81,6 +81,7 @@ class ReadinessController extends Zend_Controller_Action
     }
 
 
+
     public function correctiveAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -108,7 +109,7 @@ class ReadinessController extends Zend_Controller_Action
             $params['participantId'] = $rService->getParticipantId($authNameSpace->dm_id);
 
             echo $rService->saveCorrectiveAction($params);
-            
+
 
         }
         exit;

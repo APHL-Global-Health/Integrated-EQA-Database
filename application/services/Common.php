@@ -110,7 +110,7 @@ class Application_Service_Common
             "<br><div>"
             . "<div style='width:100%'>"
             . "<div style='float: left' >"
-            . "<img height='100px' width='100px' src='".$this->baseUrl()."/" . $config->mohLogo . "'/>"
+            . "<img height='100px' width='100px' src='" . $this->baseUrl() . "/" . $config->mohLogo . "'/>"
             . " </div>"
             . "<div style='width: 90%;float: right;text-align: left;'>"
             . "<br><br>" . $config->vlLogoFooterMessage . ""
@@ -141,18 +141,30 @@ class Application_Service_Common
             $message, null, "VLEID ePT ");
     }
 
+    public function createOutline($message)
+    {
+        $html = "<div style='min-height:100%;width:100%;background-color: rgba(186,173,198,0.93);padding-top: 5%'>"
+            . $message
+
+            . "</div>";
+        return $html;
+
+    }
 
     public function sendReadinessEmail($email, $subject, $deadline)
     {
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-        $message = ""
+        $message = "<div style='padding:4em;background-color:white;font-size: 14px;height: 100%;'> Dear User,<br>"
             . $config->vlSurveyReadinessMessage
             . $this->urlLinkButton("auth/login", "NHRL Proficiency Testing Programme:<br> Viral Load/EID readiness checklist");
 
 
         $toMail = Application_Service_Common::getConfig('admin_email');
-        $message .= "Please complete by ".($deadline).". Failure to comply will result in exclusion from the round ";
+        $message .= "Please complete by <b>" . ($deadline) . "</b>. Failure to comply will result in exclusion from the round <br><br>";
         $message .= $this->createFooterWithLogo();
+
+        $message = $this->createOutline($message);
+        $message .= "</div>";
         $this->sendMail($email, null, null, $subject,
             $message, null, "VLEID ePT ");
 
@@ -164,9 +176,12 @@ class Application_Service_Common
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $fullname = isset($fullname) ? $fullname : 'Participant';
-        $message = "Dear $fullname,"
+        $message = "<div style='padding:4em;background-color:white;font-size: 14px;height: 100%;'>Dear $fullname,"
             . " <br> $Message <br>"
-            . $config->emailRegistrationSignature;
+            . $config->emailRegistrationSignature
+            . $this->createFooterWithLogo();
+        $message = $this->createOutline($message);
+        $message .= "</div>";
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
