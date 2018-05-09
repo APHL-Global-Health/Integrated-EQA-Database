@@ -107,7 +107,9 @@ class Application_Service_Common
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
 
         $footerDiv =
-            "<br><div>"
+            "<br>" .
+            "<div>" . $config->vleidEmailFooter . "<br>" .
+            "</div><div>"
             . "<div style='width:100%'>"
             . "<div style='float: left' >"
             . "<img height='100px' width='100px' src='" . $this->baseUrl() . "/" . $config->mohLogo . "'/>"
