@@ -37,7 +37,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                 "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>" .
                 "Please complete by " . $value['readinessdate'] . " Failure to comply will result in exclusion from the round<br>" .
                 "<br>" .
-                "<br>" . $config->vleidEmailFooter;
+                "<br>" ;
 
             array_push($emails, $value['email']);
 

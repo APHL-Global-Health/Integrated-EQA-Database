@@ -180,7 +180,7 @@ class Application_Service_Common
         $fullname = isset($fullname) ? $fullname : 'Participant';
         $message = "<div style='padding:4em;background-color:white;font-size: 14px;height: 100%;'>Dear $fullname,"
             . " <br> $Message <br>"
-            . $config->emailRegistrationSignature
+            
             . $this->createFooterWithLogo();
         $message = $this->createOutline($message);
         $message .= "</div>";
