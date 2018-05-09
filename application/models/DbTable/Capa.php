@@ -43,5 +43,37 @@ class Application_Model_DbTable_Capa extends Zend_Db_Table_Abstract
         return $lab['participant_id'];
     }
 
+    public function getCapaFeedback($filter = null)
+    {
+
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $checkquery = $db->select()
+            ->from("vl_eid_capa")
+            ->join(array('pmm' => 'participant'), 'pmm.participant_id=vl_eid_capa.ParticipantID', array('mflCode', 'institute_name'))
+            ->join(array('r' => 'distributions'), 'r.distribution_id=vl_eid_capa.surveyId', 'distribution_code');;
+        if (isset($filter)) {
+            if (isset($filter['dateSubmittedFrom']) && !empty($filter['dateSubmittedFrom']))
+                $checkquery->where('dateCreated >= ?', $filter['dateSubmittedFrom']);
+            if (isset($filter['dateSubmittedFrom']) && !empty($filter['dateSubmittedFrom']))
+                $checkquery->where('dateCreated <= ?', $filter['dateSubmittedTo']);
+            if (isset($filter['surveyId']) && !empty($filter['surveyId']))
+                $checkquery->where('surveyId >= ?', $filter['surveyId']);
+            if (isset($filter['participantId'])&& !empty($filter['participantId']))
+                $checkquery->where('participantId = ?', $filter['participantId']);
+        }
+        return $db->fetchAll($checkquery);
+    }
+
+    public function enrolledLaboratories()
+    {
+        $db = Zend_Db_Table_Abstract::getAdapter();
+        $checkquery = $db->select()
+            ->from("participant",array('mflCode', 'institute_name','participant_id'))
+           // ->join(array('e' => 'enrollments'), 'e.participant_id=participant.participant_id', array())
+        ->group("participant.participant_id");
+        return $db->fetchAll($checkquery);
+
+    }
+
 
 }

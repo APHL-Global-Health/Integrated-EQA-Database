@@ -51,13 +51,41 @@ class Reports_CorrectiveActionsController extends Zend_Controller_Action
 
     public function capaAction()
     {
+        $rService = new Application_Model_DbTable_Distribution();
+        $capa = new Application_Model_DbTable_Capa();
 
+        $this->view->surveys = $rService->getFinalizedDistributions();
+        $this->view->labs = $capa->enrolledLaboratories();
 
     }
-    public function getActions(){
 
+    public function createFilters($filter)
+    {
 
+    }
+
+    public function getAction()
+    {
+
+        try {
+            $filters = null;
+            if ($this->getRequest()->isPost()) {
+                $filters = $this->_getAllParams()['filter'];
+
+                $filters['dateSubmittedFrom'] = $filters['startDate'];
+                $filters['dateSubmittedTo'] = $filters['endDate'];
+            }
+
+            $capa = new Application_Model_DbTable_Capa();
+
+            $capaResults = $capa->getCapaFeedback($filters);
+
+            echo json_encode($capaResults);
+        } catch (Exception $e) {
+
+        }
         ///
+        exit;
     }
 }
 

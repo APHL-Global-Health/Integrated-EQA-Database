@@ -1,5 +1,5 @@
 <h3>Corrective Action Feedback</h3>
-<table  style="margin:20px 0;" class="table table-bordered">
+<table style="margin:20px 0;" class="table table-bordered">
     <tr>
         <td style="width:150px;text-align: center;font-weight:bold;">
             Pick a Date Range
@@ -14,26 +14,144 @@
     </tr>
     <tr>
         <td>
-            <input type="text" id="dateRange" name="dateRange"  onchange="" class="form-control input-sm" readonly="readonly" style="background: #fff" placeholder ="Click here to pick a Date Range"/>
+            <input type="text" id="dateSubmitted" name="dateRange"
+                   onchange="" class="form-control input-sm" readonly="readonly" style="background: #fff"
+                   placeholder="Click here to pick a Date Range"/>
         </td>
         <td>
-            <select id="scheme" name="scheme"  class="form-control input-sm" onchange="getShipmentCodes(this.value)">
-                <option value=""> -- Select Survey --</option>
+            <select name="surveyId" id="surveyId" class="form-control input-sm" required>
+                <option value=''>-- select survey --</option>
                 <?php
-                foreach ($this->schemes as $scheme) {
+                foreach ($this->surveys as $key => $value) {
                     ?>
-                    <option value="<?php echo $scheme['scheme_id']; ?>"><?php echo $scheme['scheme_name']; ?></option>
-                    <?php
+                    <option value="<?php echo $value['distribution_id']; ?>"><?php echo $value['distribution_code']; ?></option>;
 
-                }
+                <?php }
                 ?>
             </select>
         </td>
         <td>
-            <select id="shipmentId" name="shipmentId"  class="form-control input-sm">
+            <select id="participantId" name="participantId" class="form-control input-sm">
                 <option value=''>-- select laboratory --</option>
+                <?php
+                foreach ($this->labs as $key => $value) {
+                    ?>
+                    <option value="<?php echo $value['participant_id']; ?>"><?php echo $value['mflCode']."(".$value['institute_name'].")"; ?></option>;
+
+                <?php }
+                ?>
             </select>
         </td>
-        <td class="dontPrint" ><button class="btn btn-success btn-sm disabled" id="getReportBtn" onclick="drawTable()"><span>Get Report</span></button>  <button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button> <button class="btn btn-info btn-sm hide" id="exportExcel" onclick="correctiveExcel()"><i class="icon-download"></i> Excel</button> <a href="#" class="btn btn-primary btn-sm hide" id="exportPdf" target="_blank"><i class="icon-download"></i> PDF</a></td>
+        <td class="dontPrint">
+            <button class="btn btn-success btn-sm" id="getReportBtn">
+                <span>Get Report</span>
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="document.location.href = document.location">
+                <span>Reset</span></button>
+            <button class="btn btn-info btn-sm hide" id="exportExcel" onclick="correctiveExcel()"><i
+                        class="icon-download"></i> Excel
+            </button>
+            <a href="#" class="btn btn-primary btn-sm hide" id="exportPdf" target="_blank"><i class="icon-download"></i>
+                PDF</a>
+        </td>
     </tr>
 </table>
+
+<div class="table-responsive">
+    <div class="btn btn-info col-md-12" id="loader" style="display:none;">
+        <i class="fa fa-spin fa-spinner"></i> Fetching data,please wait...
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr class="text-capitalize">
+            <th>Lab</th>
+            <th>Survey</th>
+            <th>Date Created</th>
+            <th>Description Occurence</th>
+            <th>Analytical</th>
+            <th>Root Cause</th>
+            <th>Measures Taken</th>
+            <th>Action Effective</th>
+            <th>Prevent Recurrence</th>
+            <th>Attributing Factors</th>
+
+        </tr>
+        </thead>
+        <tbody class="" id="capaData">
+
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript" src="<?php echo $this->baseUrl('js/daterangepicker.js'); ?>"></script>
+<script type="text/javascript">
+    var startDate = "";
+    var endDate = "";
+    var paginate = true;
+    $(document).ready(function () {
+        $('#dateSubmitted').daterangepicker({
+                format: 'DD-MMM-YYYY',
+                ranges: {
+                    'Last 60 Days': [moment().subtract('days', 59), moment()],
+                    'Last 90 Days': [moment().subtract('days', 89), moment()],
+                    'Last 180 Days': [moment().subtract('days', 179), moment()],
+                    'Last 12 Months': [moment().subtract('month', 12), moment()],
+                    'Last 18 Months': [moment().subtract('month', 18), moment()],
+                }
+            },
+            function (start, end) {
+                startDate = start.format('YYYY-MM-DD');
+                endDate = end.format('YYYY-MM-DD');
+
+            });
+
+
+    });
+    $(document).ready(function () {
+        $("#getReportBtn").click(function () {
+
+            $('#loader').show();
+
+            $.post("<?php echo $this->url(array('module' => 'reports', 'controller' => 'corrective-actions', 'action' => 'get')); ?>",
+
+                {
+                    filter: {
+                        startDate: startDate,
+                        endDate: endDate,
+                        surveyId: $("#surveyId").val(),
+                        participantId: $("#participantId").val()
+                    }
+                },
+
+                function (data) {
+                    $('#loader').hide();
+                    var trHTML = '';
+                    response = JSON.parse(data);
+                    console.log(response);
+                    $.each(response, function (i, item) {
+
+
+                        trHTML += '<tr><td>' + item.mflCode
+                            + '</td><td>' + item.distribution_code
+                            + '</td><td>' + item.dateCreated
+                            + '</td><td>' + item.descriptionOccurence
+                            + '</td><td>' + item.preanalytical+ ", "+item.analytical+", "+item.postanalytical
+                            + '</td><td>' + item.rootCause
+                            + '</td><td>' + item.measuresTaken
+                            + '</td><td>' + item.actionEffective
+                            + '</td><td>' + item.preventRecurrence
+                            + '</td><td>' + item.attributingFactors
+                            + '</td></tr>';
+                    });
+
+                    $('#capaData').html(trHTML);
+
+                }
+            )
+            ;
+            event.preventDefault();
+
+        })
+    })
+</script>
