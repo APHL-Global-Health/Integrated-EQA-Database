@@ -59,7 +59,7 @@ class Application_Service_Distribution {
                 "<br><a href='".$common->baseUrl().'/participant/current-schemes'."' style='padding:14px;width:auto;".
                        "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
                       "NHRL Proficiency Testing Programme:<br> Viral Load/EID receipt</a><br>"
-                .$config->vleidEmailFooter;
+                ."";
 
         
         

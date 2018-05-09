@@ -78,7 +78,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                 "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>" .
                 "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>" .
                 "<br>" .
-                "<br>" . $config->vleidEmailFooter;
+                "<br>" ;
             array_push($emails, $value['email']);
 
 
