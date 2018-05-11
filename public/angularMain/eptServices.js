@@ -77,7 +77,7 @@ EptServices.service('EptServices', function () {
         $.alert(
             {
                 title: '<i class="fa fa-check-circle text-success"></i> Success',
-                content: '1 row deleted successfully.'
+                content: '1 record was successfully removed.'
             }
         );
 
