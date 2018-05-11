@@ -1,117 +1,102 @@
 <section class="content">
 
-	<div class="login-box home-purple" style="max-width: 430px; margin: auto; padding:15px;opacity: 0.7; ">
-		<div class="login-logo">
-	        <h2 class="color:white;">Login - <span> Proficiency Testing</span></h2>
-                
-	    </div><!-- /.login-logo -->
+    <div class="login-box home-purple"
+         style="max-width: 430px; margin: auto; padding:15px;opacity: 0.7;margin-top: 100px; ">
+        <div class="login-logo">
+            <h2 class="color:white;">Login - <span> Proficiency Testing</span></h2>
 
-		<div class="login-box-body">
-                    <?php if(isset($_GET['status'])){ ?>
-               <div class="alert btn-success" style="overflow: auto;">
-                    <?php echo  $_GET['status']  ?>
+        </div><!-- /.login-logo -->
+
+        <div class="login-box-body">
+            <?php if (isset($_GET['status'])) { ?>
+                <div class="alert btn-success" style="overflow: auto;">
+                    <?php echo $_GET['status'] ?>
                 </div>
-                    <?php } ?>	
-		<form name="loginForm" id="loginForm" class="form-vertical" method="post" onsubmit="validateLogin();return false;"
-			action="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>">
+            <?php } ?>
+            <form name="loginForm" id="loginForm" class="form-vertical" method="post"
+                  onsubmit="validateLogin();return false;"
+                  action="<?php echo $this->url(array("controller" => "auth", "action" => "login"), null, true) ?>">
 
-	    
-	        <div class="form-group"> 
-	            <label for="username" class="uname" data-icon="u"> Email address </label>
-	            
-					<input id="username" name="username" class="isRequired form-control" title="Please enter your email address" type="text" placeholder="mymail@mail.com"/>
-				
-	        </div>
-	        <div class="form-group">
-				<label for="password" class="youpasswd" data-icon="p"> Password </label>
 
-					<input id="password" name="password" class="isRequired form-control" title="Please enter your password" type="password" placeholder="eg. X8df!90EO" />
-					
-	        </div>
-			<div class="form-group">
-				
-				<table border="0">
-					<tbody>
-						<tr>
-							<td>
-								<div style="float:left;margin:1px;">
-									<img id="capChaw" src="/captcha/<?php echo rand(); ?>" />
-								</div>
-							</td>
-							<td style="padding-top:3px;" align="center">
-								<input type="text" style="margin:0;width:130px;padding:1px;margin-top:8px" id="challengeResponse" placeholder="Enter text from image on left" class="isRequired form-control" title="Please enter the text from the image." maxlength="40">
-									<br/>
-								<a onclick="getCaptcha('capChaw');return false;" style="cursor:pointer;font-size:12px;margin:5px;"><i class="icon-refresh icon-white"></i> Get New Image</a>
-							</td>
-							
-						</tr>
-					</tbody>
-				</table>
-				
-			</div>
-			<div class="box-footer">
-				<input type="submit" class="btn col-md-12 btn-lg btn-primary" value="Sign in"/>
-			</div>
-			<div>
-					<a href="/auth/reset-password" style="font-size:0.8em;color:white;">Forgot Password?</a>
-					<!--<a href="/contact-us" style="">Don't have a login ? Click here to contact us</a>-->
-				
-			</div>
+                <div class="form-group">
+                    <label for="username" class="uname" data-icon="u"> Email address </label>
 
-	</form>
-	</div>
-	</div>
+                    <input id="username" name="username" class="isRequired form-control"
+                           title="Please enter your email address" type="text" placeholder="mymail@mail.com"/>
+
+                </div>
+                <div class="form-group">
+                    <label for="password" class="youpasswd" data-icon="p"> Password </label>
+
+                    <input id="password" name="password" class="isRequired form-control"
+                           title="Please enter your password" type="password" placeholder="eg. X8df!90EO"/>
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="box-footer">
+                    <input type="submit" class="btn col-md-12 btn-lg btn-primary" value="Sign in"/>
+                </div>
+                <div>
+                    <a href="/auth/reset-password" style="font-size:0.8em;color:white;">Forgot Password?</a>
+                    <!--<a href="/contact-us" style="">Don't have a login ? Click here to contact us</a>-->
+
+                </div>
+
+            </form>
+        </div>
+    </div>
 </section>
-        <script type="text/javascript">
-			
-			$(document).ready(function(){
-				 <?php
-					$alertMsg = new Zend_Session_Namespace('alertSpace');
-					if(isset($alertMsg->message) && $alertMsg->message != ""){
-					?>
-					  alert("<?php echo $alertMsg->message;?>");
-					<?php
-					  $alertMsg->message="";
-					  unset($alertMsg->message);        
-					}
-					?>
-			})
-			
-			
-            function getCaptcha(captchaDivId){
-                $.blockUI();
-                var d = new Date();
-                var randstr = 'r-'+d.getFullYear()+d.getSeconds()+d.getMilliseconds()+Math.random();
-                $("#"+captchaDivId).attr("src" , '/captcha/'+randstr);		
-                $("#"+captchaDivId).load(function(){
-                    $.unblockUI();
-                });
-            }
-	    
-            function validateLogin(){
-                flag = deforayValidator.init({
-                    formId: 'loginForm'
-                });
-                if(flag){
-                    challenge_field=document.getElementById("challengeResponse").value;
-                    if(challenge_field !="" ){
-                        $.post("<?php echo $this->url(array(), 'checkCaptchaRoute', true); ?>", { challenge_field:challenge_field, format: "html"},
-                        function(data){
-                            //data == 'fail'
-                            if(false){
-                                alert("Text you entered from the image is incorrect. Please try again");
-                                getCaptcha('capChaw');
-                                document.getElementById("challengeResponse").value="";
-                                return false;
-                            }else{
-				$.blockUI();
-                                document.getElementById('loginForm').submit();
-                            }
-                        });
-                    }else{
-                        alert("Please enter the text from the image to proceed.");
-                    }
-                }
-            }	    
+<script type="text/javascript">
 
-        </script>
+    $(document).ready(function () {
+        <?php
+        $alertMsg = new Zend_Session_Namespace('alertSpace');
+        if(isset($alertMsg->message) && $alertMsg->message != ""){
+        ?>
+        alert("<?php echo $alertMsg->message;?>");
+        <?php
+        $alertMsg->message = "";
+        unset($alertMsg->message);
+        }
+        ?>
+    })
+
+
+    function getCaptcha(captchaDivId) {
+        $.blockUI();
+        var d = new Date();
+        var randstr = 'r-' + d.getFullYear() + d.getSeconds() + d.getMilliseconds() + Math.random();
+        $("#" + captchaDivId).attr("src", '/captcha/' + randstr);
+        $("#" + captchaDivId).load(function () {
+            $.unblockUI();
+        });
+    }
+
+    function validateLogin() {
+        flag = deforayValidator.init({
+            formId: 'loginForm'
+        });
+        if (flag) {
+            challenge_field = document.getElementById("challengeResponse").value;
+            if (challenge_field != "") {
+                $.post("<?php echo $this->url(array(), 'checkCaptchaRoute', true); ?>", {
+                        challenge_field: challenge_field,
+                        format: "html"
+                    },
+                    function (data) {
+                        //data == 'fail'
+
+                        $.blockUI();
+                        document.getElementById('loginForm').submit();
+                        /  }
+                    });
+            } else {
+                alert("Please enter the text from the image to proceed.");
+            }
+        }
+    }
+
+</script>
