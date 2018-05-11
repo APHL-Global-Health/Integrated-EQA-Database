@@ -759,7 +759,8 @@ class Application_Service_Shipments {
             'number_of_controls' => $controlCount,
             'lastdate_response' => Pt_Commons_General::dateFormat($params['lastDate']),
             'created_on_admin' => new Zend_Db_Expr('now()'),
-            'created_by_admin' => $authNameSpace->primary_email
+            'created_by_admin' => $authNameSpace->primary_email,
+            'testingInstructions' => $params['testingInstructions']
         );
         $lastId = $db->insert($data);
 

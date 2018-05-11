@@ -424,7 +424,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
     {
         return $this
             ->fetchAll($this->select()
-                ->where("status = 'finalized'"));
+                ->where("status = 'shipped'"));
     }
 
     public function updateDistributionStatus($distributionId, $status)

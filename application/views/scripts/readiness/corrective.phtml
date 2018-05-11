@@ -25,6 +25,7 @@
                         <label>Survey</label>
                         <select name="surveyId" id="surveyId" class="form-control" required>
                             <?php
+                            var_dump($this->surveys);
                             foreach ($this->surveys as $key => $value) {
                                 ?>
                                 <option value="<?php echo $value['distribution_id']; ?>"><?php echo $value['distribution_code']; ?></option>;
