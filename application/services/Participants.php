@@ -136,10 +136,11 @@ class Application_Service_Participants
             ->from(array('p' => 'participant'))
             ->join(array('sl' => 'readinesschecklist'), 'sl.participantID=p.participant_id')
             ->where("sl.verdict='Approved'")
-            ->where("sl.RoundId='$roundId'")
+           // ->where("sl.RoundId='$roundId'")
             ->where("p.status='active'")
-            // ->where("participant_id NOT IN ?", $subSql)
-            ->order('first_name');
+             ->where("participant_id NOT IN ?", $subSql)
+            ->order('first_name')
+            ->group('p.participant_id');
 
 
         return $db->fetchAll($sql);

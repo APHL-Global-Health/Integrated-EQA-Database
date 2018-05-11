@@ -149,7 +149,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                     $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'],
                         $shipmentDetails['distribution_id']);
-//var_dump($this->view->unEnrolledParticipants);
+//var_dump($this->view->unEnrolledParticipants,"Here");
 //exit;
                 } else {
                     $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid, $shipmentDetails['distribution_id']);

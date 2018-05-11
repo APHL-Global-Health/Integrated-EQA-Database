@@ -8,10 +8,10 @@ html {
 
 body {
     padding-bottom: 10px;
-    padding-top: 40px;
+    /*padding-top: 40px;*/
     background-color: #FFF;
     margin-bottom: 100px;
-    margin-top: 60px;
+    /*margin-top: 60px;*/
 }
 
 .navbar .container .country-flag {
@@ -116,6 +116,7 @@ a.footer-items:hover {
     background-color: purple;
     color: white;
     opacity: 0.5;
+    margin-top: 75px;
 }
 
 .purple-button:hover{
