@@ -19,9 +19,8 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
     }
 
     public function saAction() {
-        $clientsServices = new Application_Service_SystemAdmin();
-        $clientsServices->getAllAdmin($params);
-        var_dump($clientsServices);
+        $common = new Application_Service_Common();
+        $common->sendMicroEmailLink("osoromichael@gmail.com", "123456", "Osoro");
         exit;
     }
 

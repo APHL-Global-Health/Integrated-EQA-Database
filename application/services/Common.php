@@ -3,6 +3,8 @@
 class Application_Service_Common
 {
 
+    public $applicationName = "National Micro Biology Reference Laboratory";
+
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array())
     {
         //Send to email
@@ -81,17 +83,55 @@ class Application_Service_Common
         return $randStr; //turn the array into a string
     }
 
+    public function microEmail($message, $fullname, $link = "")
+    {
+        $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+
+        $html = "<div style='background-color: white;'>"
+            . "<div style='font-family: \"Century Gothic\", Times, serif;width: 100%;padding-left: 0%;'><div style='heigth:40px;width:100%;background-color:grey;color:White; '>"
+            . "<p style='margin : 10px 0px 0px 10px;padding : 10px 0px 0px 10px;text-align: center;'>" .
+            "<div style='text-align: center;font-size: 40px;font-weight: bolder;'>" . $this->applicationName
+            . "</div>"
+
+            . "<div style='color:lightgrey;text-align: center;font-size: 35px;font-weight: bold;'>" .
+            "</div>"
+            . "<div style='color:rgba(241,244,255,0.81);text-align: center;font-size: 20px;font-weight: bold;'>"
+            . $config->microCaption
+            . "</div></p>"
+            . "<br></div>";
+
+
+        $html .= "<div style='font-size:14px;text-align:left;margin : 10px 10px 10px 10px;'>"
+            . "<br><div style='font-size:16px;'><b>Dear " . $fullname . ",</b></div>"
+            . " <p style='margin : 10px 10px 10px 10px;'>" . $message . "<br>" .
+            "$link</p>";
+
+        $html .= "<br>" . $config->emailRegistrationSignature . "<br>"
+            . '</div>';
+
+        $html .= "<div style='heigth:70px;width:100%;background-color: #b3b3b3;color:black;text-align:center;padding-top : 10px;padding-bottom : 10px'>"
+            . "<p style='color:black;'>" . $this->applicationName
+            . $config->emailFooter
+
+            . "<p style='margin-left : 10px;margin-bottom : 3px;'>Copyright Reserved @ " . date('Y') . "</p></div>";
+
+        $html .= "</div>";
+
+        return $html;
+    }
+
     public function sendEmailWithPWDToUser($sendTo, $password, $fullname)
     {
 //        $common = new Application_Service_Common();
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-        $message = "Dear $fullname,"
+        $message = ""
             . $config->emailRegistrationBody
             . "<br>Username : $sendTo <br>"
-            . "Password : $password <br>"
-            . $config->emailRegistrationSignature;
+            . "Password : $password <br>";
+
+        $message = $this->microEmail($message, $fullname);
         $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');
+
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
 
@@ -100,7 +140,7 @@ class Application_Service_Common
 //        $common = new Application_Service_Common();
 
         $link = "<a href='http://ept.nphls.or.ke/auth/setpassword?rc=$link' 
-style='padding:5px;margin : 20px;background-color: blue;color: white;'>ept.nphls.or.ke/auth/setpassword?rc=$link</a> ";
+style='padding:5px;margin : 20px;background-color: blue;color: white;'>micro.nphls.or.ke/auth/setpassword?rc=$link</a> ";
 
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
         $message = "Dear $fullname,"
@@ -117,22 +157,20 @@ style='padding:5px;margin : 20px;background-color: blue;color: white;'>ept.nphls
     {
 //        $common = new Application_Service_Common();
 
-        $link = "<a href='http://".$_SERVER['HTTP_HOST']."/auth/setpassword?rc=$link' 
-style='padding:5px;margin : 20px;background-color: blue;color: white;'>http://".$_SERVER['HTTP_HOST']."/auth/setpassword?rc=$link</a> ";
+        $link = "<a href='http://" . $_SERVER['HTTP_HOST'] . "/auth/setpassword?rc=$link' 
+style='padding:5px;margin : 40px;background-color: blue;color: white;border-radius: 10px;'>Set Password</a> ";
 
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
-        $message = "Dear $fullname,"
-            . $config->emailResetMessage
 
-            . "<br><br> : $link <br><br>"
-            . $config->emailRegistrationSignature;
+        $message = ""
+            . $config->emailResetMessage;
+
+        $message = $this->microEmail($message, $fullname, "<br>" . $link);
+        // echo $message;exit;
         $toMail = Application_Service_Common::getConfig('admin_email');
         //$fromName = Application_Service_Common::getConfig('admin-name');
         $this->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
-
-
-
 
 
     public function sendGeneralEmail($sendTo, $Message, $fullname = null)
