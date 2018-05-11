@@ -1430,7 +1430,7 @@
                 $.confirm({
                     title: 'Confirm delete!',
                     theme: 'light',
-                    content: 'Are you sure you want to delete this record,this action cannot be undone',
+                    content: 'Are you sure you want to delete this record?,this action cannot be undone',
                     buttons: {
                         'Delete': {
                             btnClass: 'btn-blue',
