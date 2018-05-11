@@ -5,7 +5,7 @@
                 <small>{{samples.programs.length}} records</small>
                 <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
             </div>
-            <div class="pull-right col-md-8 col-sm-12">
+            <div class="pull-right col-md-8 col-sm-12" ng-init="samples.getShipmentsForDelivery('tbl_bac_test_types','status','0,1')">
                 <items-per-page></items-per-page>
 
                 <div class="col-md-7 col-sm-9 pull-right">
