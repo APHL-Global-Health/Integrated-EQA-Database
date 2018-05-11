@@ -1391,6 +1391,7 @@ class Application_Service_Shipments {
         $dbAdapter->update('shipment', array('number_of_samples' => $size - $controlCount,
             'number_of_controls' => $controlCount,
             'shipment_code' => $params['shipmentCode'],
+            'testingInstructions' => $params['testingInstructions'],
             'lastdate_response' => Pt_Commons_General::dateFormat($params['lastDate'])), 'shipment_id = ' . $params['shipmentId']);
     }
 
