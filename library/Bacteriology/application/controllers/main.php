@@ -64,18 +64,18 @@ Class Main extends pdfCreator
 
     public function generateThatDuplicateError($tableName)
     {
-        if($tableName=='tbl_bac_samples'){
+        if ($tableName == 'tbl_bac_samples') {
             return 'Duplicate sample name,please try another sample name';
         }
 
-        if($tableName=="tbl_bac_panel_mst"){
+        if ($tableName == "tbl_bac_panel_mst") {
             return 'Duplicate panel name,please try another panel name';
         }
-        if($tableName=="tbl_bac_shipments"){
+        if ($tableName == "tbl_bac_shipments") {
             return 'Duplicate shipment name,please try another shipment name';
         }
 
-        if($tableName=="tbl_bac_rounds"){
+        if ($tableName == "tbl_bac_rounds") {
             return 'Duplicate round name,please try another round name';
         }
 
@@ -176,9 +176,8 @@ Class Main extends pdfCreator
                 $sql .= $this->returnWhereStatement($where, $group, $tableName);
             }
         }
-        if ($tableName == 'tbl_bac_sample_to_panel') {
-//                    echo $sql;
-//        exit;
+        if ($tableName == 'tbl_bac_expected_results') {
+            $sql .= ' order by dateCreated desc';
         }
 //                    echo $sql;
 //        exit;
@@ -491,9 +490,9 @@ Class Main extends pdfCreator
                 $counter = 0;
                 foreach ($updateInfo as $key => $value) {
                     $value = is_array($value) ? implode(",", $value) : $value;
-                    if($value===null){
+                    if ($value === null) {
                         $updateStatement .= $key . "=" . "NULL";
-                    }else{
+                    } else {
                         $updateStatement .= $key . "=" . " '$value' ";
                     }
 

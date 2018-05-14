@@ -1,5 +1,6 @@
 <div class="col-md-12 no-padding" ng-if="samples.linksObject.samplesLink == 'viewPackaging'">
-    <div class="main-div" ng-show="!samples.showPanelModal" ng-init="samples.getAllSamples('tbl_bac_panel_mst', samples.where)">
+    <div class="main-div" ng-show="!samples.showPanelModal"
+         ng-init="samples.getAllSamples('tbl_bac_panel_mst', samples.where)">
         <div id='alert' tabindex='1'>
             <div class="alert {{samples.feedbackObject.fbbgColor}}" ng-if="samples.feedbackObject.fbStatus">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -13,8 +14,10 @@
             <div class="pull-right col-mod-12">
                 <items-per-page></items-per-page>
                 <div class="pull-right" ng-init="expand = true">
-                    <small><button ng-click="expand = !expand" class="btn btn-sm btn-default"><i
-                                class="fa fa-expand"></i> </button></small>
+                    <small>
+                        <button ng-click="expand = !expand" class="btn btn-sm btn-default"><i
+                                class="fa fa-expand"></i></button>
+                    </small>
                 </div>
                 <div class="col-md-7 pull-right col-xs-12">
                     <input type="search" class="col-md-12 btn-sm "
@@ -152,7 +155,7 @@
                                             </div>
                                         </div>
                                         <table class="table"
-                                               >
+                                        >
                                             <tr>
                                                 <th></th>
                                                 <th>Batch Name</th>
@@ -201,78 +204,78 @@
                 </div>
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
-                        <tr>
-                            <th>#.</th>
-                            <th>Panel Name</th>
-                            <th>Panel Type</th>
-                            <th>Panel Label</th>
-                            <th>Prepared on</th>
+                    <tr>
+                        <th>#.</th>
+                        <th>Panel Name</th>
+                        <th>Panel Type</th>
+                        <th>Panel Label</th>
+                        <th>Prepared on</th>
 
-                            <th>Delivered on</th>
+                        <th>Delivered on</th>
 
-                            <th>Status</th>
-                            <th>Samples Added</th>
-                            <!--                                <th>Date Saved</th>-->
-                            <th>Ship't Number</th>
-                            <th>Created on</th>
-                            <th></th>
-                        </tr>
+                        <th>Status</th>
+                        <th>Samples Added</th>
+                        <!--                                <th>Date Saved</th>-->
+                        <th>Ship't Number</th>
+                        <th>Created on</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
-                            <td>{{$index + 1}}</td>
-                            <td>{{panel.panelName}}</td>
-                            <td>{{panel.panelType}}</td>
-                            <td>{{panel.panelLabel}}</td>
-                            <td nowrap>{{panel.panelDatePrepared}}</td>
-                            <td nowrap>{{panel.panelDateOfDelivery}}</td>
+                    <tr dir-paginate="panel in samples.panelsData | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
+                        <td>{{$index + 1}}</td>
+                        <td>{{panel.panelName}}</td>
+                        <td>{{panel.panelType}}</td>
+                        <td>{{panel.panelLabel}}</td>
+                        <td nowrap>{{panel.panelDatePrepared}}</td>
+                        <td nowrap>{{panel.panelDateOfDelivery}}</td>
 
-                            <td nowrap>Active</td>
-                            <td nowrap>{{panel.totalSamplesAdded}}</td>
-                            <td nowrap>{{panel.shipmentNo}}</td>
-                            <td nowrap>{{panel.dateCreated.substring(0, 10)}}</td>
-                            <td nowrap>
-                                <a class="btn btn-info btn-sm"
-                                   data-placement="right" data-type="info" data-container="body"
-                                   data-animation="am-fade-and-scale"
-                                   data-trigger="hover" data-type="success" data-title="Edit Panel" bs-tooltip
+                        <td nowrap>Active</td>
+                        <td nowrap>{{panel.totalSamplesAdded}}</td>
+                        <td nowrap>{{panel.shipmentNo}}</td>
+                        <td nowrap>{{panel.dateCreated.substring(0, 10)}}</td>
+                        <td nowrap>
+                            <a class="btn btn-info btn-sm"
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Edit Panel" bs-tooltip
 
-                                   ng-click="samples.editFunction(panel, 'tbl_bac_panel_mst')">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus != 0"
-                                   data-placement="right" data-type="info" data-container="body"
-                                   data-animation="am-fade-and-scale"
-                                   data-trigger="hover" data-type="success" data-title="Remove Panel" bs-tooltip
+                               ng-click="samples.editFunction(panel, 'tbl_bac_panel_mst')">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus != 0"
+                               data-placement="right" data-type="info" data-container="body"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Remove Panel" bs-tooltip
 
-                                   ng-click="samples.deleteCustomRow(panel.id, 'tbl_bac_panel_mst')"><i
-                                        class="fa fa-remove"></i></a>
-                                <!--<a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"-->
-                                <!--data-placement="right" data-type="info" data-container="body"-->
-                                <!--data-animation="am-fade-and-scale"-->
-                                <!--data-trigger="hover" data-type="success" data-title="Lock Panel" bs-tooltip-->
-                                <!--&gt;-->
-                                <!--<i class="fa fa-unlock"></i>-->
-                                <!--</a>-->
-                                <a class="btn btn-primary btn-sm" about="" ng-disabled="panel.panelStatus != 0"
-                                   ng-click="samples.addSamplesToPanel(panel)"
-                                   href="#addSamples" data-backdrop="false" data-toggle="modal"
-                                   data-placement="right" data-type="info" data-container="body"
-                                   data-animation="am-fade-and-scale"
-                                   data-trigger="hover" data-type="success" data-title="Add Samples" bs-tooltip
+                               ng-click="samples.deleteCustomRow(panel.id, 'tbl_bac_panel_mst')"><i
+                                    class="fa fa-remove"></i></a>
+                            <!--<a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"-->
+                            <!--data-placement="right" data-type="info" data-container="body"-->
+                            <!--data-animation="am-fade-and-scale"-->
+                            <!--data-trigger="hover" data-type="success" data-title="Lock Panel" bs-tooltip-->
+                            <!--&gt;-->
+                            <!--<i class="fa fa-unlock"></i>-->
+                            <!--</a>-->
+                            <a class="btn btn-primary btn-sm" about="" ng-disabled="panel.panelStatus != 0"
+                               ng-click="samples.addSamplesToPanel(panel)"
+                               href="" data-backdrop="false" data-toggle="modal"
+                               data-placement="left" data-type="info"
+                               data-animation="am-fade-and-scale"
+                               data-trigger="hover" data-type="success" data-title="Add Samples" bs-tooltip
 
-                                   ><i class="fa fa-plus"></i></a>
-                                <!--<a class="btn btn-primary btn-sm" href="#barcodeModal"-->
-                                <!--data-placement="right" data-type="info" data-container="body"-->
-                                <!--data-animation="am-fade-and-scale"-->
-                                <!--data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip-->
-                                <!--data-backdrop="false"-->
-                                <!--data-toggle="modal"-->
-                                <!--ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>-->
-                                <!--</a>-->
+                            ><i class="fa fa-plus"></i></a>
+                            <!--<a class="btn btn-primary btn-sm" href="#barcodeModal"-->
+                            <!--data-placement="right" data-type="info" data-container="body"-->
+                            <!--data-animation="am-fade-and-scale"-->
+                            <!--data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip-->
+                            <!--data-backdrop="false"-->
+                            <!--data-toggle="modal"-->
+                            <!--ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>-->
+                            <!--</a>-->
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -290,11 +293,13 @@
 
     <!---------Modal---------->
     <div class="">
-        <div  ng-if="samples.showPanelModal">
+        <div ng-if="samples.showPanelModal"
+             ng-init="samples.samplesData={};samples.getAllSamples('tbl_bac_samples', samples.where)">
             <div class="col-md-12 text-right">
                 <div class="clearfix">&nbsp;</div>
-                <div><button type="button" class="btn btn-sm btn-danger"
-                             ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> close
+                <div>
+                    <button type="button" class="btn btn-sm btn-danger"
+                            ng-click="samples.hidePanelModal()"><i class="fa fa-remove"></i> close
                     </button>
                 </div>
                 <div class="clearfix">&nbsp;</div>
@@ -303,7 +308,8 @@
 
                 <div class="panel panel-heading" ng-init="samples.samplePanelArray = []">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="samples.hidePanelModal()">&times;</button>
+                            ng-click="samples.hidePanelModal()">&times;
+                    </button>
                     <h4 class="modal-title">Add Sample To
                         {{samples.currentPanel.panelName| capitalizeLetter}} :
                         {{samples.currentPanel.panelLabel| capitalizeLetter}}
@@ -327,7 +333,7 @@
                     <table class="table table-striped table-responsive">
                         <tr>
                             <td></td>
-                            <td>Quantitys</td>
+
                             <td><b>Sample</b></td>
                             <td><b>Date Prer'd</b></td>
                         </tr>
@@ -336,32 +342,34 @@
 
                                 <div class="[ form-group ]">
                                     <input type="checkbox" ng-hide="true"
-                                           ng-checked="samples.returnCheckedRow(sample.id, samples.samplePanelArray)" name="{{sample.id}}" id="{{sample.id}}" autocomplete="off"
+                                           ng-checked="samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
+                                           name="{{sample.id}}" id="{{sample.id}}" autocomplete="off"
                                            ng-click="samples.addSampleToArray(sample.id, sample.sampleCheck, sample.quantity)"
                                            ng-model="sample.sampleCheck">
 
 
                                     <div class="[ no-padding]">
                                         <label for="{{sample.id}}" class="[ btn-round ]">
-                                            <span class="[ fa fa-check-circle  ]" ng-show="samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
+                                            <span class="[ fa fa-check-circle  ]"
+                                                  ng-show="samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
 
                                                   data-placement="right" data-type="info" data-container="body"
                                                   data-animation="am-fade-and-scale" bs-tooltip
                                                   data-trigger="hover" data-title="remove sample"
-                                                  ></span>
-                                            <span class="[ fa fa-minus-circle  ]" ng-show="!samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
+                                            ></span>
+                                            <span class="[ fa fa-minus-circle  ]"
+                                                  ng-show="!samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
                                                   data-placement="right" data-type="info" data-container="body"
                                                   data-animation="am-fade-and-scale" bs-tooltip
                                                   data-trigger="hover" data-title="add sample"
-                                                  > </span>
+                                            > </span>
                                         </label>
                                     </div>
                                 </div>
 
-                            </td>
-                            <td>
+
                                 <form name="sampleQuantityForm">
-                                    <input type="number" ng-disabled="!sample.sampleCheck" name="sampleQuantity"
+                                    <input type="number" ng-hide="true" name="sampleQuantity"
                                            maxlength="4"
                                            ng-init="sample.quantity = 1" min="1" max="1000"
                                            ng-change="samples.addSampleToArray(sample.id, sample.sampleCheck, sample.quantity)"
@@ -382,7 +390,7 @@
                     <button class="btn btn-info col-md-12"
                             ng-disabled="samples.samplePanelArray.length == 0 || samples.savingInProgress"
                             ng-click="samples.saveSamplesToPanel(samples.currentPanel)"
-                            >
+                    >
                         Save Samples to {{samples.currentPanel.panelName| capitalizeLetter}} <i
                             class="fa fa-spin {{samples.savingSpinner}}"></i>
                     </button>
