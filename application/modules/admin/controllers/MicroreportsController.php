@@ -304,7 +304,7 @@ class Admin_MicroreportsController extends Zend_Controller_Action
             $roundName = $value['roundName'] . "(" . $value['roundCode'] . ")";
 
             array_push($arrayAcceptable, array("x" => $roundName, "y" => $aP['acceptable']));
-            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP['unacceptabble']));
+            array_push($arrayUnacceptable, array("x" => $roundName, "y" => $aP['unacceptable']));
 
 
         }

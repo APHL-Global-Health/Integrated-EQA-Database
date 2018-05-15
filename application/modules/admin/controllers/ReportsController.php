@@ -708,12 +708,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         if (is_array($responseResults)) {
             $whereSampleExpectedResult['sampleId'] = $responseResults['sampleId'];
             $sampleExpectedResult = $this->returnValueWhere($whereSampleExpectedResult, 'tbl_bac_expected_results');
-//            var_dump($sampleExpectedResult);
-//echo '<br>';
-//echo '<br>';
-//echo '<br>';
-//            var_dump($responseResults);
-//             exit;
+
             if (count($sampleExpectedResult) > 0) {
                 $score['grainStainReactionScore'] = null;
                 $score['primaryMediaScore'] = null;
@@ -788,8 +783,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                 $score['grade'] = $this->getGradeRemark($score['finalScore']);
 
-                $score['grade'] = $this->getGradeRemarkOnSampleTypes($whereResponse);
-
+                $g = $this->getGradeRemarkOnSampleTypes($whereResponse);
+                $score['grade'] = $g['grade'];
+                $score['remarks'] = $g['remarks'];
                 $score['markedStatus'] = 1;
                 $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
                 if ($updateLabResults['status'] == 0) {
@@ -886,7 +882,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
             $sampleType = str_replace('"', '', str_replace("]", '',
                 str_replace("[", '', $sampleInfo['sampleType'])));
-            $sampleType =explode(',',$sampleType);
+            $sampleType = explode(',', $sampleType);
 
         }
 
@@ -919,7 +915,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         }
 
 
-        $range = $this->dbConnection->selectFromTable('tbl_bac_grades', array('status'=>1));
+        $range = $this->dbConnection->selectFromTable('tbl_bac_grades', array('status' => 1));
         $returnArray['grade'] = 'Not Set';
         $returnArray['remarks'] = 'Not Available';
 
