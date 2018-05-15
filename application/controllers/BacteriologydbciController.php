@@ -606,7 +606,7 @@ class BacteriologydbciController extends Zend_Controller_Action
             }
         }
         return (array)$returnArray;
-        exit();
+
     }
 
     public function testpdfAction()
@@ -915,11 +915,12 @@ class BacteriologydbciController extends Zend_Controller_Action
 
         $sampleInstructions = $this->returnValueWhere($postedData, 'tbl_bac_sample_instructions');
 
-        if (sizeof($sampleInstructions) == 0) {
+        if ($sampleInstructions ==false) {
             $where['status'] = 9;
 
             $sampleInstructions = $this->returnValueWhere($where, 'tbl_bac_sample_instructions');
         }
+
         return $sampleInstructions;
     }
 
@@ -1199,9 +1200,6 @@ class BacteriologydbciController extends Zend_Controller_Action
             if (count($where) > 0) {
 
                 $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
-
-                var_dump($dataDB);
-                exit;
 
                 if ($dataDB != false) {
                     foreach ($dataDB as $key => $value) {
@@ -2508,9 +2506,9 @@ class BacteriologydbciController extends Zend_Controller_Action
         $where['userId'] = $postedData['userId'];
         $where['sampleId'] = $postedData['sampleId'];
         $where['roundId'] = $postedData['roundId'];
-//        print_r($where);
-//        exit;
+
         $results = $this->returnValueWhere($where, 'tbl_bac_response_results');
+
         $susceptibility = $this->returnValueWhere($where, 'tbl_bac_suscepitibility');
 
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_micro_bacterial_agents', $where);
@@ -2521,6 +2519,10 @@ class BacteriologydbciController extends Zend_Controller_Action
         $data['microAgents'] = $microAgents;
         $postedWhere['sampleId'] = $postedData['sampleId'];
         $data['sampleInstructions'] = $this->returnSampleInstructions($postedWhere);
+
+//        print_r($data['sampleInstructions']);
+//        exit;
+
 
 //        if ($microAgents != false) {
 //            foreach ($microAgents as $key => $value) {
