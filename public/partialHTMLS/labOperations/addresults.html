@@ -15,9 +15,9 @@
         </div>
         <div class="col-md-1 pull-right">
             <button class=" btn btn-default btn-sm"
-               data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-               data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
-               ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
+                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
+                    data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                    ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
                     class="fa fa-refresh"></i>
             </button>
             &nbsp;
@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<div class="col-md-12"  ng-init="samples.getUserIssuedSamples('tbl_bac_panels_shipments')">
+<div class="col-md-12" ng-init="samples.getUserIssuedSamples('tbl_bac_panels_shipments')">
 
     <table class="table table-bordered">
         <td>No.</td>
@@ -47,7 +47,7 @@
             <td>{{sample.materialSource}}</td>
             <td>
                 <button class="btn btn-sm btn-success"
-                        ng-click="samples.showAddResponse(sample)"
+                        ng-click="samples.showAddResponse(sample);samples.susceptibilityFormData={}"
                         ng-disabled="sample.daysLeftOnTen==10"
                         ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
@@ -65,11 +65,11 @@
                         class="fa fa-edit"></i> edit
                 </button>
                 <!--<button class="btn btn-sm btn-primary"-->
-                        <!--ng-disabled="sample.daysLeft==0 || sample.daysLeftOnTen==0"-->
-                        <!--data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"-->
-                        <!--data-trigger="hover" data-type="success" data-title="Click to download results form" bs-tooltip-->
+                <!--ng-disabled="sample.daysLeft==0 || sample.daysLeftOnTen==0"-->
+                <!--data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"-->
+                <!--data-trigger="hover" data-type="success" data-title="Click to download results form" bs-tooltip-->
                 <!--&gt;<i-->
-                        <!--class="fa fa-download"></i> Download-->
+                <!--class="fa fa-download"></i> Download-->
                 <!--</button>-->
             </td>
         </tr>
