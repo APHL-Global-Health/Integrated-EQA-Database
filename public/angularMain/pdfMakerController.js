@@ -310,7 +310,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 },
                 {
                     text: 'Micro Agents Used : ' + microAgents.length + ' : ' + microAgents.toString() +
-                            ' | Your score ' + dataDetails.results.totalMicroAgentsScore + '%',
+                            ' | Your score ' + dataDetails.results.totalMicroAgentsScore + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -324,7 +324,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     margin: [0, 0, 0, 5]
                 },
                 {
-                    text: 'Total Average Score : ' + Number(dataDetails.results.finalScore) + '%',
+                    text: 'Total Average Score : ' + Number(dataDetails.results.finalScore) + '',
                     style: ['content', 'leftData'],
                     margin: [0, 0, 0, 5]
                 },
@@ -557,7 +557,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     {text: ' Responded', style: 'subHeader'},
                     {text: ' Evaluated', style: 'subHeader'},
                     {text: ' Unevaluated', style: 'subHeader'},
-                    {text: 'Response %', style: 'subHeader'}
+                    {text: 'Response ', style: 'subHeader'}
 
                 ];
 
@@ -949,7 +949,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                     'Total Responded': excelData[i].totalResponded,
                     'Total Evaluated': excelData[i].totalTotalEvaluated,
                     'Total Unevaluated': excelData[i].totalTotalUnevaluated,
-                    'Response %': excelData[i].responseRate,
+                    'Response ': excelData[i].responseRate,
 
                 }
                 returnArray.push(tempArray);

@@ -116,7 +116,7 @@ EptServices.service('EptServices', function () {
                 if (state) {
                     return num;
                 }
-                return num + "%";
+                return num + "";
 
                 break;
         }

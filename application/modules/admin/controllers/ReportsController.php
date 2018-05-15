@@ -97,10 +97,9 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
     public function evaluateroundAction()
     {
-        //$postedData = $this->returnArrayFromInput();
-        $postedData = array();
-        $postedData['id'] = 3;
-        $whereRound['roundId'] = 3;//$postedData['id'];
+        $postedData = $this->returnArrayFromInput();
+
+        $whereRound['roundId'] = $postedData['id'];
         $whereRound['startRoundFlag'] = 1;
         $updateStatus = false;
         $shipments = $this->dbConnection->selectFromTable('tbl_bac_shipments', $whereRound);
@@ -744,8 +743,6 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $sampleTypes = explode(',', $sampleTypeDetails['sampleType']);
 
 
-
-                
                 if (in_array(1, $sampleTypes)) {
 
                     $scoreGS = 0;
@@ -788,7 +785,11 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $whereResponse['participantId'] = $responseResults['participantId'];
                 $whereResponse['adminMarked'] = 0;
                 $score['finalScore'] = array_sum($score);
+
                 $score['grade'] = $this->getGradeRemark($score['finalScore']);
+
+                $score['grade'] = $this->getGradeRemarkOnSampleTypes($whereResponse);
+
                 $score['markedStatus'] = 1;
                 $updateLabResults = $this->dbConnection->updateTable('tbl_bac_response_results', $whereResponse, $score);
                 if ($updateLabResults['status'] == 0) {
@@ -868,6 +869,73 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         finishExecution:
         return true;
     }
+
+    public function getGradeRemarkOnSampleTypes($whereFilter)
+    {
+        {
+            $where['sampleId'] = $whereFilter['sampleId'];
+            $whereSampleId['id'] = $whereFilter['sampleId'];
+            $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+
+            $sampleExpectedInfo = $this->returnValueWhere($where, 'tbl_bac_expected_results');
+
+            $where['participantId'] = $whereFilter['participantId'];
+            $where['roundId'] = $whereFilter['roundId'];
+
+            $sampleScoreInfo = $this->returnValueWhere($where, 'tbl_bac_response_results');
+
+            $sampleType = str_replace('"', '', str_replace("]", '',
+                str_replace("[", '', $sampleInfo['sampleType'])));
+            $sampleType =explode(',',$sampleType);
+
+        }
+
+        {
+            $totalExpected = 0;
+            $totalScored = 0;
+            if (in_array(1, $sampleType)) {
+                $totalExpected += $sampleExpectedInfo['grainStainReactionScore'];
+                $totalScored += $sampleScoreInfo['grainStainReactionScore'];
+            }
+            if (in_array(2, $sampleType)) {
+                $totalExpected += $sampleExpectedInfo['finalIdentificationScore'];
+                $totalScored += $sampleScoreInfo['finalIdentificationScore'];
+            }
+            if (in_array(3, $sampleType)) {
+
+
+                $whereAstSampleId['sampleId'] = $whereFilter['sampleId'];
+                $sampleAST = $this->returnValueWhere($whereAstSampleId, 'tbl_bac_response_results');
+
+                $totalExpected += $sampleAST['agentScore'];
+                $totalScored += $sampleScoreInfo['totalMicroAgentsScore'];
+
+            }
+
+        }
+        /*block calculating the totals*/
+        {
+            $percentage = round(($totalScored / $totalExpected) * 100, 0);
+        }
+
+
+        $range = $this->dbConnection->selectFromTable('tbl_bac_grades', array('status'=>1));
+        $returnArray['grade'] = 'Not Set';
+        $returnArray['remarks'] = 'Not Available';
+
+        if ($range != false) {
+            foreach ($range as $key => $value) {
+                if ($percentage >= $value->lowerMark && $percentage <= $value->upperMark) {
+                    $returnArray['grade'] = $value->grade;
+                    $returnArray['remarks'] = $value->remarks;
+                    break;
+                }
+            }
+        }
+        return $returnArray;
+
+    }
+
 
     public function getGradeRemark($total)
     {
