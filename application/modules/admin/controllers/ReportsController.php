@@ -97,8 +97,10 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
     public function evaluateroundAction()
     {
-        $postedData = $this->returnArrayFromInput();
-        $whereRound['roundId'] = $postedData['id'];
+        //$postedData = $this->returnArrayFromInput();
+        $postedData = array();
+        $postedData['id'] = 3;
+        $whereRound['roundId'] = 3;//$postedData['id'];
         $whereRound['startRoundFlag'] = 1;
         $updateStatus = false;
         $shipments = $this->dbConnection->selectFromTable('tbl_bac_shipments', $whereRound);
@@ -121,7 +123,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation was Unsuccessful !'));
             }
         } else {
-            echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation Unsuccessful.no shipments found !'));
+            echo $this->returnJson(array('status' => 0, 'message' => 'Round Evaluation Unsuccessful.No shipments found !'));
         }
         exit;
     }
@@ -470,6 +472,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                     $whereSampleId['roundId'] = $panelSamples[$key]->roundId;
 
                     $responseResults = $this->dbConnection->selectFromTable('tbl_bac_response_results', $whereSampleId);
+
+
                     if ($responseResults != false) {
 
                         foreach ($responseResults as $key => $value) {
@@ -700,11 +704,17 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
     public function updateResponseResults($responseResults)
     {
+
+
         if (is_array($responseResults)) {
             $whereSampleExpectedResult['sampleId'] = $responseResults['sampleId'];
             $sampleExpectedResult = $this->returnValueWhere($whereSampleExpectedResult, 'tbl_bac_expected_results');
 //            var_dump($sampleExpectedResult);
-//            exit;
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//            var_dump($responseResults);
+//             exit;
             if (count($sampleExpectedResult) > 0) {
                 $score['grainStainReactionScore'] = null;
                 $score['primaryMediaScore'] = null;
@@ -722,6 +732,8 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $whereSampleId['status'] = 1;
 
                 $sampleTypeDetails = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
+                $sampleTypeDetails = str_replace('"', '', str_replace("]", '',
+                    str_replace("[", '', $sampleTypeDetails)));
 
                 if (count($sampleTypeDetails) == 0)
                     goto finishExecution;
@@ -731,13 +743,20 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
 
                 $sampleTypes = explode(',', $sampleTypeDetails['sampleType']);
 
+
+
+                
                 if (in_array(1, $sampleTypes)) {
 
                     $scoreGS = 0;
+
                     if ($responseResults['grainStainReaction'] == null) {
                         $scoreGS = 0;
                     } else {
+
                         if ($sampleExpectedResult['grainStainReaction'] != null) {
+
+
                             if ($responseResults['grainStainReaction'] == $sampleExpectedResult['grainStainReaction']) {
                                 $scoreGS = $sampleExpectedResult['grainStainReactionScore'];
                             } else if (in_array($responseResults['grainStainReaction'], explode(' ', $sampleExpectedResult['grainStainReaction']))) {
@@ -746,6 +765,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                             }
                         }
                     }
+
                     $score['grainStainReactionScore'] = $scoreGS;
 
                 }
