@@ -6,7 +6,7 @@
                         ng-click="samples.hideShipmentModal()">&times;
                 </button>
                 <h4 class="modal-title">Receive Shipment
-                    {{samples.currentShipment.shipmentName| capitalizeLetter}} 
+                    {{samples.currentShipment.shipmentName| capitalizeLetter}}
                     {{samples.currentShipment.shipmentDsc| capitalizeLetter}}
 
                 </h4>
@@ -46,7 +46,7 @@
                              ng-class="{ 'has-error'  : receiveShipmentForm.panelsReceived.$invalid && !receiveShipmentForm.panelsReceived.$pristine }">
                             <label for="panelsReceived" class="col-2 col-form-label"># Panels Received</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" id="panelsReceived" 
+                                <input class="form-control" type="text" id="panelsReceived"
                                        name="panelsReceived" ng-pattern="samples.numericOnly" style="max-width: 47%;"
                                        ng-model="samples.receiveShipmentFormData.panelsReceived">
                             </div>
@@ -84,15 +84,15 @@
                             </small>
                         </div>
 
-                        <div class="form-group " 
+                        <div class="form-group "
                              ng-class="{ 'has-error'  : receiveShipmentForm.shipmentStatus.$invalid && !receiveShipmentForm.shipmentStatus.$pristine }">
                             <label for="type" class="col-2 col-form-label">Condition Status</label>
                             <div class="col-10">
                                 <select class="form-control" type="text" id="" name="shipmentStatus"
                                         style="max-width: 47%;"
                                         ng-model="samples.receiveShipmentFormData.shipmentStatus">
-                                    <option selected="" value="3"> Received Okay </option>
-                                    <option selected="" value="5"> Spoilt </option>
+                                    <option selected="" value="3"> Received Okay</option>
+                                    <option selected="" value="5"> Spoilt</option>
                                 </select>
                             </div>
                             <small class="text-danger col-md-12"
@@ -110,7 +110,7 @@
 
                                 </textarea>
                             </div>
-                            <small class="text-danger col-md-12" 
+                            <small class="text-danger col-md-12"
                                    ng-show="receiveShipmentForm.receiveComments.$invalid && !receiveShipmentForm.receiveComments.$pristine">
                                 Error : Required & Only numbers,alphabets,hyphen and dashes allowed
                             </small>
@@ -121,7 +121,7 @@
                                 <button class="btn btn-success col-md-12" style="max-width: 47%;"
                                         ng-disabled="receiveShipmentForm.$invalid || samples.savingInProgress"
                                         ng-click="samples.saveReceiveShipmentForm(samples.receiveShipmentFormData)"
-                                        >Save Receiving Details<i class="fa fa-spin {{samples.savingSpinner}}"></i>
+                                >Save Receiving Details<i class="fa fa-spin {{samples.savingSpinner}}"></i>
                                 </button>
                             </div>
                         </div>

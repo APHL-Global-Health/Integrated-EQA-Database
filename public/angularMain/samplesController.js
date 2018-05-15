@@ -814,6 +814,7 @@
                                 $scope.samples.panelsToShipmentArray = [];
 
                                 $scope.samples.getPanelFromShipment(shipment.id, 1);
+                                $scope.samples.getAllSamples('tbl_bac_shipments', samples.whereShipment)
                                 changeFb(EptServices.EptServiceObject.returnLoaderStatus(response.status));
 
                                 $scope.samples.showShipmentModal = false;
@@ -1643,6 +1644,7 @@
                                 postedData.where = {id: $scope.samples.currentShipment.id};
                                 if (angular.isDefined(postedData)) {
                                     $scope.samples.updateWhere(postedData, 1);
+                                    $scope.samples.dispatchShipmentFormData={};
                                 }
 
                             }

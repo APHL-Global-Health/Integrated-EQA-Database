@@ -1200,6 +1200,9 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                 $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
 
+                var_dump($dataDB);
+                exit;
+
                 if ($dataDB != false) {
                     foreach ($dataDB as $key => $value) {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
@@ -1490,13 +1493,19 @@ class BacteriologydbciController extends Zend_Controller_Action
         $whereTBPS['participantId'] = $where['participantId'];
         $whereTBPS['roundId >'] = 0;
 
-        $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
+
+
+        //$this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
 
         /*         * ****************************************************************************************** */
 
         /*         * *******************************update tbl_bac_panel_mst*********************************************************** */
+        $whereShipmentId['participantId'] = $where['participantId'];
+
 
         $whereShipmentData = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
+
+
 
         if ($whereShipmentData != false) {
             $shipmentData['okStatus'] = 0;
@@ -1524,14 +1533,19 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $shipmentData['dateDelivered'] = $updateTBSP['dateDelivered'];
                 $shipmentData['okStatus'] = $update['shipmentStatus'];
 
+
+
                 $sampleToIssue = $this->dbConnection->selectFromTable('tbl_bac_sample_to_panel', $whereTBSP);
+
+
+
                 if (count($sampleToIssue) > 0) {
                     foreach ($sampleToIssue as $ky => $vl) {
 
                         $data['userId'] = $this->dbConnection->getUserSession();;
-                        $data['sampleId'] = $sampleToIssue[$key]->sampleId;
+                        $data['sampleId'] = $sampleToIssue[$ky]->sampleId;
                         $data['panelToSampleId'] = $sampleToIssue[$key]->id;
-                        $data['roundId'] = $sampleToIssue[$key]->roundId;
+                        $data['roundId'] = $sampleToIssue[$ky]->roundId;
                         $data['participantId'] = $where['participantId'];
                         $this->savesamplesToUsers($data);
 
@@ -1555,6 +1569,9 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         try {
 
+//            var_dump(count($jsPostData));
+////            exit;
+
             if (is_array($jsPostData)) {
                 $response = [];
                 try {
@@ -1567,16 +1584,16 @@ class BacteriologydbciController extends Zend_Controller_Action
                     $response = $this->dbConnection->insertData('tbl_bac_samples_to_users', $data);
                     $whereUpdate['id'] = $jsPostData['panelToSampleId'];
                 } catch (Exception $e) {
-
+                    echo $e->getMessage();
                 }
                 if (isset($whereUpdate)) {
                     $updateData['issuedFlag'] = 1;
                     $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereUpdate, $updateData);
                 }
 
-                echo $this->returnJson($response);
+               // echo $this->returnJson($response);
             }
-            exit();
+
         } catch (Exception $error) {
             echo $error->getMessage();
         }
@@ -1644,6 +1661,8 @@ class BacteriologydbciController extends Zend_Controller_Action
                 if ($dataArray['tableName'] == 'tbl_bac_shipments') {
 
                     if (in_array($postedData['shipmentStatus'], array(3, 5))) {
+
+                        //
 
                         $this->updateShipmentRelatedTables($wherePosted, $postedData);
 
@@ -2099,7 +2118,6 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $sampleTypes = explode(',', $tempArray['sampleType']);
 
 
-
                 $tempArray['grainStainReaction'] = $expectedResults['grainStainReaction'];
                 $tempArray['grainStainReactionScore'] = $expectedResults['grainStainReactionScore'];
                 $tempArray['finalIdentification'] = $expectedResults['finalIdentification'];
@@ -2109,12 +2127,12 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $tempArray['totalExpectedScore'] = 0;
 
                 if (in_array(1, $sampleTypes)) {
-                    $tempArray['totalExpectedScore'] +=$expectedResults['grainStainReactionScore'];
-                    $tempArray['totalScore'] +=$tempArray['grainStainReactionScoreResult'];
+                    $tempArray['totalExpectedScore'] += $expectedResults['grainStainReactionScore'];
+                    $tempArray['totalScore'] += $tempArray['grainStainReactionScoreResult'];
                 }
                 if (in_array(2, $sampleTypes)) {
-                    $tempArray['totalExpectedScore'] +=$expectedResults['finalIdentificationScore'];
-                    $tempArray['totalScore'] +=$tempArray['finalIdentificationScoreResult'];
+                    $tempArray['totalExpectedScore'] += $expectedResults['finalIdentificationScore'];
+                    $tempArray['totalScore'] += $tempArray['finalIdentificationScoreResult'];
                 }
 
 
@@ -2123,12 +2141,12 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $sampleASTsExptectedResults = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $whereSampleID);
 
                 if (in_array(3, $sampleTypes)) {
-                    $microExpectedScore= $this->returnValueWhere($getSampleResults[$key]->sampleId, 'tbl_bac_expected_micro_bacterial_agents');
-                    $tempArray['totalExpectedScore'] +=$microExpectedScore['agentScore'];
-                    $tempArray['totalScore'] +=$tempArray['microSco'];
+                    $microExpectedScore = $this->returnValueWhere($getSampleResults[$key]->sampleId, 'tbl_bac_expected_micro_bacterial_agents');
+                    $tempArray['totalExpectedScore'] += $microExpectedScore['agentScore'];
+                    $tempArray['totalScore'] += $tempArray['microSco'];
                 }
 
-                $tempArray['totalPercentScore']=round($tempArray['totalScore']/$tempArray['totalExpectedScore'],1)*100;
+                $tempArray['totalPercentScore'] = round($tempArray['totalScore'] / $tempArray['totalExpectedScore'], 1) * 100;
                 array_push($arrayResultsAndExpected, $tempArray);
 
                 $holdEvery['arrayResultsAndExpected'] = $arrayResultsAndExpected;
