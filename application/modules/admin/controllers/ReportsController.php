@@ -909,14 +909,16 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
             }
 
         }
+        $returnArray['percentage'] = 0;
         /*block calculating the totals*/
         {
             $percentage = round(($totalScored / $totalExpected) * 100, 0);
         }
 
-
+        $returnArray['percentage'] = $percentage;
         $range = $this->dbConnection->selectFromTable('tbl_bac_grades', array('status' => 1));
         $returnArray['grade'] = 'Not Set';
+
         $returnArray['remarks'] = 'Not Available';
 
         if ($range != false) {

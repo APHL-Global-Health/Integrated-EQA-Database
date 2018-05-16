@@ -93,7 +93,8 @@
                 <th>County</th>
                 <th>Sample</th>
                 <th>Round</th>
-                <th>GS/FS Avg.</th>
+                <th>GS </th>
+                <th>FS </th>
 
                 <th>Micro Agents</th>
                 <th>Remarks</th>
@@ -109,7 +110,8 @@
                 <td>{{lab.county}}</td>
                 <td>{{lab.batchName}}</td>
                 <td nowrap>{{lab.roundCode}}</td>
-                <td nowrap>{{reports.addGramFinal(lab.grainStainReactionScore,lab.finalIdentificationScore)}}</td>
+                <td nowrap>{{lab.grainStainReactionScore}}</td>
+                <td>{{lab.finalIdentificationScore}}</td>
                 <td nowrap>{{lab.totalMicroAgentsScore}}</td>
                 <td>{{lab.remarks}}</td>
                 <td>{{lab.grade}}</td>
