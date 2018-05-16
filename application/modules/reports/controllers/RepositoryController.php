@@ -856,6 +856,9 @@ class Reports_RepositoryController extends Zend_Controller_Action {
 
         if (isset($whereArray['Status'])) {
             $updateData['Status'] = $whereArray['Status'];
+            if($whereArray['Status']==0){
+                $updateData['uploadMessage'] = 'Rejected By admin';
+            }
         } else {
             $updateData['AdminApproved'] = 1;
         }

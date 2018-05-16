@@ -23,7 +23,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
 //        print_r($auth);
 //        exit;
         //echo $pname;
-        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'FailReasonCode', 'BatchID', 'Status');
+        $aColumns = array('ImpID', 'ProviderID', 'ProgramID', 'LabID', 'RoundID', 'SampleCode', 'TestKitID', 'Result', 'ResultCode', 'Grade', 'uploadMessage', 'BatchID', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -165,7 +165,7 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $row[] = $aRow['Result'];
             $row[] = $aRow['ResultCode'];
             $row[] = $aRow['Grade'];
-            $row[] = $aRow['FailReasonCode'];
+            $row[] = $aRow['uploadMessage'];
             $row[] = $aRow['BatchID'];
             $batchID = "'" . $aRow['BatchID'] . "'";
             if (isset($validity)) {

@@ -606,7 +606,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
             theme: 'supervan',
             content: 'Are you want to revoke records in this batch,this action can not be undone ',
             buttons: {
-                'Evaluate': {
+                'Revoke': {
                     btnClass: 'btn-blue',
                     action: function () {
 

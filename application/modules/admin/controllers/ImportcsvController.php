@@ -325,6 +325,8 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
             $excelData = $this->getUploadedExcelFileData();
 
             $insertStatement = $this->createBulkInsert('rep_repository', $finalTableColumns, $excelData, $extraInfo, $mappedColumn);
+
+
             $db->query($insertStatement);
             $filedetails = new Zend_Session_Namespace('filename');
             $filedetails->filename = '';
