@@ -2,6 +2,10 @@
     <form name="addCsvForm" id="addCsvForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "importcsv", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" enctype="multipart/form-data">
         <fieldset>
             <legend>Import Provider Data</legend>
+            <div class="btn col-md-12" style=" margin-bottom: 10px; border: 1px solid #0E3460;background-color: #00a1cb;color: white; ">
+                NB : Please make sure you upload file has MFLCode column otherwise the data will be deemed invalid
+            </div>
+
             <div class="form-group">
                 <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
