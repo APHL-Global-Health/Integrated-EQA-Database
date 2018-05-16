@@ -60,7 +60,7 @@
             </div>
             </table>
             <br>
-
+            <input   tabindex="7" hidden name="ContactID" value="<?php echo $this->admin['ContactID']; ?>"/>
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"/>
                 <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/labscontact';"
@@ -92,7 +92,7 @@
     }
 
     function validateNow() {
-        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "ProviderID##" . $this->admin['ProviderID']; ?>', 'This Email already exists for another Admin. Please try something else.')
+        //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php //echo "ProviderID##" . $this->admin['ProviderID']; ?>', 'This Email already exists for another Admin. Please try something else.')
         //if (!checkDduplicateId) {
         flag = deforayValidator.init({
             formId: 'editProvidersForm'

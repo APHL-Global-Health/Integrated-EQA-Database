@@ -6,18 +6,20 @@
  * and open the template in the editor.
  */
 
-class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract
+{
 
     protected $_name = 'rep_labcontacts';
     protected $_primary = 'ContactID';
 
-    public function getAllLabcontact($parameters) {
+    public function getAllLabcontact($parameters)
+    {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ContactID','LabID','LabName', 'ContactName', 'ContactEmail', 'ContactTelephone', 'Status');
+        $aColumns = array('ContactID', 'LabID', 'LabName', 'a.ContactName', 'a.ContactEmail', 'a.ContactTelephone', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -95,9 +97,11 @@ class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name), array('c.LabName','a.ContactID','a.ContactName','a.ContactEmail','a.ContactTelephone'))
-                ->join(array('c' => 'rep_labs'), 'c.LabID=a.LabID')
-                ->group("a.LabID");
+        $sQuery = $this->getAdapter()
+            ->select()
+            ->from(array('a' => $this->_name), array('c.LabName', 'a.ContactID', 'a.ContactName', 'a.ContactEmail','a.Status', 'a.ContactTelephone'))
+            ->join(array('c' => 'rep_labs'), 'c.LabID=a.LabID',array('LabName'))
+            ->group("a.LabID");
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -152,27 +156,32 @@ class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract {
 
         echo json_encode($output);
     }
-    
-    public function getProviders() {
+
+    public function getProviders()
+    {
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $pname = $auth->getIdentity()->ProviderName;
         }
-        if($pname){
-        return $this->fetchAll($this->select()->where("Status='active'")->where("ProviderName='$pname'")->order("ProviderName"));
-        }else{
+        if ($pname) {
+            return $this->fetchAll($this->select()->where("Status='active'")->where("ProviderName='$pname'")->order("ProviderName"));
+        } else {
             return $this->fetchAll($this->select()->where("Status='active'")->order("ProviderName"));
         }
     }
-    public function getProvider($partSysId) {
+
+    public function getProvider($partSysId)
+    {
         return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
-                                ->joinLeft(array('pr' => 'rep_providerprograms'), 'pr.ProviderID=p.ProviderID')
-                                ->joinLeft(array('rp' => 'rep_programs'), 'rp.ProgramID=pr.ProgramID', array('ProgramID' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT rp.Description SEPARATOR ', ')")))
-                                ->where("p.ProviderID = ?", $partSysId)
-                                ->group('p.ProviderID'));
-        
+            ->joinLeft(array('pr' => 'rep_providerprograms'), 'pr.ProviderID=p.ProviderID')
+            ->joinLeft(array('rp' => 'rep_programs'), 'rp.ProgramID=pr.ProgramID', array('ProgramID' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT rp.Description SEPARATOR ', ')")))
+            ->where("p.ProviderID = ?", $partSysId)
+            ->group('p.ProviderID'));
+
     }
-    public function addLabcontact($params) {
+
+    public function addLabcontact($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
@@ -186,11 +195,13 @@ class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract {
         return $saved;
     }
 
-    public function getLabcontactDetails($adminId) {
+    public function getLabcontactDetails($adminId)
+    {
         return $this->fetchRow($this->select()->where("ContactID = ? ", $adminId));
     }
 
-    public function updateLabcontact($params) {
+    public function updateLabcontact($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'LabID' => $params['LabID'],
@@ -199,6 +210,7 @@ class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract {
             'ContactEmail' => $params['ContactEmail'],
             'Status' => $params['Status']
         );
+
         return $this->update($data, "ContactID=" . $params['ContactID']);
     }
 
