@@ -150,7 +150,7 @@ class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract {
 
         echo json_encode($output);
     }
-    public function deleteProvider($id)
+    public function deletePeriod($id)
     {
         return $this->delete("ID = ".$id);
     }
