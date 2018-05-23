@@ -202,6 +202,7 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
                 'status' => $params['Status'],
                 'force_password_reset' => 1,
                 'IsProvider' => 2,
+                'County' => null,
                 'ProviderName' => $params['ProviderName'],
                 'created_by' => $authNameSpace->admin_id,
                 'created_on' => new Zend_Db_Expr('now()')
@@ -212,8 +213,9 @@ class Application_Model_DbTable_Providerscontact extends Zend_Db_Table_Abstract 
             }
 
             if ($table->insert($datas)) {
-                $common->sendPasswordEmailToUser($params['ContactEmail'], $password, $params['ContactName']);
+                //$common->sendPasswordEmailToUser($params['ContactEmail'], $password, $params['ContactName']);
             }
+
         }
         return $saved;
     }

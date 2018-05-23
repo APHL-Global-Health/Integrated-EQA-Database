@@ -39,13 +39,24 @@
             <td>Sub Module</td><td><?php if($this->admin['IsVl'] == "2") echo "Repository"?></td>
         </tr>
         <tr>
-            <td>County (<?php echo count($this->admin['County']); ?>)</td><td>
-                <?php foreach($this->admin['County'] as $key=>$value){
-                    ?>
+            <td>
+                County (<?php
+                if (is_array($this->admin['County'])) {echo count($this->admin['County']); }else {echo "0";}?>)
 
+            </td><td>
+                <?php
+                if (is_array($this->admin['County'])) {
+                    foreach ($this->admin['County'] as $key => $value) {
+                        ?>
+
+                        <?php
+                        echo $value['Description'] . "<br>";
+                    }
+                }else {
+                    ?>
+                    NONE
                     <?php
-                    echo $value['Description'] ."<br>";
-                }   ?>
+                }?>
             </td>
         </tr>
         <tr>
