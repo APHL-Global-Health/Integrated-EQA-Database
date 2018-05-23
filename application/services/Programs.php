@@ -11,6 +11,11 @@ class Application_Service_Programs {
 		$adminDb = new Application_Model_DbTable_Programs();
 		return $adminDb->getAllPrograms($params);
 	}
+
+    public function deleteProgramDetails($params){
+        $adminDb = new Application_Model_DbTable_Programs();
+        return $adminDb->deleteProgramDetails($params);
+    }
 	public function addPrograms($params){
 		$adminDb = new Application_Model_DbTable_Programs();
 		return $adminDb->addPrograms($params);		

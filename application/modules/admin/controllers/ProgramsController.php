@@ -46,5 +46,17 @@ class Admin_ProgramsController extends Zend_Controller_Action
             }
         }
     }
+
+    public function deleteAction()
+    {
+        $adminService = new Application_Service_Programs();
+
+            if($this->_hasParam('id')){
+                $adminId = (int)$this->_getParam('id');
+                $this->view->admin = $adminService->deleteProgramDetails($adminId);
+                $this->_redirect("/admin/programs");
+            }
+
+    }
 }
 

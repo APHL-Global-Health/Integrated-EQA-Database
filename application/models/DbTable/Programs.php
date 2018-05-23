@@ -5,11 +5,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rep_programs';
     protected $_primary = 'ProgramID';
-    
+
     public function getAllPrograms($parameters)
     {
 
@@ -17,7 +18,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('ProgramCode','Description','Comments','Status');
+        $aColumns = array('ProgramCode', 'Description', 'Comments', 'Status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -96,7 +97,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
-	
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -142,44 +143,58 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
             $row[] = $aRow['Description'];
             $row[] = $aRow['Comments'];
             $row[] = $aRow['Status'];
-            $row[] = '<a href="/admin/programs/edit/id/' . $aRow['ProgramID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url = '<a href="/admin/programs/edit/id/' . $aRow['ProgramID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url .= '<a href="/admin/programs/delete/id/' . $aRow['ProgramID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> Edit</a>';
 
+            $row[] = $url;
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
-    public function getPrograms(){
-		$sql = $this->select();
-		return $this->fetchAll($sql);
-	}
-    public function addPrograms($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function getPrograms()
+    {
+        $sql = $this->select();
+        return $this->fetchAll($sql);
+    }
+
+    public function deleteProgramDetails($id)
+    {
+        return $this->delete("ProgramId = ".$id);
+    }
+
+    public function addPrograms($params)
+    {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'ProgramCode'=>$params['ProgramCode'],
-                      'Description'=>$params['Description'],
-                      'Comments'=>$params['Comments'],
-                      'Status'=>$params['Status'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
+            'ProgramCode' => $params['ProgramCode'],
+            'Description' => $params['Description'],
+            'Comments' => $params['Comments'],
+            'Status' => $params['Status'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
         return $this->insert($data);
     }
-    public function getProgramDetails($adminId){
-        return $this->fetchRow($this->select()->where("ProgramID = ? ",$adminId));
+
+    public function getProgramDetails($adminId)
+    {
+        return $this->fetchRow($this->select()->where("ProgramID = ? ", $adminId));
     }
-    
-    public function updatePrograms($params){
-	$authNameSpace = new Zend_Session_Namespace('administrators');
+
+    public function updatePrograms($params)
+    {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-                      'ProgramCode'=>$params['ProgramCode'],
-                      'Description'=>$params['Description'],
-                      'Comments'=>$params['Comments'],
-                      'Status'=>$params['Status'],
-		      'CreatedBy' => $authNameSpace->admin_id,
-                      'CreatedDate' => new Zend_Db_Expr('now()')
-                      );
-        return $this->update($data,"ProgramID=".$params['ProgramID']);
+            'ProgramCode' => $params['ProgramCode'],
+            'Description' => $params['Description'],
+            'Comments' => $params['Comments'],
+            'Status' => $params['Status'],
+            'CreatedBy' => $authNameSpace->admin_id,
+            'CreatedDate' => new Zend_Db_Expr('now()')
+        );
+        return $this->update($data, "ProgramID=" . $params['ProgramID']);
     }
 }
 
