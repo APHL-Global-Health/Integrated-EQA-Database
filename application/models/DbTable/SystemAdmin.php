@@ -307,11 +307,13 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
             'phone' => $params['phone'],
             'status' => $params['status'],
             'IsVl' => $params['IsVl'],
-            'County' => $params['County'],
             'AssignModule' => 0,
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')
         );
+        if($_SESSION['loggedInDetails']['IsProvider']==1){
+            $data['County']=  $params['County'];
+        }
         if (isset($params['IsProvider'])) {
             $data['IsProvider'] = $params['IsProvider'];
         }
