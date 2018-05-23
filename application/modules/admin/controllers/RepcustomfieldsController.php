@@ -47,9 +47,19 @@ class Admin_RepcustomfieldsController extends Zend_Controller_Action
 
             $adminService->addFields($params);
             $this->_redirect("/admin/repcustomfields");
+        }else{
+
+            if ($this->_hasParam('id')) {
+                $id = (int)$this->_getParam('id');
+
+                $this->view->customDetails =$adminService->getCustomFieldDetails($id);
+            }
+            $this->view->providerList = $commonService->getproviderList();
+            $this->view->programList = $commonService->getprogramList();
         }
-        $this->view->providerList = $commonService->getproviderList();
-        $this->view->programList = $commonService->getprogramList();
+
+
+
     }
 
     public function deleteAction()

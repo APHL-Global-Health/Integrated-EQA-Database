@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: eanalyze
+-- Host: 127.0.0.1    Database: eanalyze_test
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.19-MariaDB
+-- Server version	5.5.5-10.1.29-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -106,10 +106,22 @@ CREATE TABLE `data_manager` (
   `updated_by` varchar(255) DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
   `IsVl` varchar(45) DEFAULT '0',
+  `IsTester` varchar(45) DEFAULT '0',
+  `resetCode` varchar(105) DEFAULT 'null',
   PRIMARY KEY (`dm_id`),
   UNIQUE KEY `primary_email` (`primary_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='A PT user Table for Data entry or report printing';
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1 COMMENT='A PT user Table for Data entry or report printing';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_manager`
+--
+
+LOCK TABLES `data_manager` WRITE;
+/*!40000 ALTER TABLE `data_manager` DISABLE KEYS */;
+INSERT INTO `data_manager` VALUES (48,'okarmikell@gmail.com','e10adc3949ba59abbe56e057f20f883e','kisii level 5','okari','mikell','','',NULL,NULL,NULL,'0711560619',0,'yes','yes','yes','no','active','2018-04-30 08:46:17','31',NULL,NULL,'2018-05-15 11:47:22','3',NULL,'null'),(49,'osoromichael@gmail.com','e10adc3949ba59abbe56e057f20f883e','Kisii','Michael LM','Osoro','','',NULL,NULL,NULL,'0737560619',0,'yes','yes','yes','no','active','2018-04-30 08:47:50','31',NULL,NULL,'2018-05-11 10:16:04','1',NULL,'null'),(50,'mosoro@abnosoftwares.co.ke','e10adc3949ba59abbe56e057f20f883e','KRH','','','','mosoro@abnosoftwares.co.ke',NULL,NULL,NULL,'',1,'no','no','no','no','active','2018-04-30 15:23:14',NULL,NULL,NULL,NULL,'1','0','null'),(51,'mosoro@gmail.com','29f4f54b8e3e238d4638a7f5808b4a97','test','email','temp','','',NULL,NULL,NULL,'0711560619',1,'no','no',NULL,NULL,'active','2018-05-11 15:48:32','3',NULL,NULL,NULL,'3','0','LjV0QDuAWqHp$QiNm58IR@qXYGhS1gH8A$pjXNDYi0V@g1IW5QumhqqQSLGR');
+/*!40000 ALTER TABLE `data_manager` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `distributions`
@@ -127,9 +139,20 @@ CREATE TABLE `distributions` (
   `created_by` varchar(255) DEFAULT NULL,
   `updated_on` datetime DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL,
+  `readinessdate` date DEFAULT NULL,
   PRIMARY KEY (`distribution_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `distributions`
+--
+
+LOCK TABLES `distributions` WRITE;
+/*!40000 ALTER TABLE `distributions` DISABLE KEYS */;
+INSERT INTO `distributions` VALUES (1,'B/0001/2018','2018-05-01','shipped','2018-05-03 08:44:31','31',NULL,NULL,'2018-05-31'),(2,'B/0002/2018','2018-05-03','pending','2018-05-03 09:03:43','31',NULL,NULL,'2018-05-30'),(3,'B/0003/2018','2018-05-07','created','2018-05-09 12:40:36','31',NULL,NULL,'2018-05-31'),(4,'B/0004/2018','2018-05-08','created','2018-05-09 12:55:49','31',NULL,NULL,'2018-05-16'),(5,'B/0005/2018','2018-05-10','shipped','2018-05-09 12:57:19','31',NULL,NULL,'2018-05-23');
+/*!40000 ALTER TABLE `distributions` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `dts_recommended_testkits`
@@ -190,7 +213,7 @@ CREATE TABLE `enrollments` (
   `enrolled_on` date DEFAULT NULL,
   `enrollment_ended_on` date DEFAULT NULL,
   `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`scheme_id`,`participant_id`),
+  PRIMARY KEY (`participant_id`,`scheme_id`),
   KEY `participant_id` (`participant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -201,7 +224,7 @@ CREATE TABLE `enrollments` (
 
 LOCK TABLES `enrollments` WRITE;
 /*!40000 ALTER TABLE `enrollments` DISABLE KEYS */;
-INSERT INTO `enrollments` VALUES ('eid',1,'2017-02-10',NULL,'enrolled'),('eid',8,'2017-03-19',NULL,'enrolled'),('eid',9,'2017-03-19',NULL,'enrolled'),('vl',1,'2017-02-01',NULL,'enrolled'),('vl',8,'2017-03-19',NULL,'enrolled'),('vl',9,'2017-03-19',NULL,'enrolled');
+INSERT INTO `enrollments` VALUES ('eid',1,'2017-02-10',NULL,'enrolled'),('vl',1,'2017-02-01',NULL,'enrolled'),('eid',8,'2017-03-19',NULL,'enrolled'),('vl',8,'2017-03-19',NULL,'enrolled'),('eid',9,'2017-03-19',NULL,'enrolled'),('vl',9,'2017-03-19',NULL,'enrolled'),('vl',23,'2017-05-23',NULL,'enrolled'),('vl',24,'2017-05-24',NULL,'enrolled'),('vl',28,'2017-05-24',NULL,'enrolled'),('eid',29,'2017-05-24',NULL,'enrolled'),('vl',29,'2017-05-24',NULL,'enrolled'),('eid',30,'2017-05-24',NULL,'enrolled'),('vl',30,'2017-05-24',NULL,'enrolled'),('eid',31,'2017-05-24',NULL,'enrolled'),('vl',31,'2017-05-24',NULL,'enrolled'),('eid',33,'2017-05-24',NULL,'enrolled'),('vl',33,'2017-05-24',NULL,'enrolled'),('eid',36,'2017-06-21',NULL,'enrolled'),('vl',36,'2017-06-21',NULL,'enrolled'),('eid',37,'2017-06-21',NULL,'enrolled'),('vl',37,'2017-06-21',NULL,'enrolled'),('eid',38,'2017-06-21',NULL,'enrolled'),('vl',38,'2017-06-21',NULL,'enrolled'),('eid',39,'2017-06-22',NULL,'enrolled'),('vl',39,'2017-06-22',NULL,'enrolled'),('eid',40,'2017-06-22',NULL,'enrolled'),('eid',41,'2017-10-19',NULL,'enrolled'),('vl',41,'2017-10-19',NULL,'enrolled'),('eid',42,'2017-10-19',NULL,'enrolled'),('vl',42,'2017-10-19',NULL,'enrolled'),('vl',43,'2017-10-23',NULL,'enrolled'),('vl',44,'2017-10-23',NULL,'enrolled'),('eid',45,'2017-10-23',NULL,'enrolled'),('vl',45,'2017-10-23',NULL,'enrolled'),('eid',52,'2017-11-15',NULL,'enrolled'),('vl',52,'2017-11-15',NULL,'enrolled'),('eid',53,'2017-11-15',NULL,'enrolled'),('vl',53,'2017-11-15',NULL,'enrolled'),('eid',54,'2017-11-20',NULL,'enrolled'),('vl',54,'2017-11-20',NULL,'enrolled'),('eid',55,'2017-11-20',NULL,'enrolled'),('vl',55,'2017-11-20',NULL,'enrolled'),('eid',58,'2018-04-30',NULL,'enrolled'),('vl',58,'2018-04-30',NULL,'enrolled');
 /*!40000 ALTER TABLE `enrollments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,8 +256,17 @@ CREATE TABLE `facility` (
   KEY `Department` (`Department`),
   KEY `County` (`County`),
   CONSTRAINT `facility_ibfk_2` FOREIGN KEY (`County`) REFERENCES `rep_counties` (`CountyID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `facility`
+--
+
+LOCK TABLES `facility` WRITE;
+/*!40000 ALTER TABLE `facility` DISABLE KEYS */;
+/*!40000 ALTER TABLE `facility` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `facilityplatform`
@@ -252,8 +284,18 @@ CREATE TABLE `facilityplatform` (
   KEY `facilityplatform_ibfk_1` (`FacilityID`),
   CONSTRAINT `facilityplatform_ibfk_1` FOREIGN KEY (`FacilityID`) REFERENCES `participant` (`participant_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `facilityplatform_ibfk_2` FOREIGN KEY (`PlatformID`) REFERENCES `vl_platform` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `facilityplatform`
+--
+
+LOCK TABLES `facilityplatform` WRITE;
+/*!40000 ALTER TABLE `facilityplatform` DISABLE KEYS */;
+INSERT INTO `facilityplatform` VALUES (24,58,1),(25,58,2);
+/*!40000 ALTER TABLE `facilityplatform` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `facilityscheme`
@@ -271,8 +313,17 @@ CREATE TABLE `facilityscheme` (
   KEY `facilityscheme_ibfk_1` (`FacilityID`),
   CONSTRAINT `facilityscheme_ibfk_1` FOREIGN KEY (`FacilityID`) REFERENCES `participant` (`participant_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `facilityscheme_ibfk_2` FOREIGN KEY (`SchemeID`) REFERENCES `vl_scheme` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `facilityscheme`
+--
+
+LOCK TABLES `facilityscheme` WRITE;
+/*!40000 ALTER TABLE `facilityscheme` DISABLE KEYS */;
+/*!40000 ALTER TABLE `facilityscheme` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `global_config`
@@ -319,6 +370,36 @@ CREATE TABLE `home_banner` (
 LOCK TABLES `home_banner` WRITE;
 /*!40000 ALTER TABLE `home_banner` DISABLE KEYS */;
 /*!40000 ALTER TABLE `home_banner` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `laboratory_peer_means`
+--
+
+DROP TABLE IF EXISTS `laboratory_peer_means`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `laboratory_peer_means` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shipmentId` int(11) DEFAULT NULL,
+  `roundId` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT '1',
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sampleId` int(11) DEFAULT NULL,
+  `score` int(11) DEFAULT NULL,
+  `laboratoryId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `laboratory_peer_means`
+--
+
+LOCK TABLES `laboratory_peer_means` WRITE;
+/*!40000 ALTER TABLE `laboratory_peer_means` DISABLE KEYS */;
+/*!40000 ALTER TABLE `laboratory_peer_means` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -432,16 +513,30 @@ CREATE TABLE `participant` (
   `contact_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `affiliation` varchar(45) DEFAULT NULL,
-  `network_tier` int(11) DEFAULT NULL,
+  `network_tier` varchar(255) DEFAULT NULL,
   `created_on` datetime DEFAULT NULL,
   `created_by` varchar(45) DEFAULT NULL,
   `updated_on` datetime DEFAULT NULL,
   `updated_by` varchar(45) DEFAULT NULL,
   `status` varchar(255) DEFAULT 'inactive',
+  `IsVl` varchar(45) DEFAULT '0',
+  `ModuleID` int(11) DEFAULT '0',
+  `MflCode` varchar(45) DEFAULT NULL,
+  `IsModule` varchar(45) DEFAULT '0',
   PRIMARY KEY (`participant_id`),
   UNIQUE KEY `unique_identifier` (`unique_identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `participant`
+--
+
+LOCK TABLES `participant` WRITE;
+/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
+INSERT INTO `participant` VALUES (57,'00001/57','no','Kisii','Kisii','Chemistry','','Kisii','',116,'','','','',NULL,NULL,NULL,'1','16','Kisii','','','','Kisii ','osoromichael@gmail.com','CDC','1','2018-04-30 09:14:53','vl@gmail.com',NULL,NULL,'active','1',1,'00001','0'),(58,'112354/58','no',NULL,'KISUMU','chemistry','KISUMU','KISUMU','',116,'','','','','','1',NULL,'','17','KISUMU','','','',' ','mosoro@abnosoftwares.co.ke','','3','2018-04-30 15:23:14',NULL,'2018-05-10 12:33:06','vl@gmail.com','active','1',1,'112354','1'),(59,'12541','no','KISII LEVEL 5','KNH','MICROBIOLOGY','175','KISII','',116,'','','','',NULL,NULL,NULL,'','BARINGO','KISII LEVEL 5','','','','KISII LEVEL 5 ','osoromichael@gmail.com',NULL,'level 1','2018-05-14 15:28:16','mb@gmail.com',NULL,NULL,'active','3',1,'12364','0');
+/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `participant_enrolled_programs_map`
@@ -477,9 +572,20 @@ CREATE TABLE `participant_manager_map` (
   `participant_id` int(11) NOT NULL,
   `dm_id` int(11) NOT NULL,
   `status` varchar(45) DEFAULT '1',
+  `Parent_id` int(11) DEFAULT '0',
   PRIMARY KEY (`participant_id`,`dm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `participant_manager_map`
+--
+
+LOCK TABLES `participant_manager_map` WRITE;
+/*!40000 ALTER TABLE `participant_manager_map` DISABLE KEYS */;
+INSERT INTO `participant_manager_map` VALUES (57,48,'1',0),(57,49,'1',0),(57,50,'1',0),(59,48,'1',0);
+/*!40000 ALTER TABLE `participant_manager_map` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `participantassays`
@@ -493,7 +599,7 @@ CREATE TABLE `participantassays` (
   `AssayID` int(11) DEFAULT NULL,
   `Participant` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,6 +608,7 @@ CREATE TABLE `participantassays` (
 
 LOCK TABLES `participantassays` WRITE;
 /*!40000 ALTER TABLE `participantassays` DISABLE KEYS */;
+INSERT INTO `participantassays` VALUES (1,1,37),(2,2,37),(3,3,37),(4,1,36),(5,3,36),(6,1,38),(7,2,38),(8,3,38),(9,1,39),(10,2,39),(11,3,39),(12,1,40),(13,1,41),(14,2,41),(15,3,41),(16,4,41),(17,1,42),(18,2,42),(19,3,42),(20,4,42),(21,2,45),(22,3,45),(23,3,53);
 /*!40000 ALTER TABLE `participantassays` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -521,8 +628,18 @@ CREATE TABLE `partners` (
   `added_on` datetime NOT NULL,
   `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`partner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `partners`
+--
+
+LOCK TABLES `partners` WRITE;
+/*!40000 ALTER TABLE `partners` DISABLE KEYS */;
+INSERT INTO `partners` VALUES (1,'CDC','',1,2,'2017-05-26 10:35:15','active');
+/*!40000 ALTER TABLE `partners` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `publications`
@@ -663,7 +780,7 @@ CREATE TABLE `r_eid_detection_assay` (
   `name` varchar(255) NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -672,7 +789,7 @@ CREATE TABLE `r_eid_detection_assay` (
 
 LOCK TABLES `r_eid_detection_assay` WRITE;
 /*!40000 ALTER TABLE `r_eid_detection_assay` DISABLE KEYS */;
-INSERT INTO `r_eid_detection_assay` VALUES (1,'COBAS Ampliprep/Taqman HIV-1 Qual Test','active'),(2,'Roche - Amplicor HIV-1 Monitor Test','active'),(3,'QIAamp Viral Mini Kit (DNA or RNA)','active'),(4,'Biocentric - Generic','active'),(5,'Chelex','active'),(6,'In House','active'),(7,'Abbott RealTime HIV-1 Qualitative Assay','active');
+INSERT INTO `r_eid_detection_assay` VALUES (1,'COBAS Ampliprep/Taqman HIV-1 Qual Test','active'),(2,'Roche - Amplicor HIV-1 Monitor Test','active'),(3,'QIAamp Viral Mini Kit (DNA or RNA)','active'),(4,'Biocentric - Generic','active'),(5,'Chelex','active'),(6,'In House','active'),(7,'Abbott RealTime HIV-1 Qualitative Assay','active'),(10,'GeneExpert ','active'),(11,'AlereQ ','active');
 /*!40000 ALTER TABLE `r_eid_detection_assay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -712,7 +829,7 @@ CREATE TABLE `r_enrolled_programs` (
   `r_epid` int(11) NOT NULL AUTO_INCREMENT,
   `enrolled_programs` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`r_epid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -721,7 +838,7 @@ CREATE TABLE `r_enrolled_programs` (
 
 LOCK TABLES `r_enrolled_programs` WRITE;
 /*!40000 ALTER TABLE `r_enrolled_programs` DISABLE KEYS */;
-INSERT INTO `r_enrolled_programs` VALUES (1,'PEPFAR RTQI Program'),(2,'PEPFAR');
+INSERT INTO `r_enrolled_programs` VALUES (1,'PEPFAR RTQI Program'),(2,'PEPFAR'),(3,'VL'),(4,'EID'),(5,'BOTH(VL & EID)');
 /*!40000 ALTER TABLE `r_enrolled_programs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -844,7 +961,7 @@ CREATE TABLE `r_possibleresult` (
 
 LOCK TABLES `r_possibleresult` WRITE;
 /*!40000 ALTER TABLE `r_possibleresult` DISABLE KEYS */;
-INSERT INTO `r_possibleresult` VALUES (1,'dts','DTS_TEST','REACTIVE'),(2,'dts','DTS_TEST','NONREACTIVE'),(3,'dts','DTS_TEST','INVALID'),(4,'dts','DTS_FINAL','POSITIVE'),(5,'dts','DTS_FINAL','NEGATIVE'),(6,'dts','DTS_FINAL','INDETERMINATE'),(7,'eid','EID_FINAL','Positive (HIV Detected)'),(8,'eid','EID_FINAL','Negative (HIV Not Detected)'),(9,'eid','EID_FINAL','Equivocal'),(10,'dbs','DBS_FINAL','P'),(11,'dbs','DBS_FINAL','N'),(12,'dts','DTS_FINAL','Not Tested'),(13,'dts','DTS_FINAL','NOT TESTED');
+INSERT INTO `r_possibleresult` VALUES (1,'dts','DTS_TEST','REACTIVE'),(2,'dts','DTS_TEST','NONREACTIVE'),(3,'dts','DTS_TEST','INVALID'),(4,'dts','DTS_FINAL','POSITIVE'),(5,'dts','DTS_FINAL','NEGATIVE'),(6,'dts','DTS_FINAL','INDETERMINATE'),(7,'eid','EID_FINAL','Positive (HIV Detected)'),(8,'eid','EID_FINAL','Negative (HIV Not Detected)'),(10,'dbs','DBS_FINAL','P'),(11,'dbs','DBS_FINAL','N'),(12,'dts','DTS_FINAL','Not Tested'),(13,'dts','DTS_FINAL','NOT TESTED');
 /*!40000 ALTER TABLE `r_possibleresult` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -970,20 +1087,22 @@ DROP TABLE IF EXISTS `readinesschecklist`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `readinesschecklist` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ParticipantID` int(11) DEFAULT NULL,
-  `q1` bit(1) DEFAULT NULL,
-  `q2` bit(1) DEFAULT NULL,
-  `q3` bit(1) DEFAULT NULL,
-  `q4` bit(1) DEFAULT NULL,
-  `q5` bit(1) DEFAULT NULL,
-  `q6` bit(1) DEFAULT NULL,
+  `ParticipantID` int(11) NOT NULL,
+  `q1` varchar(100) DEFAULT NULL,
+  `q2` varchar(100) DEFAULT NULL,
+  `q3` varchar(100) DEFAULT NULL,
+  `q4` text,
+  `q5` varchar(100) DEFAULT NULL,
+  `q6` varchar(100) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL,
   `verdict` varchar(250) DEFAULT NULL,
   `comment` text,
   `added_by` int(11) DEFAULT NULL,
   `added_on` datetime DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `RoundID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UN_KEY` (`ParticipantID`,`RoundID`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -992,6 +1111,7 @@ CREATE TABLE `readinesschecklist` (
 
 LOCK TABLES `readinesschecklist` WRITE;
 /*!40000 ALTER TABLE `readinesschecklist` DISABLE KEYS */;
+INSERT INTO `readinesschecklist` VALUES (12,22,'1','1','1','','1','1','Complete','Approved','none',NULL,'2017-05-26 11:14:47',5),(13,22,'0','0','0','yes','0','0','Approved','Approved',NULL,NULL,'2017-05-26 11:31:17',10),(14,29,'0','0','0','YES','0','0','In review','Approved',NULL,NULL,'2017-05-30 14:08:12',10),(15,31,'yes','yes','yes','n/a','yes','no','Complete','Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support','okay',NULL,'2017-06-27 09:54:42',13),(16,13,'yes','yes','yes','none','yes','yes','Complete','Congratulations, you have been approved for participation in this EQA round. Your panel will be shipped within 2 weeks. We greatly appreciate your continued support','ok',NULL,'2017-10-19 10:25:47',0),(17,13,'Y','y','y','y','y','y','In review',NULL,NULL,NULL,'2017-10-19 10:39:09',15),(18,44,'yes','yes','yes','yes','yes','yes','Complete','We sincerely regret to inform you that you will not be participating in this round of EQA. We hope you will resolve the pending issues and join us again for te next round. We greatly appreciate your continued support.','WRONG',NULL,'2017-10-23 14:05:09',15),(19,52,'yes','yes','yes','yes','yes','yes','In review',NULL,NULL,NULL,'2017-11-16 10:38:47',16),(20,52,'we ready','yes','yes','yes','yes','no','In review',NULL,NULL,NULL,'2017-11-20 09:24:32',17),(21,52,'YES','YES','YES','Yes','YES','YES','Complete','Approved','',NULL,'2018-04-18 12:15:28',22),(22,57,'YES','YES','YES','','YES','YES','Complete','Approved','',NULL,'2018-05-03 15:27:38',2),(23,57,'YES','YES','YES','','YES','YES','Complete','Approved','',NULL,'2018-05-03 15:28:35',1);
 /*!40000 ALTER TABLE `readinesschecklist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1191,7 +1311,7 @@ CREATE TABLE `reference_result_dbs` (
   `sample_id` int(11) NOT NULL,
   `sample_label` varchar(45) DEFAULT NULL,
   `reference_result` varchar(45) DEFAULT NULL,
-  `control` int(11) DEFAULT NULL,
+  `control` int(11) DEFAULT '0',
   `mandatory` int(11) NOT NULL DEFAULT '0',
   `sample_score` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`shipment_id`,`sample_id`)
@@ -1204,6 +1324,7 @@ CREATE TABLE `reference_result_dbs` (
 
 LOCK TABLES `reference_result_dbs` WRITE;
 /*!40000 ALTER TABLE `reference_result_dbs` DISABLE KEYS */;
+INSERT INTO `reference_result_dbs` VALUES (1,1,'S A','10',0,1,1),(2,1,'Test','11',0,1,1),(4,1,'TVLEID','11',0,1,100),(5,1,'TEST','10',0,1,20),(7,1,'Test','10',0,1,100),(21,1,'Test','10',0,1,10),(24,1,'Test +ve','10',0,0,1);
 /*!40000 ALTER TABLE `reference_result_dbs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1219,7 +1340,7 @@ CREATE TABLE `reference_result_dts` (
   `sample_id` int(11) NOT NULL,
   `sample_label` varchar(45) DEFAULT NULL,
   `reference_result` varchar(45) DEFAULT NULL,
-  `control` int(11) DEFAULT NULL,
+  `control` int(11) DEFAULT '0',
   `mandatory` int(11) NOT NULL DEFAULT '0',
   `sample_score` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`shipment_id`,`sample_id`),
@@ -1248,7 +1369,7 @@ CREATE TABLE `reference_result_eid` (
   `sample_id` int(11) NOT NULL,
   `sample_label` varchar(255) DEFAULT NULL,
   `reference_result` varchar(255) DEFAULT NULL,
-  `control` int(11) DEFAULT NULL,
+  `control` int(11) DEFAULT '0',
   `reference_hiv_ct_od` varchar(45) DEFAULT NULL,
   `reference_ic_qs` varchar(45) DEFAULT NULL,
   `mandatory` int(11) NOT NULL DEFAULT '0',
@@ -1264,6 +1385,7 @@ CREATE TABLE `reference_result_eid` (
 
 LOCK TABLES `reference_result_eid` WRITE;
 /*!40000 ALTER TABLE `reference_result_eid` DISABLE KEYS */;
+INSERT INTO `reference_result_eid` VALUES (3,1,'In-House Negative Control','7',0,'1','2',1,1),(3,2,'Positive','8',1,'1','1',0,1),(6,1,'Sample 1','7',1,'Test','1',0,1),(13,1,'Kit Negative Control','7',0,'1','1',0,1),(13,2,'In-House Positive Control	','8',0,'1','1',0,1),(13,3,'Kit Positive Control','8',1,'1','1',0,1),(14,1,'Kit Negative Control','7',1,'1','1',0,1),(14,2,'Kit Positive Control','8',0,'1','1',1,1),(14,3,'PT Provider Negative Control','8',0,'11','1',0,1),(14,4,'PT Provider Positive Control','7',1,'1','1',1,1),(14,5,'In-House Negative Control','8',0,'11','1',0,1),(14,6,'In-House Positive Control	','7',0,'1','1',1,1),(14,7,'Kit Positive Control','7',1,'1','1',0,1),(16,1,'Kit Negative Control','7',0,'10','1',1,1),(16,2,'Kit Positive Control','7',0,'10','2',1,1),(16,3,'PT Provider Negative Control','7',0,'10','3',1,1),(16,4,'Kit Positive Control','8',0,'7','2',0,1),(17,1,'Kit Negative Control','8',0,'1','1',0,1),(17,2,'PT Provider Positive Control','7',0,'1','1',1,1),(17,3,'Kit Positive Control','7',1,'1','1',0,1),(18,1,'Kit Negative Control','8',0,'1','1',1,1),(18,2,'Kit Positive Control','7',0,'1','1',0,1),(18,3,'Kit Control','8',1,'1','1',0,1),(19,1,'Kit Negative Control','7',0,'1','1',1,1),(19,2,'In-House Positive Control	','8',0,'1','1',1,1),(19,3,'Kit Positive Control','8',1,'1','1',0,1),(20,1,'Test','7',0,'1','1',0,1),(20,2,'Test Z','8',0,'1','1',0,1),(23,1,'Kit Negative Control','8',0,'1','1',1,1),(23,2,'Kit Positive Control','7',0,'1','1',1,1),(23,3,'Kit +ve','7',1,'1','1',0,1),(25,1,'Kit Negative Control','8',0,'1','1',1,1),(25,2,'KP','7',1,'2','2',0,1);
 /*!40000 ALTER TABLE `reference_result_eid` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1286,7 +1408,7 @@ CREATE TABLE `reference_result_tb` (
   `probe_b` varchar(255) DEFAULT NULL,
   `spc` varchar(255) DEFAULT NULL,
   `probe_a` varchar(255) DEFAULT NULL,
-  `control` int(11) DEFAULT NULL,
+  `control` int(11) DEFAULT '0',
   `mandatory` int(11) NOT NULL DEFAULT '0',
   `sample_score` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1313,7 +1435,7 @@ CREATE TABLE `reference_result_vl` (
   `sample_id` int(11) NOT NULL,
   `sample_label` varchar(255) DEFAULT NULL,
   `reference_result` varchar(45) DEFAULT NULL,
-  `control` int(11) DEFAULT NULL,
+  `control` int(11) DEFAULT '0',
   `mandatory` int(11) NOT NULL DEFAULT '0',
   `sample_score` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`shipment_id`,`sample_id`),
@@ -1327,7 +1449,7 @@ CREATE TABLE `reference_result_vl` (
 
 LOCK TABLES `reference_result_vl` WRITE;
 /*!40000 ALTER TABLE `reference_result_vl` DISABLE KEYS */;
-INSERT INTO `reference_result_vl` VALUES (1,1,'A',NULL,1,1,1),(1,2,'B',NULL,1,1,1),(1,3,'C',NULL,1,1,1),(2,1,'A',NULL,0,1,1),(2,2,'B',NULL,0,1,1),(2,3,'C',NULL,0,1,1),(3,1,'A',NULL,0,1,1),(3,2,'B',NULL,0,1,1),(3,3,'C',NULL,0,1,1),(3,4,'D',NULL,0,1,1);
+INSERT INTO `reference_result_vl` VALUES (5,1,'Negative Control',NULL,0,1,1),(5,2,'Low Positive Control',NULL,0,1,1),(5,3,'High Positive Control',NULL,0,1,1),(15,1,'Negative Control',NULL,0,0,1),(15,2,'Low Positive Control',NULL,0,1,1),(15,3,'High Positive Control',NULL,0,1,1),(15,4,'unspecifie',NULL,0,1,1);
 /*!40000 ALTER TABLE `reference_result_vl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1376,7 +1498,7 @@ CREATE TABLE `reference_vl_calculation` (
 
 LOCK TABLES `reference_vl_calculation` WRITE;
 /*!40000 ALTER TABLE `reference_vl_calculation` DISABLE KEYS */;
-INSERT INTO `reference_vl_calculation` VALUES (1,1,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-03-20 08:55:13',NULL,'calculated'),(1,2,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-03-20 08:55:13',NULL,'calculated'),(1,3,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-03-20 08:55:13',NULL,'calculated'),(2,1,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(2,2,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(2,3,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(3,1,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(3,2,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(3,3,1,2.0000000000,NULL,NULL,NULL,NULL,1.0000000000,0.0000000000,NULL,0.5000000000,1.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated');
+INSERT INTO `reference_vl_calculation` VALUES (5,1,1,NULL,NULL,NULL,NULL,NULL,0.6000000000,NULL,NULL,0.5000000000,0.7000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(9,1,1,NULL,NULL,NULL,NULL,NULL,6.5000000000,5.5000000000,0.0000000000,6.0000000000,7.0000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,1,3,NULL,NULL,NULL,NULL,NULL,2.0000000000,NULL,NULL,1.5000000000,2.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,2,3,NULL,NULL,NULL,NULL,NULL,3.0000000000,NULL,NULL,2.5000000000,3.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,3,3,NULL,NULL,NULL,NULL,NULL,0.6000000000,NULL,NULL,0.5000000000,0.7000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,4,4,NULL,NULL,NULL,NULL,NULL,8.0000000000,NULL,NULL,7.0000000000,9.0000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated');
 /*!40000 ALTER TABLE `reference_vl_calculation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1402,7 +1524,7 @@ CREATE TABLE `reference_vl_methods` (
 
 LOCK TABLES `reference_vl_methods` WRITE;
 /*!40000 ALTER TABLE `reference_vl_methods` DISABLE KEYS */;
-INSERT INTO `reference_vl_methods` VALUES (1,1,1,'12'),(1,2,1,'10'),(1,3,1,'14'),(2,1,1,'3'),(2,1,2,'3'),(2,2,1,'4'),(2,2,2,'4'),(2,3,1,'5'),(2,3,2,'5'),(3,1,1,'7'),(3,2,2,'7'),(3,3,1,'6'),(3,4,2,'6');
+INSERT INTO `reference_vl_methods` VALUES (2,1,1,'3'),(2,1,2,'3'),(2,2,1,'4'),(2,2,2,'4'),(2,3,1,'5'),(2,3,2,'5'),(3,1,1,'7'),(3,2,2,'7'),(3,3,1,'6'),(3,4,2,'6'),(5,1,1,'0.7'),(8,1,1,'1'),(9,1,1,'1.1'),(9,2,1,'10'),(15,1,3,'1'),(15,2,3,'2'),(15,3,3,'4'),(15,4,4,'1');
 /*!40000 ALTER TABLE `reference_vl_methods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1433,6 +1555,39 @@ LOCK TABLES `rep_analytes` WRITE;
 /*!40000 ALTER TABLE `rep_analytes` DISABLE KEYS */;
 INSERT INTO `rep_analytes` VALUES (1,'Malaria Parasite Detection and Identification',1,1,NULL,'2016-11-29 14:58:18',NULL);
 /*!40000 ALTER TABLE `rep_analytes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rep_corrective_action`
+--
+
+DROP TABLE IF EXISTS `rep_corrective_action`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rep_corrective_action` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ProviderID` int(11) DEFAULT NULL,
+  `ProgramID` int(11) DEFAULT NULL,
+  `RoundID` int(11) DEFAULT NULL,
+  `actionDone` text,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `participant_id` int(11) DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `mflCode` varchar(45) DEFAULT NULL,
+  `datePerformed` datetime DEFAULT NULL,
+  `elementCaptured` text,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_corrective_action`
+--
+
+LOCK TABLES `rep_corrective_action` WRITE;
+/*!40000 ALTER TABLE `rep_corrective_action` DISABLE KEYS */;
+INSERT INTO `rep_corrective_action` VALUES (11,1,1,1,'Action','2018-04-19 15:55:36',NULL,2,'45212','2018-04-11 00:00:00','n/a\r\n                    ');
+/*!40000 ALTER TABLE `rep_corrective_action` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1482,8 +1637,18 @@ CREATE TABLE `rep_customfields` (
   `CreatedBy` varchar(20) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_customfields`
+--
+
+LOCK TABLES `rep_customfields` WRITE;
+/*!40000 ALTER TABLE `rep_customfields` DISABLE KEYS */;
+INSERT INTO `rep_customfields` VALUES (3,'m','MALARIA','TestCase','Test Case','NULL','varchar',100,'2','0000-00-00 00:00:00'),(4,'m','MALARIA','TestCase','TestCase','NULL','varchar',100,'2','0000-00-00 00:00:00');
+/*!40000 ALTER TABLE `rep_customfields` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_failreasons`
@@ -1504,6 +1669,16 @@ CREATE TABLE `rep_failreasons` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `rep_failreasons`
+--
+
+LOCK TABLES `rep_failreasons` WRITE;
+/*!40000 ALTER TABLE `rep_failreasons` DISABLE KEYS */;
+INSERT INTO `rep_failreasons` VALUES (1,'weather','MALARIA','m','2','2018-05-23 10:12:47');
+/*!40000 ALTER TABLE `rep_failreasons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `rep_grading`
 --
 
@@ -1518,8 +1693,17 @@ CREATE TABLE `rep_grading` (
   `CreatedDate` datetime DEFAULT NULL,
   `CreatedBy` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_grading`
+--
+
+LOCK TABLES `rep_grading` WRITE;
+/*!40000 ALTER TABLE `rep_grading` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_grading` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_labcontacts`
@@ -1538,8 +1722,18 @@ CREATE TABLE `rep_labcontacts` (
   PRIMARY KEY (`ContactID`),
   KEY `LabID` (`LabID`),
   CONSTRAINT `rep_labcontacts_ibfk_1` FOREIGN KEY (`LabID`) REFERENCES `rep_labs` (`LabID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_labcontacts`
+--
+
+LOCK TABLES `rep_labcontacts` WRITE;
+/*!40000 ALTER TABLE `rep_labcontacts` DISABLE KEYS */;
+INSERT INTO `rep_labcontacts` VALUES (1,1,'Osoro','osoromichael@gmail.com','0711560619','active'),(2,1,'Osoro','osoromichael@gmail.com','','active'),(3,2,'omolo bondo','omolo@gmail.com','','active');
+/*!40000 ALTER TABLE `rep_labcontacts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_labs`
@@ -1562,8 +1756,18 @@ CREATE TABLE `rep_labs` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`LabID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_labs`
+--
+
+LOCK TABLES `rep_labs` WRITE;
+/*!40000 ALTER TABLE `rep_labs` DISABLE KEYS */;
+INSERT INTO `rep_labs` VALUES (1,'Kenya',14,'Kisii',40200,'0711560619',NULL,NULL,NULL,'active','2','2018-05-16 10:52:47'),(2,'Kisii',9,'Kisii',120,'560619',NULL,NULL,NULL,'active','2','2017-11-09 16:37:09');
+/*!40000 ALTER TABLE `rep_labs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_programs`
@@ -1581,8 +1785,18 @@ CREATE TABLE `rep_programs` (
   `CreatedDate` datetime DEFAULT NULL,
   `Comments` text,
   PRIMARY KEY (`ProgramID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_programs`
+--
+
+LOCK TABLES `rep_programs` WRITE;
+/*!40000 ALTER TABLE `rep_programs` DISABLE KEYS */;
+INSERT INTO `rep_programs` VALUES (1,'001','MALARIA','active','2','2017-05-23 06:15:31',''),(3,'Test 001','tes','active','2','2017-11-09 16:17:28','');
+/*!40000 ALTER TABLE `rep_programs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providercontacts`
@@ -1602,8 +1816,17 @@ CREATE TABLE `rep_providercontacts` (
   UNIQUE KEY `UN_KEY_EMAIL` (`ContactEmail`),
   KEY `ProviderID` (`ProviderID`),
   CONSTRAINT `rep_providercontacts_ibfk_1` FOREIGN KEY (`ProviderID`) REFERENCES `rep_providers` (`ProviderID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providercontacts`
+--
+
+LOCK TABLES `rep_providercontacts` WRITE;
+/*!40000 ALTER TABLE `rep_providercontacts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_providercontacts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerfiles`
@@ -1624,8 +1847,18 @@ CREATE TABLE `rep_providerfiles` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providerfiles`
+--
+
+LOCK TABLES `rep_providerfiles` WRITE;
+/*!40000 ALTER TABLE `rep_providerfiles` DISABLE KEYS */;
+INSERT INTO `rep_providerfiles` VALUES (1,'2','1','1','ChromeSetup (2).exe','application/x-dosexec',1130328,'C:\\xampp\\htdocs\\EPTR\\public\\files\\ChromeSetup (2).exe','2','2017-11-10 13:26:28'),(2,'1','1','1','SMA_0056_15.pdf','application/pdf',19677,'C:\\xampp\\htdocs\\EPTR\\public\\files\\SMA_0056_15.pdf','2','2017-11-10 13:30:25');
+/*!40000 ALTER TABLE `rep_providerfiles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerlabs`
@@ -1641,8 +1874,17 @@ CREATE TABLE `rep_providerlabs` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providerlabs`
+--
+
+LOCK TABLES `rep_providerlabs` WRITE;
+/*!40000 ALTER TABLE `rep_providerlabs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_providerlabs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerprograms`
@@ -1658,8 +1900,17 @@ CREATE TABLE `rep_providerprograms` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providerprograms`
+--
+
+LOCK TABLES `rep_providerprograms` WRITE;
+/*!40000 ALTER TABLE `rep_providerprograms` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_providerprograms` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerresultcodes`
@@ -1675,8 +1926,17 @@ CREATE TABLE `rep_providerresultcodes` (
   `CreatedBy` varchar(100) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providerresultcodes`
+--
+
+LOCK TABLES `rep_providerresultcodes` WRITE;
+/*!40000 ALTER TABLE `rep_providerresultcodes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_providerresultcodes` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providerrounds`
@@ -1695,8 +1955,18 @@ CREATE TABLE `rep_providerrounds` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providerrounds`
+--
+
+LOCK TABLES `rep_providerrounds` WRITE;
+/*!40000 ALTER TABLE `rep_providerrounds` DISABLE KEYS */;
+INSERT INTO `rep_providerrounds` VALUES (1,'Test','m',10,'2017-11-10','2017-11-30','2','2017-11-10 10:46:53');
+/*!40000 ALTER TABLE `rep_providerrounds` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providers`
@@ -1719,8 +1989,18 @@ CREATE TABLE `rep_providers` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ProviderID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providers`
+--
+
+LOCK TABLES `rep_providers` WRITE;
+/*!40000 ALTER TABLE `rep_providers` DISABLE KEYS */;
+INSERT INTO `rep_providers` VALUES (1,'m','osoromichael@gmail.com','m','m',0,NULL,NULL,NULL,'active','2','2017-11-09 16:47:45'),(2,'m','osoromichael@gmail.com','m','m',0,NULL,NULL,NULL,'active','2','2017-11-09 16:48:03');
+/*!40000 ALTER TABLE `rep_providers` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_providersamples`
@@ -1739,8 +2019,17 @@ CREATE TABLE `rep_providersamples` (
   `CreatedBy` varchar(100) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_providersamples`
+--
+
+LOCK TABLES `rep_providersamples` WRITE;
+/*!40000 ALTER TABLE `rep_providersamples` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_providersamples` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_repository`
@@ -1780,6 +2069,7 @@ CREATE TABLE `rep_repository` (
   `AdminApproved` varchar(45) DEFAULT '0',
   `lastUpdatePerson` varchar(45) DEFAULT NULL,
   `EventDate` date DEFAULT NULL,
+  `uploadMessage` text COMMENT 'Upload Message(system generated)',
   PRIMARY KEY (`ImpID`),
   KEY `rep_repository_ibfk_1` (`ProviderID`),
   KEY `LabID` (`LabID`),
@@ -1788,49 +2078,18 @@ CREATE TABLE `rep_repository` (
   KEY `AnalyteID` (`AnalyteID`),
   KEY `Grade` (`Grade`),
   KEY `TestKitID` (`TestKitID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1843 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `rep_repository`
+--
+
+LOCK TABLES `rep_repository` WRITE;
+/*!40000 ALTER TABLE `rep_repository` DISABLE KEYS */;
+INSERT INTO `rep_repository` VALUES (61,'m','Coast Provincial General Hospital','Test','MALARIA','2018-05-16','A','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22484','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(62,'m','Coast Provincial General Hospital','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22483','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(63,'m','Coast Provincial General Hospital','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22482','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(64,'m','Coast Provincial General Hospital','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22481','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(65,'m','Coast Provincial General Hospital','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium ovale','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22480','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(66,'m','Kangemi Health Center','Test','MALARIA','2018-05-16','A','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22478','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(67,'m','Kangemi Health Center','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22477','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(68,'m','Kangemi Health Center','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22476','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(69,'m','Kangemi Health Center','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22475','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(70,'m','Kangemi Health Center','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium ovale','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22473','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(71,'m','Kenyatta National Hospital','Test','MALARIA','2018-05-16','5','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium malariae','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22472','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(72,'m','Kenyatta National Hospital','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22471','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(73,'m','Kenyatta National Hospital','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum, Plasmodium malariae','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22464','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(74,'m','Kenyatta National Hospital','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22448','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(75,'m','Kenyatta National Hospital','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium ovale, Plasmodium vivax','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22447','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(76,'m','Kenyatta National Hospital- BTU','Test','MALARIA','2018-05-16','A','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22446','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(77,'m','Kenyatta National Hospital- BTU','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22445','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(78,'m','Kenyatta National Hospital- BTU','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium vivax','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22444','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(79,'m','Kenyatta National Hospital- BTU','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium vivax','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22443','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(80,'m','Kenyatta National Hospital- BTU','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium ovale','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22442','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(81,'m','Gilgil Sub-District Hospital','Test','MALARIA','2018-05-16','A','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22440','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(82,'m','Gilgil Sub-District Hospital','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22412','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(83,'m','Gilgil Sub-District Hospital','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22410','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(84,'m','Gilgil Sub-District Hospital','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22408','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(85,'m','Gilgil Sub-District Hospital','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium malariae','OK','NOT ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22407','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(86,'m','Kangema Sub County Hospital','Test','MALARIA','2018-05-16','A','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium malariae','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22406','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(87,'m','Kangema Sub County Hospital','Test','MALARIA','2018-05-16','B','Malaria Parasite Detection and Identification ',NULL,NULL,'No Parasite Seen','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22392','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(88,'m','Kangema Sub County Hospital','Test','MALARIA','2018-05-16','C','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum, Plasmodium malariae','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22383','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(89,'m','Kangema Sub County Hospital','Test','MALARIA','2018-05-16','D','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium falciparum','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22381','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(90,'m','Kangema Sub County Hospital','Test','MALARIA','2018-05-16','E','Malaria Parasite Detection and Identification ',NULL,NULL,'Plasmodium ovale','OK','ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'22380','1','3uGmF7mxVc','1','0','2','2017-11-30','Rejected By admin'),(91,'m','Kiambu County Referal Hospital','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'10539','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data'),(92,'m','Kayole II Sub District Hospital','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'13016','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data'),(93,'m','Makindu SubCounty Hospital','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'UNACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'12455','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data'),(94,'m','Kisumu East District Hospital','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'13704','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data'),(95,'m','Gesusu SDH','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'UNACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'13564','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data'),(96,'m','Alupe Sub County Hospital','Test','MALARIA','2018-05-23',NULL,NULL,NULL,NULL,NULL,NULL,'ACCEPTABLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'15795','1','tCNaEaeHo7','0','0',NULL,'2017-11-30','Valid data');
 /*!40000 ALTER TABLE `rep_repository` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateTime_valid_rep` BEFORE INSERT ON `rep_repository` FOR EACH ROW BEGIN
-
-declare mflcount int default 0;
-declare EventDate date default null;
-
-declare EventDateCount int default 0;
-
-select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
-select EndDate into EventDate from rep_providerrounds where PeriodDescription = new.RoundID;
-
-
-  set new.EventDate=EventDate ;
-
-
-if mflcount=0 then
-  set new.valid=0 ;
-end if;
-
-
-if ( isnull(new.ReleaseDate) ) then
- set new.ReleaseDate=curdate();
-end if;
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `rep_testkits`
@@ -1847,8 +2106,17 @@ CREATE TABLE `rep_testkits` (
   `CreatedBy` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_testkits`
+--
+
+LOCK TABLES `rep_testkits` WRITE;
+/*!40000 ALTER TABLE `rep_testkits` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_testkits` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `report_config`
@@ -1917,6 +2185,7 @@ CREATE TABLE `response_result_dbs` (
   `created_on` datetime DEFAULT NULL,
   `updated_by` varchar(45) DEFAULT NULL,
   `updated_on` datetime DEFAULT NULL,
+  `mandatory` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`shipment_map_id`,`sample_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1927,6 +2196,7 @@ CREATE TABLE `response_result_dbs` (
 
 LOCK TABLES `response_result_dbs` WRITE;
 /*!40000 ALTER TABLE `response_result_dbs` DISABLE KEYS */;
+INSERT INTO `response_result_dbs` VALUES (1,1,2,'01','2018-05-04','2','2',1,'02','2018-05-04','2','2',3,'03','2018-05-04','2','2',4,'04','2018-05-04','1','1','1','1','1','0','1','0','1',10,NULL,'49','2018-05-04 16:43:09',NULL,NULL,NULL),(6,1,1,'1','2018-05-10','2','2',2,'2','2018-05-10','2','2',1,'3','2018-05-10','2','2',3,'4','2018-05-10','1','1','1','1','1','1','1','1','1',10,NULL,'49','2018-05-10 15:17:12',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `response_result_dbs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2001,6 +2271,7 @@ CREATE TABLE `response_result_eid` (
 
 LOCK TABLES `response_result_eid` WRITE;
 /*!40000 ALTER TABLE `response_result_eid` DISABLE KEYS */;
+INSERT INTO `response_result_eid` VALUES (7,'1','7','1','1',NULL,'49','2018-05-10 15:15:23',NULL,NULL),(7,'2','7','1','1',NULL,'49','2018-05-10 15:15:23',NULL,NULL),(98,'1','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'2','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'3','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'4','8','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(166,'1','7','1','1',NULL,'27','2017-11-20 11:52:52',NULL,NULL),(166,'2','8','1','1',NULL,'27','2017-11-20 11:52:52',NULL,NULL),(166,'3','7','1','1',NULL,'27','2017-11-20 11:52:53',NULL,NULL),(192,'1','7','1','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19'),(192,'2','8','11','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19'),(192,'3','7','1','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19');
 /*!40000 ALTER TABLE `response_result_eid` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2063,6 +2334,15 @@ CREATE TABLE `response_result_vl` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `response_result_vl`
+--
+
+LOCK TABLES `response_result_vl` WRITE;
+/*!40000 ALTER TABLE `response_result_vl` DISABLE KEYS */;
+/*!40000 ALTER TABLE `response_result_vl` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `response_vl_not_tested_reason`
 --
 
@@ -2111,7 +2391,7 @@ CREATE TABLE `scheme_list` (
 
 LOCK TABLES `scheme_list` WRITE;
 /*!40000 ALTER TABLE `scheme_list` DISABLE KEYS */;
-INSERT INTO `scheme_list` VALUES ('dbs','Dried Blood Spot - HIV Serology','response_result_dbs','reference_result_dbs',NULL,'Inactive'),('dts','Dried Tube Specimen - HIV Serology','response_result_dts','reference_result_dts',NULL,'Inactive'),('eid','Dried Blood Spot - Early Infant Diagnosis','response_result_eid','reference_result_eid',NULL,'active'),('tb','Dried Tube Specimen - Tuberculosis','response_result_tb','reference_result_tb',NULL,'Inactive'),('vl','Dried Tube Specimen - HIV Viral Load','response_result_vl','reference_result_vl',NULL,'active');
+INSERT INTO `scheme_list` VALUES ('dbs','Dried Blood Spot -  HIV Viral Load','response_result_dbs','reference_result_dbs',NULL,'active'),('dts','Dried Tube Specimen - HIV Serology','response_result_dts','reference_result_dts',NULL,'Inactive'),('eid','Dried Blood Spot - Early Infant Diagnosis','response_result_eid','reference_result_eid',NULL,'active'),('tb','Dried Tube Specimen - Tuberculosis','response_result_tb','reference_result_tb',NULL,'Inactive'),('vl','Dried Tube Specimen - HIV Viral Load','response_result_vl','reference_result_vl',NULL,'active');
 /*!40000 ALTER TABLE `scheme_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2140,13 +2420,24 @@ CREATE TABLE `shipment` (
   `updated_by_admin` varchar(255) DEFAULT NULL,
   `updated_on_admin` datetime DEFAULT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'pending',
+  `testingInstructions` text,
   PRIMARY KEY (`shipment_id`),
   KEY `scheme_type` (`scheme_type`),
   KEY `distribution_id` (`distribution_id`),
   CONSTRAINT `shipment_ibfk_1` FOREIGN KEY (`scheme_type`) REFERENCES `scheme_list` (`scheme_id`),
   CONSTRAINT `shipment_ibfk_2` FOREIGN KEY (`distribution_id`) REFERENCES `distributions` (`distribution_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shipment`
+--
+
+LOCK TABLES `shipment` WRITE;
+/*!40000 ALTER TABLE `shipment` DISABLE KEYS */;
+INSERT INTO `shipment` VALUES (1,'DBS0518-1','dbs','2018-05-03','2018-05-24',2,1,0,'on',1,'0',NULL,'vl@gmail.com','2018-05-03 15:43:49','vl@gmail.com','2018-05-04 17:17:18','finalized','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(2,'DBS0518-2','dbs','2018-05-01','2018-05-30',1,1,0,'on',NULL,'0',NULL,'vl@gmail.com','2018-05-09 10:34:12',NULL,NULL,'shipped','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(3,'EID0518-1','eid','2018-05-10','2018-05-31',5,1,1,'on',100,'0',NULL,'vl@gmail.com','2018-05-10 12:29:28',NULL,NULL,'evaluated','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(4,'DBS0518-3','dbs','2018-05-10','2018-05-31',5,1,0,'on',100,'0',NULL,'vl@gmail.com','2018-05-10 12:35:28','vl@gmail.com','2018-05-11 09:25:17','finalized','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(5,'VL0518-1','vl','2018-05-03','2018-05-30',2,3,0,'off',NULL,'0',NULL,'vl@gmail.com','2018-05-11 08:59:04',NULL,NULL,'pending','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(6,'EID0518-2','eid','2018-05-03','2018-05-31',2,0,1,'off',NULL,'0',NULL,'vl@gmail.com','2018-05-11 11:56:11',NULL,NULL,'pending','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n'),(7,'DBS0518-4','dbs','2018-05-03','2018-05-31',2,1,0,'off',NULL,'0',NULL,'vl@gmail.com','2018-05-11 12:13:02',NULL,NULL,'pending','Module	Request	ABNStatus	ABNComment	\nMicroBiology	\"Update Reports \n\"	done	Some Reports are available but clarifications are needed for the ones that need to be updated.	\nMicroBiology	Graphs 	done	Has been clarified,awaiting development 	\nRepository	\"Which users can enter a corrective action?\nCounty Medical Lab Coordinators for labs in their counties\nPartners for labs in their areas of jurisdiction\"	Done	Clarification is needed on at what point this is to be undertaken.	\nRepository	\"What elements are captured for each corrective action?\nWhat action was performed by the reporting party?\n• What action was performed by the lab?\n• When were the actions performed?\n\"	 Done	Clarification is needed on at what point this is to be undertaken.	\"capture provider,event,program then then the corrective action \n\n\n\n\"\nEID/VL	\"Development of the user interface and improvement of the user experience\na. The homepage\nb. Internal pages outlook\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Readiness checklist questions requiring a yes/no answer should have check\nboxes as opposed to writing in text. \n\"	Done	Ongoing, scheduled for release in Week 16 2018	\nEID/VL	\"Kindly refer to the template given for the notification emails. This notification for\nthe shipment is not clear and still has a typographical error. Kindly correct the\ncontact point address because we deal with our participants at the lab level.\n\"	 Done	Specification on the specific email type affected and whether its on all emails (not specified on template) so that we conclusively resolve it.	\nEID/VL	\"The panel specified is not available. Please fix this issue with the A, B and C as it\nwould be a mismatch in details and all participants would select PT test not\nperformed\n\"	Done	They are to be deleted from the existing tables	\"Samples AB,C should be removed\n from the database\"\nEID/VL	\"Response evaluation screen has a notice at the bottom of the screen. What\ndoes it mean? The documentation to be uploaded is for verification purposes\nand is not in itself graded\n\"	done	Ongoing	\nEID/VL	\"Under reports, the page looks a bit squeezed. Please create more space\nbetween lines of text and have the title sit in its own line so it is not broken. The\nexcel buttons are also not responsive\n\"	Done	Scheduled for Development	\nEID/VL	Where is the CAPA form to fill in for the unsatisfactory results?	Done		\nEID/VL	can not download result  form for individual	DOne		\nEID/VL	\"Reference results mean and SD should be automatically calculated by the\nsystem from data input and not typed in\n\"	Not Done	Was initially done, but a change has been requested that requires us to redo. Scheduled for developed.	\nEID/VL	\"Instructions for filling in reference results should be given just as for participant\nsubmissions\n\"	Done	Ongoing, scheduled for release in Week 16 2018	\n');
+/*!40000 ALTER TABLE `shipment` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `shipment_participant_map`
@@ -2199,14 +2490,25 @@ CREATE TABLE `shipment_participant_map` (
   `qc_done_by` varchar(255) DEFAULT NULL,
   `qc_created_on` datetime DEFAULT NULL,
   `mode_id` int(11) DEFAULT NULL,
+  `sample_conditions` text,
   PRIMARY KEY (`map_id`),
   UNIQUE KEY `shipment_id_2` (`shipment_id`,`participant_id`),
   KEY `shipment_id` (`shipment_id`),
   KEY `participant_id` (`participant_id`),
   CONSTRAINT `shipment_participant_map_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`shipment_id`),
   CONSTRAINT `shipment_participant_map_ibfk_2` FOREIGN KEY (`participant_id`) REFERENCES `participant` (`participant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COMMENT='Shipment for DTS Samples';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Shipment for DTS Samples';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shipment_participant_map`
+--
+
+LOCK TABLES `shipment_participant_map` WRITE;
+/*!40000 ALTER TABLE `shipment_participant_map` DISABLE KEYS */;
+INSERT INTO `shipment_participant_map` VALUES (1,1,57,'{\"sample_rehydration_date\":\"2018-05-04\"}','19111190',1.00,0.00,'2018-05-04',NULL,NULL,NULL,NULL,'2018-05-04','2018-05-04 00:00:00','Osoro','yes',NULL,1,'[]',0,NULL,'no','no','',NULL,NULL,'2018-05-04 13:07:40',NULL,NULL,'2018-05-04 16:43:09','49','31','2018-05-04 16:43:09',NULL,NULL,0,NULL,0,'',NULL,NULL,NULL,1,NULL),(5,2,57,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2018-05-09 15:51:37',NULL,NULL,NULL,NULL,'31',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL,NULL),(6,4,57,'{\"sample_rehydration_date\":\"2018-05-10\"}','19111190',0.00,0.00,'2018-05-10',NULL,NULL,NULL,NULL,'2018-05-10','2018-05-10 00:00:00','','no',NULL,2,'[{\"warning\":\"Sample <strong>TVLEID<\\/strong> out of range\"},{\"warning\":\"<strong>EIA-01 BioRad Genetic Systems HIV 1\\/2 plus O<\\/strong> repeated as EIA 1 and EIA 3\"},{\"warning\":\"Participant did not meet the score criteria (Participant Score - <strong>0<\\/strong> and Required Score - <strong>100<\\/strong>)\"}]',0,NULL,'no','no','',NULL,NULL,'2018-05-10 12:47:49',NULL,NULL,'2018-05-10 15:17:12','49','31','2018-05-10 15:17:12','yes',NULL,0,NULL,0,'',NULL,NULL,NULL,1,NULL),(7,3,57,'{\"sample_rehydration_date\":\"2018-05-10\",\"extraction_assay\":\"4\",\"detection_assay\":\"10\",\"extraction_assay_expiry_date\":\"2018-05-10\",\"detection_assay_expiry_date\":\"2018-05-11\",\"extraction_assay_lot_no\":\"test\",\"detection_assay_lot_no\":\"Test\",\"uploaded_file\":\"\"}','19111190',100.00,0.00,'2018-05-10',NULL,NULL,NULL,NULL,'2018-05-10','2018-05-10 00:00:00','','no',NULL,1,'[{\"warning\":\"Control\\/Sample <strong>Positive<\\/strong> out of range\"}]',0,NULL,'no','no','',NULL,NULL,'2018-05-10 13:03:39',NULL,NULL,'2018-05-10 15:15:23','49','31','2018-05-10 15:15:23','yes',NULL,0,NULL,0,'',NULL,NULL,NULL,1,'                                                      ');
+/*!40000 ALTER TABLE `shipment_participant_map` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `system_admin`
@@ -2233,10 +2535,10 @@ CREATE TABLE `system_admin` (
   `IsProvider` varchar(11) DEFAULT '0',
   `ProviderName` varchar(100) DEFAULT NULL,
   `AssignModule` int(11) DEFAULT '0',
-  `County` varchar(45) DEFAULT NULL,
+  `County` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `UN_KEY_EMAIL` (`primary_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2245,8 +2547,7 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org',md5('system@17'),'','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','mapesa@gmail.com',md5('repository@17'),'','0788492586',1,'active','2017-04-05 12:29:55','2','2017-04-05 14:33:15','17',2,'1','',0,'30');
-
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org','e10adc3949ba59abbe56e057f20f883e','','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','rm@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',1,'active','2017-04-05 12:29:55','2','2017-06-08 14:37:10','2',2,'1','',0,'30'),(3,'micro','Administrator','mb@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-05 12:29:55','2','2017-06-08 14:37:10','2',3,'1','',0,'30'),(31,'VL/EID','Administrator','vl@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-01 10:27:00','1','2018-03-13 10:48:38','31',1,'0','',0,NULL),(32,'MICRO','USER','micro@nphls.or.ke','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-01 10:27:00','1','2017-04-24 08:35:24','32',3,'0','',0,NULL),(34,'Email Test','Test','testemail@gmail.com','677d4beebc4bf16513173a4bbd1e9bf7','','0711560619',1,'active','2018-04-11 16:21:00','3',NULL,NULL,3,NULL,NULL,0,NULL),(35,'mail','tester','mailtester@gmail.com','f0ce294f6d50bafcc97ba252f7a98559','','0711560619',1,'active','2018-04-11 16:30:00','3',NULL,NULL,3,NULL,NULL,0,NULL),(36,'M','Osoro','mosoro@abnosoftwares.co.ke','9b72ef4704d95252fab35a25e74ee3ae','','07115606189',1,'active','2018-04-12 09:38:58','2',NULL,NULL,2,'3',NULL,0,'30'),(37,'Test Multiple','t','osorom@gmail.com','e10adc3949ba59abbe56e057f20f883e','','123547',0,'active','2018-04-12 11:33:12','2','2018-05-23 10:03:52','2',2,'3',NULL,0,'1,2,3,4,5,6,7'),(39,'test','Test','testchker@gmail.com','96224a627560ce152c8a6751ecbd9dfb','','4512454',1,'active','2018-04-12 12:12:56','2',NULL,NULL,2,'3',NULL,0,'1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,');
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2365,7 +2666,7 @@ CREATE TABLE `tbl_bac_expected_micro_bacterial_agents` (
   `agentScore` decimal(10,0) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SAMPLE_ANTI_UK` (`sampleId`,`antiMicroAgent`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2374,7 +2675,7 @@ CREATE TABLE `tbl_bac_expected_micro_bacterial_agents` (
 
 LOCK TABLES `tbl_bac_expected_micro_bacterial_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_expected_micro_bacterial_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_expected_micro_bacterial_agents` VALUES (7,'3','amikacin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(11,'3','ampicilin','yes',10,1,1,NULL,NULL,NULL,'I',NULL,4),(16,'1','amikacin','yes',15,1,1,NULL,NULL,NULL,'I',NULL,4),(17,'1','colistin','yes',22,1,1,NULL,NULL,NULL,'I',NULL,4),(18,'1','cloxacilin','yes',25,1,1,NULL,NULL,NULL,'I',NULL,4),(19,'1','ampicilin','yes',555,1,1,NULL,NULL,NULL,'I',NULL,4),(20,'2','amikacin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(21,'2','ampicilin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10),(22,'2','colistin','yes',12,1,1,NULL,NULL,NULL,'I',NULL,10);
+INSERT INTO `tbl_bac_expected_micro_bacterial_agents` VALUES (1,'1','ampicilin','yes',10,1,31,NULL,NULL,NULL,'I',NULL,10),(2,'2','colistin','yes',15,1,31,NULL,NULL,NULL,'R',NULL,10);
 /*!40000 ALTER TABLE `tbl_bac_expected_micro_bacterial_agents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2412,7 +2713,7 @@ CREATE TABLE `tbl_bac_expected_results` (
   `status` varchar(45) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sampleId_UNIQUE` (`sampleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2421,32 +2722,9 @@ CREATE TABLE `tbl_bac_expected_results` (
 
 LOCK TABLES `tbl_bac_expected_results` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_expected_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_expected_results` VALUES (1,'1','','2017-03-15 14:59:19',1,1,'0000-00-00 00:00:00','Abiotrophia adiacens',4,'slide',1,'27',1,'grey',1,'Acanthamoeba',1,'amoxicilin',1,'serotypomg',1,'Abiotrophia adiacens',4,'1'),(2,'2','','2017-03-15 15:02:30',1,1,'0000-00-00 00:00:00','Achromobacter ruhlandii',4,'slide',2,'30',2,'30',2,'Achromobacter',2,'amikacilin',2,'serotyping',2,'Achromobacter ruhlandii',4,'1');
+INSERT INTO `tbl_bac_expected_results` VALUES (1,'1',NULL,'2018-03-13 12:19:12',31,NULL,NULL,NULL,5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'test',5,'1'),(2,'4',NULL,'2018-05-14 09:53:40',3,NULL,NULL,'TEST 0001',5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'TEST 0001 X',NULL,'1'),(3,'5',NULL,'2018-05-15 12:47:24',3,NULL,NULL,'TEST 002',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'TEST 002',5,'1');
 /*!40000 ALTER TABLE `tbl_bac_expected_results` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `tbl_bac_update_samples_after_insert` AFTER INSERT ON `tbl_bac_expected_results` FOR EACH ROW BEGIN
-
-
-
-update tbl_bac_samples set expectedResults=1 where id=new.sampleId;
-
-
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `tbl_bac_grades`
@@ -2470,7 +2748,7 @@ CREATE TABLE `tbl_bac_grades` (
   UNIQUE KEY `G_UK` (`grade`),
   UNIQUE KEY `L_UK` (`lowerMark`),
   UNIQUE KEY `U_UK` (`upperMark`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2479,7 +2757,7 @@ CREATE TABLE `tbl_bac_grades` (
 
 LOCK TABLES `tbl_bac_grades` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_grades` DISABLE KEYS */;
-INSERT INTO `tbl_bac_grades` VALUES (3,'UNACCEPTABLE',0,74,'UNACCEPTABLE',1,'2017-03-15 15:12:01','1','0000-00-00 00:00:00','1'),(6,'ACCEPTABLE',75,100,'ACCEPTABLE',1,'2017-03-20 12:21:24',NULL,NULL,'1');
+INSERT INTO `tbl_bac_grades` VALUES (1,'UNACCEPTABLE',0,74,'NOT ACCEPTABLE',31,'2018-03-13 13:14:53',NULL,NULL,'1'),(3,'Acceptable',75,100,'Remarkable',3,'2018-05-11 16:30:30',NULL,NULL,'1');
 /*!40000 ALTER TABLE `tbl_bac_grades` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2506,14 +2784,14 @@ CREATE TABLE `tbl_bac_micro_bacterial_agents` (
   `updateDate` datetime DEFAULT NULL,
   `level` varchar(45) DEFAULT NULL,
   `createdBy` int(11) DEFAULT NULL,
-  `score` decimal(4,2) DEFAULT '0.00',
+  `score` int(11) DEFAULT '0',
   `markedStatus` varchar(45) DEFAULT '0',
   `published` varchar(45) DEFAULT '0',
   `adminMarked` varchar(45) DEFAULT '0',
   `finalScore` varchar(45) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_sample_round_lab` (`roundId`,`sampleId`,`antiMicroAgent`,`participantId`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2522,7 +2800,7 @@ CREATE TABLE `tbl_bac_micro_bacterial_agents` (
 
 LOCK TABLES `tbl_bac_micro_bacterial_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_micro_bacterial_agents` VALUES (41,'ampicilin','yes',11,1,2,1,1,4,'1','2017-03-30 16:52:11','1',NULL,'1',1,0.00,'0','1','0','R'),(42,'ampicilin','yes',88,1,1,1,1,3,'1','2017-04-03 09:42:19','1',NULL,'1',1,0.00,'0','1','0','S'),(43,'colistin','yes',28,1,1,1,1,3,'1','2017-04-03 09:42:19','1',NULL,'1',1,0.00,'0','1','0','R'),(44,'cloxacilin','yes',28,1,1,1,1,3,'1','2017-04-03 09:42:19','1',NULL,'1',1,0.00,'0','1','0','R'),(45,'amikacin','yes',128,1,1,1,1,3,'1','2017-04-03 09:42:19','1',NULL,'1',1,0.00,'0','1','0','I'),(46,'','',0,2,2,1,1,4,'1','2017-04-04 12:02:22',NULL,NULL,'1',2,0.00,'0','0','0','');
+INSERT INTO `tbl_bac_micro_bacterial_agents` VALUES (1,'','',0,4,1,1,13,7,'1','2017-11-09 09:37:10','31',NULL,'1',4,0,'0','1','1','');
 /*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2556,9 +2834,10 @@ CREATE TABLE `tbl_bac_panel_mst` (
   `dateUpdate` datetime DEFAULT CURRENT_TIMESTAMP,
   `createdBy` int(11) DEFAULT NULL,
   `totalSamplesAdded` int(11) DEFAULT NULL,
+  `addedStatus` varchar(45) DEFAULT '0',
   PRIMARY KEY (`id`,`panelName`),
   UNIQUE KEY `uk_panel_name` (`panelName`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='Host panels names without the samples attached to them';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COMMENT='Host panels names without the samples attached to them';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2567,7 +2846,7 @@ CREATE TABLE `tbl_bac_panel_mst` (
 
 LOCK TABLES `tbl_bac_panel_mst` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_panel_mst` DISABLE KEYS */;
-INSERT INTO `tbl_bac_panel_mst` VALUES (1,'PANEL/A/17','WET','2017-02-25','PANEL/A/17','2017-03-15','2017-03-15','1','2017-03-15 15:13:01',0,10,NULL,'4',0,NULL,NULL,NULL,'9137505279285476',1,'2017-03-15 15:13:01',1,NULL);
+INSERT INTO `tbl_bac_panel_mst` VALUES (1,'Test','test','0000-00-00','test','2018-03-18','2018-03-04','1','2018-03-05 10:07:14',0,1,NULL,'2',0,NULL,NULL,NULL,'7070262227247399',32,'2018-03-05 10:07:14',31,NULL,'1'),(2,'654654654','54646','0000-00-00','654654','2018-03-05','2018-03-03','1','2018-03-05 17:06:19',0,NULL,NULL,'2',0,NULL,NULL,NULL,'4386863219601467',31,'2018-03-05 17:06:19',31,NULL,'1'),(3,'PANEL 0001','wet',NULL,'p0001','2018-05-14','2018-05-14','1','2018-05-14 10:09:12',0,NULL,NULL,'2',0,NULL,NULL,NULL,'05880801833998839',48,'2018-05-14 10:09:12',3,NULL,'1');
 /*!40000 ALTER TABLE `tbl_bac_panel_mst` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2599,11 +2878,21 @@ CREATE TABLE `tbl_bac_panels_shipments` (
   `participantId` varchar(45) DEFAULT NULL,
   `receiveComment` varchar(200) DEFAULT NULL,
   `roundId` int(11) DEFAULT NULL,
-  `startRoundFlag` varchar(45) DEFAULT '0',
+  `startRoundFlag` varchar(10) DEFAULT '1',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_ship_panel_lab` (`panelId`,`shipmentId`,`participantId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `uk_ship_panel_lab` (`panelId`,`shipmentId`,`deliveryStatus`,`participantId`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_panels_shipments`
+--
+
+LOCK TABLES `tbl_bac_panels_shipments` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_panels_shipments` DISABLE KEYS */;
+INSERT INTO `tbl_bac_panels_shipments` VALUES (1,1,1,'2018-03-05 10:10:30','31','2','1',31,'2018-03-05 10:10:30',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(2,1,1,'2018-03-05 10:12:40','31','3','1',32,'2018-03-05 10:12:40',NULL,NULL,1,'2018-03-05 00:00:00',NULL,NULL,NULL,'Current Lab Manager','27',NULL,1,'1'),(4,2,2,'2018-03-05 17:07:03','31','2','1',31,'2018-03-05 17:07:03',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(5,2,2,'2018-03-05 17:07:41','31','2','1',31,'2018-03-05 17:07:41',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','34',NULL,2,'1'),(6,2,2,'2018-03-05 17:07:42','31','2','1',31,'2018-03-05 17:07:42',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','27',NULL,2,'1'),(7,2,2,'2018-03-05 17:07:43','31','2','1',31,'2018-03-05 17:07:43',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','22',NULL,2,'1'),(8,2,2,'2018-03-05 17:07:43','31','2','1',31,'2018-03-05 17:07:43',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','20',NULL,2,'1'),(9,2,2,'2018-03-05 17:07:44','31','2','1',31,'2018-03-05 17:07:44',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','19',NULL,2,'1'),(10,2,2,'2018-03-05 17:07:45','31','2','1',31,'2018-03-05 17:07:45',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','15',NULL,2,'1'),(11,2,2,'2018-03-05 17:07:45','31','2','1',31,'2018-03-05 17:07:45',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','14',NULL,2,'1'),(12,2,2,'2018-03-05 17:07:46','31','2','1',31,'2018-03-05 17:07:46',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','13',NULL,2,'1'),(13,3,3,'2018-05-14 11:47:46','3','2','1',3,'2018-05-14 11:47:46',NULL,NULL,1,NULL,NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(14,3,3,'2018-05-15 09:22:28','3','3','1',48,'2018-05-15 09:22:28',NULL,NULL,1,'2018-05-15 00:00:00',NULL,NULL,NULL,'Current Lab Manager','59',NULL,3,'1');
+/*!40000 ALTER TABLE `tbl_bac_panels_shipments` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_programs`
@@ -2625,7 +2914,7 @@ CREATE TABLE `tbl_bac_programs` (
   `status` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tbl_bac_programs__pk_code` (`programName`,`programCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2634,6 +2923,7 @@ CREATE TABLE `tbl_bac_programs` (
 
 LOCK TABLES `tbl_bac_programs` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_programs` DISABLE KEYS */;
+INSERT INTO `tbl_bac_programs` VALUES (1,'001','2017-04-26 09:39:37',32,NULL,NULL,NULL,'Trial Round','Trial Round',1),(7,'test','2017-04-27 15:15:47',32,NULL,NULL,NULL,'test','test',1);
 /*!40000 ALTER TABLE `tbl_bac_programs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2655,8 +2945,17 @@ CREATE TABLE `tbl_bac_ready_labs` (
   `roundId` int(11) DEFAULT NULL,
   `totalParticipants` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_ready_labs`
+--
+
+LOCK TABLES `tbl_bac_ready_labs` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_ready_labs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_bac_ready_labs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_response_results`
@@ -2692,55 +2991,32 @@ CREATE TABLE `tbl_bac_response_results` (
   `isolateProcessingScore` int(11) DEFAULT NULL,
   `finalIdentification` varchar(105) DEFAULT NULL,
   `finalIdentificationScore` int(11) DEFAULT NULL,
-  `finalScore` decimal(4,2) DEFAULT '0.00',
+  `finalScore` int(11) DEFAULT NULL,
   `status` varchar(45) DEFAULT '1',
   `changedStatus` varchar(45) DEFAULT '1',
   `markedStatus` varchar(45) DEFAULT '0',
   `feedback` int(11) DEFAULT '0',
   `published` int(11) DEFAULT '0',
-  `totalMicroAgentsScore` decimal(4,2) DEFAULT '0.00',
   `grade` varchar(45) DEFAULT NULL,
   `remarks` varchar(105) DEFAULT NULL,
   `adminRemarks` varchar(400) DEFAULT NULL,
   `correctiveAction` int(11) DEFAULT '0',
   `adminMarked` varchar(45) DEFAULT '0',
+  `totalMicroAgentsScore` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `sampleId_UNIQUE` (`sampleId`,`roundId`,`participantId`,`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `sampleId_UNIQUE` (`roundId`,`participantId`,`userId`,`sampleId`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `tbl_bac_response_results`
+--
+
+LOCK TABLES `tbl_bac_response_results` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_response_results` DISABLE KEYS */;
+INSERT INTO `tbl_bac_response_results` VALUES (1,'1','1','27','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'ACCEPTABLE',NULL,NULL,0,'1',0),(2,'2','1','29','32','2','2018-03-05 12:00:04',32,31,NULL,NULL,0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,5,'1','1','1',0,1,'UNACCEPTABLE',NULL,NULL,0,'0',NULL),(3,'1','2','28','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'ACCEPTABLE',NULL,NULL,0,'1',0),(4,'3','1','28','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'UNACCEPTABLE',NULL,NULL,0,'1',0),(5,'4','3','59','48','15','2018-05-15 12:33:50',48,3,NULL,'TEST 0001',5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,NULL,NULL,5,'1','1','1',0,1,'Acceptable','Remarkable',NULL,0,'0',NULL),(7,'5','3','59','48','15','2018-05-15 12:45:35',48,3,NULL,NULL,NULL,'none',NULL,'NONE',NULL,'none',NULL,'none',NULL,'none',NULL,'none',NULL,'TEST 002',5,5,'1','1','1',0,1,'Acceptable','Remarkable',NULL,0,'0',NULL);
 /*!40000 ALTER TABLE `tbl_bac_response_results` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateSamplesToUsers` AFTER UPDATE ON `tbl_bac_response_results` FOR EACH ROW BEGIN
-	update tbl_bac_samples_to_users 
-	   set 
-	   totalCorrectScore=new.finalScore,
-       grade=new.grade,
-       remarks=new.remarks,
-       adminMarked=new.adminMarked,
-       totalMicroAgentsScore=new.totalMicroAgentsScore
-   where 
-   sampleId=new.sampleId and 
-   roundId=new.roundId and 
-   participantId=new.participantId and
-    panelToSampleId=new.panelToSampleId and 
-     userId=new.userId;
-    
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `tbl_bac_rounds`
@@ -2765,16 +3041,27 @@ CREATE TABLE `tbl_bac_rounds` (
   `totalSamplesAdded` int(11) DEFAULT '0',
   `daysLeft` int(11) DEFAULT '0',
   `totalShipmentsAdded` int(11) DEFAULT '0',
-  `startRoundFlag` varchar(45) DEFAULT '0',
+  `startRoundFlag` varchar(10) DEFAULT '1',
   `dateStarted` datetime DEFAULT NULL,
   `evaluated` int(11) DEFAULT '0',
   `published` int(11) DEFAULT '0',
+  `publishedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `roundName_UNIQUE` (`roundName`),
   UNIQUE KEY `roundCode_UNIQUE` (`roundCode`),
   UNIQUE KEY `uk_round_roundname` (`roundName`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_rounds`
+--
+
+LOCK TABLES `tbl_bac_rounds` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_rounds` DISABLE KEYS */;
+INSERT INTO `tbl_bac_rounds` VALUES (1,'test','Test','2018-03-04','2018-03-25',31,1,1,'2018-03-05 10:09:42',31,'2018-03-05 10:09:42','test',0,0,0,'1',NULL,1,1,'2018-03-13 08:23:13'),(2,'6546544','46546','2018-03-04','2018-03-27',31,1,1,'2018-03-05 17:07:25',NULL,'2018-03-05 17:07:25','65465',0,0,0,'1',NULL,0,0,NULL),(3,'TEST 0001','TEST T0001','2018-05-12','2018-05-27',3,1,1,'2018-05-14 15:24:01',3,'2018-05-14 15:24:01','TEST 001',0,0,0,'1',NULL,1,1,'2018-05-15 10:12:15');
+/*!40000 ALTER TABLE `tbl_bac_rounds` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_rounds_labs`
@@ -2791,11 +3078,22 @@ CREATE TABLE `tbl_bac_rounds_labs` (
   `createdBy` varchar(45) DEFAULT NULL,
   `lastUpdatePerson` varchar(45) DEFAULT NULL,
   `dateUpdate` varchar(45) DEFAULT NULL,
-  `status` varchar(45) DEFAULT NULL,
+  `status` varchar(45) DEFAULT '1',
+  `lastMailSend` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_LAB_ROUND` (`roundId`,`labId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_rounds_labs`
+--
+
+LOCK TABLES `tbl_bac_rounds_labs` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_rounds_labs` DISABLE KEYS */;
+INSERT INTO `tbl_bac_rounds_labs` VALUES (1,'1','27','2018-03-05 10:12:40','31',NULL,NULL,'1','2018-03-05 10:12:40'),(3,'2','34','2018-03-05 17:07:41','31',NULL,NULL,'1','2018-03-05 17:07:41'),(4,'2','27','2018-03-05 17:07:42','31',NULL,NULL,'1','2018-03-05 17:07:42'),(5,'2','22','2018-03-05 17:07:42','31',NULL,NULL,'1','2018-03-05 17:07:42'),(6,'2','20','2018-03-05 17:07:43','31',NULL,NULL,'1','2018-03-05 17:07:43'),(7,'2','19','2018-03-05 17:07:44','31',NULL,NULL,'1','2018-03-05 17:07:44'),(8,'2','15','2018-03-05 17:07:45','31',NULL,NULL,'1','2018-03-05 17:07:45'),(9,'2','14','2018-03-05 17:07:45','31',NULL,NULL,'1','2018-03-05 17:07:45'),(10,'2','13','2018-03-05 17:07:46','31',NULL,NULL,'1','2018-03-05 17:07:46'),(11,'3','59','2018-05-15 09:22:28','3',NULL,NULL,'1','2018-05-15 09:22:28');
+/*!40000 ALTER TABLE `tbl_bac_rounds_labs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_sample_instructions`
@@ -2830,7 +3128,7 @@ CREATE TABLE `tbl_bac_sample_instructions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_SAMPLEID` (`sampleId`),
   KEY `INDEX_KEY` (`id`,`status`,`sampleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2839,7 +3137,7 @@ CREATE TABLE `tbl_bac_sample_instructions` (
 
 LOCK TABLES `tbl_bac_sample_instructions` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_sample_instructions` DISABLE KEYS */;
-INSERT INTO `tbl_bac_sample_instructions` VALUES (2,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.',NULL,'the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-22 17:11:50','1',NULL,NULL,'9',0,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(6,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','zxczxczxc','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:17:15','1','','0000-00-00 00:00:00','1',2,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(7,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','asdaSDasdasdAS','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:18:50','1','1','0000-00-00 00:00:00','1',1,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.');
+INSERT INTO `tbl_bac_sample_instructions` VALUES (2,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.',NULL,'the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-22 17:11:50','1',NULL,NULL,'9',0,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(6,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','zxczxczxc','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:17:15','1','','0000-00-00 00:00:00','1',2,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(7,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','asdaSDasdasdAS','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-03-23 11:18:50','1','1','0000-00-00 00:00:00','1',1,'EQA/NPHL/A/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.'),(8,'thank you for participating in the nmrl proficiency testing scheme (pts) this year. we hope that your participation will be beneficial to your laboratory, as well as being enjoyable. we would like to welcome any new participants to the program.','the nmrl pts aims to determine the laboratory procedures on handling specimen including complete identification, antimicrobial susceptible testing and recommendation to clinicians. participants are encouraged to perform all the survey challenges.','read the clinical details and processing instructions for each sample. samples shall be analyzed using your own standard operating procedures. all participants are required to use the test method of their choice.\nsamples should be treated in the same way as routine patient specimen.','the nmrl pts endeavors to assess all aspects of specimen management, such as turn-around time, accuracy of reports, clinical relevance of results, specimen handling, etc. rapid turn-around time is an essential element of specimen management; survey questionnaires which are received after the return deadline will be penalized and those received after the interim results are distributed will not be assessed.\n if a laboratory code is not completed or incorrectly stated on the survey response form the submitted results shall not be assessed, this is equivalent to omitting a patient name of a report.\nplease contact nmrl if you are unsure of your laboratory code.','temperature:\n samples are shipped at ambient conditions. please ensure that samples are stored and processed at room temperature at all times unless instructions are supplied to the contrary.\n\n\n\nstability: \nsome of the simulated specimens have a limited viability; therefore your laboratory should process the samples as soon as they are received in the laboratory.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','isolates which are included in the nmrl pts is carefully characterized to ensure that typical morphology and features to facilitate identification. prior to distribution, the organisms are tested using standard phenotypic, and where required, genotypic methods.','the package contains:\nâ€¢	instruction sheet\nâ€¢	previous eqa performance reports\nâ€¢	2 cary blair swabs and 4 gram stain smears','if the packages contain broken samples, sterilize (autoclave) the container and contents immediately. dispose broken samples as per safety protocols used in your laboratory. guard against the production of aerosols. please follow universal safety precautions at all times.\ncarry out all procedures aseptically, preferably in class ii biosafety cabinet','please keep all processed samples at room temperature until you have identified the organism/s fully.','an electronic notification is sent out on dispatch of the pts samples, should you not receive your shipment or the condition of the shipment is unsuitable, please contact the scheme coordinators within 5 working days of the notification received.','the proficiency test results should be returned either by email or the postal address provided on the first page of this instruction sheet.','This package contains 4 samples A, B, C, D. Please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform PTS Scheme coordinator via email if samples were unsuitable. ','2017-04-21 14:33:17','32','','0000-00-00 00:00:00','1',3,'EQA/NMHRl/17','this package contains 4 samples a, b, c, d. please open package and inspect for any breakages, possible deterioration during transportation or missing samples, inform pts scheme coordinator via email if samples were unsuitable. \nplease keep all samples at room temperature until you have identified the organism/s fully.');
 /*!40000 ALTER TABLE `tbl_bac_sample_instructions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2863,21 +3161,32 @@ CREATE TABLE `tbl_bac_sample_to_panel` (
   `deliveryCondition` varchar(45) DEFAULT NULL,
   `comments` varchar(45) DEFAULT NULL,
   `quantity` int(11) DEFAULT '1',
-  `dateDelivered` date DEFAULT NULL,
+  `dateDelivered` datetime DEFAULT NULL,
   `participantId` int(11) DEFAULT NULL,
   `issuedStatus` int(11) DEFAULT '0',
   `roundId` int(11) DEFAULT NULL,
   `totalAddedSamples` int(11) DEFAULT NULL,
   `shipmentId` int(11) DEFAULT NULL,
-  `startRoundFlag` int(11) DEFAULT '0',
+  `startRoundFlag` varchar(10) DEFAULT '1',
   `conditionStatus` varchar(105) DEFAULT NULL,
   `sampleComment` varchar(300) DEFAULT NULL,
   `responseStatus` varchar(45) DEFAULT '0',
   `feedBack` varchar(45) DEFAULT '0',
   `issuedFlag` varchar(45) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE_SAMPLE_PANEL` (`sampleId`,`panelId`,`deliveryStatus`,`participantId`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_sample_to_panel`
+--
+
+LOCK TABLES `tbl_bac_sample_to_panel` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` DISABLE KEYS */;
+INSERT INTO `tbl_bac_sample_to_panel` VALUES (1,1,'1','31','2018-03-05 10:10:14','1',31,'2018-03-05 10:10:14',2,NULL,NULL,1,'0000-00-00 00:00:00',NULL,0,NULL,1,1,'1',NULL,NULL,'0','0','0'),(2,1,'1','31','2018-03-05 10:10:14','1',32,'2018-03-05 10:10:14',4,'','',1,'2018-03-05 02:52:38',27,0,1,1,1,'1','','','0','0','1'),(4,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,NULL,NULL,1,'0000-00-00 00:00:00',NULL,0,NULL,1,2,'1',NULL,NULL,'0','0','0'),(5,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',34,0,2,1,2,'1','','','0','0','0'),(6,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',27,0,2,1,2,'1','','','0','0','0'),(7,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',22,0,2,1,2,'1','','','0','0','0'),(8,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',20,0,2,1,2,'1','','','0','0','0'),(9,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',19,0,2,1,2,'1','','','0','0','0'),(10,1,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',29,0,2,1,2,'1','','','0','0','0'),(11,1,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',28,0,2,1,2,'1','','','0','0','0'),(12,3,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',28,0,2,1,2,'1','','','0','0','0'),(13,4,'3','3','2018-05-14 11:04:38','1',3,'2018-05-14 11:04:38',2,NULL,NULL,1,NULL,NULL,0,NULL,1,3,'1',NULL,NULL,'0','0','0'),(14,5,'3','3','2018-05-14 11:11:58','1',3,'2018-05-14 11:11:58',2,NULL,NULL,1,NULL,NULL,0,NULL,1,3,'1',NULL,NULL,'0','0','0'),(15,4,'3','3','2018-05-14 11:04:38','1',48,'2018-05-14 11:04:38',4,'','',1,'2018-05-15 05:18:36',59,0,3,1,3,'1','','','0','0','1'),(16,5,'3','3','2018-05-14 11:11:58','1',48,'2018-05-14 11:11:58',4,'','',1,'2018-05-15 05:18:36',59,0,3,1,3,'1','','','0','0','0');
+/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_samples`
@@ -2916,13 +3225,24 @@ CREATE TABLE `tbl_bac_samples` (
   `totalSamplesAdded` int(11) DEFAULT NULL,
   `materialSource` varchar(100) DEFAULT NULL,
   `sampleDetails` varchar(100) DEFAULT NULL,
-  `sampleType` varchar(10) DEFAULT NULL,
+  `sampleType` varchar(100) DEFAULT NULL,
   `sampleInstructions` varchar(100) DEFAULT NULL,
   `expectedResults` int(11) DEFAULT '0',
+  `addedStatus` varchar(45) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_sample_batcname` (`batchName`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_samples`
+--
+
+LOCK TABLES `tbl_bac_samples` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_samples` DISABLE KEYS */;
+INSERT INTO `tbl_bac_samples` VALUES (1,'Test  001','2018-03-04',NULL,NULL,NULL,'osoro','none','bacterial',1,'2018-03-05 10:06:55','0',NULL,'1','Test',NULL,'none',NULL,'5','null',NULL,'7594812188124447',31,'2018-03-05 10:06:55',31,0,NULL,'standard organisms','Test','1,2,3','test',1,'1'),(2,'987987','2018-03-05',NULL,NULL,NULL,'897987','789','89798',1,'2018-03-05 17:05:58','0',NULL,'1','6546',NULL,'654',NULL,'5','null',NULL,'8563265193198042',31,'2018-03-05 17:05:58',31,0,NULL,'standard organisms','65465','[\"2,3\"]','546',0,'1'),(3,'Test 003','2018-03-05',NULL,NULL,NULL,'897987','789','89798',1,'2018-03-05 17:05:58','0',NULL,'1','6546',NULL,'654',NULL,'5','null',NULL,'8563265193198042',31,'2018-03-05 17:05:58',31,0,NULL,'standard organisms','65465','[\"2\"]','546',0,'1'),(4,'Test 0001','2018-05-14',NULL,NULL,NULL,'Osoro','NPHL','1',1,'2018-05-14 09:51:32','0',NULL,'1','KNH',NULL,NULL,NULL,'5','null',NULL,'9140951139338258',3,'2018-05-14 09:51:32',3,0,NULL,'standard organisms','TEST ID','[\"1\"]','TEST FOR ID',1,'1'),(5,'TEST 002','2018-05-14',NULL,NULL,NULL,'OSORO','NPHL','STOOL',1,'2018-05-14 11:08:50','0',NULL,'1','KNH',NULL,NULL,NULL,'5','null',NULL,'42692378858058033',3,'2018-05-14 11:08:50',3,0,NULL,'standard organisms','test','[\"2\"]','test',1,'1');
+/*!40000 ALTER TABLE `tbl_bac_samples` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_samples_to_users`
@@ -2955,9 +3275,21 @@ CREATE TABLE `tbl_bac_samples_to_users` (
   `grade` varchar(45) DEFAULT NULL,
   `published` int(11) DEFAULT '0',
   `adminMarked` varchar(45) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `finalScore` decimal(4,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sampleUser` (`userId`,`sampleId`,`roundId`,`participantId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_samples_to_users`
+--
+
+LOCK TABLES `tbl_bac_samples_to_users` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_samples_to_users` DISABLE KEYS */;
+INSERT INTO `tbl_bac_samples_to_users` VALUES (9,48,4,15,'2018-05-15 12:18:36','2018-05-15 12:18:36','1','3',NULL,NULL,48,'1','0',NULL,NULL,3,59,5,NULL,'Remarkable','Acceptable',1,'0',5.00),(10,48,5,15,'2018-05-15 12:18:36','2018-05-15 12:18:36','1','3',NULL,NULL,48,'1','0',NULL,NULL,3,59,5,NULL,'Remarkable','Acceptable',1,'0',5.00);
+/*!40000 ALTER TABLE `tbl_bac_samples_to_users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_saved_email_notifications`
@@ -3011,8 +3343,17 @@ CREATE TABLE `tbl_bac_shipment_logs` (
   `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `participantId` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_shipment_logs`
+--
+
+LOCK TABLES `tbl_bac_shipment_logs` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_shipment_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_bac_shipment_logs` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_shipments`
@@ -3057,108 +3398,23 @@ CREATE TABLE `tbl_bac_shipments` (
   `shippingMethod` varchar(45) DEFAULT NULL,
   `totalPanelsAdded` int(11) DEFAULT '0',
   `labId` int(11) DEFAULT NULL,
-  `startRoundFlag` varchar(10) DEFAULT '0',
+  `startRoundFlag` varchar(10) DEFAULT '1',
   `evaluated` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_shipment_name` (`shipmentName`),
   KEY `shipmentIndexKey` (`id`,`shipmentName`,`addressedTo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updatePanelAndSamples` AFTER UPDATE ON `tbl_bac_shipments` FOR EACH ROW BEGIN
-IF(new.evaluated=0) THEN
-	update tbl_bac_panels_shipments 
-	   set 
-	   deliveryStatus=new.shipmentStatus,
-       dateDelivered=current_timestamp,
-	   quantity='1',
-	   receivedBy=new.receivedBy
-   where shipmentId=new.id and roundId is not null;
+--
+-- Dumping data for table `tbl_bac_shipments`
+--
 
-
-  update tbl_bac_panel_mst 
-   set 
-	   dateDelivered=new.dateReceived,
-	   panelStatus=new.shipmentStatus,
-	   shipmentNumber=concat('S-0',new.id)
-   where tbl_bac_panel_mst.id in
-  (select panelId from  tbl_bac_panels_shipments where  tbl_bac_panels_shipments.shipmentId=new.id)
-  ;
-
- update tbl_bac_panels_shipments 
-   set 
-	   
-       deliveryStatus=new.shipmentStatus
-       
-   where tbl_bac_panels_shipments.shipmentId=new.id;
-  
-
-
-	update tbl_bac_sample_to_panel set 
-    deliveryStatus =new.shipmentStatus,
-     dateDelivered=current_timestamp,
-    shipmentId=new.id
-    where panelId in(	
-	select panelId from  tbl_bac_panels_shipments where  tbl_bac_panels_shipments.shipmentId=new.id	
-	)  and roundId is not null;
-  
-
-
-   -- Insert record into audit table
-   INSERT INTO tbl_bac_shipment_logs
-		   ( dateReceived,
-			panelsReceived,
-			shipmentStatus,
-			receivedBy,
-			addressedTo,
-			status,
-			shipmentId
-			)
-   VALUES
-	   ( new.dateReceived,
-		new.panelsReceived,
-		new.shipmentStatus,
-		new.receivedBy,
-		new.addressedTo,
-		'1',
-		new.id
-		 );
-ELSE
- INSERT INTO tbl_bac_shipment_logs
-		   ( dateReceived,
-			panelsReceived,
-			shipmentStatus,
-			receivedBy,
-			addressedTo,
-			status,
-			shipmentId
-			)
-   VALUES
-	   ( new.dateReceived,
-		new.panelsReceived,
-		new.shipmentStatus,
-		new.receivedBy,
-		new.addressedTo,
-		'1',
-		new.id
-		 );
-END IF;
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
+LOCK TABLES `tbl_bac_shipments` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_shipments` DISABLE KEYS */;
+INSERT INTO `tbl_bac_shipments` VALUES (1,'Test','2018-03-05 10:07:31',1,31,'2018-03-05 10:07:31',NULL,'test',NULL,NULL,NULL,NULL,'31',NULL,'Test',NULL,NULL,NULL,'test','1','2018-03-04','test','2',NULL,NULL,NULL,NULL,'2018-03-04',NULL,'n/a','g4s','Current Lab Manager','Lorry',0,NULL,'1',1),(2,'65465','2018-03-05 17:06:51',1,31,'2018-03-05 17:06:51',NULL,'465465',NULL,NULL,NULL,NULL,'31',NULL,'64546',NULL,NULL,NULL,'5465','2','2018-03-05','56446','2',NULL,NULL,NULL,NULL,'2018-03-04',NULL,'6565','56465','Current Lab Manager','4',0,NULL,'1',0),(3,'TEST S0001','2018-05-14 11:47:27',1,3,'2018-05-14 11:47:27',NULL,'1',NULL,NULL,NULL,NULL,'3',NULL,'shIPMENT',NULL,NULL,NULL,'S0001','3','2018-05-13','OSORO','2',NULL,NULL,NULL,NULL,'2018-05-14',NULL,'','G4S','Current Lab Manager','Lorry',0,NULL,'1',1);
+/*!40000 ALTER TABLE `tbl_bac_shipments` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_suscepitibility`
@@ -3187,8 +3443,18 @@ CREATE TABLE `tbl_bac_suscepitibility` (
   `roundId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_lab_sample_round_uk` (`participantId`,`sampleId`,`roundId`,`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_bac_suscepitibility`
+--
+
+LOCK TABLES `tbl_bac_suscepitibility` WRITE;
+/*!40000 ALTER TABLE `tbl_bac_suscepitibility` DISABLE KEYS */;
+INSERT INTO `tbl_bac_suscepitibility` VALUES (1,48,59,4,15,'2018-05-15 12:34:38','48',NULL,NULL,1,'N/A','Kirby Bauer','NONE','NONE','NONE','EUCAST',3),(2,48,59,5,15,'2018-05-15 12:46:09','48',NULL,NULL,1,'n/a','Stroke','n/a','n/a','n/a','CLSI',3);
+/*!40000 ALTER TABLE `tbl_bac_suscepitibility` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_test_agents`
@@ -3210,8 +3476,9 @@ CREATE TABLE `tbl_bac_test_agents` (
   `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `lastUpdatePerson` varchar(45) DEFAULT NULL,
   `updateDate` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Uni_key` (`testAgentName`,`testAgentCode`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3220,7 +3487,7 @@ CREATE TABLE `tbl_bac_test_agents` (
 
 LOCK TABLES `tbl_bac_test_agents` WRITE;
 /*!40000 ALTER TABLE `tbl_bac_test_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_test_agents` VALUES (1,'amikacin','501','3',10,100,1000,'1','1','2017-03-15 14:50:01',NULL,NULL),(2,'colistin','702','3',20,500,1500,'1','1','2017-03-15 14:50:36',NULL,NULL),(3,'ampicilin','502','3',100,1000,5000,'1','1','2017-03-15 14:51:06',NULL,NULL),(5,'cloxacilin','520','3',55,155,250,'1','1','2017-03-15 14:52:27',NULL,NULL),(6,'qweqwe','asd','1',NULL,NULL,NULL,'1','1','2017-03-25 00:26:59',NULL,NULL);
+INSERT INTO `tbl_bac_test_agents` VALUES (1,'amikacin','','3',10,100,1000,'1','1','2017-03-15 14:50:01','2','0000-00-00 00:00:00'),(2,'colistin','702','3',20,500,1500,'1','1','2017-03-15 14:50:36',NULL,NULL),(3,'ampicilin','502','3',100,1000,5000,'1','1','2017-03-15 14:51:06',NULL,NULL),(5,'cloxacilin','520','3',55,155,250,'1','1','2017-03-15 14:52:27',NULL,NULL),(6,'qweqwe','asd','1',NULL,NULL,NULL,'1','1','2017-03-25 00:26:59',NULL,NULL),(7,'MICILCOLIN','105','1',0,0,0,'1','2','2017-06-13 18:14:22','3','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `tbl_bac_test_agents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3255,6 +3522,65 @@ INSERT INTO `tbl_bac_test_types` VALUES (2,'ID testing','Identification','2017-0
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbrr`
+--
+
+DROP TABLE IF EXISTS `tbrr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbrr` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `sampleId` varchar(45) DEFAULT NULL,
+  `roundId` varchar(45) DEFAULT NULL,
+  `participantId` varchar(45) DEFAULT NULL,
+  `userId` varchar(45) DEFAULT '1',
+  `panelToSampleId` varchar(45) DEFAULT '1',
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` int(11) DEFAULT NULL,
+  `lastUpdatePerson` int(11) DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  `grainStainReaction` varchar(105) DEFAULT NULL,
+  `grainStainReactionScore` int(11) DEFAULT '0',
+  `primaryMedia` varchar(105) DEFAULT NULL,
+  `primaryMediaScore` int(11) DEFAULT NULL,
+  `incubationConditions` varchar(105) DEFAULT NULL,
+  `incubationConditionsScore` int(11) DEFAULT NULL,
+  `colonialMorphology` varchar(45) DEFAULT NULL,
+  `colonialMorphologyScore` int(11) DEFAULT NULL,
+  `bacterialQualification` varchar(105) DEFAULT NULL,
+  `bacterialQualificationScore` int(11) DEFAULT NULL,
+  `bacterialReagents` varchar(105) DEFAULT NULL,
+  `bacterialReagentsScore` int(11) DEFAULT NULL,
+  `isolateProcessing` varchar(105) DEFAULT NULL,
+  `isolateProcessingScore` int(11) DEFAULT NULL,
+  `finalIdentification` varchar(105) DEFAULT NULL,
+  `finalIdentificationScore` int(11) DEFAULT NULL,
+  `finalScore` int(11) DEFAULT '0',
+  `status` varchar(45) DEFAULT '1',
+  `changedStatus` varchar(45) DEFAULT '1',
+  `markedStatus` varchar(45) DEFAULT '0',
+  `feedback` int(11) DEFAULT '0',
+  `published` int(11) DEFAULT '0',
+  `grade` varchar(45) DEFAULT NULL,
+  `remarks` varchar(105) DEFAULT NULL,
+  `adminRemarks` varchar(400) DEFAULT NULL,
+  `correctiveAction` int(11) DEFAULT '0',
+  `adminMarked` varchar(45) DEFAULT '0',
+  `totalMicroAgentsScore` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbrr`
+--
+
+LOCK TABLES `tbrr` WRITE;
+/*!40000 ALTER TABLE `tbrr` DISABLE KEYS */;
+INSERT INTO `tbrr` VALUES (1,'1','1','13','3','2','2017-04-26 11:10:40',3,32,NULL,'MALARIA',0,'33',0,'33',0,'333',0,'333',0,'33',33,'33',33,'33',100,33,'1','1','1',0,0,'UNACCEPTABLE','UNACCEPTABLE',NULL,0,'0',0),(2,'2','1','13','3','2','2017-04-26 11:10:40',3,32,NULL,'3333',100,'33',0,'33',0,'333',0,'333',0,'33',33,'33',33,'33',100,0,'1','1','1',0,0,'ACCEPTABLE','ACCEPTABLE',NULL,0,'0',0);
+/*!40000 ALTER TABLE `tbrr` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `temp_mail`
 --
 
@@ -3272,7 +3598,7 @@ CREATE TABLE `temp_mail` (
   `from_full_name` varchar(255) DEFAULT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`temp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3281,6 +3607,7 @@ CREATE TABLE `temp_mail` (
 
 LOCK TABLES `temp_mail` WRITE;
 /*!40000 ALTER TABLE `temp_mail` DISABLE KEYS */;
+INSERT INTO `temp_mail` VALUES (1,'',NULL,'kisiihospital@gmail.com','','',NULL,NULL,'pending'),(2,'',NULL,'osoromichael@gmail.com','','',NULL,NULL,'pending'),(3,'',NULL,'qweqweqw@gmail.com','','',NULL,NULL,'pending'),(4,'',NULL,'kisiihospital@gmail.com','','',NULL,NULL,'pending'),(5,'',NULL,'osoromichael@gmail.com','','',NULL,NULL,'pending'),(6,'',NULL,'kisumu@gmail.co.ke','','',NULL,NULL,'pending'),(7,'',NULL,'mosoross@abnosoftwares.co.ke','','',NULL,NULL,'pending'),(8,'',NULL,'anothertest@gmail.com','','',NULL,NULL,'pending'),(9,'',NULL,'testertwo@gmail.com','','',NULL,NULL,'pending');
 /*!40000 ALTER TABLE `temp_mail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3295,8 +3622,53 @@ CREATE TABLE `vl_department` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `DepartmentName` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vl_department`
+--
+
+LOCK TABLES `vl_department` WRITE;
+/*!40000 ALTER TABLE `vl_department` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vl_department` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vl_eid_capa`
+--
+
+DROP TABLE IF EXISTS `vl_eid_capa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vl_eid_capa` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `participantId` int(11) DEFAULT NULL,
+  `dmId` int(11) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `descriptionOccurence` text,
+  `preanalytical` text,
+  `analytical` text,
+  `postanalytical` text,
+  `rootCause` text,
+  `measuresTaken` text,
+  `actionEffective` text,
+  `preventRecurrence` text,
+  `surveyId` int(11) DEFAULT NULL,
+  `attributingFactors` text,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vl_eid_capa`
+--
+
+LOCK TABLES `vl_eid_capa` WRITE;
+/*!40000 ALTER TABLE `vl_eid_capa` DISABLE KEYS */;
+INSERT INTO `vl_eid_capa` VALUES (4,57,49,'2018-05-08 14:56:20','Test Again\n                           ','Yes','Yes','Yes',NULL,'Measures taken\n                           ','Yes','Prevent recurrence\n                           ',2,NULL),(5,57,49,'2018-05-08 15:14:30','Test Again\n                           ','Yes','Yes','Yes',NULL,'Measures taken\n                           ','Yes','Prevent recurrence\n                           ',2,NULL);
+/*!40000 ALTER TABLE `vl_eid_capa` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `vl_mfl`
@@ -3310,8 +3682,49 @@ CREATE TABLE `vl_mfl` (
   `Code` varchar(40) DEFAULT NULL,
   `Name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vl_mfl`
+--
+
+LOCK TABLES `vl_mfl` WRITE;
+/*!40000 ALTER TABLE `vl_mfl` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vl_mfl` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vl_peer_mean`
+--
+
+DROP TABLE IF EXISTS `vl_peer_mean`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vl_peer_mean` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `peerName` varchar(45) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `result` varchar(45) DEFAULT NULL,
+  `roundId` int(11) DEFAULT NULL,
+  `shipmentId` int(11) DEFAULT NULL,
+  `mean` decimal(10,0) DEFAULT NULL,
+  `SDI` decimal(10,0) DEFAULT NULL,
+  `system_id` int(11) DEFAULT NULL,
+  `participant_id` int(11) DEFAULT NULL,
+  `sampleId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vl_peer_mean`
+--
+
+LOCK TABLES `vl_peer_mean` WRITE;
+/*!40000 ALTER TABLE `vl_peer_mean` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vl_peer_mean` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `vl_platform`
@@ -3360,14 +3773,6 @@ LOCK TABLES `vl_scheme` WRITE;
 INSERT INTO `vl_scheme` VALUES (1,'Viral Load'),(2,'EID');
 /*!40000 ALTER TABLE `vl_scheme` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'eanalyze'
---
-
---
--- Dumping routines for database 'eanalyze'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -3378,4 +3783,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-18 13:23:04
+-- Dump completed on 2018-05-23 14:49:42

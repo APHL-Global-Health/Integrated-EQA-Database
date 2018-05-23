@@ -150,7 +150,7 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
             $url = '<a href="/admin/repcustomfields/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
             $url .= '<a href="/admin/repcustomfields/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> delete</a>';
 
-            $row[]=$url;
+            $row[] = $url;
             $output['aaData'][] = $row;
         }
 
@@ -181,12 +181,41 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
             $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
 
         }
-
-
         return $db->query($sqlCommands);
 
+    }
+
+
+    public function updateFields($params)
+    {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $createdby = $authNameSpace->admin_id;
+        $createdate = new Zend_Db_Expr('now()');
+        $provider = $params['ProviderID'];
+        $program = $params['ProgramID'];
+        $column = $params['ColumnName'];
+        $description = $params['Description'];
+        $mandatory = $params['Mandatory'];
+        $datatype = $params['Datatype'];
+        $length = $params['Length'];
+
+        $sQuery = $this->getAdapter()->select()->from($this->_name, new Zend_Db_Expr("COUNT('" . $column . "')"));
+        $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
+        if ($aResultTotal[0] == 0) {
+            $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+            $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
+            $db->query($customf);
+        } else {
+            $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+
+        }
+        return $db->query($sqlCommands);
 
     }
+
+
+
 
     public function deleteCustomField($id)
     {
