@@ -6,12 +6,14 @@
  * and open the template in the editor.
  */
 
-class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
+{
 
     protected $_name = 'rep_customfields';
     protected $_primary = 'ID';
 
-    public function getAllFields($parameters) {
+    public function getAllFields($parameters)
+    {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -145,15 +147,18 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract {
             $row[] = $aRow['Mandatory'];
             $row[] = $aRow['Datatype'];
             $row[] = $aRow['Length'];
-            //$row[] = '<a href="/admin/programs/edit/id/' . $aRow['ProgramID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url = '<a href="/admin/repcustomfields/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url .= '<a href="/admin/repcustomfields/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> delete</a>';
 
+            $row[]=$url;
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
 
-    public function addFields($params) {
+    public function addFields($params)
+    {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table::getDefaultAdapter();
         $createdby = $authNameSpace->admin_id;
@@ -165,16 +170,43 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract {
         $mandatory = $params['Mandatory'];
         $datatype = $params['Datatype'];
         $length = $params['Length'];
-        $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
-        $db->query($sqlCommands);
-        $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
-        return $db->query($customf);
-        
+
+        $sQuery = $this->getAdapter()->select()->from($this->_name, new Zend_Db_Expr("COUNT('" . $column . "')"));
+        $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
+        if ($aResultTotal[0] == 0) {
+            $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+            $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
+            $db->query($customf);
+        } else {
+            $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+
+        }
+
+
+        return $db->query($sqlCommands);
+
+
     }
-    public function parseString($string) {
+
+    public function deleteCustomField($id)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $fields = $this->fetchRow($this->select()->where("ID = ? ", $id));
+        $col = $fields['ColumnName'];
+        $sqlCommands = "ALTER TABLE `rep_repository` DROP COLUMN $col";
+        $delete = "DELETE FROM  `rep_customfields` where ID = $id";
+        $db->query($sqlCommands);
+        return $db->query($delete);
+
+    }
+
+    public function parseString($string)
+    {
         return preg_replace('/[^a-zA-Z]/', '', $string);
     }
-    public function getFieldDetails($adminId) {
+
+    public function getFieldDetails($adminId)
+    {
         return $this->fetchRow($this->select()->where("ProgramID = ? ", $adminId));
     }
 

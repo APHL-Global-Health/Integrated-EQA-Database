@@ -21,4 +21,9 @@ class Application_Service_Repcustomfields {
 		return $adminDb->getFieldDetails($adminId);		
 	}
 
+    public function deleteCustomField($adminId){
+        $adminDb = new Application_Model_DbTable_Repcustomfields();
+        return $adminDb->deleteCustomField($adminId);
+    }
+
 }
