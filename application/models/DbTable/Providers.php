@@ -142,14 +142,20 @@ class Application_Model_DbTable_Providers extends Zend_Db_Table_Abstract {
             $row[] = $aRow['Email'];
             $row[] = $aRow['Telephone'];
             $row[] = $aRow['Status'];
-            $row[] = '<a href="/admin/providers/edit/id/' . $aRow['ProviderID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> ';
-
+            $url = '<a href="/admin/providers/edit/id/' . $aRow['ProviderID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> ';
+            $url .= '<a href="/admin/providers/delete/id/' . $aRow['ProviderID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> delete</a> ';
+$row[]=$url;
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
-    
+    public function deleteProvider($id)
+    {
+        return $this->delete("ProviderId = ".$id);
+    }
+
+
     public function getProviders() {
         $auth = Zend_Auth::getInstance();
         

@@ -19,6 +19,11 @@ class Application_Service_Providers {
 		$adminDb = new Application_Model_DbTable_Providers();
 		return $adminDb->addProviders($params);		
 	}
+
+    public function deleteProvider($params){
+        $adminDb = new Application_Model_DbTable_Providers();
+        return $adminDb->deleteProvider($params);
+    }
 	public function updateProviders($params){
 		$adminDb = new Application_Model_DbTable_Providers();
 		return $adminDb->updateProviders($params);		

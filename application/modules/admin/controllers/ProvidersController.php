@@ -61,4 +61,16 @@ class Admin_ProvidersController extends Zend_Controller_Action {
         }
     }
 
+    public function deleteAction() {
+        $adminService = new Application_Service_Providers();
+        $programService = new Application_Service_Programs();
+
+            if ($this->_hasParam('id')) {
+                $adminId = (int) $this->_getParam('id');
+                $adminService->deleteProvider($adminId);
+                $this->_redirect("/admin/providers");
+            }
+
+    }
+
 }
