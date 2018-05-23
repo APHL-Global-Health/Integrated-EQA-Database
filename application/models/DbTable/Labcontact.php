@@ -100,8 +100,8 @@ class Application_Model_DbTable_Labcontact extends Zend_Db_Table_Abstract
         $sQuery = $this->getAdapter()
             ->select()
             ->from(array('a' => $this->_name), array('c.LabName', 'a.ContactID', 'a.ContactName', 'a.ContactEmail','a.Status', 'a.ContactTelephone'))
-            ->join(array('c' => 'rep_labs'), 'c.LabID=a.LabID',array('LabName'))
-            ->group("a.LabID");
+            ->join(array('c' => 'rep_labs'), 'c.LabID=a.LabID',array('LabName'));
+           // ->group("a.LabID");
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
