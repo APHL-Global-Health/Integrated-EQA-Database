@@ -297,6 +297,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
 
     public function updateSystemAdmin($params)
     {
+//        var_dump($params);exit;
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'first_name' => $params['firstName'],
@@ -306,6 +307,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
             'phone' => $params['phone'],
             'status' => $params['status'],
             'IsVl' => $params['IsVl'],
+            'County' => $params['County'],
             'AssignModule' => 0,
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()')
