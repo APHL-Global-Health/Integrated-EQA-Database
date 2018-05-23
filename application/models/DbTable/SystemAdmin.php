@@ -145,7 +145,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
             $row[] = $aRow['primary_email'];
             $row[] = $aRow['phone'];
             $url = '<a href="/admin/system-admins/edit/id/' . $aRow['admin_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
-            $url .= '<a href="/admin/system-admins/addcounty/id/' . $aRow['admin_id'] . '" class="btn btn-success btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> add County</a>';
+            $url .= '<a href="/admin/system-admins/viewdetails/id/' . $aRow['admin_id'] . '" class="btn btn-success btn-xs" style="margin-right: 2px;"><i class="icon-eye"></i> view</a>';
             $row[] = $url;
 
             $output['aaData'][] = $row;
@@ -252,7 +252,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
         if ($_SESSION['loggedInDetails']['IsVl'] != 4) {
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
             if ($data['IsVl'] == 2) {
-                $data['County'] = implode(',',$params['County']);
+                $data['County'] = implode(',', $params['County']);
             }
         }
         if ($_SESSION['loggedInDetails']['IsVl'] == 4) {
@@ -281,7 +281,18 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
 
     public function getSystemAdminDetails($adminId)
     {
-        return $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
+        $details = $this->fetchRow($this->select()->where("admin_id = ? ", $adminId));
+
+        if ($details['County'] != null || !empty($details['County'])) {
+            $sQuery = $this->getAdapter()->select()->from(array('a' => "rep_counties"));
+            $sQuery->where('CountyID IN (?)', explode(',',$details['County']));
+
+            $rResult = $this->getAdapter()->fetchAll($sQuery);
+
+            $details['County'] = $rResult;
+        }
+
+        return $details;
     }
 
     public function updateSystemAdmin($params)
@@ -317,7 +328,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract
             $data['IsVl'] = $_SESSION['loggedInDetails']['IsVl'];
             if ($data['IsVl'] == 2) {
                 if (isset($data['County'])) {
-                    $data['County'] = implode(',',$params['County']);
+                    $data['County'] = implode(',', $params['County']);
                 }
             }
         }

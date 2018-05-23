@@ -1,0 +1,58 @@
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;"><div style="font-size:22.5px;line-height:36px;color:#333;float:left;">
+       User Details</div>
+    <div style="margin-top:10px;">
+        <?php
+
+        ?>
+        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'index'), 'default', true); ?>"
+           class="btn btn-primary" style="float:right;"><i class="icon-user"></i>&nbsp;Back</a>
+    </div>
+</h4>
+<div class="container col-md-8 col-md-offset-2">
+
+    <table class="table btn-primary">
+        <tr>
+            <td colspan="2">
+                <?php if ($this->admin['IsProvider'] == "3")echo "QA Manager" ?>
+                <?php if ($this->admin['IsProvider'] == "1")echo "System Admin" ?>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>First Name</td><td><?php echo $this->admin['first_name'];   ?></td>
+        </tr>
+        <tr>
+            <td>Last Name</td><td><?php echo $this->admin['last_name'];   ?></td>
+        </tr>
+        <tr>
+            <td>Primary Email</td><td><?php echo $this->admin['primary_email'];   ?></td>
+        </tr>
+        <tr>
+            <td>Cell/Mobile Number</td><td><?php echo $this->admin['phone'];   ?></td>
+        </tr>
+        <tr>
+            <td>Secondary Email</td><td><?php echo $this->admin['secondary_email'];   ?></td>
+        </tr>
+        <tr>
+            <td>Sub Module</td><td><?php if($this->admin['IsVl'] == "2") echo "Repository"?></td>
+        </tr>
+        <tr>
+            <td>County (<?php echo count($this->admin['County']); ?>)</td><td>
+                <?php foreach($this->admin['County'] as $key=>$value){
+                    ?>
+
+                    <?php
+                    echo $value['Description'] ."<br>";
+                }   ?>
+            </td>
+        </tr>
+        <tr>
+            <td>Status</td><td>
+                <?php echo ($this->admin['status'] == "active")?"Active":"Inactive"?>
+            </td>
+        </tr>
+    </table>
+
+</div>

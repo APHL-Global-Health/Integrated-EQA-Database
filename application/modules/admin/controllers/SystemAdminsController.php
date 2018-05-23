@@ -61,4 +61,23 @@ class Admin_SystemAdminsController extends Zend_Controller_Action {
         $this->view->countyList = $commonService->getCountiesList();
     }
 
+
+    public function viewdetailsAction() {
+        $commonService = new Application_Service_Common();
+        $adminService = new Application_Service_SystemAdmin();
+
+            if ($this->_hasParam('id')) {
+                if (in_array($_SESSION['loggedInDetails']["IsProvider"], array(2, 3))) {
+                    $adminId =(int) $_SESSION['loggedInDetails']['admin_id'];
+                } else {
+                    $adminId = (int) $this->_getParam('id');
+                }
+                $this->view->admin = $adminService->getSystemAdminDetails($adminId);
+            }
+
+        $this->view->countyList = $commonService->getCountiesList();
+    }
+
+
+
 }

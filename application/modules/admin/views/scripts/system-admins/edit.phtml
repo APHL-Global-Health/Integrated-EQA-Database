@@ -1,11 +1,13 @@
 <div class="well">
-    <form name="editSystemAdminForm" id="editSystemAdminForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "system-admins", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
+    <form name="editSystemAdminForm" id="editSystemAdminForm" method="post"
+          action="<?php echo $this->url(array("module" => "admin", "controller" => "system-admins", "action" => "edit"), 'default', true) ?>"
+          class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
         <fieldset>
             <legend>Update PT Manager</legend>
             <?php
-//            var_dump($_SESSION['loggedInDetails']);
+            //            var_dump($_SESSION['loggedInDetails']);
             if ($_SESSION['loggedInDetails']['force_password_reset'] == 1 &&
-                    $_SESSION['loggedInDetails']['admin_id'] == $this->admin['admin_id']) {
+                $_SESSION['loggedInDetails']['admin_id'] == $this->admin['admin_id']) {
                 ?>
                 <div class="alert alert-warning col-md-12">You have not reset you password, kindly do so.</div>
             <?php } ?>
@@ -14,7 +16,7 @@
                 if (isset($_GET['status'])) {
                     ?>
                     <div class="alert alert-success col-md-12">Profile Updated successfully.</div>
-                <?php
+                    <?php
                 }
             }
             ?>
@@ -26,7 +28,7 @@
                                              value="<?php echo $this->admin['first_name']; ?>"
                                              placeholder="Please enter the first name here"/></div>
                 <input type="hidden" id="adminId" name="adminId" size="50" maxlength="45"
-                       class="isRequired form-control" 
+                       class="isRequired form-control"
                        value="<?php echo $this->admin['admin_id']; ?>"/>
             </div>
             <div class="form-group">
@@ -43,13 +45,14 @@
 
                 <div class="col-lg-5">
                     <input type="text"
-                    <?php
-                    if ($_SESSION['loggedInDetails']['admin_id'] != $this->admin['admin_id']) {
-                        echo "readonly=''";
-                    }
-                    ?>
+                        <?php
+                        if ($_SESSION['loggedInDetails']['admin_id'] != $this->admin['admin_id']) {
+                            echo "readonly=''";
+                        }
+                        ?>
                            id="primaryEmail" name="primaryEmail" size="50" class="isRequired form-control isEmail"
-                           title="Please enter the primary email id here" placeholder="Please enter the primary email id here"
+                           title="Please enter the primary email id here"
+                           placeholder="Please enter the primary email id here"
                            value="<?php echo $this->admin['primary_email']; ?>"
                            onblur="checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "admin_id##" . $this->admin['admin_id']; ?>', 'This Email already exists for another Admin. Please try something else.');cheackEmailId();"/>
                 </div>
@@ -58,20 +61,28 @@
             if ($_SESSION['loggedInDetails']['admin_id'] == $this->admin['admin_id']) {
                 ?>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Password <br/> <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small></label>
+                    <label class="col-lg-3 control-label">Password <br/>
+                        <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small>
+                    </label>
                     <div class="col-lg-5">
-                        <input type="password" id="password" name="password" size="50" value="" class="form-control" title="Please enter a password" placeholder="Please enter a password" onchange="validatePassword(this)"/>
+                        <input type="password" id="password" name="password" size="50" value="" class="form-control"
+                               title="Please enter a password" placeholder="Please enter a password"
+                               onchange="validatePassword(this)"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Confirm Password <br/> <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small></label>
+                    <label class="col-lg-3 control-label">Confirm Password <br/>
+                        <small style="font-weight:normal;" class="mandatory">Leave blank to retain old password</small>
+                    </label>
                     <div class="col-lg-5">
-                        <input type="password" id="confirmPassword" name="password"  size="50" value="" class="form-control confirmPassword" title="Please repeat the same password" placeholder="Please repeat the same password"/>
-                        <input type="hidden" id="force_password_reset" name="force_password_reset"  size="50" value="0" />
+                        <input type="password" id="confirmPassword" name="password" size="50" value=""
+                               class="form-control confirmPassword" title="Please repeat the same password"
+                               placeholder="Please repeat the same password"/>
+                        <input type="hidden" id="force_password_reset" name="force_password_reset" size="50" value="0"/>
 
                     </div>
                 </div>
-<?php } ?>
+            <?php } ?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Cell/Mobile Number <span class="mandatory">*</span></label>
 
@@ -85,10 +96,13 @@
                 <label class="col-lg-3 control-label">Secondary Email</label>
 
                 <div class="col-lg-5">
-                    <input  type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45" value="<?php echo $this->admin['secondary_email']; ?>" placeholder="Please enter secondary email here" class="form-control isEmail" onblur="cheackEmailId()" />
+                    <input type="text" id="secondaryEmail" name="secondaryEmail" size="50" maxlength="45"
+                           value="<?php echo $this->admin['secondary_email']; ?>"
+                           placeholder="Please enter secondary email here" class="form-control isEmail"
+                           onblur="cheackEmailId()"/>
                 </div>
             </div>
-<?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
+            <?php if ($_SESSION['loggedInDetails']['AssignModule'] == 1) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Module <span class="mandatory">*</span></label>
 
@@ -96,16 +110,24 @@
                         <select type="text" id="IsVl" name="IsVl" class="isRequired form-control"
                                 title="Please select user module here">
                             <option value="0" selected="selected">--Select--</option>
-                            <option value="1" <?php echo ($this->admin['IsVl'] == "1") ? "selected='selected'" : ""; ?>>Viral Load</option>
-                            <option value="2" <?php echo ($this->admin['IsVl'] == "2") ? "selected='selected'" : ""; ?>>Repository</option>
-                            <option value="3" <?php echo ($this->admin['IsVl'] == "3") ? "selected='selected'" : ""; ?>>Microbiology</option>
-                            <option value="4" <?php echo ($this->admin['IsVl'] == "4") ? "selected='selected'" : ""; ?>>System Admin</option>
+                            <option value="1" <?php echo ($this->admin['IsVl'] == "1") ? "selected='selected'" : ""; ?>>
+                                Viral Load
+                            </option>
+                            <option value="2" <?php echo ($this->admin['IsVl'] == "2") ? "selected='selected'" : ""; ?>>
+                                Repository
+                            </option>
+                            <option value="3" <?php echo ($this->admin['IsVl'] == "3") ? "selected='selected'" : ""; ?>>
+                                Microbiology
+                            </option>
+                            <option value="4" <?php echo ($this->admin['IsVl'] == "4") ? "selected='selected'" : ""; ?>>
+                                System Admin
+                            </option>
 
                         </select>
                     </div>
                 </div>
             <?php } ?>
-<?php if ($_SESSION['loggedInDetails']['IsVl'] == 2 && !in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) { ?>
+            <?php if ($_SESSION['loggedInDetails']['IsVl'] == 2 && !in_array($_SESSION['loggedInDetails']['IsProvider'], array('2', '3'))) { ?>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Sub Module <span class="mandatory">*</span></label>
 
@@ -113,29 +135,36 @@
                         <select type="text" id="IsProvider" name="IsProvider" class="isRequired form-control"
                                 title="Please select user sub module here">
 
-                                                         <!--<option value="2" <?php echo ($this->admin['IsProvider'] == "2") ? "selected='selected'" : ""; ?>>Provider</option>-->
-                            <option value="3" <?php echo ($this->admin['IsProvider'] == "3") ? "selected='selected'" : ""; ?>>QA Manager</option>
-                            <option value="1" <?php echo ($this->admin['IsProvider'] == "1") ? "selected='selected'" : ""; ?>>System Admin</option>
+                            <!--<option value="2" <?php echo ($this->admin['IsProvider'] == "2") ? "selected='selected'" : ""; ?>>Provider</option>-->
+                            <option value="3" <?php echo ($this->admin['IsProvider'] == "3") ? "selected='selected'" : ""; ?>>
+                                QA Manager
+                            </option>
+                            <option value="1" <?php echo ($this->admin['IsProvider'] == "1") ? "selected='selected'" : ""; ?>>
+                                System Admin
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">County <span class="mandatory">*</span></label>
                     <div class="col-lg-5">
-                        <select class="form-control isRequired" required name="County" id="County" value="<?php echo $this->admin['County']; ?>"
+                        <select class="form-control isRequired"
+                                required name="County[]" multiple id="County" value="<?php echo $this->admin['County']; ?>"
                                 title="Please choose the county here">
                             <option value="N/A" selected="">--SELECT COUNTY--</option>
                             <?php foreach ($this->countyList as $prov) {
                                 ?>
-                                <option value="<?php echo $prov['CountyID']; ?>" 
-                                        <?php echo ($this->admin['County'] == $prov['CountyID']) ? "selected='selected'" : "" ?>><?php echo $prov['Description']; ?></option>
-                                        <?php
-                                    }
-                                    ?>
+                                <option value="<?php echo $prov['CountyID']; ?>"
+                                    <?php echo ($this->admin['County'] == $prov['CountyID']) ? "selected='selected'" : "" ?>>
+                                    <?php echo $prov['Description']; ?>
+                                </option>
+                                <?php
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
-<?php } ?>
+            <?php } ?>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status <span class="mandatory">*</span></label>
 
@@ -144,11 +173,11 @@
                             title="Please select user status here">
                         <option value="">--Select--</option>
                         <option
-                            value="active" <?php echo ($this->admin['status'] == "active") ? "selected='selected'" : ""; ?>>
+                                value="active" <?php echo ($this->admin['status'] == "active") ? "selected='selected'" : ""; ?>>
                             Active
                         </option>
                         <option
-                            value="inactive" <?php echo ($this->admin['status'] == "inactive") ? "selected='selected'" : ""; ?>>
+                                value="inactive" <?php echo ($this->admin['status'] == "inactive") ? "selected='selected'" : ""; ?>>
                             Inactive
                         </option>
                     </select>
@@ -164,30 +193,38 @@
                     ?>
                     <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/system-admins';"
                            tabindex="8" value="Cancel"/>
-<?php } else { ?>
+                <?php } else { ?>
                     <input class="btn btn-danger" type="button" onclick="window.location.href = '/admin/';"
                            tabindex="8" value="Cancel Save"/>
-<?php } ?>
+                <?php } ?>
             </div>
         </fieldset>
     </form>
 </div>
 <script type="text/javascript">
     var duplicated = false;
+
     function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
         objValue = document.getElementById(obj).value;
-        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html"},
-                function (data) {
-                    if (data > 0) {
-                        alert(msg, "err");
-                        duplicated = true;
-                        $("#" + obj).focus();
-                    } else {
-                        duplicated = false;
-                    }
-                    return duplicated;
-                });
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {
+                tableName: tableName,
+                fieldName: fieldName,
+                value: objValue,
+                fnct: fnct,
+                format: "html"
+            },
+            function (data) {
+                if (data > 0) {
+                    alert(msg, "err");
+                    duplicated = true;
+                    $("#" + obj).focus();
+                } else {
+                    duplicated = false;
+                }
+                return duplicated;
+            });
     }
+
     function validateNow() {
         //checkDduplicateId=checkDuplicate('system_admin', 'primary_email', 'primaryEmail', '<?php echo "admin_id##" . $this->admin['admin_id']; ?>', 'This Email already exists for another Admin. Please try something else.')
         //if (!checkDduplicateId) {
@@ -200,6 +237,7 @@
         }
         //}
     }
+
     function cheackEmailId() {
         primaryEmail = document.getElementById("primaryEmail").value;
         secondaryEmail = document.getElementById("secondaryEmail").value;
