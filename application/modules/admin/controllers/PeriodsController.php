@@ -51,5 +51,19 @@ class Admin_PeriodsController extends Zend_Controller_Action
         }
         $this->view->providerList = $commonService->getproviderList();
     }
+
+    public function deleteAction() {
+        $adminService = new Application_Service_Periods();
+
+
+        if ($this->_hasParam('id')) {
+            $adminId = (int) $this->_getParam('id');
+            $adminService->deletePeriod($adminId);
+            $this->_redirect("/admin/periods");
+        }
+
+    }
+
+
 }
 

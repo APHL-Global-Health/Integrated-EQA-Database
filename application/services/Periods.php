@@ -16,6 +16,10 @@ class Application_Service_Periods {
 		$adminDb = new Application_Model_DbTable_Periods();
 		return $adminDb->addPeriods($params);		
 	}
+	public function deletePeriod($params){
+		$adminDb = new Application_Model_DbTable_Periods();
+		return $adminDb->deletePeriod($params);
+	}
 	public function updatePeriods($params){
 		$adminDb = new Application_Model_DbTable_Periods();
 		return $adminDb->updatePeriods($params);		

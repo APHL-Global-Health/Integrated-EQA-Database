@@ -141,12 +141,18 @@ class Application_Model_DbTable_Periods extends Zend_Db_Table_Abstract {
             $row[] = $aRow['PeriodDescription'];
             $row[] = $aRow['ProviderID'];
             $row[] = $aRow['EnrolledLabs'];
-            $row[] = '<a href="/admin/periods/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url = '<a href="/admin/periods/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url .= '<a href="/admin/periods/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> delete</a>';
 
+            $row[] =$url;
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
+    }
+    public function deleteProvider($id)
+    {
+        return $this->delete("ID = ".$id);
     }
 
     public function getPeriods() {
