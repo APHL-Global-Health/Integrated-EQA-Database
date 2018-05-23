@@ -124,23 +124,7 @@
         <label for="inputEmail">Password</label>
 		<input type="password" id="password" name="password" class="isRequired  form-control" title="Please enter your password" placeholder="eg. X8df!90EO" />
 	</div>
-		<table border="0" style="width:50%;margin-top: 10px;margin:0 auto;clear: both;">
-					<tbody>
-						<tr>
-							<td>
-								<div style="float:left;margin:1px;">
-									<img id="capChaw" src="/captcha/<?php echo rand(); ?>" />
-								</div>
-							</td>
-							<td style="padding-top:3px;" align="center">
-								<a onclick="getCaptcha('capChaw');return false;" class="btn btn-info btn-xs" style="font-size:12px;margin:3px;"><i class="icon-refresh"></i> Get New Image</a>
-								<input type="text" style="margin:0;width:140px;padding:3px;margin-top:3px;font-size:13px;" id="challengeResponse" placeholder="Enter text from image" class="form-control input-sm" title="Please enter the text from the image." maxlength="40" />
-								
-							</td>
-							
-						</tr>
-					</tbody>
-				</table>
+
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> Remember me
       
@@ -199,15 +183,10 @@
                         $.post("<?php echo $this->url(array(), 'checkCaptchaRoute', true); ?>", { challenge_field:challenge_field, format: "html"},
                         function(data){
                             //false
-                            if(false){
-                                alert("Text you entered from the image is incorrect. Please try again");
-                                getCaptcha('capChaw');
-                                document.getElementById("challengeResponse").value="";
-                                return false;
-                            }else{
+
 				$.blockUI();
                                 document.getElementById('loginForm').submit();
-                            }
+                            
                         });
                     }else{
                         alert("Please enter the text from the image to proceed.");
