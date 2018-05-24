@@ -1584,11 +1584,6 @@ CREATE TABLE `rep_corrective_action` (
 -- Dumping data for table `rep_corrective_action`
 --
 
-LOCK TABLES `rep_corrective_action` WRITE;
-/*!40000 ALTER TABLE `rep_corrective_action` DISABLE KEYS */;
-INSERT INTO `rep_corrective_action` VALUES (11,1,1,1,'Action','2018-04-19 15:55:36',NULL,2,'45212','2018-04-11 00:00:00','n/a\r\n                    ');
-/*!40000 ALTER TABLE `rep_corrective_action` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_counties`
@@ -1672,12 +1667,6 @@ CREATE TABLE `rep_failreasons` (
 -- Dumping data for table `rep_failreasons`
 --
 
-LOCK TABLES `rep_failreasons` WRITE;
-/*!40000 ALTER TABLE `rep_failreasons` DISABLE KEYS */;
-INSERT INTO `rep_failreasons` VALUES (1,'weather','MALARIA','m','2','2018-05-23 10:12:47');
-/*!40000 ALTER TABLE `rep_failreasons` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `rep_grading`
 --
@@ -1731,7 +1720,6 @@ CREATE TABLE `rep_labcontacts` (
 
 LOCK TABLES `rep_labcontacts` WRITE;
 /*!40000 ALTER TABLE `rep_labcontacts` DISABLE KEYS */;
-INSERT INTO `rep_labcontacts` VALUES (1,1,'Osoro','osoromichael@gmail.com','0711560619','active'),(2,1,'Osoro','osoromichael@gmail.com','','active'),(3,2,'omolo bondo','omolo@gmail.com','','active');
 /*!40000 ALTER TABLE `rep_labcontacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1765,7 +1753,6 @@ CREATE TABLE `rep_labs` (
 
 LOCK TABLES `rep_labs` WRITE;
 /*!40000 ALTER TABLE `rep_labs` DISABLE KEYS */;
-INSERT INTO `rep_labs` VALUES (1,'Kenya',14,'Kisii',40200,'0711560619',NULL,NULL,NULL,'active','2','2018-05-16 10:52:47'),(2,'Kisii',9,'Kisii',120,'560619',NULL,NULL,NULL,'active','2','2017-11-09 16:37:09');
 /*!40000 ALTER TABLE `rep_labs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1794,7 +1781,6 @@ CREATE TABLE `rep_programs` (
 
 LOCK TABLES `rep_programs` WRITE;
 /*!40000 ALTER TABLE `rep_programs` DISABLE KEYS */;
-INSERT INTO `rep_programs` VALUES (1,'001','MALARIA','active','2','2017-05-23 06:15:31',''),(3,'Test 001','tes','active','2','2017-11-09 16:17:28','');
 /*!40000 ALTER TABLE `rep_programs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1856,7 +1842,6 @@ CREATE TABLE `rep_providerfiles` (
 
 LOCK TABLES `rep_providerfiles` WRITE;
 /*!40000 ALTER TABLE `rep_providerfiles` DISABLE KEYS */;
-INSERT INTO `rep_providerfiles` VALUES (1,'2','1','1','ChromeSetup (2).exe','application/x-dosexec',1130328,'C:\\xampp\\htdocs\\EPTR\\public\\files\\ChromeSetup (2).exe','2','2017-11-10 13:26:28'),(2,'1','1','1','SMA_0056_15.pdf','application/pdf',19677,'C:\\xampp\\htdocs\\EPTR\\public\\files\\SMA_0056_15.pdf','2','2017-11-10 13:30:25');
 /*!40000 ALTER TABLE `rep_providerfiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1964,7 +1949,6 @@ CREATE TABLE `rep_providerrounds` (
 
 LOCK TABLES `rep_providerrounds` WRITE;
 /*!40000 ALTER TABLE `rep_providerrounds` DISABLE KEYS */;
-INSERT INTO `rep_providerrounds` VALUES (1,'Test','m',10,'2017-11-10','2017-11-30','2','2017-11-10 10:46:53');
 /*!40000 ALTER TABLE `rep_providerrounds` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1998,7 +1982,6 @@ CREATE TABLE `rep_providers` (
 
 LOCK TABLES `rep_providers` WRITE;
 /*!40000 ALTER TABLE `rep_providers` DISABLE KEYS */;
-INSERT INTO `rep_providers` VALUES (1,'m','osoromichael@gmail.com','m','m',0,NULL,NULL,NULL,'active','2','2017-11-09 16:47:45'),(2,'m','osoromichael@gmail.com','m','m',0,NULL,NULL,NULL,'active','2','2017-11-09 16:48:03');
 /*!40000 ALTER TABLE `rep_providers` ENABLE KEYS */;
 UNLOCK TABLES;
 
