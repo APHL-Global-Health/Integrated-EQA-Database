@@ -136,7 +136,10 @@ class Application_Model_DbTable_Failreasons extends Zend_Db_Table_Abstract
             $row[] = $aRow['ReasonDescription'];
             $row[] = $aRow['ProviderID'];
             $row[] = $aRow['ProgramID'];
-            $row[] = '<a href="/admin/failreasons/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url= '<a href="/admin/failreasons/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+            $url .= '<a href="/admin/failreasons/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> Edit</a>';
+
+            $row=$url;
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

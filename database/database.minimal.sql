@@ -1646,7 +1646,7 @@ CREATE TABLE `rep_customfields` (
 
 LOCK TABLES `rep_customfields` WRITE;
 /*!40000 ALTER TABLE `rep_customfields` DISABLE KEYS */;
-INSERT INTO `rep_customfields` VALUES (3,'m','MALARIA','TestCase','Test Case','NULL','varchar',100,'2','0000-00-00 00:00:00'),(4,'m','MALARIA','TestCase','TestCase','NULL','varchar',100,'2','0000-00-00 00:00:00');
+
 /*!40000 ALTER TABLE `rep_customfields` ENABLE KEYS */;
 UNLOCK TABLES;
 

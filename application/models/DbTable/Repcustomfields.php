@@ -170,6 +170,10 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
         $mandatory = $params['Mandatory'];
         $datatype = $params['Datatype'];
         $length = $params['Length'];
+        if($mandatory!=NULL)
+            $mandatoryChange=' ';
+        else
+            $mandatoryChange = ' DEFAULT '. $mandatory;
         //block of code if no id is set
         if (!isset($params['ID'])) {
             $sQuery = $this
@@ -179,11 +183,12 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
                 ->where("ColumnName = ?", $column);
             $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
             if ($aResultTotal[0] == 0) {
-                $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+
+                $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length)  $mandatoryChange COMMENT '$description';";
                 $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
                 $db->query($customf);
             } else {
-                $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+                $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length)  $mandatoryChange COMMENT '$description';";
 
             }
             return $db->query($sqlCommands);
@@ -204,7 +209,7 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
             $sqlCommands = "ALTER TABLE `rep_repository` CHANGE "
 
                 . $this->parseString($aResult['ColumnName']) . "  " . $this->parseString($params['ColumnName'])
-                . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+                . "  $datatype($length)  $mandatoryChange COMMENT '$description';";
 
             $data['ProviderID'] = $params['ProviderID'];
             $data['ProgramID'] = $params['ProgramID'];
