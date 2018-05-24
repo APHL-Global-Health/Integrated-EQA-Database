@@ -144,7 +144,7 @@ class Application_Model_DbTable_Programs extends Zend_Db_Table_Abstract
             $row[] = $aRow['Comments'];
             $row[] = $aRow['Status'];
             $url = '<a href="/admin/programs/edit/id/' . $aRow['ProgramID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
-            $url .= '<a href="/admin/programs/delete/id/' . $aRow['ProgramID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> Edit</a>';
+            $url .= '<a href="/admin/programs/delete/id/' . $aRow['ProgramID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> Delete</a>';
 
             $row[] = $url;
             $output['aaData'][] = $row;
