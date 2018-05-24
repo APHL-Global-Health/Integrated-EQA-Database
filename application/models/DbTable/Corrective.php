@@ -183,7 +183,6 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
             $row = array();
             $row[] = ++$count;//ucwords($aRow['ID']);
             $row[] = $aRow['Description'];
-            $row[] = $aRow['ProviderName'];
             $row[] = $aRow['PeriodDescription'];
             $row[] = $aRow['actionDone'];
 

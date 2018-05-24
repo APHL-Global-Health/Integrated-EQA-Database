@@ -4,10 +4,10 @@
           class="form-horizontal bs-example" role="form" enctype="multipart/form-data">
         <fieldset>
             <legend>Corrective Action Form</legend>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="col-lg-3 control-label">Provider <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <select class="form-control isRequired" required="" name="ProviderID" id="ProviderID"
+                    <select class="form-control isRequired"  name="ProviderID" id="ProviderID"
                             title="Please choose the provider here">
                         <option value=""></option>
                         <?php foreach ($this->providerList as $prov) {
