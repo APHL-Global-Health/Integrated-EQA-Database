@@ -127,6 +127,7 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
             ->joinLeft(array('pmm' => 'rep_programs'), 'pmm.ProgramID=pt.ProgramID', 'Description')
             ->joinLeft(array('r' => 'rep_providerrounds'), 'r.Id=pt.RoundID', 'PeriodDescription')
             ->joinLeft(array('p' => 'rep_providers'), 'p.ProviderId=pt.ProviderID', 'ProviderName')
+            ->joinLeft(array('m' => 'mfl_facility_codes'), 'm.MflCode=pt.mflCode', 'Name')
             ->joinLeft(array('d' => 'system_admin'), 'd.admin_id=pt.createdBy', array('primary_email', 'first_name'));
 
         if (isset($sWhere) && $sWhere != "") {
@@ -188,7 +189,7 @@ class Application_Model_DbTable_Corrective extends Zend_Db_Table_Abstract
 
             $row[] = $aRow['datePerformed'];
             $row[] = $aRow['elementCaptured'];
-            $row[] = $aRow['mflCode'];
+            $row[] = $aRow['mflCode'] ."(".$aRow['Name'].")";
 
 
 
