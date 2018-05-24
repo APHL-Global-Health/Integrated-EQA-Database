@@ -2082,6 +2082,13 @@ CREATE TABLE `rep_repository` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Trigger for `rep_repository`
+----
+
+
+
+
+
 -- Dumping data for table `rep_repository`
 --
 
@@ -3772,5 +3779,33 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+delimiter $$
+CREATE DEFINER=`root`@`localhost` TRIGGER `updateTime_valid_rep` 
+BEFORE INSERT ON `rep_repository` FOR EACH ROW BEGIN
+
+declare mflcount int default 0;
+declare EventDate date default null;
+
+declare EventDateCount int default 0;
+
+select count(MflCode) into mflcount from mfl_facility_codes where MflCode = new.MflCode;
+select EndDate into EventDate from rep_providerrounds where PeriodDescription = new.RoundID;
+
+
+  set new.EventDate=EventDate ;
+  set new.uploadMessage='Valid data' ;
+
+
+if mflcount=0 then
+  set new.valid=0 ;
+  set new.uploadMessage='Invalid mflcode' ;
+end if;
+
+
+if ( isnull(new.ReleaseDate) ) then
+ set new.ReleaseDate=curdate();
+end if;
+
+END
 
 -- Dump completed on 2018-05-23 14:49:42
