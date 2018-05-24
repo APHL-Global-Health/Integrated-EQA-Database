@@ -128,6 +128,9 @@ class Application_Model_DbTable_Importcsv extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
+
+        $sQuery = $sQuery->where("Status = ?",0);
+
         //error_log($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);

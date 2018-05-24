@@ -35,6 +35,7 @@ class Admin_ImportcsvController extends Zend_Controller_Action {
         if ($auth->hasIdentity()) {
             $pname = $auth->getIdentity()->ProviderName;
         }
+
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
 
