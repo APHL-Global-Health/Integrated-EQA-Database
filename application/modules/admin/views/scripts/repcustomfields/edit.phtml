@@ -1,5 +1,5 @@
 <div class="well">
-    <form name="addFieldForm" id="addFieldForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "repcustomfields", "action" => "add"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
+    <form name="addFieldForm" id="addFieldForm" method="post" action="<?php echo $this->url(array("module" => "admin", "controller" => "repcustomfields", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
             return false;">
         <fieldset>
             <legend>Add New Field</legend>
@@ -11,21 +11,28 @@
                         <option value=""></option>
                         <?php foreach ($this->providerList as $prov) {
                             ?>
-                            <option value="<?php echo $prov['ProviderName']; ?>"><?php echo $prov['ProviderName']; ?></option>
+                            <option value="<?php echo $prov['ProviderName']; ?>"
+                                <?php echo ($this->customDetails['ProviderID']==$prov['ProviderName']) ?"selected":""; ?>>
+
+                                <?php echo $prov['ProviderName']; ?></option>
                             <?php
                         }
                         ?>
                     </select>
+                    <input class="hidden" value="<?php echo($this->customDetails['ID']); ?>" name="ID">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Program <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
+
                     <select class="form-control isRequired" name="ProgramID" id="ProgramID" title="Please choose the program here">
                         <option value=""></option>
                         <?php foreach ($this->programList as $prog) {
                             ?>
-                            <option value="<?php echo $prog['Description']; ?>"><?php echo $prog['Description']; ?></option>
+                            <option value="<?php echo $prog['Description']; ?>"
+                                <?php echo ($this->customDetails['ProgramID']==$prog['Description']) ?"selected":""; ?>
+                            ><?php echo $prog['Description']; ?></option>
                             <?php
                         }
                         ?>
@@ -36,16 +43,20 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Field Name <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input id="pname" type="text" id="ColumnName" name="ColumnName" size="50" maxlength="45"
+                <div class="col-lg-5"><input id="pname" value="<?php echo($this->customDetails['ColumnName']); ?>"
+                                             type="text" id="ColumnName" name="ColumnName" size="50" maxlength="45"
                                              class="isRequired form-control" title="Please enter the field name here"
                                              placeholder="Please enter the field name here"/></div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Field Comment <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input id="pname" type="text" id="Description" name="Description" size="50" maxlength="45"
+                <div class="col-lg-5">
+                    <input id="pname" value="<?php echo($this->customDetails['Description']); ?>"
+                           type="text" id="Description" name="Description" size="50" maxlength="45"
                                              class="isRequired form-control" title="Please enter the field description here"
-                                             placeholder="Please enter the field description here"/></div>
+                                             placeholder="Please enter the field description here"/>
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Data Type <span class="mandatory">*</span></label>
@@ -54,9 +65,9 @@
                     <select type="text" id="Datatype" name="Datatype" class="isRequired form-control"
                             title="Please select datatype here">
                         <option value="">--Select--</option>
-                        <option value="varchar" selected="selected">Varchar</option>
-                        <option value="int">Integer</option>
-                        <option value="text">Text</option>
+                        <option value="varchar"   <?php echo ($this->customDetails['Datatype']=="varchar") ?"selected":""; ?>>Varchar</option>
+                        <option value="int" <?php echo ($this->customDetails['Datatype']=="int") ?"selected":""; ?>>Integer</option>
+                        <option value="text" <?php echo ($this->customDetails['Datatype']=="text") ?"selected":""; ?>>Text</option>
                     </select>
                 </div>
             </div>
@@ -70,7 +81,9 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Field Length <span class="mandatory">*</span></label>
 
-                <div class="col-lg-5"><input type="number" id="Length" name="Length" size="50" maxlength="45"
+                <div class="col-lg-5"><input
+                            value="<?php echo($this->customDetails['Length']); ?>"
+                            type="number" id="Length" name="Length" size="50" maxlength="45"
                                              class="isRequired form-control" title="Please enter the length here"
                                              placeholder="Please enter the length here"/></div>
             </div>

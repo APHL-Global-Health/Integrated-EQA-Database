@@ -170,18 +170,55 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
         $mandatory = $params['Mandatory'];
         $datatype = $params['Datatype'];
         $length = $params['Length'];
+        //block of code if no id is set
+        if (!isset($params['ID'])) {
+            $sQuery = $this
+                ->getAdapter()
+                ->select()
+                ->from($this->_name, new Zend_Db_Expr("COUNT('" . $column . "')"))
+                ->where("ColumnName = ?", $column);
+            $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
+            if ($aResultTotal[0] == 0) {
+                $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+                $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
+                $db->query($customf);
+            } else {
+                $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
 
-        $sQuery = $this->getAdapter()->select()->from($this->_name, new Zend_Db_Expr("COUNT('" . $column . "')"));
-        $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
-        if ($aResultTotal[0] == 0) {
-            $sqlCommands = "ALTER TABLE `rep_repository` ADD COLUMN " . $this->parseString($column) . " $datatype($length) DEFAULT $mandatory COMMENT '$description';";
-            $customf = "INSERT INTO `rep_customfields` (ProviderID,ProgramID,ColumnName,Description,Mandatory,Datatype,Length,CreatedBy,CreatedDate) VALUES('$provider','$program','" . $this->parseString($column) . "','$column','$mandatory','$datatype','$length','$createdby','$createdate');";
-            $db->query($customf);
+            }
+            return $db->query($sqlCommands);
+
         } else {
-            $sqlCommands = "ALTER TABLE `rep_repository` CHANGE " . $this->parseString($column) . "  " . $this->parseString($column) . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+            //what to do if its an edit
+            $sQueryId = $this
+                ->getAdapter()
+                ->select()
+                ->from($this->_name)
+                ->where("ID = ?", $params['ID']);
+
+            $aResult = $this->getAdapter()->fetchRow($sQueryId);
+            $datatype = $params['Datatype'];
+            $length = $params['Length'];
+            $description = $params['description'];
+
+            $sqlCommands = "ALTER TABLE `rep_repository` CHANGE "
+
+                . $this->parseString($aResult['ColumnName']) . "  " . $this->parseString($params['ColumnName'])
+                . "  $datatype($length) DEFAULT $mandatory COMMENT '$description';";
+
+            $data['ProviderID'] = $params['ProviderID'];
+            $data['ProgramID'] = $params['ProgramID'];
+            $data['ColumnName'] = $params['ColumnName'];
+            $data['Description'] = $params['Description'];
+            $data['Mandatory'] = $params['Mandatory'];
+            $data['Datatype'] = $params['Datatype'];
+            $data['Length'] = $params['Length'];
+
+             $this->update($data, " ID=" . $params['ID']);
+
+            return $db->query($sqlCommands);
 
         }
-        return $db->query($sqlCommands);
 
     }
 
@@ -215,8 +252,6 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
     }
 
 
-
-
     public function deleteCustomField($id)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -237,6 +272,11 @@ class Application_Model_DbTable_Repcustomfields extends Zend_Db_Table_Abstract
     public function getFieldDetails($adminId)
     {
         return $this->fetchRow($this->select()->where("ProgramID = ? ", $adminId));
+    }
+
+    public function getCustomFieldDetails($adminId)
+    {
+        return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
     }
 
 }

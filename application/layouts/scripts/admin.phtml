@@ -185,7 +185,11 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'programs'), 'default', true); ?>">PT Programs</a></li>
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'providers'), 'default', true); ?>">PT Providers</a></li>
+
+                                   <!--
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'labs'), 'default', true); ?>">Labs</a></li>
+                                   -->
+
                                     <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'periods'), 'default', true); ?>">Test Events</a></li>
                                     <?php if ($vl != 2) { ?>
                                         <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'grading'), 'default', true); ?>">Grading</a></li>
