@@ -114,16 +114,6 @@ CREATE TABLE `data_manager` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `data_manager`
---
-
-LOCK TABLES `data_manager` WRITE;
-/*!40000 ALTER TABLE `data_manager` DISABLE KEYS */;
-INSERT INTO `data_manager` VALUES (48,'okarmikell@gmail.com','e10adc3949ba59abbe56e057f20f883e','kisii level 5','okari','mikell','','',NULL,NULL,NULL,'0711560619',0,'yes','yes','yes','no','active','2018-04-30 08:46:17','31',NULL,NULL,'2018-05-15 11:47:22','3',NULL,'null'),(49,'osoromichael@gmail.com','e10adc3949ba59abbe56e057f20f883e','Kisii','Michael LM','Osoro','','',NULL,NULL,NULL,'0737560619',0,'yes','yes','yes','no','active','2018-04-30 08:47:50','31',NULL,NULL,'2018-05-11 10:16:04','1',NULL,'null'),(50,'mosoro@abnosoftwares.co.ke','e10adc3949ba59abbe56e057f20f883e','KRH','','','','mosoro@abnosoftwares.co.ke',NULL,NULL,NULL,'',1,'no','no','no','no','active','2018-04-30 15:23:14',NULL,NULL,NULL,NULL,'1','0','null'),(51,'mosoro@gmail.com','29f4f54b8e3e238d4638a7f5808b4a97','test','email','temp','','',NULL,NULL,NULL,'0711560619',1,'no','no',NULL,NULL,'active','2018-05-11 15:48:32','3',NULL,NULL,NULL,'3','0','LjV0QDuAWqHp$QiNm58IR@qXYGhS1gH8A$pjXNDYi0V@g1IW5QumhqqQSLGR');
-/*!40000 ALTER TABLE `data_manager` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `distributions`
 --
 
@@ -143,16 +133,6 @@ CREATE TABLE `distributions` (
   PRIMARY KEY (`distribution_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `distributions`
---
-
-LOCK TABLES `distributions` WRITE;
-/*!40000 ALTER TABLE `distributions` DISABLE KEYS */;
-INSERT INTO `distributions` VALUES (1,'B/0001/2018','2018-05-01','shipped','2018-05-03 08:44:31','31',NULL,NULL,'2018-05-31'),(2,'B/0002/2018','2018-05-03','pending','2018-05-03 09:03:43','31',NULL,NULL,'2018-05-30'),(3,'B/0003/2018','2018-05-07','created','2018-05-09 12:40:36','31',NULL,NULL,'2018-05-31'),(4,'B/0004/2018','2018-05-08','created','2018-05-09 12:55:49','31',NULL,NULL,'2018-05-16'),(5,'B/0005/2018','2018-05-10','shipped','2018-05-09 12:57:19','31',NULL,NULL,'2018-05-23');
-/*!40000 ALTER TABLE `distributions` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `dts_recommended_testkits`
@@ -219,16 +199,6 @@ CREATE TABLE `enrollments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `enrollments`
---
-
-LOCK TABLES `enrollments` WRITE;
-/*!40000 ALTER TABLE `enrollments` DISABLE KEYS */;
-INSERT INTO `enrollments` VALUES ('eid',1,'2017-02-10',NULL,'enrolled'),('vl',1,'2017-02-01',NULL,'enrolled'),('eid',8,'2017-03-19',NULL,'enrolled'),('vl',8,'2017-03-19',NULL,'enrolled'),('eid',9,'2017-03-19',NULL,'enrolled'),('vl',9,'2017-03-19',NULL,'enrolled'),('vl',23,'2017-05-23',NULL,'enrolled'),('vl',24,'2017-05-24',NULL,'enrolled'),('vl',28,'2017-05-24',NULL,'enrolled'),('eid',29,'2017-05-24',NULL,'enrolled'),('vl',29,'2017-05-24',NULL,'enrolled'),('eid',30,'2017-05-24',NULL,'enrolled'),('vl',30,'2017-05-24',NULL,'enrolled'),('eid',31,'2017-05-24',NULL,'enrolled'),('vl',31,'2017-05-24',NULL,'enrolled'),('eid',33,'2017-05-24',NULL,'enrolled'),('vl',33,'2017-05-24',NULL,'enrolled'),('eid',36,'2017-06-21',NULL,'enrolled'),('vl',36,'2017-06-21',NULL,'enrolled'),('eid',37,'2017-06-21',NULL,'enrolled'),('vl',37,'2017-06-21',NULL,'enrolled'),('eid',38,'2017-06-21',NULL,'enrolled'),('vl',38,'2017-06-21',NULL,'enrolled'),('eid',39,'2017-06-22',NULL,'enrolled'),('vl',39,'2017-06-22',NULL,'enrolled'),('eid',40,'2017-06-22',NULL,'enrolled'),('eid',41,'2017-10-19',NULL,'enrolled'),('vl',41,'2017-10-19',NULL,'enrolled'),('eid',42,'2017-10-19',NULL,'enrolled'),('vl',42,'2017-10-19',NULL,'enrolled'),('vl',43,'2017-10-23',NULL,'enrolled'),('vl',44,'2017-10-23',NULL,'enrolled'),('eid',45,'2017-10-23',NULL,'enrolled'),('vl',45,'2017-10-23',NULL,'enrolled'),('eid',52,'2017-11-15',NULL,'enrolled'),('vl',52,'2017-11-15',NULL,'enrolled'),('eid',53,'2017-11-15',NULL,'enrolled'),('vl',53,'2017-11-15',NULL,'enrolled'),('eid',54,'2017-11-20',NULL,'enrolled'),('vl',54,'2017-11-20',NULL,'enrolled'),('eid',55,'2017-11-20',NULL,'enrolled'),('vl',55,'2017-11-20',NULL,'enrolled'),('eid',58,'2018-04-30',NULL,'enrolled'),('vl',58,'2018-04-30',NULL,'enrolled');
-/*!40000 ALTER TABLE `enrollments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `facility`
 --
 
@@ -288,16 +258,6 @@ CREATE TABLE `facilityplatform` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `facilityplatform`
---
-
-LOCK TABLES `facilityplatform` WRITE;
-/*!40000 ALTER TABLE `facilityplatform` DISABLE KEYS */;
-INSERT INTO `facilityplatform` VALUES (24,58,1),(25,58,2);
-/*!40000 ALTER TABLE `facilityplatform` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `facilityscheme`
 --
 
@@ -345,7 +305,7 @@ CREATE TABLE `global_config` (
 
 LOCK TABLES `global_config` WRITE;
 /*!40000 ALTER TABLE `global_config` DISABLE KEYS */;
-INSERT INTO `global_config` VALUES ('admin_email','eptmanager@gmail.com'),('custom_field_1',''),('custom_field_2',''),('custom_field_needed','no'),('pass_percentage','95'),('qc_access','no'),('response_after_evaluate','no'),('text_under_logo','Test Instance for Viral Load and Early Infant Diagnosis PT Schemes');
+INSERT INTO `global_config` VALUES ('admin_email','nphleqa@gmail.com'),('custom_field_1',''),('custom_field_2',''),('custom_field_needed','no'),('pass_percentage','95'),('qc_access','no'),('response_after_evaluate','no'),('text_under_logo','Test Instance for Viral Load and Early Infant Diagnosis PT Schemes');
 /*!40000 ALTER TABLE `global_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -529,16 +489,6 @@ CREATE TABLE `participant` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `participant`
---
-
-LOCK TABLES `participant` WRITE;
-/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
-INSERT INTO `participant` VALUES (57,'00001/57','no','Kisii','Kisii','Chemistry','','Kisii','',116,'','','','',NULL,NULL,NULL,'1','16','Kisii','','','','Kisii ','osoromichael@gmail.com','CDC','1','2018-04-30 09:14:53','vl@gmail.com',NULL,NULL,'active','1',1,'00001','0'),(58,'112354/58','no',NULL,'KISUMU','chemistry','KISUMU','KISUMU','',116,'','','','','','1',NULL,'','17','KISUMU','','','',' ','mosoro@abnosoftwares.co.ke','','3','2018-04-30 15:23:14',NULL,'2018-05-10 12:33:06','vl@gmail.com','active','1',1,'112354','1'),(59,'12541','no','KISII LEVEL 5','KNH','MICROBIOLOGY','175','KISII','',116,'','','','',NULL,NULL,NULL,'','BARINGO','KISII LEVEL 5','','','','KISII LEVEL 5 ','osoromichael@gmail.com',NULL,'level 1','2018-05-14 15:28:16','mb@gmail.com',NULL,NULL,'active','3',1,'12364','0');
-/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `participant_enrolled_programs_map`
 --
 
@@ -578,16 +528,6 @@ CREATE TABLE `participant_manager_map` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `participant_manager_map`
---
-
-LOCK TABLES `participant_manager_map` WRITE;
-/*!40000 ALTER TABLE `participant_manager_map` DISABLE KEYS */;
-INSERT INTO `participant_manager_map` VALUES (57,48,'1',0),(57,49,'1',0),(57,50,'1',0),(59,48,'1',0);
-/*!40000 ALTER TABLE `participant_manager_map` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `participantassays`
 --
 
@@ -601,16 +541,6 @@ CREATE TABLE `participantassays` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `participantassays`
---
-
-LOCK TABLES `participantassays` WRITE;
-/*!40000 ALTER TABLE `participantassays` DISABLE KEYS */;
-INSERT INTO `participantassays` VALUES (1,1,37),(2,2,37),(3,3,37),(4,1,36),(5,3,36),(6,1,38),(7,2,38),(8,3,38),(9,1,39),(10,2,39),(11,3,39),(12,1,40),(13,1,41),(14,2,41),(15,3,41),(16,4,41),(17,1,42),(18,2,42),(19,3,42),(20,4,42),(21,2,45),(22,3,45),(23,3,53);
-/*!40000 ALTER TABLE `participantassays` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `partners`
@@ -630,16 +560,6 @@ CREATE TABLE `partners` (
   PRIMARY KEY (`partner_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `partners`
---
-
-LOCK TABLES `partners` WRITE;
-/*!40000 ALTER TABLE `partners` DISABLE KEYS */;
-INSERT INTO `partners` VALUES (1,'CDC','',1,2,'2017-05-26 10:35:15','active');
-/*!40000 ALTER TABLE `partners` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `publications`
@@ -838,7 +758,7 @@ CREATE TABLE `r_enrolled_programs` (
 
 LOCK TABLES `r_enrolled_programs` WRITE;
 /*!40000 ALTER TABLE `r_enrolled_programs` DISABLE KEYS */;
-INSERT INTO `r_enrolled_programs` VALUES (1,'PEPFAR RTQI Program'),(2,'PEPFAR'),(3,'VL'),(4,'EID'),(5,'BOTH(VL & EID)');
+INSERT INTO `r_enrolled_programs` VALUES (1,'VL'),(2,'EID'),(3,'BOTH(VL & EID)');
 /*!40000 ALTER TABLE `r_enrolled_programs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -911,7 +831,7 @@ CREATE TABLE `r_network_tiers` (
 
 LOCK TABLES `r_network_tiers` WRITE;
 /*!40000 ALTER TABLE `r_network_tiers` DISABLE KEYS */;
-INSERT INTO `r_network_tiers` VALUES (1,'Primary care laboratory service tier'),(2,'Secondary and tertiary laboratory service tiers'),(3,'Public Health Reference Laboratories');
+INSERT INTO `r_network_tiers` VALUES (1,'Primary care laboratory service tier'),(2,'Secondary and tertiary laboratory service tiers'),(3,'Sub-county referral laboratory'),(4,'County referral laboratory'),(5,'Level 5'),(6,'Level 6'),(7,'Regional VL/EID Reference laboratory');
 /*!40000 ALTER TABLE `r_network_tiers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1074,7 +994,7 @@ CREATE TABLE `r_vl_assay` (
 
 LOCK TABLES `r_vl_assay` WRITE;
 /*!40000 ALTER TABLE `r_vl_assay` DISABLE KEYS */;
-INSERT INTO `r_vl_assay` VALUES (1,'Plasma HIV RNA measurement','Plasma HIV RNA'),(2,'DBS HIV RNA measurement','DBS HIV RNA'),(3,'DBS HIV DNA PCR','DBS HIV DNA PCR'),(4,'test','test');
+INSERT INTO `r_vl_assay` VALUES (1,'Gene Xpert','Gene Xpert'),(2,'Abbott Plasma','Abbott Plasma'),(3,'Abbott DBS','Abbott DBS'),(4,'CAP/CTM Plasma','CAP/CTM Plasma'),(5,'CAP/CTM DBS','CAP/CTM DBS'),(6,'Hologic','Hologic');
 /*!40000 ALTER TABLE `r_vl_assay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1319,16 +1239,6 @@ CREATE TABLE `reference_result_dbs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reference_result_dbs`
---
-
-LOCK TABLES `reference_result_dbs` WRITE;
-/*!40000 ALTER TABLE `reference_result_dbs` DISABLE KEYS */;
-INSERT INTO `reference_result_dbs` VALUES (1,1,'S A','10',0,1,1),(2,1,'Test','11',0,1,1),(4,1,'TVLEID','11',0,1,100),(5,1,'TEST','10',0,1,20),(7,1,'Test','10',0,1,100),(21,1,'Test','10',0,1,10),(24,1,'Test +ve','10',0,0,1);
-/*!40000 ALTER TABLE `reference_result_dbs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reference_result_dts`
 --
 
@@ -1378,16 +1288,6 @@ CREATE TABLE `reference_result_eid` (
   CONSTRAINT `reference_result_eid_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`shipment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `reference_result_eid`
---
-
-LOCK TABLES `reference_result_eid` WRITE;
-/*!40000 ALTER TABLE `reference_result_eid` DISABLE KEYS */;
-INSERT INTO `reference_result_eid` VALUES (3,1,'In-House Negative Control','7',0,'1','2',1,1),(3,2,'Positive','8',1,'1','1',0,1),(6,1,'Sample 1','7',1,'Test','1',0,1),(13,1,'Kit Negative Control','7',0,'1','1',0,1),(13,2,'In-House Positive Control	','8',0,'1','1',0,1),(13,3,'Kit Positive Control','8',1,'1','1',0,1),(14,1,'Kit Negative Control','7',1,'1','1',0,1),(14,2,'Kit Positive Control','8',0,'1','1',1,1),(14,3,'PT Provider Negative Control','8',0,'11','1',0,1),(14,4,'PT Provider Positive Control','7',1,'1','1',1,1),(14,5,'In-House Negative Control','8',0,'11','1',0,1),(14,6,'In-House Positive Control	','7',0,'1','1',1,1),(14,7,'Kit Positive Control','7',1,'1','1',0,1),(16,1,'Kit Negative Control','7',0,'10','1',1,1),(16,2,'Kit Positive Control','7',0,'10','2',1,1),(16,3,'PT Provider Negative Control','7',0,'10','3',1,1),(16,4,'Kit Positive Control','8',0,'7','2',0,1),(17,1,'Kit Negative Control','8',0,'1','1',0,1),(17,2,'PT Provider Positive Control','7',0,'1','1',1,1),(17,3,'Kit Positive Control','7',1,'1','1',0,1),(18,1,'Kit Negative Control','8',0,'1','1',1,1),(18,2,'Kit Positive Control','7',0,'1','1',0,1),(18,3,'Kit Control','8',1,'1','1',0,1),(19,1,'Kit Negative Control','7',0,'1','1',1,1),(19,2,'In-House Positive Control	','8',0,'1','1',1,1),(19,3,'Kit Positive Control','8',1,'1','1',0,1),(20,1,'Test','7',0,'1','1',0,1),(20,2,'Test Z','8',0,'1','1',0,1),(23,1,'Kit Negative Control','8',0,'1','1',1,1),(23,2,'Kit Positive Control','7',0,'1','1',1,1),(23,3,'Kit +ve','7',1,'1','1',0,1),(25,1,'Kit Negative Control','8',0,'1','1',1,1),(25,2,'KP','7',1,'2','2',0,1);
-/*!40000 ALTER TABLE `reference_result_eid` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `reference_result_tb`
@@ -1444,16 +1344,6 @@ CREATE TABLE `reference_result_vl` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reference_result_vl`
---
-
-LOCK TABLES `reference_result_vl` WRITE;
-/*!40000 ALTER TABLE `reference_result_vl` DISABLE KEYS */;
-INSERT INTO `reference_result_vl` VALUES (5,1,'Negative Control',NULL,0,1,1),(5,2,'Low Positive Control',NULL,0,1,1),(5,3,'High Positive Control',NULL,0,1,1),(15,1,'Negative Control',NULL,0,0,1),(15,2,'Low Positive Control',NULL,0,1,1),(15,3,'High Positive Control',NULL,0,1,1),(15,4,'unspecifie',NULL,0,1,1);
-/*!40000 ALTER TABLE `reference_result_vl` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reference_vl_calculation`
 --
 
@@ -1493,16 +1383,6 @@ CREATE TABLE `reference_vl_calculation` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reference_vl_calculation`
---
-
-LOCK TABLES `reference_vl_calculation` WRITE;
-/*!40000 ALTER TABLE `reference_vl_calculation` DISABLE KEYS */;
-INSERT INTO `reference_vl_calculation` VALUES (5,1,1,NULL,NULL,NULL,NULL,NULL,0.6000000000,NULL,NULL,0.5000000000,0.7000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(9,1,1,NULL,NULL,NULL,NULL,NULL,6.5000000000,5.5000000000,0.0000000000,6.0000000000,7.0000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,1,3,NULL,NULL,NULL,NULL,NULL,2.0000000000,NULL,NULL,1.5000000000,2.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,2,3,NULL,NULL,NULL,NULL,NULL,3.0000000000,NULL,NULL,2.5000000000,3.5000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,3,3,NULL,NULL,NULL,NULL,NULL,0.6000000000,NULL,NULL,0.5000000000,0.7000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated'),(15,4,4,NULL,NULL,NULL,NULL,NULL,8.0000000000,NULL,NULL,7.0000000000,9.0000000000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'calculated');
-/*!40000 ALTER TABLE `reference_vl_calculation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reference_vl_methods`
 --
 
@@ -1517,16 +1397,6 @@ CREATE TABLE `reference_vl_methods` (
   PRIMARY KEY (`shipment_id`,`sample_id`,`assay`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `reference_vl_methods`
---
-
-LOCK TABLES `reference_vl_methods` WRITE;
-/*!40000 ALTER TABLE `reference_vl_methods` DISABLE KEYS */;
-INSERT INTO `reference_vl_methods` VALUES (2,1,1,'3'),(2,1,2,'3'),(2,2,1,'4'),(2,2,2,'4'),(2,3,1,'5'),(2,3,2,'5'),(3,1,1,'7'),(3,2,2,'7'),(3,3,1,'6'),(3,4,2,'6'),(5,1,1,'0.7'),(8,1,1,'1'),(9,1,1,'1.1'),(9,2,1,'10'),(15,1,3,'1'),(15,2,3,'2'),(15,3,3,'4'),(15,4,4,'1');
-/*!40000 ALTER TABLE `reference_vl_methods` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `rep_analytes`
@@ -2176,16 +2046,6 @@ CREATE TABLE `response_result_dbs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `response_result_dbs`
---
-
-LOCK TABLES `response_result_dbs` WRITE;
-/*!40000 ALTER TABLE `response_result_dbs` DISABLE KEYS */;
-INSERT INTO `response_result_dbs` VALUES (1,1,2,'01','2018-05-04','2','2',1,'02','2018-05-04','2','2',3,'03','2018-05-04','2','2',4,'04','2018-05-04','1','1','1','1','1','0','1','0','1',10,NULL,'49','2018-05-04 16:43:09',NULL,NULL,NULL),(6,1,1,'1','2018-05-10','2','2',2,'2','2018-05-10','2','2',1,'3','2018-05-10','2','2',3,'4','2018-05-10','1','1','1','1','1','1','1','1','1',10,NULL,'49','2018-05-10 15:17:12',NULL,NULL,NULL);
-/*!40000 ALTER TABLE `response_result_dbs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `response_result_dts`
 --
 
@@ -2249,16 +2109,6 @@ CREATE TABLE `response_result_eid` (
   CONSTRAINT `response_result_eid_ibfk_1` FOREIGN KEY (`shipment_map_id`) REFERENCES `shipment_participant_map` (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `response_result_eid`
---
-
-LOCK TABLES `response_result_eid` WRITE;
-/*!40000 ALTER TABLE `response_result_eid` DISABLE KEYS */;
-INSERT INTO `response_result_eid` VALUES (7,'1','7','1','1',NULL,'49','2018-05-10 15:15:23',NULL,NULL),(7,'2','7','1','1',NULL,'49','2018-05-10 15:15:23',NULL,NULL),(98,'1','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'2','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'3','7','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(98,'4','8','1','1',NULL,'27','2017-11-20 09:59:02','27','2017-11-20 10:19:59'),(166,'1','7','1','1',NULL,'27','2017-11-20 11:52:52',NULL,NULL),(166,'2','8','1','1',NULL,'27','2017-11-20 11:52:52',NULL,NULL),(166,'3','7','1','1',NULL,'27','2017-11-20 11:52:53',NULL,NULL),(192,'1','7','1','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19'),(192,'2','8','11','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19'),(192,'3','7','1','1',NULL,'27','2017-11-20 15:34:37','27','2017-11-20 15:58:19');
-/*!40000 ALTER TABLE `response_result_eid` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `response_result_tb`
@@ -2481,16 +2331,6 @@ CREATE TABLE `shipment_participant_map` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `shipment_participant_map`
---
-
-LOCK TABLES `shipment_participant_map` WRITE;
-/*!40000 ALTER TABLE `shipment_participant_map` DISABLE KEYS */;
-INSERT INTO `shipment_participant_map` VALUES (1,1,57,'{\"sample_rehydration_date\":\"2018-05-04\"}','19111190',1.00,0.00,'2018-05-04',NULL,NULL,NULL,NULL,'2018-05-04','2018-05-04 00:00:00','Osoro','yes',NULL,1,'[]',0,NULL,'no','no','',NULL,NULL,'2018-05-04 13:07:40',NULL,NULL,'2018-05-04 16:43:09','49','31','2018-05-04 16:43:09',NULL,NULL,0,NULL,0,'',NULL,NULL,NULL,1,NULL),(5,2,57,NULL,'19901190',NULL,0.00,'0000-00-00',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,NULL,'no','no',NULL,NULL,NULL,'2018-05-09 15:51:37',NULL,NULL,NULL,NULL,'31',NULL,NULL,NULL,0,NULL,0,'no',NULL,NULL,NULL,NULL,NULL),(6,4,57,'{\"sample_rehydration_date\":\"2018-05-10\"}','19111190',0.00,0.00,'2018-05-10',NULL,NULL,NULL,NULL,'2018-05-10','2018-05-10 00:00:00','','no',NULL,2,'[{\"warning\":\"Sample <strong>TVLEID<\\/strong> out of range\"},{\"warning\":\"<strong>EIA-01 BioRad Genetic Systems HIV 1\\/2 plus O<\\/strong> repeated as EIA 1 and EIA 3\"},{\"warning\":\"Participant did not meet the score criteria (Participant Score - <strong>0<\\/strong> and Required Score - <strong>100<\\/strong>)\"}]',0,NULL,'no','no','',NULL,NULL,'2018-05-10 12:47:49',NULL,NULL,'2018-05-10 15:17:12','49','31','2018-05-10 15:17:12','yes',NULL,0,NULL,0,'',NULL,NULL,NULL,1,NULL),(7,3,57,'{\"sample_rehydration_date\":\"2018-05-10\",\"extraction_assay\":\"4\",\"detection_assay\":\"10\",\"extraction_assay_expiry_date\":\"2018-05-10\",\"detection_assay_expiry_date\":\"2018-05-11\",\"extraction_assay_lot_no\":\"test\",\"detection_assay_lot_no\":\"Test\",\"uploaded_file\":\"\"}','19111190',100.00,0.00,'2018-05-10',NULL,NULL,NULL,NULL,'2018-05-10','2018-05-10 00:00:00','','no',NULL,1,'[{\"warning\":\"Control\\/Sample <strong>Positive<\\/strong> out of range\"}]',0,NULL,'no','no','',NULL,NULL,'2018-05-10 13:03:39',NULL,NULL,'2018-05-10 15:15:23','49','31','2018-05-10 15:15:23','yes',NULL,0,NULL,0,'',NULL,NULL,NULL,1,'                                                      ');
-/*!40000 ALTER TABLE `shipment_participant_map` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_admin`
 --
 
@@ -2527,7 +2367,7 @@ CREATE TABLE `system_admin` (
 
 LOCK TABLES `system_admin` WRITE;
 /*!40000 ALTER TABLE `system_admin` DISABLE KEYS */;
-INSERT INTO `system_admin` VALUES (1,'System','Administrator','thomas.nyongesa@ken.aphl.org','e10adc3949ba59abbe56e057f20f883e','','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Repository','Administrator','rm@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',1,'active','2017-04-05 12:29:55','2','2017-06-08 14:37:10','2',2,'1','',0,'30'),(3,'micro','Administrator','mb@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-05 12:29:55','2','2017-06-08 14:37:10','2',3,'1','',0,'30'),(31,'VL/EID','Administrator','vl@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-01 10:27:00','1','2018-03-13 10:48:38','31',1,'0','',0,NULL),(32,'MICRO','USER','micro@nphls.or.ke','e10adc3949ba59abbe56e057f20f883e','','0788492586',0,'active','2017-04-01 10:27:00','1','2017-04-24 08:35:24','32',3,'0','',0,NULL),(34,'Email Test','Test','testemail@gmail.com','677d4beebc4bf16513173a4bbd1e9bf7','','0711560619',1,'active','2018-04-11 16:21:00','3',NULL,NULL,3,NULL,NULL,0,NULL),(35,'mail','tester','mailtester@gmail.com','f0ce294f6d50bafcc97ba252f7a98559','','0711560619',1,'active','2018-04-11 16:30:00','3',NULL,NULL,3,NULL,NULL,0,NULL),(36,'M','Osoro','mosoro@abnosoftwares.co.ke','9b72ef4704d95252fab35a25e74ee3ae','','07115606189',1,'active','2018-04-12 09:38:58','2',NULL,NULL,2,'3',NULL,0,'30'),(37,'Test Multiple','t','osorom@gmail.com','e10adc3949ba59abbe56e057f20f883e','','123547',0,'active','2018-04-12 11:33:12','2','2018-05-23 10:03:52','2',2,'3',NULL,0,'1,2,3,4,5,6,7'),(39,'test','Test','testchker@gmail.com','96224a627560ce152c8a6751ecbd9dfb','','4512454',1,'active','2018-04-12 12:12:56','2',NULL,NULL,2,'3',NULL,0,'1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,');
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','nphleqa@gmail.com','e10adc3949ba59abbe56e057f20f883e','','0788492586',1,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL);
 /*!40000 ALTER TABLE `system_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2697,16 +2537,6 @@ CREATE TABLE `tbl_bac_expected_results` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_expected_results`
---
-
-LOCK TABLES `tbl_bac_expected_results` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_expected_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_expected_results` VALUES (1,'1',NULL,'2018-03-13 12:19:12',31,NULL,NULL,NULL,5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'test',5,'1'),(2,'4',NULL,'2018-05-14 09:53:40',3,NULL,NULL,'TEST 0001',5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'TEST 0001 X',NULL,'1'),(3,'5',NULL,'2018-05-15 12:47:24',3,NULL,NULL,'TEST 002',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'TEST 002',5,'1');
-/*!40000 ALTER TABLE `tbl_bac_expected_results` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_grades`
 --
 
@@ -2775,16 +2605,6 @@ CREATE TABLE `tbl_bac_micro_bacterial_agents` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_micro_bacterial_agents`
---
-
-LOCK TABLES `tbl_bac_micro_bacterial_agents` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` DISABLE KEYS */;
-INSERT INTO `tbl_bac_micro_bacterial_agents` VALUES (1,'','',0,4,1,1,13,7,'1','2017-11-09 09:37:10','31',NULL,'1',4,0,'0','1','1','');
-/*!40000 ALTER TABLE `tbl_bac_micro_bacterial_agents` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_panel_mst`
 --
 
@@ -2821,16 +2641,6 @@ CREATE TABLE `tbl_bac_panel_mst` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_panel_mst`
---
-
-LOCK TABLES `tbl_bac_panel_mst` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_panel_mst` DISABLE KEYS */;
-INSERT INTO `tbl_bac_panel_mst` VALUES (1,'Test','test','0000-00-00','test','2018-03-18','2018-03-04','1','2018-03-05 10:07:14',0,1,NULL,'2',0,NULL,NULL,NULL,'7070262227247399',32,'2018-03-05 10:07:14',31,NULL,'1'),(2,'654654654','54646','0000-00-00','654654','2018-03-05','2018-03-03','1','2018-03-05 17:06:19',0,NULL,NULL,'2',0,NULL,NULL,NULL,'4386863219601467',31,'2018-03-05 17:06:19',31,NULL,'1'),(3,'PANEL 0001','wet',NULL,'p0001','2018-05-14','2018-05-14','1','2018-05-14 10:09:12',0,NULL,NULL,'2',0,NULL,NULL,NULL,'05880801833998839',48,'2018-05-14 10:09:12',3,NULL,'1');
-/*!40000 ALTER TABLE `tbl_bac_panel_mst` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_panels_shipments`
 --
 
@@ -2865,16 +2675,6 @@ CREATE TABLE `tbl_bac_panels_shipments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_panels_shipments`
---
-
-LOCK TABLES `tbl_bac_panels_shipments` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_panels_shipments` DISABLE KEYS */;
-INSERT INTO `tbl_bac_panels_shipments` VALUES (1,1,1,'2018-03-05 10:10:30','31','2','1',31,'2018-03-05 10:10:30',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(2,1,1,'2018-03-05 10:12:40','31','3','1',32,'2018-03-05 10:12:40',NULL,NULL,1,'2018-03-05 00:00:00',NULL,NULL,NULL,'Current Lab Manager','27',NULL,1,'1'),(4,2,2,'2018-03-05 17:07:03','31','2','1',31,'2018-03-05 17:07:03',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(5,2,2,'2018-03-05 17:07:41','31','2','1',31,'2018-03-05 17:07:41',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','34',NULL,2,'1'),(6,2,2,'2018-03-05 17:07:42','31','2','1',31,'2018-03-05 17:07:42',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','27',NULL,2,'1'),(7,2,2,'2018-03-05 17:07:43','31','2','1',31,'2018-03-05 17:07:43',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','22',NULL,2,'1'),(8,2,2,'2018-03-05 17:07:43','31','2','1',31,'2018-03-05 17:07:43',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','20',NULL,2,'1'),(9,2,2,'2018-03-05 17:07:44','31','2','1',31,'2018-03-05 17:07:44',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','19',NULL,2,'1'),(10,2,2,'2018-03-05 17:07:45','31','2','1',31,'2018-03-05 17:07:45',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','15',NULL,2,'1'),(11,2,2,'2018-03-05 17:07:45','31','2','1',31,'2018-03-05 17:07:45',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','14',NULL,2,'1'),(12,2,2,'2018-03-05 17:07:46','31','2','1',31,'2018-03-05 17:07:46',NULL,NULL,1,'0000-00-00 00:00:00',NULL,NULL,NULL,'Current Lab Manager','13',NULL,2,'1'),(13,3,3,'2018-05-14 11:47:46','3','2','1',3,'2018-05-14 11:47:46',NULL,NULL,1,NULL,NULL,NULL,NULL,'Current Lab Manager',NULL,NULL,NULL,'1'),(14,3,3,'2018-05-15 09:22:28','3','3','1',48,'2018-05-15 09:22:28',NULL,NULL,1,'2018-05-15 00:00:00',NULL,NULL,NULL,'Current Lab Manager','59',NULL,3,'1');
-/*!40000 ALTER TABLE `tbl_bac_panels_shipments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_programs`
 --
 
@@ -2896,16 +2696,6 @@ CREATE TABLE `tbl_bac_programs` (
   UNIQUE KEY `tbl_bac_programs__pk_code` (`programName`,`programCode`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_programs`
---
-
-LOCK TABLES `tbl_bac_programs` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_programs` DISABLE KEYS */;
-INSERT INTO `tbl_bac_programs` VALUES (1,'001','2017-04-26 09:39:37',32,NULL,NULL,NULL,'Trial Round','Trial Round',1),(7,'test','2017-04-27 15:15:47',32,NULL,NULL,NULL,'test','test',1);
-/*!40000 ALTER TABLE `tbl_bac_programs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_ready_labs`
@@ -2989,16 +2779,6 @@ CREATE TABLE `tbl_bac_response_results` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_response_results`
---
-
-LOCK TABLES `tbl_bac_response_results` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_response_results` DISABLE KEYS */;
-INSERT INTO `tbl_bac_response_results` VALUES (1,'1','1','27','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'ACCEPTABLE',NULL,NULL,0,'1',0),(2,'2','1','29','32','2','2018-03-05 12:00:04',32,31,NULL,NULL,0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,5,'1','1','1',0,1,'UNACCEPTABLE',NULL,NULL,0,'0',NULL),(3,'1','2','28','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'ACCEPTABLE',NULL,NULL,0,'1',0),(4,'3','1','28','32','2','2018-03-05 12:00:04',32,3,NULL,'blank',0,'Test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'test',NULL,'Test',5,2,'1','1','1',0,1,'UNACCEPTABLE',NULL,NULL,0,'1',0),(5,'4','3','59','48','15','2018-05-15 12:33:50',48,3,NULL,'TEST 0001',5,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,'NONE',NULL,NULL,NULL,5,'1','1','1',0,1,'Acceptable','Remarkable',NULL,0,'0',NULL),(7,'5','3','59','48','15','2018-05-15 12:45:35',48,3,NULL,NULL,NULL,'none',NULL,'NONE',NULL,'none',NULL,'none',NULL,'none',NULL,'none',NULL,'TEST 002',5,5,'1','1','1',0,1,'Acceptable','Remarkable',NULL,0,'0',NULL);
-/*!40000 ALTER TABLE `tbl_bac_response_results` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_rounds`
 --
 
@@ -3034,16 +2814,6 @@ CREATE TABLE `tbl_bac_rounds` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_rounds`
---
-
-LOCK TABLES `tbl_bac_rounds` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_rounds` DISABLE KEYS */;
-INSERT INTO `tbl_bac_rounds` VALUES (1,'test','Test','2018-03-04','2018-03-25',31,1,1,'2018-03-05 10:09:42',31,'2018-03-05 10:09:42','test',0,0,0,'1',NULL,1,1,'2018-03-13 08:23:13'),(2,'6546544','46546','2018-03-04','2018-03-27',31,1,1,'2018-03-05 17:07:25',NULL,'2018-03-05 17:07:25','65465',0,0,0,'1',NULL,0,0,NULL),(3,'TEST 0001','TEST T0001','2018-05-12','2018-05-27',3,1,1,'2018-05-14 15:24:01',3,'2018-05-14 15:24:01','TEST 001',0,0,0,'1',NULL,1,1,'2018-05-15 10:12:15');
-/*!40000 ALTER TABLE `tbl_bac_rounds` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_rounds_labs`
 --
 
@@ -3064,16 +2834,6 @@ CREATE TABLE `tbl_bac_rounds_labs` (
   UNIQUE KEY `UK_LAB_ROUND` (`roundId`,`labId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_rounds_labs`
---
-
-LOCK TABLES `tbl_bac_rounds_labs` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_rounds_labs` DISABLE KEYS */;
-INSERT INTO `tbl_bac_rounds_labs` VALUES (1,'1','27','2018-03-05 10:12:40','31',NULL,NULL,'1','2018-03-05 10:12:40'),(3,'2','34','2018-03-05 17:07:41','31',NULL,NULL,'1','2018-03-05 17:07:41'),(4,'2','27','2018-03-05 17:07:42','31',NULL,NULL,'1','2018-03-05 17:07:42'),(5,'2','22','2018-03-05 17:07:42','31',NULL,NULL,'1','2018-03-05 17:07:42'),(6,'2','20','2018-03-05 17:07:43','31',NULL,NULL,'1','2018-03-05 17:07:43'),(7,'2','19','2018-03-05 17:07:44','31',NULL,NULL,'1','2018-03-05 17:07:44'),(8,'2','15','2018-03-05 17:07:45','31',NULL,NULL,'1','2018-03-05 17:07:45'),(9,'2','14','2018-03-05 17:07:45','31',NULL,NULL,'1','2018-03-05 17:07:45'),(10,'2','13','2018-03-05 17:07:46','31',NULL,NULL,'1','2018-03-05 17:07:46'),(11,'3','59','2018-05-15 09:22:28','3',NULL,NULL,'1','2018-05-15 09:22:28');
-/*!40000 ALTER TABLE `tbl_bac_rounds_labs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_sample_instructions`
@@ -3159,16 +2919,6 @@ CREATE TABLE `tbl_bac_sample_to_panel` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_sample_to_panel`
---
-
-LOCK TABLES `tbl_bac_sample_to_panel` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` DISABLE KEYS */;
-INSERT INTO `tbl_bac_sample_to_panel` VALUES (1,1,'1','31','2018-03-05 10:10:14','1',31,'2018-03-05 10:10:14',2,NULL,NULL,1,'0000-00-00 00:00:00',NULL,0,NULL,1,1,'1',NULL,NULL,'0','0','0'),(2,1,'1','31','2018-03-05 10:10:14','1',32,'2018-03-05 10:10:14',4,'','',1,'2018-03-05 02:52:38',27,0,1,1,1,'1','','','0','0','1'),(4,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,NULL,NULL,1,'0000-00-00 00:00:00',NULL,0,NULL,1,2,'1',NULL,NULL,'0','0','0'),(5,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',34,0,2,1,2,'1','','','0','0','0'),(6,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',27,0,2,1,2,'1','','','0','0','0'),(7,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',22,0,2,1,2,'1','','','0','0','0'),(8,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',20,0,2,1,2,'1','','','0','0','0'),(9,2,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',19,0,2,1,2,'1','','','0','0','0'),(10,1,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',29,0,2,1,2,'1','','','0','0','0'),(11,1,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',28,0,2,1,2,'1','','','0','0','0'),(12,3,'2','31','2018-03-05 17:06:28','1',31,'2018-03-05 17:06:28',2,'','',1,'0000-00-00 00:00:00',28,0,2,1,2,'1','','','0','0','0'),(13,4,'3','3','2018-05-14 11:04:38','1',3,'2018-05-14 11:04:38',2,NULL,NULL,1,NULL,NULL,0,NULL,1,3,'1',NULL,NULL,'0','0','0'),(14,5,'3','3','2018-05-14 11:11:58','1',3,'2018-05-14 11:11:58',2,NULL,NULL,1,NULL,NULL,0,NULL,1,3,'1',NULL,NULL,'0','0','0'),(15,4,'3','3','2018-05-14 11:04:38','1',48,'2018-05-14 11:04:38',4,'','',1,'2018-05-15 05:18:36',59,0,3,1,3,'1','','','0','0','1'),(16,5,'3','3','2018-05-14 11:11:58','1',48,'2018-05-14 11:11:58',4,'','',1,'2018-05-15 05:18:36',59,0,3,1,3,'1','','','0','0','0');
-/*!40000 ALTER TABLE `tbl_bac_sample_to_panel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_samples`
 --
 
@@ -3215,16 +2965,6 @@ CREATE TABLE `tbl_bac_samples` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_samples`
---
-
-LOCK TABLES `tbl_bac_samples` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_samples` DISABLE KEYS */;
-INSERT INTO `tbl_bac_samples` VALUES (1,'Test  001','2018-03-04',NULL,NULL,NULL,'osoro','none','bacterial',1,'2018-03-05 10:06:55','0',NULL,'1','Test',NULL,'none',NULL,'5','null',NULL,'7594812188124447',31,'2018-03-05 10:06:55',31,0,NULL,'standard organisms','Test','1,2,3','test',1,'1'),(2,'987987','2018-03-05',NULL,NULL,NULL,'897987','789','89798',1,'2018-03-05 17:05:58','0',NULL,'1','6546',NULL,'654',NULL,'5','null',NULL,'8563265193198042',31,'2018-03-05 17:05:58',31,0,NULL,'standard organisms','65465','[\"2,3\"]','546',0,'1'),(3,'Test 003','2018-03-05',NULL,NULL,NULL,'897987','789','89798',1,'2018-03-05 17:05:58','0',NULL,'1','6546',NULL,'654',NULL,'5','null',NULL,'8563265193198042',31,'2018-03-05 17:05:58',31,0,NULL,'standard organisms','65465','[\"2\"]','546',0,'1'),(4,'Test 0001','2018-05-14',NULL,NULL,NULL,'Osoro','NPHL','1',1,'2018-05-14 09:51:32','0',NULL,'1','KNH',NULL,NULL,NULL,'5','null',NULL,'9140951139338258',3,'2018-05-14 09:51:32',3,0,NULL,'standard organisms','TEST ID','[\"1\"]','TEST FOR ID',1,'1'),(5,'TEST 002','2018-05-14',NULL,NULL,NULL,'OSORO','NPHL','STOOL',1,'2018-05-14 11:08:50','0',NULL,'1','KNH',NULL,NULL,NULL,'5','null',NULL,'42692378858058033',3,'2018-05-14 11:08:50',3,0,NULL,'standard organisms','test','[\"2\"]','test',1,'1');
-/*!40000 ALTER TABLE `tbl_bac_samples` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_samples_to_users`
 --
 
@@ -3260,16 +3000,6 @@ CREATE TABLE `tbl_bac_samples_to_users` (
   UNIQUE KEY `sampleUser` (`userId`,`sampleId`,`roundId`,`participantId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_samples_to_users`
---
-
-LOCK TABLES `tbl_bac_samples_to_users` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_samples_to_users` DISABLE KEYS */;
-INSERT INTO `tbl_bac_samples_to_users` VALUES (9,48,4,15,'2018-05-15 12:18:36','2018-05-15 12:18:36','1','3',NULL,NULL,48,'1','0',NULL,NULL,3,59,5,NULL,'Remarkable','Acceptable',1,'0',5.00),(10,48,5,15,'2018-05-15 12:18:36','2018-05-15 12:18:36','1','3',NULL,NULL,48,'1','0',NULL,NULL,3,59,5,NULL,'Remarkable','Acceptable',1,'0',5.00);
-/*!40000 ALTER TABLE `tbl_bac_samples_to_users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_saved_email_notifications`
@@ -3387,16 +3117,6 @@ CREATE TABLE `tbl_bac_shipments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_bac_shipments`
---
-
-LOCK TABLES `tbl_bac_shipments` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_shipments` DISABLE KEYS */;
-INSERT INTO `tbl_bac_shipments` VALUES (1,'Test','2018-03-05 10:07:31',1,31,'2018-03-05 10:07:31',NULL,'test',NULL,NULL,NULL,NULL,'31',NULL,'Test',NULL,NULL,NULL,'test','1','2018-03-04','test','2',NULL,NULL,NULL,NULL,'2018-03-04',NULL,'n/a','g4s','Current Lab Manager','Lorry',0,NULL,'1',1),(2,'65465','2018-03-05 17:06:51',1,31,'2018-03-05 17:06:51',NULL,'465465',NULL,NULL,NULL,NULL,'31',NULL,'64546',NULL,NULL,NULL,'5465','2','2018-03-05','56446','2',NULL,NULL,NULL,NULL,'2018-03-04',NULL,'6565','56465','Current Lab Manager','4',0,NULL,'1',0),(3,'TEST S0001','2018-05-14 11:47:27',1,3,'2018-05-14 11:47:27',NULL,'1',NULL,NULL,NULL,NULL,'3',NULL,'shIPMENT',NULL,NULL,NULL,'S0001','3','2018-05-13','OSORO','2',NULL,NULL,NULL,NULL,'2018-05-14',NULL,'','G4S','Current Lab Manager','Lorry',0,NULL,'1',1);
-/*!40000 ALTER TABLE `tbl_bac_shipments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tbl_bac_suscepitibility`
 --
 
@@ -3425,16 +3145,6 @@ CREATE TABLE `tbl_bac_suscepitibility` (
   UNIQUE KEY `user_lab_sample_round_uk` (`participantId`,`sampleId`,`roundId`,`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_bac_suscepitibility`
---
-
-LOCK TABLES `tbl_bac_suscepitibility` WRITE;
-/*!40000 ALTER TABLE `tbl_bac_suscepitibility` DISABLE KEYS */;
-INSERT INTO `tbl_bac_suscepitibility` VALUES (1,48,59,4,15,'2018-05-15 12:34:38','48',NULL,NULL,1,'N/A','Kirby Bauer','NONE','NONE','NONE','EUCAST',3),(2,48,59,5,15,'2018-05-15 12:46:09','48',NULL,NULL,1,'n/a','Stroke','n/a','n/a','n/a','CLSI',3);
-/*!40000 ALTER TABLE `tbl_bac_suscepitibility` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tbl_bac_test_agents`
@@ -3551,16 +3261,6 @@ CREATE TABLE `tbrr` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbrr`
---
-
-LOCK TABLES `tbrr` WRITE;
-/*!40000 ALTER TABLE `tbrr` DISABLE KEYS */;
-INSERT INTO `tbrr` VALUES (1,'1','1','13','3','2','2017-04-26 11:10:40',3,32,NULL,'MALARIA',0,'33',0,'33',0,'333',0,'333',0,'33',33,'33',33,'33',100,33,'1','1','1',0,0,'UNACCEPTABLE','UNACCEPTABLE',NULL,0,'0',0),(2,'2','1','13','3','2','2017-04-26 11:10:40',3,32,NULL,'3333',100,'33',0,'33',0,'333',0,'333',0,'33',33,'33',33,'33',100,0,'1','1','1',0,0,'ACCEPTABLE','ACCEPTABLE',NULL,0,'0',0);
-/*!40000 ALTER TABLE `tbrr` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `temp_mail`
 --
 
@@ -3580,16 +3280,6 @@ CREATE TABLE `temp_mail` (
   PRIMARY KEY (`temp_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `temp_mail`
---
-
-LOCK TABLES `temp_mail` WRITE;
-/*!40000 ALTER TABLE `temp_mail` DISABLE KEYS */;
-INSERT INTO `temp_mail` VALUES (1,'',NULL,'kisiihospital@gmail.com','','',NULL,NULL,'pending'),(2,'',NULL,'osoromichael@gmail.com','','',NULL,NULL,'pending'),(3,'',NULL,'qweqweqw@gmail.com','','',NULL,NULL,'pending'),(4,'',NULL,'kisiihospital@gmail.com','','',NULL,NULL,'pending'),(5,'',NULL,'osoromichael@gmail.com','','',NULL,NULL,'pending'),(6,'',NULL,'kisumu@gmail.co.ke','','',NULL,NULL,'pending'),(7,'',NULL,'mosoross@abnosoftwares.co.ke','','',NULL,NULL,'pending'),(8,'',NULL,'anothertest@gmail.com','','',NULL,NULL,'pending'),(9,'',NULL,'testertwo@gmail.com','','',NULL,NULL,'pending');
-/*!40000 ALTER TABLE `temp_mail` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vl_department`
@@ -3639,16 +3329,6 @@ CREATE TABLE `vl_eid_capa` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vl_eid_capa`
---
-
-LOCK TABLES `vl_eid_capa` WRITE;
-/*!40000 ALTER TABLE `vl_eid_capa` DISABLE KEYS */;
-INSERT INTO `vl_eid_capa` VALUES (4,57,49,'2018-05-08 14:56:20','Test Again\n                           ','Yes','Yes','Yes',NULL,'Measures taken\n                           ','Yes','Prevent recurrence\n                           ',2,NULL),(5,57,49,'2018-05-08 15:14:30','Test Again\n                           ','Yes','Yes','Yes',NULL,'Measures taken\n                           ','Yes','Prevent recurrence\n                           ',2,NULL);
-/*!40000 ALTER TABLE `vl_eid_capa` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vl_mfl`
