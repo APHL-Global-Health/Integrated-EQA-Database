@@ -1,5 +1,0 @@
-ALTER TABLE `participant` 
-ADD COLUMN `MflCode` VARCHAR(45) NULL DEFAULT NULL AFTER `ModuleID`;
-
-DROP TRIGGER IF EXISTS updatePanelAndSamples;
-
