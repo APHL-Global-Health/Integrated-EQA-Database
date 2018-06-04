@@ -49,8 +49,10 @@ class Admin_PlatformsController extends Zend_Controller_Action
         if($this->_hasParam('id')){
             $partnerId = (int)$this->_getParam('id');
             $partnerService->deletePlatform($partnerId);
+            $this->_redirect("/admin/platforms");
         }else{
             $this->_redirect("/admin/platforms");
         }
+        exit;
     }
 }

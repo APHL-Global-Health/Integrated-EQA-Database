@@ -179,7 +179,7 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
     }
     public function deletePlatformDetails($adminId)
     {
-        return $this->delete("ID =  ".$adminId."");
+        return $this->delete("ID =  ".$adminId);
     }
 }
 
