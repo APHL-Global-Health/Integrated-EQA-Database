@@ -1,0 +1,67 @@
+<div class="well" xmlns="http://www.w3.org/1999/html">
+    <form name="addPartnerForm" id="addPlatformForm" method="post"
+          action="<?php echo $this->url(array("module" => "admin", "controller" => "platforms", "action" => "add"),'default', true) ?>" class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Add New Platform</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Platform Name <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                    <textarea id="partnerName" name="PlatformName"
+                                             class="isRequired form-control" title="Please enter the partner name here"
+                                             placeholder="Please enter the partner name here"
+                              onblur="checkDuplicate('vl_platform', 'PlatformName','PlatformName',null, 'The name that you entered already exist. Please try something else.');"></textarea></div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Status </label>
+
+                <div class="col-lg-5">
+                    <select type="text" name="status"                     class="form-control" title="Please enter the link here"
+                            placeholder="Please enter the link here"/>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select
+                </div>
+            </div>
+            </div>
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/platforms';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+	if($.trim(objValue)!= '') {
+	    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+		function (data) {
+		    if (data > 0) {
+			alert(msg, "err");
+			duplicated = true;
+			$("#"+obj).val("");
+			$("#"+obj).focus();
+		    }
+		    else {
+			duplicated = false;
+		    }
+		    return duplicated;
+		});
+	}
+    }
+
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'addPlatformForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('addPlatformForm').submit();
+        }
+    }
+</script>
