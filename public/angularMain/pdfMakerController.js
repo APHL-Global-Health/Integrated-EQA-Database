@@ -44,26 +44,19 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
             },
 
             content: [
-                //{
-                //    image: schoolLogo,
-                //    width: 60,
-                //    style: ['centerData'],
-                //    margin: [0, 0, 0, 5]
-                //},
                 {text: 'Nation Public Health Laboratories'.toUpperCase(), style: ['header', 'centerData']},
                 {text: reportHeader, style: ['content', 'centerData'], margin: [0, 0, 0, 5]},
 
                 {text: 'P.O BOX 145-00100,Nairobi', style: ['content', 'centerData']},
-                {text: 'info@nphl.co.ke', style: ['content', 'centerData']},
+                {text: 'info@nphls.or.ke', style: ['content', 'centerData']},
                 {
-                    text: 'www.nphl.or.ke',
-                    link: "http://www.nphl.or.ke",
+                    text: 'www.nphls.or.ke',
+                    link: "http://www.nphls.or.ke",
                     style: ['content', 'centerData'],
                     fillColor: 'yellow',
                     decoration: "underline"
                 },
                 {text: reportTitle, style: ['subHeader', 'centerData'], margin: [0, 5, 0, 0]},
-                // {text:"Google", link:"http://www.google.com", decoration:"underline",fillColor: 'blue', margin: [0, 5, 0, 0]},
                 {
                     text: "_______________________________________________________________________________________________",
                     margin: [0, 0, 0, 5]
@@ -218,10 +211,10 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 {text: reportHeader, style: ['content', 'centerData'], margin: [0, 0, 0, 5]},
 
                 {text: 'P.O BOX 145-00100,Nairobi', style: ['content', 'centerData']},
-                {text: 'info@nphl.co.ke', style: ['content', 'centerData']},
+                {text: 'info@nphls.or.ke', style: ['content', 'centerData']},
                 {
-                    text: 'www.nphl.or.ke',
-                    link: "http://www.nphl.or.ke",
+                    text: 'www.nphls.or.ke',
+                    link: "http://www.nphls.or.ke",
                     style: ['content', 'centerData'],
                     fillColor: 'yellow',
                     decoration: "underline"

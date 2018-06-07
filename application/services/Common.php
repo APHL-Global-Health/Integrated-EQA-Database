@@ -3,7 +3,7 @@
 class Application_Service_Common
 {
 
-    public $applicationName = "National Micro Biology Reference Laboratory";
+    public $applicationName = "National Microbiology Reference Laboratory";
 
     public function sendMail($to, $cc, $bcc, $subject, $message, $fromMail = null, $fromName = null, $attachments = array())
     {

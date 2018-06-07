@@ -209,7 +209,7 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 . "<br>Username : $sendTo <br>"
                 . "Password : $password <br>"
                 . "If you have received this email in error or have any other queries, "
-                . "please notify the system administrator at info@nphl.or.ke."
+                . "please notify the system administrator at info@nphls.or.ke."
                 . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
                 . "<small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
