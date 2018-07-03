@@ -63,12 +63,6 @@ class Reports_CorrectiveActionsController extends Zend_Controller_Action
     {
 
     }
-    public function testemailAction()
-    {
-        $common = new Application_Service_Common();
-        $common->sendReadinessEmail("osoromichael@gmail.com", "email outline", "2017/01/12");
-        exit;
-    }
     public function getAction()
     {
 

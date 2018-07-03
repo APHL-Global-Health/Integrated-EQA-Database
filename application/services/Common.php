@@ -134,8 +134,7 @@ class Application_Service_Common
 
             . "Kindly use below credentials to logo in.This is a one time password.Please change the password after you log in "
             . "<br><b>Username : $sendTo </b><br>"
-            . "<b>Password : $password </b><br>"
-            . $config->emailRegistrationFooter;
+            . "<b>Password : $password </b><br>";
 
 
         $message .= $this->createFooterWithLogo();
@@ -185,7 +184,6 @@ class Application_Service_Common
         $message = $this->createOutline($message);
         $message .= "</div>";
         $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
         $this->sendMail($sendTo, null, null, "NPHL Integrated Email", $message, null, "ePT Admin Mail");
     }
 

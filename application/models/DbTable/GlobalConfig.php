@@ -10,6 +10,7 @@ class Application_Model_DbTable_GlobalConfig extends Zend_Db_Table_Abstract
         $res = $this->getAdapter()->fetchCol($this->select()
                                ->from($this->_name, array('value'))
                               ->where("name='".$name."'"));
+        error_log($name);
         return $res[0];
     }
     public function getGlobalConfig() {

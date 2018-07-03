@@ -663,10 +663,7 @@ public function getCounties() {
         $participantName = $params['pfname'] . " " . $params['plname'];
         $dataManager = $authNameSpace->first_name . " " . $authNameSpace->last_name;
 
-        //$message = "Hi $participantName,<br/><small>Login using the following credentials:<br/><small>Username: $partmail <br/> Password: 123456</small><br/>This is a system generated email. Please do not reply.</small>";
         $toMail = $params['pemail'];
-        //$fromMail="brianonyi@gmail.com";
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
         $common->sendPasswordEmailToUser($toMail, $password, $participantName);
 
         return $participantId;

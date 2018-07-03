@@ -115,7 +115,7 @@ a.footer-items:hover {
     margin: auto;
     background-color: purple;
     color: white;
-    opacity: 0.5;
+    /*opacity: 0.5;*/
     margin-top: 75px;
 }
 

@@ -71,8 +71,7 @@ class Application_Service_DataManagers
                 $common->createFooterWithLogo()
                 . "<small></small>";
             $fromMail = Application_Service_Common::getConfig('admin_email');
-            $fromName = Application_Service_Common::getConfig('admin-name');
-            $common->sendMail($email, null, null, "Password Reset - e-PT", $message, $fromMail, $fromName);
+            $common->sendMail($email, null, null, "Password Reset - e-PT", $message, $fromMail, "ePT Administrator");
             $sessionAlert->message = ""
                 . "Your password has been reset. Please check your registered mail id for the instructions.";
             $sessionAlert->status = "success";

@@ -175,40 +175,6 @@ class BacteriologydbciController extends Zend_Controller_Action {
         return $mess;
     }
 
-    public function sendemailAction($body, $to = '', $send = '') {
-        try {
-            $config = array('ssl' => 'tls',
-                'auth' => 'login',
-                'username' => 'osoromichael@gmail.com',
-                'password' => 'w@r10r@90');
-
-            $transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
-
-
-            $mail = new Zend_Mail();
-
-
-            $message = isset($send) ? $body : $this->createEmailBody('Participant', $body['message']);
-            $mail->setBodyHtml($message);
-            $mail->setFrom('National Public Health Laboratories');
-            if ($to != '') {
-                $mail->addTo($to, '');
-            } else {
-                $mail->addTo('okarmikell@gmail.com', 'Okari Mikell');
-            }
-            $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
-            $mail->setSubject($subject);
-            if ($mail->send($transport)) {
-//                echo 'Sent successfully';
-            } else {
-                echo 'unable to send email';
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        exit();
-    }
-
     public function savepaneltoshipmentAction() {
         try {
             $jsPostData = file_get_contents('php://input');
@@ -2007,15 +1973,6 @@ class BacteriologydbciController extends Zend_Controller_Action {
         } else {
             $response['message'] = 'Invalid survey or round ';
         }
-        exit;
-    }
-
-    public function testinAction() {
-        $ar = 'michael osoro';
-        $arr = explode(" ", $ar);
-
-        $in = 'osoros';
-        var_dump(in_array($in, $arr));
         exit;
     }
 

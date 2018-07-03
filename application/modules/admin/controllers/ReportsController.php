@@ -495,15 +495,6 @@ class Admin_ReportsController extends Admin_BacteriologydbciController {
         exit;
     }
 
-    public function testinAction() {
-        $ar = 'michael osoro';
-        $arr = explode(" ", $ar);
-
-        $in = 'osoros';
-        var_dump(in_array($in, $arr));
-        exit;
-    }
-
     public function compareStrings($s1, $s2) {
         //one is empty, so no result
         if (strlen($s1) == 0 || strlen($s2) == 0) {

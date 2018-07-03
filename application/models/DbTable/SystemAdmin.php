@@ -213,7 +213,6 @@ class Application_Model_DbTable_SystemAdmin extends Zend_Db_Table_Abstract {
                 . "<br>Regards,<br>QA Office,<br>National Public Health Laboratories<br><br><br><br>"
                 . "<small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
         $common->sendMail($sendTo, null, null, "NPHL Integrated EQA Login Credentials", $message, null, "ePT Admin Credentials");
     }
 

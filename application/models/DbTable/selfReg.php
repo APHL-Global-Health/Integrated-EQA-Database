@@ -425,19 +425,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $enrollDb = new Application_Model_DbTable_Enrollments();
             $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
         }
-//            foreach ($params['dataManager'] as $dataManager) {
-//                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
-//            }
-//            if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-//                foreach ($params['enrolledProgram'] as $epId) {
-//                    $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-//                }
-//            }
+
         $pMail = $params['pemail'];
         $message = "Hi,<br/>  A new participant ($participantName) was added. <br/><small>This is a system generated email. Please do not reply.</small>";
         $toMail = Application_Service_Common::getConfig('admin_email');
-        $fromMail = "brianonyi@gmail.com";
-        $fromName = Application_Service_Common::getConfig('admin-name');
+        $fromMail = Application_Service_Common::getConfig('admin_email');
         $common->sendMail($toMail, null, null, "New Participant Registered  ($participantName)", $message, $fromMail, "ePT Admin");
         $common->sendPasswordEmailToUser($pMail, $password, $participantName);
 
@@ -544,10 +536,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $participantName = $params['pfname'] . " " . $params['plname'];
         $dataManager = $authNameSpace->first_name . " " . $authNameSpace->last_name;
 
-        //$message = "Hi $participantName,<br/><small>Login using the following credentials:<br/><small>Username: $partmail <br/> Password: 123456</small><br/>This is a system generated email. Please do not reply.</small>";
         $toMail = $params['pemail'];
-        //$fromMail="brianonyi@gmail.com";
-        //$fromName = Application_Service_Common::getConfig('admin-name');			
         $common->sendPasswordEmailToUser($toMail, $password, $participantName);
 
         return $participantId;

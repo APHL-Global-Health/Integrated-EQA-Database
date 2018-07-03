@@ -399,16 +399,6 @@ class ReportsController extends Zend_Controller_Action
         exit;
     }
 
-    public function testinAction()
-    {
-        $ar = 'michael osoro';
-        $arr = explode(" ", $ar);
-
-        $in = 'osoros';
-        var_dump(in_array($in, $arr));
-        exit;
-    }
-
     public function updateResponseResults($responseResults)
     {
         if (is_array($responseResults)) {
