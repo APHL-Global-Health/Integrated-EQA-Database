@@ -1,0 +1,59 @@
+<div class="well">
+    <form name="editReadinessChecklistForm" id="editReadinessChecklistForm" method="post" 
+        action="<?php echo $this->url(array("module" => "admin", "controller" => "readiness-checklist", "action" => "update"),'default', true) ?>" 
+        class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Edit Readiness Checklist</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Readiness Checklist Name <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                    <input type="text" id="ReadinessChecklistName" name="ReadinessChecklistName" size="50" maxlength="45"
+                        class="isRequired form-control" title="Please enter the checklist name here"
+                        placeholder="Please enter the checklist name here"
+                        onblur="checkDuplicate('readiness_checklists', 'title','ReadinessChecklistName','<?php echo "id##" . $this->readinessChecklist['id']; ?>', 'The name that you entered already exists. Please try something else.');"
+                         value="<?php echo $this->readinessChecklist['title']; ?>"
+                          />
+                </div>
+            </div>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input type="hidden" id="readinessChecklistId" name="readinessChecklistId" value="<?php echo $this->readinessChecklist['id']; ?>"/>
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/readiness-checklist';"
+                       tabindex="8" value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+	if($.trim(objValue)!= '') {
+	    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+		function (data) {
+		    if (data > 0) {
+			alert(msg, "err");
+			duplicated = true;
+			$("#"+obj).val("");
+			$("#"+obj).focus();
+		    }
+		    else {
+			duplicated = false;
+		    }
+		    return duplicated;
+		});
+	}
+    }
+
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'editReadinessChecklistForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('editReadinessChecklistForm').submit();
+        }
+    }
+</script>

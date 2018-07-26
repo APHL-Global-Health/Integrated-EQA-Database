@@ -6,6 +6,14 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
     protected $_name = 'distributions';
     protected $_primary = 'distribution_id';
 
+    protected $_referenceMap    = array(
+        'ReadinessChecklist' => array(
+            'columns'           => array('readiness_checklist_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklist',
+            'refColumns'        => array('id')
+        )
+    );
+
     public function getAllDistributions($parameters)
     {
 
@@ -366,10 +374,12 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $data = array('distribution_code' => "",
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
+            'readiness_checklist_id' => $params['readiness_checklist_id'],
             'readinessdate' => Pt_Commons_General::dateFormat($params['readinessDate']),
             'status' => 'created',
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()'));
+
         //get participant emails
         $date = $params['readinessDate'];
 
@@ -378,12 +388,15 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
         $db->update('distributions', $updateInfo, "distribution_id ='" . $insertId . "' ");
 
+    }
+
+    public function sendReadinessEmailNotification($labEmail){
+
         if (isset($labEmail)) {
 
-
-            $subject = "New Round Readiness Checklist  " . $updateInfo['distribution_code'] . "";
+            $subject = "New Round Readiness Checklist  " . $this->distribution_code;
             if (count($labEmail) > 0) {
-                $common->sendReadinessEmail($labEmail, $subject, $date);
+                $common->sendReadinessEmail($labEmail, $subject, $this->readinessdate);
             }
             return $insertId;
         }
@@ -588,9 +601,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
     public function getAllDistributionStatusDetails()
     {
 
-
         return $this->fetchAll($this->select());
-
     }
 
 }

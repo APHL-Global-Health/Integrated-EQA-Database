@@ -7,141 +7,151 @@
         <fieldset>
             <legend style="color:white;">Request Enrollment</legend>
             <input type="hidden" id="pid" name="pid"/>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">MFL Code <span class="mandatory">*</span></label>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">MFL Code <span class="mandatory">*</span></label>
 
-                <div class="col-lg-8">
-                    <input type="text" id="MflCode" name="MflCode" size="50" class="isRequired form-control"
-                           title="Please enter a unique Mfl Code here"
-                           placeholder="Please enter a unique MFL Code here"
-                           onblur="checkDuplicate('facility', 'MflCode', this,
-                                       null, 'A facility with this MFL Code is already registered.')"/>
+                    <div class="col-lg-8">
+                        <input type="text" id="MflCode" name="MflCode" size="50" class="isRequired form-control"
+                               title="Please enter a unique Mfl Code here"
+                               placeholder="Please enter a unique MFL Code here"
+                               onblur="checkDuplicate('facility', 'MflCode', this,
+                                           null, 'A facility with this MFL Code is already registered.')"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+
+                    <div class="col-lg-8"><input type="text" id="instituteName" name="instituteName" size="50" maxlength="255" 
+                                                 class="isRequired form-control" title="Please enter the Facility Name here"
+                                                 placeholder="Please enter the Facility Name here"/></div>
+                </div>
+                <div class="form-group">
+                   <label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label>
+                   <div class="col-lg-8">
+                       <input type="text" id="pfname" name="lab_name" size="50" maxlength="255" 
+                              class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Department Name <span class="mandatory">*</span></label>
+
+                    <div class="col-lg-8"><input type="text" id="departmentName" name="departmentName" size="50" maxlength="255" 
+                                                 class="isRequired form-control" title="Please enter the Department Name here"
+                                                 placeholder="Please enter the Department Name here"/></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Physical Address</label>
+
+                    <div class="col-lg-8"><textarea id="address" name="address" size="50" 
+                                                    class="form-control" title="Please enter the address here"
+                                                    placeholder="Please enter the address here"></textarea></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Shipping Address (include city and country)</label>
+
+                    <div class="col-lg-8"><textarea id="shippingAddress" name="shippingAddress" size="50" 
+                                                    class="form-control" title="Please enter the address here"
+                                                    placeholder="Please enter the Shipping Address here"></textarea></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Zip/Postal Code (if applicable)</label>
+
+                    <div class="col-lg-8"><input type="text" id="zip" name="zip" size="50" maxlength="255" 
+                                                 class="form-control" title="Please enter the Zip/Postal here"
+                                                 placeholder="Please enter the Zip/Postal here"/></div>
                 </div>
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
-
-                <div class="col-lg-8"><input type="text" id="instituteName" name="instituteName" size="50" maxlength="255" 
-                                             class="isRequired form-control" title="Please enter the Facility Name here"
-                                             placeholder="Please enter the Facility Name here"/></div>
-            </div>
-            <div class="form-group col-lg-6">
-           <label class="col-lg-4 control-label">Lab Name<span class="mandatory">*</span></label>
-           <div class="col-lg-8">
-               <input type="text" id="pfname" name="lab_name" size="50" maxlength="255" 
-                      class="isRequired form-control" title="Please enter the Lab Name here" placeholder="Please enter the Lab Name here"/>
-           </div>
-               </div>          
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Department Name <span class="mandatory">*</span></label>
-
-                <div class="col-lg-8"><input type="text" id="departmentName" name="departmentName" size="50" maxlength="255" 
-                                             class="isRequired form-control" title="Please enter the Department Name here"
-                                             placeholder="Please enter the Department Name here"/></div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Physical Address</label>
-
-                <div class="col-lg-8"><textarea id="address" name="address" size="50" 
-                                                class="form-control" title="Please enter the address here"
-                                                placeholder="Please enter the address here"></textarea></div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Shipping Address (include city and country)</label>
-
-                <div class="col-lg-8"><textarea id="shippingAddress" name="shippingAddress" size="50" 
-                                                class="form-control" title="Please enter the address here"
-                                                placeholder="Please enter the Shipping Address here"></textarea></div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Zip/Postal Code (if applicable)</label>
-
-                <div class="col-lg-8"><input type="text" id="zip" name="zip" size="50" maxlength="255" 
-                                             class="form-control" title="Please enter the Zip/Postal here"
-                                             placeholder="Please enter the Zip/Postal here"/></div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Country <span class="mandatory">*</span></label>
-
-                <div class="col-lg-8">
-                    <select class="form-control isRequired" name="country" id="country" title="Please choose the country here">
-                        <option value=""></option>
-                        <?php foreach ($this->countriesList as $cou) {
-                            ?>
-                            <option value="<?php echo $cou['id']; ?>"><?php echo $cou['iso_name']; ?></option>
-                            <?php
-                        }
-                        ?>
-                    </select>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Phone Number</label>
+                    <div class="col-lg-8">
+                        <input id="phone2" type="text" id="phone1" name="phone1" size="50" maxlength="255" placeholder="Please enter the facility  phone number here" class="form-control isNumeric checkNum"/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">County <span class="mandatory">*</span></label>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Country <span class="mandatory">*</span></label>
 
-                <div class="col-lg-8">
-                    <select class="form-control isRequired" name="region" id="region" title="Please choose the county here">
+                    <div class="col-lg-8">
+                        <select class="form-control isRequired" name="country" id="country" title="Please choose the country here">
                             <option value=""></option>
-                            <?php foreach ($this->countiesList as $cout) {
+                            <?php foreach ($this->countriesList as $cou) {
                                 ?>
-                                <option value="<?php echo $cout['CountyID']; ?>"><?php echo $cout['Description']; ?></option>
+                                <option value="<?php echo $cou['id']; ?>"><?php echo $cou['iso_name']; ?></option>
                                 <?php
                             }
                             ?>
                         </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">City <span class="mandatory">*</span></label>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">County <span class="mandatory">*</span></label>
 
-                <div class="col-lg-8"><input type="text" id="city" name="city" size="50" maxlength="255" 
-                                             class="isRequired form-control" title="Please enter the city here"
-                                             placeholder="Please enter the city here"/></div>
-            </div>
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Partner</label>
-
-                <div class="col-lg-8">
-                    <select class="form-control" name="Partner" id="Partner" title="Please choose the Partner here">
-                            <option value="">Select Partner</option>
-                            <?php foreach ($this->PartnersList as $prt) {
+                    <div class="col-lg-8">
+                        <select class="form-control isRequired" name="region" id="region" title="Please choose the county here">
+                                <option value=""></option>
+                                <?php foreach ($this->countiesList as $cout) {
+                                    ?>
+                                    <option value="<?php echo $cout['CountyID']; ?>"><?php echo $cout['Description']; ?></option>
+                                    <?php
+                                }
                                 ?>
-                                <option value="<?php echo $prt['partner_id']; ?>"><?php echo $prt['partner_name']; ?></option>
+                            </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">City <span class="mandatory">*</span></label>
+
+                    <div class="col-lg-8"><input type="text" id="city" name="city" size="50" maxlength="255" 
+                                                 class="isRequired form-control" title="Please enter the city here"
+                                                 placeholder="Please enter the city here"/></div>
+                 </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Partner</label>
+
+                    <div class="col-lg-8">
+                        <select class="form-control" name="Partner" id="Partner" title="Please choose the Partner here">
+                                <option value="">Select Partner</option>
+                                <?php foreach ($this->PartnersList as $prt) {
+                                    ?>
+                                    <option value="<?php echo $prt['partner_id']; ?>"><?php echo $prt['partner_name']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Enrolled Programs </label>
+
+                    <div class="col-lg-8">
+                        <select name="scheme[]" id="scheme"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
+                            <?php foreach ($this->schemeList as $sch) {
+                                    ?>
+                                    <option value="<?php echo $sch['ID']; ?>"><?php echo $sch['SchemeName']; ?></option>
+                                    <?php
+                                }
+                                ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Platforms </label>
+
+                    <div class="col-lg-8">
+                        <select name="platform[]" id="platform" multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose platforms" >
+                            <?php foreach ($this->platformList as $platforms) {
+                                ?>
+                                <option value="<?php echo $platforms['ID']; ?>"><?php echo $platforms['PlatformName']; ?></option>
                                 <?php
                             }
                             ?>
                         </select>
+                    </div>
                 </div>
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Enrolled Programs </label>
 
-                <div class="col-lg-8">
-                    <select name="scheme[]" id="scheme"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
-                        <?php foreach ($this->schemeList as $sch) {
-                                ?>
-                                <option value="<?php echo $sch['ID']; ?>"><?php echo $sch['SchemeName']; ?></option>
-                                <?php
-                            }
-                            ?>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Platforms </label>
-
-                <div class="col-lg-8">
-                    <select name="platform[]" id="platform" multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose platforms" >
-                        <?php foreach ($this->platformList as $platforms) {
-                            ?>
-                            <option value="<?php echo $platforms['ID']; ?>"><?php echo $platforms['PlatformName']; ?></option>
-                            <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
             <legend style="color:white;">Facility Contact</legend>
+
             <div class="form-group col-lg-6">
                 <label class="col-lg-4 control-label">First Name <span class="mandatory">*</span></label>
                 <div class="col-lg-8"><input type="text" id="pfname" name="pfname" size="50" maxlength="255" class="form-control isRequired" title="Please enter the first name here" placeholder="Please enter the first name here"/></div>
@@ -164,13 +174,6 @@
                 <div class="col-lg-8">
                     <input id="phone1" type="text" id="phone2" name="phone2" size="50" maxlength="255" class="form-control isNumeric checkNum" title="Please enter mobile/cell number here" placeholder="Please enter mobile/cell number here"/></div>
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Phone Number</label>
-                <div class="col-lg-8">
-                    <input id="phone2" type="text" id="phone1" name="phone1" size="50" maxlength="255" placeholder="Please enter phone number here" class="form-control isNumeric checkNum"/>
-                </div>
-            </div>
-          </table>
             <br>
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" class="form-group col-lg-11" align="center">

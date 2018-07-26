@@ -1,0 +1,63 @@
+<?php
+
+class Admin_ReadinessChecklistController extends Zend_Controller_Action
+{
+
+    public function init()
+    {
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('index', 'html')->initContext();
+        $this->_helper->layout()->pageName = 'configMenu';
+    }
+
+    public function indexAction(){
+        if ($this->getRequest()->isPost()) {
+            $parameters = $this->_getAllParams();
+            $readinessChecklistService = new Application_Service_ReadinessChecklist();
+            $readinessChecklistService->getAllReadinessChecklists($parameters);
+        }
+    }
+    
+    public function viewAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        if($this->_hasParam('id')){
+            $readinessChecklistId = (int)$this->_getParam('id');
+            $this->view->readinessChecklist = $readinessChecklistService->getReadinessChecklistDetails($readinessChecklistId);
+        }else{
+            $this->_redirect("/admin/readiness-checklist");
+        }
+    }
+
+    public function addAction(){
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $readinessChecklistService = new Application_Service_ReadinessChecklist();
+            $readinessChecklistService->addReadinessChecklist($params);
+            $this->_redirect("/admin/readiness-checklist");
+        }
+    }
+    
+    public function editAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        if($this->_hasParam('id')){
+            $readinessChecklistId = (int)$this->_getParam('id');
+            $this->view->readinessChecklist = $readinessChecklistService->getReadinessChecklistDetails($readinessChecklistId);
+        }else{
+            $this->_redirect("/admin/readiness-checklist");
+        }
+    }
+
+    public function updateAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $readinessChecklistService->updateReadinessChecklist($params);
+            $this->_redirect("/admin/readiness-checklist");
+        }
+    }
+
+    public function deleteAction(){
+
+    }
+
+}

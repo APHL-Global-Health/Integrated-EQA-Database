@@ -1,25 +1,42 @@
 <?php
 
-class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
-{
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    protected $_name = 'vl_platform';
+class Application_Model_DbTable_ReadinessChecklistQuestion extends Zend_Db_Table_Abstract {
 
-    public function getAllPlatforms()
-    {
-        $sql = $this->select();
-        return $this->fetchAll($sql);
-    }
+    protected $_name = 'readiness_checklist_questions';
+    protected $_primary = 'id';
 
+    protected $_referenceMap    = array(
+        'ReadinessChecklist' => array(
+            'columns'           => array('readiness_checklist_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklist',
+            'refColumns'        => array('id')
+        )
+    );
 
-    public function fetchAllPlatformAdmin($parameters)
-    {
+    // Question types
+    // 0 = 'QUESTION';
+    // 1 = 'COMMENT';
+    // 2 = 'HEADING';
+
+    // Answer types
+    // 0 = 'LIST';
+    // 1 = 'NUMBER';
+    // 2 = 'FREE_TEXT';
+
+    public function getAllReadinessChecklistQuestions($parameters) {
+
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
+        error_log(implode("--", $parameters));
 
-        $aColumns = array('PlatformName', 'status');
-        $orderColumns = array('PlatformName', 'sort_order', 'status');
+        $aColumns = array('readiness_checklist_id', 'question', 'position', 'question_type', 'answer_type', 'list_options', 'created_at', 'created_by');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -42,7 +59,7 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
             $sOrder = "";
             for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
                 if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . "
+                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . "
 				 	" . ($parameters['sSortDir_' . $i]) . ", ";
                 }
             }
@@ -97,7 +114,7 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('pt' => $this->_name));
+        $sQuery = $this->getAdapter()->select()->from(array('a' => $this->_name));
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -137,50 +154,66 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
             "aaData" => array()
         );
 
-        $general = new Pt_Commons_General();
+
         foreach ($rResult as $aRow) {
-
             $row = array();
-            $row[] = ucwords($aRow['PlatformName']);
+            $row[] = $aRow['readiness_checklist_id'];
+            $row[] = $aRow['question'];
+            $row[] = $aRow['position'];
+            $row[] = $aRow['question_type'];
+            $row[] = $aRow['answer_type'];
+            $row[] = $aRow['list_options'];
+            $row[] = $aRow['created_at'];
+            $creator = new Application_Service_SystemAdmin();
+            $creatorDetails = $creator->getSystemAdminDetails($aRow['created_by']);
+            $row[] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
+            $row[] = '<a href="/admin/readiness-checklist-question/edit/id/' . $aRow['id'] 
+                    . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> '
+                    .'<a href="/admin/readiness-checklist-question/view/id/' . $aRow['id'] 
+                    . '" class="btn btn-success btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> View</a> ';
 
-            // $row[] = $aRow['status'] == 1 ? "Active" : "Inactive";
-            $row[] = $aRow['status'] == 1 ? "Active" : "Inactive";
-            $url = '<a href="/admin/platforms/edit/id/' . $aRow['ID'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
-            $url .= '<a href="/admin/platforms/delete/id/' . $aRow['ID'] . '" class="btn btn-danger btn-xs" style="margin-right: 2px;"><i class="icon-remove"></i> delete</a>';
-            $row[] = $url;
             $output['aaData'][] = $row;
         }
 
         echo json_encode($output);
     }
-
-
-    public function addPlatforms($params)
-    {
-        $authNameSpace = new Zend_Session_Namespace('administrators');
-        $data = array(
-            'PlatformName' => $params['PlatformName'],
-            'status' => $params['status']);
-        return $this->insert($data);
+    
+    public function getReadinessChecklistQuestionDetails($questionID) {
+        $question = $this->fetchRow($this->select()->where("id = ? ", $questionID))->toArray();
+        $creator = new Application_Service_SystemAdmin();
+        $creatorDetails = $creator->getSystemAdminDetails($question['created_by']);
+        $question['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
+        return $question;
     }
 
-    public function updatePlatforms($params)
-    {
+    public function addReadinessChecklistQuestion($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
+        $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
-            'PlatformName' => $params['PlatformName'],
-            'status' => $params['status']
+            'readiness_checklist_id' => $params['readiness_checklist_id'],
+            'question' => $params['question'],
+            'position' => $params['position'],
+            'question_type' => $params['question_type'],
+            'answer_type' => $params['answer_type'],
+            'list_options' => $params['list_options'],
+            'created_by' => $authNameSpace->admin_id
         );
-        return $this->update($data, "ID=" . $params['ID']);
+        $saved = $this->insert($data);
+        return $saved;
     }
 
-    public function getPlatformDetails($adminId)
-    {
-        return $this->fetchRow($this->select()->where("ID = ? ", $adminId));
+    public function updateReadinessChecklistQuestion($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $data = array(
+            'readiness_checklist_id' => $params['readiness_checklist_id'],
+            'question' => $params['question'],
+            'position' => $params['position'],
+            'question_type' => $params['question_type'],
+            'answer_type' => $params['answer_type'],
+            'list_options' => $params['list_options'],
+            'created_by' => $authNameSpace->admin_id
+        );
+        return $this->update($data, "id=" . $params['readinessChecklistId']);
     }
-    public function deletePlatformDetails($adminId)
-    {
-        return $this->delete("ID =  ".$adminId);
-    }
+
 }
-

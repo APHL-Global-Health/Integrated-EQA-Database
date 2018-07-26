@@ -221,7 +221,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">
                                     Participant/Lab Manager Mapping</a></li>
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness', 'action' => 'index'), 'default', true); ?>">
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness-checklist', 'action' => 'index'), 'default', true); ?>">
                                     Readiness Checklist</a></li>
                             <li>
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'enrollments'), 'default', true); ?>">
@@ -244,13 +244,13 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     Platforms</a>
                             </li>
 
-                            <li>
+                            <li class="hide">
 
 
 
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'vl-assay'), 'default', true); ?>">
                                     VL Assay</a></li>
-                            <li>
+                            <li class="hide">
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'eid-assay'), 'default', true); ?>">
                                     EID Assay</a></li>
                         </ul>

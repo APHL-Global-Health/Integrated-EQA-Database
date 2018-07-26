@@ -67,7 +67,7 @@
             <input type="password" id="password" name="password" class="isRequired  form-control"
                    title="Please enter your password" placeholder="eg. X8df!90EO"/>
         </div>
-        <table border="0" style="width:50%;margin-top: 10px;margin:0 auto;clear: both;">
+        <table border="0" style="width:50%;margin-top: 10px;margin:0 auto;clear: both;display: none;">
             <tbody>
             <tr>
                 <td>
@@ -143,27 +143,27 @@
             formId: 'loginForm'
         });
         if (flag) {
-            challenge_field = document.getElementById("challengeResponse").value;
-            if (challenge_field != "") {
-                $.post("<?php echo $this->url(array(), 'checkCaptchaRoute', true); ?>", {
-                        challenge_field: challenge_field,
-                        format: "html"
-                    },
-                    function (data) {
-                        //data == 'fail'
-                        if (false) {
-                            alert("Text you entered from the image is incorrect. Please try again");
-                            getCaptcha('capChaw');
-                            document.getElementById("challengeResponse").value = "";
-                            return false;
-                        } else {
+            // challenge_field = document.getElementById("challengeResponse").value;
+            // if (challenge_field != "") {
+            //     $.post("<?php echo $this->url(array(), 'checkCaptchaRoute', true); ?>", {
+            //             challenge_field: challenge_field,
+            //             format: "html"
+            //         },
+            //         function (data) {
+            //             //data == 'fail'
+            //             if (false) {
+            //                 alert("Text you entered from the image is incorrect. Please try again");
+            //                 getCaptcha('capChaw');
+            //                 document.getElementById("challengeResponse").value = "";
+            //                 return false;
+            //             } else {
                             $.blockUI();
                             document.getElementById('loginForm').submit();
-                        }
-                    });
-            } else {
-                alert("Please enter the text from the image to proceed.");
-            }
+            //             }
+            //         });
+            // } else {
+            //     alert("Please enter the text from the image to proceed.");
+            // }
         }
     }
 </script>

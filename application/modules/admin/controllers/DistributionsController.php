@@ -53,6 +53,9 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
 
         $this->view->distributionDates = $distributionService->getDistributionDates();
+
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        $this->view->readinessChecklists = $readinessChecklistService->listReadinessChecklists([]);
     }
 
     public function viewShipmentAction() {
