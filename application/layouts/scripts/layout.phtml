@@ -30,7 +30,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
         <!--____________________ Angular files_______________________________-->
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery_ui_min.css"); ?>" type="text/css" media="all">
 
-        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
         <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
@@ -133,7 +132,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                                 <i class="icon icon-pencil"></i> <span>Active Test Events</span>
                                             </a>
                                         </li>
-                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?>">
+                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?> hide">
                                             <a href="<?php echo $this->url(array("controller" => "readiness", "action" => "index"), null, true) ?>">
                                                 <i class="icon icon-list-ul"></i> <span>Readiness Status</span>
                                             </a>
@@ -159,12 +158,12 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <li class="<?php echo ($activeSubMenu == 'summary-reports') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "summary-report"), null, true) ?>"> Summary Report</a></li>
                                     </ul>
                                 </li>
-                                <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
+                                <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?> hide">
                                     <a href="<?php echo $this->url(array("controller" => "participant", "action" => "all-schemes"), null, true) ?>">
                                         <i class="icon icon-list-ul"></i> <span>All Schemes</span>
                                     </a>
                                 </li>
-                                <li class="<?php echo ($activeMenu == 'defaulted-schemes') ? ' active ' : ''; ?>">
+                                <li class="<?php echo ($activeMenu == 'defaulted-schemes') ? ' active ' : ''; ?> hide">
                                     <a href="<?php echo $this->url(array("controller" => "participant", "action" => "defaulted-schemes"), null, true) ?>">
                                         <i class="icon icon-exclamation"></i> <span>Defaulted Schemes</span>
                                     </a>
@@ -181,7 +180,7 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <li class="<?php echo ($activeSubMenu == 'change-password') ? ' active ' : ''; ?>"><a href="<?php echo $this->url(array("controller" => "participant", "action" => "password"), null, true) ?>">Change Password</a></li>                                
                                     </ul>
                                 </li>
-                                <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?>">
+                                <li class="<?php echo ($activeMenu == 'contact-us') ? ' active ' : ''; ?> hide">
                                     <a href="<?php echo $this->url(array("controller" => "contact"), null, true) ?>"><i class="icon icon-envelope"></i>
                                         <span>Contact Us </span></a></li>
                             <?php } ?>				 

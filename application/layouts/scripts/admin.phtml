@@ -37,6 +37,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
+    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap.min.css"); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery_ui_min.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/admin.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/DT_bootstrap.css"); ?>" type="text/css" media="all">
@@ -47,15 +48,11 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
           css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
     <![endif]-->
 
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bacteriology.css"); ?>" type="text/css" media="all">
-
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/deforayModal.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl("css/build.css"); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/fullcalendar.css'); ?>">
     <link rel="stylesheet" href="<?php echo $this->baseUrl('angularMain/calendar/calendarDemo.css'); ?>">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl('css/jquery-confirm.min.css'); ?>">
-    <link rel="stylesheet" href="<?php echo $this->baseUrl("css/bootstrap-multiselect.css"); ?>" type="text/css"
-          media="all">
+    <link rel="stylesheet" href="<?php echo $this->baseUrl('css/jquery-confirm.min.css'); ?>" media="all">
 
     <link rel="stylesheet" href="<?php echo $this->baseUrl('css/daterangepicker.css'); ?>" type="text/css" media="all">
     <link rel="stylesheet" href="<?php echo $this->baseUrl('css/global.css'); ?>" type="text/css">
@@ -216,8 +213,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                     PT Participants</a></li>
                             <li>
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'data-managers'), 'default', true); ?>">
-                                    PT Lab Manager </a></li>
-                            <li>
+                                    Participant Contacts </a></li>
+                            <li class="hide">
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">
                                     Participant/Lab Manager Mapping</a></li>
                             <li>
