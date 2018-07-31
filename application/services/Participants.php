@@ -165,7 +165,7 @@ class Application_Service_Participants
             ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id', array())
             ->where("s.shipment_id = ?", $shipmentId)
             ->where("p.status='active'")
-            ->order('p.first_name');
+            ->order('p.institute_name');
 
         return $db->fetchAll($sql);
     }

@@ -1,352 +1,151 @@
-
-<?php
-//Zend_Debug::dump($this->participant);die;
-?>
-<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('css/bootstrap-select.min.css'); ?>" />
 <div class="">
-    <form name="editParticipantForm" id="editParticipantForm" method="post"
-          action="<?php echo $this->url(array("module" => "admin", "controller" => "participants", "action" => "edit"), 'default', true) ?>" class="form-horizontal bs-example" role="form" onsubmit="validateNow();
-                  return false;">
-        <fieldset>
-            <h3>View Participant Details
-                <a class="btn btn-danger pull-right" type="button" onclick="window.location.href = '/admin/participants';" tabindex="8" value="Cancel">
-                    << Back</a></h3>
-            <hr>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Mfl Code</label>
-                <div class="col-lg-8">
-                    <div class="list-group-item">  
-                        <?php echo $this->participant['MflCode']; ?>&nbsp;
-                    </div>
-                </div>
+    <h3>Participant Details
+        <a class="btn btn-primary pull-right" type="button" onclick="window.location.href = '/admin/participants';" tabindex="8" value="Cancel">
+            << Back</a></h3>
+    <hr>
+    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Facility Code</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['unique_identifier']; ?>&nbsp;
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Participant Name</label>
-                <div class="col-lg-8">
-                    <div class="list-group-item">  
-                        <?php echo $this->participant['institute_name']; ?>&nbsp;
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Facility Name</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['institute_name']; ?>&nbsp;
             </div>
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Participant ID </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">  
-                        <?php echo $this->participant['unique_identifier']; ?>&nbsp;
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Email</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['email']; ?>&nbsp;
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Phone</label>
 
-            <div class="form-group col-lg-6" id="firstNameDiv">
-                <label class="col-lg-4 control-label">First Name</label>
-
-                <div class="col-lg-8">
-
-                    <div class="list-group-item">
-                        <?php echo $this->participant['first_name']; ?>&nbsp;
-                    </div>
-                </div>
+        <div class="col-sm-8">
+            <div> 
+                <?php echo $this->participant['phone']; ?>&nbsp;
             </div>
-
-            <div class="form-group col-lg-6" id="lastNameDiv">
-                <label class="col-lg-4 control-label">Last Name</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['last_name']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>	    
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Institute Name </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['institute_name']; ?>&nbsp;
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Facility Code</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['unique_identifier']; ?>&nbsp;
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Department Name </label>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Physical Address</label>
 
-                <div class="col-lg-8">
-                    <div class="list-group-item"> 
-                        <?php echo $this->participant['department_name']; ?>&nbsp;
-                    </div>
-                </div>
+        <div class="col-sm-8">
+            <p> 
+                <?php echo $this->participant['address']; ?>&nbsp;
+            </p>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Postal Address </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['zip']; ?>&nbsp;
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Physical Address</label>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">City </label>
 
-                <div class="col-lg-8">
-                    <div class="list-group-item"> 
-                        <?php echo $this->participant['address']; ?>&nbsp;
-                    </div>
-                </div>
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['city']; ?>&nbsp;
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">City </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['city']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">State (if applicable)</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['state']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Country </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php foreach ($this->countriesList as $cou) {
-                            ?>
-                            <?php
-                            if (($this->participant["country"] == $cou['id']))
-                                echo $cou['iso_name'];
-                        }
-                        ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">County </label>
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php foreach ($this->counties as $cou) {
-                            ?>
-                            <?php
-                            if (($this->participant['region'] == $cou['CountyID']))
-                                echo $cou['Description'];
-                        }
-                        ?>&nbsp;
-                    </div>
-
-                </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">County </label>
+        <div class="col-sm-8">
+            <div>
+                <?php foreach ($this->counties as $cou) {
+                    ?>
+                    <?php
+                    if (($this->participant['region'] == $cou['CountyID']))
+                        echo $cou['Description'];
+                }
+                ?>&nbsp;
             </div>
 
-            <div class="form-group col-lg-6" style="display: none;">
-                <label class="col-lg-4 control-label">Latitude</label>
-                <div class="col-lg-8"><input type="text" id="lat" name="lat" size="50" maxlength="255" class="form-control" title="Please enter the latitude here" placeholder="Please enter the latitude here" value="<?php echo $this->participant['lat']; ?>"/>
-                </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Country </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php foreach ($this->countriesList as $cou) {
+                    ?>
+                    <?php
+                    if (($this->participant["country"] == $cou['id']))
+                        echo $cou['iso_name'];
+                }
+                ?>&nbsp;
             </div>
+        </div>
+    </div>
+    <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Testing Volume</label>
 
-            <div class="form-group col-lg-6" style="display: none;">
-                <label class="col-lg-4 control-label">Longitude</label>
-
-                <div class="col-lg-8"><input type="text" id="long" name="long" size="50" maxlength="255" 
-                                             class="form-control" title="Please enter the longitude here"
-                                             placeholder="Please enter the longitude here"
-                                             value="<?php echo $this->participant['long']; ?>"/></div>
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['testing_volume']; ?>&nbsp;
             </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Enrolled Programs </label>
 
-            <div class="form-group col-lg-6" style="display: none;">
-                <label class="col-lg-4 control-label">Funding Source</label>
+        <div class="col-sm-8">
+            <div>
+                <?php
+                $enrolledProg = explode(",", $this->participant['enrolled_prog']);
 
-                <div class="col-lg-8">
-
-                    <?php echo $this->participant['funding_source']; ?>
-
-                </div>
+                foreach ($this->enrolledPrograms as $enrolledPrograms) {
+                    echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? $enrolledPrograms['enrolled_programs'] . '<br>' : "&nbsp;";
+                }
+                ?>&nbsp;
             </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Testing Volume</label>
+        </div>
+    </div>
+    <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Facility Level </label>
 
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['testing_volume']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Enrolled Programs </label>
+        <div class="col-sm-8">
+            <p>
+                <?php foreach ($this->networks as $nw) {
+                    ?>
+                    <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? $nw['network_name'] . '<br>' : "" ?>
+                <?php }
+                ?>
 
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php
-                        $enrolledProg = explode(",", $this->participant['enrolled_prog']);
+            </p>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Status </label>
+        <div class="col-sm-8">
+            <p class="text-uppercase">
+                <?php echo $this->participant['status']; ?>
+            </p>
+        </div>
+    </div>
 
-                        foreach ($this->enrolledPrograms as $enrolledPrograms) {
-                            echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? $enrolledPrograms['enrolled_programs'] . '<br>' : "&nbsp;";
-                        }
-                        ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Site Type</label>
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php
-                        foreach ($this->siteType as $siteType) {
-                            echo ($this->participant['site_type'] == $siteType['r_stid']) ? $siteType['site_type'] : "&nbsp;";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-
-            <hr style="border:1px solid #ccc;background: #ccc;width:90%;"/>
-
-
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">PT Participant Login</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php
-                        $dataManagers = explode(",", $this->participant['data_manager']);
-                        foreach ($this->dataManagers as $dm) {
-                            echo (in_array($dm['dm_id'], $dataManagers)) ? $dm['first_name'] . " " . $dm['last_name'] . '<br>' : "&nbsp";
-                        }
-                        ?>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Platforms Enrolled</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php
-                        foreach ($this->enrolledPlatforms as $platform) {
-                            echo $platform['PlatformName'] . '<br>';
-                        }
-                        ?>&nbsp;
-
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Contact Name </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['contact_name']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">E-mail</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['email']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Shipping Address (include city and country)</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['shipping_address']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Zip/Postal Code (if applicable)</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['zip']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>            
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Cell/Mobile No.</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['mobile']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Phone Number</label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['phone']; ?>&nbsp;
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Network Tier </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php foreach ($this->networks as $nw) {
-                            ?>
-                            <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? $nw['network_name'] . '<br>' : "&nbsp;" ?>
-                        <?php }
-                        ?>
-
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Affiliation </label>
-
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php foreach ($this->affiliates as $aff) {
-                            ?>
-                            <?php echo ($this->participant['affiliation'] == $aff['affiliate']) ? $aff['affiliate'] . '<br>' : "&nbsp;" ?>
-
-
-                        <?php }
-                        ?>
-
-                    </div>
-                </div>
-            </div>
-            <?php if ($this->participant['status'] == "pending") { ?>
-                <div class="form-group col-lg-6">
-                    <label class="col-lg-4 control-label">Schemes </label>
-
-                    <div class="col-lg-8">
-                        <select id="scheme" name="scheme[]"  class="form-control isRequired" multiple="multiple" title="Please choose one or more Schemes" data-selected-text-format="count>3">
-                            <?php
-                            foreach ($this->schemes as $scheme) {
-                                ?>
-                                <option value="<?php echo $scheme['scheme_id']; ?>" <?php echo (in_array($scheme['scheme_id'], $this->participantSchemes) ? "selected='selected'" : ""); ?>><?php echo $scheme['scheme_name']; ?></option>	
-                                <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-            <?php } ?>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Status </label>
-                <div class="col-lg-8">
-                    <div class="list-group-item">
-                        <?php echo $this->participant['status']; ?>
-                    </div>
-                </div>
-            </div>
-
-            </table>
-            <br>
-            <hr>
-        </fieldset>
-    </form>
 </div>

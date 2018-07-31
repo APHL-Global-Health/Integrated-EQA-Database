@@ -2,9 +2,9 @@
 $result= '';
 foreach ($this->dataManagers as $key => $dataManagers) {
      $selected = "";
-    foreach ($this->paticipantManagers as $paticipantManagers) {
+    foreach ($this->participantManagers as $participantManagers) {
        
-        if ($paticipantManagers['dm_id'] == $dataManagers['dm_id']) {
+        if ($participantManagers['dm_id'] == $dataManagers['dm_id']) {
             $selected = "selected='selected'";
         }
     }

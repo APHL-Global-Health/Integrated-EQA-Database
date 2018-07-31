@@ -110,7 +110,7 @@ public function getCounties() {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('unique_identifier', 'MflCode', 'first_name', 'iso_name', 'mobile', 'phone', 'affiliation', 'email', 'status');
+        $aColumns = array('unique_identifier', 'institute_name', 'enrolled_programs', 'status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "participant_id";
@@ -185,8 +185,9 @@ public function getCounties() {
          * Get data to display
          */
 
-        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name), array('p.participant_id', 'p.unique_identifier',
-                    'p.country', 'p.mobile', 'p.phone', 'p.affiliation', 'p.email', 'p.status', 'p.MflCode',
+        $sQuery = $this->getAdapter()->select()->from(array('p' => $this->_name),
+                array('p.participant_id', 'p.unique_identifier', 'p.country', 'p.mobile', 'p.phone',
+                    'p.affiliation', 'p.email', 'p.status', 'p.MflCode', 'p.institute_name', 'p.enrolled_programs',
                     'participantName' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT COALESCE(p.first_name,''),\" \",COALESCE(p.last_name,'') ORDER BY p.first_name SEPARATOR ', ')")))
                 ->join(array('c' => 'countries'), 'c.id=p.country')
                 ->group("p.participant_id");
@@ -243,24 +244,17 @@ public function getCounties() {
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['unique_identifier'];
-            $row[] = $aRow['participantName'];
-            $row[] = $aRow['iso_name'];
-            $row[] = $aRow['mobile'];
-            $row[] = $aRow['phone'];
-            $row[] = $aRow['MflCode'];
-            $row[] = $aRow['email'];
+            $row[] = $aRow['institute_name'];
+            $row[] = $aRow['enrolled_programs'];
             $row[] = ucwords($aRow['status']);
-            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-                $row[] = '<a href="/admin/participants/editmicrolab/id/' . $aRow['participant_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
-            } else {
-                $row[] = ''
-                        . '<a href="/admin/participants/edit/id/' . $aRow['participant_id']
-                        . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
-                        . '<i class="icon-pencil"></i> Edit</a>'
-                        . '<a href="/admin/participants/view/id/' . $aRow['participant_id']
-                        . '" class="btn btn-info btn-xs" style="margin-right: 2px;">'
-                        . '<i class="icon-eye"></i> view</a>';
-            }
+            $row[] = ''
+                    . '<a href="/admin/participants/edit/id/' . $aRow['participant_id']
+                    . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                    . '<i class="icon-pencil"></i> Edit</a>'
+                    . '<a href="/admin/participants/view/id/' . $aRow['participant_id']
+                    . '" class="btn btn-info btn-xs" style="margin-right: 2px;">'
+                    . '<i class="icon-eye"></i> view</a>';
+
             $output['aaData'][] = $row;
         }
 
