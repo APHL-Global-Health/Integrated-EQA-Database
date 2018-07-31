@@ -30,25 +30,13 @@ class Admin_DataManagersController extends Zend_Controller_Action {
         $userService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {
             $params = $this->_request->getPost();
-            $userService->addUser($params);
+            $dmID = $userService->addUser($params);
+            $userService->updateUserLaboratory(['dm_id' => $dmID, 'participant_id' => $params['participant_id']], false);
             $this->_redirect("/admin/data-managers");
         }
 
-
-        if ($this->_hasParam('contact')) {
-            $contact = new Application_Model_DbTable_ContactUs();
-            $this->view->contact = $contact->getContact($this->_getParam('contact'));
-        }
-    }
-
-    public function addmicrouserAction() {
-        $userService = new Application_Service_DataManagers();
-        if ($this->getRequest()->isPost()) {
-            $params = $this->_request->getPost();
-            $userService->addUser($params);
-            $this->_redirect("/admin/data-managers");
-        }
-
+        $participantService = new Application_Service_Participants();
+        $this->view->participants = $participantService->getAllActiveParticipants();
 
         if ($this->_hasParam('contact')) {
             $contact = new Application_Model_DbTable_ContactUs();
@@ -57,10 +45,14 @@ class Admin_DataManagersController extends Zend_Controller_Action {
     }
 
     public function editAction() {
+        $participantService = new Application_Service_Participants();
+        $this->view->participants = $participantService->getAllActiveParticipants();
         $userService = new Application_Service_DataManagers();
         if ($this->getRequest()->isPost()) {
             $params = $this->_request->getPost();
             $userService->updateUser($params);
+            error_log("participant_id: ".$params['participant_id']." dm_id: ".$params['userSystemId']);
+            $userService->updateUserLaboratory(['dm_id' => $params['userSystemId'], 'participant_id' => $params['participant_id']], false);
             $this->_redirect("/admin/data-managers");
         } else {
             if ($this->_hasParam('id')) {
@@ -86,19 +78,4 @@ class Admin_DataManagersController extends Zend_Controller_Action {
             }
         }
     }
-
-    public function editmicrouserAction() {
-        $userService = new Application_Service_DataManagers();
-        if ($this->getRequest()->isPost()) {
-            $params = $this->_request->getPost();
-            $userService->updateUser($params);
-            $this->_redirect("/admin/data-managers");
-        } else {
-            if ($this->_hasParam('id')) {
-                $userId = (int) $this->_getParam('id');
-                $this->view->rsUser = $userService->getUserInfoBySystemId($userId);
-            }
-        }
-    }
-
 }

@@ -48,7 +48,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('u.institute', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'p.first_name', 'u.status', 'u.IsTester');
+        $aColumns = array('p.institute_name', 'u.first_name', 'u.last_name', 'u.mobile', 'u.primary_email', 'u.secondary_email', 'u.status', 'u.IsTester');
 
 
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -129,7 +129,7 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         $sQuery = $this->getAdapter()->select()->from(array('u' => $this->_name))
                 ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.dm_id=u.dm_id', array('participant_id'))
-                ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('participantCount' => new Zend_Db_Expr("SUM(IF(p.participant_id!='',1,0))"), 'p.participant_id'))
+                ->joinLeft(array('p' => 'participant'), 'p.participant_id = pmm.participant_id', array('p.participant_id', 'p.institute_name'))
                 ->group('u.dm_id');
 
         if ($sWhere == "") {
@@ -178,39 +178,19 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
 
         foreach ($rResult as $aRow) {
             $row = array();
-            //if(isset($aRow['participant_id'])&& $aRow['participant_id']!=''){
-            //$participantDetails='<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['participant_id'].'\',\'980\',\'500\');" class="btn btn-primary btn-xs"><i class="icon-search"></i></a>';
-            //}else{
-            //$participantDetails='';
-            //}
-            $row[] = $aRow['institute'];
-            // $row[] = $participantDetails.' '.$aRow['institute'];
-            $row[] = $aRow['first_name'];
-            $row[] = $aRow['last_name'];
-            $row[] = $aRow['mobile'];
+
+            $row[] = $aRow['institute_name'];
+            $row[] = trim($aRow['first_name'] . " " . $aRow['last_name']);
             $row[] = $aRow['primary_email'];
+            $row[] = $aRow['mobile'];
 
-//            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
+            $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
 
-
-
-            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-                $row[] = $aRow['secondary_email'] ;
-            } else {
-                $row[] = $aRow['IsTester'] == 0 ? 'Yes' : 'No';
-            }
-
-            //$row[] = '<a href="javascript:void(0);" onclick="layoutModal(\'/admin/participants/view-participants/id/'.$aRow['dm_id'].'\',\'980\',\'500\');" >'.$aRow['participantCount'].'</a>';
             $row[] = $aRow['status'];
 
-            if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-                $row[] = '<a href="/admin/data-managers/editmicrouser/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
-            } else {
-                $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs"'
-                        . ' style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>'
-                        . '<a href="/admin/data-managers/changelaboratory/id/' . $aRow['dm_id'] . '" class="btn btn-info btn-xs"'
-                        . ' style="margin-right: 2px;"><i class="icon-pencil"></i> Change Lab</a>';
-            }
+            $row[] = '<a href="/admin/data-managers/edit/id/' . $aRow['dm_id'] . '" class="btn btn-warning btn-xs"'
+                    . ' style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a>';
+
             $output['aaData'][] = $row;
         }
 
@@ -222,20 +202,25 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     }
 
     public function getUserRecords($userId) {
-        return count($this->fetchRow("dm_id = '" . $userId . "'")->toArray());
+        return count($this->fetchRow("dm_id = $userId")->toArray());
     }
 
     public function getUserDetailsBySystemId($userSystemId) {
-        return $this->fetchRow("dm_id = '" . $userSystemId . "'")->toArray();
+        return $this->fetchRow("dm_id = $userSystemId")->toArray();
     }
 
-    public function updateUserLaboratory($params) {
+    public function updateUserLaboratory($params, $sendMessage = true) {
         $db = Zend_Db_Table_Abstract::getAdapter();
         $where = $params['dm_id'];
 
         $bind['participant_id'] = $params['participant_id'];
         $numberRows = $db->update('participant_manager_map', $bind, "dm_id = $where");
-        $exists = $this->getUserRecords($params['dm_id']);
+        $exists = $db->select()
+                        ->from('participant_manager_map', ['hits' => new Zend_Db_Expr("COUNT('dm_id')")])
+                        ->where('dm_id = ?',$params['dm_id'])
+                        ->query()
+                        ->fetchAll()[0]['hits'];
+
         if ($numberRows == 0) {
             $bind['dm_id'] = $params['dm_id'];
             if ($exists == 0) {
@@ -243,14 +228,15 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
             }
             $message = '<br>You have added to a facility : ';
         } else {
-            $message = '<br>You have been change from you current facility to : ';
+            $message = '<br>Your facility has been changed to : ';
         }
         $participant = new Application_Model_DbTable_Participants();
         $partpnt = $participant->getParticipant($bind['participant_id']);
 
         $common = new Application_Service_Common();
-        if ($numberRows == 1) {
-            $common->sendGeneralEmail($params['email'], $message . $partpnt["institute_name"]);
+        if ($numberRows == 1 && $sendMessage) {
+            $email = $params['userId'];
+            $common->sendGeneralEmail($email, $message . $partpnt["institute_name"]);
         }
     }
 
