@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('America/New_York');
+date_default_timezone_set('Africa/Nairobi');
 $authNameSpace = new Zend_Session_Namespace('datamanagers');
 if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment["shipment_test_report_date"]) != "") {
     $expTestReceiptDate = explode(" ", $this->shipment["shipment_test_report_date"]);
@@ -78,7 +78,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                         <tr>
                             <td style="width:20%;"> <h4 class="text-info">  Participant Name </h4> <?php echo ( $this->participant['first_name'] . ' ' . $this->participant['last_name'] ); ?></td>
                             <td style="width:20%;"><h4 class="text-info">  Participant Code </h4> <?php echo $this->participant['unique_identifier'] ?></td>
-                            <td style="width:20%;"><h4 class="text-info">  Affiliation </h4> <?php echo ( $this->participant['affiliation'] ); ?> </td>
+                            <td style="width:20%;"><h4 class="text-info">  Affiliation </h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
                             <td style="width:20%;"><h4 class="text-info"> Phone No </h4> <?php echo ( $this->participant['phone'] ); ?></td>
                             <td style="width:20%;"><h4 class="text-info"> Mobile No </h4> <?php echo ( $this->participant['mobile'] ); ?></td>
                         </tr>

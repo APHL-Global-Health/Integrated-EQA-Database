@@ -1011,8 +1011,9 @@ class Application_Service_Shipments {
     }
 
     public function getShipment($sid) {
-        $db = new Application_Model_DbTable_Shipments();
-        return $db->fetchRow($db->select()->where("shipment_id = ?", $sid));
+        $shipmentDb = new Application_Model_DbTable_Shipments();
+        $row = $shipmentDb->fetchRow('shipment_id=' . $sid);
+        return $row;
     }
 
     public function shipItNow($params) {
@@ -1050,7 +1051,7 @@ class Application_Service_Shipments {
             return "Shipment deleted.";
         } catch (Exception $e) {
             return($e->getMessage());
-            return "c Unable to delete. Please try again later or contact system admin for help";
+            return "Unable to delete. Please try again later or contact system admin for help";
         }
     }
 

@@ -205,7 +205,7 @@ if ($auth->hasIdentity()) {
         </div>
     </div>
     <br/>
-    <span class="" style="padding:1px 0;">
+    <span class="hide" style="padding:1px 0;">
         <h3 style="border-bottom:1px solid #555;width:100%;">Participant Distribution</h3>
         <select id="scheme" name="scheme" onchange="showParticipantsLocation();" class="form-control input-sm">
             <option value="all">Show for all Schemes</option>
@@ -220,35 +220,6 @@ if ($auth->hasIdentity()) {
     </span>
 
 
-<?php } ?>
-<?php if ($vl == 3) { ?>
-
-            <div class="jumbotron">
-                <h1>MICROBIOLOGY ADMIN MODULE</h1> 
-                  <small>Welcome back, f<?php echo $_SESSION['loggedInDetails']["last_name"] . ' ' . $_SESSION['loggedInDetails']["first_name"]; ?></small>
-                <p>On this module you will be able to add other Microbiology Users,create rounds,create tests and views reports.</p> 
-            </div>
-            <p class="lead">To add a module add click here 
-                <a class="btn btn-primary" 
-                   href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'system-admins', 'action' => 'add'), 'default', true); ?>">
-                    Add Microbiology Users </a>
-            </p> 
-        
-<?php } ?>
-<?php if ($vl == 2) { ?>
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Repository Overview</h1> 
-              <small>Welcome back, <?php echo "{$_SESSION['loggedInDetails']["first_name"]} {$_SESSION['loggedInDetails']["last_name"]}"; ?>.</small>
-            <p>
-            <?php 
-                if ($role == 1) echo $config->repositoryAdminNarrative; 
-                if ($role == 2) echo $config->repositoryPTProviderNarrative; 
-                if ($role == 3) echo $config->repositoryQAManagerNarrative; 
-            ?>
-            </p> 
-        </div>
-    </div>
 <?php } ?>
 
 <?php if ($vl == 4) { ?>
@@ -269,7 +240,7 @@ if ($auth->hasIdentity()) {
 
 
 
-<div class="col-lg-13" id="map-canvas" style="width:100%; height: 450px;margin-top:10px !important;"></div>
+<div class="col-lg-13 hide" id="map-canvas" style="width:100%; height: 450px;margin-top:10px !important;"></div>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->

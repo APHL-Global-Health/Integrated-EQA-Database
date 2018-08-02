@@ -25,7 +25,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
     public function indexAction() {
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();
-//Zend_Debug::dump($params);die;
             $shipmentService = new Application_Service_Shipments();
             $shipmentService->getAllShipments($params);
         } else if ($this->_hasParam('searchString')) {
@@ -64,7 +63,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
     public function getparticitingAction() {
 
-//if ($this->getRequest()->isPost()) {
         $shipmentId = $this->getRequest()->getParam('sid');
         $clientsServices = new Application_Service_Shipments();
         $shipments = $clientsServices->getparticipatingLabs($shipmentId);
@@ -131,11 +129,13 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
     public function shipItAction() {
         $shipmentService = new Application_Service_Shipments();
+
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $shipmentService->shipItNow($params);
             $this->_redirect("/admin/shipment");
         } else {
+
             if ($this->_hasParam('sid')) {
                 $participantService = new Application_Service_Participants();
                 $sid = (int) base64_decode($this->_getParam('sid'));
@@ -149,8 +149,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                     $this->view->unEnrolledParticipants = $participantService->getUnEnrolled($shipmentDetails['scheme_type'],
                         $shipmentDetails['distribution_id']);
-//var_dump($this->view->unEnrolledParticipants,"Here");
-//exit;
                 } else {
                     $this->view->previouslyUnSelected = $participantService->getUnEnrolledByShipmentId($sid, $shipmentDetails['distribution_id']);
 

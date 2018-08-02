@@ -149,11 +149,11 @@ class Application_Service_Participants
     public function getEnrolledBySchemeCode($scheme)
     {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('e' => 'participant'), array())
-            ->join(array('p' => 'enrollments'), "p.participant_id=e.participant_id")
+        $sql = $db->select()->from(array('p' => 'participant'))
+            ->join(array('e' => 'enrollments'), "p.participant_id=e.participant_id")
             ->where("scheme_id = ?", $scheme)
             ->where("p.status='active'")
-            ->order('first_name');
+            ->order('p.institute_name');
         return $db->fetchAll($sql);
     }
 
@@ -161,8 +161,8 @@ class Application_Service_Participants
     {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('p' => 'participant'))
-            ->join(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array())
-            ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id', array())
+            ->join(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id')
+            ->join(array('s' => 'shipment'), 'sp.shipment_id=s.shipment_id')
             ->where("s.shipment_id = ?", $shipmentId)
             ->where("p.status='active'")
             ->order('p.institute_name');
