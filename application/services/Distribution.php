@@ -3,28 +3,28 @@
 class Application_Service_Distribution {
 
     public function getAllDistributions($params) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getAllDistributions($params);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getAllDistributions($params);
     }
 
     public function addDistribution($params, $labEmail = null) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->addDistribution($params, $labEmail);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->addDistribution($params, $labEmail);
     }
 
     public function getDistribution($did) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getDistribution($did);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getDistribution($did);
     }
 
     public function updateDistribution($params) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->updateDistribution($params);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->updateDistribution($params);
     }
 
     public function getDistributionDates() {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getDistributionDates();
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getDistributionDates();
     }
 
     public function getShipments($distroId) {
@@ -36,13 +36,13 @@ class Application_Service_Distribution {
     }
 
     public function getUnshippedDistributions() {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getUnshippedDistributions();
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getUnshippedDistributions();
     }
 
     public function updateDistributionStatus($distributionId, $status) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->updateDistributionStatus($distributionId, $status);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->updateDistributionStatus($distributionId, $status);
     }
 
     public function returnshippingMessage($shipmentName) {
@@ -108,8 +108,8 @@ class Application_Service_Distribution {
             $shipmentDb = new Application_Model_DbTable_Shipments();
             $shipmentDb->updateShipmentStatusByDistribution($distributionId, "shipped");
 
-            $disrtibutionDb = new Application_Model_DbTable_Distribution();
-            $disrtibutionDb->updateDistributionStatus($distributionId, "shipped");
+            $distributionDb = new Application_Model_DbTable_Distribution();
+            $distributionDb->updateDistributionStatus($distributionId, "shipped");
             $this->sendEmailToParticipantsForShipmentDispatch($distributionId);
             $db->commit();
 
@@ -123,13 +123,13 @@ class Application_Service_Distribution {
     }
 
     public function getAllDistributionReports($parameters) {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getAllDistributionReports($parameters);
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getAllDistributionReports($parameters);
     }
 
     public function getAllDistributionStatus() {
-        $disrtibutionDb = new Application_Model_DbTable_Distribution();
-        return $disrtibutionDb->getAllDistributionStatusDetails();
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->getAllDistributionStatusDetails();
     }
 
 }
