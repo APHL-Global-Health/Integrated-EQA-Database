@@ -53,7 +53,7 @@ class DistributionsController extends Zend_Controller_Action {
             $params = $this->getRequest()->getPost();
             $partnerService = new Application_Model_DbTable_Readiness();
             $partnerService->addReadiness($params);
-            $this->_redirect("/readiness/index");
+            $this->_redirect("/readiness-checklist/index");
         }
         $this->view->participantId = $id;
         $commonService = new Application_Service_Common();

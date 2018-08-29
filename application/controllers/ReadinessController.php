@@ -36,6 +36,7 @@ class ReadinessController extends Zend_Controller_Action
             $rService = new Application_Model_DbTable_Readiness();
             $rService->getAllReadiness($params, $id);
         }
+        error_log("ReadinessController");
     }
 
     public function getreadinessAction()
@@ -53,6 +54,8 @@ class ReadinessController extends Zend_Controller_Action
         $pID = $authNameSpace->UserID;
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetailByUserEmail($pID);
+
+error_log("ReadinessController");
 
         foreach ($t as $k) {
             $id = $k["participant_id"];

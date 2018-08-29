@@ -36,6 +36,7 @@ class ReadinessChecklistController extends Zend_Controller_Action
             $rService = new Application_Model_DbTable_ReadinessChecklists();
             $rService->getAllReadinessChecklists($params, $id);
         }
+        error_log("ReadinessChecklistController");
     }
 
     public function getreadinessAction()
@@ -54,29 +55,64 @@ class ReadinessChecklistController extends Zend_Controller_Action
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetailByUserEmail($pID);
 
+error_log("ReadinessChecklistController");
         foreach ($t as $k) {
             $id = $k["participant_id"];
         }
 
-        if ($this->getRequest()->isPost()) {
-            $params = $this->getRequest()->getPost();
-            $partnerService = new Application_Model_DbTable_ReadinessChecklists();
-            $v = $partnerService->addReadinessChecklists($params);
-            if ($v) {
-                $this->_helper->flashMessenger("Your readiness checklist has been submitted successfully.");
-                $this->_redirect("/readiness/index");
-            } else {
-                $this->_helper->flashMessenger("Sorry, you have already submitted the readiness checklist for the selected test event.");
-                $this->_redirect("/readiness/index");
-            }
-        }
         $this->view->participantId = $id;
-        $roundInfo['distribution_Id'] = $this->getRequest()->getParam('roundId');
-        $roundInfo['distribution_code'] = str_replace('*', "/", $this->getRequest()->getParam('code'));
+        $roundID = $this->getRequest()->getParam('roundId');
+
+        $distributionService = new Application_Service_Distribution();
+        $this->view->round = $round = $distributionService->getDistribution($roundID);
+
+        $checklistID = $round['readiness_checklist_id'];
+
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        $this->view->readinessChecklist = $clist = $readinessChecklistService->getReadinessChecklistDetails($checklistID);
+    }
+
+    public function replyAction(){
+
+        $params = $this->getRequest()->getPost();
+        $partnerService = new Application_Model_DbTable_ReadinessChecklists();
+        $v = $partnerService->addReadinessChecklists($params);
+        if ($v) {
+            $this->_helper->flashMessenger("Your readiness checklist has been submitted successfully.");
+            $this->_redirect("/readiness/index");
+        } else {
+            $this->_helper->flashMessenger("Sorry, you have already submitted the readiness checklist for the selected test event.");
+            $this->_redirect("/readiness/index");
+        }
+    }
+
+    public function correctiveAction()
+    {
+        if ($this->getRequest()->isPost()) {
 
 
-        $commonService = new Application_Service_Common();
-        $this->view->roundsList = $commonService->getUnshippedDistributions();
-        $this->view->roundInfo = $roundInfo;
+        }
+        $rService = new Application_Model_DbTable_Distribution();
+
+        $this->view->surveys = $rService->getFinalizedDistributions();
+    }
+
+    public function savecorrectiveAction()
+    {
+
+        if ($this->getRequest()->isPost()) {
+            $params = $this->_getAllParams();
+            $params = $params['data'];
+
+            $authNameSpace = new Zend_Session_Namespace('datamanagers');
+
+            $rService = new Application_Model_DbTable_Capa();
+            $params['dmId'] = $authNameSpace->dm_id;
+            $params['participantId'] = $rService->getParticipantId($authNameSpace->dm_id);
+
+            echo $rService->saveCorrectiveAction($params);
+
+        }
+        exit;
     }
 }

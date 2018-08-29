@@ -398,7 +398,7 @@ CREATE TABLE `r_enrolled_programs` (
   PRIMARY KEY (`r_epid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `r_enrolled_programs` VALUES (1,'PEPFAR RTQI Program'),(2,'PEPFAR'),(3,'VL'),(4,'EID'),(5,'BOTH(VL & EID)');
+INSERT INTO `r_enrolled_programs` VALUES (3,'VL'),(4,'EID'),(5,'BOTH(VL & EID)');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `r_evaluation_comments` (
