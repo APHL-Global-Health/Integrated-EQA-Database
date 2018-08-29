@@ -76,11 +76,12 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <tr>
-                            <td style="width:20%;"> <h4 class="text-info">  Participant Name </h4> <?php echo ( $this->participant['first_name'] . ' ' . $this->participant['last_name'] ); ?></td>
-                            <td style="width:20%;"><h4 class="text-info">  Participant Code </h4> <?php echo $this->participant['unique_identifier'] ?></td>
-                            <td style="width:20%;"><h4 class="text-info">  Affiliation </h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
-                            <td style="width:20%;"><h4 class="text-info"> Phone No </h4> <?php echo ( $this->participant['phone'] ); ?></td>
-                            <td style="width:20%;"><h4 class="text-info"> Mobile No </h4> <?php echo ( $this->participant['mobile'] ); ?></td>
+                            <td>
+                                <h4 class="text-info">  Lab Code </h4> <?php echo ( $this->participant['MflCode'] ); ?>
+                            </td>
+                            <td><h4 class="text-info">  Lab Name </h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
+                            <td><h4 class="text-info"> Phone No </h4> <?php echo ( $this->participant['phone'] ); ?></td>
+                            <td><h4 class="text-info"> Mobile No </h4> <?php echo ( $this->participant['mobile'] ); ?></td>
                         </tr>
                     </table>
                     <hr>
@@ -134,22 +135,28 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                     ?>
                                 </select>
                             </td>
-                            <td class="hideOtherAssay"><label>Please specify Other Assay Name <span class="mandatory">*</span></label></td> 
-                            <td class="hideOtherAssay">
+                            <td class="hideOtherAssay hide"><label>Please specify Other Assay Name <span class="mandatory">*</span></label></td> 
+                            <td class="hideOtherAssay hide">
                                 <input type="text" name="otherAssay" id="otherAssay" class="form-control"  value="<?php echo (isset($this->shipment['attributes']['other_assay']) && ($this->shipment['attributes']['other_assay'] != "")) ? $this->shipment['attributes']['other_assay'] : ""; ?>" title="Please specify Other Assay Name" />
                             </td>
-
+                            <td><label>Sample Volume Received</label></td>
+                            <td>
+                                <select class="form-control" name="sample_volume_received">
+                                    <option value="A">Adequate</option>
+                                    <option value="NA">Not Adequate</option>
+                                </select>
+                            </td>
                         </tr>
 
                         <tr class ="dark">
-                            <td><label>Assay Expiration Date </label></td>
+                            <td><label>Kit Lot Number <span class="mandatory">*</span></label></td>
+                            <td>
+                                <input type="text" name="assayLotNumber" id="assayLotNumber" class="isRequired form-control"  value="<?php echo $this->shipment['attributes']['assay_lot_number']; ?>" title="Please enter Assay lot number" placeholder="Please enter Assay lot number"/>
+                            </td>
+                            <td><label>Kit Expiration Date </label></td>
                             <td>
                                 <input type="text" name="assayExpirationDate" id="assayExpirationDate" style="width:180px;float:left;"  class="expDatepicker form-control" readonly="readonly"  value="<?php echo $this->dateFormat($this->shipment['attributes']['assay_expiration_date']); ?>" title="Please enter Assay Expiration date" placeholder="Please enter Assay Expiration date"/>
                                 <i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('assayExpirationDate')"> Clear</i>
-                            </td>
-                            <td><label>Assay Lot Number <span class="mandatory">*</span></label></td>
-                            <td>
-                                <input type="text" name="assayLotNumber" id="assayLotNumber" class="isRequired form-control"  value="<?php echo $this->shipment['attributes']['assay_lot_number']; ?>" title="Please enter Assay lot number" placeholder="Please enter Assay lot number"/>
                             </td>
                         </tr>
 
