@@ -72,4 +72,39 @@
             }
         } );
     } );
+
+    function deleteChecklist(checkListID) {
+
+        $.confirm({
+            title: 'Confirm Delete!',
+            content: 'Are you sure want to delete the checklist? This action is irreversible!',
+            buttons: {
+                'Delete': {
+                    btnClass: 'btn-red',
+                    action: function () {
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness-checklist', 'action' => 'delete')); ?>',
+                            data: {checkListID: checkListID},
+                            success: function (data) {
+                                window.location.href = "/admin/readiness-checklist";
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                $('#loader').hide();
+                                console.log(xhr.responseText);
+                            }
+                        });
+
+                    }
+                },
+                cancel: {
+                    action: function () {
+                    }
+                }
+            }
+        })
+
+
+    }
 </script>

@@ -55,7 +55,7 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
-        $sWhere = "";
+        $sWhere = "ISNULL(deleted_at)";
         if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
             $searchArray = explode(" ", $parameters['sSearch']);
             $sWhereSub = "";
@@ -144,10 +144,12 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
             $creator = new Application_Service_SystemAdmin();
             $creatorDetails = $creator->getSystemAdminDetails($aRow['created_by']);
             $row[] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
-            $row[] = '<a href="/admin/readiness-checklist/edit/id/' . $aRow['id'] 
-                    . '" class="btn btn-warning btn-xs" style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> '
-                    .'<a href="/admin/readiness-checklist/view/id/' . $aRow['id'] 
-                    . '" class="btn btn-success btn-xs" style="margin-right: 2px;"><i class="icon-info"></i> Details</a> ';
+            $row[] = '<a href="/admin/readiness-checklist/edit/id/' . $aRow['id'] . '" class="btn btn-warning btn-xs" '
+                    .'style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> '
+                    .'<a href="/admin/readiness-checklist/view/id/' . $aRow['id'] . '" class="btn btn-success btn-xs" '
+                    .'style="margin-right: 2px;"><i class="icon-info"></i> Details</a> '
+                    .'<a href="#" onclick="deleteChecklist('. $aRow['id'] . ')" class="btn btn-danger btn-xs" '
+                    .'style="margin-right: 2px;"><i class="icon-delete"></i> Delete</a> ';
 
             $output['aaData'][] = $row;
         }
@@ -190,6 +192,18 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
             'created_by' => $authNameSpace->admin_id
         );
         return $this->update($data, "id=" . $params['readinessChecklistId']);
+    }
+
+    public function deleteReadinessChecklist($params) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $now = date('Y-m-d H:i:s');
+        $data = array(
+            'deleted_by' => $authNameSpace->admin_id,
+            'deleted_at' => $now
+        );
+        $this->update($data, "id=" . $params['checkListID']);
+        
+        return $this->getAllReadinessChecklists([]);
     }
 
 }

@@ -218,9 +218,6 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'participant-manager-map'), 'default', true); ?>">
                                     Participant/Lab Manager Mapping</a></li>
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness-checklist', 'action' => 'index'), 'default', true); ?>">
-                                    Readiness Checklist</a></li>
-                            <li>
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'enrollments'), 'default', true); ?>">
                                     Scheme Enrollments</a></li>
                             <li class="divider"></li>
@@ -256,6 +253,9 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-beaker"></i>&nbsp;&nbsp;Manage <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'readiness-checklist', 'action' => 'index'), 'default', true); ?>">
+                                    Readiness Checklists</a></li>
                             <li>
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions'), 'default', true); ?>">
                                     PT Survey</a></li>

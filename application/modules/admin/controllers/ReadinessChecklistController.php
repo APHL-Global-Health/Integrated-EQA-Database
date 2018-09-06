@@ -57,7 +57,17 @@ class Admin_ReadinessChecklistController extends Zend_Controller_Action
     }
 
     public function deleteAction(){
-
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $rowsUpdated = $readinessChecklistService->deleteReadinessChecklist($params);
+            if ($rowsUpdated == 1) {
+                $reply = "The checklist was successfully deleted!";
+            }else{
+                $reply = "The checklist could not be deleted!";
+            }
+            return $reply;
+        }
     }
 
 }
