@@ -1,0 +1,153 @@
+<div class="well">
+    <form name="readinessChecklistResponseForm" id="readinessChecklistResponseForm" method="post" 
+        action="<?php echo $this->url(array("module" => "default", "controller" => "readiness-checklist", "action" => "reply"),'default', true) ?>" 
+        class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Readiness Checklist</legend>
+            <div class="form-group">
+                <label class="col-md-3">Test Event</label>
+                <div class="col-md-5"><?php echo $this->round['distribution_code']; ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Start Date</label>
+                <div class="col-md-5"><?php echo $this->round['distribution_date']; ?></div>
+            </div>
+             <div class="form-group">
+                <label class="col-md-3">Checklist Due Date</label>
+                <div class="col-md-5"><?php echo $this->round['readinessdate']; ?></div>
+            </div>
+             <div class="form-group">
+                <label class="col-md-3">Platforms</label>
+                <div class="col-md-5">
+                    <input type="checkbox" id="abbot" name="abbot"> ABBOT <br />
+                    <input type="checkbox" id="capctm" name="capctm"> CAP/CTM <br />
+                    <input type="checkbox" id="c8800" name="c8800"> C8800 <br />
+                    <input type="checkbox" id="panther" name="panther"> Panther <br />
+                </div>
+            </div>
+            <legend><?php echo $this->readinessChecklist['title']; ?></legend>
+            <div>
+                <table class="display datatable table table-bordered table-hover table-striped hide" id="checklistQuestions">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left">#</th>
+                            <th style="text-align: left">Question</th>
+                            <th style="text-align: left">Question Type</th>
+                            <th style="text-align: left">Answer Type</th>
+                            <th style="text-align: left">List Options</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            $questionTypes = ['Comment', 'Heading', 'Question' ];
+                            $answerTypes = ['Free Text', 'List', 'Number'];
+
+                            function orderItems($a, $b){
+                                return $a['position'] > $b['position'];
+                            }
+
+                            usort($this->readinessChecklist['questions'], 'orderItems');
+
+                            if(count($this->readinessChecklist['questions']) > 0){ 
+
+                                foreach ($this->readinessChecklist['questions'] as $question) {
+                        ?>
+                                    <tr>
+                                        <td><?php echo $question['position']?></td>
+                                        <td><?php echo $question['question']?></td>
+                                        <td><?php echo $questionTypes[$question['question_type']]?></td>
+                                        <td><?php echo $answerTypes[$question['answer_type']]?></td>
+                                        <td><?php echo $question['list_options']?></td>
+                                        <td>Delete</td>
+                                    </tr>
+                        <?php
+                                }
+                             }else{
+                        ?>
+                                <tr>
+                                    <td colspan="6" class="dataTables_empty">No questions have been added to this checklist.</td>
+                                </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <?php
+                    if(count($this->readinessChecklist['questions']) > 0){
+                        $counter = 1;
+
+                        foreach ($this->readinessChecklist['questions'] as $question) {
+                ?>
+                            <div class="form-group col-md-12">
+                <?php
+                                if (strcmp($questionTypes[$question['question_type']], 'Comment') == 0) {
+                
+                                    echo "<p class='col-md-12'>".$question['question']."</p>";
+                                }else if (strcmp($questionTypes[$question['question_type']], 'Heading') == 0) {
+                
+                                    echo "<h4 class='col-md-12'>".$question['question']."</h4>";
+                                }else{
+                
+                                    echo "<div class='col-md-12'>".$counter++.". ".$question['question']."</div>";
+
+                                    if (strcmp($answerTypes[$question['answer_type']], 'Free Text') == 0) {
+                ?>
+                                        <div class='col-md-12'>
+                                            <input type="text" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>" class="form-control">
+                                        </div>
+                <?php
+                                    }else if (strcmp($answerTypes[$question['answer_type']], 'Number') == 0) {
+                ?>
+                                        <div class='col-md-12'>
+                                            <input type="number" class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>">
+                                        </div>
+                <?php
+                                    }else{
+                                        $options = explode(",", $question['list_options']);
+                ?>
+                                        <div class='col-md-12'>
+                                            <select class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>">
+                <?php
+                                                foreach ($options as $option) {
+                                                    echo "<option value='$option'>$option</option>";
+                                                }
+                ?>
+                                            </select>
+                                        </div>
+                <?php
+                                    }
+                                }
+                ?>
+                            </div>
+                <?php
+                        }
+                     }
+                 ?>
+            </div>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input type="hidden" id="readinessChecklistId" name="readinessChecklistId" value="<?php echo $this->readinessChecklist['id']; ?>"/>
+                <input type="hidden" id="participantId" name="participantId" value="<?php echo $this->participantId; ?>"/>
+                <input type="hidden" id="roundId" name="roundId" value="<?php echo $this->round['distribution_id']; ?>"/>
+                <button class="btn btn-primary" type="button" 
+                    onclick="document.getElementById('readinessChecklistResponseForm').submit();">
+                    Submit
+                </button>
+                <a href="/distributions" class="btn btn-primary">Back</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'readinessChecklistResponseForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('readinessChecklistResponseForm').submit();
+        }
+    }
+</script>

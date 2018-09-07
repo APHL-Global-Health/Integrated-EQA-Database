@@ -32,4 +32,9 @@ class Application_Service_ReadinessChecklist {
 		
 		return $checklistDB->updateReadinessChecklist($params);		
 	}
+	public function deleteReadinessChecklist($params){
+		$checklistDB = new Application_Model_DbTable_ReadinessChecklist();
+		
+		return $checklistDB->deleteReadinessChecklist($params);		
+	}
 }

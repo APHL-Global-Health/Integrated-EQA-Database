@@ -206,14 +206,14 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
                     <thead>
                         <tr>
                             <th></th>
-                            <th style="width:30px;">Year</th>
-                            <th style="width:100px;">Shipment<br/>Date</th>
-                            <th style="width:50px;">Scheme</th>
-                            <th style="width:100px;">Shipment Code</th>
-                            <th>Participant Id</th>
-                            <th>Participant</th>
-                            <th style="width:100px;">Response<br/>Date</th>
-                            <th style="width:100px;">Action</th>
+                            <th class="hide" ">Year</th>
+                            <th>Shipment Date</th>
+                            <th>Scheme</th>
+                            <th>Shipment Code</th>
+                            <th class="hide">Participant Id</th>
+                            <th>Laboratory</th>
+                            <th>Response Date</th>
+                            <th>Action</th>
                             <th>Report</th>
 
                         </tr>
@@ -676,13 +676,13 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
                 "bRetrieve": true,
                 "aoColumns": [
                     {"bSortable": false},
-                    {"sClass": "center"},
-                    {"sClass": "center"},
-                    {"sClass": "center"},
-                    {"sClass": "center"},
+                    {"sClass": "hide"},
                     {"sClass": ""},
                     {"sClass": ""},
-                    {"sClass": "center"},
+                    {"sClass": ""},
+                    {"sClass": "hide"},
+                    {"sClass": ""},
+                    {"sClass": ""},
                     {"sClass": "center", "bSortable": false},
                     {"sClass": "center", "bSortable": false}
                 ],

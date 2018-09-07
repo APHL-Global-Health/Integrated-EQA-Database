@@ -309,14 +309,14 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $row[] = ucwords($aRow['readinessdate']);
             $row[] = ucwords($aRow['status']);
             if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured' || $aRow['status'] == 'pending') {
-                $row[] = '<a href="/readiness/add/roundId/' . $aRow['distribution_id'] . '/code/' . str_replace('/', "*", $aRow['distribution_code']) . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                $row[] = '<a href="/readiness-checklist/add/roundId/' . $aRow['distribution_id'] . '/code/' . str_replace('/', "*", $aRow['distribution_code']) . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
                     . '<i class="icon-pencil"></i> Readiness Checklist</a>';
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
-                $row[] = '<a href="/readiness/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;">'
+                $row[] = '<a href="/readiness-checklist/add" class="btn btn-warning btn-xs disabled" style="margin-right: 2px;">'
                     . '<i class="icon-pencil"></i> Readiness Checklist'
                     . '</a>';
             } else {
-                $row[] = '<a href="/readiness/add" class="btn btn-danger btn-xs disabled" style="margin-right: 2px;">'
+                $row[] = '<a href="/readiness-checklist/add" class="btn btn-danger btn-xs disabled" style="margin-right: 2px;">'
                     . '<i class="icon-pencil"></i> Not Allowed'
                     . '</a>';
             }
@@ -416,7 +416,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     public function getDistribution($did)
     {
-        return $this->fetchRow("distribution_id = " . $did);
+        return $this->getAdapter()->fetchRow($this->select()->from($this->_name)->where("distribution_id = $did"));
     }
 
     public function updateDistribution($params)

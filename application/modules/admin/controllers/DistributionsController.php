@@ -58,6 +58,19 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         $this->view->readinessChecklists = $readinessChecklistService->listReadinessChecklists([]);
     }
 
+    public function readinessAction(){
+
+        $roundID = (int) $this->_getParam('roundid');
+        
+        $distributionService = new Application_Service_Distribution();
+        $this->view->round = $round = $distributionService->getDistribution($roundID);
+
+        $checklistID = $round['readiness_checklist_id'];
+
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        $this->view->readinessChecklists = $readinessChecklistService->getReadinessChecklistDetails($checklistID);
+    }
+
     public function viewShipmentAction() {
         $this->_helper->layout()->disableLayout();
         if ($this->_hasParam('id')) {

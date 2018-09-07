@@ -1,0 +1,1 @@
+ALTER TABLE readiness_checklists ADD COLUMN deleted_by int unsigned;

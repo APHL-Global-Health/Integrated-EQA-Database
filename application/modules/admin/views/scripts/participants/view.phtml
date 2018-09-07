@@ -36,15 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
-        <label class="col-sm-4">Facility Code</label>
-        <div class="col-sm-8">
-            <div>  
-                <?php echo $this->participant['unique_identifier']; ?>&nbsp;
-            </div>
-        </div>
-    </div>
-    <div class="row" style="padding: 10px 0;">
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
         <label class="col-sm-4">Physical Address</label>
 
         <div class="col-sm-8">
@@ -53,12 +45,21 @@
             </p>
         </div>
     </div>
-    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+    <div class="row" style="padding: 10px 0;">
         <label class="col-sm-4">Postal Address </label>
 
         <div class="col-sm-8">
             <div>
                 <?php echo $this->participant['zip']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Shipping Address </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['shipping_address']; ?>&nbsp;
             </div>
         </div>
     </div>
@@ -102,12 +103,17 @@
         </div>
     </div>
     <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
-        <label class="col-sm-4">Testing Volume</label>
+        <label class="col-sm-4">Facility Level </label>
 
         <div class="col-sm-8">
-            <div>
-                <?php echo $this->participant['testing_volume']; ?>&nbsp;
-            </div>
+            <p>
+                <?php foreach ($this->networks as $nw) {
+                    ?>
+                    <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? $nw['network_name'] . '<br>' : "" ?>
+                <?php }
+                ?>
+
+            </p>
         </div>
     </div>
     <div class="row" style="padding: 10px 0;">
@@ -126,20 +132,6 @@
         </div>
     </div>
     <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
-        <label class="col-sm-4">Facility Level </label>
-
-        <div class="col-sm-8">
-            <p>
-                <?php foreach ($this->networks as $nw) {
-                    ?>
-                    <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? $nw['network_name'] . '<br>' : "" ?>
-                <?php }
-                ?>
-
-            </p>
-        </div>
-    </div>
-    <div class="row" style="padding: 10px 0;">
         <label class="col-sm-4">Status </label>
         <div class="col-sm-8">
             <p class="text-uppercase">
