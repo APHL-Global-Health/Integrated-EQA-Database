@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS= 0;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contact_us` (
@@ -341,7 +342,7 @@ CREATE TABLE `r_control` (
   PRIMARY KEY (`control_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `r_control` VALUES (1,'Kit Negative Control','eid','active'),(2,'Kit Positive Control','eid','active'),(3,'PT Provider Negative Control','eid','active'),(4,'PT Provider Positive Control','eid','active'),(5,'In-House Negative Control','eid','active'),(6,'In-House Positive Control','eid','active'),(7,'Negative Control','vl','active'),(8,'Low Positive Control','vl','active'),(9,'High Positive Control','vl','active');
+INSERT INTO `r_control` VALUES (1,'Kit Negative Control','eid','active'),(2,'Kit Positive Control','eid','active'),(3,'Negative Control','vl','active'),(4,'Low Positive Control','vl','active'),(5,'High Positive Control','vl','active');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `r_dbs_eia` (
@@ -426,7 +427,7 @@ CREATE TABLE `r_network_tiers` (
   PRIMARY KEY (`network_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `r_network_tiers` VALUES (1,'Primary care laboratory service tier'),(2,'Secondary and tertiary laboratory service tiers'),(3,'Public Health Reference Laboratories'),(4,'Regional VL/EID Reference laboratory'),(5,'Sub-county Referral Laboratory'),(6,'County Referral Laboratory'),(7,'Level 5'),(8,'Level 6');
+INSERT INTO `r_network_tiers` VALUES (1,'Primary care laboratory service tier'),(2,'Secondary and tertiary laboratory service tiers'),(3,'Public Health Reference Laboratories'),(4,'Regional VL/EID Reference laboratory');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `r_participant_affiliates` (
@@ -499,7 +500,7 @@ CREATE TABLE `r_vl_assay` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `r_vl_assay` VALUES (1,'Plasma HIV RNA measurement','Plasma HIV RNA'),(2,'DBS HIV RNA measurement','DBS HIV RNA'),(3,'DBS HIV DNA PCR','DBS HIV DNA PC');
+INSERT INTO `r_vl_assay` VALUES (1,'Plasma HIV RNA measurement','Plasma HIV RNA'),(2,'DBS HIV RNA measurement','DBS HIV RNA'),(3,'DTS HIV RNA measurement','DTS HIV RNA');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `readiness_checklist_questions` (
@@ -943,7 +944,7 @@ CREATE TABLE `scheme_list` (
   PRIMARY KEY (`scheme_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `scheme_list` VALUES ('dbs','Dried Blood Spot -  HIV Viral Load','response_result_dbs','reference_result_dbs',NULL,'Inactive'),('dts','Dried Tube Specimen - HIV Serology','response_result_dts','reference_result_dts',NULL,'Inactive'),('eid','Dried Blood Spot - Early Infant Diagnosis','response_result_eid','reference_result_eid',NULL,'active'),('tb','Dried Tube Specimen - Tuberculosis','response_result_tb','reference_result_tb',NULL,'Inactive'),('vl','Dried Tube Specimen - HIV Viral Load','response_result_vl','reference_result_vl',NULL,'active');
+INSERT INTO `scheme_list` VALUES ('dbs','Dried Blood Spot -  HIV Viral Load','response_result_dbs','reference_result_dbs',NULL,'active'),('dts','Dried Tube Specimen - HIV Serology','response_result_dts','reference_result_dts',NULL,'Inactive'),('eid','Dried Blood Spot - Early Infant Diagnosis','response_result_eid','reference_result_eid',NULL,'active'),('tb','Dried Tube Specimen - Tuberculosis','response_result_tb','reference_result_tb',NULL,'Inactive'),('vl','Plasma - HIV Viral Load','response_result_vl','reference_result_vl',NULL,'active');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `shipment` (
@@ -1052,7 +1053,7 @@ CREATE TABLE `system_admin` (
   UNIQUE KEY `UN_KEY_EMAIL` (`primary_email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `system_admin` VALUES (1,'System','Administrator','nphleqa@gmail.com','5f4dcc3b5aa765d61d8327deb882cf99','','0788492586',0,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL),(2,'Thomas','Nyongesa','mapesa@gatech.edu','5f4dcc3b5aa765d61d8327deb882cf99','','788492586',0,'active','2018-07-04 12:18:01','1',NULL,NULL,1,NULL,NULL,0,NULL);
+INSERT INTO `system_admin` VALUES (1,'System','Administrator','nphleqa@gmail.com','5f4dcc3b5aa765d61d8327deb882cf99','','0788492586',0,'active','2017-04-01 10:27:00','1','2017-04-01 10:41:24','1',4,'3','',1,NULL);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `temp_mail` (
@@ -1132,3 +1133,5 @@ CREATE TABLE `vl_scheme` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `vl_scheme` VALUES (1,'Viral Load'),(2,'EID');
+
+SET FOREIGN_KEY_CHECKS = 1;
