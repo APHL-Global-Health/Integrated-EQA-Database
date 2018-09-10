@@ -1,0 +1,1 @@
+create table readiness_checklist_sends(id int primary key, readiness_checklist_id int unsigned not null, start_date datetime not null, end_date datetime not null, created_by int unsigned not null default 1, created_at datetime, deleted_by int unsigned, deleted_at datetime);

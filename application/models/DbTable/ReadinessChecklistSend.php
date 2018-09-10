@@ -6,20 +6,27 @@
  * and open the template in the editor.
  */
 
-class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'readiness_checklists';
+    protected $_name = 'readiness_checklist_sends';
     protected $_primary = 'id';
-    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistQuestion', 
-        'Application_Model_DbTable_Distribution', 'Application_Model_DbTable_ReadinessChecklistSend');
 
-    public function getAllReadinessChecklists($parameters) {
+    protected $_referenceMap    = array(
+        'ReadinessChecklist' => array(
+            'columns'           => array('readiness_checklist_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklist',
+            'refColumns'        => array('id')
+        )
+    );
+
+    public function getAllReadinessChecklistSends($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
+        error_log(implode("--", $parameters));
 
-        $aColumns = array('title', 'created_at', 'created_by');
+        $aColumns = array('readiness_checklist_id', 'start_date', 'end_date', 'created_at', 'created_by');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -56,7 +63,7 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
          */
-        $sWhere = "ISNULL(deleted_at)";
+        $sWhere = "";
         if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
             $searchArray = explode(" ", $parameters['sSearch']);
             $sWhereSub = "";
@@ -140,19 +147,16 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
 
         foreach ($rResult as $aRow) {
             $row = array();
-            $row[] = $aRow['title'];
+            $row[] = $aRow['readiness_checklist_id'];
+            $row[] = $aRow['start_date'];
+            $row[] = $aRow['end_date'];
             $row[] = $aRow['created_at'];
             $creator = new Application_Service_SystemAdmin();
             $creatorDetails = $creator->getSystemAdminDetails($aRow['created_by']);
             $row[] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
-            $row[] = '<a href="/admin/readiness-checklist/edit/id/' . $aRow['id'] . '" class="btn btn-warning btn-xs" '
-                    .'style="margin-right: 2px;"><i class="icon-pencil"></i> Edit</a> '
-                    .'<a href="/admin/readiness-checklist/view/id/' . $aRow['id'] . '" class="btn btn-success btn-xs" '
-                    .'style="margin-right: 2px;"><i class="icon-info"></i> Details</a> '
-                    .'<a href="/admin/readiness-checklist/sent/id/' . $aRow['id'] . '" class="btn btn-success btn-xs" '
-                    .'style="margin-right: 2px;"><i class="icon-info"></i> View Sent</a> '
-                    .'<a href="#" onclick="deleteChecklist('. $aRow['id'] . ')" class="btn btn-danger btn-xs" '
-                    .'style="margin-right: 2px;"><i class="icon-delete"></i> Delete</a> ';
+            $row[] = '<a href="/admin/readiness-checklist/viewresponse/id/' . $aRow['id'] 
+                    . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
+                    .'<i class="icon-pencil"></i> View Response</a> ';
 
             $output['aaData'][] = $row;
         }
@@ -160,55 +164,38 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
         echo json_encode($output);
     }
     
-    public function list() {
-
-        return $this->fetchAll($this->select())->toArray();
-    }
-    
-    public function getReadinessChecklistDetails($checklistID) {
-        $readinessChecklist = $this->fetchRow($this->select()->where("id = ? ", $checklistID));
-        $checklist = $readinessChecklist->toArray();
+    public function getReadinessChecklistSendDetails($sendID) {
+        $send = $this->fetchRow($this->select()->where("id = ? ", $sendID))->toArray();
         $creator = new Application_Service_SystemAdmin();
-        $creatorDetails = $creator->getSystemAdminDetails($checklist['created_by']);
-        $checklist['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
-
-        $checklist['questions'] = $readinessChecklist->findDependentRowset('Application_Model_DbTable_ReadinessChecklistQuestion')->toArray();
-
-        $checklist['sends'] = $readinessChecklist->findDependentRowset('Application_Model_DbTable_ReadinessChecklistSend')->toArray();
-
-        return $checklist;
+        $creatorDetails = $creator->getSystemAdminDetails($send['created_by']);
+        $send['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
+        return $send;
     }
 
-    public function addReadinessChecklist($params) {
+    public function addReadinessChecklistSend($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
-            'title' => $params['ReadinessChecklistName'],
-            'created_by' => $authNameSpace->admin_id
+            'readiness_checklist_id' => $params['readiness_checklist_id'],
+            'start_date' => $params['start_date'],
+            'end_date' => $params['end_date'],
+            'created_by' => $authNameSpace->admin_id,
+            'created_at' => date("Y-m-d H:i:s")
         );
         $saved = $this->insert($data);
+        // Insert participants into readiness_checklist_responses
         return $saved;
     }
 
-    public function updateReadinessChecklist($params) {
+    public function updateReadinessChecklistSend($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
-            'title' => $params['ReadinessChecklistName'],
+            'readiness_checklist_id' => $params['readiness_checklist_id'],
+            'start_date' => $params['start_date'],
+            'end_date' => $params['end_date'],
             'created_by' => $authNameSpace->admin_id
         );
-        return $this->update($data, "id=" . $params['readinessChecklistId']);
-    }
-
-    public function deleteReadinessChecklist($params) {
-        $authNameSpace = new Zend_Session_Namespace('administrators');
-        $now = date('Y-m-d H:i:s');
-        $data = array(
-            'deleted_by' => $authNameSpace->admin_id,
-            'deleted_at' => $now
-        );
-        $this->update($data, "id=" . $params['checkListID']);
-        
-        return $this->getAllReadinessChecklists([]);
+        return $this->update($data, "id=" . $params['readinessChecklistSendId']);
     }
 
 }

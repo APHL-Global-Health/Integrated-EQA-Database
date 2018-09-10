@@ -1,0 +1,92 @@
+<div class="well">
+    <form name="sendReadinessChecklistForm" id="sendReadinessChecklistForm" method="post" 
+        action="<?php echo $this->url(array("module" => "admin", "controller" => "readiness-checklist", "action" => "sendchecklist"),'default', true) ?>" 
+        class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Send Readiness Checklist - <?php echo $this->readinessChecklist['title']; ?></legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Start Date <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                    <input type="text" id="start_date" name="start_date" size="50" maxlength="45"
+                           class="isRequired form-control datepicker"
+                           title="Please enter the start date here"
+                           placeholder="Please enter the start date here"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">End Date <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                    <input type="text" id="end_date" name="end_date" size="50" maxlength="45"
+                           class="isRequired form-control datepicker"
+                           title="Please enter the end date here"
+                           placeholder="Please enter the end date here"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Participants <span class="mandatory">*</span></label>
+
+                <div class="col-lg-5">
+                <?php
+                    foreach ($this->participants as $participant) {
+                ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="participants[]"
+                            value="<?php echo $participant['participant_id']; ?>">
+                        <label class="form-check-label" for="defaultCheck1">
+                            <?php echo $participant['institute_name']; ?>
+                        </label>
+                    </div>
+                <?php
+                    }
+                ?>
+                </div>
+            </div>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input type="hidden" id="readinessChecklistId" name="readinessChecklistId" value="<?php echo $this->readinessChecklist['id']; ?>"/>
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Send"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/readiness-checklist';"
+                       value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+	if($.trim(objValue)!= '') {
+	    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+		function (data) {
+		    if (data > 0) {
+			alert(msg, "err");
+			duplicated = true;
+			$("#"+obj).val("");
+			$("#"+obj).focus();
+		    }
+		    else {
+			duplicated = false;
+		    }
+		    return duplicated;
+		});
+	}
+    }
+
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'sendReadinessChecklistForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('sendReadinessChecklistForm').submit();
+        }
+    }
+
+    $(function () {
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+</script>

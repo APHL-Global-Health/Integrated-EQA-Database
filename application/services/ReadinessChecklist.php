@@ -22,6 +22,11 @@ class Application_Service_ReadinessChecklist {
 		
 		return $checklistDB->getReadinessChecklistDetails($checklistID);		
 	}
+	public function sendReadinessChecklist($params){
+		// $checklistDB = new Application_Model_DbTable_ReadinessChecklist();
+		$sentChecklistModel = new Application_Model_DbTable_ReadinessChecklistSend();
+		return $sentChecklistModel->addReadinessChecklistSend($params);		
+	}
 	public function addReadinessChecklist($params){
 		$checklistDB = new Application_Model_DbTable_ReadinessChecklist();
 		

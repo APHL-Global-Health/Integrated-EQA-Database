@@ -1,0 +1,1 @@
+alter table readiness_checklist_responses change column distribution_id readiness_checklist_send_id int unsigned not null;
