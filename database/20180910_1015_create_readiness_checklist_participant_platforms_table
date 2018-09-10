@@ -1,0 +1,1 @@
+create table readiness_checklist_participant_platforms(readiness_checklist_participant_id int unsigned not null, platform_id int unsigned not null);

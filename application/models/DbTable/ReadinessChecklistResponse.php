@@ -12,9 +12,9 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
     protected $_primary = 'id';
 
     protected $_referenceMap    = array(
-        'ReadinessChecklist' => array(
-            'columns'           => array('readiness_checklist_id'),
-            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklist',
+        'ReadinessChecklistSurvey' => array(
+            'columns'           => array('readiness_checklist_survey_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistSurvey',
             'refColumns'        => array('id')
         )
     );
@@ -26,7 +26,7 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
          */
         error_log(implode("--", $parameters));
 
-        $aColumns = array('readiness_checklist_id', 'start_date', 'end_date', 'created_at', 'created_by');
+        $aColumns = array('readiness_checklist_survey_id', 'participant_id', 'readiness_checklist_question_id', 'answer', 'created_at', 'created_by');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;

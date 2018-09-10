@@ -11,7 +11,7 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
     protected $_name = 'readiness_checklists';
     protected $_primary = 'id';
     protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistQuestion', 
-        'Application_Model_DbTable_Distribution', 'Application_Model_DbTable_ReadinessChecklistSend');
+        'Application_Model_DbTable_Distribution', 'Application_Model_DbTable_ReadinessChecklistSurvey');
 
     public function getAllReadinessChecklists($parameters) {
 
@@ -174,7 +174,7 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
 
         $checklist['questions'] = $readinessChecklist->findDependentRowset('Application_Model_DbTable_ReadinessChecklistQuestion')->toArray();
 
-        $checklist['sends'] = $readinessChecklist->findDependentRowset('Application_Model_DbTable_ReadinessChecklistSend')->toArray();
+        $checklist['surveys'] = $readinessChecklist->findDependentRowset('Application_Model_DbTable_ReadinessChecklistSurvey')->toArray();
 
         return $checklist;
     }

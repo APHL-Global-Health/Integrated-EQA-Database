@@ -1,15 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_Abstract {
 
-class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abstract {
-
-    protected $_name = 'readiness_checklist_sends';
+    protected $_name = 'readiness_checklist_surveys';
     protected $_primary = 'id';
+
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistResponse', 'Application_Model_DbTable_ReadinessChecklistParticipant');
 
     protected $_referenceMap    = array(
         'ReadinessChecklist' => array(
@@ -19,7 +15,7 @@ class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abs
         )
     );
 
-    public function getAllReadinessChecklistSends($parameters) {
+    public function getAllReadinessChecklistSurveys($parameters) {
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -164,15 +160,15 @@ class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abs
         echo json_encode($output);
     }
     
-    public function getReadinessChecklistSendDetails($sendID) {
-        $send = $this->fetchRow($this->select()->where("id = ? ", $sendID))->toArray();
+    public function getReadinessChecklistSurveyDetails($surveyID) {
+        $survey = $this->fetchRow($this->select()->where("id = ? ", $surveyID))->toArray();
         $creator = new Application_Service_SystemAdmin();
-        $creatorDetails = $creator->getSystemAdminDetails($send['created_by']);
-        $send['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
-        return $send;
+        $creatorDetails = $creator->getSystemAdminDetails($survey['created_by']);
+        $survey['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
+        return $survey;
     }
 
-    public function addReadinessChecklistSend($params) {
+    public function addReadinessChecklistSurvey($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
@@ -187,7 +183,7 @@ class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abs
         return $saved;
     }
 
-    public function updateReadinessChecklistSend($params) {
+    public function updateReadinessChecklistSurvey($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'readiness_checklist_id' => $params['readiness_checklist_id'],
@@ -195,7 +191,7 @@ class Application_Model_DbTable_ReadinessChecklistSend extends Zend_Db_Table_Abs
             'end_date' => $params['end_date'],
             'created_by' => $authNameSpace->admin_id
         );
-        return $this->update($data, "id=" . $params['readinessChecklistSendId']);
+        return $this->update($data, "id=" . $params['readinessChecklistSurveyId']);
     }
 
 }

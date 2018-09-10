@@ -24,8 +24,8 @@ class Application_Service_ReadinessChecklist {
 	}
 	public function sendReadinessChecklist($params){
 		// $checklistDB = new Application_Model_DbTable_ReadinessChecklist();
-		$sentChecklistModel = new Application_Model_DbTable_ReadinessChecklistSend();
-		return $sentChecklistModel->addReadinessChecklistSend($params);		
+		$sentChecklistModel = new Application_Model_DbTable_ReadinessChecklistSurvey();
+		return $sentChecklistModel->addReadinessChecklistSurvey($params);		
 	}
 	public function addReadinessChecklist($params){
 		$checklistDB = new Application_Model_DbTable_ReadinessChecklist();
