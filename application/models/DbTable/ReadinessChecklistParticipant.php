@@ -9,7 +9,7 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
 
     protected $_referenceMap    = array(
         'ReadinessChecklistSurvey' => array(
-            'columns'           => array('readiness_checklist_send_id'),
+            'columns'           => array('readiness_checklist_survey_id'),
             'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistSurvey',
             'refColumns'        => array('id')
         ),
@@ -17,8 +17,25 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
             'columns'           => array('participant_id'),
             'refTableClass'     => 'Application_Model_DbTable_Participants',
             'refColumns'        => array('participant_id')
+        ),
+        'DataManager' => array(
+            'columns'           => array('updated_by'),
+            'refTableClass'     => 'Application_Model_DbTable_DataManagers',
+            'refColumns'        => array('dm_id')
         )
     );
 
+    public function addChecklistSurveyParticipants($checklistSurveyID, $participantIDs){
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        foreach ($participantIDs as $participantID) {
+            $data  = [
+                'readiness_checklist_survey_id' => $checklistSurveyID, 
+                'participant_id' => $participantID, 
+                'created_by' => $authNameSpace->admin_id, 
+                'created_at' => new Zend_Db_Expr('now()')
+            ];
 
+            $this->insert($data);
+        }
+    }
 }

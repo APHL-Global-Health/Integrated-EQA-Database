@@ -1,0 +1,2 @@
+alter table readiness_checklist_participants add unique (readiness_checklist_survey_id, participant_id), add column updated_by int unsigned, add column updated_at datetime;
+alter table readiness_checklist_participants add column status tinyint unsigned default 0 after participant_id;

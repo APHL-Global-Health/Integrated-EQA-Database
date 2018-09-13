@@ -7,7 +7,7 @@ class Admin_ReadinessChecklistController extends Zend_Controller_Action
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('index', 'html')->initContext();
-        $this->_helper->layout()->pageName = 'configMenu';
+        $this->_helper->layout()->pageName = 'manageMenu';
     }
 
     public function indexAction(){
@@ -49,6 +49,24 @@ class Admin_ReadinessChecklistController extends Zend_Controller_Action
             $this->view->readinessChecklist = $readinessChecklistService->getReadinessChecklistDetails((int)$this->_getParam('id'));
             $participantService = new Application_Service_Participants();
             $this->view->participants = $participantService->getAllActiveParticipants();
+        }
+    }
+    
+    public function participantsAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+
+        $this->view->readinessChecklist = $readinessChecklistService->getReadinessChecklistSurvey((int)$this->_getParam('id'));
+    }
+    
+    public function responseAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            $readinessChecklistService->sendReadinessChecklist($params);
+            error_log(json_encode($params));
+            $this->_redirect("/admin/readiness-checklist/sent/id/".$params['readinessChecklistId']);
+        }else{
+            $this->view->survey = $readinessChecklistService->getReadinessChecklistSurveyResponses((int)$this->_getParam('id'), (int)$this->_getParam('pid'));
         }
     }
     

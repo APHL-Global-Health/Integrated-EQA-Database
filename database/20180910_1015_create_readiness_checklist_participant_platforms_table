@@ -1,1 +1,1 @@
-create table readiness_checklist_participant_platforms(readiness_checklist_participant_id int unsigned not null, platform_id int unsigned not null);
+CREATE TABLE `readiness_checklist_participant_platform` (`readiness_checklist_participant_id` int(10) unsigned NOT NULL,`platform_id` int(10) unsigned NOT NULL, PRIMARY KEY (`readiness_checklist_participant_id`,`platform_id`));

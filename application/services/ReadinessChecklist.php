@@ -22,6 +22,16 @@ class Application_Service_ReadinessChecklist {
 		
 		return $checklistDB->getReadinessChecklistDetails($checklistID);		
 	}
+	public function getReadinessChecklistSurvey($checklistSurveyID){
+		$checklistDB = new Application_Model_DbTable_ReadinessChecklistSurvey();
+		
+		return $checklistDB->getReadinessChecklistSurveyDetails($checklistSurveyID);		
+	}
+	public function getReadinessChecklistSurveyResponses($checklistSurveyID, $participantID){
+		$checklistDB = new Application_Model_DbTable_ReadinessChecklistSurvey();
+		
+		return $checklistDB->getReadinessChecklistSurveyResponses($checklistSurveyID, $participantID);		
+	}
 	public function sendReadinessChecklist($params){
 		// $checklistDB = new Application_Model_DbTable_ReadinessChecklist();
 		$sentChecklistModel = new Application_Model_DbTable_ReadinessChecklistSurvey();

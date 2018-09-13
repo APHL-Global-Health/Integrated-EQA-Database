@@ -5,6 +5,8 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
 
     protected $_name = 'vl_platform';
 
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipantPlatform');
+
     public function getAllPlatforms()
     {
         $sql = $this->select();

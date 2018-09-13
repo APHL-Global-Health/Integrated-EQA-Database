@@ -161,26 +161,95 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
     }
     
     public function getReadinessChecklistSurveyDetails($surveyID) {
-        $survey = $this->fetchRow($this->select()->where("id = ? ", $surveyID))->toArray();
+        $survey = $this->fetchRow($this->select()->where("id = ? ", $surveyID));
+
+        $surveyDetails = $survey->toArray();
         $creator = new Application_Service_SystemAdmin();
-        $creatorDetails = $creator->getSystemAdminDetails($survey['created_by']);
-        $survey['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
-        return $survey;
+        $creatorDetails = $creator->getSystemAdminDetails($surveyDetails['created_by']);
+        $surveyDetails['creator'] = $creatorDetails['first_name'] . " " . $creatorDetails['last_name'];
+
+        $parent = $survey->findParentRow('Application_Model_DbTable_ReadinessChecklist');
+        $surveyDetails['parent'] = $parent->toArray();
+
+        $participantReference = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+        $participants = [];
+
+        foreach ($participantReference as $participant) {
+            $participants[] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray();
+        }
+
+        $surveyDetails['participants'] = $participants;
+
+        return $surveyDetails;
+    }
+
+    public function getReadinessChecklistSurveyResponses($surveyID, $participantID) {
+
+        $survey = $this->fetchRow($this->select()->where("id = ? ", $surveyID));
+
+        $surveyDetails = $survey->toArray();
+
+        $parent = $survey->findParentRow('Application_Model_DbTable_ReadinessChecklist');
+        $surveyDetails['parent'] = $parent->toArray();
+
+        $surveyDetails['creator'] = "";
+
+        $participantReference = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+
+        $platforms = [];
+
+        foreach ($participantReference as $participant) {
+
+            if($participant->participant_id == $participantID){
+
+                $surveyDetails['checklistParticipant'] = $participant->toArray();
+                $surveyDetails['participant'] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray();
+
+                $platforms = $participant->findManyToManyRowset('Application_Model_DbTable_Platforms', 'Application_Model_DbTable_ReadinessChecklistParticipantPlatform', 'ReadinessParticipants')->toArray();
+            }
+        }
+
+        $surveyDetails['platforms'] = $platforms;
+
+        $surveyDetails['questions'] = $parent->findDependentRowset('Application_Model_DbTable_ReadinessChecklistQuestion')->toArray();
+
+        $responses = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistResponse');
+        $answers = [];
+
+        foreach ($responses as $response) {
+            $dataManager = $response->findParentRow('Application_Model_DbTable_DataManagers');
+            $participants = $dataManager->findManyToManyRowset('Application_Model_DbTable_Participants','Application_Model_DbTable_ParticipantManagerMap');
+            foreach ($participants as $participant) {
+                if($participant->participant_id == $participantID){
+                    $answers[$response->readiness_checklist_question_id] = $response->toArray();
+                    
+                    $surveyDetails['creator'] = $dataManager['first_name'] . " " . $dataManager['last_name'];
+                    break;
+                }
+            }
+        }
+        $surveyDetails['answers'] = $answers;
+
+        return $surveyDetails;
     }
 
     public function addReadinessChecklistSurvey($params) {
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
-            'readiness_checklist_id' => $params['readiness_checklist_id'],
+            'readiness_checklist_id' => $params['readinessChecklistId'],
             'start_date' => $params['start_date'],
             'end_date' => $params['end_date'],
             'created_by' => $authNameSpace->admin_id,
             'created_at' => date("Y-m-d H:i:s")
         );
-        $saved = $this->insert($data);
-        // Insert participants into readiness_checklist_responses
-        return $saved;
+        $surveyID = $this->insert($data);
+
+        // Insert participants into readiness_checklist_participants
+        $checklistParticipant = new Application_Model_DbTable_ReadinessChecklistParticipant();
+        $checklistParticipant->addChecklistSurveyParticipants($surveyID, $params['participants']);
+
+        return $survey;
     }
 
     public function updateReadinessChecklistSurvey($params) {

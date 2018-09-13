@@ -5,6 +5,8 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
     protected $_name = 'data_manager';
     protected $_primary = array('dm_id');
 
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistResponse');
+
     public function addUser($params) {
 
         $common = new Application_Service_Common();

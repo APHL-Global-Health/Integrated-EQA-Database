@@ -1,0 +1,141 @@
+<div class="well">
+    <form name="editsurveyForm" id="editsurveyForm" method="post" 
+        action="<?php echo $this->url(array("module" => "admin", "controller" => "readiness-checklist", "action" => "edit"),'default', true) ?>" 
+        class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Readiness Checklist</legend>
+            <div class="form-group">
+                <label class="col-md-3">Participant</label>
+                <div class="col-md-5"><?php echo $this->survey['participant']['institute_name']; ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Participant Contact</label>
+                <div class="col-md-5"><?php echo $this->survey['creator']; ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Response Date</label>
+                <div class="col-md-5"><?php echo $this->survey['checklistParticipant']['updated_at'] ?></div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3">Platforms</label>
+                <div class="col-md-5">
+                    <?php 
+                        if (count($this->survey['platforms'] > 0)) {
+                            foreach($this->survey['platforms'] as $platform){
+                                echo $platform['PlatformName']."<br />";
+                            }
+                        }else{
+                            echo "None";
+                        }
+                    ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3">Status</label>
+                <div class="col-md-5">
+                    <?php
+                        $statusColor = ['warning', 'info', 'success', 'danger'];
+                        $statusText = ['NOT SUBMITTED', 'SUBMITTED', 'APPROVED', 'REJECTED'];
+                        $status = $this->survey['checklistParticipant']['status'];
+                        
+                        echo "<span class='bg-".$statusColor[$status]." rounded' style='padding:10px 15px;'>".$statusText[$status]."</span>"; 
+                    ?>
+                </div>
+            </div>
+
+            <legend><?php echo $this->survey['parent']['title']; ?></legend>
+
+            <div>
+                <?php
+                    $questionTypes = ['Comment', 'Heading', 'Question' ];
+
+                    function orderItems($a, $b){
+                        return $a['position'] > $b['position'];
+                    }
+
+                    usort($this->survey['questions'], 'orderItems');
+
+                    if(count($this->survey['questions']) > 0){
+                        $counter = 1;
+
+                        foreach ($this->survey['questions'] as $question) {
+                ?>
+                            <div class="form-group col-md-12">
+                <?php
+                                if (strcmp($questionTypes[$question['question_type']], 'Comment') == 0) {
+                
+                                    echo "<p class='col-md-12'>".$question['question']."</p>";
+                                }else if (strcmp($questionTypes[$question['question_type']], 'Heading') == 0) {
+                
+                                    echo "<h4 class='col-md-12'>".$question['question']."</h4>";
+                                }else{
+                
+                ?>
+                                    <div class='col-md-12'><strong>
+                                        <?php echo ($counter++).". ".$question['question']; ?>
+                                    </strong></div>
+                                    <div class='col-md-12'>
+                                        <p style="padding: 10px 15px;">
+                                            <?php echo isset($this->survey['answers'][$question['id']])?$this->survey['answers'][$question['id']]['answer']:"Not answered!";?>
+                                        </p>
+                                    </div>
+                <?php
+                                }
+                ?>
+                            </div>
+                <?php
+                        }
+                     }
+                 ?>
+            </div>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input type="hidden" id="surveyId" name="surveyId" value="<?php echo $this->survey['id']; ?>"/>
+                <?php if($this->survey['checklistParticipant']['status'] == 1){ // SUBMITTED ?>
+                    <a href="/admin/readiness-checklist-question/add/id/<?php echo $this->survey['id']; ?>"
+                        class="btn btn-primary" style="min-width: 100px;">
+                        <i class="icon-plus"></i>&nbsp;Approve</a>
+                    <a href="/admin/readiness-checklist-question/add/id/<?php echo $this->survey['id']; ?>"
+                        class="btn btn-danger" style="min-width: 100px;">
+                        <i class="icon-plus"></i>&nbsp;Reject</a>
+                <?php } ?>
+                <a href="/admin/readiness-checklist/participants/id/<?php echo $this->survey['id']; ?>"
+                    class="btn btn-info" style="min-width: 100px;">Back</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    var duplicated = false;
+
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+    	objValue=document.getElementById(obj).value;
+    	if($.trim(objValue)!= '') {
+    	    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+    		function (data) {
+    		    if (data > 0) {
+    			alert(msg, "err");
+    			duplicated = true;
+    			$("#"+obj).val("");
+    			$("#"+obj).focus();
+    		    }
+    		    else {
+    			duplicated = false;
+    		    }
+    		    return duplicated;
+    		});
+    	}
+    }
+
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'editsurveyForm'
+        });
+        if (flag && !duplicated) {
+            $.blockUI();
+            document.getElementById('editsurveyForm').submit();
+        }
+    }
+</script>

@@ -16,6 +16,11 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
             'columns'           => array('readiness_checklist_survey_id'),
             'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistSurvey',
             'refColumns'        => array('id')
+        ),
+        'DataManager' => array(
+            'columns'           => array('created_by'),
+            'refTableClass'     => 'Application_Model_DbTable_DataManagers',
+            'refColumns'        => array('dm_id')
         )
     );
 

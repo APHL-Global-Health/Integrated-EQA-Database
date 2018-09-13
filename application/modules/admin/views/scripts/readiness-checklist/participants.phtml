@@ -1,13 +1,11 @@
 <section class="content-header">
     <h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
         <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">
-            Sent Readiness Checklists - <?php echo $this->readinessChecklist['title']; ?>
+            Readiness Checklist Participants - <?php echo $this->readinessChecklist['parent']['title']; ?>
         </div>
         <div style="margin-top:10px;">
-            <a href="/admin/readiness-checklist" class="btn btn-primary" style="float:right;margin-left: 5px;">Back</a>
-            <a href="/admin/readiness-checklist/sendchecklist/id/<?php echo $this->readinessChecklist['id']; ?>" 
-                class="btn btn-primary" style="float:right;">
-                <i class="icon-plus"></i>&nbsp;&nbsp;Send Readiness Checklist</a>
+            <a href="/admin/readiness-checklist/sent/id/<?php echo $this->readinessChecklist['id']; ?>" 
+                class="btn btn-primary" style="float:right;margin-left: 5px;">Back</a>
         </div>
     </h4>
 </section>
@@ -23,27 +21,30 @@
                 </div>
                   
             <?php endif; ?>
-            <?php if(count($this->readinessChecklist['surveys']) > 0) { ?>
+            <?php if(count($this->readinessChecklist['participants']) > 0) { ?>
+
                 <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentScheme">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>ID</th>
+                            <th>Name</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
                         $cnt = 1;
-                        foreach ($this->readinessChecklist['surveys'] as $sent) {
+                        foreach ($this->readinessChecklist['participants'] as $sent) {
                     ?>
                             <tr>
                                 <td><?php echo $cnt++; ?></td>
-                                <td><?php echo substr($sent['start_date'], 0, 10); ?></td>
-                                <td><?php echo substr($sent['end_date'], 0, 10); ?></td>
+                                <td><?php echo $sent['unique_identifier']; ?></td>
+                                <td><?php echo $sent['institute_name']; ?></td>
                                 <td style="text-align: center;">
-                                    <a href="/admin/readiness-checklist/participants/id/<?php echo $sent['id']; ?>" class="btn btn-xs btn-info" style="padding: 5px 10px;"> View Response </a>
+                                    <a href="/admin/readiness-checklist/response/id/<?php echo $this->readinessChecklist['id']; ?>/pid/<?php echo $sent['participant_id']; ?>" class="btn btn-xs btn-info" style="padding: 5px 10px;"> 
+                                        View Response 
+                                    </a>
                                 </td>
                             </tr>
                     <?php
@@ -55,7 +56,7 @@
                 }else{
             ?>
                     <div>
-                        This readiness checklists has never been sent out!
+                        There are no participants for this readiness survey!
                     </div>
             <?php
                 }
@@ -70,3 +71,10 @@
 
 
 </script>
+
+
+
+
+
+
+
