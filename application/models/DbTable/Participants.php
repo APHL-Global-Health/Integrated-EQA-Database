@@ -5,7 +5,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     protected $_name = 'participant';
     protected $_primary = 'participant_id';
 
-    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipantProgram');
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipant');
 
     public function getParticipantsByUserSystemId($userSystemId) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');

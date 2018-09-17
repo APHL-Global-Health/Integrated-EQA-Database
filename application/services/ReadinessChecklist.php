@@ -22,6 +22,28 @@ class Application_Service_ReadinessChecklist {
 		
 		return $checklistDB->getReadinessChecklistDetails($checklistID);		
 	}
+	public function listReadinessChecklistSurveys($participantID){
+		$participantModel = new Application_Model_DbTable_Participants();
+		$participant = $participantModel->fetchRow($participantModel->select()->where("participant_id = ? ", $participantID));
+		$response['participant'] = $participant->toArray();
+
+		$response['surveys'] = [];
+
+		$checklistParticipantRowset = $participant->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+		
+		foreach ($checklistParticipantRowset as $checklistParticipant) {
+			$dataManager = $checklistParticipant->findParentRow('Application_Model_DbTable_DataManagers');
+			$respondent = isset($dataManager)?$dataManager->first_name." ".$dataManager->last_name:"";
+			$survey = $checklistParticipant->findParentRow('Application_Model_DbTable_ReadinessChecklistSurvey');
+			$response['surveys'][] = [
+				'survey' => $survey->toArray(), 
+				'checklistParticipant' => $checklistParticipant->toArray(),
+				'dataManager' => $respondent
+			];
+		}
+
+		return $response;
+	}
 	public function getReadinessChecklistSurvey($checklistSurveyID){
 		$checklistDB = new Application_Model_DbTable_ReadinessChecklistSurvey();
 		

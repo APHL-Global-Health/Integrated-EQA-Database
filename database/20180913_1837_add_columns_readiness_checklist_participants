@@ -1,0 +1,4 @@
+ALTER TABLE `readiness_checklist_participants` CHANGE COLUMN `updated_by` `submitted_by` int(10) unsigned DEFAULT NULL;
+ALTER TABLE `readiness_checklist_participants` CHANGE COLUMN `updated_at` `submitted_at` datetime DEFAULT NULL;
+ALTER TABLE `readiness_checklist_participants` ADD COLUMN `sanctioned_by` int(10) unsigned DEFAULT NULL;
+ALTER TABLE `readiness_checklist_participants` ADD COLUMN `sanctioned_at` datetime DEFAULT NULL;

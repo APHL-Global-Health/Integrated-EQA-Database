@@ -1,6 +1,6 @@
 
 <section class="content-header">
-    <h1>Readiness Checklist</h1>
+    <h1>Readiness Checklists - <?php echo $this->surveys['participant']['institute_name'] ?></h1>
 </section>
 <section class="content">
     <div class="box">
@@ -17,17 +17,50 @@
             <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentSchemeTable">
                 <thead>
                     <tr>
-                        <th>Participant Name</th>
-                        <th>Test Event</th>
-                        <th>Verdict</th>
-                        <th>Date</th>
-                        <th>Test Event Status</th>
+                        <th>#</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Respondent</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="9" class="dataTables_empty">Loading data from server</td>
-                    </tr>
+                    <?php
+                    if (count($this->surveys['surveys']) > 0) {
+                        $counter = 1;
+                        foreach ($this->surveys['surveys'] as $survey) {
+                    ?>
+                            <tr>
+                                <td><?php echo $counter++; ?></td>
+                                <td><?php echo substr($survey['survey']['start_date'],0,10); ?></td>
+                                <td><?php echo substr($survey['survey']['end_date'],0,10); ?></td>
+                                <td>
+                                <?php
+                                    $statusColor = ['warning', 'info', 'success', 'danger'];
+                                    $statusText = ['NOT SUBMITTED', 'SUBMITTED', 'APPROVED', 'REJECTED'];
+                                    $status = $survey['checklistParticipant']['status'];
+                                    
+                                    echo "<span class='bg-".$statusColor[$status]." status-label'>".$statusText[$status]."</span>"; 
+                                ?>
+                                </td>
+                                <td><?php echo $survey['dataManager']; ?></td>
+                                <td>
+                                    <a href="/readiness-checklist/add/id/<?php echo $survey['checklistParticipant']['readiness_checklist_survey_id']; ?>"
+                                        class="btn btn-info" style="min-width: 100px;"> View</a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }else{
+
+                    ?>
+                        <tr>
+                            <td colspan="5" class="dataTables_empty">No readiness surveys found!</td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -37,51 +70,7 @@
 
     var csTable = null;
     function currentSchemes() {
-        csTable = $('#currentSchemeTable').dataTable({
-            "oLanguage": {
-                "sLengthMenu": "_MENU_ records per page"
-            },
-            "bJQueryUI": false,
-            "bAutoWidth": false,
-            "bInfo": true,
-            "bScrollCollapse": true,
-            "sPaginationType": "full_numbers",
-            "bRetrieve": false,
-            "bDestroy": true,
-            "aoColumns": [
-                {"sClass": ""},
-                {"sClass": ""},
-                {"sClass": ""},
-                {"sClass": ""},
-                {"sClass": ""}
-            ],
-            "aaSorting": [[0, "desc"]],
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'readiness', 'action' => 'index', 'format' => 'html')); ?>",
-            "fnServerData": function (sSource, aoData, fnCallback) {
-                $.ajax({
-                    "dataType": 'json',
-                    "type": "POST",
-                    "url": sSource,
-                    "data": aoData,
-                    "success": fnCallback
-                });
-            }
-        });
+        csTable = $('#currentSchemeTable').dataTable({});
     }
-
-
-
-
-    $(document).ready(function () {
-
-        currentSchemes();
-
-        $('#currentType1,#currentType2,#currentType3').click(function () {
-            currentSchemes();
-        });
-    });
-
 
 </script>

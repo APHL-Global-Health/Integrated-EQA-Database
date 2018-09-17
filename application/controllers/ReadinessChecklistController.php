@@ -24,19 +24,18 @@ class ReadinessChecklistController extends Zend_Controller_Action
     public function indexAction()
     {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
-        $pID = $authNameSpace->UserID;
-        $participantService = new Application_Service_Participants();
-        $t = $participantService->getParticipantDetailByUserEmail($pID);
+        $email = $authNameSpace->UserID;
 
+        $participantService = new Application_Service_Participants();
+        $t = $participantService->getParticipantDetailByUserEmail($email);
         foreach ($t as $k) {
             $id = $k["participant_id"];
         }
-        if ($this->getRequest()->isPost()) {
-            $params = $this->_getAllParams();
-            $rService = new Application_Model_DbTable_ReadinessChecklists();
-            $rService->getAllReadinessChecklists($params, $id);
-        }
-        error_log("ReadinessChecklistController");
+
+        $params = $this->_getAllParams();
+        $rService = new Application_Service_ReadinessChecklist();
+        $this->view->surveys = $rService->listReadinessChecklistSurveys($id);
+
     }
 
     public function getreadinessAction()
@@ -55,35 +54,30 @@ class ReadinessChecklistController extends Zend_Controller_Action
         $participantService = new Application_Service_Participants();
         $t = $participantService->getParticipantDetailByUserEmail($pID);
 
-error_log("ReadinessChecklistController");
         foreach ($t as $k) {
             $id = $k["participant_id"];
         }
 
         $this->view->participantId = $id;
-        $roundID = $this->getRequest()->getParam('roundId');
 
-        $distributionService = new Application_Service_Distribution();
-        $this->view->round = $round = $distributionService->getDistribution($roundID);
-
-        $checklistID = $round['readiness_checklist_id'];
+        $surveyID = $this->getRequest()->getParam('id');
 
         $readinessChecklistService = new Application_Service_ReadinessChecklist();
-        $this->view->readinessChecklist = $clist = $readinessChecklistService->getReadinessChecklistDetails($checklistID);
+        $this->view->survey = $readinessChecklistService->getReadinessChecklistSurveyResponses($surveyID, $id);
+        $this->view->platforms = (new Application_Service_Platform())->getPlatforms();
     }
 
     public function replyAction(){
 
         $params = $this->getRequest()->getPost();
-        $partnerService = new Application_Model_DbTable_ReadinessChecklists();
-        $v = $partnerService->addReadinessChecklists($params);
-        if ($v) {
+        $surveyResponseModel = new Application_Model_DbTable_ReadinessChecklistResponse();
+        $response = $surveyResponseModel->addReadinessChecklistResponse($params);
+        if ($response) {
             $this->_helper->flashMessenger("Your readiness checklist has been submitted successfully.");
-            $this->_redirect("/readiness/index");
         } else {
             $this->_helper->flashMessenger("Sorry, you have already submitted the readiness checklist for the selected test event.");
-            $this->_redirect("/readiness/index");
         }
+        $this->_redirect("/readiness-checklist/");
     }
 
     public function correctiveAction()

@@ -136,3 +136,9 @@ a .home-menu {
     background-color: purple!important;
     color:purple;
 }
+
+.status-label{
+    padding:10px 15px;
+    border:1px solid #F93;
+    border-radius:4px;
+}

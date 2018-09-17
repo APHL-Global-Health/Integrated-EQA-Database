@@ -2,7 +2,6 @@ var reportsModule = angular.module('ReportModule');
 
 reportsModule.controller('ReportsController', function ($scope, $log, $http, EptServices, EptFactory, $timeout, loginDataCache) {
     var serverSamplesURL = SERVER_API_URL.bacteriologyParticipant;
-//    var serverReportURL = SERVER_API_URL.reportsURL;
     var serverReportURL = SERVER_API_URL.bacteriologyParticipant;
     console.log(serverReportURL);
     $scope.$log = $log;

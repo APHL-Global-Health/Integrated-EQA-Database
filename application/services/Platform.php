@@ -3,32 +3,32 @@
 class Application_Service_Platform {
     
     public function addPlatform($params){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-	return $partnersDb->addPlatforms($params);
+        $platformModel = new Application_Model_DbTable_Platforms();
+    	return $platformModel->addPlatforms($params);
     }
     
     public function getAllPlatform($parameters){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-	return $partnersDb->fetchAllPlatformAdmin($parameters);
+        $platformModel = new Application_Model_DbTable_Platforms();
+    	return $platformModel->fetchAllPlatformAdmin($parameters);
     }
     
-    public function getPlatform($partnerId){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-	return $partnersDb->getPlatformDetails($partnerId);
+    public function getPlatform($platformId){
+        $platformModel = new Application_Model_DbTable_Platforms();
+    	return $platformModel->getPlatformDetails($platformId);
     }
 
-    public function deletePlatform($partnerId){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-        return $partnersDb->deletePlatformDetails($partnerId);
+    public function deletePlatform($platformId){
+        $platformModel = new Application_Model_DbTable_Platforms();
+        return $platformModel->deletePlatformDetails($platformId);
     }
     
     public function updatePlatform($params){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-	return $partnersDb->updatePlatforms($params);
+        $platformModel = new Application_Model_DbTable_Platforms();
+    	return $platformModel->updatePlatforms($params);
     }
     
-    public function getAllActivePlatforms(){
-        $partnersDb = new Application_Model_DbTable_Platforms();
-	return $partnersDb->fetchAllActivePlatforms();
+    public function getPlatforms(){
+        $platformModel = new Application_Model_DbTable_Platforms();
+    	return $platformModel->fetchAll($platformModel->select()->where("status = ? ", 1));
     }
 }

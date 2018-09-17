@@ -124,28 +124,12 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                                     </a>
                                 </li>
-                                <li class="treeview <?php echo ($activeMenu == 'reasdiness') ? ' active ' : ''; ?>">
-                                    <a href="#" class="" aria-haspopup="true" aria-expanded="false"><i class="icon icon-edit"></i> <span>Readiness/Corrective </span> <i class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
-                                    <ul class="treeview-menu">
-                                        <li class="<?php echo ($activeMenu == 'readinesss') ? ' active ' : ''; ?>">
-                                            <a href="<?php echo $this->url(array("controller" => "distributions", "action" => "index"), null, true) ?>">
-                                                <i class="icon icon-pencil"></i> <span>Active Test Events</span>
-                                            </a>
-                                        </li>
-                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?> hide">
-                                            <a href="<?php echo $this->url(array("controller" => "readiness", "action" => "index"), null, true) ?>">
-                                                <i class="icon icon-list-ul"></i> <span>Readiness Status</span>
-                                            </a>
-                                        </li>
-                                        
-                                        <li class="<?php echo ($activeMenu == 'readisness') ? ' active ' : ''; ?>">
-                                            <a href="<?php echo $this->url(array("controller" => "readiness-checklist", "action" => "corrective"), null, true) ?>">
-                                                <i class="icon icon-check"></i> <span>Corrective</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a class="" href="<?php echo $this->url(array("controller" => "readiness-checklist", "action" => "index"), null, true) ?>" >
+                                        <i class="icon icon-check"></i> <span>Readiness Checklist</span>
+                                    </a>
                                 </li>
-
+                                
                                 <li class="<?php echo ($activeMenu == 'current-schemes') ? ' active ' : ''; ?>">
                                     <a href="<?php echo $this->url(array("controller" => "participant", "action" => "current-schemes"), null, true) ?>">
                                         <i class="icon icon-list-ul"></i> <span>PT Result Submission</span>
@@ -166,6 +150,12 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 <li class="<?php echo ($activeMenu == 'defaulted-schemes') ? ' active ' : ''; ?> hide">
                                     <a href="<?php echo $this->url(array("controller" => "participant", "action" => "defaulted-schemes"), null, true) ?>">
                                         <i class="icon icon-exclamation"></i> <span>Defaulted Schemes</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="" href="<?php echo $this->url(array("controller" => "readiness-checklist", "action" => "corrective"), null, true) ?>" >
+                                        <i class="icon icon-edit"></i> <span>Corrective Action</span>
                                     </a>
                                 </li>
 

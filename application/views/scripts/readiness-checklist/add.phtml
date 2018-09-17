@@ -1,83 +1,87 @@
 <div class="well">
+    <?php
+        $readonly = "readonly";
+        $disabled = "disabled";
+        if($this->survey['checklistParticipant']['status'] == 0){
+            $readonly = "";
+            $disabled = "";
+        }
+    ?>
     <form name="readinessChecklistResponseForm" id="readinessChecklistResponseForm" method="post" 
         action="<?php echo $this->url(array("module" => "default", "controller" => "readiness-checklist", "action" => "reply"),'default', true) ?>" 
-        class="form-horizontal bs-example" role="form" enctype="multipart/form-data" onsubmit="validateNow();return false;">
+        class="form-horizontal bs-example" role="form" enctype="multipart/form-data">
         <fieldset>
-            <legend>Readiness Checklist</legend>
-            <div class="form-group">
-                <label class="col-md-3">Test Event</label>
-                <div class="col-md-5"><?php echo $this->round['distribution_code']; ?></div>
-            </div>
+            <legend>Readiness Checklist - <?php echo $this->survey['participant']['institute_name']; ?></legend>
             <div class="form-group">
                 <label class="col-md-3">Start Date</label>
-                <div class="col-md-5"><?php echo $this->round['distribution_date']; ?></div>
+                <div class="col-md-5"><?php echo substr($this->survey['start_date'],0,10); ?></div>
             </div>
              <div class="form-group">
                 <label class="col-md-3">Checklist Due Date</label>
-                <div class="col-md-5"><?php echo $this->round['readinessdate']; ?></div>
+                <div class="col-md-5"><?php echo substr($this->survey['end_date'],0,10); ?></div>
+            </div>
+             <div class="form-group">
+                <label class="col-md-3">Respondent</label>
+                <div class="col-md-5"><?php echo $this->survey['creator']; ?></div>
             </div>
              <div class="form-group">
                 <label class="col-md-3">Platforms</label>
                 <div class="col-md-5">
-                    <input type="checkbox" id="abbot" name="abbot"> ABBOT <br />
-                    <input type="checkbox" id="capctm" name="capctm"> CAP/CTM <br />
-                    <input type="checkbox" id="c8800" name="c8800"> C8800 <br />
-                    <input type="checkbox" id="panther" name="panther"> Panther <br />
+                    <?php
+                    function getSelectedPlatform($platformID, $platformRowset){
+                        foreach ($platformRowset as $platform) {
+                            if ($platform['ID'] == $platformID) return " checked";
+                        }
+                        return "";
+                    }
+                    foreach ($this->platforms as $platform) {
+                        echo "<input type='checkbox' id='platform$platform->ID' name='platform$platform->ID' ";
+                        echo getSelectedPlatform($platform->ID, $this->survey['platforms']);
+                        echo " $disabled> $platform->PlatformName <br />";
+                    }
+                    ?>
                 </div>
             </div>
-            <legend><?php echo $this->readinessChecklist['title']; ?></legend>
-            <div>
-                <table class="display datatable table table-bordered table-hover table-striped hide" id="checklistQuestions">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left">#</th>
-                            <th style="text-align: left">Question</th>
-                            <th style="text-align: left">Question Type</th>
-                            <th style="text-align: left">Answer Type</th>
-                            <th style="text-align: left">List Options</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                            $questionTypes = ['Comment', 'Heading', 'Question' ];
-                            $answerTypes = ['Free Text', 'List', 'Number'];
-
-                            function orderItems($a, $b){
-                                return $a['position'] > $b['position'];
-                            }
-
-                            usort($this->readinessChecklist['questions'], 'orderItems');
-
-                            if(count($this->readinessChecklist['questions']) > 0){ 
-
-                                foreach ($this->readinessChecklist['questions'] as $question) {
-                        ?>
-                                    <tr>
-                                        <td><?php echo $question['position']?></td>
-                                        <td><?php echo $question['question']?></td>
-                                        <td><?php echo $questionTypes[$question['question_type']]?></td>
-                                        <td><?php echo $answerTypes[$question['answer_type']]?></td>
-                                        <td><?php echo $question['list_options']?></td>
-                                        <td>Delete</td>
-                                    </tr>
-                        <?php
-                                }
-                             }else{
-                        ?>
-                                <tr>
-                                    <td colspan="6" class="dataTables_empty">No questions have been added to this checklist.</td>
-                                </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+             <div class="form-group">
+                <label class="col-md-3">Status</label>
+                <div class="col-md-5">
+                <?php
+                    $statusColor = ['warning', 'info', 'success', 'danger'];
+                    $statusText = ['NOT SUBMITTED', 'SUBMITTED', 'APPROVED', 'REJECTED'];
+                    $status = $this->survey['checklistParticipant']['status'];
+                    
+                    echo "<span class='bg-".$statusColor[$status]." status-label' >".$statusText[$status]."</span>";
+                ?>
+                </div>
             </div>
+            <legend><?php echo $this->survey['parent']['title']; ?></legend>
             <div>
                 <?php
-                    if(count($this->readinessChecklist['questions']) > 0){
+
+                    if(count($this->survey['questions']) > 0){
+
+                        function getAnswer($questionID, $answerPool){
+                            $answer = "0M#O";
+                            foreach ($answerPool as $reply) {
+                                if ($reply['readiness_checklist_question_id'] == $questionID) {
+                                    $answer = $reply['answer'];
+                                }
+                            }
+                            return $answer;
+                        }
+
+                        $questionTypes = ['Comment', 'Heading', 'Question' ];
+                        $answerTypes = ['Free Text', 'List', 'Number'];
+
+                        function orderItems($a, $b){
+                            return $a['position'] > $b['position'];
+                        }
+
+                        usort($this->survey['questions'], 'orderItems');
+
                         $counter = 1;
 
-                        foreach ($this->readinessChecklist['questions'] as $question) {
+                        foreach ($this->survey['questions'] as $question) {
                 ?>
                             <div class="form-group col-md-12">
                 <?php
@@ -94,23 +98,36 @@
                                     if (strcmp($answerTypes[$question['answer_type']], 'Free Text') == 0) {
                 ?>
                                         <div class='col-md-12'>
-                                            <input type="text" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>" class="form-control">
+                <?php
+                                            $ans = "";
+                                            if (strcmp(getAnswer($question['id'], $this->survey['answers']), "0M#O") != 0) {
+                                                $ans = "value='".getAnswer($question['id'], $this->survey['answers'])."'";
+                                            }
+                                            echo "<input type='text' name='question" . $question['id'] . "' ";
+                                            echo "id='question".$question['id']."' class='form-control' ";
+                                            echo "$ans $readonly>";
+                ?>
                                         </div>
                 <?php
                                     }else if (strcmp($answerTypes[$question['answer_type']], 'Number') == 0) {
+                                        $ans = "";
+                                        if (strcmp(getAnswer($question['id'], $this->survey['answers']), "0M#O") != 0) {
+                                            $ans = "value='".getAnswer($question['id'], $this->survey['answers'])."'";
+                                        }
                 ?>
                                         <div class='col-md-12'>
-                                            <input type="number" class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>">
+                                            <input type="number" class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>" <?php echo "$ans $readonly"; ?>>
                                         </div>
                 <?php
                                     }else{
                                         $options = explode(",", $question['list_options']);
+                                        $ans = getAnswer($question['id'], $this->survey['answers']);
                 ?>
                                         <div class='col-md-12'>
-                                            <select class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>">
+                                            <select class="form-control" name="question<?php echo $question['id'];?>" id="question<?php echo $question['id'];?>" <?php echo $disabled; ?>>
                 <?php
                                                 foreach ($options as $option) {
-                                                    echo "<option value='$option'>$option</option>";
+                                                    echo "<option value='$option'".((strcmp($option, $ans) == 0)?" selected":"").">$option</option>";
                                                 }
                 ?>
                                             </select>
@@ -127,27 +144,19 @@
             </div>
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
-                <input type="hidden" id="readinessChecklistId" name="readinessChecklistId" value="<?php echo $this->readinessChecklist['id']; ?>"/>
+                <input type="hidden" id="surveyId" name="surveyId" value="<?php echo $this->survey['id']; ?>"/>
                 <input type="hidden" id="participantId" name="participantId" value="<?php echo $this->participantId; ?>"/>
-                <input type="hidden" id="roundId" name="roundId" value="<?php echo $this->round['distribution_id']; ?>"/>
-                <button class="btn btn-primary" type="button" 
-                    onclick="document.getElementById('readinessChecklistResponseForm').submit();">
-                    Submit
-                </button>
-                <a href="/distributions" class="btn btn-primary">Back</a>
+                <?php if ($this->survey['checklistParticipant']['status'] == 0) { ?>
+                    <button class="btn btn-primary" type="button" 
+                        onclick="document.getElementById('readinessChecklistResponseForm').submit();">
+                        Submit
+                    </button>
+                <?php } ?>
+                <a href="/readiness-checklist" class="btn btn-primary">Back</a>
             </div>
         </fieldset>
     </form>
 </div>
 <script type="text/javascript">
 
-    function validateNow() {
-        flag = deforayValidator.init({
-            formId: 'readinessChecklistResponseForm'
-        });
-        if (flag && !duplicated) {
-            $.blockUI();
-            document.getElementById('readinessChecklistResponseForm').submit();
-        }
-    }
 </script>

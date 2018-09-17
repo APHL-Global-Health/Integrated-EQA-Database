@@ -1,20 +1,14 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table_Abstract {
 
     protected $_name = 'readiness_checklist_responses';
     protected $_primary = 'id';
 
     protected $_referenceMap    = array(
-        'ReadinessChecklistSurvey' => array(
-            'columns'           => array('readiness_checklist_survey_id'),
-            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistSurvey',
+        'ReadinessChecklistParticipant' => array(
+            'columns'           => array('readiness_checklist_participant_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistParticipant',
             'refColumns'        => array('id')
         ),
         'DataManager' => array(
@@ -31,7 +25,7 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
          */
         error_log(implode("--", $parameters));
 
-        $aColumns = array('readiness_checklist_survey_id', 'participant_id', 'readiness_checklist_question_id', 'answer', 'created_at', 'created_by');
+        $aColumns = array('readiness_checklist_participant_id', 'participant_id', 'readiness_checklist_question_id', 'answer', 'created_at', 'created_by');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -178,29 +172,48 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
     }
 
     public function addReadinessChecklistResponse($params) {
-        $authNameSpace = new Zend_Session_Namespace('administrators');
-        $db = Zend_Db_Table_Abstract::getAdapter();
-        $data = array(
-            'readiness_checklist_id' => $params['readiness_checklist_id'],
-            'start_date' => $params['start_date'],
-            'end_date' => $params['end_date'],
-            'created_by' => $authNameSpace->admin_id,
-            'created_at' => date("Y-m-d H:i:s")
-        );
-        $saved = $this->insert($data);
-        // Insert participants into readiness_checklist_responses
-        return $saved;
-    }
+        $authNameSpace = new Zend_Session_Namespace('datamanagers');
+        $checklistParticipant = new Application_Model_DbTable_ReadinessChecklistParticipant();
+        $checklistParticipationID = $checklistParticipant->getChecklistSurveyParticipationID($params['surveyId'], $params['participantId']);
 
-    public function updateReadinessChecklistResponse($params) {
-        $authNameSpace = new Zend_Session_Namespace('administrators');
-        $data = array(
-            'readiness_checklist_id' => $params['readiness_checklist_id'],
-            'start_date' => $params['start_date'],
-            'end_date' => $params['end_date'],
-            'created_by' => $authNameSpace->admin_id
-        );
-        return $this->update($data, "id=" . $params['readinessChecklistResponseId']);
+        $checklistPlatform = new Application_Model_DbTable_ReadinessChecklistParticipantPlatform();
+        $checklistPlatform->delete("readiness_checklist_participant_id = $checklistParticipationID");
+
+        error_log(json_encode($params));
+
+        $saved = 0;
+        $data = [];
+        $data['readiness_checklist_participant_id'] = $checklistParticipationID;
+        $data['created_by'] = $authNameSpace->dm_id;
+        $data['created_at'] = date('Y-m-d H:i:s');
+
+        foreach ($params as $key => $value) {
+            if(strpos($key, "question") > -1){
+                $data['readiness_checklist_question_id'] = str_replace("question", "", $key);
+                $data['answer'] = $value;
+
+                $answer = $this->fetchRow(
+                    $this->select()->where(
+                        "readiness_checklist_participant_id = ?", $data['readiness_checklist_participant_id'])
+                        ->where("readiness_checklist_question_id = ?", $data['readiness_checklist_question_id']));
+
+                if($answer){
+                    $this->update($data, "id=" . $answer->id);
+                }else{
+                    $this->insert($data);
+                }
+                $saved++;
+            }elseif(strpos($key, "platform") > -1){
+                $platformData['platform_id'] = str_replace("platform", "", $key);
+                $platformData['readiness_checklist_participant_id'] = $checklistParticipationID;
+
+                $checklistPlatform->insert($platformData);
+            }
+        }
+
+        $checklistParticipant->updateChecklistSurveyParticipationStatus($checklistParticipationID, 1); // SUBMITTED
+
+        return $saved;
     }
 
 }

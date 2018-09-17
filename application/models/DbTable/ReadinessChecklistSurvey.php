@@ -171,10 +171,10 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
         $parent = $survey->findParentRow('Application_Model_DbTable_ReadinessChecklist');
         $surveyDetails['parent'] = $parent->toArray();
 
-        $participantReference = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+        $participantsRowset = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
         $participants = [];
 
-        foreach ($participantReference as $participant) {
+        foreach ($participantsRowset as $participant) {
             $participants[] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray();
         }
 
@@ -194,16 +194,18 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
 
         $surveyDetails['creator'] = "";
 
-        $participantReference = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+        $participantsRowset = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant');
+        $checklistParticipants = [];
 
         $platforms = [];
 
-        foreach ($participantReference as $participant) {
+        foreach ($participantsRowset as $participant) {
 
             if($participant->participant_id == $participantID){
 
                 $surveyDetails['checklistParticipant'] = $participant->toArray();
                 $surveyDetails['participant'] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray();
+                $checklistParticipants[] = $participant;
 
                 $platforms = $participant->findManyToManyRowset('Application_Model_DbTable_Platforms', 'Application_Model_DbTable_ReadinessChecklistParticipantPlatform', 'ReadinessParticipants')->toArray();
             }
@@ -213,18 +215,23 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
 
         $surveyDetails['questions'] = $parent->findDependentRowset('Application_Model_DbTable_ReadinessChecklistQuestion')->toArray();
 
-        $responses = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistResponse');
+
         $answers = [];
 
-        foreach ($responses as $response) {
-            $dataManager = $response->findParentRow('Application_Model_DbTable_DataManagers');
-            $participants = $dataManager->findManyToManyRowset('Application_Model_DbTable_Participants','Application_Model_DbTable_ParticipantManagerMap');
-            foreach ($participants as $participant) {
-                if($participant->participant_id == $participantID){
-                    $answers[$response->readiness_checklist_question_id] = $response->toArray();
-                    
-                    $surveyDetails['creator'] = $dataManager['first_name'] . " " . $dataManager['last_name'];
-                    break;
+        if(count($checklistParticipants) > 0){
+
+            $responses = $checklistParticipants[0]->findDependentRowset('Application_Model_DbTable_ReadinessChecklistResponse');
+
+            foreach ($responses as $response) {
+                $dataManager = $response->findParentRow('Application_Model_DbTable_DataManagers');
+                $participants = $dataManager->findManyToManyRowset('Application_Model_DbTable_Participants','Application_Model_DbTable_ParticipantManagerMap');
+                foreach ($participants as $participant) {
+                    if($participant->participant_id == $participantID){
+                        $answers[$response->readiness_checklist_question_id] = $response->toArray();
+                        
+                        $surveyDetails['creator'] = $dataManager['first_name'] . " " . $dataManager['last_name'];
+                        break;
+                    }
                 }
             }
         }
