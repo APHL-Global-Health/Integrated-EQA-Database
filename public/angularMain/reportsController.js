@@ -169,6 +169,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         }
     }
     $scope.reports.responseInfoData = {};
+
     $scope.reports.getUserResults = function (where, type) {
         var url = serverReportURL + 'getresponsefeedback';
         showAjaxLoader(true)

@@ -1831,6 +1831,9 @@ class BacteriologydbciController extends Zend_Controller_Action
         $postedData['responseStatus'] = 1;
         $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);
 
+error_log("getresponsefeedbackAction");
+error_log(json_encode($postedData));
+
         if ($data != false) {
             foreach ($data as $key => $value) {
                 $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
