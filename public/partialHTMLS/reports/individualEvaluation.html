@@ -79,16 +79,22 @@
                 <td>{{lab.labDetails.city}}</td>
                 <td>{{lab.dateCreated}}</td>
                 <td nowrap>{{lab.evaluatedStatus}}</td>
-                <td nowrap>{{lab.finalScore}}</td>
+                <td nowrap>{{lab.finalScore}} %</td>
 
                 <td>{{lab.batchName}}</td>
                 <td>
-                    <button ng-disabled="false" ng-disabled="lab.daysLeft > 0|| lab.published==1"
+                    <button ng-disabled="false" ng-show="lab.daysLeft <= 0 && lab.published==0 && lab.resultReleased == 0"
                             ng-click="reports.evaluateIndividual(lab)" class="btn btn-danger btn-sm">
                         <i class="fa fa-check"></i>
-                        <x ng-show="lab.markedStatus==0">evaluate</x>
+                        <x ng-show="lab.markedStatus==0">Evaluate</x>
                         <x ng-show="lab.markedStatus==1">Re-evaluate</x>
                     </button>
+                     <button ng-disabled="false" ng-show="lab.markedStatus==1 && lab.daysLeft <= 0 && lab.resultReleased == 0"
+                            ng-click="reports.releaseIndividualEvaluation(lab)" class="btn btn-warning btn-sm">
+                        <i class="fa fa-check"></i>
+                        <x ng-show="lab.markedStatus==1">Release</x>
+                    </button>
+                    <label class="btn btn-sm btn-info" ng-show="lab.resultReleased == 1">Result Released</label>
                 </td>
 
             </tr>

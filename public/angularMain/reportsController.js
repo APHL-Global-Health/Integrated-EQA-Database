@@ -747,6 +747,31 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
 
     }
 
+    $scope.reports.releaseIndividualEvaluation = function (individual) {
+        $scope.reports.currentClickedLabResults = individual;
+        showAjaxLoader(true);
+        var where = {
+            userId: individual.userId,
+            sampleId: individual.sampleId,
+            participantId: individual.participantId,
+            roundId: individual.roundId
+        }
+        var url = serverReportURL + 'releaseResult';
+        $http.post(url, where)
+                .success(function (response) {
+                    showAjaxLoader(false);
+                    $.alert({
+                        title: '<i class="fa fa-check-circle"></i> Success',
+                        content: 'Lab result released successfully'
+                    });
+                    console.log(response);
+                })
+                .error(function (error) {
+                    showAjaxLoader(false);
+                })
+
+    }
+
     $scope.reports.saveIndividualEvaluation = function (individualResults) {
         try {
 
@@ -756,13 +781,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                     update: individualResults,
                     id: individualResults.id
                 }
-                // delete data.update.id;
-                // delete data.update.batchName;
-                // delete data.update.materialSource;
-                // delete data.update.sampleDetails;
-                // delete data.update.sampleInstructions;
-                // delete data.update.labDetails;
-                // delete data.update.evaluatedStatus;
+
                 console.log(data);
                 var url = serverReportURL + 'updatefunction';
                 $http
@@ -879,7 +898,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             }
 
         } else {
-            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
+            /* $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent") */
         }
     }
 

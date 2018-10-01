@@ -807,7 +807,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             }
 
         } else {
-            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
+            /* $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent") */
         }
     }
     $scope.reports.enrolledRounds = {};

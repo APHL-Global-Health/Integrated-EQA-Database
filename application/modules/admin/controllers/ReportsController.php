@@ -150,6 +150,23 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         exit;
     }
 
+
+    public function releaseresultAction()
+    {
+        $where = $this->returnArrayFromInput();
+        $update['published'] = 1; // Published
+
+        $whereClause['sampleId'] = $where['sampleId'];
+        $whereClause['participantId'] = $where['participantId'];
+
+        error_log(json_encode($whereClause));
+
+        $updatePublication = $this->dbConnection->updateTable('tbl_bac_response_results', $whereClause, $update);
+
+        echo $this->returnJson($updatePublication);
+        exit;
+    }
+
     public function sendEmailToEnrolledLabsForPublish($roundId)
     {
         $where['roundId'] = $roundId;
@@ -214,6 +231,7 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
 
                 $data[$key]->daysLeft = $this->converttodays($round['endDate']);
+                $data[$key]->resultReleased = $data[$key]->published;
                 $data[$key]->published = $round['published'];
                 $sampleInfo = $this->returnSampleInfo($value->panelToSampleId);
                 $data[$key]->daysLeftOnTen = $sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
@@ -321,6 +339,16 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
         $whereEvaluation['id'] = $posted['id'];
         $updateEval = (array)$posted['update'];
 
+        $sampleType = $updateEval['sampleType'];
+
+        $sampleType = str_replace("[", "", $sampleType);
+        $sampleType = str_replace("]", "", $sampleType);
+        $sampleType = str_replace('"', "", $sampleType);
+
+        $sampleTypes = explode(",", $sampleType);
+
+error_log($sampleType);
+
         unset($updateEval['id']);
         unset($updateEval['index']);
         unset($updateEval['sampleType']);
@@ -346,30 +374,15 @@ class Admin_ReportsController extends Admin_BacteriologydbciController
                 }
             }
         }
-        $whereSampleId['sampleId'] = $updateEval['sampleId'];
-        $countAstSamples = $this->dbConnection->selectCount('tbl_bac_expected_micro_bacterial_agents', $whereSampleId, 'sampleId');
-        $count = 0;
-        if ($updateEval['finalIdentificationScore'] > -1) {
-            $count++;
-        }
 
-        if ($updateEval['grainStainReactionScore'] > -1) {
-            $count++;
-        }
-        if ($countAstSamples > 0) {
+        if (count($sampleTypes) > 0) {
 
-            $count++;
-        }
-        if ($count > 0) {
-
-            $updateEval['finalScore'] = round($finalScore / $count);
+            $updateEval['finalScore'] = round($finalScore / (count($sampleTypes) * 4) * 100);
         } else {
             echo $this->returnJson(array('status' => 0, 'message' => 'Samples seems to have no possible expected results'));
             exit;
         }
-//        print_r($updateEval);
-//        exit;
-        $updateEval['totalMicroAgentsScore'] = $updateEval['totalMicroAgentsScore'];
+
         $updateEvaluation = $this->dbConnection->updateTable('tbl_bac_response_results', $whereEvaluation, $updateEval);
 
         echo $this->returnJson($updateEvaluation);
