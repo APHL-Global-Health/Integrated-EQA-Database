@@ -1829,10 +1829,12 @@ class BacteriologydbciController extends Zend_Controller_Action
             $postedData['participantId'] = $userDetails['participant_id'];
         }
         $postedData['responseStatus'] = 1;
-        $data = $this->dbConnection->selectReportFromTable('tbl_bac_samples_to_users', $col, $postedData, $orderArray, true, $groupArray);
+        // $data = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, $postedData, $orderArray, true, $groupArray);
+        $data = $this->dbConnection->selectReportFromTable('tbl_bac_response_results', $col, ['participantId' => $userDetails['participant_id'], 'published' => 1], $orderArray, true, $groupArray);
 
 error_log("getresponsefeedbackAction");
 error_log(json_encode($postedData));
+error_log(json_encode($data));
 
         if ($data != false) {
             foreach ($data as $key => $value) {

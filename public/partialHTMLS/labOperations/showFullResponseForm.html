@@ -17,7 +17,7 @@
     </div>
     <div  id="printable-response">
         <div class="h3 text-center col-md-12">
-            <img src="images/nphl-logo-2.png"/><br>
+            <img src="/images/nphl-logo-2.png"/><br>
             RESPONSE PT REPORT <i class="fa fa-spin {{reports.loader}}"></i>
             <hr>
         </div>
@@ -29,6 +29,7 @@
                         NATIONAL MICROBIOLOGY REFERENCE LABORATORY - NAIROBI, KENYA<br>
                         STANDARD OPERATING PROCEDURE
                     </b>
+                    {{reports.userResults.results}}
                 </div>
                 <div class="h5 col-md-12 text-bold text-left  border-bottom">
                     <br>
@@ -44,7 +45,7 @@
                     <br>
                     Grade : {{reports.userResults.results.grade}} <br><br>
                     Total Score:
-                    {{reports.userResults.results.finalScore}}
+                    {{reports.userResults.results.finalScore}} %
                     
                     <br><br>
                     Remarks : {{reports.userResults.results.remarks}} <br><br>

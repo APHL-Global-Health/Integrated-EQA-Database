@@ -55,11 +55,9 @@
                 <thead>
                 <tr>
                     <td>#</td>
-                    <th>Round Name</th>
-                    <th>Round Code</th>
+                    <th>Round</th>
                     <th>Sample</th>
-                    <th>organisms Score</th>
-                    <th>Agents Score</th>
+                    <th>Score</th>
 
                     <th>Grade</th>
                     <th>Date</th>
@@ -70,12 +68,9 @@
                 <tbody>
                 <tr dir-paginate="sampleResponse in reports.responseInfoData | itemsPerPage: samples.itemsPerPage ">
                     <td>{{$index+1}}</td>
-                    <td>{{sampleResponse.roundName}}
-                    </td>
-                    <td>{{sampleResponse.roundCode}}</td>
+                    <td>{{sampleResponse.roundName}} {{sampleResponse.roundCode}}</td>
                     <td>{{sampleResponse.batchName}}</td>
-                    <td>{{sampleResponse.totalCorrectScore}}</td>
-                    <td nowrap>{{sampleResponse.totalMicroAgentsScore}}</td>
+                    <td>{{sampleResponse.finalScore }} %</td>
 
                     <td nowrap>{{sampleResponse.grade}}</td>
                     <td>{{samples.returnSubstring(sampleResponse.dateCreated,10)}}</td>
