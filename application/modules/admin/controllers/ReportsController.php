@@ -352,6 +352,7 @@ error_log($sampleType);
         unset($updateEval['index']);
         unset($updateEval['sampleType']);
         unset($updateEval['batchName']);
+        unset($updateEval['resultReleased']);
         unset($updateEval['materialSource']);
         unset($updateEval['sampleDetails']);
         unset($updateEval['sampleInstructions']);
