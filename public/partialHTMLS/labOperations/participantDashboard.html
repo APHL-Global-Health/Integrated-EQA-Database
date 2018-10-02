@@ -3,12 +3,9 @@
         Dashboard  <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
     </h3>
 
-    <div class="panel panel-success" ng-init="samples.getCurrentActiveRound()">
+    <div class="panel panel-success hide" ng-init="samples.getCurrentActiveRound()">
         <div class="panel panel-heading">
             <h5>Current Round</h5> 
-<!--            <button ng-click="samples.getCurrentActiveRound()">
-                load
-            </button>-->
         </div>
         <div class="panel panel-body">
             <table class="table table-striped table-condensed table-bordered" id="printableTable">
@@ -16,29 +13,18 @@
                     <tr>
                         <th>#.</th>
                         <th>Round Name</th>
-                        <th>Round Code</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Date Created</th>
-
                         <th>Day(s) to go</th>
-
                         <th>Status</th>
                         <th></th>
-                        <!--                                <th>Date Saved</th>
-                        <th>Ship't Number</th>
-                        <th>Lab ID</th>
-                        <th>Total Samps.</th>
-                        <th>Created on</th>
-                        -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="round in samples.currentRound | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
+                    <tr dir-paginate="round in samples.currentRound | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'" ng-if="round.status==1">
                         <td>{{$index + 1}}</td>
-                        <td>{{round.roundName}}
-                        </td>
-                        <td>{{round.roundCode}}</td>
+                        <td>{{round.roundName}}</td>
                         <td>{{round.startDate}}</td>
                         <td>{{round.endDate}}</td>
                         <td nowrap>{{round.dateCreated}}</td>
@@ -66,7 +52,7 @@
         </div>
     </div>
 
-    <div class=" panel panel-primary">
+    <div class=" panel panel-primary hide">
         <div class="panel panel-heading">
             <h5>Performance Summary
                 <button class="btn btn-default btn-sm" ng-click="samples.getRoundEvaluationAvg()">
@@ -87,9 +73,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="round in samples.labAveragePerformance | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
+                    <tr dir-paginate="round in samples.labAveragePerformance | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'" ng-if="round.status==1">
 
-                        <td>{{$index + 1}}</td>
+                        <td>{{$index + 1}} {{round.status}}</td>
                         <td>{{round.roundName}}</td> 
                         <td>{{round.averageScore}}</td>
                         <td>{{round.averageGrade}}</td>
@@ -149,36 +135,22 @@
                             <tr>
                                 <th>#.</th>
                                 <th>Round Name</th>
-                                <th>Round Code</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-                                <th>Date Created</th>
-
                                 <th>Day(s) to go</th>
                                 <th>Total Participating Labs</th>
                                 <th>Status</th>
-                                <!--                                <th>Date Saved</th>
-                                <th>Ship't Number</th>
-                                <th>Lab ID</th>
-                                <th>Total Samps.</th>
-                                <th>Created on</th>
-                                -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'">
-                                <td>{{$index + 1}}</td>
-                                <td>{{round.roundName}}
-                                </td>
-                                <td>{{round.roundCode}}</td>
+                            <tr dir-paginate="round in samples.rounds | itemsPerPage: samples.itemsPerPage |filter : samples.searchData|orderBy: '-dateCreated'" ng-if="round.status==1">
+                                <td> &nbsp; </td>
+                                <td>{{round.roundName}}</td>
                                 <td>{{round.startDate}}</td>
                                 <td>{{round.endDate}}</td>
-                                <td nowrap>{{round.dateCreated}}</td>
                                 <td nowrap>{{round.daysLeft}}</td>
                                 <td nowrap>{{round.totalLabsAdded}}</td>
                                 <td nowrap>{{samples.roundStatus(round.daysLeft, round.startRoundFlag)}}</td>
-
-
                             </tr>
 
                         </tbody>
