@@ -752,13 +752,14 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         delete primaryEvaluation.daysLeft;
         delete primaryEvaluation.daysLeftOnTen;
 
-        console.log(primaryEvaluation)
+        console.log(primaryEvaluation);
         $scope.reports.saveIndividualEvaluation(primaryEvaluation);
         $timeout(function () {
 
             $scope.reports.saveMicroAgentsEvaluation(microEvaluation)
-        }, 2000)
+        }, 2000);
     }
+
     $scope.reports.saveMicroAgentsEvaluation = function (microAgents) {
         if (microAgents.length > 0) {
             var error = false;
@@ -814,7 +815,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
             }
 
         } else {
-            $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")
+            /* $.alert("<i class='fa fa-exclamation-circle'></i> please fill atleast one micro agent")*/
         }
     }
     $scope.reports.enrolledRounds = {};
