@@ -74,4 +74,9 @@ class Application_Service_ReadinessChecklist {
 		
 		return $checklistDB->deleteReadinessChecklist($params);		
 	}
+	public function updateChecklistParticipationStatus($participationID, $status){
+		$checklistDB = new Application_Model_DbTable_ReadinessChecklistParticipant();
+		
+		return $checklistDB->updateChecklistSurveyParticipationStatus($participationID, $status);		
+	}
 }

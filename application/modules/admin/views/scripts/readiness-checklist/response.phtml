@@ -94,10 +94,10 @@
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input type="hidden" id="surveyId" name="surveyId" value="<?php echo $this->survey['id']; ?>"/>
                 <?php if($this->survey['checklistParticipant']['status'] == 1){ // SUBMITTED ?>
-                    <a href="/admin/readiness-checklist-question/add/id/<?php echo $this->survey['id']; ?>"
+                    <a href="/admin/readiness-checklist/participationupdate/pid/<?php echo $this->survey['checklistParticipant']['id']; ?>/sid/2/vid/<?php echo $this->survey['id']; ?>/tid/<?php echo $this->survey['checklistParticipant']['participant_id']; ?>"
                         class="btn btn-primary" style="min-width: 100px;">
                         <i class="icon-plus"></i>&nbsp;Approve</a>
-                    <a href="/admin/readiness-checklist-question/add/id/<?php echo $this->survey['id']; ?>"
+                    <a href="/admin/readiness-checklist/participationupdate/pid/<?php echo $this->survey['checklistParticipant']['id']; ?>/sid/3/vid/<?php echo $this->survey['id']; ?>/tid/<?php echo $this->survey['checklistParticipant']['participant_id']; ?>"
                         class="btn btn-danger" style="min-width: 100px;">
                         <i class="icon-plus"></i>&nbsp;Reject</a>
                 <?php } ?>

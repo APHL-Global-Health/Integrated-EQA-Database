@@ -112,4 +112,12 @@ class Admin_ReadinessChecklistController extends Zend_Controller_Action
         }
     }
 
+    public function participationupdateAction(){
+        $readinessChecklistService = new Application_Service_ReadinessChecklist();
+
+        $readinessChecklistService->updateChecklistParticipationStatus((int)$this->_getParam('pid'), (int)$this->_getParam('sid')); //participation and status IDs
+
+        $this->_redirect("/admin/readiness-checklist/response/id/".(int)$this->_getParam('vid')."/pid/".(int)$this->_getParam('tid'));
+    }
+
 }
