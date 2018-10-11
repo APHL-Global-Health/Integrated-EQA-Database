@@ -1,17 +1,4 @@
 <div class="">
-    <!--
-    <div class="h4 border-bottom col-md-12">
-        Panels & Samples in Lab
-        <i class="fa fa-spin {{samples.loaderProgressSpinner}}"></i>
-
-        <div class="col-md-1 pull-right"><a href="#" class=" label label-default btn-sm"
-                                            ng-click="samples.getAllSamples('tbl_bac_panel_mst')"><i
-                class="fa fa-refresh"></i>
-        </a>
-            &nbsp;
-        </div>
-
-    </div-->
     <div class="panel panel-primary">
         <div class="panel panel-heading">
             Delivered Panels
@@ -44,17 +31,13 @@
                 </div>
             </h3>
 
-
             <div>
                 <div class="text-capitalize path" ng-show="samples.showShipmentInfoStatus">
-                    <a href="#" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"
-
-                    >
+                    <a href="#" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"s>
                         Shipments : {{samples.clickedShipmentData.shipmentName }}
                         <small>
                             <i>{{samples.clickedShipmentData.datePrepared}}</i></small>
                     </a>
-                    <!--<button class="btn btn-sm btn-success pull-right col-md-1" ng-click="samples.samplesActivePage('addReceivedSamples', 1)"> << Back</button>-->
                 </div>
                 <table class="table table-striped table-condensed table-bordered" id="printableTable">
                     <thead>
@@ -62,16 +45,12 @@
                         <th>#.</th>
                         <th>Panel Name</th>
                         <th>Panel Type</th>
-                        <th>Panel Label</th>
-                        <th>Prepared on</th>
+                        <th>Date Prepared</th>
 
-                        <th>Delivered on</th>
+                        <th>Date Delivered</th>
                         <th>Status</th>
-                        <!--                                <th>Date Saved</th>-->
-                        <th>Ship't Number</th>
+                        <th>Shipment Number</th>
                         
-                        <th>Total Samps. Types</th>
-                        <th>Created on</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -92,16 +71,11 @@
                             </x>
                         </td>
                         <td>{{panel.panelType}}</td>
-                        <td>{{panel.panelLabel}}</td>
                         <td>{{panel.panelDatePrepared}}</td>
                         <td nowrap>{{panel.dateDelivered}}</td>
                         <td nowrap>{{samples.returnPanelStatus(panel.deliveryStatus)}}</td>
-                        <!--                                <td nowrap>{{sample.dateCreated}}</td>-->
                         <td nowrap>{{samples.clickedShipmentData.shipmentLabel}}</td>
                         
-
-                        <td nowrap>{{panel.totalSamplesAdded}}</td>
-                        <td nowrap>{{panel.dateCreated}}</td>
                         <td nowrap>
                             <button class="btn btn-danger btn-sm"
                                ng-disabled="panel.deliveryStatus > 3|| panel.shipmentDeliveryStatus==2"
