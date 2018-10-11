@@ -856,9 +856,6 @@ error_log($sampleType);
 
                         $updateLabResults = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $whereResponse, $update);
 
-                        if ($updateLabResults['status'] == 0) {
-//                            var_dump($updateLabResults);
-                        }
                     }
                 }
             } else {

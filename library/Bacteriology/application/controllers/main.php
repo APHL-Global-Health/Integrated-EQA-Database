@@ -179,8 +179,7 @@ Class Main extends pdfCreator
         if ($tableName == 'tbl_bac_expected_results') {
             $sql .= ' order by dateCreated desc';
         }
-//                    echo $sql;
-//        exit;
+
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {

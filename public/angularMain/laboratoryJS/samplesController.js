@@ -2308,6 +2308,7 @@
             try {
                 var url = serverSamplesURL + 'getusersamplesissued';
                 changeSavingSpinner(true);
+                console.log("LJS: " + url);
                 $http
                     .post(url, where)
                     .success(function (response) {

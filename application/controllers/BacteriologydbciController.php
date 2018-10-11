@@ -1195,7 +1195,16 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         try {
 
-            $where['userId'] = $this->dbConnection->getUserSession();
+            $userID = $this->dbConnection->getUserSession();
+
+            $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+            $participants = $db->fetchAll($db->select()->from('participant_manager_map')->where('dm_id = ?', [$userID]));
+
+            if($participants != false){
+                foreach ($participants as $participant) {
+                    $where['participantId'] = $participant['participant_id'];
+                }
+            }
 
             if (count($where) > 0) {
 
@@ -1203,6 +1212,17 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                 if ($dataDB != false) {
                     foreach ($dataDB as $key => $value) {
+
+                        $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
+                        if($round['status'] == 0) continue;
+
+                        $dataDB[$key]->startDate = $round['startDate'];
+                        $dataDB[$key]->endDate = $round['endDate'];
+                        $dataDB[$key]->roundCode = $round['roundCode'];
+                        $dataDB[$key]->roundName = $round['roundName'];
+                        $dataDB[$key]->roundStatus = $round['roundStatus'];
+
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
                         $dataDB[$key]->batchName = $sample['batchName'];
                         $dataDB[$key]->datePrepared = $sample['datePrepared'];
@@ -1220,26 +1240,19 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->dateCreated = substr($dataDB[$key]->dateCreated, 0, 10);
                         $dataDB[$key]->datePrepared = substr($dataDB[$key]->datePrepared, 0, 10);
 
-                        $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
-
-                        $dataDB[$key]->startDate = $round['startDate'];
-                        $dataDB[$key]->endDate = $round['endDate'];
-                        $dataDB[$key]->roundCode = $round['roundCode'];
-                        $dataDB[$key]->roundStatus = $round['roundStatus'];
-
-
                         $sampleInfo = $this->returnSampleInfo($dataDB[$key]->panelToSampleId);
 
                         $dataDB[$key]->daysLeft = $this->returnDaysWithoutWeekends($dataDB[$key]->endDate);
 
 
-                        $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft; //$sampleInfo['endDaysLeft'] > 10 ? 0 : $sampleInfo['endDaysLeft'];
+                        $dataDB[$key]->daysLeftOnTen = $dataDB[$key]->daysLeft;
 
                         $dataDB[$key]->allowedOnTenDays = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
                         $dataDB[$key]->allowed = $dataDB[$key]->daysLeft > 0 ? 1 : 0;
+
+                        $data['data'][$key] = $dataDB[$key];
                     }
                     $data['status'] = 1;
-                    $data['data'] = $dataDB;
 
                     echo($this->returnJson($data));
                 } else {
@@ -1297,10 +1310,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
         }
 
-
         return $days; // 4
-
-
     }
 
 
@@ -1309,14 +1319,12 @@ class BacteriologydbciController extends Zend_Controller_Action
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
         $insertData = (array)$postedData['resultsAba'];
-//print_r($insertData);exit;
+
         if (count($insertData) > 0) {
             $resp['status'] = 0;
             if (isset($postedData['edit'])) {
                 $deleteWhere['sampleId'] = $postedData['sampleId'];
                 $status = $this->dbConnection->deleteFromWhere('tbl_bac_micro_bacterial_agents', $deleteWhere);
-//                echo $this->returnJson($status);
-//                exit;
             }
             for ($i = 0; $i < sizeof($insertData); $i++) {
 
