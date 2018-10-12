@@ -1184,7 +1184,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
             if (count($where) > 0) {
 
-                $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where);
+                $dataDB = $this->dbConnection->selectFromTable('tbl_bac_samples_to_users', $where, " group by sampleId ", " order by sampleId desc");
 
                 if ($dataDB != false) {
                     foreach ($dataDB as $key => $value) {
@@ -1192,6 +1192,12 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $round = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
 
                         if($round['status'] == 0) continue;
+
+                        $shipment = $this->returnValueWhere(
+                            ['sampleId' => $value->sampleId, 'participantId' => $value->participantId], 
+                            'tbl_bac_sample_to_panel');
+
+                        if($shipment['deliveryStatus'] == 0) continue;
 
                         $dataDB[$key]->startDate = $round['startDate'];
                         $dataDB[$key]->endDate = $round['endDate'];

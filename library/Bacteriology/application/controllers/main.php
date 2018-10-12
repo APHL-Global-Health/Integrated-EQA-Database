@@ -122,7 +122,7 @@ Class Main extends pdfCreator
 
     }
 
-    public function returnWhereStatement($array, $group = "", $tableName = "")
+    public function returnWhereStatement($array, $group = "", $tableName = "", $orderBy = "")
     {
 
         $where = ' where ';
@@ -146,15 +146,19 @@ Class Main extends pdfCreator
                 $where .= " and status " . $st . ' ';
             }
 
-            if ($group) {
+            if ($group === true) {
                 if ($tableName == 'tbl_bac_panels_shipments' && $group == true) {
                     $where .= ' ';
                 } else {
                     $where .= "group by shipmentId,panelId";
                 }
+            }else{
+                $where .= $group;
             }
             if ($tableName == 'tbl_bac_ready_labs') {
                 $where .= " order by roundId desc";
+            }else{
+                $where .= $orderBy;
             }
             //$where .= ' order by id desc';
             return $where;
@@ -163,14 +167,14 @@ Class Main extends pdfCreator
         }
     }
 
-    public function selectFromTable($tableName, $where = "", $group = "")
+    public function selectFromTable($tableName, $where = "", $group = "", $orderBy = "")
     {
 
         $sql = "SELECT * FROM $tableName";
         if (isset($where)) {
 
             if (is_array($where)) {
-                $sql .= $this->returnWhereStatement($where, $group, $tableName);
+                $sql .= $this->returnWhereStatement($where, $group, $tableName, $orderBy);
             }
         }
         if ($tableName == 'tbl_bac_expected_results') {

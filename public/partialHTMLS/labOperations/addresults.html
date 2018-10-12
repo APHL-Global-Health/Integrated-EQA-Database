@@ -28,13 +28,17 @@
 <div class="col-md-12" ng-init="samples.getUserIssuedSamples('tbl_bac_panels_shipments')">
 
     <table class="table table-bordered">
-        <td>#</td>
-        <td>Round</td>
-        <td>Sample</td>
-        <td>Days To respond</td>
-        <td>Date Prepared</td>
-        <td>Date Issued</td>
-        <td>Action</td>
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>Round</td>
+                <td>Sample</td>
+                <td>Days To respond</td>
+                <td>Date Prepared</td>
+                <td>Date Issued</td>
+                <td>Action</td>
+            </tr>
+        </thead>
         <tr class="{{samples.returnRowColor(sample.responseStatus)}}"
             dir-paginate="sample in samples.samplesIssuedToUser | itemsPerPage: samples.itemsPerPage |filter : samples.searchData">
             <td>{{$index+1}}</td>
@@ -46,7 +50,7 @@
             <td>
                 <button class="btn btn-sm btn-success"
                         ng-click="samples.showAddResponse(sample);samples.susceptibilityFormData={}"
-                        ng-disabled="sample.daysLeftOnTen==10"
+                        ng-disabled="sample.daysLeftOnTen==10 || sample.daysLeftOnTen==0"
                         ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
                         data-trigger="hover" data-type="success" title="Click to to respond or give feedback"
