@@ -69,7 +69,7 @@ class Application_Service_DataManagers
 
         $sessionAlert = new Zend_Session_Namespace('alertSpace');
         if ($newPassword != false) {
-            $link = "<a href='http://ept.nphls.or.ke/auth/setpassword?rc=$resetCode' 
+            $link = "<a href='http://micro.nphls.or.ke/auth/setpassword?rc=$resetCode' 
 style='padding:5px;margin : 20px;background-color: blue;color: white;'>Reset Password</a> ";
             $common = new Application_Service_Common();
             $message = "Hi,<br/> We have reset your password. Please click the link below to set a new password <strong></strong> <br/>";

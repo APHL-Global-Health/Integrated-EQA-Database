@@ -1207,7 +1207,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                         $dataDB[$key]->materialSource = $sample['materialSource'];
                         $dataDB[$key]->sampleType = str_replace('"', '', str_replace("]", '',
-                            str_replace("[", '', $sample['sampleType'])));;
+                            str_replace("[", '', $sample['sampleType'])));
 
                         $dataDB[$key]->sampleDetails = $sample['sampleDetails'];
                         $dataDB[$key]->sampleInstructions = $sample['sampleInstructions'];
@@ -1514,7 +1514,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                 if (count($sampleToIssue) > 0) {
                     foreach ($sampleToIssue as $ky => $vl) {
 
-                        $data['userId'] = $this->dbConnection->getUserSession();;
+                        $data['userId'] = $this->dbConnection->getUserSession();
                         $data['sampleId'] = $sampleToIssue[$ky]->sampleId;
                         $data['panelToSampleId'] = $sampleToIssue[$key]->id;
                         $data['roundId'] = $sampleToIssue[$ky]->roundId;
@@ -2711,9 +2711,9 @@ error_log(json_encode($data));
                         foreach ($sampleToPanel as $ky => $val) {
                             $whereParticipantId['participant_id'] = $val->participantId;
                             $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                            $whereSampleId['id'] = $val->sampleId;;
+                            $whereSampleId['id'] = $val->sampleId;
                             $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                            $roundId['id'] = $val->roundId;;
+                            $roundId['id'] = $val->roundId;
                             $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                             $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -2748,9 +2748,9 @@ error_log(json_encode($data));
                 foreach ($sampleToPanel as $ky => $val) {
                     $whereParticipantId['participant_id'] = $val->participantId;
                     $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                    $whereSampleId['id'] = $val->sampleId;;
+                    $whereSampleId['id'] = $val->sampleId;
                     $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                    $roundId['id'] = $val->roundId;;
+                    $roundId['id'] = $val->roundId;
                     $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                     $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -2846,9 +2846,9 @@ error_log(json_encode($data));
                         foreach ($sampleToPanel as $ky => $val) {
                             $whereParticipantId['participant_id'] = $val->participantId;
                             $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                            $whereSampleId['id'] = $val->sampleId;;
+                            $whereSampleId['id'] = $val->sampleId;
                             $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                            $roundId['id'] = $val->roundId;;
+                            $roundId['id'] = $val->roundId;
                             $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                             $sampleToPanel[$ky]->sample = $sampleInfo;
@@ -2871,9 +2871,9 @@ error_log(json_encode($data));
                 foreach ($sampleToPanel as $ky => $val) {
                     $whereParticipantId['participant_id'] = $val->participantId;
                     $participantInfo = $this->returnValueWhere($whereParticipantId, 'participant');
-                    $whereSampleId['id'] = $val->sampleId;;
+                    $whereSampleId['id'] = $val->sampleId;
                     $sampleInfo = $this->returnValueWhere($whereSampleId, 'tbl_bac_samples');
-                    $roundId['id'] = $val->roundId;;
+                    $roundId['id'] = $val->roundId;
                     $roundInfo = $this->returnValueWhere($roundId, 'tbl_bac_rounds');
 
                     $sampleToPanel[$ky]->sample = $sampleInfo;

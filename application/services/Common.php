@@ -137,9 +137,8 @@ class Application_Service_Common
 
     public function sendPasswordEmailToUser($sendTo, $link, $fullname)
     {
-//        $common = new Application_Service_Common();
 
-        $link = "<a href='http://ept.nphls.or.ke/auth/setpassword?rc=$link' 
+        $link = "<a href='http://micro.nphls.or.ke/auth/setpassword?rc=$link' 
 style='padding:5px;margin : 20px;background-color: blue;color: white;'>micro.nphls.or.ke/auth/setpassword?rc=$link</a> ";
 
         $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
