@@ -36,7 +36,7 @@ Class Main extends pdfCreator
         $query['status'] = false;
         $dataArray['createdBy'] = $this->getUserSession();
         try {
-            $query = "insert into " . $tableName . " ( ";
+            $query = "insert ignore into " . $tableName . " ( ";
             $counter = 0;
             $values = ' VALUES (';
             foreach ($dataArray as $key => $value) {
@@ -90,10 +90,7 @@ Class Main extends pdfCreator
                 if (isset($dataArray) && is_array($dataArray)) {
 
                     $queryStatement = $this->createInsertStatement($tableName, $dataArray);
-                    if ($tableName == 'tbl_bac_samples') {
-//                        echo $queryStatement;
-//                        exit;
-                    }
+
                     if (is_string($queryStatement)) {
                         $queryStatus = $this->connect_db->query($queryStatement);
                         if ($queryStatus) {
@@ -207,9 +204,6 @@ Class Main extends pdfCreator
 
     public function doQuery($sql, $count = null)
     {
-//        echo$sql;
-//        exit;
-//        var_dump($this->connect_db->error);
 
         if (isset($count)) {
             return $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
@@ -222,10 +216,6 @@ Class Main extends pdfCreator
             while ($assoc = $result->fetch_assoc()) {
                 $results [count($results)] = $assoc; // Return rows
             }
-//            while ($row = $result->fetch_object()) {
-//                $user_arr[] = $row;
-//            }
-
             return $results;
         } else {
             return [];
@@ -270,7 +260,6 @@ Class Main extends pdfCreator
 
             $where .= " order by " . implode(',', $orderBy) . " desc";
 
-//             $where .= ' order by id desc';
             return $where;
         }
 
@@ -282,17 +271,14 @@ Class Main extends pdfCreator
     {
 
         $sql = "SELECT " . implode(',', $col) . " FROM $tableName";
-//        print_r($sql);
-//        exit;
+
         if (isset($where)) {
 
             if (is_array($where)) {
                 $sql .= $this->returnReportsWhereStmnt($where, $order, $group, $groupArray, $tableName);
             }
         }
-//
-//        echo $sql;
-//        exit;
+
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -321,9 +307,6 @@ Class Main extends pdfCreator
         } else {
             $sql .= " where " . $col . " = " . $where;
         }
-//        echo $sql;
-//        exit;
-
         try {
             $result = $this->connect_db->query($sql)->fetch_array(MYSQLI_NUM)[0];
             return ($result); //->num_rows;
@@ -338,7 +321,7 @@ Class Main extends pdfCreator
     public function returnParticipatinglabs($where)
     {
         $columns = array('participant.MflCode', 'mfl_facility_codes.County', 'institute_name', 'roundName', 'tbl_bac_rounds_labs.dateCreated', 'OperationStatus', 'participant.contact_name');
-//        tbl_bac_rounds_labs,mfl_facility_codes,participant
+        //        tbl_bac_rounds_labs,mfl_facility_codes,participant
 
         $selecetColumns = implode(',', $columns);
         $sql = "SELECT $selecetColumns FROM  tbl_bac_rounds_labs "
@@ -347,7 +330,7 @@ Class Main extends pdfCreator
             . " JOIN mfl_facility_codes ON mfl_facility_codes.MflCode = participant.MflCode $where";
 
         $result = $this->connect_db->query($sql);
-//echo $sql;exit;
+
         if ($result->num_rows > 0) {
             // output data of each row
 
@@ -386,7 +369,7 @@ Class Main extends pdfCreator
         $col = $where['column'];
         $status = $where['status'];
         $sql = "SELECT * FROM $tableName where $col in ($status) and roundId is not NULL and participantId=$participantId";
-//echo $sql;exit;
+
         $result = $this->connect_db->query($sql);
 
         if ($result->num_rows > 0) {
@@ -417,8 +400,7 @@ Class Main extends pdfCreator
                     }
                 }
                 if (is_string($sql)) {
-//                    echo $sql;
-//                    exit;
+
                     $result = $this->connect_db->query($sql);
 
                     if ($result) {
@@ -458,8 +440,7 @@ Class Main extends pdfCreator
                 }
                 if (is_string($sql)) {
                     if ($tableName == 'tbl_bac_response_results') {
-//                        echo $sql;
-//                    exit;
+
                     }
                     $result = $this->connect_db->query($sql);
 
@@ -482,7 +463,7 @@ Class Main extends pdfCreator
     {
         try {
             $updateInfo['lastUpdatePerson'] = $this->getUserSession();
-//            $updateInfo['updateDate'] = $this->getUserSession();
+
             $updateStatement = ' ';
             if (sizeof($updateInfo) > 0) {
                 $updateStatement .= ' set ';

@@ -13,7 +13,7 @@
         <i class="fa fa-close"></i> close
     </button>
     <div class="col-md-12">
-        <img src="images/nphl-logo-2.png"/><br>
+        <img src="/images/nphl-logo-2.png"/><br>
         <h3><u>MICROBIOLOGY FEEDBACK FORM ({{samples.currentSampleForResponse.batchName}})</u>
             <i class="fa fa-spin {{samples.savingSpinner}}"></i>
 
@@ -172,11 +172,11 @@
                             <input class="form-control col-md-12" type="text"
                                    ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                    placeholder="Please enter the grain stain results"
-                                   ng-disabled="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,1)"
+                                   ng-disabled="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,2)"
                                    ng-model="samples.userFeedbackFormData.grainStainReaction"
                                    name="grainStainReaction">
                             <div class="text-blue"
-                                 ng-show="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,1)">
+                                 ng-show="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,2)">
                                 Gram stain reaction is Not Required
                             </div>
                         </td>
@@ -260,11 +260,11 @@
                             <input class="form-control col-md-12" type="text"
                                    ng-pattern="samples.alphaNumHyDashSpaceRegExp"
                                    placeholder="Please enter Final identification "
-                                   ng-disabled="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,2)"
+                                   ng-disabled="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,1)"
                                    ng-model="samples.userFeedbackFormData.finalIdentification"
                                    name="finalIdentification">
                             <div class="text-blue"
-                                 ng-show="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,2)">
+                                 ng-show="!samples.checkSampleType(samples.currentSampleForResponse.sampleType,1)">
                                 Final identification is not required
                             </div>
                         </td>

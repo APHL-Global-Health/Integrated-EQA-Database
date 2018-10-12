@@ -170,11 +170,10 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                 <ul class="nav navbar-nav">
                     <?php if ($authNameSpace->IsVl == 3) { ?>
                         <li class="dropdown user user-menu">
-                            <!--                            --><?php //echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true)        ?>
                             <a href="#">
-                                <i class="icon icon-dashboard"></i> <span
-                                        class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
-                                <!--                            </a>-->
+                                <i class="icon icon-dashboard"></i> 
+                                <span><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
+                            </a>
                         </li>
                     <?php } else { ?>
                         <?php if (isset($authNameSpace->dm_id)) { ?>
@@ -333,11 +332,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
-                        <!--                    <li class="">-->
-                        <!--                        <a href="#">-->
-                        <!--                            <i class="icon icon-list-ul"></i> <span>Report PT Data</span>-->
-                        <!--                        </a>-->
-                        <!--                    </li>-->
                         <li class="treeview " ng-class="{'active' : clickedTab == 'ReceivedSampless'}">
                             <a href="" class="" target="_self" ng-click="clickedTab = 'ReceivedSamples'"
                                aria-haspopup="true" aria-expanded="false"><i class="fa fa-ship"></i>
@@ -349,29 +343,8 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                        ng-click="samples.samplesActivePage('add' + clickedTab, 1)"
                                        ng-click="">
                                         Receive Shipment</a></li>
-                                <!--                                        <li class=""><a
-                                                                                href="" target="_self"
-                                                                                ng-click="samples.samplesActivePage('view' + clickedTab, 1)">
-                                                                                View Received Samples</a></li>-->
                             </ul>
                         </li>
-                        <!--
-                                                        <li class="treeview " ng-class="{'active' : clickedTab == 'samplesToUsers'}">
-                                                            <a href=""  target="_self" class="" aria-haspopup="true" ng-click="clickedTab = 'samplesToUsers'"
-                                                               aria-expanded="false"><i class="icon icon-edit"></i>
-                                                                <span>Samples Issuance</span> <i
-                                                                    class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
-                                                            <ul class="treeview-menu">
-                                                                <li class="">
-                                                                    <a href="" target="_self" ng-click="samples.samplesActivePage('add' + clickedTab, 1)">
-                                                                        Issue Samples</a></li>
-                                                                <li class=""><a
-                                                                        href="" target="_self"
-                                                                        ng-click="samples.samplesActivePage('view' + clickedTab, 1)">
-                                                                        View Issued Samples</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        -->
                         <li class=" treeview " ng-class="{'active' : clickedTab == 'results'}">
                             <a href="" class="" aria-haspopup="true" aria-expanded="false" target="_self"
                                ng-click="clickedTab = 'results'"><i class="fa fa-check"></i>
@@ -461,12 +434,6 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
 
                 </ng-include>
             </div>
-            <!--            <div ng-show="reports.loaderStatus" class="text-center">-->
-            <!--                <hr>-->
-            <!--                <br>-->
-            <!--                <i class="fa fa-spin fa-spinner fa-3x"></i><br>-->
-            <!--                loading...-->
-            <!--            </div>-->
         </section>
 
     </div><!-- /.content-wrapper -->

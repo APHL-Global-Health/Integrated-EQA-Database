@@ -10,13 +10,13 @@
         <div class="col-md-8 pull-right">
             <input type="search" class="col-md-12 form-control input-sm"
                    data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                   data-trigger="hover" data-type="success" data-title="Search Inside samples" bs-tooltip
+                   data-trigger="hover" data-type="success" title="Search Inside samples"
                    ng-model="samples.searchData">
         </div>
         <div class="col-md-1 pull-right">
             <button class=" btn btn-default btn-sm"
                     data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                    data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                    data-trigger="hover" data-type="success" title="Click to load data"
                     ng-click="samples.getUserIssuedSamples('tbl_bac_panels_shipments')"><i
                     class="fa fa-refresh"></i>
             </button>
@@ -49,8 +49,8 @@
                         ng-disabled="sample.daysLeftOnTen==10"
                         ng-show="sample.responseStatus==0"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                        data-trigger="hover" data-type="success" data-title="Click to to respond or give feedback"
-                        bs-tooltip
+                        data-trigger="hover" data-type="success" title="Click to to respond or give feedback"
+                       
                 ><i
                         class="fa fa-reply"></i> Respond
                 </button>
@@ -58,7 +58,7 @@
                         ng-click="samples.showAddResponse(sample,0)"
                         ng-disabled="sample.daysLeftOnTen==0 || sample.published==1"
                         data-placement="right" data-type="info" data-container="body" data-animation="am-fade-and-scale"
-                        data-trigger="hover" data-type="success" data-title="Click to edit feedback" bs-tooltip
+                        data-trigger="hover" data-type="success" title="Click to edit feedback"
                 ><i
                         class="fa fa-edit"></i> Edit
                 </button>

@@ -147,9 +147,6 @@ class BacteriologydbciController extends Zend_Controller_Action
                    </p>"
             . "<p style='margin-left : 10px;margin-bottom : 3px;'>Copyright Reserved @ " . date('Y') . "</p></div>";
 
-
-//        $body['body'] = $html;
-//        $body['subject'] = $message['subject'];
         return $html;
     }
 
@@ -210,7 +207,7 @@ class BacteriologydbciController extends Zend_Controller_Action
             $subject = isset($send) ? 'ROUND PUBLISHED RESULTS' : $body['subject'];
             $mail->setSubject($subject);
             if ($mail->send($transport)) {
-//                echo 'Sent successfully';
+
             } else {
                 echo 'unable to send email';
             }
@@ -310,7 +307,6 @@ class BacteriologydbciController extends Zend_Controller_Action
         $whereLab = $this->returnUserLabDetails();
 
         $round = $this->dbConnection->selectFromTable('tbl_bac_rounds', $whereRound);
-//        var_dump($whereLab);
         if ($round != false) {
             foreach ($round as $key => $value) {
                 $where['labId'] = $whereLab['participant_id'];
@@ -337,7 +333,6 @@ class BacteriologydbciController extends Zend_Controller_Action
         $jsPostData = file_get_contents('php://input');
 
         $jsPostData = (array)(json_decode($jsPostData));
-//        print_r($whereLab);
         $wherePP = array();
         if (isset($jsPostData['checkLab'])) {
             if ($jsPostData['checkLab'] == 1) {
@@ -349,7 +344,6 @@ class BacteriologydbciController extends Zend_Controller_Action
 
         if ($round != false) {
             foreach ($round as $key => $value) {
-//                $where['labId'] = $whereLab['participant_id'];
                 $where['roundId'] = $value->roundId;
 
                 $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
@@ -466,8 +460,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $whereShipmentId['shipmentId'] = $dataDB[$key]->id;
                 $whereShipmentId['participantId'] = null;
                 $panels = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
-//                var_dump($dataDB);
-//                exit;
+
                 try {
                     if ($panels != false) {
 
@@ -483,12 +476,9 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                             $response = $this->dbConnection->insertData('tbl_bac_panels_shipments', $insert);
                             $insertSample = $this->savesampleforeachpanel($insert);
-//                        if (!$insertSample) {
-//                            exit;
-//                        }
+
                             if (isset($deleteNullPanel)) {
                                 $deleteNullPanel['panelId'] = null;
-                                //$status = $this->dbConnection->deleteFromWhere('tbl_bac_panels_shipments', $deleteNullPanel);
                             }
                         }
                     }
@@ -531,9 +521,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $insert['createdBy'] = $this->dbConnection->getUserSession();
                         $response = $this->dbConnection->insertData('tbl_bac_sample_to_panel', $insert);
                     }
-//                    return true;
                 }
-//                return false;
             }
         } catch (Exception $exception) {
             echo("error occured " . $exception->getMessage());
@@ -545,8 +533,7 @@ class BacteriologydbciController extends Zend_Controller_Action
         $jsPostData = file_get_contents('php://input');
 
         $jsPostData = (array)(json_decode($jsPostData));
-//        print_r($jsPostData);
-//        exit;
+
         if (is_array($jsPostData)) {
             $insertData = (array)$jsPostData['data'];
             $dataDB['data'] = $this->dbConnection->insertData($jsPostData['tableName'], $insertData);
@@ -589,8 +576,7 @@ class BacteriologydbciController extends Zend_Controller_Action
         }
         if (is_array($whereId)) {
             $dataDB = $this->dbConnection->selectFromTable($tableName, $whereId);
-//            echo($dataDB);
-//            exit;
+
             if ($dataDB != false) {
                 try {
 
@@ -620,8 +606,7 @@ class BacteriologydbciController extends Zend_Controller_Action
         try {
 
             $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
-//            print_r($where);
-//            exit;
+
             if ($dataDB != false) {
 
                 foreach ($dataDB as $key => $value) {
@@ -645,8 +630,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                         } else {
                             $dataDB[$key]->totalSamplesAdded = $this->dbConnection->selectCount('tbl_bac_sample_to_panel', $value->panelId, 'panelId');
                         }
-//                        var_dump($where);
-//                        exit;
+
                     } else if ($tableName == 'tbl_bac_sample_to_panel') {
                         $sample = $this->returnValueWhere($value->sampleId, 'tbl_bac_samples');
 
@@ -672,7 +656,6 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $dataDB[$key]->first_name = $lab['first_name'];
                         $dataDB[$key]->region = $lab['region'];
                         $dataDB[$key]->institute = $lab['institute_name'];
-//                        $dataDB[$key]->batchName = $sample['batchName'];
                     }
                 }
             }
@@ -686,12 +669,10 @@ class BacteriologydbciController extends Zend_Controller_Action
     public function getmicroagentsAction()
     {
         $postedData = $this->returnArrayFromInput();
-//print_r($postedData);
-//exit;
+
         $where['sampleId'] = $postedData['sampleId'];
         $microAgents = $this->dbConnection->selectFromTable('tbl_bac_expected_micro_bacterial_agents', $where);
-//        var_dump($where);
-//        exit;
+
         if ($microAgents != false) {
             echo $this->returnJson(array("status" => 1, 'data' => $microAgents));
         } else {
@@ -726,9 +707,9 @@ class BacteriologydbciController extends Zend_Controller_Action
                 if (!$userdetails) {
                     echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
                     exit;
-                } else {
-//                    $participantId = $userdetails['participant_id'];
                 }
+                error_log(json_encode($userdetails));
+
                 $participantId = $userdetails['participant_id'];
 
                 $dataDB = $this->dbConnection->selectFromDStatusTableSamples($tableName, $where, $participantId);
@@ -769,8 +750,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                             if ($tableName == 'tbl_bac_samples_to_users') {
 
                                 $issuedTo = $this->returnValueWhere($value->userId, 'data_manager');
-//                            var_dump($issuedTo);
-//                            exit;
+
                                 $dataDB[$key]->issuedTo = $issuedTo['last_name'] . ' ' . $issuedTo['first_name'];
                             }
                         }
@@ -906,7 +886,6 @@ class BacteriologydbciController extends Zend_Controller_Action
         } else {
             echo $this->returnJson(array('status' => 0, 'message' => 'no records found'));
         }
-//        return $sampleInstructions;
         exit;
     }
 
@@ -944,7 +923,7 @@ class BacteriologydbciController extends Zend_Controller_Action
         }
 
         $tableName = 'tbl_bac_panels_shipments';
-//        $whereParticipant['startRoundFlag'] = 1;
+
         $dataDB = $this->dbConnection->selectFromTable($tableName, $whereParticipant, true);
 
 
@@ -979,6 +958,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                     $dataDB[$key]->roundCode = $round['roundCode'];
                     $dataDB[$key]->startDate = $round['startDate'];
                     $dataDB[$key]->endDate = $round['endDate'];
+                    $dataDB[$key]->roundStatus = $round['status'];
                     $dataDB[$key]->daysLeft = $this->returnDaysWithoutWeekends($dataDB[$key]->endDate);
                     $dataDB[$key]->totalPanelsAdded = $this->dbConnection->selectCount('tbl_bac_panels_shipments', $whereS, 'panelId');
                 }
@@ -1001,10 +981,9 @@ class BacteriologydbciController extends Zend_Controller_Action
 
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
-        //
+
         $where = (array)$postedData['where'];
-//        print_r($where);
-//          exit();
+
         $tableName = 'tbl_bac_panels_shipments';
         $dataDB = $this->dbConnection->selectFromTable($tableName, $where, true);
 
@@ -1042,8 +1021,7 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         $whr['labId'] = $where['participant_id'];
         $rounds = $this->dbConnection->selectFromTable('tbl_bac_ready_labs', $whr);
-//        var_dump($rounds);
-//        exit;
+
         if ($rounds != false) {
             $i = 0;
             foreach ($rounds as $key => $value) {
@@ -1092,8 +1070,6 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $labUsers[$key]->validUser = isset($userDetails['first_name']) ? 1 : 0;
                     }
 
-//                    var_dump($labUsers);
-//                    exit;
                     echo $this->returnJson(array("status" => 1, "data" => $labUsers));
                 }
             }
@@ -1280,18 +1256,18 @@ class BacteriologydbciController extends Zend_Controller_Action
 
         $start = new DateTime("" . $start . "");
         $end = new DateTime("" . $end . "");
-// otherwise the  end date is excluded (bug?)
+        // otherwise the  end date is excluded (bug?)
         $end->modify('+1 day');
 
         $interval = $end->diff($start);
 
-// total days
+        // total days
         $days = $interval->days;
 
-// create an iterateable period of date (P1D equates to 1 day)
+        // create an iterateable period of date (P1D equates to 1 day)
         $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
-// best stored as array, so you can add more than one
+        // best stored as array, so you can add more than one
         $holidays = array();
 
 
@@ -1359,7 +1335,7 @@ class BacteriologydbciController extends Zend_Controller_Action
                         $where['participantId'] = $postedData['participantId'];
 
                         $update['published'] = 1;
-//                        $update['markedStatus'] = 0;
+                        // $update['markedStatus'] = 0;
                         //  $data = $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $where, $update);
                         //$data = $this->dbConnection->updateTable('tbl_bac_samples_to_users', $where, $update);
                     }
@@ -1377,14 +1353,12 @@ class BacteriologydbciController extends Zend_Controller_Action
         $postedData = file_get_contents('php://input');
         $postedData = (array)(json_decode($postedData));
         $insertData = (array)$postedData['resultsAba'];
-//print_r($insertData);exit;
         if (count($insertData) > 0) {
             $resp['status'] = 0;
             if (isset($postedData['edit'])) {
                 $deleteWhere['sampleId'] = $postedData['sampleId'];
                 $status = $this->dbConnection->deleteFromWhere('tbl_bac_expected_micro_bacterial_agents', $deleteWhere);
-//                echo $this->returnJson($status);
-//                exit;
+
             }
             for ($i = 0; $i < sizeof($insertData); $i++) {
 
@@ -1501,7 +1475,7 @@ class BacteriologydbciController extends Zend_Controller_Action
 
 
 
-        //$this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
+        $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
 
         /*         * ****************************************************************************************** */
 
@@ -1509,20 +1483,12 @@ class BacteriologydbciController extends Zend_Controller_Action
         $whereShipmentId['participantId'] = $where['participantId'];
 
 
-        $whereShipmentData = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments', $whereShipmentId);
-
-
+        $whereShipmentData = $this->dbConnection->selectFromTable('tbl_bac_panels_shipments',
+            ['participantId' => $where['participantId'], 'shipmentId' => $shipmentId]);
 
         if ($whereShipmentData != false) {
             $shipmentData['okStatus'] = 0;
             foreach ($whereShipmentData as $key => $value) {
-                $whereTBPM['id'] = $whereShipmentData[$key]->panelId;
-                $updateTBPM['dateDelivered'] = $shipmentData['dateReceived'];
-                $updateTBPM['panelStatus'] = $shipmentData['shipmentStatus'];
-                $updateTBPM['shipmentNumber'] = 'S-0' . $shipmentId;
-
-                $updateTBPMfeedback = $this->dbConnection->updateTable('tbl_bac_panel_mst', $whereTBPM, $updateTBPM);
-
 
                 /***********************update tbl_bac_sample_to_panel************************** */
 
@@ -1558,15 +1524,11 @@ class BacteriologydbciController extends Zend_Controller_Action
                     }
                 }
 
-
-//                print_r($whereTBPM);
-//                exit;
-                /*                 * ****************************************** */
             }
             $this->returnMicroAdmins($shipmentData, $where['participantId']);
         }
         /*         * ************************************************************************************************************** */
-//        exit;
+
         return true;
     }
 
@@ -1575,13 +1537,9 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         try {
 
-//            var_dump(count($jsPostData));
-////            exit;
-
             if (is_array($jsPostData)) {
                 $response = [];
                 try {
-                    //   $connection = new Main();
                     $data['userId'] = $jsPostData['userId'];
                     $data['sampleId'] = $jsPostData['sampleId'];
                     $data['panelToSampleId'] = $jsPostData['panelToSampleId'];
@@ -1597,7 +1555,6 @@ class BacteriologydbciController extends Zend_Controller_Action
                     $this->dbConnection->updateTable('tbl_bac_sample_to_panel', $whereUpdate, $updateData);
                 }
 
-               // echo $this->returnJson($response);
             }
 
         } catch (Exception $error) {
@@ -1668,8 +1625,6 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                     if (in_array($postedData['shipmentStatus'], array(3, 5))) {
 
-                        //
-
                         $this->updateShipmentRelatedTables($wherePosted, $postedData);
 
                         $data['status'] = 1;
@@ -1712,8 +1667,7 @@ class BacteriologydbciController extends Zend_Controller_Action
         try {
             $tableName = 'tbl_bac_panels_shipments';
             $dataDB = $this->dbConnection->selectFromTable($tableName, $where);
-            //  echo(sizeof($dataDB));
-//            exit;
+
             if ($dataDB != false) {
                 $userLabDtls = $this->returnUserLabDetails();
                 foreach ($dataDB as $key => $value) {
@@ -1746,13 +1700,10 @@ class BacteriologydbciController extends Zend_Controller_Action
     {
         $loggedIn = $this->dbConnection->getUserSession();
 
-
         try {
 
             $userLab = $this->returnValueWhere($loggedIn, 'participant_manager_map');
 
-//            var_dump($userLab);
-//            exit;
             if (sizeof($userLab) == 0) {
                 return false;
             } else {

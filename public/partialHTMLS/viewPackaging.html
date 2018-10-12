@@ -23,13 +23,13 @@
                     <input type="search" class="col-md-12 btn-sm "
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Search Panels" bs-tooltip
+                           data-trigger="hover" data-type="success" title="Search Panels"
                            ng-model="samples.searchData">
                 </div>
                 <div class="col-md-1 pull-right">
                     <button class=" btn btn-default btn-sm"
                             data-placement="right" data-container="body" data-animation="am-fade-and-scale"
-                            data-trigger="hover" data-type="success" data-title="Load data" bs-tooltip
+                            data-trigger="hover" data-type="success" title="Load data"
                             ng-click="samples.getAllSamples('tbl_bac_panel_mst', samples.where)"><i
                             class="fa fa-refresh"></i>
                     </button>
@@ -131,10 +131,6 @@
                                                     <i nowrap>{{panel.dateCreated}}</i>
                                                     <br>
 
-                                                    <!--Shipment Status :-->
-                                                    <!--<i nowrap><b>{{samples.returnPanelStatus(panel.panelStatus)}}</b>-->
-                                                    <!--</i>-->
-
                                                     <div class="text-left ">
                                                         <i class="text-gray"><i>{{panel.panelDatePrepared}}</i>
                                                         </i>
@@ -215,7 +211,6 @@
 
                         <th>Status</th>
                         <th>Samples Added</th>
-                        <!--                                <th>Date Saved</th>-->
                         <th>Ship't Number</th>
                         <th>Created on</th>
                         <th></th>
@@ -238,7 +233,7 @@
                             <a class="btn btn-info btn-sm"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Edit Panel" bs-tooltip
+                               data-trigger="hover" data-type="success" title="Edit Panel"
 
                                ng-click="samples.editFunction(panel, 'tbl_bac_panel_mst')">
                                 <i class="fa fa-edit"></i>
@@ -246,34 +241,19 @@
                             <a class="btn btn-danger btn-sm" ng-disabled="panel.panelStatus != 0"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Remove Panel" bs-tooltip
+                               data-trigger="hover" data-type="success" title="Remove Panel"
 
                                ng-click="samples.deleteCustomRow(panel.id, 'tbl_bac_panel_mst')"><i
                                     class="fa fa-remove"></i></a>
-                            <!--<a class="btn btn-success btn-sm" ng-disabled="panel.panelStatus!=0"-->
-                            <!--data-placement="right" data-type="info" data-container="body"-->
-                            <!--data-animation="am-fade-and-scale"-->
-                            <!--data-trigger="hover" data-type="success" data-title="Lock Panel" bs-tooltip-->
-                            <!--&gt;-->
-                            <!--<i class="fa fa-unlock"></i>-->
-                            <!--</a>-->
-                            <a class="btn btn-primary btn-sm" about="" ng-disabled="panel.panelStatus != 0"
+                            <a class="btn btn-primary btn-sm" about=""
                                ng-click="samples.addSamplesToPanel(panel)"
                                href="" data-backdrop="false" data-toggle="modal"
                                data-placement="left" data-type="info"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Add Samples" bs-tooltip
+                               data-trigger="hover" data-type="success" title="Add Samples"
 
                             ><i class="fa fa-plus"></i></a>
-                            <!--<a class="btn btn-primary btn-sm" href="#barcodeModal"-->
-                            <!--data-placement="right" data-type="info" data-container="body"-->
-                            <!--data-animation="am-fade-and-scale"-->
-                            <!--data-trigger="hover" data-type="success" data-title="Print Barcode" bs-tooltip-->
-                            <!--data-backdrop="false"-->
-                            <!--data-toggle="modal"-->
-                            <!--ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>-->
-                            <!--</a>-->
-
+                            <!--  ng-disabled="panel.panelStatus != 0" -->
                         </td>
                     </tr>
 
@@ -354,14 +334,14 @@
                                                   ng-show="samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
 
                                                   data-placement="right" data-type="info" data-container="body"
-                                                  data-animation="am-fade-and-scale" bs-tooltip
-                                                  data-trigger="hover" data-title="remove sample"
+                                                  data-animation="am-fade-and-scale"
+                                                  data-trigger="hover" title="remove sample"
                                             ></span>
                                             <span class="[ fa fa-minus-circle  ]"
                                                   ng-show="!samples.returnCheckedRow(sample.id, samples.samplePanelArray)"
                                                   data-placement="right" data-type="info" data-container="body"
-                                                  data-animation="am-fade-and-scale" bs-tooltip
-                                                  data-trigger="hover" data-title="add sample"
+                                                  data-animation="am-fade-and-scale"
+                                                  data-trigger="hover" title="add sample"
                                             > </span>
                                         </label>
                                     </div>
