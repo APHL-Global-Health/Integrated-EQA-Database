@@ -272,26 +272,28 @@ class BacteriologydbciController extends Zend_Controller_Action
         if ($round != false) {
             foreach ($round as $key => $value) {
 
-                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
-                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                if($roundInfo['status'] == 1){
+                    $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+                    $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
 
-                $labInfo = $this->returnValueWhere($value->labId, 'participant');
+                    $labInfo = $this->returnValueWhere($value->labId, 'participant');
 
-                $round[$key]->roundName = $roundInfo['roundName'];
-                $round[$key]->roundCode = $roundInfo['roundCode'];
-                $round[$key]->startDate = $roundInfo['startDate'];
-                $round[$key]->endDate = $roundInfo['endDate'];
-                $round[$key]->evaluated = $roundInfo['evaluated'];
-                $round[$key]->published = $roundInfo['published'];
-                $round[$key]->publishedDate = $roundInfo['publishedDate'];
+                    $round[$key]->roundName = $roundInfo['roundName'];
+                    $round[$key]->roundCode = $roundInfo['roundCode'];
+                    $round[$key]->startDate = $roundInfo['startDate'];
+                    $round[$key]->endDate = $roundInfo['endDate'];
+                    $round[$key]->evaluated = $roundInfo['evaluated'];
+                    $round[$key]->published = $roundInfo['published'];
+                    $round[$key]->publishedDate = $roundInfo['publishedDate'];
 
-                $round[$key]->participantName = $labInfo['institute_name'];
-                $round[$key]->participantCode = $labInfo['unique_identifier'];
+                    $round[$key]->participantName = $labInfo['institute_name'];
+                    $round[$key]->participantCode = $labInfo['unique_identifier'];
 
-                $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
-                $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
-                $round[$key]->publishedStatus = $roundInfo['published'] == 0 ? 'UnPublished' : 'published';
-                $round[$key]->DaysLeft = $this->converttodays($round[$key]->endDate);
+                    $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
+                    $round[$key]->evaluatedStatus = $roundInfo['evaluated'] == 0 ? 'Unevaluated' : 'Evaluated';
+                    $round[$key]->publishedStatus = $roundInfo['published'] == 0 ? 'UnPublished' : 'published';
+                    $round[$key]->DaysLeft = $this->converttodays($round[$key]->endDate);
+                }
             }
             echo $this->returnJson(array('status' => 1, 'data' => $round));
         } else {

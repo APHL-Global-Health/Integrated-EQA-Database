@@ -677,13 +677,7 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
                     update: individualResults,
                     id: individualResults.id
                 }
-                // delete data.update.id;
-                // delete data.update.batchName;
-                // delete data.update.materialSource;
-                // delete data.update.sampleDetails;
-                // delete data.update.sampleInstructions;
-                // delete data.update.labDetails;
-                // delete data.update.evaluatedStatus;
+
                 console.log(individualResults);
                 var url = serverReportURL + 'updatefunction';
                 $http
@@ -816,17 +810,17 @@ reportsModule.controller('ReportsController', function ($scope, $log, $http, Ept
         try {
             var url = serverReportURL + 'getenrolledrounds';
             $http.post(url)
-                    .success(function (response) {
-                        console.log(response);
-                        if (response.status == 1) {
-                            $scope.reports.enrolledRounds = response.data;
-                        } else {
-                            EptServices.EptServiceObject.returnNoRecordsFoundAlert();
-                        }
-                    })
-                    .error(function (error) {
+                .success(function (response) {
+                    console.log(response);
+                    if (response.status == 1) {
+                        $scope.reports.enrolledRounds = response.data;
+                    } else {
+                        EptServices.EptServiceObject.returnNoRecordsFoundAlert();
+                    }
+                })
+                .error(function (error) {
 
-                    })
+                })
         } catch (Except) {
             throw Error(Except);
         }
