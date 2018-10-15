@@ -272,9 +272,9 @@ class BacteriologydbciController extends Zend_Controller_Action
         if ($round != false) {
             foreach ($round as $key => $value) {
 
+                $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
+
                 if($roundInfo['status'] == 1){
-                    $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
-                    $roundInfo = $this->returnValueWhere($value->roundId, 'tbl_bac_rounds');
 
                     $labInfo = $this->returnValueWhere($value->labId, 'participant');
 
