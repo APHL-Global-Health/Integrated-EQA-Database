@@ -15,14 +15,14 @@
 
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Search inside results" bs-tooltip
+                               data-trigger="hover" data-type="success" title="Search inside results"
                                ng-model="samples.searchData">
                     </div>
                     <div class="col-md-1 pull-right">
                         <button class=" btn btn-default btn-sm"
                            data-placement="right" data-type="info" data-container="body"
                            data-animation="am-fade-and-scale"
-                           data-trigger="hover" data-type="success" data-title="Click to load data" bs-tooltip
+                           data-trigger="hover" data-type="success" title="Click to load data"
                            ng-click="samples.getParticipantPanel('tbl_bac_panels_shipments')"><i
                                 class="fa fa-refresh"></i>
                         </button>
@@ -61,7 +61,7 @@
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
                                data-trigger="hover" data-type="success"
-                               data-title="Click to view more about {{panel.panelName}} panel" bs-tooltip
+                               title="Click to view more about {{panel.panelName}} panel"
 
                                ng-show="panel.totalSamplesAdded >0 && panel.deliveryStatus !=2"
                                class="">{{panel.panelName}}</a>
@@ -81,8 +81,8 @@
                                ng-disabled="panel.deliveryStatus > 3|| panel.shipmentDeliveryStatus==2"
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
-                               data-trigger="hover" data-type="success" data-title="Reject {{panel.panelName}} panel"
-                               bs-tooltip
+                               data-trigger="hover" data-type="success" title="Reject {{panel.panelName}} panel"
+                              
                                ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',5)"><i
                                     class="fa fa-thumbs-down"></i>
                             </button>
@@ -91,7 +91,7 @@
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
                                data-trigger="hover" data-type="success"
-                               data-title="Successfully receive {{panel.panelName}} panel" bs-tooltip
+                               title="Successfully receive {{panel.panelName}} panel"
                                ng-click="samples.panelReceived(panel,'tbl_bac_sample_to_panel',4)"><i
                                     class="fa fa-thumbs-up"></i>
                             </button>
@@ -99,8 +99,8 @@
                                data-placement="right" data-type="info" data-container="body"
                                data-animation="am-fade-and-scale"
                                data-trigger="hover" data-type="success"
-                               data-title="Print Barcode {{panel.panelName}} panel"
-                               bs-tooltip
+                               title="Print Barcode {{panel.panelName}} panel"
+                              
                                href="#barcodeModal" data-backdrop="false" data-toggle="modal"
                                ng-click="samples.generateBarcode(panel)"><i class="fa fa-barcode"></i>
                             </button>
