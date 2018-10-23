@@ -19,7 +19,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
             ->join(array('p' => 'participant'), 'p.participant_id = d.participant_id',
                 array('email', 'institute_name'))
             ->join(array('di' => 'distributions'), 'di.distribution_id = s.distribution_id',
-                array('distribution_code', 'readinessdate'))
+                array('distribution_code'))
             ->where("d.shipment_id = ?", $data['shipment_id']));
         $emails = array();
         foreach ($labShipmentDetails as $key => $value) {
@@ -35,7 +35,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
                 "<br><a href='" . $common->baseUrl() . '/distributions' . "' style='padding:14px;width:auto;" .
                 "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>" .
                 "NHRL Proficiency Testing Programme:<br>Viral Load/EID readiness checklist</a><br>" .
-                "Please complete by " . $value['readinessdate'] . " Failure to comply will result in exclusion from the round<br>" .
+                "Please complete by THIS DATE. Failure to comply will result in exclusion from the round<br>" .
                 "<br>" .
                 "<br>" ;
 
@@ -63,7 +63,7 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
             ->join(array('p' => 'participant'), 'p.participant_id = d.participant_id',
                 array('email', 'institute_name'))
             ->join(array('di' => 'distributions'), 'di.distribution_id = s.distribution_id',
-                array('distribution_code', 'readinessdate'))
+                array('distribution_code'))
             ->where("d.shipment_id = ?", $data['shipment_id']));
         $emails = array();
         foreach ($labShipmentDetails as $key => $value) {

@@ -73,8 +73,6 @@ class Application_Service_Shipments {
          * Ordering
          */
 
-
-
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
             $sOrder = "";
@@ -159,7 +157,6 @@ class Application_Service_Shipments {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //die($sQuery);
 
         $rResult = $db->fetchAll($sQuery);
 

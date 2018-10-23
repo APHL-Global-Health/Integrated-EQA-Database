@@ -8,8 +8,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     protected $_referenceMap    = array(
         'ReadinessChecklist' => array(
-            'columns'           => array('readiness_checklist_id'),
-            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklist',
+            'columns'           => array('readiness_checklist_survey_id'),
+            'refTableClass'     => 'Application_Model_DbTable_ReadinessChecklistSurvey',
             'refColumns'        => array('id')
         )
     );
@@ -158,7 +158,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['distribution_code'] . '</a>';
             $row[] = $aRow['shipments'];
             $row[] = ucwords($aRow['status']);
-            $readiness = '<a class="btn btn-primary btn-xs" href="/admin/distributions/readiness/roundid/'.$aRow['distribution_id'].'">Readiness Checklists</a> ';
+            $readiness = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">Readiness Checklists</a> ';
 
             $edit = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-pencil"></i> Edit</span></a>';
             if (isset($aRow['status']) && $aRow['status'] == 'configured') {
@@ -181,7 +181,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
-        $aColumns = array('d.distribution_id', "DATE_FORMAT(distribution_date,'%d-%b-%Y')", 'distribution_code', 'readinessdate', 'd.status');
+        $aColumns = array('d.distribution_id', "DATE_FORMAT(distribution_date,'%d-%b-%Y')", 'distribution_code', 'd.status');
         $orderColumns = array('d.distribution_id', 'distribution_date', 'distribution_code', 'd.status');
 
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -306,7 +306,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $row = array();
             $row[] = $aRow['distribution_code'];
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
-            $row[] = ucwords($aRow['readinessdate']);
             $row[] = ucwords($aRow['status']);
             if (isset($aRow['status']) && $aRow['status'] == 'created' || $aRow['status'] == 'configured' || $aRow['status'] == 'pending') {
                 $row[] = '<a href="/readiness-checklist/add/roundId/' . $aRow['distribution_id'] . '/code/' . str_replace('/', "*", $aRow['distribution_code']) . '" class="btn btn-warning btn-xs" style="margin-right: 2px;">'
@@ -376,14 +375,12 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $data = array('distribution_code' => "",
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
-            'readiness_checklist_id' => $params['readiness_checklist_id'],
-            'readinessdate' => Pt_Commons_General::dateFormat($params['readinessDate']),
+            'readiness_checklist_survey_id' => $params['readiness_checklist_survey_id'],
             'status' => 'created',
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()'));
 
         //get participant emails
-        $date = $params['readinessDate'];
 
         $insertId = $this->insert($data);
         $updateInfo['distribution_code'] = $this->generateroundcode($insertId);
@@ -392,13 +389,15 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     }
 
-    public function sendReadinessEmailNotification($labEmail){
+    public function sendReadinessEmailNotification($labEmail, $readinessDate = null){
+
+        if(is_null($readinessDate))$readinessDate = date('YY-m-d');
 
         if (isset($labEmail)) {
 
             $subject = "New Round Readiness Checklist  " . $this->distribution_code;
             if (count($labEmail) > 0) {
-                $common->sendReadinessEmail($labEmail, $subject, $this->readinessdate);
+                $common->sendReadinessEmail($labEmail, $subject, $readinessDate);
             }
             return $insertId;
         }
@@ -424,7 +423,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array('distribution_code' => $params['distributionCode'],
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
-            'readinessdate' => Pt_Commons_General::dateFormat($params['readinessDate']),
+            'readiness_checklist_survey_id' => $params['readiness_checklist_survey_id'],
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()'));
         return $this->update($data, "distribution_id=" . base64_decode($params['distributionId']));

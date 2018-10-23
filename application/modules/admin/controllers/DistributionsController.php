@@ -54,8 +54,15 @@ class Admin_DistributionsController extends Zend_Controller_Action {
 
         $this->view->distributionDates = $distributionService->getDistributionDates();
 
-        $readinessChecklistService = new Application_Service_ReadinessChecklist();
-        $this->view->readinessChecklists = $readinessChecklistService->listReadinessChecklists([]);
+        $checklists = [];
+
+        $readinessChecklist = new Application_Model_DbTable_ReadinessChecklist();
+
+        foreach ($readinessChecklist->list() as $checklist) {
+            $checklists[] = $readinessChecklist->getReadinessChecklistDetails($checklist['id']);
+        }
+
+        $this->view->readinessChecklists = $checklists;
     }
 
     public function readinessAction(){
@@ -100,6 +107,16 @@ class Admin_DistributionsController extends Zend_Controller_Action {
 
 
     public function editAction() {
+        $checklists = [];
+
+        $readinessChecklist = new Application_Model_DbTable_ReadinessChecklist();
+
+        foreach ($readinessChecklist->list() as $checklist) {
+            $checklists[] = $readinessChecklist->getReadinessChecklistDetails($checklist['id']);
+        }
+
+        $this->view->readinessChecklists = $checklists;
+
         $distributionService = new Application_Service_Distribution();
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();

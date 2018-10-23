@@ -29,39 +29,28 @@
 
             </div>
             <div class="form-group">
-                <label class="col-lg-3 control-label">Readiness Checklist<span class="mandatory">*</span></label>
+                <label class="col-lg-3 control-label">Readiness Checklist Survey<span class="mandatory">*</span></label>
 
                 <div class="col-lg-6">
-                    <select id="readiness_checklist_id" name="readiness_checklist_id" class="isRequired form-control"
-                        title="Select the readiness checklist you'd like to send out.">
+                    <select id="readiness_checklist_survey_id" name="readiness_checklist_survey_id" class="isRequired form-control"
+                        title="Select the readiness checklist survey corresponding to this round.">
                         <?php
                             function orderItems($a, $b){
                                 return $a['title'] > $b['title'];
                             }
 
-                            usort($this->readinessChecklists, 'orderItems');
+                            usort($this->readinecssChecklists, 'orderItems');
 
                             foreach ($this->readinessChecklists as $checklist) {
-                                echo "<option value=".$checklist['id'].">".$checklist['title']."</option>";
+                                foreach ($checklist['surveys'] as $survey) {
+                                    echo "<option value=".$survey['id'].">".$checklist['title']." - (".substr($survey['start_date'],0,10)." - ".substr($survey['end_date'],0,10).")</option>";
+                                }
                             }
                         ?>
                     </select>
                 </div>
 
             </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Readiness Checklist Due Date <span class="mandatory">*</span></label>
-
-                <div class="col-lg-6">
-                    <input type="text" id="readinessDate" name="readinessDate" size="50" maxlength="45"
-                           class="isRequired form-control datepicker"
-                           title="Please enter the due date here"
-                           placeholder="Please enter the due date here"/>
-                    <span class="help-block">Readiness checklist forms to be submitted before the date selected.</span>
-                </div>
-
-            </div>
-            </table>
             <br>
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
