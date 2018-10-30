@@ -40,7 +40,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         } else {
             $this->view->selectedDistribution = "";
         }
-        
+
         $distro = new Application_Service_Distribution();
         $this->view->unshippedDistro = $distro->getUnshippedDistributions();
     }
@@ -84,7 +84,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         $sInfo['shipment_Id'] = $this->getRequest()->getParam('sid');
 
         $this->view->shipmentId = $sInfo['shipment_Id'];
-
     }
 
     public function addAction() {
@@ -160,6 +159,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
             }
         }
     }
+
     public function semailAction(){
        $shipmentService = new Application_Service_Shipments();
        
@@ -206,7 +206,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                 }
 
-// oOps !! Nothing to edit....
+        // oOps !! Nothing to edit....
                 if ($response == null || $response == "" || $response === false) {
                     $this->_redirect("/admin/shipment");
                 }
@@ -217,7 +217,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
     }
 
     public function viewEnrollmentsAction() {
-//$this->_helper->layout()->setLayout('modal');
         $participantService = new Application_Service_Participants();
         if ($this->getRequest()->isPost()) {
             $params = $this->_getAllParams();

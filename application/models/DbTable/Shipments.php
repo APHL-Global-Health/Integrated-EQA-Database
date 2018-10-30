@@ -6,6 +6,14 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
     protected $_primary = 'shipment_id';
     protected $_session = null;
 
+    protected $_referenceMap    = array(
+        'Distribution' => array(
+            'columns'           => array('distribution_id'),
+            'refTableClass'     => 'Application_Model_DbTable_Distribution',
+            'refColumns'        => array('distribution_id')
+        )
+    );
+
     public function __construct() {
         parent::__construct();
         $this->_session = new Zend_Session_Namespace('datamanagers');
@@ -45,9 +53,6 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         
         return  $rResult = $this->getAdapter()->fetchAll($sQuery);
     }
-    
-    
-    
     
     public function getShipmentRowInfo($sId) {
         $result = $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => 'shipment'))
@@ -207,7 +212,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //error_log($sQuery);
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -289,8 +294,6 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $sOrder = substr_replace($sOrder, "", -1);
         }
 
-
-
         /*
          * Filtering
          * NOTE this does not match the built-in DataTables filtering which does it
@@ -364,7 +367,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //echo($sQuery);die;
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -380,9 +383,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array(''))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
                 ->where("s.status='shipped' OR s.status='evaluated'")
-                ->where("year(s.shipment_date)  + 5 > year(CURDATE())")
-        //->where("s.lastdate_response >=  CURDATE()")
-        ;
+                ->where("year(s.shipment_date)  + 5 > year(CURDATE())");
 
         if (isset($parameters['currentType'])) {
             if ($parameters['currentType'] == 'active') {
@@ -391,6 +392,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 $sQuery = $sQuery->where("s.response_switch = 'off'");
             }
         }
+
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -554,7 +556,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //error_log($sQuery);
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -740,11 +742,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
                 ->where("s.status='shipped' OR s.status='evaluated'OR s.status='finalized'")
                 ->where("year(s.shipment_date)  + 5 > year(CURDATE())");
-        //->order('s.shipment_date')
-        //->order('spm.participant_id')
-        // error_log($this->_session->dm_id);
-//        echo $sQuery;
-//        exit;
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }
@@ -834,19 +832,6 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $row[] = $aRow['unique_identifier'];
             $row[] = $aRow['institute_name'];
             $row[] = $general->humanDateFormat($aRow['RESPONSEDATE']);
-
-
-//            if($aRow['status']!='finalized' && $aRow['RESPONSEDATE']!='' && $aRow['RESPONSEDATE']!='0000-00-00'){
-//             $delete='<a href="javascript:void(0);" onclick="removeSchemes(\'' . $aRow['scheme_type']. '\',\'' . base64_encode($aRow['map_id']) . '\')" style="text-decoration : underline;"> Delete</a>';
-//            }
-//            if($aRow['RESPONSE']=="Enter Result"){
-//				$download='<a href="/' . $aRow['scheme_type'] . '/download/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '" style="text-decoration : underline;" target="_BLANK"> Download</a>';
-//			}
-//            if($isEditable){
-//            $row[] = '<a href="/' . $aRow['scheme_type'] . '/response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '" style="text-decoration : underline;">' . $aRow['RESPONSE'] . '</a>  '.$download.$delete;
-//            }else{
-//                $row[] ='';
-//            }
 
             $buttonText = "View";
             $download = '';
@@ -989,7 +974,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //error_log($sQuery);
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -1161,7 +1146,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //error_log($sQuery);
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -1318,7 +1303,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-        //error_log($sQuery);
+
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -1750,10 +1735,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
                 ->where("s.scheme_type=?", $parameters['scheme']);
-        //->order('s.shipment_date')
-        //->order('spm.participant_id')
-        // error_log($this->_session->dm_id);
-        //echo $sQuery;die;
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }

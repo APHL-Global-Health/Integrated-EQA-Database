@@ -6,6 +6,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
     protected $_name = 'distributions';
     protected $_primary = 'distribution_id';
 
+    protected $_dependentTables = array('Application_Model_DbTable_Shipments');
+
     protected $_referenceMap    = array(
         'ReadinessChecklist' => array(
             'columns'           => array('readiness_checklist_survey_id'),
@@ -153,15 +155,21 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
             $row = array();
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
-            $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['distribution_code'] . '</a>';
-            $row[] = $aRow['shipments'];
+            $row[] = $aRow['distribution_code'];
+            $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['shipments'] . '</a>';
             $row[] = ucwords($aRow['status']);
+
             $readiness = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">View Participants</a> ';
 
             $edit = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-pencil"></i> Edit</span></a>';
-            if (isset($aRow['status']) && $aRow['status'] == 'configured') {
+
+            if ($this->getParticipantCount($aRow['distribution_id'],2) > 0 && 
+                $this->getShipmentCount($aRow['distribution_id']) > 0  && $aRow['status'] != 'shipped') {
+
                 $row[] = $edit . ' ' . '<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="shipDistribution(\'' . base64_encode($aRow['distribution_id']) . '\')"><span><i class="icon-ambulance"></i> Ship Now</span></a>';
+
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
+
                 $row[] = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '/5h8pp3t/shipped"><span><i class="icon-pencil"></i> Edit</span></a>' . ' ' . '<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
             } else {
                 $row[] = $edit . ' ' . '<a class="btn btn-primary btn-xs" href="/admin/shipment/index/did/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-plus"></i> Add Scheme</span></a>';
@@ -603,4 +611,36 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         return $this->fetchAll($this->select());
     }
 
+    public function getParticipantCount($distributionID, $status=-1)
+    {
+        $distribution = $this->find($distributionID)->current();
+        $survey = $distribution->findParentRow('Application_Model_DbTable_ReadinessChecklistSurvey');
+        $participants = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant')->toArray();
+
+        $count = 0;
+        if($status == -1){ 
+            $count = count($participants);
+        }else{
+            foreach ($participants as $participant) {
+                if($participant['status'] == $status) $count++;
+            }
+        }
+        return $count;
+    }
+
+    public function getShipmentCount($distributionID, $status=-1)
+    {
+        $distribution = $this->find($distributionID)->current();
+        $shipments = $distribution->findDependentRowset('Application_Model_DbTable_Shipments')->toArray();
+
+        $count = 0;
+        if($status == -1){ 
+            $count = count($shipments);
+        }else{
+            foreach ($shipments as $shipment) {
+                if($shipment['status'] == $status) $count++;
+            }
+        }
+        return $count;
+    }
 }

@@ -10,7 +10,6 @@ class Application_Service_Shipments {
                                 ->join(array('rr' => 'reference_result_vl'), 'reference_vl_calculation.sample_id=rr.sample_id')
                                 ->join(array('sp' => 'shipment'), 'reference_vl_calculation.shipment_id=sp.shipment_id')
 
-//                                ->where("reference_vl_calculation.shipment_id=" . $sid)
                                 ->where("reference_vl_calculation.shipment_id=rr.shipment_id")
                                 ->where("rr.shipment_id=" . $sid)
                                 ->order('reference_vl_calculation.sample_id ASC')
@@ -202,11 +201,11 @@ class Application_Service_Shipments {
 
             $row[] = $aRow['shipment_code'];
             $row[] = $aRow['SCHEME'];
-            $row[] = $aRow['distribution_code'];
+            $row[] = '<a href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '">' . $aRow['distribution_code'] . '</a>';
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = Pt_Commons_General::humanDateFormat($aRow['lastdate_response']);
             $row[] = $aRow['number_of_samples'];
-            $row[] = "<a href='/admin/readiness-checklist/participants/id/" . ($aRow['readiness_checklist_survey_id']) . "/status/2'>" . $aRow['total_participants'] . "</a>";
+            $row[] = "<a href='/admin/readiness-checklist/participants/id/" . ($aRow['readiness_checklist_survey_id']) . "'>" . $aRow['total_participants'] . "</a>";
             $row[] = $responseSwitch;
             $row[] = ucfirst($aRow['status']);
             $edit = '';
