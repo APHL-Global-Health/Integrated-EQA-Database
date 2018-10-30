@@ -102,9 +102,32 @@ class Application_Service_Distribution {
     }
 
     public function shipDistribution($distributionId) {
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $db->beginTransaction();
+
         try {
+            $shipmentParticipantsDb = new Application_Model_DbTable_ShipmentParticipantMap();
+
+            $query = $db->select()->from(array('s' => 'shipment'))
+                        ->join(array('d' => 'distributions'), 's.distribution_id = d.distribution_id')
+                        ->join(array('rcp' => 'readiness_checklist_participants'), 'd.readiness_checklist_survey_id = rcp.readiness_checklist_survey_id', array('participant_id'))
+                        ->where('d.distribution_id='.$distributionId)
+                        ->where('rcp.status=2');//APPROVED
+
+            $results = $db->fetchAll($query);
+
+            foreach ($results as $result) {
+
+                $data = array('shipment_id' => $result['shipment_id'],
+                    'participant_id' => $result['participant_id'],
+                    'evaluation_status' => '19901190',
+                    'created_by_admin' => $authNameSpace->admin_id,
+                    "created_on_admin" => new Zend_Db_Expr('now()'));
+
+                $shipmentParticipantsDb->insert($data);
+            }
+
             $shipmentDb = new Application_Model_DbTable_Shipments();
             $shipmentDb->updateShipmentStatusByDistribution($distributionId, "shipped");
 

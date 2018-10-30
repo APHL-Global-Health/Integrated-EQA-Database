@@ -5,7 +5,7 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
     protected $_name = 'readiness_checklist_surveys';
     protected $_primary = 'id';
 
-    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistResponse', 'Application_Model_DbTable_ReadinessChecklistParticipant');
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistResponse', 'Application_Model_DbTable_ReadinessChecklistParticipant', 'Application_Model_DbTable_Distribution');
 
     protected $_referenceMap    = array(
         'ReadinessChecklist' => array(

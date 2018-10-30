@@ -97,16 +97,6 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
             $this->delete('shipment_id=' . $params['shipmentId']);
             foreach ($params['participants'] as $participant) {
 
-
-                //$row = $this->fetchRow('shipment_id='.$params['shipmentId'] .' and participant_id='.$participant);
-                //if($row != null && $row != ""){
-                //    echo('shipment_id='.$params['shipmentId'] .' and participant_id='.$participant);
-                //    $data = array('shipment_id'=>$params['shipmentId'],
-                //                  'participant_id'=>$participant,
-                //                  'updated_by_admin' => $authNameSpace->admin_id,
-                //                  "updated_on_admin"=>new Zend_Db_Expr('now()'));
-                //    $this->update($data,'shipment_id='.$params['shipmentId'] .' and participant_id='.$participant);                    
-                //}else{
                 $data = array('shipment_id' => $params['shipmentId'],
                     'participant_id' => $participant,
                     'evaluation_status' => '19901190',

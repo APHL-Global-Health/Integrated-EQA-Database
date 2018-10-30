@@ -27,7 +27,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
 
-
         /*
          * Paging
          */
@@ -153,7 +152,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $shipmentResults = $shipmentDb->getPendingShipmentsByDistribution($aRow['distribution_id']);
 
             $row = array();
-            $row[] = '<a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" href="/admin/distributions/view-shipment/id/' . $aRow['distribution_id'] . '"><span><i class="icon-search"></i></span></a>';
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['distribution_code'] . '</a>';
             $row[] = $aRow['shipments'];

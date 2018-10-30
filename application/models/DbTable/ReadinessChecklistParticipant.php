@@ -60,6 +60,17 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
             $data['sanctioned_at'] = new Zend_Db_Expr('now()');
         }
 
+        if($status == 2){
+            $participant = $this->fetchRow($this->select()->where("id = ? ", $participationID));
+            $parent = $participant->findParentRow('Application_Model_DbTable_ReadinessChecklistSurvey');
+            $distributions = $parent->findDependentRowset('Application_Model_DbTable_Distribution');
+
+            foreach ($distributions as $distribution) {
+                $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                $db->update('distributions', ['status' => 'configured'], "distribution_id ='" . $distribution->distribution_id . "' ");
+            }
+        }
+
         return $this->update($data, "id = $participationID");
     }
 
