@@ -30,13 +30,17 @@ class Admin_ShipmentController extends Zend_Controller_Action {
         } else if ($this->_hasParam('searchString')) {
             $this->view->searchData = $this->_getParam('searchString');
         }
+
+        // Get Scheme lists
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
+
         if ($this->_hasParam('did')) {
             $this->view->selectedDistribution = (int) base64_decode($this->_getParam('did'));
         } else {
             $this->view->selectedDistribution = "";
         }
+        
         $distro = new Application_Service_Distribution();
         $this->view->unshippedDistro = $distro->getUnshippedDistributions();
     }

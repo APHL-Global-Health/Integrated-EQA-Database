@@ -21,7 +21,11 @@
                 </div>
                   
             <?php endif; ?>
-            <?php if(count($this->readinessChecklist['participants']) > 0) { ?>
+            <?php 
+                if(count($this->readinessChecklist['participants']) > 0) { 
+                    $surveyStatus = [0 => "NOT SENT", 1 => "SUBMITTED", 2 => "APPROVED", 3=> "REJECTED"];
+
+            ?>
 
                 <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentScheme">
                     <thead>
@@ -29,6 +33,7 @@
                             <th>#</th>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Status</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                     </thead>
@@ -41,6 +46,7 @@
                                 <td><?php echo $cnt++; ?></td>
                                 <td><?php echo $sent['unique_identifier']; ?></td>
                                 <td><?php echo $sent['institute_name']; ?></td>
+                                <td><?php echo $surveyStatus[$sent['survey_status']]; ?></td>
                                 <td style="text-align: center;">
                                     <a href="/admin/readiness-checklist/response/id/<?php echo $this->readinessChecklist['id']; ?>/pid/<?php echo $sent['participant_id']; ?>" class="btn btn-xs btn-info" style="padding: 5px 10px;"> 
                                         View Response 

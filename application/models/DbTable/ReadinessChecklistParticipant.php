@@ -45,6 +45,7 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
     }
 
     public function updateChecklistSurveyParticipationStatus($participationID, $status){
+        //0 => NOT SENT, 1 => SUBMITTED, 2 => APPROVED, 3=> REJECTED
         $adminNameSpace = new Zend_Session_Namespace('administrators');
         $managerNameSpace = new Zend_Session_Namespace('datamanagers');
 

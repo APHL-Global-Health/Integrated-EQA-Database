@@ -158,7 +158,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['distribution_code'] . '</a>';
             $row[] = $aRow['shipments'];
             $row[] = ucwords($aRow['status']);
-            $readiness = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">Readiness Checklists</a> ';
+            $readiness = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">View Participants</a> ';
 
             $edit = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-pencil"></i> Edit</span></a>';
             if (isset($aRow['status']) && $aRow['status'] == 'configured') {

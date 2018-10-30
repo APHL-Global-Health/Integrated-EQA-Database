@@ -49,7 +49,6 @@ class Application_Service_Shipments {
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        //$aColumns = array('project_name','project_code','e.employee_name','client_name','architect_name','project_value','building_type_name','DATE_FORMAT(p.project_date,"%d-%b-%Y")','DATE_FORMAT(p.deadline,"%d-%b-%Y")','refered_by','emp.employee_name');
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
         $aColumns = array("sl.scheme_name", "shipment_code", 'distribution_code', "DATE_FORMAT(distribution_date,'%d-%b-%Y')", 'number_of_samples', 's.status');
@@ -133,8 +132,9 @@ class Application_Service_Shipments {
          */
 
         $sQuery = $db->select()->from(array('s' => 'shipment'))
-                ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date'))
-                ->joinLeft(array('spm' => 'shipment_participant_map'), 's.shipment_id = spm.shipment_id', array('total_participants' => new Zend_Db_Expr('count(map_id)'), 'last_new_shipment_mailed_on', 'new_shipment_mail_count'))
+                ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date', 'readiness_checklist_survey_id'))
+                ->joinLeft(array('rcs' => 'readiness_checklist_surveys'), 'd.readiness_checklist_survey_id = rcs.id')
+                ->joinLeft(array('rcp' => 'readiness_checklist_participants'), 'rcs.id = rcp.readiness_checklist_survey_id && rcp.status = 2', array('total_participants' => new Zend_Db_Expr('count(participant_id)')))
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
                 ->group('s.shipment_id');
 
@@ -182,7 +182,6 @@ class Application_Service_Shipments {
         );
 
         foreach ($rResult as $aRow) {
-            $mailedOn = '';
             $row = array();
             if ($aRow['status'] == 'ready') {
                 $btn = "btn-success";
@@ -191,10 +190,7 @@ class Application_Service_Shipments {
             } else {
                 $btn = "btn-primary";
             }
-            if ($aRow['last_new_shipment_mailed_on'] != '') {
-                $mailedOn = explode(' ', $aRow['last_new_shipment_mailed_on']);
-                $mailedOn = Pt_Commons_General::humanDateFormat($mailedOn[0]) . ' ' . $mailedOn[1];
-            }
+
             if ($aRow['status'] != 'finalized' && $aRow['status'] != 'ready' && $aRow['status'] != 'pending') {
                 $responseSwitch = "<select onchange='responseSwitch(this.value," . $aRow['shipment_id'] . ")'>";
                 $responseSwitch .= "<option value='on'" . (isset($aRow['response_switch']) && $aRow['response_switch'] == "on" ? " selected='selected' " : "") . ">On</option>";
@@ -204,18 +200,15 @@ class Application_Service_Shipments {
                 $responseSwitch = '-';
             }
 
-            //$row[] = $aRow['shipment_code'];
             $row[] = $aRow['shipment_code'];
             $row[] = $aRow['SCHEME'];
             $row[] = $aRow['distribution_code'];
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = Pt_Commons_General::humanDateFormat($aRow['lastdate_response']);
             $row[] = $aRow['number_of_samples'];
-            $row[] = "<a href='/admin/shipment/showparticipant/sid/" . ($aRow['shipment_id']) . "'>" . $aRow['total_participants'] . "</a>";
+            $row[] = "<a href='/admin/readiness-checklist/participants/id/" . ($aRow['readiness_checklist_survey_id']) . "/status/2'>" . $aRow['total_participants'] . "</a>";
             $row[] = $responseSwitch;
             $row[] = ucfirst($aRow['status']);
-//             $row[] = $mailedOn;
-//             $row[] = $aRow['new_shipment_mail_count'];
             $edit = '';
             $enrolled = '';
             $delete = '';
@@ -228,9 +221,7 @@ class Application_Service_Shipments {
                 $edit = '&nbsp;<a class="btn btn-danger btn-xs disabled" href="javascript:void(0);"><span><i class="icon-check"></i> Finalized</span></a>';
             }
 
-            if ($aRow['status'] != 'shipped' && $aRow['status'] != 'evaluated' && $aRow['status'] != 'finalized') {
-                $enrolled = '&nbsp;<a class="btn ' . $btn . ' btn-xs" href="/admin/shipment/ship-it/sid/' . base64_encode($aRow['shipment_id']) . '"><span><i class="icon-user"></i> Enroll</span></a>';
-            } else if ($aRow['status'] == 'ready') {
+            if  ($aRow['status'] == 'ready') {
                 $enrolled = '&nbsp;<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
                 $announcementMail = '&nbsp;<a class="btn btn-warning btn-xs" href="javascript:void(0);" onclick="mailShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-bullhorn"></i> New Shipment Mail</span></a>';
             }
@@ -244,16 +235,6 @@ class Application_Service_Shipments {
             if ($aRow['status'] != 'finalized') {
                 $peermean = '&nbsp;<a class="btn btn-info btn-xs" href="/admin/shipment/addpeermean/sid/' . $aRow['shipment_id'] . '"><span><i class="icon-remove"></i> Peer Mean</span></a>';
             }
-
-//           if ($aRow['status'] != null && $aRow['status'] != "" && $aRow['status'] != 'shipped' && $aRow['status'] != 'evaluated' && $aRow['status'] != 'closed' && $aRow['status'] != 'finalized') {
-//                $row[] = '<a class="btn ' . $btn . ' btn-xs" href="/admin/shipment/ship-it/sid/' . base64_encode($aRow['shipment_id']) . '"><span><i class="icon-user"></i> Enroll</span></a>'
-//                        . $edit 
-//                        . '&nbsp;<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="removeShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-remove"></i> Delete</span></a>';
-//            } else if ($aRow['status'] != null && $aRow['status'] != "" && $aRow['status'] == 'shipped' && $aRow['status'] != 'closed') {
-//                $row[] = $edit;
-//            } else {
-//                $row[] = $edit.'<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
-//            }
 
             $row[] = $edit . $enrolled . $delete . $announcementMail . $manageEnroll . $peermean;
             $output['aaData'][] = $row;

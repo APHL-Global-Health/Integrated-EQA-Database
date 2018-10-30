@@ -175,7 +175,7 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
         $participants = [];
 
         foreach ($participantsRowset as $participant) {
-            $participants[] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray();
+            $participants[] = $participant->findParentRow('Application_Model_DbTable_Participants')->toArray()+['survey_status' => $participant->status];
         }
 
         $surveyDetails['participants'] = $participants;
