@@ -50,7 +50,7 @@ class Application_Service_Distribution {
                 
                $config = new Zend_Config_Ini($common->configFileUrl(), APPLICATION_ENV);
         $message = ""
-                . "This to notify you that your flow cytometry EQA panel (".$shipmentName.") from the NHRL proficiency testing programme is en route to your facility.".
+                . "<br>This to notify you that your EQA panel (".$shipmentName.") from the Interlab proficiency testing programme is en route to your facility.".
                 " Please expect delivery within 1-2 working days.<br>".
                 
                 
@@ -58,7 +58,7 @@ class Application_Service_Distribution {
                 "Kindly acknowledge receipt and the condition of the panel immediately it is delivered using the link below:".
                 "<br><a href='".$common->baseUrl().'/participant/current-schemes'."' style='padding:14px;width:auto;".
                        "text-decoration:none;display:block;background-color:purple;margin:8px;color:white;border-radius:10px;'>".
-                      "NHRL Proficiency Testing Programme:<br> Viral Load/EID receipt</a><br>"
+                      "Interlab Proficiency Testing Programme:<br> Viral Load/EID receipt</a><br>"
                 ."";
 
         
