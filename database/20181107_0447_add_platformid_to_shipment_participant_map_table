@@ -1,0 +1,3 @@
+alter table shipment_participant_map drop key `shipment_id_2`;
+alter table shipment_participant_map add column platform_id int unsigned not null default 1 after participant_id;
+alter table shipment_participant_map add unique (shipment_id, participant_id, platform_id);

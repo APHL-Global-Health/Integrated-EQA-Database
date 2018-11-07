@@ -19,14 +19,15 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         $this->_session = new Zend_Session_Namespace('datamanagers');
     }
 
-    public function getShipmentData($sId, $pId) {
+    public function getShipmentData($sId, $pId, $platformID = 1) {
         $data =  $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => $this->_name))
                                 ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
                                 ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
                                 ->joinLeft(array('r_vl_r' => 'response_vl_not_tested_reason'),
                                         'r_vl_r.vl_not_tested_reason_id=sp.vl_not_tested_reason', array('vlNotTestedReason' => 'vl_not_tested_reason'))
                                 ->where("s.shipment_id = ?", $sId)
-                                ->where("sp.participant_id = ?", $pId));
+                                ->where("sp.participant_id = ?", $pId)
+                                ->where("sp.platform_id = ?", $platformID));
         return $data;
     }
 
@@ -342,10 +343,13 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
          */
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
-                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')"))
+                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id"))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
+                ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id')
+                ->join(array('pf' => 'vl_platform'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
+                ->where("rcp.status=2") //APPROVED
                 ->where("s.status='shipped' OR s.status='evaluated'");
 
         if (isset($parameters['currentType'])) {
@@ -368,6 +372,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
+error_log("C1: ".$sQuery);
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -392,7 +397,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 $sQuery = $sQuery->where("s.response_switch = 'off'");
             }
         }
-
+error_log("C2: ".$sQuery);
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -416,6 +421,8 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $row[] = $general->humanDateFormat($aRow['shipment_date']);
             $row[] = ($aRow['scheme_name']);
             $row[] = $aRow['shipment_code'];
+            $row[] = $aRow['platform_id'];
+            $row[] = $aRow['platform_name'];
             $row[] = $aRow['unique_identifier'];
             $row[] = $aRow['institute_name'];
             $row[] = $general->humanDateFormat($aRow['lastdate_response']);
@@ -424,6 +431,9 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $buttonText = "View/Edit";
             $download = '';
             $delete = '';
+
+            $getParams = '/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '/pfid/' . $aRow['platform_id'];
+            
             if ($isEditable) {
                 if ($aRow['RESPONSEDATE'] != '' && $aRow['RESPONSEDATE'] != '0000-00-00') {
                     if ($this->_session->view_only_access == 'no') {
@@ -431,11 +441,11 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                     }
                 } else {
                     $buttonText = "Enter Response";
-                    $download = '<br/><a href="/' . $aRow['scheme_type'] . '/download/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '" class="btn btn-default"  style="margin:3px 0;" target="_BLANK" download > <i class="icon icon-download"></i> Download Form</a>';
+                    $download = '<br/><a href="/' . $aRow['scheme_type'] . '/download' . $getParams . '" class="btn btn-default"  style="margin:3px 0;" target="_BLANK" download > <i class="icon icon-download"></i> Download Form</a>';
                 }
             }
 
-            $row[] = '<a href="/' . $aRow['scheme_type'] . '/response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '" class="btn btn-success" style="margin:3px 0;"> <i class="icon icon-edit"></i>  ' . $buttonText . ' </a>'
+            $row[] = '<a href="/' . $aRow['scheme_type'] . '/response' . $getParams . '" class="btn btn-success" style="margin:3px 0;"> <i class="icon icon-edit"></i>  ' . $buttonText . ' </a>'
                     . $delete
                     . $download;
 

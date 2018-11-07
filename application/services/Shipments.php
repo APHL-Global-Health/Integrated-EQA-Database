@@ -620,7 +620,7 @@ class Application_Service_Shipments {
     }
 
     public function updateVlResults($params) {
-        //print_r($params);die;
+
         if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
             return false;
         }
@@ -657,7 +657,6 @@ class Application_Service_Shipments {
                 "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
                 "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
                 "attributes" => $attributes,
-                //"shipment_test_report_date" => new Zend_Db_Expr('now()'),
                 "supervisor_approval" => $params['supervisorApproval'],
                 "participant_supervisor" => $params['participantSupervisor'],
                 "user_comment" => $params['userComments'],
@@ -665,6 +664,7 @@ class Application_Service_Shipments {
                 "mode_id" => $params['modeOfReceipt'],
                 "updated_on_user" => new Zend_Db_Expr('now()')
             );
+
             if (isset($params['testReceiptDate']) && trim($params['testReceiptDate']) != '') {
                 $data['shipment_test_report_date'] = Pt_Commons_General::dateFormat($params['testReceiptDate']);
             } else {
@@ -995,6 +995,8 @@ class Application_Service_Shipments {
 
     public function shipItNow($params) {
         $db = new Application_Model_DbTable_ShipmentParticipantMap();
+        error_log("shipItNow: 999");
+        error_log(json_encode($params));
         return $db->shipItNow($params);
     }
 

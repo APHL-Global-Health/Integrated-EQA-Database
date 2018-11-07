@@ -20,7 +20,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
     }
 </style>
 <section class="content-header">
-    <h1><?php echo $this->shipment['scheme_name']; ?></h1>
+    <h1><?php echo $this->shipment['scheme_name'] . " - " . $this->platform['PlatformName']; ?></h1>
 </section>
 <section class="content">
     <div class="box">
@@ -31,6 +31,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                 <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipId; ?>" />
                 <input type="hidden" id ="participantId" name="participantId" value="<?php echo $this->participantId; ?>" />
                 <input type="hidden" id ="evId" name="evId" value="<?php echo $this->eID; ?>" />
+                <input type="hidden" id ="platformID" name="platformID" value="<?php echo $this->platformID; ?>" />
                 <input type="hidden" id ="schemeCode" name="schemeCode" value="<?php echo $this->shipment['shipment_code']; ?>" />
                 <input type="hidden" id ="participantName" name="participantName" value="<?php echo ( $this->participant['first_name'] . ' ' . $this->participant['last_name'] ); ?>" />
                 <input type="hidden" id ="participantId" name="participantId" value="<?php echo ( $this->participant['unique_identifier'] ); ?>" />
@@ -91,8 +92,6 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                             <td style="width:20%;"><label>Result Due Date</label></td>
                             <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
                         </tr>
-
-
 
                         <tr class ="light">
                             <td><label>Test Receipt Date</label></td>
@@ -236,336 +235,317 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                     <div style="width:100%;padding-left:20%;"><input type="checkbox" name="isPtTestNotPerformed" id="isPtTestNotPerformed" value="yes" <?php echo(isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'checked="checked"' : ''; ?>/>&nbsp;&nbsp;<label style="font-size:16px;">PT test not performed<label></div>
 
 
-                                <table class="table table-bordered table-striped" style="width:60%;margin:10px auto;">
-                                    <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                    <table class="table table-bordered table-striped" style="width:60%;margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr>
+                                <td colspan="3" style="font-size:1.1em;">
+                                    Please Note :
+                                    <ul style="margin:10px;">
+                                        <li>Viral Load should be entered in log<sub>10</sub> copies/ml</li>
+                                        <li>Please provide numerical results (such as: 0.00 to 7.00 log<sub>10</sub> copies/ml).</li>
+                                        <li>For negative or undetectable result (TND), please enter 0.00.</li>
+                                        <li>For result value that is &lt;LOD, please enter the value of assay LOD (such as 1.6 for &lt;40 copies/mL) and provide “&lt;40 copies/mL” under comment section</li>
+                                    </ul>
+
+                                    <div class="vlResultSection" style="width:100%;padding-left:20%;"><label style="font-size:16px;">Viral Load Calculator (Convert copies/ml to Log<sub>10</sub>)<label></div>
+
+                                    <div class="vlResultSection" style="width:100%;padding-left:20%;"><input type="text" class="form-control checkNum" id="vlResultToLog" name="vlResultToLog" placeholder="Enter a result value to calculate the log value" style="width:80%;"/><span class="mandatory logValFormVl" style="font-size:16px;display:none;"></span></div>
+                                </td>
+                            </tr>
+                            <tr align="center" class="" >
+                                <th style="width:50%;">Control/Sample</th>
+                                <th>Viral Load (log<sub>10</sub> copies/ml)</th>		
+                                <th>TND(Target Not Detected)</th>		
+                            </tr>
+                        </thead>
+                        <tfoot></tfoot>
+                        <?php
+                            $count = 0;
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                $vlResult = $sample['reported_viral_load'];
+                                if ($sample['is_tnd'] == 'yes') {
+                                    $vlResult = 0.00;
+                                }
+                                $count++;
+                        ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
+                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input type="text" name="vlResult[]" id="vlResult<?php echo $count; ?>" class="<?php echo ($sample['mandatory'] == 1) ? "isRequired" : ""; ?>  form-control checkVlVal vlResultValues"  value="<?php echo $vlResult; ?>" title="Please enter the Viral Load Values for <?php echo $sample['sample_label']; ?>" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input type="hidden" name="tndReference[]" id="tndReference<?php echo $count; ?>"/>
+                                        <input type="checkbox" name="tnd[]" id="tnd<?php echo $count; ?>" class="tnd" value="<?php echo $count; ?>" <?php echo($sample['is_tnd'] == 'yes') ? 'checked="checked"' : ''; ?>/>
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                                <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                    <td colspan="3">
+                                        <label>Please pick a reason</label> <span class="mandatory">*</span> : 
+                                        <select id="vlNotTestedReason" name="vlNotTestedReason" class="form-control" title="Please select reason" style="width:60%;">
+                                            <option value="">--Select--</option>
+                                            <?php
+                                            foreach ($this->allNotTestedReason as $reason) {
+                                                ?>
+                                                <option value="<?php echo $reason['vl_not_tested_reason_id']; ?>" <?php echo($this->shipment['vl_not_tested_reason'] == $reason['vl_not_tested_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reason['vl_not_tested_reason']); ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                    <td colspan="3"><label>Your comments</label> <span class="mandatory">*</span> : <textarea id="ptNotTestedComments" name="ptNotTestedComments" class="form-control" title="Please enter comments"><?php echo $this->shipment['pt_test_not_performed_comments']; ?></textarea></td>
+                                </tr>
+                                <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                    <td colspan="3"><label>Do you need any support from the PT Provider ?</label> <textarea id="ptSupportComments" name="ptSupportComments" class="form-control" title="Please enter message to PT provider"><?php echo $this->shipment['pt_support_comments']; ?></textarea></td>
+                                </tr>
+                            </table>
+                            <hr>
+                                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                                         <tr>
-                                            <td colspan="3" style="font-size:1.1em;">
-                                                Please Note :
-                                                <ul style="margin:10px;">
-                                                    <li>Viral Load should be entered in log<sub>10</sub> copies/ml</li>
-                                                    <li>Please provide numerical results (such as: 0.00 to 7.00 log<sub>10</sub> copies/ml).</li>
-                                                    <li>For negative or undetectable result (TND), please enter 0.00.</li>
-                                                    <li>For result value that is &lt;LOD, please enter the value of assay LOD (such as 1.6 for &lt;40 copies/mL) and provide “&lt;40 copies/mL” under comment section</li>
-                                                </ul>
+                                            <th style="width:20%;">Upload File</th>
+                                            <td colspan="3">
+                                                <?php
+                                                $hideUploadFileArea = false;
+                                                if (isset($this->shipment['attributes']['uploaded_file']) &&
+                                                        $this->shipment['attributes']['uploaded_file'] != "" &&
+                                                        file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $this->shipment['attributes']['uploaded_file'])
+                                                ) {
+                                                    $hideUploadFileArea = true;
+                                                    ?>
+                                                    <span id="uploadeFileLink">
+                                                        <a id="uploadeFileLink" href="/uploads/<?php echo $this->shipment['attributes']['uploaded_file'] ?>" download><?php echo basename($this->shipment['attributes']['uploaded_file']); ?></a>&nbsp;&nbsp;&nbsp;<a href="javascript:removeUploadedFile();" class="text-danger"><i class="icon icon-remove-sign"></i> Remove</a>	
+                                                    </span>
 
-                                                <div class="vlResultSection" style="width:100%;padding-left:20%;"><label style="font-size:16px;">Viral Load Calculator (Convert copies/ml to Log<sub>10</sub>)<label></div>
-                                                            <div class="vlResultSection" style="width:100%;padding-left:20%;"><input type="text" class="form-control checkNum" id="vlResultToLog" name="vlResultToLog" placeholder="Enter a result value to calculate the log value" style="width:80%;"/><span class="mandatory logValFormVl" style="font-size:16px;display:none;"></span></div>
-                                                            </td>
-                                                            </tr>
-                                                            <tr align="center" class="" >
-                                                                <th style="width:50%;">Control/Sample</th>
-                                                                <th>Viral Load (log<sub>10</sub> copies/ml)</th>		
-                                                                <th>TND(Target Not Detected)</th>		
-                                                            </tr>
-                                                            </thead>
-                                                            <tfoot>
+                                                <?php
+                                                }
+                                                ?>
+                                                <div id="uploadFileArea" <?php echo (isset($hideUploadFileArea) && $hideUploadFileArea) ? "style='display:none;'" : ''; ?>>
+                                                    <input type="file" name="uploadedFile" />
+                                                    <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                                            </tfoot>
-                                                            <?php
-                                                            $count = 0;
-                                                            foreach ($this->allSamples as $sample) {
-                                                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
-                                                                    $sample['mandatory'] = 0;
-                                                                }
-                                                                $vlResult = $sample['reported_viral_load'];
-                                                                if ($sample['is_tnd'] == 'yes') {
-                                                                    $vlResult = 0.00;
-                                                                }
-                                                                $count++;
-                                                                ?>
+                                        <tr>
+                                            <th>Comments </th>
+                                            <td colspan="3">
+                                                <textarea name="userComments" id="userComments" class=" form-control" size="120" maxlength="40"><?php echo $this->shipment['user_comment']; ?></textarea>
 
-                                                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                                                                    <td style="text-align:center;">
-                                                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
-                                                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
-                                                                    </td>
-                                                                    <td style="text-align:center;">
-                                                                        <input type="text" name="vlResult[]" id="vlResult<?php echo $count; ?>" class="<?php echo ($sample['mandatory'] == 1) ? "isRequired" : ""; ?>  form-control checkVlVal vlResultValues"  value="<?php echo $vlResult; ?>" title="Please enter the Viral Load Values for <?php echo $sample['sample_label']; ?>" />
-                                                                    </td>
-                                                                    <td style="text-align:center;">
-                                                                        <input type="hidden" name="tndReference[]" id="tndReference<?php echo $count; ?>"/>
-                                                                        <input type="checkbox" name="tnd[]" id="tnd<?php echo $count; ?>" class="tnd" value="<?php echo $count; ?>" <?php echo($sample['is_tnd'] == 'yes') ? 'checked="checked"' : ''; ?>/>
-                                                                    </td>
-                                                                </tr>
+                                            </td>
+                                        </tr>
 
+                                    </table>
 
-                                                            <?php } ?>
-                                                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
-                                                                <td colspan="3">
-                                                                    <label>Please pick a reason</label> <span class="mandatory">*</span> : 
-                                                                    <select id="vlNotTestedReason" name="vlNotTestedReason" class="form-control" title="Please select reason" style="width:60%;">
-                                                                        <option value="">--Select--</option>
-                                                                        <?php
-                                                                        foreach ($this->allNotTestedReason as $reason) {
-                                                                            ?>
-                                                                            <option value="<?php echo $reason['vl_not_tested_reason_id']; ?>" <?php echo($this->shipment['vl_not_tested_reason'] == $reason['vl_not_tested_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reason['vl_not_tested_reason']); ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
-                                                                <td colspan="3"><label>Your comments</label> <span class="mandatory">*</span> : <textarea id="ptNotTestedComments" name="ptNotTestedComments" class="form-control" title="Please enter comments"><?php echo $this->shipment['pt_test_not_performed_comments']; ?></textarea></td>
-                                                            </tr>
-                                                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
-                                                                <td colspan="3"><label>Do you need any support from the PT Provider ?</label> <textarea id="ptSupportComments" name="ptSupportComments" class="form-control" title="Please enter message to PT provider"><?php echo $this->shipment['pt_support_comments']; ?></textarea></td>
-                                                            </tr>
-                                                            </table>
-                                                            <hr>
-                                                            <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
-                                                                <tr>
-                                                                    <th style="width:20%;">Upload File</th>
-                                                                    <td colspan="3">
-                                                                        <?php
-                                                                        $hideUploadFileArea = false;
-                                                                        if (isset($this->shipment['attributes']['uploaded_file']) &&
-                                                                                $this->shipment['attributes']['uploaded_file'] != "" &&
-                                                                                file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $this->shipment['attributes']['uploaded_file'])
-                                                                        ) {
-                                                                            $hideUploadFileArea = true;
-                                                                            ?>
-                                                                            <span id="uploadeFileLink">
-                                                                                <a id="uploadeFileLink" href="/uploads/<?php echo $this->shipment['attributes']['uploaded_file'] ?>" download><?php echo basename($this->shipment['attributes']['uploaded_file']); ?></a>&nbsp;&nbsp;&nbsp;<a href="javascript:removeUploadedFile();" class="text-danger"><i class="icon icon-remove-sign"></i> Remove</a>	
-                                                                            </span>
+                                    <?php if ($this->isEditable) { ?>
+                                        <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+                                            <p>
 
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                        <div id="uploadFileArea" <?php echo (isset($hideUploadFileArea) && $hideUploadFileArea) ? "style='display:none;'" : ''; ?>>
-                                                                            <input type="file" name="uploadedFile" />
-                                                                            <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                <input name="submitbtn" class="btn btn-primary" type="submit" onclick="validateNow();
+                                                            return false;" tabindex="7" value="Submit"  /> 
+                                                &nbsp;&nbsp;&nbsp;
+                                                <input name="cancel" class="btn btn-danger" type="button" id="reset" tabindex="8" value="Cancel" onclick="javascript:goto_dashboard()" /> 
 
-                                                                <tr>
+                                            </p>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <?php
+                                $genderHelper = $this->getHelper('DateFormat');
+                                $dtFormat = $genderHelper->getDateFormat();
+                                
+                                if (!$this->isEditable) {
+                                ?>
+                                    <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+                                        <a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:goto_dashboard()" >Back</a>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+    <script>
 
-                                                                    <th>Comments </th>
-                                                                    <td colspan="3">
-                                                                        <textarea name="userComments" id="userComments" class=" form-control" size="120" maxlength="40"><?php echo $this->shipment['user_comment']; ?></textarea>
+        function goto_dashboard() {
+            window.history.back();
+        }
 
-                                                                    </td>
-                                                                </tr>
+        function removeUploadedFile() {
+            if (window.confirm("Do you really want to remove this file?")) {
+                $("#uploadeFileLink").hide();
+                $("#uploadFileArea").show();
+            }
+        }
 
-                                                            </table>
-                                                            <?php if ($this->isEditable) { ?>
-                                                                <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
-                                                                    <p>
+        function showHideOtherAssay(assayVal) {
+            if (assayVal == 6) {
+                $(".hideOtherAssay").show();
+                $("#otherAssay").addClass("isRequired");
+                //$("#otherAssay").val("");
+            } else {
+                $("#otherAssay").val("")
+                $(".hideOtherAssay").hide();
+                $("#otherAssay").removeClass("isRequired");
+            }
+        }
 
-                                                                        <input name="submitbtn" class="btn btn-primary" type="submit" onclick="validateNow();
-                                                                                    return false;" tabindex="7" value="Submit"  /> 
-                                                                        &nbsp;&nbsp;&nbsp;
-                                                                        <input name="cancel" class="btn btn-danger" type="button" id="reset" tabindex="8" value="Cancel" onclick="javascript:goto_dashboard()" /> 
+        $(function () {
+            <?php if (isset($this->shipment['attributes']['vl_assay']) && $this->shipment['attributes']['vl_assay'] != "") { ?>
+                showHideOtherAssay("<?php echo $this->shipment['attributes']['vl_assay']; ?>");
+            <?php } ?>
+            $(".datepicker,.expDatepicker").datepicker({dateFormat: '<?php echo $dtFormat; ?>'});
+            <?php if (!$this->isEditable) { ?>
+                $("#vlResponseForm").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
+            <?php } ?>
+        });
 
-                                                                    </p>
-                                                                </div>
-                                                            <?php } ?>
-                                                            </div>
-                                                            <?php
-                                                            $genderHelper = $this->getHelper('DateFormat');
-                                                            $dtFormat = $genderHelper->getDateFormat();
-                                                            ?>
+        function validateNow() {
 
+            flag = deforayValidator.init({
+                formId: 'vlResponseForm'
+            });
+            $(".vlResultValues").each(function () {
+                if (parseFloat($(this).val()) < 0 || parseFloat($(this).val()) > 7) {
+                    alert("VL Result has to be between 1 and 7");
+                    flag = false;
+                    return false;
+                }
+            });
+            if (flag) {
+                if (moment($("#receipt_date").val()).isAfter($("#test_date").val())) {
+                    alert('Testing Date has to come after the Shipment Receipt Date');
+                    return false;
+                }
 
+                $.blockUI();
+                document.getElementById('vlResponseForm').submit();
+            }
+        }
 
-                                                            <?php if (!$this->isEditable) {
-                                                                ?>
-                                                                <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
-                                                                    <a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:goto_dashboard()" >Back</a>
-                                                                </div>
-                                                                <?php
-                                                            }
-                                                            ?>
+        $('#supervisorApproval').change(function () {
+            if ($('#supervisorApproval').val() == 'yes')
+            {
+                $('#labSupervisor').show();
+                $('#participantSupervisor').val('');
+                $('#participantSupervisor').show();
+            }
+            else {
+                $('#labSupervisor').hide();
+                $('#participantSupervisor').val('');
+                $('#participantSupervisor').hide();
+            }
+        });
 
+        function clearDate(id) {
+            $("#" + id).val('');
+        }
 
-                                                            </div>
-                                                            </form>
+        function checkQcStatus() {
+            var radioValue = $("input[name='qcDone']:checked").val();
+            if (radioValue == "yes") {
+                $("#qcSection").show();
+                $("#qcDate").addClass("isRequired");
+                $("#qcDoneBy").addClass("isRequired");
+            } else {
+                $("#qcSection").hide();
+                $("#qcDate").val("");
+                $("#qcDoneBy").val("");
+                $("#qcDate").removeClass("isRequired");
+                $("#qcDoneBy").removeClass("isRequired");
+            }
+        }
 
+        //TND---0.00 prepopulate
+        $('.tnd').change(function () {
+            var selfVal = this.value;
+            if ($(this).is(':checked')) {
+                $('#vlResult' + selfVal).val('0.00');
+                $('#tndReference' + selfVal).val('yes');
+            } else {
+                $('#vlResult' + selfVal).val('');
+                $('#tndReference' + selfVal).val('');
+            }
+        });
 
+        //PT not performed case
+        $('#isPtTestNotPerformed').change(function () {
+            if ($(this).is(':checked')) {
+                $('.vlResultSection').hide();
+                $('.vlResultValues').val('');
+                $('.tnd').attr('checked', false);
+                $('.ptNotPerformedSection').show();
+                $('.vlResultMandatory').css('visibility', 'hidden');
+                $('.vlResultValues').removeClass('isRequired');
+                $('#vlNotTestedReason').addClass('isRequired');
+                $('#ptNotTestedComments').addClass('isRequired');
+            } else {
+                $('.vlResultSection').show();
+                $('.ptNotPerformedSection').hide();
+                $('.vlResultMandatory').css('visibility', 'visible');
+                $('.vlResultValues').addClass('isRequired');
+                $('#vlNotTestedReason').removeClass('isRequired');
+                $('#ptNotTestedComments').removeClass('isRequired');
+            }
+        });
 
+        jQuery(".checkNum").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                            (e.keyCode == 65 && e.ctrlKey === true) ||
+                            // Allow: home, end, left, right
+                                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
 
-                                                            </div>
-                                                            </section>
-                                                            <script>
+        jQuery(".checkVlVal").keypress(function (event) {
+            var $this = $(this);
+            if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+                    ((event.which < 48 || event.which > 57) &&
+                            (event.which != 0 && event.which != 8))) {
+                event.preventDefault();
+            }
 
-                                                                function goto_dashboard() {
-                                                                    window.history.back();
-                                                                }
+            var text = $(this).val();
+            if ((event.which == 46) && (text.indexOf('.') == -1)) {
+                setTimeout(function () {
+                    if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+                        $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+                    }
+                }, 1);
+            }
 
-                                                                function removeUploadedFile() {
-                                                                    if (window.confirm("Do you really want to remove this file?")) {
-                                                                        $("#uploadeFileLink").hide();
-                                                                        $("#uploadFileArea").show();
-                                                                    }
+            if ((text.indexOf('.') != -1) &&
+                    (text.substring(text.indexOf('.')).length > 2) &&
+                    (event.which != 0 && event.which != 8) &&
+                    ($(this)[0].selectionStart >= text.length - 2)) {
+                event.preventDefault();
+            }
+        });
 
-                                                                }
-
-                                                                function showHideOtherAssay(assayVal) {
-                                                                    if (assayVal == 6) {
-                                                                        $(".hideOtherAssay").show();
-                                                                        $("#otherAssay").addClass("isRequired");
-                                                                        //$("#otherAssay").val("");
-                                                                    } else {
-                                                                        $("#otherAssay").val("")
-                                                                        $(".hideOtherAssay").hide();
-                                                                        $("#otherAssay").removeClass("isRequired");
-                                                                    }
-                                                                }
-
-                                                                $(function () {
-<?php if (isset($this->shipment['attributes']['vl_assay']) && $this->shipment['attributes']['vl_assay'] != "") { ?>
-                                                                        showHideOtherAssay("<?php echo $this->shipment['attributes']['vl_assay']; ?>");
-<?php } ?>
-                                                                    // $(".datepicker" ).datepicker({dateFormat: '<?php echo $dtFormat; ?>',maxDate: '0', minDate : new Date('<?php echo $this->shipment['shipment_date']; ?>')});
-                                                                    //$(".expDatepicker" ).datepicker({dateFormat: '<?php echo $dtFormat; ?>'});
-                                                                    $(".datepicker,.expDatepicker").datepicker({dateFormat: '<?php echo $dtFormat; ?>'});
-<?php if (!$this->isEditable) {
-    ?>
-                                                                        $("#vlResponseForm").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
-    <?php
-}
-?>
-                                                                });
-
-
-                                                                function validateNow() {
-
-                                                                    flag = deforayValidator.init({
-                                                                        formId: 'vlResponseForm'
-                                                                    });
-                                                                    $(".vlResultValues").each(function () {
-                                                                        if (parseFloat($(this).val()) < 0 || parseFloat($(this).val()) > 7) {
-                                                                            alert("VL Result has to be between 1 and 7");
-                                                                            flag = false;
-                                                                            return false;
-                                                                        }
-                                                                    });
-                                                                    if (flag) {
-                                                                        if (moment($("#receipt_date").val()).isAfter($("#test_date").val())) {
-                                                                            alert('Testing Date has to come after the Shipment Receipt Date');
-                                                                            return false;
-                                                                        }
-
-
-
-                                                                        $.blockUI();
-                                                                        document.getElementById('vlResponseForm').submit();
-                                                                    }
-                                                                }
-                                                                $('#supervisorApproval').change(function () {
-                                                                    if ($('#supervisorApproval').val() == 'yes')
-                                                                    {
-                                                                        $('#labSupervisor').show();
-                                                                        $('#participantSupervisor').val('');
-                                                                        $('#participantSupervisor').show();
-                                                                    }
-                                                                    else {
-                                                                        $('#labSupervisor').hide();
-                                                                        $('#participantSupervisor').val('');
-                                                                        $('#participantSupervisor').hide();
-                                                                    }
-                                                                });
-
-                                                                function clearDate(id) {
-                                                                    $("#" + id).val('');
-                                                                }
-
-                                                                function checkQcStatus() {
-                                                                    var radioValue = $("input[name='qcDone']:checked").val();
-                                                                    if (radioValue == "yes") {
-                                                                        $("#qcSection").show();
-                                                                        $("#qcDate").addClass("isRequired");
-                                                                        $("#qcDoneBy").addClass("isRequired");
-                                                                    } else {
-                                                                        $("#qcSection").hide();
-                                                                        $("#qcDate").val("");
-                                                                        $("#qcDoneBy").val("");
-                                                                        $("#qcDate").removeClass("isRequired");
-                                                                        $("#qcDoneBy").removeClass("isRequired");
-                                                                    }
-                                                                }
-
-                                                                //TND---0.00 prepopulate
-                                                                $('.tnd').change(function () {
-                                                                    var selfVal = this.value;
-                                                                    if ($(this).is(':checked')) {
-                                                                        $('#vlResult' + selfVal).val('0.00');
-                                                                        $('#tndReference' + selfVal).val('yes');
-                                                                    } else {
-                                                                        $('#vlResult' + selfVal).val('');
-                                                                        $('#tndReference' + selfVal).val('');
-                                                                    }
-                                                                });
-
-                                                                //PT not performed case
-                                                                $('#isPtTestNotPerformed').change(function () {
-                                                                    if ($(this).is(':checked')) {
-                                                                        $('.vlResultSection').hide();
-                                                                        $('.vlResultValues').val('');
-                                                                        $('.tnd').attr('checked', false);
-                                                                        $('.ptNotPerformedSection').show();
-                                                                        $('.vlResultMandatory').css('visibility', 'hidden');
-                                                                        $('.vlResultValues').removeClass('isRequired');
-                                                                        $('#vlNotTestedReason').addClass('isRequired');
-                                                                        $('#ptNotTestedComments').addClass('isRequired');
-                                                                    } else {
-                                                                        $('.vlResultSection').show();
-                                                                        $('.ptNotPerformedSection').hide();
-                                                                        $('.vlResultMandatory').css('visibility', 'visible');
-                                                                        $('.vlResultValues').addClass('isRequired');
-                                                                        $('#vlNotTestedReason').removeClass('isRequired');
-                                                                        $('#ptNotTestedComments').removeClass('isRequired');
-                                                                    }
-                                                                });
-
-                                                                jQuery(".checkNum").keydown(function (e) {
-                                                                    // Allow: backspace, delete, tab, escape, enter and .
-                                                                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                                                                            // Allow: Ctrl+A
-                                                                                    (e.keyCode == 65 && e.ctrlKey === true) ||
-                                                                                    // Allow: home, end, left, right
-                                                                                            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                                                                                // let it happen, don't do anything
-                                                                                return;
-                                                                            }
-                                                                            // Ensure that it is a number and stop the keypress
-                                                                            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                                                                                e.preventDefault();
-                                                                            }
-                                                                        });
-
-                                                                jQuery(".checkVlVal").keypress(function (event) {
-                                                                    var $this = $(this);
-                                                                    if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
-                                                                            ((event.which < 48 || event.which > 57) &&
-                                                                                    (event.which != 0 && event.which != 8))) {
-                                                                        event.preventDefault();
-                                                                    }
-
-                                                                    var text = $(this).val();
-                                                                    if ((event.which == 46) && (text.indexOf('.') == -1)) {
-                                                                        setTimeout(function () {
-                                                                            if ($this.val().substring($this.val().indexOf('.')).length > 3) {
-                                                                                $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
-                                                                            }
-                                                                        }, 1);
-                                                                    }
-
-                                                                    if ((text.indexOf('.') != -1) &&
-                                                                            (text.substring(text.indexOf('.')).length > 2) &&
-                                                                            (event.which != 0 && event.which != 8) &&
-                                                                            ($(this)[0].selectionStart >= text.length - 2)) {
-                                                                        event.preventDefault();
-                                                                    }
-                                                                });
-
-                                                                jQuery("#vlResultToLog").on("keypress", function (event) {
-                                                                    var vlVal = $("#vlResultToLog").val();
-                                                                    if (vlVal != "" && vlVal != 0) {
-                                                                        $(".logValFormVl").show();
-                                                                        $(".logValFormVl").html(Math.round(Math.log10(vlVal) * 100) / 100);
-                                                                    } else {
-                                                                        $(".logValFormVl").hide();
-                                                                        $(".logValFormVl").html("");
-                                                                    }
-                                                                });
-                                                            </script>
+        jQuery("#vlResultToLog").on("keypress", function (event) {
+            var vlVal = $("#vlResultToLog").val();
+            if (vlVal != "" && vlVal != 0) {
+                $(".logValFormVl").show();
+                $(".logValFormVl").html(Math.round(Math.log10(vlVal) * 100) / 100);
+            } else {
+                $(".logValFormVl").hide();
+                $(".logValFormVl").html("");
+            }
+        });
+    </script>

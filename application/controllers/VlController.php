@@ -62,30 +62,38 @@ class VlController extends Zend_Controller_Action
 				$this->_redirect("/participant/current-schemes");
 			}
     		
-    		//die;            
         }else{
             $sID= $this->getRequest()->getParam('sid');
             $pID= $this->getRequest()->getParam('pid');
             $eID =$this->getRequest()->getParam('eid');
-	    $this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
+            $platformID =$this->getRequest()->getParam('pfid');
+
+		    $this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
 			
             $participantService = new Application_Service_Participants();
+
             $this->view->participant = $participantService->getParticipantDetails($pID);
-            //Zend_Debug::dump($schemeService->getVlSamples($sID,$pID));
-            $this->view->allSamples =$schemeService->getVlSamples($sID,$pID);
+            $this->view->allSamples =$schemeService->getVlSamples($sID,$pID, $platformID);
             $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
-            $shipment = $schemeService->getShipmentData($sID,$pID);
-	    $shipment['attributes'] = json_decode($shipment['attributes'],true);
+
+            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+		    $shipment['attributes'] = json_decode($shipment['attributes'],true);
             $this->view->shipment = $shipment;
+
+            $platformService = new Application_Service_Platform();
+            $this->view->platform = $platformService->getPlatform($platformID);
+
             $this->view->shipId = $sID;
             $this->view->participantId = $pID;
             $this->view->eID = $eID;
+            $this->view->platformID = $platformID;
     
             $this->view->isEditable = $shipmentService->isShipmentEditable($sID,$pID);
 			
-	    $commonService = new Application_Service_Common();
-	    $this->view->modeOfReceipt=$commonService->getAllModeOfReceipt();
-	    $this->view->globalQcAccess=$commonService->getConfig('qc_access');
+		    $commonService = new Application_Service_Common();
+
+		    $this->view->modeOfReceipt=$commonService->getAllModeOfReceipt();
+		    $this->view->globalQcAccess=$commonService->getConfig('qc_access');
     	}
     }
 

@@ -159,7 +159,8 @@ class Application_Model_DbTable_ShipmentParticipantMap extends Zend_Db_Table_Abs
         } else {
             $params['evaluation_status'][3] = 1;
         }
-
+error_log("SPM: 162");
+error_log(json_encode($params));
         return $this->update($params, "map_id = " . $shipmentMapId);
     }
 

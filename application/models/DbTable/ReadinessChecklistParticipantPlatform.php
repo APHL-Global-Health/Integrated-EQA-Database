@@ -3,7 +3,8 @@
 
 class Application_Model_DbTable_ReadinessChecklistParticipantPlatform extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'readiness_checklist_participant_platform';
+    protected $_name = 'readiness_checklist_participant_platforms';
+    protected $_primary = array('readiness_checklist_participant_id', 'platform_id');
 
     protected $_referenceMap    = array(
         'ReadinessParticipants' => array(

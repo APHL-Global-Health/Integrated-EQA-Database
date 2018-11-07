@@ -1,0 +1,2 @@
+RENAME TABLE readiness_checklist_participant_platform TO readiness_checklist_participant_platforms;
+ALTER TABLE readiness_checklist_participant_platforms ADD COLUMN assay_id tinyint unsigned default 1;

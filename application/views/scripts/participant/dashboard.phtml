@@ -175,8 +175,6 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
             </div>
         </div>
 
-
-
         <div class="box">
             <div class="box-body">
                 <h3 class="txt text-info">All Shipments</h3>
@@ -205,17 +203,15 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
                 <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="allSchemeTable">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th class="hide" ">Year</th>
                             <th>Shipment Date</th>
                             <th>Scheme</th>
                             <th>Shipment Code</th>
-                            <th class="hide">Participant Id</th>
+                            <th class="hide"></th>
+                            <th>Platform</th>
+                            <th class="hide">Participant</th>
                             <th>Laboratory</th>
-                            <th>Response Date</th>
+                            <th>Due Date</th>
                             <th>Action</th>
-                            <th>Report</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -675,16 +671,16 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
                 "sPaginationType": "full_numbers",
                 "bRetrieve": true,
                 "aoColumns": [
-                    {"bSortable": false},
+                    {"sClass": false},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": "hide"},
+                    {"sClass": ""},
                     {"sClass": "hide"},
                     {"sClass": ""},
                     {"sClass": ""},
-                    {"sClass": ""},
                     {"sClass": "hide"},
-                    {"sClass": ""},
-                    {"sClass": ""},
                     {"sClass": "center", "bSortable": false},
-                    {"sClass": "center", "bSortable": false}
                 ],
                 "aaSorting": [[1, "desc"]],
                 "fnDrawCallback": function () {
@@ -700,7 +696,7 @@ if (isset($this->schemes) && count($this->schemes) > 0) {
                 },
                 "bProcessing": true,
                 "bServerSide": true,
-                "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'all-schemes', 'format' => 'html')); ?>",
+                "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'current-schemes', 'format' => 'html')); ?>",
                 "fnServerParams": function (aoData) {
                     aoData.push({"name": "qualityChecked", "value": $("#qualityChecked").val()});
                     if ($("#qualityChecked").val() == 'yes') {

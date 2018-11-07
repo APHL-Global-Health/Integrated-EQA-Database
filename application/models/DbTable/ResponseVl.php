@@ -8,6 +8,7 @@ class Application_Model_DbTable_ResponseVl extends Zend_Db_Table_Abstract
 
     public function updateResults($params){
         $sampleIds = $params['sampleId'];
+        error_log(json_encode($params));
         foreach($sampleIds as $key => $sampleId){
             $res = $this->fetchRow("shipment_map_id = ".$params['smid'] . " and sample_id = ".$sampleId );
             $authNameSpace = new Zend_Session_Namespace('datamanagers');
