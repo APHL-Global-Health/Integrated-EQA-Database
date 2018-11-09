@@ -53,7 +53,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll($db->select()->from('partners')->order('partner_id ASC'));
     }
-public function getCounties() {
+    public function getCounties() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
        return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
     }
@@ -348,8 +348,7 @@ public function getCounties() {
     public function addParticipants($params) {
 
         $authNameSpace = new Zend_Session_Namespace('administrators');
-//print_r($params);
-//exit;
+
         $data = array(
             'MflCode' => $params['MflCode'],
             'institute_name' => $params['instituteName'],
@@ -386,9 +385,8 @@ public function getCounties() {
         }
 
         $participantName = $params['instituteName'];
-//        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
         $data['IsVl'] = $_SESSION['loggedInDetails']["IsVl"];
-//        }
+
         if (isset($params['MflCode'])) {
             $data['MflCode'] = $params['MflCode'];
         }
@@ -422,7 +420,7 @@ public function getCounties() {
 
 
         ////////insert into data_manager if its selft registraion////////////////////
-//        $participantId = $this->insert($data);
+
         $sendTo = $params['pemail'];
         if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
             $common = new Application_Service_Common();
@@ -462,10 +460,7 @@ public function getCounties() {
             'phone' => isset($params['phone1']) ? $params['phone1'] : '',
             'email' => $params['pemail'],
             'contact_name' => $params['pfname'] . ' ' . $params['plname'],
-//            'affiliation' => $params['partAff'],
             'network_tier' => isset($params['network']) ? $params['network'] : '',
-//            'testing_volume' => $params['testingVolume'],
-//            'funding_source' => $params['fundingSource'],
             'site_type' => isset($params['siteType']) ? $params['siteType'] : '',
             'region' => $params['region'],
             'created_on' => new Zend_Db_Expr('now()'),
@@ -697,20 +692,168 @@ public function getCounties() {
         return $result;
     }
 
-    public function getAllModuleParticipants($schemeType = null) {
-        if ($schemeType != "all") {
-            $IsVl = $_SESSION['loggedInDetails']['IsVl'];
-            $result = $this->getAdapter()
-                    ->fetchAll($this->getAdapter()
-                    ->select()
-                    ->from(array('p' => $this->_name), array('p.unique_identifier', 'p.institute_name', 'p.participant_id'))
-                    ->where("p.IsVl='" . $IsVl . "'")
-                    ->group('p.participant_id'));
-        } else {
-            $result = $this->fetchAll($this->select()->where("status='active'"));
+    public function getParticipantCycleResponses($parameters) {
+        /* Array of database columns which should be read and sent back to DataTables. Use a space where
+         * you want to insert a non-database field (for example a counter or static image)
+         */
+
+        $aColumns = array('unique_identifier', 'institute_name', '', 'status');
+
+        /* Indexed column (used for fast and accurate table cardinality) */
+        $sIndexColumn = "participant_id";
+        /*
+         * Paging
+         */
+        $sLimit = "";
+        if (isset($parameters['iDisplayStart']) && $parameters['iDisplayLength'] != '-1') {
+            $sOffset = $parameters['iDisplayStart'];
+            $sLimit = $parameters['iDisplayLength'];
         }
 
-        return $result;
+        /*
+         * Ordering
+         */
+        $sOrder = "";
+        if (isset($parameters['iSortCol_0'])) {
+            $sOrder = "";
+            for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
+                if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
+                    $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . "
+                    " . ($parameters['sSortDir_' . $i]) . ", ";
+                }
+            }
+
+            $sOrder = substr_replace($sOrder, "", -2);
+        }
+
+        /*
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+         */
+        $sWhere = "";
+        if (isset($parameters['sSearch']) && $parameters['sSearch'] != "") {
+            $searchArray = explode(" ", $parameters['sSearch']);
+            $sWhereSub = "";
+            foreach ($searchArray as $search) {
+                if ($sWhereSub == "") {
+                    $sWhereSub .= "(";
+                } else {
+                    $sWhereSub .= " AND (";
+                }
+                $colSize = count($aColumns);
+
+                for ($i = 0; $i < $colSize; $i++) {
+                    if ($i < $colSize - 1) {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' OR ";
+                    } else {
+                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search) . "%' ";
+                    }
+                }
+                $sWhereSub .= ")";
+            }
+            $sWhere .= $sWhereSub;
+        }
+
+        /* Individual column filtering */
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (isset($parameters['bSearchable_' . $i]) && $parameters['bSearchable_' . $i] == "true" && $parameters['sSearch_' . $i] != '') {
+                if ($sWhere == "") {
+                    $sWhere .= $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                } else {
+                    $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($parameters['sSearch_' . $i]) . "%' ";
+                }
+            }
+        }
+
+        /*
+         * SQL queries
+         * Get data to display
+         */
+
+        $sQuery = $this->getAdapter()->select()
+                ->from(array('d' => 'distributions'))
+                ->join(array('s' => 'shipment'), 'd.distribution_id=s.distribution_id', 
+                    array('s.shipment_code', 's.scheme_type', 's.shipment_date', 'due_date' => 's.lastdate_response', 
+                        'shipment_status' => 's.status', 'shipment_id'))
+                ->join(array('spm' => 'shipment_participant_map'), 's.shipment_id=spm.shipment_id', 
+                    array('response_date' => new Zend_Db_Expr("IFNULL(spm.updated_on_user,'')"), 'participant_id', 
+                        'platform_id'))
+                ->join(array('p' => 'participant'), 'spm.participant_id=p.participant_id', array('p.institute_name'))
+                ->join(array('pf' => 'vl_platform'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
+                ->joinLeft(array('dm' => 'data_manager'), 'spm.updated_by_user=dm.dm_id', 
+                    array('respondent' => new Zend_Db_Expr("CONCAT(dm.first_name, ' ', dm.last_name)")))
+                ->where('d.status != ?', 'pending');
+
+        if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
+            $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
+        }
+
+        if (isset($sWhere) && $sWhere != "") {
+            $sQuery = $sQuery->where($sWhere);
+        }
+
+        if (isset($sOrder) && $sOrder != "") {
+            $sQuery = $sQuery->order($sOrder);
+        }
+
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery = $sQuery->limit($sLimit, $sOffset);
+        }
+
+        //error_log($sQuery);
+
+        $rResult = $this->getAdapter()->fetchAll($sQuery);
+
+        /* Data set length after filtering */
+        $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_COUNT);
+        $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $aResultFilterTotal = $this->getAdapter()->fetchAll($sQuery);
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $sQuery = $this->getAdapter()->select()->from(array("p" => $this->_name), new Zend_Db_Expr("COUNT('" . $sIndexColumn . "')"));
+
+        if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
+            $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
+        }
+        $aResultTotal = $this->getAdapter()->fetchCol($sQuery);
+        $iTotal = $aResultTotal[0];
+
+        /*
+         * Output
+         */
+        $output = array(
+            "sEcho" => 1,
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
+        );
+
+
+        foreach ($rResult as $aRow) {
+            $row = array();
+
+            $row['distribution_code'] = $aRow['distribution_code'];
+            $row['institute_name'] = $aRow['institute_name'];
+            $row['shipment_code'] = $aRow['shipment_code'];
+            $row['platform_name'] = $aRow['platform_name'];
+            $row['shipment_date'] = $aRow['shipment_date'];
+            $row['due_date'] = $aRow['due_date'];
+            $row['respondent'] = $aRow['respondent'];
+            $row['response_date'] = $aRow['response_date'];
+            if(strlen($row['response_date']) > 0){
+                $row['action'] = '<a href="#" class="btn btn-info btn-xs"> View Response</a>';
+            }else{
+                $row['action'] = '';
+            }
+
+            $output['aaData'][] = $row;
+        }
+
+        return $output;
+
     }
 
     public function getEnrolledByShipmentDetails($parameters) {

@@ -151,4 +151,12 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->participants = $participantService->getAllActiveParticipants();
     }
 
+    public function cycleResponsesAction(){
+
+            $parameters = $this->_getAllParams();
+            $participantService = new Application_Service_Participants();
+            
+            $this->view->responses = $participantService->getParticipantCycleResponses($parameters);
+    }
+
 }

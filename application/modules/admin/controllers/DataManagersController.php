@@ -62,20 +62,4 @@ class Admin_DataManagersController extends Zend_Controller_Action {
         }
     }
 
-    public function changelaboratoryAction() {
-        $userService = new Application_Service_DataManagers();
-        if ($this->getRequest()->isPost()) {
-            $params = $this->_request->getPost();
-            $userService->updateUserLaboratory($params);
-            $this->_redirect("/admin/data-managers");
-        } else {
-            if ($this->_hasParam('id')) {
-                $userId = (int) $this->_getParam('id');
-                $participant = new Application_Model_DbTable_Participants();
-
-                $this->view->rsUser = $userService->getUserInfoBySystemId($userId);
-                $this->view->participants = $participant->getAllModuleParticipants();
-            }
-        }
-    }
 }

@@ -289,8 +289,7 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                             <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'detailed'), 'default', true); ?>">Participant
-                                    Response Report</a></li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'cycle-responses'), 'default', true); ?>">Participant Response Report</a></li>
                             <li>
                                 <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'participant-performance'), 'default', true); ?>">Participant
                                     Performance Report</a></li>

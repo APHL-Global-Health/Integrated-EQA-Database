@@ -539,4 +539,10 @@ class Application_Service_Participants
         }
     }
 
+    public function getParticipantCycleResponses($parameters)
+    {
+        $participantDb = new Application_Model_DbTable_Participants();
+        return $participantDb->getParticipantCycleResponses($parameters);
+    }
+
 }
