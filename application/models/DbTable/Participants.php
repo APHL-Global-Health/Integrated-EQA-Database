@@ -844,7 +844,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row['respondent'] = $aRow['respondent'];
             $row['response_date'] = $aRow['response_date'];
             if(strlen($row['response_date']) > 0){
-                $row['action'] = '<a href="#" class="btn btn-info btn-xs"> View Response</a>';
+                $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs"> View Response</a>';
             }else{
                 $row['action'] = '';
             }
@@ -1653,6 +1653,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                                 where e.`status`='enrolled' and p.`status`='active' and p.ModuleID=1");
         return $count;
     }
+
     public function AllVlEIdDataManagers(){
         $db = Zend_Db_Table_Abstract::getAdapter();
         $count = $db->fetchAll("select DISTINCT p.primary_email as email from data_manager p");

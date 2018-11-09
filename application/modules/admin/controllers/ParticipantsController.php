@@ -159,4 +159,33 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             $this->view->responses = $participantService->getParticipantCycleResponses($parameters);
     }
 
+    public function individualResponseAction(){
+
+            $parameters = $this->_getAllParams();
+            $sID= $this->getRequest()->getParam('sid');
+            $pID= $this->getRequest()->getParam('pid');
+            $eID =$this->getRequest()->getParam('eid');
+            $platformID =$this->getRequest()->getParam('pfid');
+
+            $participantService = new Application_Service_Participants();
+            $this->view->participant = $participantService->getParticipantDetails($pID);
+
+            $schemeService = new Application_Service_Schemes();
+            $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID);
+            $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
+
+            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+            $shipment['attributes'] = json_decode($shipment['attributes'],true);
+            $this->view->shipment = $shipment;
+
+            $platformService = new Application_Service_Platform();
+            $this->view->platform = $platformService->getPlatform($platformID);
+
+            $this->view->shipId = $sID;
+            $this->view->participantId = $pID;
+            $this->view->eID = $eID;
+            $this->view->platformID = $platformID;
+    
+    }
+
 }

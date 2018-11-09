@@ -1,0 +1,176 @@
+<section class="content-header">
+    <h4><?php echo $this->shipment['scheme_name'] . " - " . $this->platform['PlatformName']; ?></h4>
+</section>
+<section class="content">
+    <div class="box">
+        <form>
+            <div class="box-body">
+                <input type="hidden" id ="smid" name="smid" value="<?php echo $this->shipment['map_id']; ?>" />
+                <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipId; ?>" />
+                <input type="hidden" id ="participantId" name="participantId" value="<?php echo $this->participantId; ?>" />
+                <input type="hidden" id ="evId" name="evId" value="<?php echo $this->eID; ?>" />
+                <input type="hidden" id ="platformID" name="platformID" value="<?php echo $this->platformID; ?>" />
+                <div id="view-content">
+                    <div id=error></div>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <tr>
+                            <td>
+                                <h4 class="text-info">  Lab Code </h4> <?php echo ( $this->participant['MflCode'] ); ?>
+                            </td>
+                            <td><h4 class="text-info">  Lab Name </h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
+                            <td><h4 class="text-info"> Phone No </h4> <?php echo ( $this->participant['phone'] ); ?></td>
+                            <td><h4 class="text-info"> Mobile No </h4> <?php echo ( $this->participant['mobile'] ); ?></td>
+                        </tr>
+                    </table>
+                    <hr>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <tr class="dark">
+                            <td style="width:20%;"><label>Shipment Date</label></td>
+                            <td style="width:30%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
+                            <td style="width:20%;"><label>Result Due Date</label></td>
+                            <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
+                        </tr>
+
+                        <tr class ="light">
+                            <td><label>Test Receipt Date</label></td>
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
+                            </td>
+                            <td><label>Sample Rehydration Date</label></td>
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment['attributes']["sample_rehydration_date"]); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Testing Date</label></td> 
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment["shipment_test_date"]); ?>
+                            </td>		
+
+                            <td><label>Specimen Volume used for testing</label></td> 
+                            <td>
+                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
+                            </td>
+                        </tr>
+
+                        <tr class ="dark">
+                            <td><label>Viral Load Assay <span class="mandatory">*</span></label></td>
+                            <td>
+                                <?php echo $this->vlAssay[$this->shipment['attributes']['vl_assay']]; ?>
+                                <?php echo (isset($this->shipment['attributes']['other_assay']) && ($this->shipment['attributes']['other_assay'] != "")) ? $this->shipment['attributes']['other_assay'] : ""; ?>
+                            </td>
+                            <td><label>Sample Volume Received</label></td>
+                            <td>
+                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
+                            </td>
+                        </tr>
+
+                        <tr class ="dark">
+                            <td><label>Kit Lot Number <span class="mandatory">*</span></label></td>
+                            <td>
+                                <?php echo $this->shipment['attributes']['assay_lot_number']; ?>
+                            </td>
+                            <td><label>Kit Expiration Date </label></td>
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment['attributes']['assay_expiration_date']); ?>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr align="center" class="" >
+                                <th style="width:50%;">Control/Sample</th>
+                                <th>Viral Load (log<sub>10</sub> copies/ml)</th>		
+                                <th>TND(Target Not Detected)</th>		
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                $vlResult = $sample['reported_viral_load'];
+                                if ($sample['is_tnd'] == 'yes') {
+                                    $vlResult = 0.00;
+                                }
+                            ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
+                                        <?php echo $sample['sample_id']; ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php echo $vlResult; ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input type="checkbox" name="tnd[]" class="tnd" <?php echo($sample['is_tnd'] == 'yes') ? 'checked="checked"' : ''; ?> readonly disabled />
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3">
+                                    <label>Please pick a reason</label> <span class="mandatory">*</span> : 
+                                    <?php echo $this->shipment['vl_not_tested_reason']; ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3"><label>Your comments</label> <span class="mandatory">*</span> : 
+                                    <?php echo $this->shipment['pt_test_not_performed_comments']; ?>
+                                </td>
+                            </tr>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3"><label>Do you need any support from the PT Provider ?</label> 
+                                    <?php echo $this->shipment['pt_support_comments']; ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    <hr>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <tr>
+                            <th style="width:20%;">Upload File</th>
+                            <td colspan="3">
+                                <?php
+                                $hideUploadFileArea = false;
+                                if (isset($this->shipment['attributes']['uploaded_file']) &&
+                                        $this->shipment['attributes']['uploaded_file'] != "" &&
+                                        file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $this->shipment['attributes']['uploaded_file'])
+                                ) {
+                                    $hideUploadFileArea = true;
+                                    ?>
+                                    <span id="uploadeFileLink">
+                                        <a id="uploadeFileLink" href="/uploads/<?php echo $this->shipment['attributes']['uploaded_file'] ?>" download><?php echo basename($this->shipment['attributes']['uploaded_file']); ?></a>	
+                                    </span>
+
+                                <?php
+                                }
+                                ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Comments </th>
+                            <td colspan="3">
+                                <?php echo $this->shipment['user_comment']; ?>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
+                    <a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:window.history.back()" >Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
