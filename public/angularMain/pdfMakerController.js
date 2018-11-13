@@ -96,7 +96,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
                 return {
                     columns: [
                         {
-                            text: 'ABNO Softwares International',
+                            text: 'National Public Health Laboratories',
                             style: ['content']
                         },
                         {
@@ -355,7 +355,7 @@ pdfModule.controller('PdfController', function ($scope, EptServices, $http, $tim
 
                     columns: [
                         {
-                            text: 'ABNO Softwares International',
+                            text: 'National Public Health Laboratories',
                             style: ['content']
                         },
                         {

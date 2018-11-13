@@ -141,7 +141,7 @@ ReportModule.controller("ReportController", function ($scope, $rootScope, $timeo
                 return {
                     columns: [
                         {
-                            text: 'ABNO Softwares International',
+                            text: 'National Public Health Laboratories',
                             style: ['content']
                         },
                         {

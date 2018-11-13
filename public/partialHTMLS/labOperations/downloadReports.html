@@ -3,10 +3,9 @@
 
         <div class=" panel panel-primary" ng-init="samples.showRoundInfo=true">
             <div class="panel panel-heading">
-                <h3><i class="fa fa-download"> </i> Download Results
+                <h3><i class="fa fa-download"> </i> PT Round Reports
                     <small>{{reports.responseInfoData.length}} records</small>
                     <i class="fa fa-spin {{reports.loader}}"></i>
-
                 </h3>
             </div>
             <div class="panel panel-body">
@@ -52,7 +51,6 @@
                                 <th>Date Created</th>
 
                                 <th>Published</th>
-                                <th>Enrolled</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -66,12 +64,10 @@
                                 <td>{{round.endDate}}</td>
                                 <td nowrap>{{round.dateCreated}}</td>
                                 <td nowrap>{{round.evaluatedStatus}}/{{round.publishedStatus}}</td>
-                                <td nowrap>Enrolled</td>
                                 <td nowrap>
-                                    <button class="btn btn-primary btn-sm" ng-disabled="round.published==0"
-                                            ng-click="reports.getRRoundResults(round)"
-                                    >
-                                        <i class="fa fa-download"></i> download
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="reports.getRRoundResults(round)" >
+                                        <i class="fa fa-download"></i> View Report
                                     </button>
                                 </td>
                             </tr>

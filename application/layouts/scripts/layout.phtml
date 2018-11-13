@@ -345,29 +345,37 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                         Receive Shipment</a></li>
                             </ul>
                         </li>
+
+                        <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
+                            <a href="" target="_self" ng-click="samples.samplesActivePage('add' + clickedTab, 1)">
+                                <i class="icon icon-list-ul"></i> <span>PT Results Entry</span>
+                            </a>
+                        </li>
+
                         <li class=" treeview " ng-class="{'active' : clickedTab == 'results'}">
                             <a href="" class="" aria-haspopup="true" aria-expanded="false" target="_self"
-                               ng-click="clickedTab = 'results'"><i class="fa fa-check"></i>
-                                <span>Results and Feedback</span> <i
+                               ng-click="clickedTab = 'results'"><i class="icon icon-check"></i>
+                                <span>View Results</span> <i
                                         class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
                             <ul class="treeview-menu">
+                                <li class="">
+                                    <a href="" target="_self" ng-click="samples.samplesActivePage('view' + clickedTab, 1)">
+                                        <i class="icon icon-list"></i> <span>Participant Responses</span>
+                                    </a>
+                                </li>
                                 <li class="<?php echo ($activeSubMenu == 'individual-reports') ? ' active ' : ''; ?>">
-                                    <a href="" target="_self"
-                                       ng-click="samples.samplesActivePage('add' + clickedTab, 1)">
-                                        Submit Feedback</a></li>
-                                <li class=""><a
-                                            href="" target="_self"
-                                            ng-click="samples.samplesActivePage('view' + clickedTab, 1)">
-                                        View Results</a></li>
+                                    <a href="" target="_self" ng-click="samples.samplesActivePage('downloadReports', 1)">
+                                        <i class="fa fa-list"></i> <span>PT Round Report</span>
+                                    </a>
+                                </li>
+                                <li class="<?php echo ($activeSubMenu == 'individual-reports') ? ' active ' : ''; ?>">
+                                    <a href="" target="_self" ng-click="samples.samplesActivePage('downloadReports', 1)" style="display: none;">
+                                        <i class="fa fa-list"></i> <span>Download</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
-
-                        <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
-                            <a href="" target="_self" ng-click="samples.samplesActivePage('downloadReports', 1)">
-                                <i class="fa fa-download"></i> <span>Download results</span>
-                            </a>
-                        </li>
 
 
                         <li class="treeview <?php echo ($activeMenu == 'my-account') ? ' active ' : ''; ?>">

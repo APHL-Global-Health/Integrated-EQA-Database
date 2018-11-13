@@ -388,12 +388,12 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                         </li>
 
                         <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'analyze') ? "class='active dropdown'" : "class='dropdown'"; ?>>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analyze & reports
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i>&nbsp;&nbsp;Analysis & Reports
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'microreports'), 'default', true); ?>">
-                                        Analysize &Reports</a>
+                                        Analysis & Reports</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo $this->url(array('module' => 'reports', 'controller' => 'graphs'), 'default', true); ?>">
@@ -413,12 +413,12 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
 
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
-                                    <i class="icon-signout"></i> Logout</a>
-                            </li>
-                            <li>
                                 <a href='/admin/system-admins/edit/id/<?php echo $_SESSION['loggedInDetails']['admin_id']; ?>'>
                                     <i class="icon-user"></i> Profile</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'log-out')); ?>">
+                                    <i class="icon-signout"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
