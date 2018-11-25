@@ -12,7 +12,7 @@
         <form>
             <div class="box-body">
                 <input type="hidden" id ="smid" name="smid" value="<?php echo $this->shipment['map_id']; ?>" />
-                <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipId; ?>" />
+                <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipmentID; ?>" />
                 <input type="hidden" id ="participantId" name="participantId" value="<?php echo $this->participantId; ?>" />
                 <input type="hidden" id ="evId" name="evId" value="<?php echo $this->eID; ?>" />
                 <input type="hidden" id ="platformID" name="platformID" value="<?php echo $this->platformID; ?>" />
@@ -29,13 +29,12 @@
                             <td><h4><strong>Mobile No</strong></h4> <?php echo ( $this->participant['mobile'] ); ?></td>
                         </tr>
                     </table>
-                    <hr>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <tr class="dark">
-                            <td style="width:20%;"><label>Shipment Date</label></td>
-                            <td style="width:30%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
-                            <td style="width:20%;"><label>Result Due Date</label></td>
+                            <td style="width:30%;"><label>Shipment Date</label></td>
+                            <td style="width:20%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
+                            <td style="width:30%;"><label>Result Due Date</label></td>
                             <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
                         </tr>
 
@@ -44,28 +43,16 @@
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
                             </td>
-                            <td><label>Sample Rehydration Date</label></td>
-                            <td>
-                                <?php echo $this->dateFormat($this->shipment['attributes']["sample_rehydration_date"]); ?>
-                            </td>
-                        </tr>
-                        <tr>
                             <td><label>Testing Date</label></td> 
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_test_date"]); ?>
                             </td>       
+                        </tr>
+                        <tr>
 
                             <td><label>Specimen Volume used for testing</label></td> 
                             <td>
                                 <?php echo $this->shipment['attributes']['specimen_volume']; ?>
-                            </td>
-                        </tr>
-
-                        <tr class ="dark">
-                            <td><label>Viral Load Assay</label></td>
-                            <td>
-                                <?php echo $this->vlAssay[$this->shipment['attributes']['vl_assay']]; ?>
-                                <?php echo (isset($this->shipment['attributes']['other_assay']) && ($this->shipment['attributes']['other_assay'] != "")) ? $this->shipment['attributes']['other_assay'] : ""; ?>
                             </td>
                             <td><label>Sample Volume Received</label></td>
                             <td>
@@ -84,14 +71,17 @@
                             </td>
                         </tr>
                     </table>
-                    <hr>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
-                                <th style="width:50%;text-align: left;">Control/Sample</th>
-                                <th>Viral Load (log<sub>10</sub> copies/ml)</th>        
-                                <th>TND(Target Not Detected)</th>       
+                                <th style="width:35%;text-align: left;">Control/Sample</th>
+                                <th>Results (log<sub>10</sub> copies/ml)</th>        
+                                <th>Mean Log</th>       
+                                <th>Log Diff</th>       
+                                <th>Lower Limit</th>       
+                                <th>Upper Limit</th>       
+                                <th>Scores</th>       
                             </tr>
                         </thead>
                         <tbody>
@@ -100,9 +90,8 @@
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
                                 }
-                                $vlResult = $sample['reported_viral_load'];
-                                if ($sample['is_tnd'] == 'yes') {
-                                    $vlResult = 0.00;
+                                if ($sample['control'] == 1) {
+                                    continue;
                                 }
                             ?>
 
@@ -111,10 +100,34 @@
                                         <?php echo $sample['sample_label']; ?>
                                     </td>
                                     <td style="text-align:center;">
-                                        <?php echo $vlResult; ?>
+                                        <?php echo $sample['reported_viral_load']; ?>
                                     </td>
                                     <td style="text-align:center;">
-                                        <input type="checkbox" name="tnd[]" class="tnd" <?php echo($sample['is_tnd'] == 'yes') ? 'checked="checked"' : ''; ?> disabled />
+                                        <?php echo number_format($this->averagePerformance[$sample['sample_id']], 2); ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php echo number_format($sample['reported_viral_load'] - $this->averagePerformance[$sample['sample_id']], 2); ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+                                            echo number_format($lowerLimit, 2);
+                                        ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            $upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+                                            echo number_format($upperLimit, 2);
+                                        ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
+                                                echo "ACCEPTABLE";
+                                            }else{
+                                                echo "UNACCEPTABLE";
+                                            } 
+                                        ?>
                                     </td>
                                 </tr>
 
@@ -139,38 +152,6 @@
                         </tbody>
                         <tfoot></tfoot>
                     </table>
-                    <hr>
-
-                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
-                        <tr>
-                            <th style="width:20%;">Upload File</th>
-                            <td colspan="3">
-                                <?php
-                                $hideUploadFileArea = false;
-                                if (isset($this->shipment['attributes']['uploaded_file']) &&
-                                        $this->shipment['attributes']['uploaded_file'] != "" &&
-                                        file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $this->shipment['attributes']['uploaded_file'])
-                                ) {
-                                    $hideUploadFileArea = true;
-                                    ?>
-                                    <span id="uploadeFileLink">
-                                        <a id="uploadeFileLink" href="/uploads/<?php echo $this->shipment['attributes']['uploaded_file'] ?>" download><?php echo basename($this->shipment['attributes']['uploaded_file']); ?></a>   
-                                    </span>
-
-                                <?php
-                                }
-                                ?>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Comments </th>
-                            <td colspan="3">
-                                <?php echo $this->shipment['user_comment']; ?>
-                            </td>
-                        </tr>
-                    </table>
-
                 </div>
                 <div style="margin: 0px auto 0px auto; text-align: center; float: right;">
                     <a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:window.history.back()" >

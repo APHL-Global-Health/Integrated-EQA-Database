@@ -34,9 +34,6 @@ class Application_Service_Schemes {
 
         $stmt = $db->fetchAll($sql);
 
-//        foreach ($stmt as $kitName) {
-//            $retval[$kitName['TESTKITNAMEID']] = $kitName['TESTKITNAME'];
-//        }
         return $stmt;
     }
 
@@ -233,28 +230,26 @@ class Application_Service_Schemes {
         return $db->fetchAll($sql);
     }
 
-    public function getVlSamples($sId, $pId, $platformID = 1) {
+    public function getVlSamples($shipmentID, $participantID, $platformID = 1) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('ref' => 'reference_result_vl'))
                 ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
                 ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
                 ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd', 'responseDate' => 'res.created_on'))
-                ->where('sp.shipment_id = ? ', $sId)
-                ->where('sp.participant_id = ? ', $pId)
+                ->where('sp.shipment_id = ? ', $shipmentID)
+                ->where('sp.participant_id = ? ', $participantID)
                 ->where('sp.platform_id = ? ', $platformID);
-                error_log($sql);
         return $db->fetchAll($sql);
     }
 
-    public function getTbSamples($sId, $pId) {
-
+    public function getAllVlPlatformResponses($shipmentID, $platformID = 1) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('ref' => 'reference_result_tb'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_tb'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('date_tested', 'mtb_detected', 'rif_resistance', 'probe_d', 'probe_c', 'probe_e', 'probe_b', 'spc', 'probe_a', 'responseDate' => 'res.created_on'))
-                ->where('sp.shipment_id = ? ', $sId)
-                ->where('sp.participant_id = ? ', $pId);
+        $sql = $db->select()->from(array('ref' => 'reference_result_vl'), array('sample_id'))
+                ->join(array('sp' => 'shipment_participant_map'), 'ref.shipment_id=sp.shipment_id', array('participant_id'))
+                ->join(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd'))
+                ->where('sp.shipment_id = ? ', $shipmentID)
+                ->where('sp.platform_id = ? ', $platformID);
+        error_log($sql);
         return $db->fetchAll($sql);
     }
 
@@ -324,23 +319,11 @@ class Application_Service_Schemes {
             $sql = $sql->where('rvc.sample_id = ?', $sampleId);
         }
 
-        //die($sql);
         $res = $db->fetchAll($sql);
-
 
         $response = array();
 
         foreach ($res as $row) {
-
-            //$response[$row['vl_assay']][$row['sample_id']]['sample_label'] = $row['sample_label'];
-            //$response[$row['vl_assay']][$row['sample_id']]['sample_id'] = $row['sample_id'];
-            //$response[$row['vl_assay']][$row['sample_id']]['vl_assay'] = $row['vl_assay'];
-            //$response[$row['vl_assay']][$row['sample_id']]['assay_name'] = $row['assay_name'];
-            //$response[$row['vl_assay']][$row['sample_id']]['low'] = $row['low_limit'];
-            //$response[$row['vl_assay']][$row['sample_id']]['high'] = $row['high_limit'];
-            //$response[$row['vl_assay']][$row['sample_id']]['manual_low_limit'] = $row['manual_low_limit'];
-            //$response[$row['vl_assay']][$row['sample_id']]['manual_high_limit'] = $row['manual_high_limit'];
-            //$response[$row['vl_assay']][$row['sample_id']]['use_range'] = $row['use_range'];
 
             $response[$row['sample_id']][$row['vl_assay']]['shipment_id'] = $row['shipment_id'];
             $response[$row['sample_id']][$row['vl_assay']]['sample_label'] = $row['sample_label'];
@@ -369,11 +352,8 @@ class Application_Service_Schemes {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         foreach ($params['sampleId'] as $assayId => $samples) {
             foreach ($samples as $sampid) {
-                //$data['manual_low_limit'] = $params['manualLow'][$assayId][$sampid];
-                //$data['manual_high_limit'] = $params['manualHigh'][$assayId][$sampid];
                 $data['use_range'] = $params['useRange'][$assayId][$sampid];
                 $data['updated_on'] = new Zend_Db_Expr('now()');
-                //echo "shipment_id = ".base64_decode($params['sid'])." and sample_id = " . $sampid . " and "." vl_assay = " . $assayId ;
                 $db->update('reference_vl_calculation', $data, "shipment_id = " . base64_decode($params['sid']) . " and sample_id = " . $sampid . " and " . " vl_assay = " . $assayId);
             }
         }
@@ -395,7 +375,6 @@ class Application_Service_Schemes {
                     ->where('sp.shipment_id = ? ', $sId)
                     ->where("sp.is_excluded = 'no' ")
                     ->where('sp.attributes like ? ', '%"vl_assay":"' . $vlAssayId . '"%');
-            //echo $sql;die;
             $response = $db->fetchAll($sql);
             $sampleWise = array();
             foreach ($response as $row) {
@@ -502,9 +481,9 @@ class Application_Service_Schemes {
     }
 
     public function getStdDeviation($inputArray) {
-        if (count($inputArray) < 2) {
-            return;
-        }
+        // if (count($inputArray) < 2) {
+        //     return;
+        // }
 
         $avg = $this->getAverage($inputArray);
 

@@ -197,27 +197,45 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->_helper->layout()->pageName = 'report';
   
         $parameters = $this->_getAllParams();
-        $sID= $this->getRequest()->getParam('sid');
-        $pID= $this->getRequest()->getParam('pid');
+        $shipmentID= $this->getRequest()->getParam('sid');
+        $participantID= $this->getRequest()->getParam('pid');
         $eID =$this->getRequest()->getParam('eid');
         $platformID =$this->getRequest()->getParam('pfid');
 
         $participantService = new Application_Service_Participants();
-        $this->view->participant = $participantService->getParticipantDetails($pID);
+        $this->view->participant = $participantService->getParticipantDetails($participantID);
 
         $schemeService = new Application_Service_Schemes();
-        $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID);
+        $this->view->allSamples = $schemeService->getVlSamples($shipmentID,$participantID, $platformID);
+        
+        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID);
+
+        $sampleList = [];
+        foreach ($allPlatformSamples as $platformSample) {
+            $sampleList[] = $platformSample['sample_id']; 
+            $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
+        }
+
+        $sampleList = array_unique($sampleList);
+
+        foreach ($sampleList as $sampleID) {
+            $averagePerformance[$sampleID] = $schemeService->getAverage($sampleValues[$sampleID]);
+            $standardDeviation[$sampleID] = $schemeService->getStdDeviation($sampleValues[$sampleID]);
+        }
+        $this->view->averagePerformance = $averagePerformance;
+        $this->view->standardDeviation = $standardDeviation;
+
         $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-        $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+        $shipment = $schemeService->getShipmentData($shipmentID,$participantID,$platformID);
         $shipment['attributes'] = json_decode($shipment['attributes'],true);
         $this->view->shipment = $shipment;
 
         $platformService = new Application_Service_Platform();
         $this->view->platform = $platformService->getPlatform($platformID);
 
-        $this->view->shipId = $sID;
-        $this->view->participantId = $pID;
+        $this->view->shipmentID = $shipmentID;
+        $this->view->participantId = $participantID;
         $this->view->eID = $eID;
         $this->view->platformID = $platformID;
     
