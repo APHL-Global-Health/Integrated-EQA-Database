@@ -242,6 +242,7 @@ class Application_Service_Schemes {
                 ->where('sp.shipment_id = ? ', $sId)
                 ->where('sp.participant_id = ? ', $pId)
                 ->where('sp.platform_id = ? ', $platformID);
+                error_log($sql);
         return $db->fetchAll($sql);
     }
 
@@ -520,14 +521,6 @@ class Application_Service_Schemes {
         $db = new Application_Model_DbTable_Shipments();
         return $db->getShipmentData($sId, $pId, $platformID);
     }
-
-    //public function getShipmentVl($sId,$pId){
-    //	
-    //	$db = new Application_Model_DbTable_ShipmentVl();
-    //	return $db->getShipmentVl($sId,$pId);
-    //	
-    //}
-
 
     public function getSchemeControls($schemeId) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();

@@ -844,7 +844,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row['respondent'] = $aRow['respondent'];
             $row['response_date'] = $aRow['response_date'];
             if(strlen($row['response_date']) > 0){
-                $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs"> View Response</a>';
+                $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs" style="margin-right:5px;"> Response</a>';
+                $row['action'] .= '<a href="/admin/participants/individual-performance/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs"> Performance</a>';
             }else{
                 $row['action'] = '';
             }
