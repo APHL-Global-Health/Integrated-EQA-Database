@@ -159,6 +159,18 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $participantService = new Application_Service_Participants();
         
         $this->view->responses = $participantService->getParticipantCycleResponses($parameters);
+
+        $platformService = new Application_Service_Platform();
+        $this->view->platforms = $platformService->getPlatforms();
+
+        $surveyService = new Application_Service_Distribution();
+        $this->view->surveys = $surveyService->getDistributions();
+
+        $this->view->participants = $participantService->getAllActiveParticipants();
+
+        if ($this->_hasParam('d'))$this->view->chosenSurvey = $this->_getParam('d');
+        if ($this->_hasParam('pf'))$this->view->chosenPlatform = $this->_getParam('pf');
+        if ($this->_hasParam('pt'))$this->view->chosenParticipant = $this->_getParam('pt');
     }
 
     public function individualResponseAction(){
@@ -190,6 +202,77 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->eID = $eID;
         $this->view->platformID = $platformID;
     
+    }
+
+    public function enterResponseAction(){
+
+        $this->_helper->layout()->pageName = 'report';
+  
+        $shipmentService = new Application_Service_Shipments();
+        
+        if($this->getRequest()->isPost())
+        {
+
+            $data = $this->getRequest()->getPost();
+            $data['uploadedFilePath'] = "";
+            if((!empty($_FILES["uploadedFile"])) && ($_FILES['uploadedFile']['error'] == 0)) {
+                
+                $filename = basename($_FILES['uploadedFile']['name']);
+                $ext = substr($filename, strrpos($filename, '.') + 1);
+                if (($_FILES["uploadedFile"]["size"] < 5000000)) {
+                    $dirpath = "vl-eid".DIRECTORY_SEPARATOR.$data['schemeCode'].DIRECTORY_SEPARATOR.$data['participantId'];
+                    $uploadDir = UPLOAD_PATH.DIRECTORY_SEPARATOR.$dirpath;
+                    if(!is_dir($uploadDir)){
+                        mkdir($uploadDir,0777,true);
+                    }
+                    
+                    // Let us clear the folder before uploading the file
+                    $files = glob($uploadDir.'/*{,.}*', GLOB_BRACE); // get all file names
+                    foreach($files as $file){ // iterate files
+                      if(is_file($file))
+                        unlink($file); // delete file
+                    }
+                    
+                    //Determine the path to which we want to save this file
+                    $data['uploadedFilePath'] = $dirpath.DIRECTORY_SEPARATOR.$filename;
+                    $newname = $uploadDir.DIRECTORY_SEPARATOR.$filename;
+                    
+                    move_uploaded_file($_FILES['uploadedFile']['tmp_name'],$newname);
+                }
+            }
+            
+            $shipmentService->updateVlResults($data);
+            
+            $this->_redirect("/admin/participants/cycle-responses");
+            
+        }else{
+            $parameters = $this->_getAllParams();
+            $sID= $this->getRequest()->getParam('sid');
+            $pID= $this->getRequest()->getParam('pid');
+            $eID =$this->getRequest()->getParam('eid');
+            $platformID =$this->getRequest()->getParam('pfid');
+
+            $participantService = new Application_Service_Participants();
+            $this->view->participant = $participantService->getParticipantDetails($pID);
+
+            $schemeService = new Application_Service_Schemes();
+            $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID);
+            $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
+
+            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+            $shipment['attributes'] = json_decode($shipment['attributes'],true);
+            $this->view->shipment = $shipment;
+
+            $platformService = new Application_Service_Platform();
+            $this->view->platform = $platformService->getPlatform($platformID);
+
+            $this->view->shipmentId = $sID;
+            $this->view->participantId = $pID;
+            $this->view->eID = $eID;
+            $this->view->platformID = $platformID;
+        
+            $this->view->isEditable = true;
+        }
     }
 
     public function individualPerformanceAction(){

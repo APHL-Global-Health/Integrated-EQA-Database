@@ -624,10 +624,12 @@ class Application_Service_Shipments {
         if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
             return false;
         }
+        $adminNameSpace = new Zend_Session_Namespace('administrators');
 
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
         $db->beginTransaction();
+
         try {
             $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
             $authNameSpace = new Zend_Session_Namespace('datamanagers');
@@ -652,7 +654,9 @@ class Application_Service_Shipments {
             if (!isset($params['modeOfReceipt'])) {
                 $params['modeOfReceipt'] = NULL;
             }
+
             $attributes = json_encode($attributes);
+            
             $data = array(
                 "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
                 "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
@@ -660,7 +664,7 @@ class Application_Service_Shipments {
                 "supervisor_approval" => $params['supervisorApproval'],
                 "participant_supervisor" => $params['participantSupervisor'],
                 "user_comment" => $params['userComments'],
-                "updated_by_user" => $authNameSpace->dm_id,
+                "updated_by_user" => isset($authNameSpace->dm_id)?$authNameSpace->dm_id:$adminNameSpace->admin_id,
                 "mode_id" => $params['modeOfReceipt'],
                 "updated_on_user" => new Zend_Db_Expr('now()')
             );

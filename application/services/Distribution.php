@@ -158,4 +158,8 @@ class Application_Service_Distribution {
         return $distributionDb->getAllDistributionStatusDetails();
     }
 
+    public function getDistributions(){
+        $distributionModel = new Application_Model_DbTable_Distribution();
+        return $distributionModel->fetchAll($distributionModel->select());
+    }
 }

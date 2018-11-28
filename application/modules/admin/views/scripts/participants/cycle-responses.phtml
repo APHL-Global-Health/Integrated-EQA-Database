@@ -19,18 +19,57 @@
             if(count($this->responses['aaData']) > 0) { 
                 $counter = 1;
             ?>
-            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="participantResponsesTable">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label class="form-label" style="margin-left: 20px;" for="pt_survey">PT Survey: </label>
+                    <select class="form-control" id="pt_survey" name="pt_survey">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        $selected = "";
+                        foreach ($this->surveys as $survey) {
+                            if($this->chosenSurvey == $survey->distribution_id) $selected = " selected";
+                            echo "<option value='{$survey->distribution_id}' $selected>{$survey->distribution_code}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Platform: </label>
+                    <select class="form-control" id="pt_platform" name="pt_platform">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        foreach ($this->platforms as $platform) {
+                            if($this->chosenPlatform == $platform->ID) $selected = " selected";
+                            echo "<option value='{$platform->ID}' $selected>{$platform->PlatformName}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Participant: </label>
+                    <select class="form-control" id="pt_participant" name="pt_participant">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        foreach ($this->participants as $participant) {
+                            if($this->chosenParticipant == $participant->participant_id) $selected = " selected";
+                            echo "<option value='{$participant->participant_id}' $selected>{$participant->institute_name}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <button class="btn btn-primary" id="btn_participant_responses">Go</button>
+                </div>
+            </div>
+            <hr>
+
+            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped" id="participantResponsesTable">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Cycle</th>
                         <th>Participant</th>
-                        <th>Scheme</th>
                         <th>Platform</th>
                         <th>Shipment Date</th>
-                        <th>Due Date</th>
-                        <th>Respondent</th>
                         <th>Response Date</th>
+                        <th>Respondent</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,12 +79,10 @@
                         <td><?php echo $counter++; ?></td>
                         <td><?php echo $reply['distribution_code']; ?></td>
                         <td><?php echo $reply['institute_name']; ?></td>
-                        <td><?php echo $reply['shipment_code']; ?></td>
                         <td><?php echo $reply['platform_name']; ?></td>
                         <td><?php echo $reply['shipment_date']; ?></td>
-                        <td><?php echo $reply['due_date']; ?></td>
+                        <td><?php echo substr($reply['response_date'], 0, 10); ?></td>
                         <td><?php echo $reply['respondent']; ?></td>
-                        <td><?php echo $reply['response_date']; ?></td>
                         <td><?php echo $reply['action']; ?></td>
                     </tr>
                     <?php } ?>
@@ -60,5 +97,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#participantResponsesTable').DataTable();
+
+        $('#btn_participant_responses').click(function(){
+            url = "/admin/participants/cycle-responses/d/" + $("#pt_survey").val() + "/pf/" + $("#pt_platform").val() + "/pt/" + $("#pt_participant").val();
+            alert(url);
+            $( location ).attr("href", url);
+        });
     } );
 </script>

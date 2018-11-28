@@ -786,6 +786,18 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                     array('respondent' => new Zend_Db_Expr("CONCAT(dm.first_name, ' ', dm.last_name)")))
                 ->where('d.status != ?', 'pending');
 
+        if (isset($parameters['d']) && intval($parameters['d']) > 0) {
+            $sQuery = $sQuery->where("d.distribution_id = ? ", $parameters['d']);
+        }
+
+        if (isset($parameters['pf']) && intval($parameters['pf']) > 0) {
+            $sQuery = $sQuery->where("spm.platform_id = ? ", $parameters['pf']);
+        }
+
+        if (isset($parameters['pt']) && intval($parameters['pt']) > 0) {
+            $sQuery = $sQuery->where("p.participant_id = ? ", $parameters['pt']);
+        }
+
         if (isset($parameters['withStatus']) && $parameters['withStatus'] != "") {
             $sQuery = $sQuery->where("p.status = ? ", $parameters['withStatus']);
         }
@@ -844,10 +856,16 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row['respondent'] = $aRow['respondent'];
             $row['response_date'] = $aRow['response_date'];
             if(strlen($row['response_date']) > 0){
-                $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs" style="margin-right:5px;"> Response</a>';
-                $row['action'] .= '<a href="/admin/participants/individual-performance/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'] . '" class="btn btn-info btn-xs"> Performance</a>';
-            }else{
-                $row['action'] = '';
+                $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'];
+                $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
+                $row['action'] .= '" class="btn btn-info btn-xs" style="margin:3px;padding:10px;"> Response</a>';
+                $row['action'] .= '<a href="/admin/participants/individual-performance/sid/' . $aRow['shipment_id'];
+                $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
+                $row['action'] .= '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
+            }else{ // if past response date and not finalized
+                $row['action'] = '<a href="/admin/participants/enter-response/sid/' . $aRow['shipment_id'];
+                $row['action'] .= '/pid/' . $aRow['participant_id'] . '/pfid/' . $aRow['platform_id'];
+                $row['action'] .= '" class="btn btn-warning btn-xs" style="margin:3px;padding:10px;"> Add Response</a>';
             }
 
             $output['aaData'][] = $row;

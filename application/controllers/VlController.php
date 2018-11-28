@@ -26,7 +26,7 @@ class VlController extends Zend_Controller_Action
 
     		$data = $this->getRequest()->getPost();
 			$data['uploadedFilePath'] = "";
-           if((!empty($_FILES["uploadedFile"])) && ($_FILES['uploadedFile']['error'] == 0)) {
+           	if((!empty($_FILES["uploadedFile"])) && ($_FILES['uploadedFile']['error'] == 0)) {
 				
 				$filename = basename($_FILES['uploadedFile']['name']);
 				$ext = substr($filename, strrpos($filename, '.') + 1);
@@ -51,7 +51,7 @@ class VlController extends Zend_Controller_Action
 					move_uploaded_file($_FILES['uploadedFile']['tmp_name'],$newname);
 					
 				}
-			  }
+			}
 			
             $shipmentService->updateVlResults($data);
     		
