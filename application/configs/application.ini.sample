@@ -1,0 +1,43 @@
+[production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+includePaths.library = APPLICATION_PATH "/../library"
+
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+
+appnamespace = "Application"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 1
+resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
+resources.view[] =
+resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts/"
+resources.view.helperPath.Pt_Helper_View = APPLICATION_PATH "/../library/Pt/Helper/View/"
+resources.frontController.plugins.PreSetter = "Pt_Plugins_PreSetter"
+
+autoloaderNamespaces[] = "Pt"
+
+resources.db.adapter = PDO_MYSQL
+resources.db.params.host = "localhost"
+resources.db.params.username = "database-user"
+resources.db.params.password = "database-password"
+resources.db.params.dbname = "database-name"
+
+#Example sending through gmail
+email.host=smtp.gmail.com
+email.config.port=465
+email.config.username="your-gmail-account@gmail.com"
+email.config.password="your-gmail-password"
+email.config.ssl=ssl
+email.config.auth=login
+
+[staging : production]
+
+[testing : production]
+
+[development : production]
+resources.frontController.params.displayExceptions = 1
+
+domain = "http://your-domain.me"
