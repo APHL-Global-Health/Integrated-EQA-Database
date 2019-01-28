@@ -100,7 +100,6 @@
 
         $('#btn_participant_responses').click(function(){
             url = "/admin/participants/cycle-responses/d/" + $("#pt_survey").val() + "/pf/" + $("#pt_platform").val() + "/pt/" + $("#pt_participant").val();
-            alert(url);
             $( location ).attr("href", url);
         });
     } );

@@ -159,7 +159,6 @@
 
         });
 
-        //drawTable();
         schemeSelected($("#scheme").val());
         $(".datepicker").datepicker({dateFormat: '<?php echo $this->defaultDateFormat(); ?>'});
     });
@@ -180,18 +179,18 @@
         $("#schemeId").val(scheme)
         $("#configShipment").hide();
         if (scheme != "" && scheme != null) {
-<?php
-if (isset($this->unshippedDistro) && count($this->unshippedDistro) > 0 && $this->unshippedDistro != '') {
-    ?>
+            <?php
+            if (isset($this->unshippedDistro) && count($this->unshippedDistro) > 0 && $this->unshippedDistro != '') {
+            ?>
                 $("#enrollBtn span").text("New Shipment : " + $("#scheme option:selected").text());
                 $("#btnSpan").fadeIn();
-    <?php
-} else {
-    ?>
+            <?php
+            } else {
+            ?>
                 $("#btnSpan").fadeOut();
-    <?php
-}
-?>
+            <?php
+            }
+            ?>
         } else {
             $("#btnSpan").fadeOut();
         }
@@ -310,6 +309,7 @@ if (isset($this->searchData) && $this->searchData != '') {
         $.blockUI();
         $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'get-sample-form')); ?>", {sid: $("#scheme").val(), format: "html"},
         function (data) {
+            console.log(data);
             $("#sampleFormFragment").html(data);
             $.unblockUI();
 
