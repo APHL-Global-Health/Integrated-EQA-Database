@@ -3,7 +3,7 @@
 class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'vl_platform';
+    protected $_name = 'platforms';
 
     protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipantPlatform');
 

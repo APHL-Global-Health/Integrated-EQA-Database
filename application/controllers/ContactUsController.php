@@ -31,7 +31,7 @@ class ContactUsController extends Zend_Controller_Action {
             $this->view->siteType = $participantService->getSiteTypeList();
             $this->view->countriesList = $common->getCountriesList();
             $this->view->countiesList = $common->getCountiesList();
-            $this->view->mflList = $common->getMflList();
+            $this->view->mflList = $common->getFacilities();
             $this->view->deptList = $common->getDepartmentList();
             $this->view->schemeList = $common->getSchemesList();
             $this->view->platformList = $common->getPlatformList();
@@ -73,7 +73,7 @@ class ContactUsController extends Zend_Controller_Action {
         $this->view->siteType = $participantService->getSiteTypeList();
         $this->view->countriesList = $common->getCountriesList();
         $this->view->countiesList = $common->getCountiesList();
-        $this->view->mflList = $common->getMflList();
+        $this->view->mflList = $common->getFacilities();
         $this->view->deptList = $common->getDepartmentList();
         $this->view->schemeList = $common->getSchemesList();
         $this->view->platformList = $common->getPlatformList();

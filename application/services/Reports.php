@@ -93,7 +93,7 @@ class Application_Service_Reports {
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array('report_generated', 'participant_count' => new Zend_Db_Expr('count("participant_id")'), 'reported_count' => new Zend_Db_Expr("SUM(shipment_test_date <> '0000-00-00')"), 'reported_percentage' => new Zend_Db_Expr("ROUND((SUM(shipment_test_date <> '0000-00-00')/count('participant_id'))*100,2)"), 'number_passed' => new Zend_Db_Expr("SUM(final_result = 1)")))
                 ->joinLeft(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
@@ -121,15 +121,9 @@ class Application_Service_Reports {
             $sQuery = $sQuery->having($sWhere);
         }
 
-        //if (isset($sHaving) && $sHaving != "") {
-        // $sQuery = $sQuery->having($sHaving);
-        // }
-
-
         if (isset($sOrder) && $sOrder != "") {
             $sQuery = $sQuery->order($sOrder);
         }
-
 
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
@@ -161,11 +155,8 @@ class Application_Service_Reports {
             "aaData" => array()
         );
 
-
         $shipmentDb = new Application_Model_DbTable_Shipments();
-        //$aColumns = array('distribution_code', "DATE_FORMAT(distribution_date,'%d-%b-%Y')",
-        //'s.shipment_code' ,'sl.scheme_name' ,'s.number_of_samples' ,
-        //'sp.participant_count','sp.reported_count','sp.number_passed','s.status');
+
         foreach ($rResult as $aRow) {
             $download = ' No Download Available ';
             if (isset($aRow['report_generated']) && $aRow['report_generated'] == 'yes') {
@@ -201,13 +192,11 @@ class Application_Service_Reports {
         $filterRules = array('*' => 'StripTags', '*' => 'StringTrim');
         $filter = new Zend_Filter_Input($filterRules, null, $params);
         if ($filter->isValid()) {
-            //$params = $filter->getEscaped();
+
             $db = new Application_Model_DbTable_ReportConfig();
             $db->getAdapter()->beginTransaction();
             try {
                 $result = $db->updateReportDetails($params);
-                //$alertMsg = new Zend_Session_Namespace('alert');
-                //$alertMsg->msg=" documents submitted successfully.";
 
                 $db->getAdapter()->commit();
                 return $result;
@@ -227,51 +216,16 @@ class Application_Service_Reports {
     public function getParticipantDetailedReport($params) {
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
 
-//        if (isset($params['reportType']) && $params['reportType'] == "network") {
-//            $sQuery = $dbAdapter->select()->from(array('n' => 'r_network_tiers'))
-//                    ->joinLeft(array('p' => 'participant'), 'p.network_tier=n.network_id', array())
-//                    //->joinLeft(array('sp'=>'shipment_participant_map'),'sp.participant_id=p.participant_id',array('participant_count'=> new Zend_Db_Expr("SUM(shipment_test_date = '') + SUM(shipment_test_date <> '')"), 'reported_count'=> new Zend_Db_Expr("SUM(shipment_test_date <> '')"), 'number_passed'=> new Zend_Db_Expr("SUM(final_result = 1)")))
-//                    ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                    ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('lastdate_response'))
-//                    ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array('others' => new Zend_Db_Expr("SUM(sp.shipment_test_date IS NULL)"), 'excluded' => new Zend_Db_Expr("SUM(if(sp.is_excluded = 'yes', 1, 0))"), 'number_failed' => new Zend_Db_Expr("SUM(sp.final_result = 2 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_passed' => new Zend_Db_Expr("SUM(sp.final_result = 1 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_late' => new Zend_Db_Expr("SUM(sp.shipment_test_date > s.lastdate_response AND sp.is_excluded != 'yes')"), 'map_id'))
-//                    ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array())
-//                    ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array())
-//                    ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id', array())
-//                    ->group('n.network_id')/* ->where("p.status = 'active'") */;
-//        }
-//
-//        if (isset($params['reportType']) && $params['reportType'] == "affiliation") {
-//            $sQuery = $dbAdapter->select()->from(array('pa' => 'r_participant_affiliates'))
-//                    ->joinLeft(array('p' => 'participant'), 'p.affiliation=pa.affiliate', array())
-//                    //->joinLeft(array('sp'=>'shipment_participant_map'),'sp.participant_id=p.participant_id',array('participant_count'=> new Zend_Db_Expr("SUM(shipment_test_date = '') + SUM(shipment_test_date <> '')"), 'reported_count'=> new Zend_Db_Expr("SUM(shipment_test_date <> '')"), 'number_passed'=> new Zend_Db_Expr("SUM(final_result = 1)")))
-//                    ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                    ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('lastdate_response'))
-//                    ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array('others' => new Zend_Db_Expr("SUM(sp.shipment_test_date IS NULL)"), 'excluded' => new Zend_Db_Expr("SUM(if(sp.is_excluded = 'yes', 1, 0))"), 'number_failed' => new Zend_Db_Expr("SUM(sp.final_result = 2 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_passed' => new Zend_Db_Expr("SUM(sp.final_result = 1 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_late' => new Zend_Db_Expr("SUM(sp.shipment_test_date > s.lastdate_response AND sp.is_excluded != 'yes')")))
-//                    ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array())
-//                    ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array())
-//                    ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id', array())
-//                    ->group('pa.aff_id')/* ->where("p.status = 'active'") */;
-//        }
-//        if (isset($params['reportType']) && $params['reportType'] == "region") {
-//            $sQuery = $dbAdapter->select()->from(array('p' => 'participant'), array('p.region'))
-//                            //->joinLeft(array('sp'=>'shipment_participant_map'),'sp.participant_id=p.participant_id',array('participant_count'=> new Zend_Db_Expr("SUM(shipment_test_date = '') + SUM(shipment_test_date <> '')"), 'reported_count'=> new Zend_Db_Expr("SUM(shipment_test_date <> '')"), 'number_passed'=> new Zend_Db_Expr("SUM(final_result = 1)")))
-//                            ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                            ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('lastdate_response'))
-//                            ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array('others' => new Zend_Db_Expr("SUM(sp.shipment_test_date IS NULL)"), 'excluded' => new Zend_Db_Expr("SUM(if(sp.is_excluded = 'yes', 1, 0))"), 'number_failed' => new Zend_Db_Expr("SUM(sp.final_result = 2 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_passed' => new Zend_Db_Expr("SUM(sp.final_result = 1 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_late' => new Zend_Db_Expr("SUM(sp.shipment_test_date > s.lastdate_response AND sp.is_excluded != 'yes')")))
-//                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array())
-//                            ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array())
-//                            ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id', array())
-//                            ->group('p.region')->where("p.region IS NOT NULL")->where("p.region != ''")/* ->where("p.status = 'active'") */;
-//        }
+
         if (isset($params['reportType']) && $params['reportType'] == "enrolled-programs") {
             $sQuery = $dbAdapter->select()->from(array('p' => 'participant'), array())
-                            //->joinLeft(array('sp'=>'shipment_participant_map'),'sp.participant_id=p.participant_id',array('participant_count'=> new Zend_Db_Expr("SUM(shipment_test_date = '') + SUM(shipment_test_date <> '')"), 'reported_count'=> new Zend_Db_Expr("SUM(shipment_test_date <> '')"), 'number_passed'=> new Zend_Db_Expr("SUM(final_result = 1)")))
+
                             ->joinLeft(array('pe' => 'enrollments'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'vl_scheme'), 'rep.ID=pe.scheme_id', array('rep.SchemeName'))
+                            ->joinLeft(array('rep' => 'schemes'), 'rep.ID=pe.scheme_id', array('rep.SchemeName'))
                             ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
                             ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('lastdate_response'))
                             ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.participant_id=p.participant_id', array('others' => new Zend_Db_Expr("SUM(sp.shipment_test_date IS NULL)"), 'excluded' => new Zend_Db_Expr("SUM(if(sp.is_excluded = 'yes', 1, 0))"), 'number_failed' => new Zend_Db_Expr("SUM(sp.final_result = 2 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_passed' => new Zend_Db_Expr("SUM(sp.final_result = 1 AND sp.shipment_test_date <= s.lastdate_response AND sp.is_excluded != 'yes')"), 'number_late' => new Zend_Db_Expr("SUM(sp.shipment_test_date > s.lastdate_response AND sp.is_excluded != 'yes')")))
-                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array())
+                            ->joinLeft(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array())
                             ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array())
                             ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id', array())
                             ->group('rep.ID');
@@ -280,12 +234,10 @@ class Application_Service_Reports {
             $sQuery = $sQuery->where("s.scheme_type = ?", $params['scheme']);
         }
 
-		//die($sQuery);
         if (isset($params['startDate']) && $params['startDate'] != "" && isset($params['endDate']) && $params['endDate'] != "") {
             $sQuery = $sQuery->where("s.shipment_date >= ?", $params['startDate']);
             $sQuery = $sQuery->where("s.shipment_date <= ?", $params['endDate']);
         }
-        //echo $sQuery;die;
         return $dbAdapter->fetchAll($sQuery);
     }
 
@@ -381,53 +333,18 @@ class Application_Service_Reports {
          */
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
-        //////////////
-
-
-//        if (isset($parameters['reportType']) && $parameters['reportType'] == "network") {
-//            $sQuery = $dbAdapter->select()->from(array('n' => 'r_network_tiers'))
-//                            ->joinLeft(array('p' => 'participant'), 'p.network_tier=n.network_id', array())
-//                            ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                            ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('shipment_code', 'lastdate_response'))
-//                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-//                            ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_code', 'distribution_date'))
-//                            ->group('n.network_id')->group('s.shipment_id')/* ->where("p.status = 'active'") */;
-//        } else if (isset($parameters['reportType']) && $parameters['reportType'] == "affiliation") {
-//            $sQuery = $dbAdapter->select()->from(array('pa' => 'r_participant_affiliates'))
-//                            ->joinLeft(array('p' => 'participant'), 'p.affiliation=pa.affiliate', array())
-//                            ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                            ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('shipment_code', 'lastdate_response'))
-//                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-//                            ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_code', 'distribution_date'))
-//                            ->group('pa.aff_id')->group('s.shipment_id')/* ->where("p.status = 'active'") */;
-//        } else if (isset($parameters['reportType']) && $parameters['reportType'] == "region") {
-//            $sQuery = $dbAdapter->select()->from(array('p' => 'participant'), array('p.region'))
-//                            ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
-//                            ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('shipment_code', 'lastdate_response'))
-//                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-//                            ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_code', 'distribution_date'))
-//                            ->group('p.region')->where("p.region IS NOT NULL")->where("p.region != ''")->group('s.shipment_id')/* ->where("p.status = 'active'") */;
-//        } else 
             if (isset($parameters['reportType']) && $parameters['reportType'] == "enrolled-programs") {
 			$sQuery = $dbAdapter->select()->from(array('p' => 'participant'), array())
 			->joinLeft(array('pe' => 'enrollments'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'vl_scheme'), 'rep.ID=pe.scheme_id', array('rep.SchemeName'))
+                            ->joinLeft(array('rep' => 'schemes'), 'rep.ID=pe.scheme_id', array('rep.SchemeName'))
                             ->joinLeft(array('shp' => 'shipment_participant_map'), 'shp.participant_id=p.participant_id', array())
                             ->joinLeft(array('s' => 'shipment'), 's.shipment_id=shp.shipment_id', array('shipment_code', 'lastdate_response'))
-                            ->joinLeft(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
+                            ->joinLeft(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
                             ->joinLeft(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_code', 'distribution_date'))
                              ->group('rep.ID')->group('s.shipment_id')/* ->where("p.status = 'active'") */;
 			
             
         }
-//        else{
-//          $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-//                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
-//                ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id')
-//                ->group('s.shipment_id');
-//        }
-        ///////////
-
 
         if (isset($parameters['startDate']) && $parameters['startDate'] != "" && isset($parameters['endDate']) && $parameters['endDate'] != "") {
             $sQuery = $sQuery->where("s.shipment_date >= ?", $parameters['startDate']);
@@ -614,7 +531,7 @@ class Application_Service_Reports {
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id',
 						   array("DATE_FORMAT(s.shipment_date,'%d-%b-%Y')",
 								 "total_shipped" => new Zend_Db_Expr('count("sp.map_id")'),
@@ -729,7 +646,7 @@ class Application_Service_Reports {
     public function getParticipantPerformanceReportByShipmentId($shipmentId) {
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("DATE_FORMAT(s.shipment_date,'%d-%b-%Y')", "total_shipped" => new Zend_Db_Expr('count("sp.map_id")'), "total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"),
                     "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))"),
                     ))
@@ -876,7 +793,7 @@ class Application_Service_Reports {
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         if($parameters['scheme']=='vl'){
             $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "total_passed" => new Zend_Db_Expr("SUM(sp.final_result=1)"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))")))
                 //->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
                 ->join(array('ref' => $refTable), 's.shipment_id=ref.shipment_id')
@@ -888,7 +805,7 @@ class Application_Service_Reports {
         }
         if($parameters['scheme']=='eid'){
             $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "total_passed" => new Zend_Db_Expr("SUM(sp.final_result=1)"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))")))
                 //->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
                 ->join(array('ref' => $refTable), 's.shipment_id=ref.shipment_id')
@@ -929,8 +846,6 @@ class Application_Service_Reports {
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-
-        //die($sQuery);
 
         $rResult = $dbAdapter->fetchAll($sQuery);
 
@@ -2041,37 +1956,13 @@ class Application_Service_Reports {
 			
 			$colNamesArray = array();
 			$colNamesArray[] = "Lab ID";
-			//$colNamesArray[] = "Lab Name";
-			//$colNamesArray[] = "Department Name";
-			//$colNamesArray[] = "Region";
-			//$colNamesArray[] = "Site Type";
-			//$colNamesArray[] = "Assay";
-			//$colNamesArray[] = "Assay Expiration Date";
-			//$colNamesArray[] = "Assay Lot Number";
-			//$colNamesArray[] = "Specimen Volume";
 	
 			$firstSheet = new PHPExcel_Worksheet($excel, 'Overall Results');
 			$excel->addSheet($firstSheet, 0);
 			
 			$firstSheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode("Lab ID", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(1, 1)->setValueExplicit(html_entity_decode("Lab Name", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(2, 1)->setValueExplicit(html_entity_decode("Department Name", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(3, 1)->setValueExplicit(html_entity_decode("Region", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(4, 1)->setValueExplicit(html_entity_decode("Site Type", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(5, 1)->setValueExplicit(html_entity_decode("Assay", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(6, 1)->setValueExplicit(html_entity_decode("Assay Expiration Date", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(7, 1)->setValueExplicit(html_entity_decode("Assay Lot Number", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-			//$firstSheet->getCellByColumnAndRow(8, 1)->setValueExplicit(html_entity_decode("Specimen Volume", ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
 			
 			$firstSheet->getStyleByColumnAndRow(0, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(1, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(2, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(3, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(4, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(5, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(6, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(7, 1)->applyFromArray($borderStyle);
-			//$firstSheet->getStyleByColumnAndRow(8, 1)->applyFromArray($borderStyle);
 			
 			$firstSheet->getDefaultRowDimension()->setRowHeight(15);
 			
@@ -2170,27 +2061,10 @@ class Application_Service_Reports {
 				// we are also building the data required for other Assay Sheets
 				if($attributes['vl_assay'] > 0){
 					$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $rowOverAll['unique_identifier'];
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $rowOverAll['first_name']." ".$rowOverAll['last_name'];
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $rowOverAll['department_name'];
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $rowOverAll['region'];
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $rowOverAll['site_type'];
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $assayName;
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $assayExpirationDate;
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $assayLotNumber;
-					//$assayWiseData[$attributes['vl_assay']][$rowOverAll['unique_identifier']][] = $specimenVolume;
 				}
 				
 				
 				$firstSheet->getCellByColumnAndRow(0, $row)->setValueExplicit(html_entity_decode($rowOverAll['unique_identifier'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(1, $row)->setValueExplicit(html_entity_decode($rowOverAll['first_name']. " " .$rowOverAll['last_name'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(2, $row)->setValueExplicit(html_entity_decode($rowOverAll['department_name'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(3, $row)->setValueExplicit(html_entity_decode($rowOverAll['region'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(4, $row)->setValueExplicit(html_entity_decode($rowOverAll['site_type'], ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(5, $row)->setValueExplicit(html_entity_decode($assayName, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(6, $row)->setValueExplicit(html_entity_decode($assayExpirationDate, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(7, $row)->setValueExplicit(html_entity_decode($assayLotNumber, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-				//$firstSheet->getCellByColumnAndRow(8, $row)->setValueExplicit(html_entity_decode($specimenVolume, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
-
 				
 				$col = 1;
 				foreach($resultResponse as $responseRow){
@@ -2243,7 +2117,7 @@ class Application_Service_Reports {
 			//Zend_Debug::dump($assayWiseData);die;
 			
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
-			$assayRes = $db->fetchAll($db->select()->from('r_vl_assay'));
+			$assayRes = $db->fetchAll($db->select()->from('assays'));
 			
 			$countOfVlAssaySheet = 1;
 			foreach($assayRes as $assayRow){
@@ -2849,7 +2723,7 @@ class Application_Service_Reports {
     public function getCorrectiveActionReportByShipmentId($shipmentId) {
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('s.shipment_code'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array('map_id'))
                 ->join(array('cam' => 'dts_shipment_corrective_action_map'), 'cam.shipment_map_id=sp.map_id', array("total_corrective" => new Zend_Db_Expr('count("cam.corrective_action_id")')))
                 ->join(array('ca' => 'r_dts_corrective_actions'), 'ca.action_id=cam.corrective_action_id', array("action_id", "corrective_action"))
@@ -3334,7 +3208,7 @@ class Application_Service_Reports {
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("DATE_FORMAT(s.shipment_date,'%d-%b-%Y')", "total_shipped" => new Zend_Db_Expr('count("sp.map_id")'), "total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))"), "total_passed" => new Zend_Db_Expr("(SUM(final_result = 1))"), "pass_percentage" => new Zend_Db_Expr("((SUM(final_result = 1))/(SUM(final_result = 1) + SUM(final_result = 2)))*100"), "average_score" => new Zend_Db_Expr("((SUM(Case When sp.is_excluded='yes' Then 0 Else sp.shipment_score End)+SUM(Case When sp.is_excluded='yes' Then 0 Else sp.documentation_score End))/(SUM(final_result = 1) + SUM(final_result = 2)))")))
                 ->joinLeft(array('p' => 'participant'), 'p.participant_id=sp.participant_id', array('region'))
                 ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id')
@@ -3386,7 +3260,7 @@ class Application_Service_Reports {
 
 
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), new Zend_Db_Expr("COUNT('" . $sIndexColumn . "')"))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array())
                 ->joinLeft(array('p' => 'participant'), 'p.participant_id=sp.participant_id', array('region'))
                 ->joinLeft(array('rr' => 'r_results'), 'sp.final_result=rr.result_id')
@@ -3904,7 +3778,7 @@ class Application_Service_Reports {
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id',
 						   array("s.shipment_date","sp.shipment_test_date","sp.shipment_receipt_date","sp.shipment_score","sp.documentation_score"))
                 ->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
@@ -3940,7 +3814,7 @@ class Application_Service_Reports {
         /* Total data set length */
         $sWhere = "";
         $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'))
-                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id')
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id',
 						   array("s.shipment_date","sp.shipment_test_date","sp.shipment_receipt_date","sp.shipment_score","sp.documentation_score"))
                 ->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
@@ -3988,7 +3862,7 @@ class Application_Service_Reports {
     {
 	$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 	$shipmentId = $params['shipmentId'];
-	$vlQuery=$db->select()->from(array('vl' => 'r_vl_assay'),array('vl.id','vl.name','vl.short_name'));
+	$vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
 	$assayResult=$db->fetchAll($vlQuery);
 	$i = 0;
 	$vlParticipantCount =array();
@@ -4026,7 +3900,7 @@ class Application_Service_Reports {
 	    $shimentResult=$db->fetchAll($shQuery);
 	}
 	if($shimentResult){
-	    $vlQuery=$db->select()->from(array('vl' => 'r_vl_assay'),array('vl.id','vl.name','vl.short_name'));
+	    $vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
 	    $assayResult=$db->fetchAll($vlQuery);
 	    $s = 0;
 	    foreach($shimentResult as $shipData){

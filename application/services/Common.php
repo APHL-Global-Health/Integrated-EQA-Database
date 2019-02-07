@@ -248,20 +248,6 @@ class Application_Service_Common
     {
         print_r($params['platform']);
         exit;
-        $db = new Application_Model_DbTable_Facility();
-        $dbs = Zend_Db_Table_Abstract::getAdapter();
-        $data = array('FacilityName' => $params['facilityname'], 'MFLCode' => $params['mflcode'], 'Department' => $params['department'], 'PhysicalAddress' => $params['physicaladdress'], 'PostalAddress' => $params['postaladdress'], 'Email' => $params['email'], 'Town' => $params['town'], 'Telephone' => $params['telephone'], 'County' => $params['county'], 'Country' => $params['Country'], 'Partner' => $params['Partner'], 'ContactName' => $params['contactname'], 'ContactEmail' => $params['contactemail'], 'ContactTelephone' => $params['contacttel'], 'additionalinfo' => $params['additionalInfo']);
-        //$db->addContact($data);
-        $Id = $db->insert($data);
-        if (isset($params['platform']) && $params['platform'] != "") {
-
-            foreach ($params['platform'] as $epId) {
-                echo $epId;
-                exit;
-                $dbs->insert('facilityplatform', array('FacilityID' => $Id, 'PlatformID' => $epId));
-            }
-        }
-        return 1;
     }
 
     public function checkDuplicate($params)
@@ -365,10 +351,10 @@ class Application_Service_Common
         return $countriesDb->getAllDepartments();
     }
 
-    public function getMflList()
+    public function getFacilities()
     {
-        $countriesDb = new Application_Model_DbTable_Mfls();
-        return $countriesDb->getAllMfls();
+        $facilitiesDb = new Application_Model_DbTable_Facilities();
+        return $facilitiesDb->getAllFacilities();
     }
 
     public function getPlatformList()
@@ -399,12 +385,6 @@ class Application_Service_Common
     {
         $db = new Application_Model_DbTable_GlobalConfig();
         return $db->getGlobalConfig();
-    }
-
-    public function getFullSchemesDetails()
-    {
-        $db = new Application_Model_DbTable_SchemeList();
-        return $db->getFullSchemeList();
     }
 
     public function updateConfig($params)

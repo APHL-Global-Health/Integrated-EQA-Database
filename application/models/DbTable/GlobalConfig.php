@@ -30,7 +30,7 @@ class Application_Model_DbTable_GlobalConfig extends Zend_Db_Table_Abstract
     public function updateConfigDetails($params) {
         foreach ($params as $fieldName => $fieldValue) {
               if($fieldName=='schemeId'){
-                  $schemeDb = new Application_Model_DbTable_SchemeList();
+                  $schemeDb = new Application_Model_DbTable_Schemes();
                   $schemeDb->update(array('status' =>'inactive'),"status='active'");
                   foreach($params["schemeId"] as $schemeId){
                        $schemeDb->update(array('status' => 'active'),"scheme_id='" . $schemeId . "'");

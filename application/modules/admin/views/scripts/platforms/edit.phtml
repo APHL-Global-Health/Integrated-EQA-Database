@@ -12,7 +12,7 @@
                     <textarea id="PlatformName" name="PlatformName"
                               class="isRequired form-control" title="Please enter the partner name here"
                               placeholder="Please enter the Platform name here"
-                              onblur="checkDuplicate('vl_platform', 'PlatformName','PlatformName','<?php echo "ID##" . $this->partner['ID']; ?>', 'The name that you entered already exist. Please try something else.');">
+                              onblur="checkDuplicate('platforms', 'PlatformName','PlatformName','<?php echo "ID##" . $this->partner['ID']; ?>', 'The name that you entered already exist. Please try something else.');">
                         <?php echo $this->partner['PlatformName']; ?>
                     </textarea>
                 </div>

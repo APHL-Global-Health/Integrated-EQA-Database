@@ -49,10 +49,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $db->fetchAll($db->select()->from('r_site_type')->order('site_type ASC'));
     }
 
-    public function getPartnerList() {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll($db->select()->from('partners')->order('partner_id ASC'));
-    }
     public function getCounties() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
        return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
@@ -103,7 +99,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getEnrolledPlatforms($partSysId) {
         return $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => 'facilityplatform'))
-                                ->joinLeft(array('e' => 'vl_platform'), 'e.ID=p.PlatformID')
+                                ->joinLeft(array('e' => 'platforms'), 'e.ID=p.PlatformID')
                                 ->where("p.FacilityID = ?", $partSysId));
     }
 
@@ -781,7 +777,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                     array('response_date' => new Zend_Db_Expr("IFNULL(spm.updated_on_user,'')"), 'participant_id', 
                         'platform_id'))
                 ->join(array('p' => 'participant'), 'spm.participant_id=p.participant_id', array('p.institute_name'))
-                ->join(array('pf' => 'vl_platform'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
+                ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->joinLeft(array('dm' => 'data_manager'), 'spm.updated_by_user=dm.dm_id', 
                     array('respondent' => new Zend_Db_Expr("CONCAT(dm.first_name, ' ', dm.last_name)")))
                 ->where('d.status != ?', 'pending');

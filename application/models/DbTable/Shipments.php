@@ -21,7 +21,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
 
     public function getShipmentData($sId, $pId, $platformID = 1) {
         $data =  $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => $this->_name))
-                                ->join(array('sl' => 'scheme_list'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
+                                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
                                 ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
                                 ->joinLeft(array('r_vl_r' => 'response_vl_not_tested_reason'),
                                         'r_vl_r.vl_not_tested_reason_id=sp.vl_not_tested_reason', array('vlNotTestedReason' => 'vl_not_tested_reason'))
@@ -58,7 +58,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
     public function getShipmentRowInfo($sId) {
         $result = $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => 'shipment'))
                         ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date'))
-                        ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('sl.scheme_name'))
+                        ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('sl.scheme_name'))
                         ->group('s.shipment_id')
                         ->where("s.shipment_id = ?", $sId));
         if ($result != "") {
@@ -195,7 +195,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 'SHIP_YEAR' => 'year(s.shipment_date)', 'TOTALSHIPMEN' => new Zend_Db_Expr("COUNT('s.shipment_id')")))
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id', array('ONTIME' => new Zend_Db_Expr("COUNT(CASE substr(sp.evaluation_status,3,1) WHEN 1 THEN 1 END)"), 'NORESPONSE' => new Zend_Db_Expr("COUNT(CASE substr(sp.evaluation_status,2,1) WHEN 9 THEN 1 END)"), 'reported_count' => new Zend_Db_Expr("SUM(shipment_test_date <> '0000-00-00')")))
                 ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=sp.participant_id')
-                ->joinLeft(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type')
+                ->joinLeft(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type')
                 ->where("s.status='shipped' OR s.status='evaluated' OR s.status='finalized'")
                 ->where("year(s.shipment_date)  + 5 > year(CURDATE())")
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
@@ -226,7 +226,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 'SHIP_YEAR' => 'year(s.shipment_date)', 'TOTALSHIPMEN' => new Zend_Db_Expr("COUNT('s.shipment_id')")))
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id', array('ONTIME' => new Zend_Db_Expr("COUNT(CASE substr(sp.evaluation_status,3,1) WHEN 1 THEN 1 END)"), 'NORESPONSE' => new Zend_Db_Expr("COUNT(CASE substr(sp.evaluation_status,2,1) WHEN 9 THEN 1 END)"), 'reported_count' => new Zend_Db_Expr("SUM(shipment_test_date <> '0000-00-00')")))
                 ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=sp.participant_id')
-                ->joinLeft(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type')
+                ->joinLeft(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type')
                 ->where("s.status='shipped' OR s.status='evaluated' OR s.status='finalized'")
                 ->where("year(s.shipment_date)  + 5 > year(CURDATE())")
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
@@ -342,12 +342,12 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
          * Get data to display
          */
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id"))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id')
-                ->join(array('pf' => 'vl_platform'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
+                ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
                 ->where("rcp.status=2") //APPROVED
                 ->where("s.status='shipped' OR s.status='evaluated'");
@@ -544,7 +544,7 @@ error_log("C2: ".$sQuery);
          */
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.status', 'SHIP_YEAR' => 'year(s.shipment_date)', 's.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.response_switch'))
                 ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "ACTION" => new Zend_Db_Expr("CASE  WHEN substr(spm.evaluation_status,2,1)='1' THEN 'View' WHEN (substr(spm.evaluation_status,2,1)='9' AND s.lastdate_response>= CURDATE()) OR (s.status= 'finalized') THEN 'Enter Result' END"), "STATUS" => new Zend_Db_Expr("CASE substr(spm.evaluation_status,3,1) WHEN 1 THEN 'On Time' WHEN '2' THEN 'Late' WHEN '0' THEN 'No Response' END")))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.participant_id'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
@@ -746,7 +746,7 @@ error_log("C2: ".$sQuery);
 
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('SHIP_YEAR' => 'year(s.shipment_date)', 's.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array('spm.report_generated', 'spm.map_id', "spm.evaluation_status", "qc_date", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "RESPONSE" => new Zend_Db_Expr("CASE  WHEN substr(spm.evaluation_status,3,1)='1' THEN 'View' WHEN (substr(spm.evaluation_status,3,1)='9' AND s.lastdate_response >= CURDATE()) OR (substr(spm.evaluation_status,3,1)='9' AND s.status= 'finalized') THEN 'Enter Result' END"), "REPORT" => new Zend_Db_Expr("CASE  WHEN spm.report_generated='yes' AND s.status='finalized' THEN 'Report' END")))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.participant_id', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
@@ -1449,7 +1449,7 @@ error_log("C2: ".$sQuery);
 
         $sQuery = $db->select()->from(array('s' => 'shipment'))
                 ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date'))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
                 ->group('s.shipment_id');
 
         if (isset($sWhere) && $sWhere != "") {
@@ -1740,7 +1740,7 @@ error_log("C2: ".$sQuery);
 
         $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array('spm.report_generated', 'spm.map_id', "spm.evaluation_status", "qc_date", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", 'spm.shipment_score'))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.participant_id'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
@@ -1769,7 +1769,7 @@ error_log("C2: ".$sQuery);
         /* Total data set length */
         $tQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array('spm.report_generated', 'spm.map_id', "spm.evaluation_status", "qc_date", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", 'spm.shipment_score'))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.participant_id'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->where("pmm.dm_id=?", $this->_session->dm_id)

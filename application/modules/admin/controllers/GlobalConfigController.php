@@ -36,7 +36,7 @@ class Admin_GlobalConfigController extends Zend_Controller_Action {
         $assign = $commonServices->getGlobalConfigDetails();
 
         $this->view->assign($assign);
-        $this->view->allSchemes = $commonServices->getFullSchemesDetails();
+        $this->view->allSchemes = $commonServices->getAllSchemes();
     }
 
 }
