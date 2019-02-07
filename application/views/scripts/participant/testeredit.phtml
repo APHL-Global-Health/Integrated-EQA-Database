@@ -115,18 +115,8 @@
     </tr>
     
     <tr>
-        <th><label>Enrolled Programs </label></th>
+        <th></th>
         <td>
-            <select name="enrolledProgram[]" id="enrolledProgram" class="" multiple="multiple" style="width:285px;">
-                <?php
-                $enrolledProg = explode(",", $this->rsParticipant['enrolled_prog']);
-                foreach ($this->enrolledPrograms as $enrolledPrograms) {
-                    ?>
-                    <option value="<?php echo $enrolledPrograms['r_epid']; ?>" <?php echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? "selected='selected'" : "" ?>><?php echo $enrolledPrograms['enrolled_programs']; ?></option>
-                    <?php
-                }
-                ?>
-            </select>
         </td>
         <th>
             <label>Site Type </label></th>
@@ -233,11 +223,6 @@
     }
     
     $(document).ready(function() {
-        
-        $("#enrolledProgram").select2({
-                    placeholder: "Select one or more Enrolled Programs",
-                    allowClear: true
-                });
         
         <?php
         if(isset($this->rsParticipant["individual"]) && $this->rsParticipant["individual"]=='no'){

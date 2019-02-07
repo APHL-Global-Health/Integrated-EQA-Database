@@ -51,11 +51,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $db->fetchAll($sql);
     }
 
-    public function getEnrolledProgramsList() {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll($db->select()->from('r_enrolled_programs')->order('enrolled_programs ASC'));
-    }
-
     public function checkParticipantAccess($participantId) {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $row = $this->getAdapter()->fetchRow($this->getAdapter()->select()
@@ -72,10 +67,9 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getParticipant($partSysId) {
         return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
-                                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
-                                ->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array('enrolled_prog' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pe.ep_id SEPARATOR ', ')")))
-                                ->where("p.participant_id = ?", $partSysId)
-                                ->group('p.participant_id'));
+                    ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
+                    ->where("p.participant_id = ?", $partSysId)
+                    ->group('p.participant_id'));
     }
 
     public function getAllParticipants($parameters) {
@@ -288,24 +282,11 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $noOfRows = $this->update($data, "participant_id = " . $params['participantId']);
         $db = Zend_Db_Table_Abstract::getAdapter();
 
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            $db->delete('participant_enrolled_programs_map', "participant_id = " . $params['participantId']);
-            //var_dump($params['enrolledProgram']);die;
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $params['participantId']));
-            }
-        }
-
         if (isset($params['dataManager']) && $params['dataManager'] != "") {
             $db->delete('participant_manager_map', "participant_id = " . $params['participantId']);
             foreach ($params['dataManager'] as $dataManager) {
                 $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $params['participantId']));
             }
-        }
-
-        if (isset($params['scheme']) && $params['scheme'] != "") {
-            $enrollDb = new Application_Model_DbTable_Enrollments();
-            $enrollDb->enrollParticipantToSchemes($params['participantId'], $params['scheme']);
         }
 
         return $noOfRows;
@@ -477,32 +458,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
 
 
-        //Zend_Debug::dump($data);die;
-        //Zend_Debug::dump($data);die;
         $participantId = $this->insert($data);
-
-
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            $db = Zend_Db_Table_Abstract::getAdapter();
-            $db->delete('participant_enrolled_programs_map', "participant_id = " . $participantId);
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-            }
-        }
-
-
-        if (isset($params['scheme']) && $params['scheme'] != "") {
-            $enrollDb = new Application_Model_DbTable_Enrollments();
-            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
-        }
-        if (isset($params['assay']) && $params['assay'] != "") {
-            $assayDb = Zend_Db_Table_Abstract::getAdapter();
-            $assayDb->delete('participantassays', "participant=" . $participantId);
-            foreach ($params['assay'] as $assay) {
-                $data = array('participant' => $participantId, 'AssayID' => $assay);
-                $assayDb->insert('participantassays', $data);
-            }
-        }
 
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();

@@ -30,7 +30,7 @@ class Admin_IndexController extends Zend_Controller_Action {
         if ($this->_hasParam('schemeType')) {
             $schemeType = $this->_getParam('schemeType');
             $participantService = new Application_Service_Participants();
-            $this->view->participants = $participantService->getSchemeWiseParticipants($schemeType);
+            $this->view->participants = []; //$participantService->getSchemeWiseParticipants($schemeType);
         }
     }
 

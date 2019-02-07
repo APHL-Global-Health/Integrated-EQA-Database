@@ -1359,7 +1359,7 @@ class ReportsController extends Zend_Controller_Action
     public function getcountiesAction()
     {
         $where['status'] = 1;
-        $counties = $this->dbConnection->selectFromTable('rep_counties', $where);
+        $counties = $this->dbConnection->selectFromTable('counties', $where);
         echo $this->returnJson(array('status' => 1, 'data' => $counties));
 
         exit;

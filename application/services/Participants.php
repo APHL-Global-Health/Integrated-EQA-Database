@@ -31,7 +31,7 @@ class Application_Service_Participants
     public function getCounties()
     {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
+        return $db->fetchAll($db->select()->from('counties')->order('CountyID ASC'));
     }
 
     public function getNetworkTierList()
@@ -216,12 +216,6 @@ class Application_Service_Participants
     {
         $db = new Application_Model_DbTable_Participants();
         return $db->addParticipantManager($params);
-    }
-
-    public function getEnrolledProgramsList()
-    {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll($db->select()->from('r_enrolled_programs')->order('enrolled_programs ASC'));
     }
 
     public function getAllParticipantRegion()

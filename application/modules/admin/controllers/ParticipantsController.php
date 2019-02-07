@@ -34,7 +34,6 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->networks = $participantService->getNetworkTierList();
         $this->view->dataManagers = $dataManagerService->getDataManagerList();
         $this->view->countriesList = $commonService->getcountriesList();
-        $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
         $this->view->counties = $participantService->getCounties();
     }
@@ -54,7 +53,6 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             $this->view->affiliates = $participantService->getAffiliateList();
             $dataManagerService = new Application_Service_DataManagers();
             $this->view->networks = $participantService->getNetworkTierList();
-            $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
             $this->view->siteType = $participantService->getSiteTypeList();
             $this->view->dataManagers = $dataManagerService->getDataManagerList();
             $this->view->countriesList = $commonService->getcountriesList();
@@ -62,7 +60,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         }
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
-        $this->view->participantSchemes = $participantService->getSchemesByParticipantId($userId);
+        $this->view->participantSchemes = []; //$participantService->getSchemesByParticipantId($userId);
     }
 
     public function pendingAction() {
@@ -80,12 +78,10 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             if ($this->_hasParam('id')) {
                 $userId = (int) $this->_getParam('id');
                 $this->view->participant = $participantService->getParticipantDetails($userId);
-                $this->view->enrolledPlatforms = $participantService->getEnrolledPlatforms($userId);
             }
             $this->view->affiliates = $participantService->getAffiliateList();
             $dataManagerService = new Application_Service_DataManagers();
             $this->view->networks = $participantService->getNetworkTierList();
-            $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
             $this->view->siteType = $participantService->getSiteTypeList();
             $this->view->dataManagers = $dataManagerService->getDataManagerList();
             $this->view->countriesList = $commonService->getcountriesList();
@@ -93,7 +89,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         }
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
-        $this->view->participantSchemes = $participantService->getSchemesByParticipantId($userId);
+        $this->view->participantSchemes = []; //$participantService->getSchemesByParticipantId($userId);
     }
 
     public function viewParticipantsAction() {

@@ -90,10 +90,10 @@
                         title="Please choose the country here">
                         <option value="">--Select Country--</option>
                         <?php 
-                        foreach ($this->countriesList as $cou) {
+                        foreach ($this->countriesList as $country) {
                         ?>
-                            <option value="<?php echo $cou['id']; ?>">
-                                <?php echo $cou['iso_name']; ?>
+                            <option value="<?php echo $country['id']; ?>">
+                                <?php echo $country['iso_name']; ?>
                             </option>
                         <?php
                         }
@@ -144,24 +144,6 @@
                             ?>
                             <option value="<?php echo $nw['network_id']; ?>"><?php echo $nw['network_name']; ?></option>
                         <?php }
-                        ?>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group col-lg-6">
-                <label class="col-lg-4 control-label">Enrolled Programs </label>
-
-                <div class="col-lg-8">
-                    <select name="enrolledProgram[]" id="enrolledProgram"  multiple="multiple" class="form-control"  
-                        data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
-                        <?php 
-                        foreach ($this->enrolledPrograms as $enrolledPrograms) {
-                        ?>
-                            <option value="<?php echo $enrolledPrograms['r_epid']; ?>">
-                                <?php echo $enrolledPrograms['enrolled_programs']; ?>
-                            </option>
-                        <?php
-                        }
                         ?>
                     </select>
                 </div>

@@ -807,7 +807,6 @@ class Application_Service_Reports {
             $sQuery = $dbAdapter->select()->from(array('s' => 'shipment'), array('shipment_code'))
                 ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id')
                 ->join(array('sp' => 'shipment_participant_map'), 'sp.shipment_id=s.shipment_id', array("total_responses" => new Zend_Db_Expr("SUM(sp.shipment_test_date <> '0000-00-00')"), "total_passed" => new Zend_Db_Expr("SUM(sp.final_result=1)"), "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))")))
-                //->join(array('p' => 'participant'), 'p.participant_id=sp.participant_id')
                 ->join(array('ref' => $refTable), 's.shipment_id=ref.shipment_id')
                 ->join(array('res' => $resTable), 'sp.map_id=res.shipment_map_id', array("positive_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rPositive . ', 1, 0))'), "negative_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rNegative . ', 1, 0))'), "invalid_responses" => new Zend_Db_Expr('SUM(if(res.reported_result = ' . $rInderminate . ', 1, 0))')))
                 ->join(array('rr' => 'r_results'), 'sp.final_result=rr.result_id')
@@ -957,23 +956,13 @@ class Application_Service_Reports {
             } else {
                 $sQuery = $sQuery->joinLeft(array('pa' => 'r_participant_affiliates'), 'p.affiliation=pa.affiliate', array());
             }
-            //echo $sQuery;die;
         }
+
         if (isset($params['reportType']) && $params['reportType'] == "region") {
             if (isset($params['regionValue']) && $params['regionValue'] != "") {
                 $sQuery = $sQuery->where("p.region= ?", $params['regionValue']);
             } else {
                 $sQuery = $sQuery->where("p.region IS NOT NULL")->where("p.region != ''");
-            }
-        }
-        if (isset($params['reportType']) && $params['reportType'] == "enrolled-programs") {
-            if (isset($params['enrolledProgramsValue']) && $params['enrolledProgramsValue'] != "") {
-                $sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'))
-							->where("rep.r_epid= ?", $params['enrolledProgramsValue']);
-            } else {
-                $sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'));
             }
         }
 
@@ -982,17 +971,13 @@ class Application_Service_Reports {
             $sQuery = $sQuery->where("s.shipment_date <= ?", $params['endDate']);
         }
         $sQuery = $sQuery->where("tn.TestKit_Name IS NOT NULL");
-        //echo $sQuery;die;
         return $dbAdapter->fetchAll($sQuery);
     }
 
     public function getTestKitDetailedReport($parameters) {
-        //Zend_Debug::dump($parameters);die;
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
          */
-
-        //    $aColumns = array('tn.TestKit_Name',new Zend_Db_Expr("CAST((COUNT('shipment_map_id')/s.number_of_samples) as UNSIGNED)"));
 
         $aColumns = array(
             'tn.TestKit_Name',
@@ -1119,16 +1104,6 @@ class Application_Service_Reports {
                 $sQuery = $sQuery->where('p.affiliation="' . $appliate . '" OR p.affiliation=' . $parameters['affiliateValue']);
             } else {
                 $sQuery = $sQuery->joinLeft(array('pa' => 'r_participant_affiliates'), 'p.affiliation=pa.affiliate', array());
-            }
-        }
-        if (isset($parameters['reportType']) && $parameters['reportType'] == "enrolled-programs") {
-            if (isset($parameters['enrolledProgramsValue']) && $parameters['enrolledProgramsValue'] != "") {
-                $sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'))
-							->where("rep.r_epid= ?", $parameters['enrolledProgramsValue']);
-            } else {
-                $sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-                            ->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'));
             }
         }
         if (isset($parameters['reportType']) && $parameters['reportType'] == "region") {
@@ -3642,16 +3617,7 @@ class Application_Service_Reports {
                     $sQuery = $sQuery->where("p.region IS NOT NULL")->where("p.region != ''");
                 }
             }
-			if (isset($parameters['reportType']) && $parameters['reportType'] == "enrolled-programs") {
-				if (isset($parameters['enrolledProgramsValue']) && $parameters['enrolledProgramsValue'] != "") {
-					$sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-								->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'))
-								->where("rep.r_epid= ?", $parameters['enrolledProgramsValue']);
-				} else {
-					$sQuery = $sQuery->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array())
-								->joinLeft(array('rep' => 'r_enrolled_programs'), 'rep.r_epid=pe.ep_id', array('rep.enrolled_programs'));
-				}
-			}			
+
             if (isset($parameters['startDate']) && $parameters['startDate'] != "" && isset($parameters['endDate']) && $parameters['endDate'] != "") {
                 $sQuery = $sQuery->where("s.shipment_date >= ?", $parameters['startDate']);
                 $sQuery = $sQuery->where("s.shipment_date <= ?", $parameters['endDate']);

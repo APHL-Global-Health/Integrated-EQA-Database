@@ -117,21 +117,6 @@
         </div>
     </div>
     <div class="row" style="padding: 10px 0;">
-        <label class="col-sm-4">Enrolled Programs </label>
-
-        <div class="col-sm-8">
-            <div>
-                <?php
-                $enrolledProg = explode(",", $this->participant['enrolled_prog']);
-
-                foreach ($this->enrolledPrograms as $enrolledPrograms) {
-                    echo (in_array($enrolledPrograms['r_epid'], $enrolledProg)) ? $enrolledPrograms['enrolled_programs'] . '<br>' : "&nbsp;";
-                }
-                ?>&nbsp;
-            </div>
-        </div>
-    </div>
-    <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
         <label class="col-sm-4">Status </label>
         <div class="col-sm-8">
             <p class="text-uppercase">

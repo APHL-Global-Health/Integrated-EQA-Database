@@ -105,45 +105,6 @@ class ParticipantController extends Zend_Controller_Action {
         }
     }
 
-    public function testereditAction() {
-        // action body
-        // Get
-        $this->_helper->layout()->activeMenu = 'my-account';
-        $this->_helper->layout()->activeSubMenu = 'testers';
-        $participantService = new Application_Service_Participants();
-        $commonService = new Application_Service_Common();
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $participantService->updateParticipant($data);
-            $this->_redirect('/participant/testers');
-        } else {
-            $this->view->rsParticipant = $participantService->getParticipantDetails($this->_getParam('psid'));
-        }
-
-        $this->view->affiliates = $participantService->getAffiliateList();
-        $this->view->countriesList = $commonService->getcountriesList();
-        $this->view->networks = $participantService->getNetworkTierList();
-        $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
-        $this->view->siteType = $participantService->getSiteTypeList();
-        $authNameSpace = new Zend_Session_Namespace('datamanagers');
-        if ($authNameSpace->view_only_access == 'yes') {
-            $this->view->isEditable = false;
-        } else {
-            $this->view->isEditable = true;
-        }
-    }
-
-    public function schemeinfoAction() {
-        // action body
-    }
-
-    public function testusAction() {
-        $participantService = new Application_Model_DbTable_Participants();
-        $authNameSpace = $participantService->getParticipantLab();
-        var_dump((array) $authNameSpace);
-        exit;
-    }
-
     public function addAction() {
         $this->_helper->layout()->activeMenu = 'my-account';
         $this->_helper->layout()->activeSubMenu = 'testers';
@@ -159,10 +120,8 @@ class ParticipantController extends Zend_Controller_Action {
         $this->view->affiliates = $participantService->getAffiliateList();
         $this->view->networks = $participantService->getNetworkTierList();
         $scheme = new Application_Service_VlAssay();
-        //$this->view->schemes = $scheme->getAllSchemes();
         $this->view->assay = $scheme->getAllVlAssays();
         $this->view->countriesList = $commonService->getcountriesList();
-        $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
         $this->view->uniqueid = $commonService->generate_id();
         $this->view->institute = $authNameSpace->institute;

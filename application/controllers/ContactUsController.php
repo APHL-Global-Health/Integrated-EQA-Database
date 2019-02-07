@@ -27,7 +27,6 @@ class ContactUsController extends Zend_Controller_Action {
             $this->view->networks = $participantService->getNetworkTierList();
             $this->view->dataManagers = $dataManagerService->getDataManagerList();
             $this->view->countriesList = $commonService->getcountriesList();
-            $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
             $this->view->siteType = $participantService->getSiteTypeList();
             $this->view->countriesList = $common->getCountriesList();
             $this->view->countiesList = $common->getCountiesList();
@@ -69,7 +68,6 @@ class ContactUsController extends Zend_Controller_Action {
         $this->view->networks = $participantService->getNetworkTierList();
         $this->view->dataManagers = $dataManagerService->getDataManagerList();
         $this->view->countriesList = $commonService->getcountriesList();
-        $this->view->enrolledPrograms = $participantService->getEnrolledProgramsList();
         $this->view->siteType = $participantService->getSiteTypeList();
         $this->view->countriesList = $common->getCountriesList();
         $this->view->countiesList = $common->getCountiesList();

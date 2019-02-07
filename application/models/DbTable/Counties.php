@@ -3,7 +3,7 @@
 class Application_Model_DbTable_Counties extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'rep_counties';
+    protected $_name = 'counties';
     
     public function getAllCounties(){
 		$sql = $this->select();

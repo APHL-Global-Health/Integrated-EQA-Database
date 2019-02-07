@@ -79,23 +79,6 @@
                                 </select>
                             </td>
                         </tr> 
-<!--                        <tr>
-                            <th><span class="mandatory"></span></th>
-                            <td>
-                                <select id="assay" name="assay[]" multiple="multiple" style="width:285px;">
-                                    <?php
-                                    //foreach ($this->assay as $scheme) {
-                                        ?>
-                                        <option value="<?php //echo $scheme['id']; ?>"><?php //echo $scheme['name']; ?></option>	
-                                        <?php
-                                    //}
-                                    ?>
-                                </select>
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>-->
-
                     </table>
                     <br>
                     <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
@@ -125,71 +108,67 @@
 <script type="text/javascript" src="<?php echo $this->baseUrl('js/bootstrap-select.min.js'); ?>"></script>
 <script>
 
-                                $(document).ready(function () {
-                                    $('#scheme').selectpicker();
-                                    $("#assay").selectpicker({
-                                        placeholder: "Select one or more",
-                                        allowClear: true
-                                    });
+        $(document).ready(function () {
+            $('#scheme').selectpicker();
+            $("#assay").selectpicker({
+                placeholder: "Select one or more",
+                allowClear: true
+            });
 
-//                                    $("#enrolledProgram").select2({
-//                                        placeholder: "Select one or more Enrolled Programs",
-//                                        allowClear: true
-//                                    });
-                                    <?php if (!$this->isEditable) {
-                                        ?>
-                                          $("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
-                                        <?php
-                                    }
-                                    ?>
-                                })
+            <?php if (!$this->isEditable) {
+                ?>
+                  $("#participantEdit").find("input:enabled, select:enabled, textarea:enabled").attr("disabled", "disabled");
+                <?php
+            }
+            ?>
+        })
 
-                                function goto_testers() {
-                                    window.history.back();
-                                }
+        function goto_testers() {
+            window.history.back();
+        }
 
-                                var duplicated = false;
+        var duplicated = false;
 
-                                function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
-                                    $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
-                                    function (data) {
-                                        if (data > 0) {
-                                            alert(msg, "err");
-                                            duplicated = true;
-                                            obj.focus();
-                                        }
-                                        else {
-                                            duplicated = false;
-                                        }
-                                    });
-                                }
-                                function validateNow() {
-                                    //checkDuplicate('participant', 'unique_identifier', $("#participantId"), null, 'This Participant ID already exists for another Participant. Please try something else.')
-                                    flag = deforayValidator.init({
-                                        formId: 'participantEdit'
-                                    });
-                                    if (flag && !duplicated) {
-                                        $.blockUI();
-                                        document.getElementById('participantEdit').submit();
-                                    }
-                                }
+        function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+            $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", {tableName: tableName, fieldName: fieldName, value: obj.value, fnct: fnct, format: "html"},
+            function (data) {
+                if (data > 0) {
+                    alert(msg, "err");
+                    duplicated = true;
+                    obj.focus();
+                }
+                else {
+                    duplicated = false;
+                }
+            });
+        }
+        function validateNow() {
+            //checkDuplicate('participant', 'unique_identifier', $("#participantId"), null, 'This Participant ID already exists for another Participant. Please try something else.')
+            flag = deforayValidator.init({
+                formId: 'participantEdit'
+            });
+            if (flag && !duplicated) {
+                $.blockUI();
+                document.getElementById('participantEdit').submit();
+            }
+        }
 
-                                function checkIndividualParticipant(obj) {
-                                    if (obj.checked) {
-                                        tag = 'Participant First Name <span class="mandatory">*</span>';
-                                        $("#lastNameLable").show();
-                                        $("#lastNameLableTd").show();
-                                        $("#pfname").attr("title", "Please enter the Participant's First Name here");
-                                        $("#pfname").attr("placeholder", "Please enter the Participant's First Name here");
-                                    } else {
-                                        tag = 'Lab Name <span class="mandatory">*</span>';
-                                        $("#lastNameLable").hide();
-                                        $("#lastNameLableTd").hide();
-                                        $("#plname").val('');
-                                        $("#pfname").attr("title", "Please enter the Lab Name here");
-                                        $("#pfname").attr("placeholder", "Please enter the Lab Name here");
+        function checkIndividualParticipant(obj) {
+            if (obj.checked) {
+                tag = 'Participant First Name <span class="mandatory">*</span>';
+                $("#lastNameLable").show();
+                $("#lastNameLableTd").show();
+                $("#pfname").attr("title", "Please enter the Participant's First Name here");
+                $("#pfname").attr("placeholder", "Please enter the Participant's First Name here");
+            } else {
+                tag = 'Lab Name <span class="mandatory">*</span>';
+                $("#lastNameLable").hide();
+                $("#lastNameLableTd").hide();
+                $("#plname").val('');
+                $("#pfname").attr("title", "Please enter the Lab Name here");
+                $("#pfname").attr("placeholder", "Please enter the Lab Name here");
 
-                                    }
-                                    $("#firstNameLable").html(tag);
-                                }
+            }
+            $("#firstNameLable").html(tag);
+        }
 </script>

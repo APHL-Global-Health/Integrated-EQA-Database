@@ -106,35 +106,6 @@
                                                  placeholder="Please enter the city here"/></div>
                  </div>
                 <div class="form-group">
-                    <label class="col-lg-4 control-label">Partner</label>
-
-                    <div class="col-lg-8">
-                        <select class="form-control" name="Partner" id="Partner" title="Please choose the Partner here">
-                                <option value="">Select Partner</option>
-                                <?php foreach ($this->PartnersList as $prt) {
-                                    ?>
-                                    <option value="<?php echo $prt['partner_id']; ?>"><?php echo $prt['partner_name']; ?></option>
-                                    <?php
-                                }
-                                ?>
-                            </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 control-label">Enrolled Programs </label>
-
-                    <div class="col-lg-8">
-                        <select name="scheme[]" id="scheme"  multiple="multiple" class="form-control"  data-selected-text-format="count>3" title="Please choose Enrolled Programs" >
-                            <?php foreach ($this->schemeList as $sch) {
-                                    ?>
-                                    <option value="<?php echo $sch['ID']; ?>"><?php echo $sch['SchemeName']; ?></option>
-                                    <?php
-                                }
-                                ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label class="col-lg-4 control-label">Platforms </label>
 
                     <div class="col-lg-8">

@@ -51,7 +51,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getCounties() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-       return $db->fetchAll($db->select()->from('rep_counties')->order('CountyID ASC'));
+       return $db->fetchAll($db->select()->from('counties')->order('CountyID ASC'));
     }
     public function getNetworkTierList() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -65,11 +65,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                 ->joinLeft(array('s' => 'shipment'), 's.shipment_id=sp.shipment_id')
                 ->where("p.participant_id=" . $pid);
         return $db->fetchAll($sql);
-    }
-
-    public function getEnrolledProgramsList() {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll($db->select()->from('r_enrolled_programs')->order('enrolled_programs ASC'));
     }
 
     public function checkParticipantAccess($participantId) {
@@ -88,13 +83,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getParticipant($partSysId) {
         return $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('p' => $this->_name))
-                                ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id',
-                                        array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
-                                 ->joinLeft(array('dm' => 'data_manager'), 'dm.dm_id=dm.dm_id',
-                                        array('phone'))
-                                ->joinLeft(array('pe' => 'participant_enrolled_programs_map'), 'pe.participant_id=p.participant_id', array('enrolled_prog' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pe.ep_id SEPARATOR ', ')")))
-                                ->where("p.participant_id = ?", $partSysId)
-                                ->group('p.participant_id'));
+                    ->joinLeft(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id',
+                            array('data_manager' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT pmm.dm_id SEPARATOR ', ')")))
+                     ->joinLeft(array('dm' => 'data_manager'), 'dm.dm_id=dm.dm_id',
+                            array('phone'))
+                    ->where("p.participant_id = ?", $partSysId)
+                    ->group('p.participant_id'));
     }
 
     public function getEnrolledPlatforms($partSysId) {
@@ -318,20 +312,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $noOfRows = $this->update($data, "participant_id = " . $params['participantId']);
         $db = Zend_Db_Table_Abstract::getAdapter();
 
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            $db->delete('participant_enrolled_programs_map', "participant_id = " . $params['participantId']);
-            //var_dump($params['enrolledProgram']);die;
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $params['participantId']));
-            }
-        }
-
-        if (isset($params['dataManager']) && $params['dataManager'] != "") {
-            $db->delete('participant_manager_map', "participant_id = " . $params['participantId']);
-            foreach ($params['dataManager'] as $dataManager) {
-                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $params['participantId']));
-            }
-        }
 
         if (isset($params['scheme']) && $params['scheme'] != "") {
             $enrollDb = new Application_Model_DbTable_Enrollments();
@@ -390,30 +370,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $participantId = $this->insert($data);
         $db = Zend_Db_Table_Abstract::getAdapter();
         $common = new Application_Service_Common();        
-        
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            $db->delete('participant_enrolled_programs_map', "participant_id = " . $participantId);
-            //var_dump($params['enrolledProgram']);die;
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-            }
-        }
-
-        if (isset($params['dataManager']) && $params['dataManager'] != "") {
-            $db->delete('participant_manager_map', "participant_id = " . $participantId);
-            foreach ($params['dataManager'] as $dataManager) {
-                $db->insert('participant_manager_map', array('dm_id' => $dataManager, 'participant_id' => $participantId));
-            }
-        }
-
-        if (isset($params['scheme']) && $params['scheme'] != "") {
-            $enrollDb = new Application_Model_DbTable_Enrollments();
-            $enrollDb->enrollParticipantToSchemes($participantId, $params['scheme']);
-        }
-        
-        
-        
-
 
         ////////insert into data_manager if its selft registraion////////////////////
 
@@ -542,13 +498,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         return $participantId;
     }
 
-    public function savePlatformInfo($platformArray, $facilityID) {
-        $db = Zend_Db_Table_Abstract::getAdapter();
-        foreach ($platformArray as $platformId) {
-            $db->insert('facilityplatform', array('FacilityID' => $facilityID, 'PlatformID' => $platformId));
-        }
-    }
-
     public function addParticipantForDataManager($params) {
         //Zend_Debug::dump($params);die;
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
@@ -589,19 +538,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $data['individual'] = 'yes';
         }
 
-
-        //Zend_Debug::dump($data);die;
-        //Zend_Debug::dump($data);die;
-        $participantId =  $this->insert($data);//$this->getParticipantLab();
-
-
-        if (isset($params['enrolledProgram']) && $params['enrolledProgram'] != "") {
-            $db = Zend_Db_Table_Abstract::getAdapter();
-            $db->delete('participant_enrolled_programs_map', "participant_id = " . $participantId);
-            foreach ($params['enrolledProgram'] as $epId) {
-                $db->insert('participant_enrolled_programs_map', array('ep_id' => $epId, 'participant_id' => $participantId));
-            }
-        }
+        $participantId =  $this->insert($data);
 
 
         if (isset($params['scheme']) && $params['scheme'] != "") {
@@ -676,7 +613,8 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
 
     public function getSchemeWiseParticipants($schemeType) {
         if ($schemeType != "all") {
-            $result = $this->getAdapter()->fetchAll($this->getAdapter()->select()->from(array('p' => $this->_name), array('p.address', 'p.long', 'p.lat', 'p.first_name', 'p.last_name'))
+            $result = $this->getAdapter()->fetchAll($this->getAdapter()->select()
+                ->from(array('p' => $this->_name), array('p.address', 'p.long', 'p.lat', 'p.first_name', 'p.last_name'))
                             ->join(array('e' => 'enrollments'), 'e.participant_id=p.participant_id')
                             ->where("e.scheme_id = ?", $schemeType)
                             ->where("p.status='active'")
