@@ -1,0 +1,51 @@
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
+    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">Schemes</div>
+    <div style="margin-top:10px;"><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'schemes', 'action' => 'add'), 'default', true); ?>" class="btn btn-primary" style="float:right;">
+            <i class="icon-plus"></i>&nbsp;&nbsp;Add New Scheme</a>
+    </div></h4>
+<table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover" id="schemesTable">
+    <thead>
+    <tr>
+        <th style="width:32%;">Scheme Name</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php if(count($this->schemes) > 0){
+            foreach($this->schemes as $scheme){
+        ?>
+            <tr>
+                <td><?php echo $scheme->scheme_name; ?></td>
+                <td style="text-align: center;text-transform:uppercase;"><?php echo $scheme->status; ?></td>
+                <td style="text-align: center;">
+                    <a href="/admin/schemes/edit/id/<?php echo $scheme->scheme_id; ?>" class="btn btn-xs btn-warning" style="padding: 5px 10px;"> Edit </a>
+                </td>
+            </tr>
+        <?php
+            }
+        }else{
+        ?>
+            <tr>
+                <td colspan="3">No schemes found!</td>
+            </tr>
+        <?php
+        } 
+        ?>
+    </tbody>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    /* Table initialisation */
+    $(document).ready(function() {
+        $('#schemesTable').dataTable( {
+            "aoColumns": [
+                {"sClass":""},
+                {"sClass":""},
+                {"sClass":"center","bSortable":false}
+            ],
+} );
+
+    } );
+
+</script>

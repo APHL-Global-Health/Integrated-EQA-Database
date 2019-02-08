@@ -1,39 +1,40 @@
 <div class="well">
-    <form name="editPlatformForm" id="editPlatformForm" method="post"
-          action="<?php echo $this->url(array("module" => "admin", "controller" => "platforms", "action" => "edit"), 'default', true) ?>"
+    <form name="editSchemeForm" id="editSchemeForm" method="post"
+          action="<?php echo $this->url(array('module' => 'admin', 'controller' => 'schemes', 'action' => 'update'), 'default', true) ?>"
           class="form-horizontal bs-example" role="form" enctype="multipart/form-data"
           onsubmit="validateNow();return false;">
         <fieldset>
-            <legend>Edit Platform</legend>
+            <legend>Edit Scheme</legend>
             <div class="form-group">
-                <label class="col-lg-3 control-label">Platform Name <span class="mandatory">*</span></label>
+                <label class="col-lg-3 control-label">Scheme Name <span class="mandatory">*</span></label>
 
                 <div class="col-lg-5">
-                    <input id="PlatformName" name="PlatformName" class="isRequired form-control" 
-                        title="Please enter the platform name here" placeholder="Please enter the Platform name here"
-                          onblur="checkDuplicate('platforms', 'PlatformName','PlatformName','<?php echo "ID##" . $this->platform['ID']; ?>', 'The name that you entered already exist. Please try something else.');"
-                            value="<?php echo $this->platform['PlatformName']; ?>" />
+                    <input type="text" id="scheme_name" name="scheme_name" class="isRequired form-control" 
+                        title="Please enter the scheme name here" placeholder="Please enter the scheme name here"
+                        onblur="checkDuplicate('schemes', 'scheme_name','scheme_name','<?php echo "ID##" . $this->scheme['scheme_id']; ?>', 'The name that you entered already exist. Please try something else.');"
+                        value="<?php echo $this->scheme['scheme_name']; ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Status</label>
 
                 <div class="col-lg-5">
-                    <select id="status" name="status"
-                            class="form-control" title="Please enter the link here"
-                            placeholder="Please enter the status here" value="<?php echo $this->platform['status']; ?>">
-                        <option value="1" <?php echo $this->platform['status'] == 1 ? 'selected' : ''; ?>> Active
+                    <select id="status" name="status" class="form-control" title="Please enter the link here"
+                        placeholder="Please enter the status here" value="<?php echo $this->scheme['status']; ?>">
+                        <option value="active" <?php echo strcmp($this->scheme['status'],"active") == 0?"selected":""; ?>>
+                            Active
                         </option>
-                        <option value="0" <?php echo $this->platform['status'] == 0 ? 'selected' : ''; ?>> Inactive
+                        <option value="inactive" <?php echo strcmp($this->scheme['status'],"inactive") == 0?"selected":""; ?>>
+                            Inactive
                         </option>
                     </select>
                 </div>
             </div>
 
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
-                <input type="hidden" id="ID" name="ID" value="<?php echo $this->platform['ID']; ?>"/>
+                <input type="hidden" id="scheme_id" name="scheme_id" value="<?php echo $this->scheme['scheme_id']; ?>"/>
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Update"/>
-                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/platforms';"
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/schemes';"
                        tabindex="8" value="Cancel"/>
             </div>
         </fieldset>
@@ -69,11 +70,11 @@
 
     function validateNow() {
         flag = deforayValidator.init({
-            formId: 'editPlatformForm'
+            formId: 'editSchemeForm'
         });
         if (flag && !duplicated) {
             $.blockUI();
-            document.getElementById('editPlatformForm').submit();
+            document.getElementById('editSchemeForm').submit();
         }
     }
 </script>

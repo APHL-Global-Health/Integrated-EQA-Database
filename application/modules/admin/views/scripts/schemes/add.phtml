@@ -6,21 +6,19 @@
             <legend>Add New Scheme</legend>
 
             <div class="form-group">
+                <label class="col-lg-3 control-label">Scheme ID <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="text" id="scheme_id" name="scheme_id"  size="50" class="isRequired form-control" title="Please enter a short alpha-numeric scheme id e.g. eid" placeholder="Please enter the scheme id here" />
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-lg-3 control-label">Scheme Name <span class="mandatory">*</span></label>
                 <div class="col-lg-5">
-                    <input type="text" id="schemeName" name="schemeName"  size="50" class="isRequired form-control" title="Please enter the scheme name here" placeholder="Please enter the scheme name here" value="<?php echo (isset($this->contact['scheme_name'])) ? $this->contact['scheme_name'] : "" ?>"/>
+                    <input type="text" id="scheme_name" name="scheme_name"  size="50" class="isRequired form-control" title="Please enter the scheme name here" placeholder="Please enter the scheme name here" />
                 </div>
             </div>
                       
-            <div class="form-group">
-                <label class="col-lg-3 control-label">Description </label>
-                <div class="col-lg-5">
-                    <textarea id="description" name="description" size="50" maxlength="255" class="form-control" 
-                        title="Enter a description of the scheme" placeholder="Enter a description of the scheme">
-                        <?php echo (isset($this->contact['description'])) ? $this->contact['description'] : "" ?>"
-                    </textarea>
-                </div>
-            </div>
             <br>
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
                 <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"  /> 

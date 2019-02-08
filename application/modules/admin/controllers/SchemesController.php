@@ -1,6 +1,6 @@
 <?php
 
-class Admin_SchemeController extends Zend_Controller_Action
+class Admin_SchemesController extends Zend_Controller_Action
 {
 
     public function init()
@@ -11,29 +11,20 @@ class Admin_SchemeController extends Zend_Controller_Action
     }
 
     public function indexAction(){
+        $schemesService = new Application_Service_Schemes();
         if ($this->getRequest()->isPost()) {
             $parameters = $this->_getAllParams();
-            $schemesService = new Application_Service_Scheme();
             $schemesService->getAllSchemes($parameters);
         }
+        $this->view->schemes = $schemesService->getAllSchemes();
     }
     
-    public function viewAction(){
-        $schemesService = new Application_Service_Scheme();
-        if($this->_hasParam('id')){
-            $schemeID = (int)$this->_getParam('id');
-            $this->view->scheme = $schemesService->getSchemeDetails($schemeID);
-        }else{
-            $this->_redirect("/admin/scheme");
-        }
-    }
-
     public function addAction(){
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
-            $schemesService = new Application_Service_Scheme();
+            $schemesService = new Application_Service_Schemes();
             $schemesService->addScheme($params);
-            $this->_redirect("/admin/scheme/view/id/".$params['scheme_id']);
+            $this->_redirect("/admin/schemes");
         }
         if($this->_hasParam('id')){
             error_log((int)$this->_getParam('id'));
@@ -42,21 +33,21 @@ class Admin_SchemeController extends Zend_Controller_Action
     }
     
     public function editAction(){
-        $schemesService = new Application_Service_Scheme();
+        $schemesService = new Application_Service_Schemes();
         if($this->_hasParam('id')){
-            $schemeID = (int)$this->_getParam('id');
-            $this->view->scheme = $schemesService->getSchemeDetails($schemeID);
+            $schemeID = $this->_getParam('id');
+            $this->view->scheme = $schemesService->getScheme($schemeID);
         }else{
-            $this->_redirect("/admin/scheme");
+            $this->_redirect("/admin/schemes");
         }
     }
 
     public function updateAction(){
-        $schemesService = new Application_Service_Scheme();
+        $schemesService = new Application_Service_Schemes();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
             $schemesService->updateScheme($params);
-            $this->_redirect("/admin/scheme");
+            $this->_redirect("/admin/schemes");
         }
     }
 

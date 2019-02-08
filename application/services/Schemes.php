@@ -7,12 +7,6 @@ class Application_Service_Schemes {
         return $schemeListDb->getAllSchemes();
     }
 
-    public function getAllDtsTestKit($countryAdapted = false) {
-
-        $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-        return $testkitsDb->getActiveTestKitsNamesForScheme('dts', $countryAdapted);
-    }
-
     public function checkResetPassword() {
         if (isset($_SESSION)) {
             if ($_SESSION['loggedInDetails']['force_password_reset'] == 1) {
@@ -20,52 +14,6 @@ class Application_Service_Schemes {
             }
         }
         return false;
-    }
-
-    public function getAllDtsTestKitList($countryAdapted = false) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('r_testkitname_dts'), array('TESTKITNAMEID' => 'TESTKITNAME_ID', 'TESTKITNAME' => 'TESTKIT_NAME', 'testkit_1', 'testkit_2', 'testkit_3'))
-                ->where("scheme_type = 'dts'");
-
-        if ($countryAdapted) {
-            $sql = $sql->where('COUNTRYADAPTED = 1');
-        }
-
-        $stmt = $db->fetchAll($sql);
-
-        return $stmt;
-    }
-
-    public function getRecommededDtsTestkit($testKit = null) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('dts_recommended_testkits'));
-
-        if ($testKit != null && (int) $testKit > 0 && (int) $testKit <= 3) {
-            $sql = $sql->where('test_no = ' . (int) $testKit);
-        }
-
-        $stmt = $db->fetchAll($sql);
-        $retval = array();
-        foreach ($stmt as $t) {
-            $retval[$t['test_no']][] = $t['testkit'];
-        }
-        return $retval;
-    }
-
-    public function setRecommededDtsTestkit($recommended) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->delete('dts_recommended_testkits');
-        foreach ($recommended as $testNo => $kits) {
-            foreach ($kits as $kit) {
-                $data = array('test_no' => $testNo,
-                    'testkit' => $kit
-                );
-                $db->insert('dts_recommended_testkits', $data);
-            }
-        }
     }
 
     public function getEidExtractionAssay() {
@@ -101,16 +49,6 @@ class Application_Service_Schemes {
         return $response;
     }
 
-    public function getDbsEia() {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $res = $db->fetchAll($db->select()->from('r_dbs_eia'));
-        $response = array();
-        foreach ($res as $row) {
-            $response[$row['eia_id']] = $row['eia_name'];
-        }
-        return $response;
-    }
-
     public function getDtsCorrectiveActions() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $res = $db->fetchAll($db->select()->from('r_dts_corrective_actions'));
@@ -119,48 +57,6 @@ class Application_Service_Schemes {
             $response[$row['action_id']] = $row['corrective_action'];
         }
         return $response;
-    }
-
-    public function getDbsWb() {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $res = $db->fetchAll($db->select()->from('r_dbs_wb'));
-        $response = array();
-        foreach ($res as $row) {
-            $response[$row['wb_id']] = $row['wb_name'];
-        }
-        return $response;
-    }
-
-    public function getDtsSamples($sId, $pId) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('ref' => 'reference_result_dts'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_dts'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('test_kit_name_1',
-                    'lot_no_1',
-                    'exp_date_1',
-                    'test_result_1',
-                    'test_kit_name_2',
-                    'lot_no_2',
-                    'exp_date_2',
-                    'test_result_2',
-                    'test_kit_name_3',
-                    'lot_no_3',
-                    'exp_date_3',
-                    'test_result_3',
-                    'reported_result'
-                ))
-                ->where('sp.shipment_id = ? ', $sId)
-                ->where('sp.participant_id = ? ', $pId);
-        return $db->fetchAll($sql);
-    }
-
-    public function getDtsReferenceData($shipmentId) {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('reference_result_dts'))
-                ->where('shipment_id = ? ', $shipmentId);
-        return $db->fetchAll($sql);
     }
 
     public function getVlReferenceData($shipmentId) {
@@ -174,59 +70,6 @@ class Application_Service_Schemes {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('reference_result_eid'))
                 ->where('shipment_id = ? ', $shipmentId);
-        return $db->fetchAll($sql);
-    }
-
-    public function getDbsSamples($sId, $pId) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('ref' => 'reference_result_dbs'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_dbs'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('eia_1',
-                    'lot_no_1',
-                    'exp_date_1',
-                    'od_1',
-                    'cutoff_1',
-                    'eia_2',
-                    'lot_no_2',
-                    'exp_date_2',
-                    'od_2',
-                    'cutoff_2',
-                    'eia_3',
-                    'lot_no_3',
-                    'exp_date_3',
-                    'od_3',
-                    'cutoff_3',
-                    'wb',
-                    'wb_lot',
-                    'wb_exp_date',
-                    'wb_160',
-                    'wb_120',
-                    'wb_66',
-                    'wb_55',
-                    'wb_51',
-                    'wb_41',
-                    'wb_31',
-                    'wb_24',
-                    'wb_17',
-                    'reported_result'
-                ))
-                ->where('sp.shipment_id = ? ', $sId)
-                ->where('sp.participant_id = ? ', $pId);
-
-        return $db->fetchAll($sql);
-    }
-
-    public function getEidSamples($sId, $pId) {
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $sql = $db->select()->from(array('ref' => 'reference_result_eid'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_eid'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_result', 'hiv_ct_od', 'ic_qs'))
-                ->where('sp.shipment_id = ? ', $sId)
-                ->where('sp.participant_id = ? ', $pId);
         return $db->fetchAll($sql);
     }
 
@@ -531,55 +374,6 @@ class Application_Service_Schemes {
         }
     }
 
-    public function addTestkit($params) {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $db->beginTransaction();
-        try {
-            $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-            $testkitsDb->addTestkitDetails($params);
-            $db->commit();
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-    }
-
-    public function updateTestkit($params) {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $db->beginTransaction();
-        try {
-            $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-            $testkitsDb->updateTestkitDetails($params);
-            $db->commit();
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-    }
-
-    public function updateTestkitStage($params) {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $db->beginTransaction();
-        try {
-            $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-            $testkitsDb->updateTestkitStageDetails($params);
-            $db->commit();
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-    }
-
-    public function getAllDtsTestKitInGrid($parameters) {
-        $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-        return $testkitsDb->getAllTestKitsForAllSchemes($parameters);
-    }
-
-    public function getDtsTestkit($testkitId) {
-        $testkitsDb = new Application_Model_DbTable_TestkitnameDts();
-        return $testkitsDb->getDtsTestkitDetails($testkitId);
-    }
-
     public function getVlManualValue($shipmentId, $sampleId, $vlAssay) {
         if (trim($shipmentId) != "" && trim($sampleId) != "" && trim($vlAssay) != "") {
             $db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -628,4 +422,19 @@ class Application_Service_Schemes {
         return $db->fetchAll($sql);
     }
 
+    public function addScheme($params){
+        $schemeModel = new Application_Model_DbTable_Schemes();
+        return $schemeModel->addScheme($params);
+    }
+       
+    public function deleteScheme($platformId){
+        $schemeModel = new Application_Model_DbTable_Schemes();
+        return $schemeModel->deleteScheme($platformId);
+    }
+    
+    public function updateScheme($params){
+        $schemeModel = new Application_Model_DbTable_Schemes();
+        return $schemeModel->updateScheme($params);
+    }
+    
 }

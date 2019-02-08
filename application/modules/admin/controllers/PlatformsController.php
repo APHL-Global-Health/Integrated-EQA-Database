@@ -14,41 +14,41 @@ class Admin_PlatformsController extends Zend_Controller_Action
     public function indexAction(){
         if ($this->getRequest()->isPost()) {
             $parameters = $this->_getAllParams();
-            $partnerService = new Application_Service_Platform();
-            $partnerService->getAllPlatform($parameters);
+            $platformService = new Application_Service_Platform();
+            $platformService->getAllPlatform($parameters);
         }
     }
     
     public function addAction(){
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
-            $partnerService = new Application_Service_Platform();
-            $partnerService->addPlatform($params);
+            $platformService = new Application_Service_Platform();
+            $platformService->addPlatform($params);
             $this->_redirect("/admin/platforms");
         }
     }
     
     public function editAction(){
-        $partnerService = new Application_Service_Platform();
+        $platformService = new Application_Service_Platform();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getPost();
-            $partnerService->updatePlatform($params);
+            $platformService->updatePlatform($params);
             $this->_redirect("/admin/platforms");
         }
         if($this->_hasParam('id')){
-            $partnerId = (int)$this->_getParam('id');
-            $this->view->partner = $partnerService->getPlatform($partnerId);
+            $platformId = (int)$this->_getParam('id');
+            $this->view->platform = $platformService->getPlatform($platformId);
         }else{
             $this->_redirect("/admin/platforms");
         }
     }
 
     public function deleteAction(){
-        $partnerService = new Application_Service_Platform();
+        $platformService = new Application_Service_Platform();
 
         if($this->_hasParam('id')){
-            $partnerId = (int)$this->_getParam('id');
-            $partnerService->deletePlatform($partnerId);
+            $platformId = (int)$this->_getParam('id');
+            $platformService->deletePlatform($platformId);
             $this->_redirect("/admin/platforms");
         }else{
             $this->_redirect("/admin/platforms");
