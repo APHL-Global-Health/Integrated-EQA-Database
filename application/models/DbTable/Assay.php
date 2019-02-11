@@ -6,7 +6,7 @@ class Application_Model_DbTable_Assay extends Zend_Db_Table_Abstract
     protected $_name = 'assays';
     protected $_primary = 'id';
     
-    protected $_dependentTables = array('Application_Model_DbTable_Scheme');
+    protected $_dependentTables = array('Application_Model_DbTable_Scheme','Application_Model_DbTable_AssayPlatform');
 
     public function addVlAssayDetails($params){
         $id = 0;

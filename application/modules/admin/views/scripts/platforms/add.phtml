@@ -12,6 +12,23 @@
                         onblur="checkDuplicate('platforms', 'PlatformName','PlatformName',null, 'The name that you entered already exist. Please try something else.');" /></div>
             </div>
             <div class="form-group">
+                <label class="col-lg-3 control-label">Assays</label>
+
+                <div class="col-lg-5 ">
+                    <?php 
+                    foreach ($this->assays as $assay) {
+                    ?>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" class="form-check-input" name="assays" id="<?php echo $assay->id ?>" >
+                            <label class="form-check-label" for="<?php echo $assay->id ?>">
+                                <?php echo $assay->name; ?></label>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-lg-3 control-label">Status </label>
 
                 <div class="col-lg-5">

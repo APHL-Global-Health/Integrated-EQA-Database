@@ -5,7 +5,8 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
 
     protected $_name = 'platforms';
 
-    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipantPlatform');
+    protected $_dependentTables = array('Application_Model_DbTable_ReadinessChecklistParticipantPlatform',
+        'Application_Model_DbTable_AssayPlatform');
 
     public function getAllPlatforms()
     {
@@ -173,7 +174,13 @@ class Application_Model_DbTable_Platforms extends Zend_Db_Table_Abstract
             'PlatformName' => $params['PlatformName'],
             'status' => $params['status']
         );
-        return $this->update($data, "ID=" . $params['ID']);
+        $platform = $this->update($data, "ID=" . $params['ID']);
+        $this->getAdapter()->delete("assay_platform", "platform_id = {$params['ID']}");
+        foreach ($params['assays'] as $assayID) {
+            $this->getAdapter()->insert("assay_platform", ["platform_id" => $params['ID'], "assay_id" => $assayID]);
+        }
+
+        return $platform;
     }
 
     public function getPlatformDetails($adminId)
