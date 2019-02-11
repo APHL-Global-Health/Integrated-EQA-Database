@@ -1,11 +1,13 @@
 <?php
 
-class Application_Model_DbTable_VlAssay extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_Assay extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'assays';
     protected $_primary = 'id';
     
+    protected $_dependentTables = array('Application_Model_DbTable_Scheme');
+
     public function addVlAssayDetails($params){
         $id = 0;
         if(isset($params['name']) && trim($params['name'])!= ''){
@@ -152,7 +154,7 @@ class Application_Model_DbTable_VlAssay extends Zend_Db_Table_Abstract
 
         echo json_encode($output);
     }
-    public function getAllAssays(){
+    public function getAssays(){
 		$sql = $this->select();
 		return $this->fetchAll($sql);
 	}

@@ -16,11 +16,29 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-lg-3 control-label">Assay</label>
+
+                <div class="col-lg-5">
+                    <select id="assay_id" name="assay_id" class="form-control" placeholder="Please enter the assay here">
+                        <option value="0"> -- Select an assay -- </option>
+                        <?php
+                        $assayID = isset($this->assay)?$this->assay->id:0;
+                        foreach ($this->assays as $anAssay) {
+                        ?>
+                            <option value="<?php echo $anAssay->id; ?>" <?php echo $anAssay->id == $assayID?"selected":""; ?>>
+                                <?php echo $anAssay->name; ?>
+                            </option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-lg-3 control-label">Status</label>
 
                 <div class="col-lg-5">
-                    <select id="status" name="status" class="form-control" title="Please enter the link here"
-                        placeholder="Please enter the status here" value="<?php echo $this->scheme['status']; ?>">
+                    <select id="status" name="status" class="form-control" placeholder="Please enter the status here">
                         <option value="active" <?php echo strcmp($this->scheme['status'],"active") == 0?"selected":""; ?>>
                             Active
                         </option>

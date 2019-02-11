@@ -1,10 +1,18 @@
 <?php
 
-class Application_Model_DbTable_Schemes extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_Scheme extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'schemes';
     
+    protected $_referenceMap    = array(
+        'Assay' => array(
+            'columns'           => array('assay_id'),
+            'refTableClass'     => 'Application_Model_DbTable_Assay',
+            'refColumns'        => array('id')
+        )
+    );
+
     public function getAllSchemes(){
 		return $this->fetchAll($this->select());
 	}
@@ -28,6 +36,7 @@ class Application_Model_DbTable_Schemes extends Zend_Db_Table_Abstract
         $data = array(
             'scheme_id' => $params['scheme_id'],
             'scheme_name' => $params['scheme_name'],
+            'assay_id' => $params['assay_id'],
             'status' => 'active');
         return $this->insert($data);
     }
@@ -37,6 +46,7 @@ class Application_Model_DbTable_Schemes extends Zend_Db_Table_Abstract
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array(
             'scheme_name' => $params['scheme_name'],
+            'assay_id' => $params['assay_id'],
             'status' => $params['status']
         );
         return $this->update($data, "scheme_id='{$params['scheme_id']}'");

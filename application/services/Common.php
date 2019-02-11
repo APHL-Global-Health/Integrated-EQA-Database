@@ -365,7 +365,7 @@ class Application_Service_Common
 
     public function getSchemesList()
     {
-        $countriesDb = new Application_Model_DbTable_Schemes();
+        $countriesDb = new Application_Model_DbTable_Scheme();
         return $countriesDb->getAllSchemes();
     }
 

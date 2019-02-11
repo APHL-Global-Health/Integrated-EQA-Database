@@ -26,17 +26,21 @@ class Admin_SchemesController extends Zend_Controller_Action
             $schemesService->addScheme($params);
             $this->_redirect("/admin/schemes");
         }
-        if($this->_hasParam('id')){
-            error_log((int)$this->_getParam('id'));
-            $this->view->schemeID = (int)$this->_getParam('id');
-        }
-    }
+
+        $assaysModel = new Application_Model_DbTable_Assay();
+        $this->view->assays = $assaysModel->getAssays();
+    }   
     
     public function editAction(){
         $schemesService = new Application_Service_Schemes();
         if($this->_hasParam('id')){
             $schemeID = $this->_getParam('id');
-            $this->view->scheme = $schemesService->getScheme($schemeID);
+            $scheme = $schemesService->getScheme($schemeID);
+            $this->view->scheme = $scheme;
+            $this->view->assay = $scheme->findParentRow('Application_Model_DbTable_Assay');
+
+            $assaysModel = new Application_Model_DbTable_Assay();
+            $this->view->assays = $assaysModel->getAssays();
         }else{
             $this->_redirect("/admin/schemes");
         }

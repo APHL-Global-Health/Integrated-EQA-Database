@@ -3,25 +3,25 @@
 class Application_Service_VlAssay {
     
     public function addVlAssay($params){
-        $vlAssayDb = new Application_Model_DbTable_VlAssay();
+        $vlAssayDb = new Application_Model_DbTable_Assay();
 	return $vlAssayDb->addVlAssayDetails($params);
     }
     public function getAllVlAssays(){
-        $vlAssayDb = new Application_Model_DbTable_VlAssay();
-	return $vlAssayDb->getAllAssays();
+        $vlAssayDb = new Application_Model_DbTable_Assay();
+	return $vlAssayDb->getAssays();
     }
     public function getAllVlAssay($parameters){
-        $vlAssayDb = new Application_Model_DbTable_VlAssay();
+        $vlAssayDb = new Application_Model_DbTable_Assay();
 	return $vlAssayDb->fetchAllVlAssay($parameters);
     }
     
     public function getVlAssay($id){
-        $vlAssayDb = new Application_Model_DbTable_VlAssay();
+        $vlAssayDb = new Application_Model_DbTable_Assay();
 	return $vlAssayDb->fetchVlAssay($id);
     }
     
     public function updateVlAssay($params){
-        $vlAssayDb = new Application_Model_DbTable_VlAssay();
+        $vlAssayDb = new Application_Model_DbTable_Assay();
 	return $vlAssayDb->updateVlAssayDetails($params);
     }
     

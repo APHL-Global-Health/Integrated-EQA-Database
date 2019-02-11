@@ -3,7 +3,7 @@
 class Application_Service_Schemes {
 
     public function getAllSchemes() {
-        $schemeListDb = new Application_Model_DbTable_Schemes();
+        $schemeListDb = new Application_Model_DbTable_Scheme();
         return $schemeListDb->getAllSchemes();
     }
 
@@ -361,13 +361,13 @@ class Application_Service_Schemes {
     }
 
     public function countEnrollmentSchemes() {
-        $schemeListDb = new Application_Model_DbTable_Schemes();
+        $schemeListDb = new Application_Model_DbTable_Scheme();
         return $schemeListDb->countEnrollmentSchemes();
     }
 
     public function getScheme($sid) {
         if ($sid != null) {
-            $schemeListDb = new Application_Model_DbTable_Schemes();
+            $schemeListDb = new Application_Model_DbTable_Scheme();
             return $schemeListDb->fetchRow($schemeListDb->select()->where("scheme_id = ?", $sid));
         } else {
             return null;
@@ -423,17 +423,17 @@ class Application_Service_Schemes {
     }
 
     public function addScheme($params){
-        $schemeModel = new Application_Model_DbTable_Schemes();
+        $schemeModel = new Application_Model_DbTable_Scheme();
         return $schemeModel->addScheme($params);
     }
        
     public function deleteScheme($platformId){
-        $schemeModel = new Application_Model_DbTable_Schemes();
+        $schemeModel = new Application_Model_DbTable_Scheme();
         return $schemeModel->deleteScheme($platformId);
     }
     
     public function updateScheme($params){
-        $schemeModel = new Application_Model_DbTable_Schemes();
+        $schemeModel = new Application_Model_DbTable_Scheme();
         return $schemeModel->updateScheme($params);
     }
     

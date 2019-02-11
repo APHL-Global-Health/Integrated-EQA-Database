@@ -18,6 +18,24 @@
                     <input type="text" id="scheme_name" name="scheme_name"  size="50" class="isRequired form-control" title="Please enter the scheme name here" placeholder="Please enter the scheme name here" />
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Assay</label>
+
+                <div class="col-lg-5">
+                    <select id="assay_id" name="assay_id" class="form-control" title="Select the assay here">
+                        <option value="0"> -- Select an assay -- </option>
+                        <?php
+                        foreach ($this->assays as $anAssay) {
+                        ?>
+                            <option value="<?php echo $anAssay->id; ?>" >
+                                <?php echo $anAssay->name; ?>
+                            </option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
                       
             <br>
             <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
