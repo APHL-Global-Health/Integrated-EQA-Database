@@ -2,9 +2,9 @@
 
 class Application_Service_Schemes {
 
-    public function getAllSchemes() {
+    public function getAllSchemes($onlyActiveScemes = false) {
         $schemeListDb = new Application_Model_DbTable_Scheme();
-        return $schemeListDb->getAllSchemes();
+        return $schemeListDb->getAllSchemes($onlyActiveScemes);
     }
 
     public function checkResetPassword() {
@@ -41,7 +41,7 @@ class Application_Service_Schemes {
     public function getVlAssay() {
 
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $res = $db->fetchAll($db->select()->from('r_vl_assay'));
+        $res = $db->fetchAll($db->select()->from('assays'));
         $response = array();
         foreach ($res as $row) {
             $response[$row['id']] = $row['name'];
@@ -70,6 +70,18 @@ class Application_Service_Schemes {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('reference_result_eid'))
                 ->where('shipment_id = ? ', $shipmentId);
+        return $db->fetchAll($sql);
+    }
+
+    public function getEidSamples($shipmentID, $participantID, $platformID = 1) {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $sql = $db->select()->from(array('ref' => 'reference_result_eid'))
+                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
+                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+                ->joinLeft(array('res' => 'response_result_eid'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('interpretation', 'target', 'responseDate' => 'res.created_on'))
+                ->where('sp.shipment_id = ? ', $shipmentID)
+                ->where('sp.participant_id = ? ', $participantID)
+                ->where('sp.platform_id = ? ', $platformID);
         return $db->fetchAll($sql);
     }
 

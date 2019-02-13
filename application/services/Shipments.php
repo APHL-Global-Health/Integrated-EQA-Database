@@ -134,7 +134,7 @@ class Application_Service_Shipments {
                 ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date', 'readiness_checklist_survey_id'))
                 ->joinLeft(array('rcs' => 'readiness_checklist_surveys'), 'd.readiness_checklist_survey_id = rcs.id')
                 ->joinLeft(array('rcp' => 'readiness_checklist_participants'), 'rcs.id = rcp.readiness_checklist_survey_id && rcp.status = 2', array('total_participants' => new Zend_Db_Expr('count(participant_id)')))
-                ->join(array('sl' => 'scheme_list'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
+                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
                 ->group('s.shipment_id');
 
         if (isset($parameters['scheme']) && $parameters['scheme'] != "") {
@@ -243,7 +243,6 @@ class Application_Service_Shipments {
     }
 
     public function updateEidResults($params) {
-        //Zend_Debug::dump($params);die;
         if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
             return false;
         }
@@ -318,8 +317,6 @@ class Application_Service_Shipments {
                  $data['sample_conditions']=$params['sample_conditions'];
             }
             
-//            print_r($params);
-//            exit;
             $noOfRowsAffected = $shipmentParticipantDb->updateShipment($data, $params['smid'], $params['hdLastDate']);
 
             $eidResponseDb = new Application_Model_DbTable_ResponseEid();
@@ -753,9 +750,6 @@ class Application_Service_Shipments {
                     'shipment_id' => $lastId,
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
-                    'reference_result' => $params['possibleResults'][$i],
-                    'reference_hiv_ct_od' => $params['hivCtOd'][$i],
-                    'reference_ic_qs' => $params['icQs'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
@@ -1072,48 +1066,49 @@ class Application_Service_Shipments {
         $returnArray = array();
 
         if ($shipment['scheme_type'] == 'dts') {
-            $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
-                            ->join(array('ref' => 'reference_result_dts'), 'ref.shipment_id=s.shipment_id')
-                            ->where("s.shipment_id = ?", $sid));
-            $schemeService = new Application_Service_Schemes();
-            $possibleResults = $schemeService->getPossibleResults('dts');
+            // $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
+            //                 ->join(array('ref' => 'reference_result_dts'), 'ref.shipment_id=s.shipment_id')
+            //                 ->where("s.shipment_id = ?", $sid));
+            // $schemeService = new Application_Service_Schemes();
+            // $possibleResults = $schemeService->getPossibleResults('dts');
 
-            $eia = $db->fetchAll($db->select()->from('reference_dts_eia')->where("shipment_id = ?", $sid));
-            $wb = $db->fetchAll($db->select()->from('reference_dts_wb')->where("shipment_id = ?", $sid));
-            $rhiv = $db->fetchAll($db->select()->from('reference_dts_rapid_hiv')->where("shipment_id = ?", $sid));
-            $returnArray['eia'] = $eia;
-            $returnArray['wb'] = $wb;
-            $returnArray['rhiv'] = $rhiv;
+            // $eia = $db->fetchAll($db->select()->from('reference_dts_eia')->where("shipment_id = ?", $sid));
+            // $wb = $db->fetchAll($db->select()->from('reference_dts_wb')->where("shipment_id = ?", $sid));
+            // $rhiv = $db->fetchAll($db->select()->from('reference_dts_rapid_hiv')->where("shipment_id = ?", $sid));
+            // $returnArray['eia'] = $eia;
+            // $returnArray['wb'] = $wb;
+            // $returnArray['rhiv'] = $rhiv;
         } else if ($shipment['scheme_type'] == 'dbs') {
 
-            $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
-                            ->join(array('ref' => 'reference_result_dbs'), 'ref.shipment_id=s.shipment_id')
-                            ->where("s.shipment_id = ?", $sid));
-            $schemeService = new Application_Service_Schemes();
-            $possibleResults = $schemeService->getPossibleResults('dbs');
+            // $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
+            //                 ->join(array('ref' => 'reference_result_dbs'), 'ref.shipment_id=s.shipment_id')
+            //                 ->where("s.shipment_id = ?", $sid));
+            // $schemeService = new Application_Service_Schemes();
+            // $possibleResults = $schemeService->getPossibleResults('dbs');
 
-            $eia = $db->fetchAll($db->select()->from('reference_dbs_eia')->where("shipment_id = ?", $sid));
-            $wb = $db->fetchAll($db->select()->from('reference_dbs_wb')->where("shipment_id = ?", $sid));
-            $returnArray['eia'] = $eia;
-            $returnArray['wb'] = $wb;
+            // $eia = $db->fetchAll($db->select()->from('reference_dbs_eia')->where("shipment_id = ?", $sid));
+            // $wb = $db->fetchAll($db->select()->from('reference_dbs_wb')->where("shipment_id = ?", $sid));
+            // $returnArray['eia'] = $eia;
+            // $returnArray['wb'] = $wb;
         } else if ($shipment['scheme_type'] == 'eid') {
             $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
                             ->join(array('ref' => 'reference_result_eid'), 'ref.shipment_id=s.shipment_id')
                             ->where("s.shipment_id = ?", $sid));
             $schemeService = new Application_Service_Schemes();
-            $possibleResults = $schemeService->getPossibleResults('eid');
+            $possibleResults = "";
+            // $possibleResults = $schemeService->getPossibleResults('eid');
         } else if ($shipment['scheme_type'] == 'vl') {
             $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
                             ->join(array('ref' => 'reference_result_vl'), 'ref.shipment_id=s.shipment_id')
                             ->where("s.shipment_id = ?", $sid));
             $possibleResults = "";
 
-            $returnArray['vlReferenceMethods'] = $db->fetchAll($db->select()->from('reference_vl_methods')->where("shipment_id = ?", $sid));
+            // $returnArray['vlReferenceMethods'] = $db->fetchAll($db->select()->from('reference_vl_methods')->where("shipment_id = ?", $sid));
         } else if ($shipment['scheme_type'] == 'tb') {
-            $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
-                            ->join(array('ref' => 'reference_result_tb'), 'ref.shipment_id=s.shipment_id')
-                            ->where("s.shipment_id = ?", $sid));
-            $possibleResults = "";
+            // $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
+            //                 ->join(array('ref' => 'reference_result_tb'), 'ref.shipment_id=s.shipment_id')
+            //                 ->where("s.shipment_id = ?", $sid));
+            // $possibleResults = "";
         } else {
             return false;
         }

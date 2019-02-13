@@ -114,7 +114,6 @@ class Application_Service_Distribution {
                         ->join(array('rcp' => 'readiness_checklist_participants'), 'd.readiness_checklist_survey_id = rcp.readiness_checklist_survey_id', array('participant_id'))
                         ->join(array('rcpp' => 'readiness_checklist_participant_platforms'), 'rcp.id = rcpp.readiness_checklist_participant_id', array('platform_id'))
                         ->where('d.distribution_id='.$distributionId)
-                        ->where('rcpp.assay_id<=2') //Hack to get VL & EID only
                         ->where('rcp.status=2');//APPROVED
 
             $results = $db->fetchAll($query);
@@ -136,7 +135,7 @@ class Application_Service_Distribution {
 
             $distributionDb = new Application_Model_DbTable_Distribution();
             $distributionDb->updateDistributionStatus($distributionId, "shipped");
-            $this->sendEmailToParticipantsForShipmentDispatch($distributionId);
+            // $this->sendEmailToParticipantsForShipmentDispatch($distributionId);
             $db->commit();
 
             return "PT Event shipped!";

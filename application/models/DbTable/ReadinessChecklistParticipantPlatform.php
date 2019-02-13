@@ -16,6 +16,11 @@ class Application_Model_DbTable_ReadinessChecklistParticipantPlatform extends Ze
             'columns'           => array('platform_id'),
             'refTableClass'     => 'Application_Model_DbTable_Platforms',
             'refColumns'        => array('ID')
+        ),
+        'Assay' => array(
+            'columns'           => array('assay_id'),
+            'refTableClass'     => 'Application_Model_DbTable_Assay',
+            'refColumns'        => array('id')
         )
     );
 

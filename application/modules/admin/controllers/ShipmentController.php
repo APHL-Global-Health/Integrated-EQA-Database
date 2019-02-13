@@ -33,7 +33,7 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
         // Get Scheme lists
         $scheme = new Application_Service_Schemes();
-        $this->view->schemes = $scheme->getAllSchemes();
+        $this->view->schemes = $scheme->getAllSchemes(true);
 
         if ($this->_hasParam('did')) {
             $this->view->selectedDistribution = (int) base64_decode($this->_getParam('did'));
@@ -111,7 +111,8 @@ class Admin_ShipmentController extends Zend_Controller_Action {
             } else if ($sid == 'eid') {
                 $scheme = new Application_Service_Schemes();
                 $this->view->eidControls = $scheme->getSchemeControls($sid);
-                $this->view->eidPossibleResults = $scheme->getPossibleResults($sid);
+                $this->view->vlAssay = $scheme->getVlAssay();
+                // $this->view->eidPossibleResults = $scheme->getPossibleResults($sid);
             } else if ($sid == 'dts') {
                 $scheme = new Application_Service_Schemes();
                 $this->view->dtsPossibleResults = $scheme->getPossibleResults($sid);
@@ -194,17 +195,17 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                 $schemeService = new Application_Service_Schemes();
 
-                if ($response['shipment']['scheme_type'] == 'dts' || $response['shipment']['scheme_type'] == 'dbs') {
-                    $this->view->wb = $schemeService->getDbsWb();
-                    $this->view->eia = $schemeService->getDbsEia();
+                // if ($response['shipment']['scheme_type'] == 'dts' || $response['shipment']['scheme_type'] == 'dbs') {
+                //     $this->view->wb = $schemeService->getDbsWb();
+                //     $this->view->eia = $schemeService->getDbsEia();
 
-                    $this->view->dtsPossibleResults = $schemeService->getPossibleResults('dts');
-                    $this->view->allTestKits = $schemeService->getAllDtsTestKit();
-                } else if ($response['shipment']['scheme_type'] == 'vl') {
+                //     $this->view->dtsPossibleResults = $schemeService->getPossibleResults('dts');
+                //     $this->view->allTestKits = $schemeService->getAllDtsTestKit();
+                // } else if ($response['shipment']['scheme_type'] == 'vl') {
 
                     $this->view->vlAssay = $schemeService->getVlAssay();
 
-                }
+                // }
 
         // oOps !! Nothing to edit....
                 if ($response == null || $response == "" || $response === false) {

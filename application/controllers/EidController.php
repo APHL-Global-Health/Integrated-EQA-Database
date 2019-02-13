@@ -15,26 +15,22 @@ class EidController extends Zend_Controller_Action
 
     public function responseAction()
     {
-
         $schemeService = new Application_Service_Schemes();
         $shipmentService = new Application_Service_Shipments();
-
-        $this->view->extractionAssay = $schemeService->getEidExtractionAssay();
-        $this->view->detectionAssay = $schemeService->getEidDetectionAssay();
-
+        
+        $this->view->vlAssay = $schemeService->getVlAssay();
+        
     	if($this->getRequest()->isPost())
     	{
 
     		$data = $this->getRequest()->getPost();
 			$data['uploadedFilePath'] = "";
-    		// Zend_Debug::dump($data);die;
-			
-			if((!empty($_FILES["uploadedFile"])) && ($_FILES['uploadedFile']['error'] == 0)) {
+           	if((!empty($_FILES["uploadedFile"])) && ($_FILES['uploadedFile']['error'] == 0)) {
 				
 				$filename = basename($_FILES['uploadedFile']['name']);
 				$ext = substr($filename, strrpos($filename, '.') + 1);
 				if (($_FILES["uploadedFile"]["size"] < 5000000)) {
-					$dirpath = "dts-early-infant-diagnosis".DIRECTORY_SEPARATOR.$data['schemeCode'].DIRECTORY_SEPARATOR.$data['participantId'];
+					$dirpath = "dbs-eid".DIRECTORY_SEPARATOR.$data['schemeCode'].DIRECTORY_SEPARATOR.$data['participantId'];
 					$uploadDir = UPLOAD_PATH.DIRECTORY_SEPARATOR.$dirpath;
 					if(!is_dir($uploadDir)){
 						mkdir($uploadDir,0777,true);
@@ -54,42 +50,49 @@ class EidController extends Zend_Controller_Action
 					move_uploaded_file($_FILES['uploadedFile']['tmp_name'],$newname);
 					
 				}
-			  }			
-			
-			//Zend_Debug::dump($data);die;
+			}
 			
             $shipmentService->updateEidResults($data);
-
-    		$this->_redirect("/participant/current-schemes");
-
-    		//die;
+    		
+    		
+    		if(isset($data['comingFrom']) && trim($data['comingFrom'])!=''){
+			$this->_redirect("/participant/".$data['comingFrom']);
+			}else{
+				$this->_redirect("/participant/current-schemes");
+			}
+    		
         }else{
             $sID= $this->getRequest()->getParam('sid');
             $pID= $this->getRequest()->getParam('pid');
             $eID =$this->getRequest()->getParam('eid');
+            $platformID =$this->getRequest()->getParam('pfid');
 
+		    $this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
+			
             $participantService = new Application_Service_Participants();
+
             $this->view->participant = $participantService->getParticipantDetails($pID);
-            //Zend_Debug::dump($schemeService->getEidSamples($sID,$pID));
+            $this->view->allSamples =$schemeService->getEidSamples($sID,$pID, $platformID);
+            $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-	    $this->view->eidPossibleResults = $schemeService->getPossibleResults('eid');
-
-            $this->view->allSamples =$schemeService->getEidSamples($sID,$pID);
-
-            $shipment = $schemeService->getShipmentData($sID,$pID);
-	    $shipment['attributes'] = json_decode($shipment['attributes'],true);
-           
+            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+		    $shipment['attributes'] = json_decode($shipment['attributes'],true);
             $this->view->shipment = $shipment;
-            $this->view->sampleConditions = $shipment['sample_conditions'];
+
+            $platformService = new Application_Service_Platform();
+            $this->view->platform = $platformService->getPlatform($platformID);
+
             $this->view->shipId = $sID;
             $this->view->participantId = $pID;
             $this->view->eID = $eID;
-
+            $this->view->platformID = $platformID;
+    
             $this->view->isEditable = $shipmentService->isShipmentEditable($sID,$pID);
-	    
-	    $commonService = new Application_Service_Common();
-	    $this->view->modeOfReceipt=$commonService->getAllModeOfReceipt();
-	    $this->view->globalQcAccess=$commonService->getConfig('qc_access');
+			
+		    $commonService = new Application_Service_Common();
+
+		    $this->view->modeOfReceipt=$commonService->getAllModeOfReceipt();
+		    $this->view->globalQcAccess=$commonService->getConfig('qc_access');
     	}
     }
 

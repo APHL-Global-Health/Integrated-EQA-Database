@@ -13,8 +13,14 @@ class Application_Model_DbTable_Scheme extends Zend_Db_Table_Abstract
         )
     );
 
-    public function getAllSchemes(){
-		return $this->fetchAll($this->select());
+    public function getAllSchemes($onlyActiveScemes = false){
+
+        $query = $this->select();
+        if($onlyActiveScemes) $query->where("status = 'active'");
+
+		$schemes = $this->fetchAll($query);
+
+        return $schemes;
 	}
 
     public function countEnrollmentSchemes()

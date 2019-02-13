@@ -24,6 +24,7 @@
                 <label class="col-md-3">Respondent</label>
                 <div class="col-md-5"><?php echo $this->survey['creator']; ?></div>
             </div>
+            <?php var_dump($this->survey); ?>
              <div class="form-group">
                 <label class="col-md-3">Platforms</label>
                 <div class="col-md-5">
@@ -35,9 +36,13 @@
                         return "";
                     }
                     foreach ($this->platforms as $platform) {
-                        echo "<input type='checkbox' id='platform$platform->ID' name='platform$platform->ID' ";
-                        echo getSelectedPlatform($platform->ID, $this->survey['platforms']);
-                        echo " $disabled> $platform->PlatformName <br />";
+                        $assays = $platform->findManyToManyRowset("Application_Model_DbTable_Assay", "Application_Model_DbTable_AssayPlatform");
+                        foreach ($assays as $assay) {
+                            $id = "platform$platform->ID"."_".$assay->id;
+                            echo "<input type='checkbox' id='$id' name='$id' ";
+                            echo getSelectedPlatform($platform->ID, $this->survey['platforms']);
+                            echo " $disabled> $platform->PlatformName - $assay->short_name<br />";
+                        }
                     }
                     ?>
                 </div>

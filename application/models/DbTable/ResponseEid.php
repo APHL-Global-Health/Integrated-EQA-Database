@@ -8,24 +8,22 @@ class Application_Model_DbTable_ResponseEid extends Zend_Db_Table_Abstract
 
     public function updateResults($params){
         $sampleIds = $params['sampleId'];
-        error_log(json_encode($params));
+        $targets = $params['target'];
+        $interpretations = $params['interpretation'];
         foreach($sampleIds as $key => $sampleId){
             $res = $this->fetchRow("shipment_map_id = ".$params['smid'] . " and sample_id = ".$sampleId );
             $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            //Set tnd value if Yes
-            $tnd = NULL;
-            if(isset($params['isPtTestNotPerformed']) && $params['isPtTestNotPerformed']== 'yes'){
-                $params['vlResult'][$key] = '';
-            }else if(isset($params['tndReference'][$key]) && $params['tndReference'][$key]== 'yes'){
-                $tnd = 'yes';
-                $params['vlResult'][$key] = '0.00'; 
-            }
+
+            error_log(json_encode($sampleId));
+            error_log(json_encode($targets[$key]));
+            error_log(json_encode($interpretations[$key]));
+
             if($res == null || count($res) == 0){
                 $this->insert(array(
                                     'shipment_map_id'=>$params['smid'],
                                     'sample_id'=>$sampleId,
-                                    'reported_viral_load'=>$params['vlResult'][$key],
-                                    'is_tnd'=>$tnd,
+                                    'target'=>$targets[$key],
+                                    'interpretation'=>$interpretations[$key],
                                     'created_by' => $authNameSpace->dm_id,
                                     'created_on' => new Zend_Db_Expr('now()')
                                    ));                
@@ -33,8 +31,8 @@ class Application_Model_DbTable_ResponseEid extends Zend_Db_Table_Abstract
                 $this->update(array(
                                     'shipment_map_id'=>$params['smid'],
                                     'sample_id'=>$sampleId,
-                                    'reported_viral_load'=>$params['vlResult'][$key],
-                                    'is_tnd'=>$tnd,
+                                    'target'=>$targets[$key],
+                                    'interpretation'=>$interpretations[$key],
                                     'updated_by' => $authNameSpace->UserID,
                                     'updated_on' => new Zend_Db_Expr('now()')
                                    ), "shipment_map_id = ".$params['smid'] . " and sample_id = ".$sampleId );
