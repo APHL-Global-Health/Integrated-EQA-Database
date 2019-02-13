@@ -112,7 +112,7 @@ class Application_Service_Distribution {
             $query = $db->select()->from(array('s' => 'shipment'))
                         ->join(array('d' => 'distributions'), 's.distribution_id = d.distribution_id')
                         ->join(array('rcp' => 'readiness_checklist_participants'), 'd.readiness_checklist_survey_id = rcp.readiness_checklist_survey_id', array('participant_id'))
-                        ->join(array('rcpp' => 'readiness_checklist_participant_platforms'), 'rcp.id = rcpp.readiness_checklist_participant_id', array('platform_id'))
+                        ->join(array('rcpp' => 'readiness_checklist_participant_platforms'), 'rcp.id = rcpp.readiness_checklist_participant_id', array('platform_id', 'assay_id'))
                         ->where('d.distribution_id='.$distributionId)
                         ->where('rcp.status=2');//APPROVED
 
@@ -123,6 +123,7 @@ class Application_Service_Distribution {
                 $data = array('shipment_id' => $result['shipment_id'],
                     'participant_id' => $result['participant_id'],
                     'platform_id' => $result['platform_id'],
+                    'assay_id' => $result['assay_id'],
                     'evaluation_status' => '19901190',
                     'created_by_admin' => $authNameSpace->admin_id,
                     "created_on_admin" => new Zend_Db_Expr('now()'));
