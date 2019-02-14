@@ -204,10 +204,14 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
                 }
                 $saved++;
             }elseif(strpos($key, "platform") > -1){
-                $platformData['platform_id'] = str_replace("platform", "", $key);
-                $platformData['readiness_checklist_participant_id'] = $checklistParticipationID;
+                $assayPlatform = explode("_", str_replace("platform", "", $key));
+                if(count($assayPlatform) == 2){
+                    $platformData['platform_id'] = $assayPlatform[0];
+                    $platformData['assay_id'] = $assayPlatform[1];
+                    $platformData['readiness_checklist_participant_id'] = $checklistParticipationID;
 
-                $checklistPlatform->insert($platformData);
+                    $checklistPlatform->insert($platformData);
+                }
             }
         }
 
