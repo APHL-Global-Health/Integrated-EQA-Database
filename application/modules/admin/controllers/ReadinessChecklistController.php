@@ -67,6 +67,7 @@ class Admin_ReadinessChecklistController extends Zend_Controller_Action
             $this->_redirect("/admin/readiness-checklist/sent/id/".$params['readinessChecklistId']);
         }else{
             $this->view->survey = $readinessChecklistService->getReadinessChecklistSurveyResponses((int)$this->_getParam('id'), (int)$this->_getParam('pid'));
+            $this->view->platforms = (new Application_Service_Platform())->getPlatforms();
         }
     }
     
