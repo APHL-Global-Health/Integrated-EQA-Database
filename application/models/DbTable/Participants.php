@@ -713,9 +713,10 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                         'shipment_status' => 's.status', 'shipment_id'))
                 ->join(array('spm' => 'shipment_participant_map'), 's.shipment_id=spm.shipment_id', 
                     array('response_date' => new Zend_Db_Expr("IFNULL(spm.updated_on_user,'')"), 'participant_id', 
-                        'platform_id'))
+                        'platform_id', 'assay_id'))
                 ->join(array('p' => 'participant'), 'spm.participant_id=p.participant_id', array('p.institute_name'))
                 ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
+                ->join(array('as' => 'assays'), 'spm.assay_id=as.id', array('assay_name' => 'as.name'))
                 ->joinLeft(array('dm' => 'data_manager'), 'spm.updated_by_user=dm.dm_id', 
                     array('respondent' => new Zend_Db_Expr("CONCAT(dm.first_name, ' ', dm.last_name)")))
                 ->where('d.status != ?', 'pending');
@@ -785,6 +786,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row['institute_name'] = $aRow['institute_name'];
             $row['shipment_code'] = $aRow['shipment_code'];
             $row['platform_name'] = $aRow['platform_name'];
+            $row['assay_name'] = $aRow['assay_name'];
             $row['shipment_date'] = $aRow['shipment_date'];
             $row['due_date'] = $aRow['due_date'];
             $row['respondent'] = $aRow['respondent'];

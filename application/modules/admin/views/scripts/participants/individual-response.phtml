@@ -44,46 +44,49 @@
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
                             </td>
-                            <td><label>Sample Rehydration Date</label></td>
-                            <td>
-                                <?php echo $this->dateFormat($this->shipment['attributes']["sample_rehydration_date"]); ?>
-                            </td>
-                        </tr>
-                        <tr>
                             <td><label>Testing Date</label></td> 
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_test_date"]); ?>
                             </td>       
-
-                            <td><label>Specimen Volume used for testing</label></td> 
-                            <td>
-                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
-                            </td>
-                        </tr>
-
-                        <tr class ="dark">
-                            <td><label>Viral Load Assay</label></td>
-                            <td>
-                                <?php echo $this->vlAssay[$this->shipment['attributes']['vl_assay']]; ?>
-                                <?php echo (isset($this->shipment['attributes']['other_assay']) && ($this->shipment['attributes']['other_assay'] != "")) ? $this->shipment['attributes']['other_assay'] : ""; ?>
-                            </td>
-                            <td><label>Sample Volume Received</label></td>
-                            <td>
-                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
-                            </td>
                         </tr>
 
                         <tr class ="dark">
                             <td><label>Kit Lot Number</label></td>
                             <td>
-                                <?php echo $this->shipment['attributes']['assay_lot_number']; ?>
+                                <?php echo getLotData($this->shipment['attributes'], 'LOT_NUMBER'); ?>
                             </td>
                             <td><label>Kit Expiration Date </label></td>
                             <td>
-                                <?php echo $this->dateFormat($this->shipment['attributes']['assay_expiration_date']); ?>
+                                <?php echo $this->dateFormat(getLotData($this->shipment['attributes'], 'LOT_EXPIRY')); ?>
                             </td>
                         </tr>
                     </table>
+                    <?php 
+                        function getLotData($attributes, $parameter){
+                            $lotData = "";
+                            $expiryDate = ['assay_expiration_date', 'detection_assay_expiry_date', 'extraction_assay_expiry_date'];
+                            $lotNumber = ['assay_lot_number', 'detection_assay_lot_no', 'extraction_assay_lot_no'];
+                            switch ($parameter) {
+                                case 'LOT_NUMBER':
+                                    foreach ($lotNumber as $lot) {
+                                        if(isset($attributes[$lot])){
+                                            $lotData = $attributes[$lot];
+                                        }
+                                        break;
+                                    }
+                                    break;
+                                case 'LOT_EXPIRY':
+                                    foreach ($expiryDate as $date) {
+                                        if(isset($attributes[$date])){
+                                            $lotData = $attributes[$date];
+                                        }
+                                        break;
+                                    }
+                                    break;
+                            }
+                            return $lotData;
+                        } 
+                    ?>
                     <hr>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
