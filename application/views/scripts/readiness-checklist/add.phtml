@@ -11,7 +11,7 @@
         action="<?php echo $this->url(array("module" => "default", "controller" => "readiness-checklist", "action" => "reply"),'default', true) ?>" 
         class="form-horizontal bs-example" role="form" enctype="multipart/form-data">
         <fieldset>
-            <legend>Readiness Checklist - <?php echo $this->survey['participant']['institute_name']; ?></legend>
+            <legend><?php echo $this->survey['name'] . " - " . $this->survey['participant']['institute_name']; ?></legend>
             <div class="form-group">
                 <label class="col-md-3">Start Date</label>
                 <div class="col-md-5"><?php echo substr($this->survey['start_date'],0,10); ?></div>
@@ -24,24 +24,26 @@
                 <label class="col-md-3">Respondent</label>
                 <div class="col-md-5"><?php echo $this->survey['creator']; ?></div>
             </div>
-            <?php var_dump($this->survey); ?>
              <div class="form-group">
                 <label class="col-md-3">Platforms</label>
                 <div class="col-md-5">
                     <?php
-                    function getSelectedPlatform($platformID, $platformRowset){
-                        foreach ($platformRowset as $platform) {
-                            if ($platform['ID'] == $platformID) return " checked";
+                    function getSelectedAssayPlatform($assayID, $platformID, $assayPlatformRowset){
+                        $isChecked = "";
+                        if(count($assayPlatformRowset) > 0){
+                            foreach ($assayPlatformRowset[0] as $assayPlatform) {
+                                if ($assayPlatform['assay_id'] == $assayID && $assayPlatform['platform_id'] == $platformID) $isChecked = " checked";
+                            }
                         }
-                        return "";
+                        return "$isChecked >";
                     }
                     foreach ($this->platforms as $platform) {
                         $assays = $platform->findManyToManyRowset("Application_Model_DbTable_Assay", "Application_Model_DbTable_AssayPlatform");
                         foreach ($assays as $assay) {
                             $id = "platform$platform->ID"."_".$assay->id;
-                            echo "<input type='checkbox' id='$id' name='$id' ";
-                            echo getSelectedPlatform($platform->ID, $this->survey['platforms']);
-                            echo " $disabled> $platform->PlatformName - $assay->short_name<br />";
+                            echo "<input type='checkbox' id='$id' name='$id' $disabled ";
+                            echo getSelectedAssayPlatform($assay->id, $platform->ID, $this->survey['assay_platform']);
+                            echo "$platform->PlatformName - $assay->short_name<br />";
                         }
                     }
                     ?>

@@ -28,6 +28,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Title</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th style="text-align: center;">Action</th>
@@ -40,6 +41,7 @@
                     ?>
                             <tr>
                                 <td><?php echo $cnt++; ?></td>
+                                <td><?php echo $sent['name']; ?></td>
                                 <td><?php echo substr($sent['start_date'], 0, 10); ?></td>
                                 <td><?php echo substr($sent['end_date'], 0, 10); ?></td>
                                 <td style="text-align: center;">

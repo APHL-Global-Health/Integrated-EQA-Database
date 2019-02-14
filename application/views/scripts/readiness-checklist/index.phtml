@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Cycle</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
@@ -33,6 +34,7 @@
                     ?>
                             <tr>
                                 <td><?php echo $counter++; ?></td>
+                                <td><?php echo $survey['survey']['name']; ?></td>
                                 <td><?php echo substr($survey['survey']['start_date'],0,10); ?></td>
                                 <td><?php echo substr($survey['survey']['end_date'],0,10); ?></td>
                                 <td>

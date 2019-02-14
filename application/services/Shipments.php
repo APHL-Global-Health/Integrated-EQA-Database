@@ -253,38 +253,25 @@ class Application_Service_Shipments {
         try {
             $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
             $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            if (isset($params['sampleRehydrationDate']) && trim($params['sampleRehydrationDate']) != "") {
-                $params['sampleRehydrationDate'] = Pt_Commons_General::dateFormat($params['sampleRehydrationDate']);
-            } else {
-                $params['sampleRehydrationDate'] = '';
-            }
-            if (isset($params['extractionAssayExpiryDate']) && trim($params['extractionAssayExpiryDate']) != "") {
-                $params['extractionAssayExpiryDate'] = Pt_Commons_General::dateFormat($params['extractionAssayExpiryDate']);
-            } else {
-                $params['extractionAssayExpiryDate'] = '';
-            }
-            if (isset($params['detectionAssayExpiryDate']) && trim($params['detectionAssayExpiryDate']) != "") {
-                $params['detectionAssayExpiryDate'] = Pt_Commons_General::dateFormat($params['detectionAssayExpiryDate']);
-            } else {
-                $params['detectionAssayExpiryDate'] = '';
-            }
+
             if (!isset($params['modeOfReceipt']) || trim($params['modeOfReceipt']) == "") {
                 $params['modeOfReceipt'] = NULL;
             }
-            $attributes = array("sample_rehydration_date" => $params['sampleRehydrationDate'],
+
+            $attributes = array(
                 "extraction_assay" => $params['extractionAssay'],
                 "detection_assay" => $params['detectionAssay'],
-                "extraction_assay_expiry_date" => $params['extractionAssayExpiryDate'],
-                "detection_assay_expiry_date" => $params['detectionAssayExpiryDate'],
-                "extraction_assay_lot_no" => $params['extractionAssayLotNo'],
-                "detection_assay_lot_no" => $params['detectionAssayLotNo'],
+                "extraction_assay_expiry_date" => Pt_Commons_General::dateFormat($params['assayExpirationDate']),
+                "detection_assay_expiry_date" => Pt_Commons_General::dateFormat($params['assayExpirationDate']),
+                "extraction_assay_lot_no" => $params['assayLotNumber'],
+                "detection_assay_lot_no" => $params['assayLotNumber'],
                 "uploaded_file" => $params['uploadedFilePath']);
 
             $attributes = json_encode($attributes);
+
             $data = array(
                 "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
                 "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
-                //"shipment_test_report_date" => new Zend_Db_Expr('now()'),
                 "attributes" => $attributes,
                 "supervisor_approval" => $params['supervisorApproval'],
                 "participant_supervisor" => $params['participantSupervisor'],

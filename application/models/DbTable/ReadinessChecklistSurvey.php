@@ -198,6 +198,7 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
         $checklistParticipants = [];
 
         $platforms = [];
+        $assayPlatform = [];
 
         foreach ($participantsRowset as $participant) {
 
@@ -208,10 +209,13 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
                 $checklistParticipants[] = $participant;
 
                 $platforms = $participant->findManyToManyRowset('Application_Model_DbTable_Platforms', 'Application_Model_DbTable_ReadinessChecklistParticipantPlatform', 'ReadinessParticipants')->toArray();
+
+                $assayPlatform[] = $participant->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipantPlatform')->toArray();
             }
         }
 
         $surveyDetails['platforms'] = $platforms;
+        $surveyDetails['assay_platform'] = $assayPlatform;
 
         $surveyDetails['questions'] = $parent->findDependentRowset('Application_Model_DbTable_ReadinessChecklistQuestion')->toArray();
 
@@ -245,6 +249,7 @@ class Application_Model_DbTable_ReadinessChecklistSurvey extends Zend_Db_Table_A
         $db = Zend_Db_Table_Abstract::getAdapter();
         $data = array(
             'readiness_checklist_id' => $params['readinessChecklistId'],
+            'name' => $params['name'],
             'start_date' => $params['start_date'],
             'end_date' => $params['end_date'],
             'created_by' => $authNameSpace->admin_id,

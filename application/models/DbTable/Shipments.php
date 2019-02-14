@@ -341,12 +341,14 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
          * SQL queries
          * Get data to display
          */
-        $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
-                ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('scheme_name'))
-                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id"))
+        $sQuery = $this->getAdapter()->select()
+                ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id"))
+                ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
+                ->join(array('sc' => 'schemes'), 'sc.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id')
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
-                ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id')
+                ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id AND d.readiness_checklist_survey_id=rcp.readiness_checklist_survey_id')
                 ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
                 ->where("rcp.status=2") //APPROVED
@@ -398,6 +400,7 @@ error_log("C1: ".$sQuery);
             }
         }
 error_log("C2: ".$sQuery);
+error_log(json_encode($parameters));
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -437,7 +440,11 @@ error_log("C2: ".$sQuery);
             if ($isEditable) {
                 if ($aRow['RESPONSEDATE'] != '' && $aRow['RESPONSEDATE'] != '0000-00-00') {
                     if ($this->_session->view_only_access == 'no') {
-                        $delete = '<br/><a href="javascript:void(0);" onclick="removeSchemes(\'' . $aRow['scheme_type'] . '\',\'' . base64_encode($aRow['map_id']) . '\')" class="btn btn-danger" style="margin:3px 0;"> <i class="icon icon-remove-sign"></i> Delete Response</a>';
+                        if((new DateTime("now")) < (new DateTime($aRow['lastdate_response']))){
+                            $delete = '<br/><a href="javascript:void(0);" onclick="removeSchemes(\'' . 
+                                $aRow['scheme_type'] . '\',\'' . base64_encode($aRow['map_id']) . 
+                                '\')" class="btn btn-danger" style="margin:3px 0;"> <i class="icon icon-remove-sign"></i> Delete Response</a>';
+                        }
                     }
                 } else {
                     $buttonText = "Enter Response";
@@ -584,10 +591,7 @@ error_log("C2: ".$sQuery);
                 ->where("s.status='shipped' OR s.status='evaluated'")
                 ->where("year(s.shipment_date)  + 5 > year(CURDATE())")
                 ->where("s.lastdate_response <  CURDATE()")
-                ->where("substr(spm.evaluation_status,3,1) <> '1'")
-        //->order('s.shipment_date')
-        //->order('spm.participant_id')
-        ;
+                ->where("substr(spm.evaluation_status,3,1) <> '1'");
 
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
