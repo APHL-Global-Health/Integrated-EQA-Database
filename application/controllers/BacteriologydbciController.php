@@ -1502,6 +1502,8 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                 $updateTBSP['dateDelivered'] = date('Y-m-d h:i:s', time());
                 $updateTBSP['deliveryStatus'] = $update['shipmentStatus'] == 3 ? 4 : $update['shipmentStatus'];
+                $updateTBSP['deliveryCondition'] = $update['receiveComments'];
+                $updateTBSP['comments'] = $update['receiveComments'];
 
                 $updateTBSP['shipmentId'] = $shipmentId;
 
