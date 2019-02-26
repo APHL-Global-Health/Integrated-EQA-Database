@@ -332,22 +332,15 @@ $activeSubMenu = isset($this->layout()->activeSubMenu) ? $this->layout()->active
                                 <i class="icon icon-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="treeview " ng-class="{'active' : clickedTab == 'ReceivedSampless'}">
-                            <a href="" class="" target="_self" ng-click="clickedTab = 'ReceivedSamples'"
-                               aria-haspopup="true" aria-expanded="false"><i class="fa fa-ship"></i>
-                                <span>Shipments</span> <i
-                                        class="fa fa-angle-left icon icon-angle-left pull-right"></i></a>
-                            <ul class="treeview-menu">
-                                <li class="">
-                                    <a href="" target="_self"
-                                       ng-click="samples.samplesActivePage('add' + clickedTab, 1)"
-                                       ng-click="">
-                                        Receive Shipment</a></li>
-                            </ul>
+
+                        <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
+                            <a href="#" target="_self" ng-click="samples.samplesActivePage('addReceivedSamples', 1)">
+                                <i class="fa fa-ship"></i> <span>Receive Shipment</span>
+                            </a>
                         </li>
 
                         <li class="<?php echo ($activeMenu == 'all-schemes') ? ' active ' : ''; ?>">
-                            <a href="" target="_self" ng-click="samples.samplesActivePage('add' + clickedTab, 1)">
+                            <a href="#" target="_self" ng-click="samples.samplesActivePage('addresults', 1)">
                                 <i class="icon icon-list-ul"></i> <span>PT Results Entry</span>
                             </a>
                         </li>
