@@ -56,10 +56,12 @@ class AuthController extends Zend_Controller_Action
                 $authNameSpace->enable_choosing_mode_of_receipt = $rs->enable_choosing_mode_of_receipt;
                 $authNameSpace->force_password_reset = $rs->force_password_reset;
 
-                // PT Provider Dependent Configuration
-                //$authNameSpace->UserFld1 = $rs->UserFld1;
-                //$authNameSpace->UserFld2 = $rs->UserFld2;
-                //$authNameSpace->UserFld3 = $rs->UserFld3;
+                $dataManagerModel = new Application_Model_DbTable_DataManagers;
+                $dataManager = $dataManagerModel->fetchRow($dataManagerModel->select()->where("dm_id = ? ", $rs->dm_id));
+
+                foreach($dataManager->findManyToManyRowset('Application_Model_DbTable_Participants','Application_Model_DbTable_ParticipantManagerMap') as $participant){
+                    $authNameSpace->participant = $participant;
+                }
 
                 $userService = new Application_Service_DataManagers();
                 $userService->updateLastLogin($rs->dm_id);

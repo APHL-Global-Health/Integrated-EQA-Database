@@ -1481,8 +1481,6 @@ class BacteriologydbciController extends Zend_Controller_Action
         $whereTBPS['participantId'] = $where['participantId'];
         $whereTBPS['roundId >'] = 0;
 
-
-
         $this->dbConnection->updateTable('tbl_bac_panels_shipments', $whereTBPS, $updatetbl_bac_panels_shipments);
 
         /*         * ****************************************************************************************** */
@@ -1502,6 +1500,8 @@ class BacteriologydbciController extends Zend_Controller_Action
 
                 $updateTBSP['dateDelivered'] = date('Y-m-d h:i:s', time());
                 $updateTBSP['deliveryStatus'] = $update['shipmentStatus'] == 3 ? 4 : $update['shipmentStatus'];
+                $updateTBSP['deliveryCondition'] = $update['receiveComments'];
+                $updateTBSP['comments'] = $update['receiveComments'];
 
                 $updateTBSP['shipmentId'] = $shipmentId;
 
@@ -1513,19 +1513,15 @@ class BacteriologydbciController extends Zend_Controller_Action
                 $shipmentData['dateDelivered'] = $updateTBSP['dateDelivered'];
                 $shipmentData['okStatus'] = $update['shipmentStatus'];
 
-
-
                 $sampleToIssue = $this->dbConnection->selectFromTable('tbl_bac_sample_to_panel', $whereTBSP);
 
-
-
-                if (count($sampleToIssue) > 0) {
+                if (count($sampleToIssue) > 0 && $update['shipmentStatus'] == 3) {
                     foreach ($sampleToIssue as $ky => $vl) {
 
                         $data['userId'] = $this->dbConnection->getUserSession();
-                        $data['sampleId'] = $sampleToIssue[$ky]->sampleId;
-                        $data['panelToSampleId'] = $sampleToIssue[$key]->id;
-                        $data['roundId'] = $sampleToIssue[$ky]->roundId;
+                        $data['sampleId'] = $vl->sampleId;
+                        $data['panelToSampleId'] = $vl->id;
+                        $data['roundId'] = $vl->roundId;
                         $data['participantId'] = $where['participantId'];
                         $this->savesamplesToUsers($data);
 
