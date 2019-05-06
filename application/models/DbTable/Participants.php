@@ -749,8 +749,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-        //error_log($sQuery);
-
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -787,6 +785,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             $row['shipment_code'] = $aRow['shipment_code'];
             $row['platform_name'] = $aRow['platform_name'];
             $row['assay_name'] = $aRow['assay_name'];
+            $row['assay_id'] = $aRow['assay_id'];
             $row['shipment_date'] = $aRow['shipment_date'];
             $row['due_date'] = $aRow['due_date'];
             $row['respondent'] = $aRow['respondent'];
@@ -794,10 +793,10 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
             if(strlen($row['response_date']) > 0){
                 $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'];
                 $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
-                $row['action'] .= '" class="btn btn-info btn-xs" style="margin:3px;padding:10px;"> Response</a>';
+                $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-info btn-xs" style="margin:3px;padding:10px;"> Response</a>';
                 $row['action'] .= '<a href="/admin/participants/individual-performance/sid/' . $aRow['shipment_id'];
                 $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
-                $row['action'] .= '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
+                $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
             }else{ // if past response date and not finalized
                 $row['action'] = '<a href="/admin/participants/enter-response/sid/' . $aRow['shipment_id'];
                 $row['action'] .= '/pid/' . $aRow['participant_id'] . '/pfid/' . $aRow['platform_id'];
