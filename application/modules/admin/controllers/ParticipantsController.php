@@ -287,12 +287,16 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $schemeService = new Application_Service_Schemes();
         $this->view->allSamples = $schemeService->getVlSamples($shipmentID, $participantID, $platformID, $assayID);
         
-        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID);
+        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID, $assayID);
 
         $sampleList = [];
         foreach ($allPlatformSamples as $platformSample) {
-            $sampleList[] = $platformSample['sample_id']; 
-            $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
+            $sampleList[] = $platformSample['sample_id'];
+            if ($assayID == 2) {
+                $sampleValues[$platformSample['sample_id']][] = $platformSample['target'];
+            }else{
+                $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
+            }
         }
 
         $sampleList = array_unique($sampleList);
