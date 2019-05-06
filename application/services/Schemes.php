@@ -93,6 +93,7 @@ class Application_Service_Schemes {
                 ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd', 'responseDate' => 'res.created_on'))
                 ->where('sp.shipment_id = ? ', $shipmentID)
                 ->where('sp.participant_id = ? ', $participantID)
+                ->where('sp.assay_id = 1')
                 ->where('sp.platform_id = ? ', $platformID);
         return $db->fetchAll($sql);
     }
@@ -104,7 +105,6 @@ class Application_Service_Schemes {
                 ->join(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd'))
                 ->where('sp.shipment_id = ? ', $shipmentID)
                 ->where('sp.platform_id = ? ', $platformID);
-        error_log($sql);
         return $db->fetchAll($sql);
     }
 
