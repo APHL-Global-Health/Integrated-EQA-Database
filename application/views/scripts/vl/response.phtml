@@ -513,7 +513,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
             }
         });
 
-        jQuery("#vlResultToLog").on("keypress", function (event) {
+        jQuery("#vlResultToLog").on("keyup", function (event) {
             var vlVal = $("#vlResultToLog").val();
             if (vlVal != "" && vlVal != 0) {
                 $(".logValFormVl").show();
