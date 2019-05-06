@@ -89,6 +89,7 @@
                     ?>
                     <hr>
 
+                    <?php if($this->shipment['assay_id'] == 1){ ?><!-- VIRAL LOAD-->
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
@@ -126,7 +127,6 @@
                                 <td colspan="3">
                                     <label>Please pick a reason</label> : 
                                     <?php echo $this->shipment['vl_not_tested_reason']; ?>
-                                    </select>
                                 </td>
                             </tr>
                             <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
@@ -142,6 +142,54 @@
                         </tbody>
                         <tfoot></tfoot>
                     </table>
+                    <?php } ?>
+
+                    <?php if($this->shipment['assay_id'] == 2){ ?><!-- EID -->
+                    <table class="table table-bordered table-striped" style="margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr align="center" class="" >
+                                <th style="width:50%;">Control/Sample</th>
+                                <th>Target</th>
+                                <th>Interpretation</th>
+                            </tr>
+                        </thead>
+                        <tfoot></tfoot>
+                        <?php
+                            $count = 0;
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                $count++;
+                        ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
+                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <?php 
+                                            if($sample['target']==0) echo 'Not Detected';
+                                            if($sample['target']==1) echo 'Detected';
+                                            ?>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <?php 
+                                            if($sample['interpretation']==0) echo 'Negative';
+                                            if($sample['interpretation']==1) echo 'Positive';
+                                            ?>
+                                        </span>
+                                    </td>
+                                </tr>
+
+                        <?php } ?>
+                    </table>
+                    <?php } ?>
+
                     <hr>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">

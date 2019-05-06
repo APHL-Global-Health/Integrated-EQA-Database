@@ -175,15 +175,16 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $pID= $this->getRequest()->getParam('pid');
         $eID =$this->getRequest()->getParam('eid');
         $platformID =$this->getRequest()->getParam('pfid');
+        $assayID =$this->getRequest()->getParam('aid');
 
         $participantService = new Application_Service_Participants();
         $this->view->participant = $participantService->getParticipantDetails($pID);
 
         $schemeService = new Application_Service_Schemes();
-        $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID);
+        $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID, $assayID);
         $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-        $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+        $shipment = $schemeService->getShipmentData($sID, $pID, $platformID, $assayID);
         $shipment['attributes'] = json_decode($shipment['attributes'],true);
         $this->view->shipment = $shipment;
 
@@ -244,15 +245,16 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
             $pID= $this->getRequest()->getParam('pid');
             $eID =$this->getRequest()->getParam('eid');
             $platformID =$this->getRequest()->getParam('pfid');
+            $assayID =$this->getRequest()->getParam('aid');
 
             $participantService = new Application_Service_Participants();
             $this->view->participant = $participantService->getParticipantDetails($pID);
 
             $schemeService = new Application_Service_Schemes();
-            $this->view->allSamples = $schemeService->getVlSamples($sID,$pID, $platformID);
+            $this->view->allSamples = $schemeService->getVlSamples($sID, $pID, $platformID, $assayID);
             $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+            $shipment = $schemeService->getShipmentData($sID, $pID, $platformID, $assayID);
             $shipment['attributes'] = json_decode($shipment['attributes'],true);
             $this->view->shipment = $shipment;
 
@@ -277,12 +279,13 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $participantID= $this->getRequest()->getParam('pid');
         $eID =$this->getRequest()->getParam('eid');
         $platformID =$this->getRequest()->getParam('pfid');
+        $assayID =$this->getRequest()->getParam('aid');
 
         $participantService = new Application_Service_Participants();
         $this->view->participant = $participantService->getParticipantDetails($participantID);
 
         $schemeService = new Application_Service_Schemes();
-        $this->view->allSamples = $schemeService->getVlSamples($shipmentID,$participantID, $platformID);
+        $this->view->allSamples = $schemeService->getVlSamples($shipmentID, $participantID, $platformID, $assayID);
         
         $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID);
 
@@ -303,7 +306,7 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
 
         $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-        $shipment = $schemeService->getShipmentData($shipmentID,$participantID,$platformID);
+        $shipment = $schemeService->getShipmentData($shipmentID, $participantID, $platformID, $assayID);
         $shipment['attributes'] = json_decode($shipment['attributes'],true);
         $this->view->shipment = $shipment;
 

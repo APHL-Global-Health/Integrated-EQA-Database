@@ -19,15 +19,29 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
         $this->_session = new Zend_Session_Namespace('datamanagers');
     }
 
-    public function getShipmentData($sId, $pId, $platformID = 1) {
-        $data =  $this->getAdapter()->fetchRow($this->getAdapter()->select()->from(array('s' => $this->_name))
-                                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-                                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                                ->joinLeft(array('r_vl_r' => 'response_vl_not_tested_reason'),
-                                        'r_vl_r.vl_not_tested_reason_id=sp.vl_not_tested_reason', array('vlNotTestedReason' => 'vl_not_tested_reason'))
-                                ->where("s.shipment_id = ?", $sId)
-                                ->where("sp.participant_id = ?", $pId)
-                                ->where("sp.platform_id = ?", $platformID));
+    public function getShipmentData($sId, $pId, $platformID = 1, $assayID = 1) {
+
+        if ($assayID == 2) { // 2 == EID
+
+            $sql = $this->getAdapter()->select()->from(array('s' => $this->_name))
+                    ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
+                    ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+                    ->where("s.shipment_id = ?", $sId)
+                    ->where("sp.participant_id = ?", $pId)
+                    ->where("sl.assay_id = ?", $assayID)
+                    ->where("sp.platform_id = ?", $platformID);
+        }else{ // 1 == VL
+
+            $sql = $this->getAdapter()->select()->from(array('s' => $this->_name))
+                    ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
+                    ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+                    ->where("s.shipment_id = ?", $sId)
+                    ->where("sp.participant_id = ?", $pId)
+                    ->where("sl.assay_id = ?", $assayID)
+                    ->where("sp.platform_id = ?", $platformID);
+        }
+
+        $data =  $this->getAdapter()->fetchRow($sql);
         return $data;
     }
 
