@@ -96,7 +96,6 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                         <tr class ="light">
                             <td><label>Test Receipt Date</label></td>
                             <td>
-
                                 <input type="text" id="receiptDate" name="receiptDate" size="11" maxlength="11" style="width:180px;float:left;" value="<?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>" class="form-control datepicker" readonly="readonly"   title="Please enter Test Receipt Date" />
                                 <i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('receiptDate')"> Clear</i>
                             </td>
@@ -108,12 +107,22 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                         </tr>
                         <tr class="dark">
                             <td><label>Kit Lot Number <span class="mandatory">*</span></label></td>
+                            <?php
+                                $assayLotNumber = "";
+                                if (isset($this->shipment['attributes']['extraction_assay_lot_no'])) {
+                                    $assayLotNumber = $this->shipment['attributes']['extraction_assay_lot_no'];
+                                }
+                                $assayExpirationDate = "";
+                                if (isset($this->shipment['attributes']['extraction_assay_expiry_date'])) {
+                                    $assayExpirationDate = $this->shipment['attributes']['extraction_assay_expiry_date'];
+                                }
+                            ?>
                             <td>
-                                <input type="text" name="assayLotNumber" id="assayLotNumber" class="isRequired form-control"  value="<?php echo $this->shipment['attributes']['extraction_assay_lot_no']; ?>" title="Please enter Assay lot number" placeholder="Please enter Assay lot number"/>
+                                <input type="text" name="assayLotNumber" id="assayLotNumber" class="isRequired form-control"  value="<?php echo $assayLotNumber; ?>" title="Please enter Assay lot number" placeholder="Please enter Assay lot number"/>
                             </td>
                             <td><label>Kit Expiration Date </label></td>
                             <td>
-                                <input type="text" name="assayExpirationDate" id="assayExpirationDate" style="width:180px;float:left;"  class="expDatepicker form-control" readonly="readonly"  value="<?php echo $this->dateFormat($this->shipment['attributes']['extraction_assay_expiry_date']); ?>" title="Please enter Assay Expiration date" placeholder="Please enter Assay Expiration date"/>
+                                <input type="text" name="assayExpirationDate" id="assayExpirationDate" style="width:180px;float:left;"  class="expDatepicker form-control" readonly="readonly"  value="<?php echo $assayExpirationDate; ?>" title="Please enter Assay Expiration date" placeholder="Please enter Assay Expiration date"/>
                                 <i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('assayExpirationDate')"> Clear</i>
                             </td>
                         </tr>
@@ -211,7 +220,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                     $sample['mandatory'] = 0;
                                 }
                                 $count++;
-                        ?>
+                                ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                                     <td style="text-align:center;">

@@ -73,7 +73,7 @@ class Application_Service_Schemes {
         return $db->fetchAll($sql);
     }
 
-    public function getEidSamples($shipmentID, $participantID, $platformID = 1) {
+    public function getEidSamples($shipmentID, $participantID, $platformID = 1, $assayID = 2) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('ref' => 'reference_result_eid'))
                 ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
@@ -81,6 +81,7 @@ class Application_Service_Schemes {
                 ->joinLeft(array('res' => 'response_result_eid'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('interpretation', 'target', 'responseDate' => 'res.created_on'))
                 ->where('sp.shipment_id = ? ', $shipmentID)
                 ->where('sp.participant_id = ? ', $participantID)
+                ->where('sp.assay_id = ?', $assayID)
                 ->where('sp.platform_id = ? ', $platformID);
         return $db->fetchAll($sql);
     }

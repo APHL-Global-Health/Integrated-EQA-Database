@@ -35,7 +35,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                 $count = 0;
                 foreach ($this->allSamples as $sample) {
                     $count++;
-                    ?>
+                ?>
                     <input type="hidden" id ="<?php echo $count . "_hdSampleId"; ?>" name="<?php echo $count . "_hdSampleId"; ?>" value="<?php echo $sample['sample_id']; ?>" />	 
                 <?php } ?>
 
@@ -98,6 +98,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                 <i class="icon-remove-sign" style="cursor:pointer;margin-top:10px;margin-left:10px;float:left;" alt="Clear Date" title="Clear Date"  onclick="clearDate('testDate')"> Clear</i>
                             </td>		
                         </tr>
+                        <?php if($this->shipment['assay_id'] == 1) {?><!-- 1 == VL -->
                         <tr>
                             <td><label>Sample Volume Received</label></td>
                             <td>
@@ -111,6 +112,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                 <input type="text" name="specimenVolume" id="specimenVolume" class="form-control" value="<?php echo $this->shipment['attributes']['specimen_volume']; ?>"/>
                             </td>
                         </tr>
+                        <?php } ?>
 
                         <tr class ="dark">
                             <td><label>Kit Lot Number <span class="mandatory">*</span></label></td>
@@ -128,7 +130,51 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                     <hr>
                     <div style="width:100%;padding-left:20%;"><input type="checkbox" name="isPtTestNotPerformed" id="isPtTestNotPerformed" value="yes" <?php echo(isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'checked="checked"' : ''; ?>/>&nbsp;&nbsp;<label style="font-size:16px;">PT test not performed<label></div>
 
-                    <table class="table table-bordered table-striped" style="width:60%;margin:10px auto;">
+                    <?php if($this->shipment['assay_id'] == 2) {?><!-- 2 == EID -->
+                    <table class="table table-bordered table-striped" style="margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr align="center" class="" >
+                                <th style="width:50%;">Control/Sample</th>
+                                <th>Target</th>     
+                                <th>Interpretation</th>     
+                            </tr>
+                        </thead>
+                        <tfoot></tfoot>
+                        <?php
+                            $count = 0;
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                $count++;
+                                ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
+                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <select name="target[]" id="target_<?php echo $sample['sample_id'];?>" class="form-control">
+                                            <option value="-1"> -- Select Target -- </option>
+                                            <option value="0" <?php echo $sample['target']==0?'selected':''; ?>>Not Detected</option>
+                                            <option value="1" <?php echo $sample['target']==1?'selected':''; ?>>Detected</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <select name="interpretation[]" id="interpretation_<?php echo $sample['sample_id'];?>" class="form-control">
+                                            <option value="-1"> -- Select Interpretation -- </option>
+                                            <option value="0" value="0" <?php echo $sample['interpretation']==0?'selected':''; ?>>Negative</option>
+                                            <option value="1" value="1" <?php echo $sample['interpretation']==1?'selected':''; ?>>Positive</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+                    <?php if($this->shipment['assay_id'] == 1) {?><!-- 1 == VL -->
+                    <table class="table table-bordered table-striped" style="margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr>
                                 <td colspan="3" style="font-size:1.1em;">
@@ -151,7 +197,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                 <th>TND(Target Not Detected)</th>		
                             </tr>
                         </thead>
-                        <?php
+                            <?php
                             $count = 0;
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
@@ -162,7 +208,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                     $vlResult = 0.00;
                                 }
                                 $count++;
-                        ?>
+                                ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                                     <td style="text-align:center;">
@@ -210,6 +256,8 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                                 </textarea></td>
                         </tr>
                     </table>
+                    <?php } ?>
+
                     <hr>
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <tr>
@@ -249,9 +297,9 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                             <p>
 
                                 <input name="submitbtn" class="btn btn-primary" type="submit" onclick="validateNow();
-                                            return false;" tabindex="7" value="Submit"  /> 
+                                            return false;" value="Submit"  /> 
                                 &nbsp;&nbsp;&nbsp;
-                                <input name="cancel" class="btn btn-danger" type="button" id="reset" tabindex="8" value="Cancel" onclick="javascript:window.history.back();" /> 
+                                <input name="cancel" class="btn btn-danger" type="button" id="reset" value="Cancel" onclick="javascript:window.history.back();" /> 
 
                             </p>
                         </div>
@@ -264,7 +312,7 @@ if (isset($this->shipment["shipment_test_report_date"]) && trim($this->shipment[
                 if (!$this->isEditable) {
                 ?>
                     <div id="respond" style="margin: 0px auto 0px auto; text-align: center;">
-                        <a href="javascript:void(0)" id="reset" tabindex="8" class="btn btn-info" onclick="javascript:window.history.back();" >Back</a>
+                        <a href="javascript:void(0)" id="reset" class="btn btn-info" onclick="javascript:window.history.back();" >Back</a>
                     </div>
                 <?php } ?>
             </div>

@@ -175,7 +175,7 @@
                                     $sample['mandatory'] = 0;
                                 }
                                 $count++;
-                        ?>
+                                ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                                     <td style="text-align:center;">
@@ -200,18 +200,22 @@
                                     </td>
                                     <td>
                                         <?php 
-                                        if(round($this->averagePerformance[$sample['sample_id']]) == 0)
-                                            echo "Negative";
-                                        if(round($this->averagePerformance[$sample['sample_id']]) == 1)
-                                            echo "Positive";
+                                        if ($sample['control'] == 0) {
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == 0)
+                                                echo "Negative";
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == 1)
+                                                echo "Positive";
+                                        }
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
-                                            echo "ACCEPTABLE";
-                                        }else{
-                                            echo "UNACCEPTABLE";
+                                        if ($sample['control'] == 0) {
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
+                                                echo "ACCEPTABLE";
+                                            }else{
+                                                echo "UNACCEPTABLE";
+                                            }
                                         }
                                         ?>
                                     </td>

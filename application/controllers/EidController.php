@@ -66,6 +66,7 @@ class EidController extends Zend_Controller_Action
             $pID= $this->getRequest()->getParam('pid');
             $eID =$this->getRequest()->getParam('eid');
             $platformID =$this->getRequest()->getParam('pfid');
+            $assayID =$this->getRequest()->getParam('aid');
 
 		    $this->view->comingFrom =$this->getRequest()->getParam('comingFrom');
 			
@@ -75,7 +76,7 @@ class EidController extends Zend_Controller_Action
             $this->view->allSamples =$schemeService->getEidSamples($sID,$pID, $platformID);
             $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
-            $shipment = $schemeService->getShipmentData($sID,$pID,$platformID);
+            $shipment = $schemeService->getShipmentData($sID, $pID, $platformID, $assayID);
 		    $shipment['attributes'] = json_decode($shipment['attributes'],true);
             $this->view->shipment = $shipment;
 
@@ -86,6 +87,7 @@ class EidController extends Zend_Controller_Action
             $this->view->participantId = $pID;
             $this->view->eID = $eID;
             $this->view->platformID = $platformID;
+            $this->view->assayID = $assayID;
     
             $this->view->isEditable = $shipmentService->isShipmentEditable($sID,$pID);
 			

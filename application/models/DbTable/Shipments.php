@@ -356,7 +356,7 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
          * Get data to display
          */
         $sQuery = $this->getAdapter()->select()
-                ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id"))
+                ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id", "spm.assay_id"))
                 ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('sc' => 'schemes'), 'sc.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id')
@@ -449,7 +449,7 @@ error_log(json_encode($parameters));
             $download = '';
             $delete = '';
 
-            $getParams = '/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '/pfid/' . $aRow['platform_id'];
+            $getParams = '/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '/pfid/' . $aRow['platform_id'] . '/aid/' . $aRow['assay_id'];
             
             if ($isEditable) {
                 if ($aRow['RESPONSEDATE'] != '' && $aRow['RESPONSEDATE'] != '0000-00-00') {
