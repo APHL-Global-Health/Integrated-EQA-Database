@@ -22,12 +22,16 @@ $this->distributionDates = array_diff($this->distributionDates, array($ptEveDate
 			
             <div class="form-group">
                 <label class="col-lg-3 control-label">PT Survey Date <span class="mandatory">*</span></label>
-
+                <?php 
+                    $disabled = "";
+                    if (strcmp($this->result['status'], "shipped") == 0 || strcmp($this->result['status'], "finalized") == 0) {
+                        $disabled = "disabled";
+                    }
+                ?>
                 <div class="col-lg-6">
-					<input type="text"  id="distributionDate" name="distributionDate" size="50" maxlength="45"
-                                             class="isRequired form-control datepicker"
-                                             title="Please enter the PT Survey date here"
-                                             placeholder="Please enter the PT Survey date here" value="<?php echo $this->dateFormat($this->result['distribution_date']); ?>" readonly="readonly"/>
+					<input type="text" id="distributionDate" name="distributionDate" size="50" maxlength="45"
+                        class="isRequired form-control datepicker" title="Please enter the PT Survey date here"
+                        placeholder="Please enter the PT Survey date here" value="<?php echo $this->dateFormat($this->result['distribution_date']); ?>" readonly="readonly"/>
 					<span class="help-block">Dates already having a PT Survey will be disabled and marked with a red circle.</span>
 				</div>
 				
@@ -36,14 +40,14 @@ $this->distributionDates = array_diff($this->distributionDates, array($ptEveDate
                 <label class="col-lg-3 control-label">Readiness Checklist Survey<span class="mandatory">*</span></label>
 
                 <div class="col-lg-6">
-                    <select id="readiness_checklist_survey_id" name="readiness_checklist_survey_id" class="isRequired form-control"
+                    <select id="readiness_checklist_survey_id" name="readiness_checklist_survey_id" class="isRequired form-control"  <?php echo $disabled; ?>
                         title="Select the readiness checklist survey corresponding to this round.">
                         <?php
                             function orderItems($a, $b){
                                 return $a['title'] > $b['title'];
                             }
 
-                            usort($this->readinecssChecklists, 'orderItems');
+                            if($this->readinecssChecklists)usort($this->readinecssChecklists, 'orderItems');
 
                             foreach ($this->readinessChecklists as $checklist) {
                                 foreach ($checklist['surveys'] as $survey) {
