@@ -121,15 +121,21 @@ class Application_Service_Distribution {
 
             foreach ($results as $result) {
 
-                $data = array('shipment_id' => $result['shipment_id'],
-                    'participant_id' => $result['participant_id'],
-                    'platform_id' => $result['platform_id'],
-                    'assay_id' => $result['assay_id'],
-                    'evaluation_status' => '19901190',
-                    'created_by_admin' => $authNameSpace->admin_id,
-                    "created_on_admin" => new Zend_Db_Expr('now()'));
+                $sql = $db->select()->from(array('s' => 'shipment_participant_map'))
+                        ->where("s.shipment_id = {$result['shipment_id']} AND s.participant_id = {$result['participant_id']} AND s.platform_id = {$result['platform_id']} AND s.assay_id = {$result['assay_id']}");
+                $rows = $db->fetchAll($sql);
 
-                $shipmentParticipantsDb->insert($data);
+                if (count($rows) == 0) {
+                    $data = array('shipment_id' => $result['shipment_id'],
+                        'participant_id' => $result['participant_id'],
+                        'platform_id' => $result['platform_id'],
+                        'assay_id' => $result['assay_id'],
+                        'evaluation_status' => '19901190',
+                        'created_by_admin' => $authNameSpace->admin_id,
+                        "created_on_admin" => new Zend_Db_Expr('now()'));
+
+                    $shipmentParticipantsDb->insert($data);
+                }
             }
 
             $shipmentDb = new Application_Model_DbTable_Shipments();

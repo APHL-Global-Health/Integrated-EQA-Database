@@ -96,16 +96,6 @@ a.footer-items:hover {
     padding: 10px;
 }
 
-@media only screen and (max-width: 768px) {
-
-    .navbar .container .country-flag, .country-flag {
-        display: none;
-    }
-
-    body {
-        background-image: 0;
-    }
-}
 .home-navbar{
     opacity: 1.5;
     background-color: unset;
@@ -142,3 +132,24 @@ a .home-menu {
     border:1px solid #F93;
     border-radius:4px;
 }
+
+@media only screen and (max-width: 768px) {
+
+    .navbar .container .country-flag, .country-flag {
+        display: none;
+    }
+
+    body {
+        background-image: 0;
+    }
+}
+
+@media print {
+    .btn {
+        display: none;
+    }
+    .main-footer{
+        display: none;
+    }
+}
+

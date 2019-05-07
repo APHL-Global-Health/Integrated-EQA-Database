@@ -48,16 +48,19 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
         //0 => NOT SENT, 1 => SUBMITTED, 2 => APPROVED, 3=> REJECTED
         $adminNameSpace = new Zend_Session_Namespace('administrators');
         $managerNameSpace = new Zend_Session_Namespace('datamanagers');
+        $updatedBy = 0;
 
         $data  = [];
         $data['status'] = $status;
 
         if($status == 1){ //Submitted
             $data['submitted_by'] = $managerNameSpace->dm_id;
+            $updatedBy = $managerNameSpace->dm_id;
             $data['submitted_at'] = new Zend_Db_Expr('now()');
         }else{
             $data['sanctioned_by'] = $adminNameSpace->admin_id;
             $data['sanctioned_at'] = new Zend_Db_Expr('now()');
+            $updatedBy = $adminNameSpace->admin_id;
         }
 
         if($status == 2){
@@ -67,7 +70,9 @@ class Application_Model_DbTable_ReadinessChecklistParticipant extends Zend_Db_Ta
 
             foreach ($distributions as $distribution) {
                 $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-                $db->update('distributions', ['status' => 'configured'], "distribution_id ='" . $distribution->distribution_id . "' ");
+                $db->update('distributions', 
+                    ['status' => 'configured', 'updated_on' => new Zend_Db_Expr('now()'), 'updated_by' => $updatedBy], 
+                    "distribution_id = $distribution->distribution_id AND status != 'shipped'");
             }
         }
 
