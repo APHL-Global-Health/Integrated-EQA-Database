@@ -105,7 +105,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
          */
 
         $sQuery = $this->getAdapter()->select()->from(array('d' => $this->_name))
-            ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')")))
+            ->joinLeft(array('s' => 'shipment'), 's.distribution_id=d.distribution_id', array('shipments' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT s.shipment_code SEPARATOR ', ')"), 'lastdate_response'))
             ->group('d.distribution_id');
 
         if (isset($sWhere) && $sWhere != "") {
@@ -119,8 +119,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
-
-        //die($sQuery);
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
@@ -146,33 +144,40 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             "aaData" => array()
         );
 
-
-        $shipmentDb = new Application_Model_DbTable_Shipments();
-
         foreach ($rResult as $aRow) {
-
-            $shipmentResults = $shipmentDb->getPendingShipmentsByDistribution($aRow['distribution_id']);
 
             $row = array();
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = $aRow['distribution_code'];
             $row[] = '<a href="/admin/shipment/index/searchString/' . $aRow['distribution_code'] . '">' . $aRow['shipments'] . '</a>';
-            $row[] = ucwords($aRow['status']);
+            $row[] = '<span class="label label-info">'.ucwords($aRow['status']) . '</span>';
 
-            $readiness = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">View Participants</a> ';
+            $viewParticipants = '<a class="btn btn-primary btn-xs" href="/admin/readiness-checklist/participants/id/'.$aRow['readiness_checklist_survey_id'].'">View Participants</a> ';
 
-            $edit = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-pencil"></i> Edit</span></a>';
+            $edit = '<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-pencil"></i> Edit</span></a> ';
 
-            if ($this->getParticipantCount($aRow['distribution_id'],2) > 0 && 
-                $this->getShipmentCount($aRow['distribution_id']) > 0  && $aRow['status'] != 'shipped') {
+            $shipNow = '<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="shipDistribution(\'' . base64_encode($aRow['distribution_id']) . '\')"><span><i class="icon-ambulance"></i> Ship Now</span></a>';
 
-                $row[] = $edit . ' ' . '<a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="shipDistribution(\'' . base64_encode($aRow['distribution_id']) . '\')"><span><i class="icon-ambulance"></i> Ship Now</span></a>';
+            $shippedEdit = '<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '/5h8pp3t/shipped"><span><i class="icon-pencil"></i> Edit</span></a> ';
+
+            $finalize = '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="finalizeDistribution(\'' . base64_encode($aRow['distribution_id']) . '\')"><span>Finalize</span></a>';
+
+            if ($this->getParticipantCount($aRow['distribution_id'], 2) > 0 && 
+                $this->getShipmentCount($aRow['distribution_id']) > 0  && $aRow['status'] == 'configured') {
+
+                $row[] = $edit . $viewParticipants . $shipNow;
 
             } else if (isset($aRow['status']) && $aRow['status'] == 'shipped') {
 
-                $row[] = $readiness.'<a class="btn btn-primary btn-xs" href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '/5h8pp3t/shipped"><span><i class="icon-pencil"></i> Edit</span></a>' . ' ' . '<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
+                if (isset($aRow['lastdate_response']) && (new DateTime($aRow['lastdate_response'])) < (new DateTime())) {
+                    $row[] = $viewParticipants . $shippedEdit . $finalize;
+                }else{
+                    $row[] = $viewParticipants . $shippedEdit;
+                }
+            }else if(isset($aRow['status']) && $aRow['status'] == 'finalized') {
+                $row[] = $viewParticipants;
             } else {
-                $row[] = $edit . ' ' . '<a class="btn btn-primary btn-xs" href="/admin/shipment/index/did/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-plus"></i> Add Scheme</span></a>';
+                $row[] = $viewParticipants . $edit . ' ' . '<a class="btn btn-primary btn-xs" href="/admin/shipment/index/did/' . base64_encode($aRow['distribution_id']) . '"><span><i class="icon-plus"></i> Add Scheme</span></a>';
             }
 
 

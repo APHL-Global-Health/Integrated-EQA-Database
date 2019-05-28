@@ -90,10 +90,6 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
     }
 
-    public function getParticipatingLabsEmail() {
-        
-    }
-
     public function shipDistributionAction() {
         if ($this->_hasParam('did')) {
             $id = (int) base64_decode($this->_getParam('did'));
@@ -101,6 +97,16 @@ class Admin_DistributionsController extends Zend_Controller_Action {
             $this->view->message = $distributionService->shipDistribution($id);
         } else {
             $this->view->message = "Unable to ship. Please try again later or contact system admin for help";
+        }
+    }
+
+    public function finalizeDistributionAction() {
+        if ($this->_hasParam('did')) {
+            $id = (int) base64_decode($this->_getParam('did'));
+            $distributionService = new Application_Service_Distribution();
+            $this->view->message = $distributionService->updateDistributionStatus($id, 'finalized');
+        } else {
+            $this->view->message = "Unable to close PT Survey. Please contact your system admin for help.";
         }
     }
 

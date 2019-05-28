@@ -81,18 +81,32 @@
 	
 
 	
-	function shipDistribution(did) {
-		var choice = confirm("Are you sure you want to ship this PT Survey ? \n You cannot undo this !")
-		if (!choice) {
-			return false;
-		}
-		$.blockUI();
+    function shipDistribution(did) {
+        var choice = confirm("Are you sure you want to ship this PT Survey ? \n You can not undo this!")
+        if (!choice) {
+            return false;
+        }
+        $.blockUI();
         $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions', 'action' => 'ship-distribution')); ?>", { did: did, format: "html" },
             function (data) {
                alert(data);
-			   oTable.fnDraw();
-			   $.unblockUI();
+               oTable.fnDraw();
+               $.unblockUI();
         });
-	}	
+    }   
+
+    function finalizeDistribution(did) {
+        var choice = confirm("Are you sure you want to close this PT Survey ? \n You can not undo this!")
+        if (!choice) {
+            return false;
+        }
+        $.blockUI();
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'distributions', 'action' => 'finalize-distribution')); ?>", { did: did, format: "html" },
+            function (data) {
+               alert(data);
+               oTable.fnDraw();
+               $.unblockUI();
+        });
+    }   
 
 </script>
