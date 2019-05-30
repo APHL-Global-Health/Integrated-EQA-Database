@@ -74,9 +74,6 @@ class ParticipantController extends Zend_Controller_Action {
         }
     }
     
-    public function participantinfoAction(){
-        
-    }
     public function schemeAction() {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $dbUsersProfile = new Application_Service_Participants();
@@ -238,4 +235,57 @@ class ParticipantController extends Zend_Controller_Action {
         }
     }
 
+    public function individualPerformanceAction(){
+
+        $this->_helper->layout()->pageName = 'view-reports';
+  
+        $parameters = $this->_getAllParams();
+        $shipmentID= $this->getRequest()->getParam('sid');
+        $participantID= $this->getRequest()->getParam('pid');
+        $eID =$this->getRequest()->getParam('eid');
+        $platformID =$this->getRequest()->getParam('pfid');
+        $assayID =$this->getRequest()->getParam('aid');
+
+        $participantService = new Application_Service_Participants();
+        $this->view->participant = $participantService->getParticipantDetails($participantID);
+
+        $schemeService = new Application_Service_Schemes();
+        $this->view->allSamples = $schemeService->getVlSamples($shipmentID, $participantID, $platformID, $assayID);
+        
+        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID, $assayID);
+
+        $sampleList = [];
+        foreach ($allPlatformSamples as $platformSample) {
+            $sampleList[] = $platformSample['sample_id'];
+            if ($assayID == 2) {
+                $sampleValues[$platformSample['sample_id']][] = $platformSample['target'];
+            }else{
+                $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
+            }
+        }
+
+        $sampleList = array_unique($sampleList);
+
+        foreach ($sampleList as $sampleID) {
+            $averagePerformance[$sampleID] = $schemeService->getAverage($sampleValues[$sampleID]);
+            $standardDeviation[$sampleID] = $schemeService->getStdDeviation($sampleValues[$sampleID]);
+        }
+        $this->view->averagePerformance = $averagePerformance;
+        $this->view->standardDeviation = $standardDeviation;
+
+        $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
+
+        $shipment = $schemeService->getShipmentData($shipmentID, $participantID, $platformID, $assayID);
+        $shipment['attributes'] = json_decode($shipment['attributes'],true);
+        $this->view->shipment = $shipment;
+
+        $platformService = new Application_Service_Platform();
+        $this->view->platform = $platformService->getPlatform($platformID);
+
+        $this->view->shipmentID = $shipmentID;
+        $this->view->participantId = $participantID;
+        $this->view->eID = $eID;
+        $this->view->platformID = $platformID;
+    
+    }
 }

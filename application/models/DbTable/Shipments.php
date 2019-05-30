@@ -359,12 +359,13 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id", "spm.assay_id"))
                 ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
                 ->join(array('sc' => 'schemes'), 'sc.scheme_id=s.scheme_type', array('scheme_name'))
-                ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id')
+                ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_status' => 'd.status'))
                 ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id AND d.readiness_checklist_survey_id=rcp.readiness_checklist_survey_id')
                 ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
+                ->where("d.status='shipped'")
                 ->where("rcp.status=2") //APPROVED
                 ->where("s.status='shipped' OR s.status='evaluated'");
 
@@ -388,7 +389,6 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-error_log("C1: ".$sQuery);
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -413,8 +413,6 @@ error_log("C1: ".$sQuery);
                 $sQuery = $sQuery->where("s.response_switch = 'off'");
             }
         }
-error_log("C2: ".$sQuery);
-error_log(json_encode($parameters));
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -1066,7 +1064,8 @@ error_log(json_encode($parameters));
          * you want to insert a non-database field (for example a counter or static image)
          */
 
-        $aColumns = array('scheme_type', 'shipment_code', 'DATE_FORMAT(shipment_date,"%d-%b-%Y")', 'unique_identifier', 'first_name', 'DATE_FORMAT(spm.shipment_test_report_date,"%d-%b-%Y")');
+        $aColumns = array('DATE_FORMAT(shipment_date,"%d-%b-%Y")', 'scheme_name', 'shipment_code', 'unique_identifier', 'institute_name', 'DATE_FORMAT(lastdate_response,"%d-%b-%Y")', 'DATE_FORMAT(spm.shipment_test_report_date,"%d-%b-%Y")');
+        $orderColumns = array('shipment_date', 'scheme_name', 'shipment_code', 'unique_identifier', 'institute_name', 'lastdate_response', 'spm.shipment_test_report_date');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
@@ -1087,18 +1086,12 @@ error_log(json_encode($parameters));
 
         $sOrder = "";
         if (isset($parameters['iSortCol_0'])) {
-            $sOrder = "";
             for ($i = 0; $i < intval($parameters['iSortingCols']); $i++) {
                 if ($parameters['bSortable_' . intval($parameters['iSortCol_' . $i])] == "true") {
-                    if ($parameters['iSortCol_' . $i] == 1) {
-                        $sOrder .= "shipment_date " . ( $parameters['sSortDir_' . $i] ) . ", ";
-                    } else {
-                        $sOrder .= $aColumns[intval($parameters['iSortCol_' . $i])] . "
-				 	" . ( $parameters['sSortDir_' . $i] ) . ", ";
-                    }
+                    $sOrder .= $orderColumns[intval($parameters['iSortCol_' . $i])] . " " . ( $parameters['sSortDir_' . $i] ) . ",";
                 }
             }
-            $sOrder = substr_replace($sOrder, "", -2);
+            $sOrder = substr_replace($sOrder, "", -1);
         }
 
         /*
@@ -1148,28 +1141,17 @@ error_log(json_encode($parameters));
          * Get data to display
          */
         $sQuery = $this->getAdapter()->select()
-            ->from(array('s' => 'shipment'), array('SHIP_YEAR' => 'year(s.shipment_date)', 's.scheme_type', 
-                's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status'))
-            ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', 
-                array('spm.map_id', "spm.evaluation_status", "spm.participant_id", 
-                    "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", 
-                    "RESPONSE" => new Zend_Db_Expr("CASE substr(spm.evaluation_status,3,1) WHEN 1 THEN 'View' WHEN '9' THEN 'Enter Result' END"), 
-                    "REPORT" => new Zend_Db_Expr("CASE  WHEN spm.report_generated='yes' AND s.status='finalized' THEN 'Report' END"), "spm.assay_id"))
-                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name'))
+                ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id", "spm.assay_id"))
+                ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
+                ->join(array('sc' => 'schemes'), 'sc.scheme_id=s.scheme_type', array('scheme_name'))
+                ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_status' => 'd.status'))
+                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
-                ->joinLeft(array('a' => 'assays'), 'spm.assay_id=a.id', array('assay_name' => 'a.name'))
-                ->joinLeft(array('pl' => 'platforms'), 'spm.platform_id=pl.ID', array('platform_name' => 'pl.PlatformName'))
+                ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id AND d.readiness_checklist_survey_id=rcp.readiness_checklist_survey_id')
+                ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
-                ->where("s.status='shipped' OR s.status='evaluated'OR s.status='finalized'");
-
-        if (isset($parameters['scheme']) && $parameters['scheme'] != "") {
-            $sQuery = $sQuery->where("s.scheme_type = ?", $parameters['scheme']);
-        }
-
-        if (isset($parameters['startDate']) && $parameters['startDate'] != "" && isset($parameters['endDate']) && $parameters['endDate'] != "") {
-            $sQuery = $sQuery->where("DATE(s.shipment_date) >= ?", $parameters['startDate']);
-            $sQuery = $sQuery->where("DATE(s.shipment_date) <= ?", $parameters['endDate']);
-        }
+                ->where("rcp.status=2") //APPROVED
+                ->where("s.status='shipped' OR s.status='evaluated'");
 
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
@@ -1192,13 +1174,21 @@ error_log(json_encode($parameters));
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.shipment_id'))
-                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array(''))
-                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name'))
+        $sQuery = $this->getAdapter()->select()->from(array('s' => 'shipment'), array('s.shipment_id', 's.status'))
+                ->join(array('spm' => 'shipment_participant_map'), 'spm.shipment_id=s.shipment_id', array('spm.map_id'))
+                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id', array(''))
                 ->where("pmm.dm_id=?", $this->_session->dm_id)
-                ->where("s.status='shipped' OR s.status='evaluated'OR s.status='finalized'");
+                ->where("s.status='shipped' OR s.status='evaluated'")
+                ->where("year(s.shipment_date)  + 5 > year(CURDATE())");
 
+        if (isset($parameters['currentType'])) {
+            if ($parameters['currentType'] == 'active') {
+                $sQuery = $sQuery->where("s.response_switch = 'on'");
+            } else if ($parameters['currentType'] == 'inactive') {
+                $sQuery = $sQuery->where("s.response_switch = 'off'");
+            }
+        }
         $aResultTotal = $this->getAdapter()->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -1213,15 +1203,28 @@ error_log(json_encode($parameters));
         );
 
         $general = new Pt_Commons_General();
+        $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
         foreach ($rResult as $aRow) {
+            $delete = '';
+            $download = '';
+            $isEditable = $shipmentParticipantDb->isShipmentEditable($aRow['shipment_id'], $aRow['participant_id']);
             $row = array();
-            $row[] = $aRow['assay_name'];
-            $row[] = $aRow['shipment_code'];
             $row[] = $general->humanDateFormat($aRow['shipment_date']);
+            $row[] = ($aRow['scheme_name']);
+            $row[] = $aRow['shipment_code'];
             $row[] = $aRow['platform_name'];
-            $row[] = $aRow['first_name'] . " " . $aRow['last_name'];
             $row[] = $general->humanDateFormat($aRow['RESPONSEDATE']);
-            $row[] = '<a href="/participant/download/d92nl9d8d/' . base64_encode($aRow['map_id']) . '"  style="text-decoration : underline;" target="_BLANK" download>' . $aRow['REPORT'] . '</a>';
+
+            $getParams = '/sid/' . $aRow['shipment_id'] . '/pid/' . $aRow['participant_id'] . '/eid/' . $aRow['evaluation_status'] . '/pfid/' . $aRow['platform_id'] . '/aid/' . $aRow['assay_id'];
+            
+            if ($aRow['distribution_status'] == 'finalized') {
+                $buttonText = 'View';
+                $row[] = '<a href="/participant/individual-performance' . $getParams . '" class="btn btn-info" style="margin:3px 0;"> <i class="icon icon-list"></i>  ' . $buttonText . ' </a>';
+            } else {
+                $row[] = '<h4><span class="label label-default">Not Available</span></h4>';
+            }
+
+
 
             $output['aaData'][] = $row;
         }

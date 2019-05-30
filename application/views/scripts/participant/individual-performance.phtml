@@ -1,0 +1,236 @@
+<section class="content-header">
+    <h4>
+        <strong><?php echo "{$this->shipment['scheme_name']} - {$this->platform['PlatformName']}"; ?> Performance</strong>
+        <div style="margin: 0px auto 0px auto; text-align: center; float: right;">
+            <a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:window.history.back()" >Back</a>
+        </div>
+ 
+    </h4>
+</section>
+<section class="content">
+    <div class="box">
+        <form>
+            <div class="box-body">
+                <input type="hidden" id ="smid" name="smid" value="<?php echo $this->shipment['map_id']; ?>" />
+                <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipmentID; ?>" />
+                <input type="hidden" id ="participantId" name="participantId" value="<?php echo $this->participantId; ?>" />
+                <input type="hidden" id ="evId" name="evId" value="<?php echo $this->eID; ?>" />
+                <input type="hidden" id ="platformID" name="platformID" value="<?php echo $this->platformID; ?>" />
+                <div id="view-content">
+                    <div id=error></div>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <tr>
+                            <td>
+                                <h4><strong>Lab Code</strong></h4> <?php echo ( $this->participant['MflCode'] ); ?>
+                            </td>
+                            <td><h4><strong>Lab Name</strong></h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
+                            <td><h4><strong>Phone No</strong></h4> <?php echo ( $this->participant['phone'] ); ?></td>
+                            <td><h4><strong>Mobile No</strong></h4> <?php echo ( $this->participant['mobile'] ); ?></td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <tr class="dark">
+                            <td style="width:30%;"><label>Shipment Date</label></td>
+                            <td style="width:20%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
+                            <td style="width:30%;"><label>Result Due Date</label></td>
+                            <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
+                        </tr>
+
+                        <tr class ="light">
+                            <td><label>Test Receipt Date</label></td>
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
+                            </td>
+                            <td><label>Testing Date</label></td> 
+                            <td>
+                                <?php echo $this->dateFormat($this->shipment["shipment_test_date"]); ?>
+                            </td>       
+                        </tr>
+                        <?php if($this->shipment['assay_id'] == 1) {?>
+                        <tr>
+
+                            <td><label>Specimen Volume used for testing</label></td> 
+                            <td>
+                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
+                            </td>
+                            <td><label>Sample Volume Received</label></td>
+                            <td>
+                                <?php echo $this->shipment['attributes']['specimen_volume']; ?>
+                            </td>
+                        </tr>
+                        <?php } ?>
+
+                        <tr class ="dark">
+                            <td><label>Kit Lot Number</label></td>
+                            <td>
+                                <?php echo isset($this->shipment['attributes']['assay_lot_number'])?$this->shipment['attributes']['assay_lot_number']:''; ?>
+                            </td>
+                            <td><label>Kit Expiration Date </label></td>
+                            <td>
+                                <?php echo isset($this->shipment['attributes']['assay_expiration_date'])?$this->dateFormat($this->shipment['attributes']['assay_expiration_date']):''; ?>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <?php if($this->shipment['assay_id'] == 1) {?><!-- 1 == VL -->
+                    <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr align="center" class="" >
+                                <th style="width:35%;text-align: left;">Control/Sample</th>
+                                <th>Results (log<sub>10</sub> copies/ml)</th>        
+                                <th>Mean Log</th>       
+                                <th>Log Diff</th>       
+                                <th>Lower Limit</th>       
+                                <th>Upper Limit</th>       
+                                <th>Scores</th>       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                if ($sample['control'] == 1) {
+                                    continue;
+                                }
+                            ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="padding-left: 20px;">
+                                        <?php echo $sample['sample_label']; ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['reported_viral_load']; ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php echo number_format($this->averagePerformance[$sample['sample_id']], 2); ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php echo number_format($sample['reported_viral_load'] - $this->averagePerformance[$sample['sample_id']], 2); ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+                                            echo number_format($lowerLimit, 2);
+                                        ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            $upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+                                            echo number_format($upperLimit, 2);
+                                        ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <?php 
+                                            if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
+                                                echo "ACCEPTABLE";
+                                            }else{
+                                                echo "UNACCEPTABLE";
+                                            } 
+                                        ?>
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3">
+                                    <label>Please pick a reason</label> : 
+                                    <?php echo $this->shipment['vl_not_tested_reason']; ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3"><label>Your comments</label> : 
+                                    <?php echo $this->shipment['pt_test_not_performed_comments']; ?>
+                                </td>
+                            </tr>
+                            <tr class="ptNotPerformedSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? '' : 'display:none;'; ?>background:none;">
+                                <td colspan="3"><label>Do you need any support from the PT Provider ?</label> 
+                                    <?php echo $this->shipment['pt_support_comments']; ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    <?php } ?>
+                    <?php if($this->shipment['assay_id'] == 2) {?><!-- 2 == EID -->
+                    <table class="table table-bordered table-striped" style="margin:10px auto;">
+                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                            <tr align="center" class="" >
+                                <th style="width:50%;">Control/Sample</th>
+                                <th>Target</th>
+                                <th>Interpretation</th>
+                                <th>Consensus</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tfoot></tfoot>
+                        <?php
+                            $count = 0;
+                            foreach ($this->allSamples as $sample) {
+                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+                                    $sample['mandatory'] = 0;
+                                }
+                                $count++;
+                                ?>
+
+                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                    <td style="text-align:center;">
+                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
+                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <?php 
+                                            if($sample['target']==0) echo 'Not Detected';
+                                            if($sample['target']==1) echo 'Detected';
+                                            ?>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <?php 
+                                            if($sample['interpretation']==0) echo 'Negative';
+                                            if($sample['interpretation']==1) echo 'Positive';
+                                            ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($sample['control'] == 0) {
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == 0)
+                                                echo "Negative";
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == 1)
+                                                echo "Positive";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        if ($sample['control'] == 0) {
+                                            if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
+                                                echo "ACCEPTABLE";
+                                            }else{
+                                                echo "UNACCEPTABLE";
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+
+                        <?php } ?>
+                    </table>
+                    <?php } ?>
+                </div>
+                <div style="margin: 0px auto 0px auto; text-align: center; float: right;">
+                    <a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:window.history.back()" >
+                        Back
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
