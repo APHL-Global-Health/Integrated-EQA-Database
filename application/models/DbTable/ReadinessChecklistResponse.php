@@ -25,7 +25,7 @@ class Application_Model_DbTable_ReadinessChecklistResponse extends Zend_Db_Table
          */
         error_log(implode("--", $parameters));
 
-        $aColumns = array('readiness_checklist_participant_id', 'participant_id', 'readiness_checklist_question_id', 'answer', 'created_at', 'created_by');
+        $aColumns = array('readiness_checklist_participant_id', 'readiness_checklist_question_id', 'answer', 'created_at', 'created_by');
 
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $this->_primary;
