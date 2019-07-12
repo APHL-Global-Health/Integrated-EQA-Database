@@ -22,7 +22,9 @@
 
                     <?php foreach ($this->participants as $key => $value) { ?>
 
-                        <option value="<?php echo $value['participant_id']; ?>">
+                        <option value="<?php echo $value['participant_id']; ?>"
+                            <?php echo $this->rsUser['participant_id'] == $value['participant_id']?'selected':''; ?>
+                        >
                             <?php echo $value['institute_name']; ?>
                         </option>
                     <?php } ?>

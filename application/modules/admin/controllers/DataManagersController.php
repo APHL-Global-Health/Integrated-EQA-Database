@@ -58,6 +58,8 @@ class Admin_DataManagersController extends Zend_Controller_Action {
             if ($this->_hasParam('id')) {
                 $userId = (int) $this->_getParam('id');
                 $this->view->rsUser = $userService->getUserInfoBySystemId($userId);
+                $dmModel = new Application_Model_DbTable_DataManagers();
+                $this->view->rsUser['participant_id'] = $dmModel->getParticipants($userId);
             }
         }
     }
