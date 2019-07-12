@@ -1,0 +1,63 @@
+<div class="well">
+    <form name="editReportUploadForm" id="editReportUploadForm" method="post"
+          action="<?php echo $this->url(array("module" => "admin", "controller" => "report-upload", "action" => "update"), 'default', true) ?>"
+          class="form-horizontal bs-example" enctype="multipart/form-data" role="form">
+        <fieldset>
+            <legend>Edit New Report</legend>
+
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Report Title <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <textarea id="title" name="title" class="form-control" title="Please enter the title here"
+                         placeholder="Please enter the report title here" required><?php echo $this->reportUpload['title']?></textarea>
+                 </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Access <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="access" id="access_0" value="0" 
+                        <?php echo $this->reportUpload['access'] == 0?'checked':''; ?>>
+                        <label class="form-check-label" for="access_0">None</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access" id="access_1" value="1" 
+                        <?php echo $this->reportUpload['access'] == 1?'checked':''; ?>>
+                        <label class="form-check-label" for="access_1">Participant  </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access" id="access_2" value="2" 
+                        <?php echo $this->reportUpload['access'] == 2?'checked':''; ?>>
+                        <label class="form-check-label" for="access_2">Public</label>
+                        </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Participant <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select id="participant_id" name="participant_id" class="form-control"
+                        title="Please select the participant" required>
+                        <option value='0'> -- All participants -- </option>
+                        <?php
+                        foreach ($this->participants as $participant) {
+                            echo "<option value='{$participant->participant_id}' ";
+                            if($participant->participant_id == $this->reportUpload['participant_id']) echo "selected";
+                            echo ">{$participant->institute_name}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="report_id" type="hidden" value="<?php echo $this->reportUpload['report_id']; ?>"/>
+                <input name="submitbtn" class="btn btn-primary" type="submit" value="Upload"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/report-upload/';"
+                       value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>

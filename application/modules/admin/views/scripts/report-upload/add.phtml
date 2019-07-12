@@ -1,0 +1,63 @@
+<div class="well">
+    <form name="addReportUploadForm" id="addReportUploadForm" method="post"
+          action="<?php echo $this->url(array("module" => "admin", "controller" => "report-upload", "action" => "add"), 'default', true) ?>"
+          class="form-horizontal bs-example" enctype="multipart/form-data" role="form">
+        <fieldset>
+            <legend>Add New Report</legend>
+
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Report Title <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <textarea id="title" name="title" class="form-control" title="Please enter the title here"
+                         placeholder="Please enter the report title here" required></textarea>
+                 </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Access <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="access" id="access_0" value="0" checked>
+                        <label class="form-check-label" for="access_0">None</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access" id="access_1" value="1">
+                        <label class="form-check-label" for="access_1">Participant  </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access" id="access_2" value="2">
+                        <label class="form-check-label" for="access_2">Public</label>
+                        </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Participant <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <select id="participant_id" name="participant_id" class="form-control"
+                        title="Please select the participant" required>
+                        <option value='0'> -- All participants -- </option>
+                        <?php
+                        foreach ($this->participants as $participant) {
+                            echo "<option value='{$participant->participant_id}'>{$participant->institute_name}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">File <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="file" class="form-control" name="upload_report_file" id="upload_report_file" required>
+                </div>
+            </div>
+
+            <br>
+
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" value="Upload"/>
+                <input class="btn btn-danger" type="button" onclick="window.location.href='/admin/report-upload/';"
+                       value="Cancel"/>
+            </div>
+        </fieldset>
+    </form>
+</div>

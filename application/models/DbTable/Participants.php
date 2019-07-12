@@ -592,11 +592,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     }
 
     public function fetchAllActiveParticipants() {
-        if ($_SESSION['loggedInDetails']["IsVl"] == 3) {
-            return $this->fetchAll($this->select()->where("status='active'")->where("IsVl='3'")->order("first_name"));
-        } else {
-            return $this->fetchAll($this->select()->where("status='active'")->order("first_name"));
-        }
+        return $this->fetchAll($this->select()->where("status='active'")->order("institute_name"));
     }
 
     public function getParticipantLab() {

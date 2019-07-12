@@ -205,6 +205,14 @@ class ParticipantController extends Zend_Controller_Action {
         }
     }
 
+    public function uploadsAction() {
+        $this->_helper->layout()->activeMenu = 'view-reports';
+        $this->_helper->layout()->activeSubMenu = 'uploads';
+
+        $participantService = new Application_Service_Participants();
+        $this->view->responses = $participantService->getUploadedReports($this->_getAllParams());
+    }
+
     public function readinessAction() {
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
         $pID = $authNameSpace->UserID;
@@ -288,4 +296,14 @@ class ParticipantController extends Zend_Controller_Action {
         $this->view->platformID = $platformID;
     
     }
+
+    public function reportDownloadAction(){
+
+        $reportUploadModel = new Application_Model_DbTable_ReportUpload();
+
+        if($this->_hasParam('file')){
+            $reportUploadModel->downloadReport($this->_getParam('file'));
+        }
+    }
+
 }

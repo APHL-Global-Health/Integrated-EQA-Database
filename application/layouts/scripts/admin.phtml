@@ -152,6 +152,8 @@ $config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs"
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'cycle-responses'), 'default', true); ?>">Participant Response Report</a></li>
+                            <li>
+                                <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'report-upload', 'action' => 'index'), 'default', true); ?>">Report Uploads</a></li>
                         </ul>
                     </li>
                     <li <?php echo (isset($this->layout()->pageName) && $this->layout()->pageName == 'report') ? "class='active dropdown'" : "class='dropdown'"; ?> style="display: none;">

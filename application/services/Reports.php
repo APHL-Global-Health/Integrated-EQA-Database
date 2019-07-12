@@ -379,8 +379,7 @@ class Application_Service_Reports {
 
         $aResultTotal = $dbAdapter->fetchAll($sQuery);
         $iTotal = sizeof($aResultTotal);
-//        echo $sQuery;
-//        exit;
+
         /*
          * Output
          */
@@ -576,8 +575,6 @@ class Application_Service_Reports {
             $sQuery = $sQuery->limit($sLimit, $sOffset);
         }
 
-//        error_log($sQuery);
-
         $rResult = $dbAdapter->fetchAll($sQuery);
 
 
@@ -651,7 +648,7 @@ class Application_Service_Reports {
                     "valid_responses" => new Zend_Db_Expr("(SUM(sp.shipment_test_date <> '0000-00-00') - SUM(is_excluded = 'yes'))"),
                     ))
                 ->where("s.shipment_id = ?", $shipmentId);
-        //echo $sQuery;die;
+
         return $dbAdapter->fetchRow($sQuery);
     }
 
@@ -854,8 +851,7 @@ class Application_Service_Reports {
         $sQuery = $sQuery->reset(Zend_Db_Select::LIMIT_OFFSET);
         $aResultFilterTotal = $dbAdapter->fetchAll($sQuery);
         $iFilteredTotal = count($aResultFilterTotal);
-//        echo $sQuery;
-//        exit;
+
         /* Total data set length */
         $sWhere = "";
         $sQuery = $dbAdapter->select()->from(array('ref' => $refTable), new Zend_Db_Expr("COUNT('ref.sample_label')"))
@@ -917,7 +913,7 @@ class Application_Service_Reports {
     }
 
     public function getTestKitReport($params) {
-        //Zend_Debug::dump($params);die;
+
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sQuery = $dbAdapter->select()->from(array('res' => 'response_result_dts'), array('totalTest' => new Zend_Db_Expr("CAST((COUNT('shipment_map_id')/s.number_of_samples) as UNSIGNED)")))
                 ->joinLeft(array('sp' => 'shipment_participant_map'), 'sp.map_id=res.shipment_map_id', array())
@@ -1215,7 +1211,6 @@ class Application_Service_Reports {
 			return false;
 		}
     }
-	
 	
 	public function generateDtsRapidHivExcelReport($shipmentId){
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -1857,8 +1852,6 @@ class Application_Service_Reports {
 			$filename = $shipmentCode . '-' . date('d-M-Y-H-i-s') . '.xls';
 			$writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
 			return $filename;
-		
-
 	}
 
 	public function generateDtsViralLoadExcelReport($shipmentId){
@@ -2286,10 +2279,7 @@ class Application_Service_Reports {
 			$filename = $result['shipment_code'] . '-' . date('d-M-Y-H-i-s') .rand(). '.xls';
 			$writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
 			return $filename;
-		
-
 	}
-	
 	
 	public function generateDbsEidExcelReport($shipmentId){
 		
@@ -2448,8 +2438,6 @@ class Application_Service_Reports {
 			$filename = $result['shipment_code'] . '-' . date('d-M-Y-H-i-s') .rand(). '.xls';
 			$writer->save(TEMP_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename);
 			return $filename;
-		
-
 	}
 
     public function addSampleNameInArray($shipmentId, $headings) {
@@ -3824,104 +3812,103 @@ class Application_Service_Reports {
     }
 
     //vl assay particpant count pie chart
-    public function getAllVlAssayParticipantCount($params)
-    {
-	$db = Zend_Db_Table_Abstract::getDefaultAdapter();
-	$shipmentId = $params['shipmentId'];
-	$vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
-	$assayResult=$db->fetchAll($vlQuery);
-	$i = 0;
-	$vlParticipantCount =array();
-	foreach ($assayResult as $assayRow) {
-	    $cQuery = $db->select()->from(array('sp' => 'shipment_participant_map'),array('sp.map_id','sp.attributes'))
-				->where("sp.shipment_id='".$shipmentId."'");
-	    $cResult=$db->fetchAll($cQuery);
-	    $k = 0;
-	    foreach($cResult as $val){
-		$valAttributes = json_decode($val['attributes'], true);
-		if($assayRow['id']==$valAttributes['vl_assay']){
-		    $k = $k + 1;
-		}
-	    }
-	    $vlParticipantCount[$i]['count']  = $k;
-	    $vlParticipantCount[$i]['name']  = $assayRow['short_name'];
-	    $i++;
-	}
-	return $vlParticipantCount;
+    public function getAllVlAssayParticipantCount($params){
+    	$db = Zend_Db_Table_Abstract::getDefaultAdapter();
+    	$shipmentId = $params['shipmentId'];
+    	$vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
+    	$assayResult=$db->fetchAll($vlQuery);
+    	$i = 0;
+    	$vlParticipantCount =array();
+    	foreach ($assayResult as $assayRow) {
+    	    $cQuery = $db->select()->from(array('sp' => 'shipment_participant_map'),array('sp.map_id','sp.attributes'))
+    				->where("sp.shipment_id='".$shipmentId."'");
+    	    $cResult=$db->fetchAll($cQuery);
+    	    $k = 0;
+    	    foreach($cResult as $val){
+        		$valAttributes = json_decode($val['attributes'], true);
+        		if($assayRow['id']==$valAttributes['vl_assay']){
+        		    $k = $k + 1;
+        		}
+    	    }
+    	    $vlParticipantCount[$i]['count']  = $k;
+    	    $vlParticipantCount[$i]['name']  = $assayRow['short_name'];
+    	    $i++;
+    	}
+    	return $vlParticipantCount;
     }
-    public function getAllVlSampleResult($params)
-    {
-	$db = Zend_Db_Table_Abstract::getDefaultAdapter();
-	$totalResult = array();
-	if($params['shipmentId']!=''){
-	    $shipmentId = $params['shipmentId'];
-	    $shQuery=$db->select()->from(array('s' => 'shipment'))->where("s.shipment_id='".$shipmentId."'");
-	    $shimentResult=$db->fetchAll($shQuery);
-	}else{
-	    $shQuery=$db->select()->from(array('s' => 'shipment'))->where("s.scheme_type='vl'");
-	    if (isset($params['start']) && $params['start'] != "" && isset($params['end']) && $params['end'] != "") {
-		$shQuery = $shQuery->where("DATE(s.shipment_date) >= ?", $params['start']);
-		$shQuery = $shQuery->where("DATE(s.shipment_date) <= ?", $params['end']);
-	    }
-	    $shimentResult=$db->fetchAll($shQuery);
-	}
-	if($shimentResult){
-	    $vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
-	    $assayResult=$db->fetchAll($vlQuery);
-	    $s = 0;
-	    foreach($shimentResult as $shipData){
-		$shipmentId = $shipData['shipment_id'];
-		$i = 0;
-		$totalResult = array();
-		foreach ($assayResult as $assayRow) {
-		    $a = 0;
-		    $f = 0;
-		    $e = 0;
-		    $cQuery = $db->select()->from(array('sp' => 'shipment_participant_map'),array('sp.map_id','sp.attributes'))
-					->where("sp.shipment_id='".$shipmentId."'");
-		    $cResult=$db->fetchAll($cQuery);
-		    foreach($cResult as $val){
-			$valAttributes = json_decode($val['attributes'], true);
-			if($assayRow['id']==$valAttributes['vl_assay']){
-			    //check pass result
-			    $pQuery = $db->select()->from(array('rrv' => 'response_result_vl'),array('passResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='pass',1,0))"),'failResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='fail',1,0))"),'exResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='excluded',1,0))")))
-					->where("rrv.shipment_map_id='".$val['map_id']."'")
-					->group("rrv.shipment_map_id");
-			    $pResult=$db->fetchRow($pQuery);
-			    if($pResult){
-			    $a = $a + $pResult['passResult'];
-			    $f = $f + $pResult['failResult'];
-			    $e = $e + $pResult['exResult'];
-			    }
-			}
-		    }
-		    $totalResult[$s][$i]['accept'] = $a;
-		    $totalResult[$s][$i]['fail'] = $f;
-		    $totalResult[$s][$i]['excluded'] = $e;
-		    $totalResult[$s][$i]['name']  = $assayRow['short_name'];
-		    $i++;
-		}
-	    }
-	    $resultAccept = array();
-	    $resultFail = array();
-	    $resultEx = array();
-	    foreach($totalResult as $result){
-		foreach($result as $data){
-		array_push($resultAccept,$data['accept']);
-		array_push($resultFail,$data['fail']);
-		array_push($resultEx,$data['excluded']);
-		}
-	    }
-	    $resultAcc[] = $resultAccept;
-	    $resultFa[] = $resultFail;
-	    $resultExe[] = $resultEx;
-	    
-	    $resultAcc['name'] = 'accept';
-	    $resultFa['name'] = 'fail';
-	    $resultExe['name'] = 'excluded';
-	    $totalResult = array($resultAcc,$resultFa,$resultExe,'nameList'=>$totalResult);
-	}
-	return $totalResult;
+
+    public function getAllVlSampleResult($params){
+    	$db = Zend_Db_Table_Abstract::getDefaultAdapter();
+    	$totalResult = array();
+    	if($params['shipmentId']!=''){
+    	    $shipmentId = $params['shipmentId'];
+    	    $shQuery=$db->select()->from(array('s' => 'shipment'))->where("s.shipment_id='".$shipmentId."'");
+    	    $shimentResult=$db->fetchAll($shQuery);
+    	}else{
+    	    $shQuery=$db->select()->from(array('s' => 'shipment'))->where("s.scheme_type='vl'");
+    	    if (isset($params['start']) && $params['start'] != "" && isset($params['end']) && $params['end'] != "") {
+        		$shQuery = $shQuery->where("DATE(s.shipment_date) >= ?", $params['start']);
+        		$shQuery = $shQuery->where("DATE(s.shipment_date) <= ?", $params['end']);
+    	    }
+    	    $shimentResult=$db->fetchAll($shQuery);
+    	}
+    	if($shimentResult){
+    	    $vlQuery=$db->select()->from(array('vl' => 'assays'),array('vl.id','vl.name','vl.short_name'));
+    	    $assayResult=$db->fetchAll($vlQuery);
+    	    $s = 0;
+    	    foreach($shimentResult as $shipData){
+        		$shipmentId = $shipData['shipment_id'];
+        		$i = 0;
+        		$totalResult = array();
+        		foreach ($assayResult as $assayRow) {
+        		    $a = 0;
+        		    $f = 0;
+        		    $e = 0;
+        		    $cQuery = $db->select()->from(array('sp' => 'shipment_participant_map'),array('sp.map_id','sp.attributes'))
+        					->where("sp.shipment_id='".$shipmentId."'");
+        		    $cResult=$db->fetchAll($cQuery);
+        		    foreach($cResult as $val){
+        			$valAttributes = json_decode($val['attributes'], true);
+        			if($assayRow['id']==$valAttributes['vl_assay']){
+        			    //check pass result
+        			    $pQuery = $db->select()->from(array('rrv' => 'response_result_vl'),array('passResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='pass',1,0))"),'failResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='fail',1,0))"),'exResult' => new Zend_Db_Expr("SUM(IF(rrv.calculated_score='excluded',1,0))")))
+        					->where("rrv.shipment_map_id='".$val['map_id']."'")
+        					->group("rrv.shipment_map_id");
+        			    $pResult=$db->fetchRow($pQuery);
+        			    if($pResult){
+        			    $a = $a + $pResult['passResult'];
+        			    $f = $f + $pResult['failResult'];
+        			    $e = $e + $pResult['exResult'];
+        			    }
+        			}
+        		    }
+        		    $totalResult[$s][$i]['accept'] = $a;
+        		    $totalResult[$s][$i]['fail'] = $f;
+        		    $totalResult[$s][$i]['excluded'] = $e;
+        		    $totalResult[$s][$i]['name']  = $assayRow['short_name'];
+        		    $i++;
+        		}
+    	    }
+    	    $resultAccept = array();
+    	    $resultFail = array();
+    	    $resultEx = array();
+    	    foreach($totalResult as $result){
+        		foreach($result as $data){
+            		array_push($resultAccept,$data['accept']);
+            		array_push($resultFail,$data['fail']);
+            		array_push($resultEx,$data['excluded']);
+        		}
+    	    }
+    	    $resultAcc[] = $resultAccept;
+    	    $resultFa[] = $resultFail;
+    	    $resultExe[] = $resultEx;
+    	    
+    	    $resultAcc['name'] = 'accept';
+    	    $resultFa['name'] = 'fail';
+    	    $resultExe['name'] = 'excluded';
+    	    $totalResult = array($resultAcc,$resultFa,$resultExe,'nameList'=>$totalResult);
+    	}
+    	return $totalResult;
     }
 	
 	public function getShipmentsByDate($schemeType,$startDate,$endDate) {
@@ -3995,22 +3982,10 @@ class Application_Service_Reports {
 	public function generateAnnualReport($sQuery,$startDate,$endDate){
 		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 		$shipmentParticipantResult=$db->fetchAll($sQuery);
-		//Zend_Debug::dump($shipmentParticipantResult);
+
 		$shipmentPassResult=array();
 		$shipmentFailResult=array();
 		$headings = array('Shipment Code','Participants Identifier','Participants Name','Institute Name','Address','Country','State','City');
-		//foreach($shipmentParticipantResult as $shipment){
-		//	if($shipment['final_result']==1){
-		//		$shipmentPassResult[$shipment['shipment_code']][$shipment['unique_identifier']]=array();
-		//		$shipmentPassResult[$shipment['shipment_code']][$shipment['unique_identifier']][]=$shipment['unique_identifier'];
-		//		$shipmentPassResult[$shipment['shipment_code']][$shipment['unique_identifier']][]=$shipment['first_name'];
-		//	}
-		//	if($shipment['final_result']==2){
-		//		$shipmentFailResult[$shipment['shipment_code']][$shipment['unique_identifier']]=array();
-		//		$shipmentFailResult[$shipment['shipment_code']][$shipment['unique_identifier']][]=$shipment['unique_identifier'];
-		//		$shipmentFailResult[$shipment['shipment_code']][$shipment['unique_identifier']][]=$shipment['first_name'];
-		//	}
-		//}
 		
 		$excel = new PHPExcel();
 		$cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
@@ -4056,7 +4031,7 @@ class Application_Service_Reports {
 			$firstSheet->getStyleByColumnAndRow($colNo, 5)->getFont()->setBold(true);
 			$colNo++;
 		}
-		//Zend_Debug::dump($shipmentPassResult);
+
 		foreach($shipmentParticipantResult as $shipment){
 			$firstSheetRow = array();
 			$secondSheetRow = array();
@@ -4098,18 +4073,6 @@ class Application_Service_Reports {
 			}
 		}
 		
-		//foreach($shipmentPassResult as $shipmentKey=>$shipment){
-		//	//$row[]=$shipmentKey;
-		//	
-		//	foreach($shipment as $val){
-		//		$row = array();
-		//		//echo $val[0];
-		//		$row[]=$val[0];
-		//		$row[]=$val[1];
-		//		$output[] = $row;
-		//	}
-		//}
-		
 		foreach ($output as $rowNo => $rowData) {
 			$colNo = 0;
 			foreach ($rowData as $field => $value) {
@@ -4118,7 +4081,6 @@ class Application_Service_Reports {
 				}
 				$firstSheet->getCellByColumnAndRow($colNo, $rowNo + 6)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
 				if ($colNo == (sizeof($headings) - 1)) {
-					//$firstSheet->getColumnDimensionByColumn($colNo)->setWidth(100);
 					$firstSheet->getStyleByColumnAndRow($colNo, $rowNo + 6)->getAlignment()->setWrapText(true);
 				}
 				$colNo++;
@@ -4145,7 +4107,6 @@ class Application_Service_Reports {
 				}
 				$secondSheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
 				if ($colNo == (sizeof($headings) - 1)) {
-					//$secondSheet->getColumnDimensionByColumn($colNo)->setWidth(100);
 					$secondSheet->getStyleByColumnAndRow($colNo, $rowNo + 3)->getAlignment()->setWrapText(true);
 				}
 				$colNo++;
@@ -4172,7 +4133,6 @@ class Application_Service_Reports {
 				}
 				$thirdSheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), PHPExcel_Cell_DataType::TYPE_STRING);
 				if ($colNo == (sizeof($headings) - 1)) {
-					//$thirdSheet->getColumnDimensionByColumn($colNo)->setWidth(100);
 					$thirdSheet->getStyleByColumnAndRow($colNo, $rowNo + 3)->getAlignment()->setWrapText(true);
 				}
 				$colNo++;
@@ -4191,6 +4151,5 @@ class Application_Service_Reports {
 		$filename = 'Annual Report-'.date('d-M-Y').'.xls';
 		$writer->save(UPLOAD_PATH. DIRECTORY_SEPARATOR."annual-reports". DIRECTORY_SEPARATOR . $filename);
 		return $filename;
-		
 	}
 }

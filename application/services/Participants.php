@@ -539,4 +539,15 @@ class Application_Service_Participants
         return $participantDb->getParticipantCycleResponses($parameters);
     }
 
+    public function getUploadedReports($parameters)
+    {
+        $reportUploadModel = new Application_Model_DbTable_ReportUpload();
+        return $reportUploadModel->getAllReportUploads($parameters);
+    }
+
+    public function uploadReport($parameters){
+        $report = new Application_Model_DbTable_ReportUpload();
+        return $report->addReportUpload($parameters);
+    }
+
 }

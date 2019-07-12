@@ -335,4 +335,11 @@ class Application_Model_DbTable_DataManagers extends Zend_Db_Table_Abstract {
         }
     }
 
+    public function getParticipants($dataManagerID){
+
+        $db = Zend_Db_Table_Abstract::getAdapter();
+
+        return $db->select()->from('participant_manager_map', array('participant_id'))
+                    ->where('dm_id = ?', $dataManagerID)->query()->fetchColumn();
+    }
 }
