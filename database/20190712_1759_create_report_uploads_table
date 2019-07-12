@@ -1,0 +1,12 @@
+CREATE TABLE `report_uploads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `file_path_hash` varchar(80) DEFAULT NULL,
+  `status` tinyint(4) DEFAULT '1',
+  `access` tinyint(4) DEFAULT '1',
+  `participant_id` int(10) unsigned DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
