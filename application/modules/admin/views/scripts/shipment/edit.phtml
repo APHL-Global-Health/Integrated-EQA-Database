@@ -1941,12 +1941,6 @@ $dtFormat = $vHelper->getDateFormat();
                 }
                 if ($shipmentData['shipment']['scheme_type'] == 'eid') {
 
-                    $possibleResults = '<select name="possibleResults[]" class="isRequired form-control input-sm"><option value="">--Select--</option>';
-                    foreach ($shipmentData['possibleResults'] as $pr) {
-                        $possibleResults .= '<option value="' . $pr['id'] . '">' . $pr['response'] . '</option>';
-                    }
-
-                    $possibleResults .= "</select>";
                     ?>
 
                     <table style="width: 100%;margin: 0 auto;" border="1"
@@ -1954,9 +1948,6 @@ $dtFormat = $vHelper->getDateFormat();
                         <thead>
                         <tr align="center">
                             <th style="width:20%;text-align: center;">Control/Sample</th>
-                            <th style="width:22%;text-align: center;">Results</th>
-                            <th style="width:10%;text-align: center;">HIV CT/OD</th>
-                            <th style="width:10%;text-align: center;">IC/QS Values</th>
                             <th style="width:10%;text-align: center;">Control ?</th>
                             <th style="width:10%;text-align: center;">Mandatory ?</th>
                             <th style="width:13%;text-align: center;">Add/Remove Row</th>
@@ -1973,32 +1964,6 @@ $dtFormat = $vHelper->getDateFormat();
                                 <td style="text-align: center">
                                     <input type="text" name="sampleName[]" class="isRequired input-sm form-control"
                                            value="<?php echo $reference['sample_label']; ?>"/>
-                                    <!--<input type="hidden" id ="control< ?php echo $count; ?>" name="controlId[]" value="< ?php echo $control['id'];?>" />-->
-                                </td>
-                                <td>
-
-                                    <select name="possibleResults[]" class="isRequired form-control input-sm">
-                                        <option value="">--Select--</option>
-                                        <?php
-                                        foreach ($shipmentData['possibleResults'] as $pr) {
-                                            ?>
-                                            <option value="<?php echo $pr['id']; ?>" <?php echo ($reference['reference_result'] == $pr['id']) ? "selected='selected'" : ""; ?>><?php echo $pr['response']; ?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text" name="hivCtOd[]" class="isRequired form-control input-sm"
-                                           placeholder="Please enter the HIV CT/OD values"
-                                           title="Please enter the HIV CT/OD values here"
-                                           value="<?php echo $reference['reference_hiv_ct_od'] ?>"/>
-                                </td>
-                                <td>
-                                    <input type="text" name="icQs[]" class="isRequired form-control input-sm"
-                                           placeholder="Please enter the IC/QS Values"
-                                           title="Please enter the IC/QS Values here"
-                                           value="<?php echo $reference['reference_ic_qs'] ?>"/>
                                 </td>
                                 <td>
                                     <select name="control[]" class="isRequired controlOrNot form-control input-sm"
@@ -2050,20 +2015,10 @@ $dtFormat = $vHelper->getDateFormat();
 
                     <script type="text/javascript">
                         function addEidRow(obj) {
-                            //$(obj.parentNode.parentNode).after('<tr align="center"><td style="text-align: center"><input type="text" name="sampleName[]" class="isRequired input-sm form-control" title="Please enter sample name here" placeholder="Please enter sample name here"/></td><td><?php echo $possibleResults; ?></td><td><input type="text" name="hivCtOd[]" class="isRequired form-control input-sm" placeholder="Please enter the HIV CT/OD values here"  title="Please enter the HIV CT/OD values here" /></td><input type="text" name="icQs[]" class="isRequired form-control input-sm" placeholder="Please enter the IC/QS Values here"  title="Please enter the IC/QS Values here" /></td><td><a href="javascript:void(0);" onclick="addEidRow(this);" class="btn btn-xs btn-info"><i class="icon-plus"></i></a>&nbsp;&nbsp;<a  href="javascript:void(0);" onclick="removeRow(this)" class="btn btn-xs btn-danger" title="Remove this row completely" alt="Remove this row completely"><i class="icon-minus"></i></a></td></tr>');
                             $(obj.parentNode.parentNode).after('<tr align="center"> \
                                                     <td style="text-align: center"> \
                                                             <input type="text" name="sampleName[]" class="isRequired input-sm form-control" title="Please enter sample name here" placeholder="Please enter sample name here"/> \
                                                     </td>  \
-                                                    <td> \
-    <?php echo $possibleResults; ?> \
-                                                    </td> \
-                                                    <td> \
-                                                            <input type="text" name="hivCtOd[]" class="isRequired form-control input-sm" placeholder="Please enter the HIV CT/OD values here"  title="Please enter the HIV CT/OD values here" /> \
-                                                    </td>\
-                                                    <td> \
-                                                            <input type="text" name="icQs[]" class="isRequired form-control input-sm" placeholder="Please enter the IC/QS Values here"  title="Please enter the IC/QS Values here" /> \
-                                                    </td>\
                                                     <td><select name="control[]" class="isRequired controlOrNot form-control input-sm" title="Please choose whether this sample is a control"> \
                                                                     <option value="">--Select--</option><option value="1">Yes</option><option value="0">No</option> \
                                                             </select> \
@@ -2090,42 +2045,39 @@ $dtFormat = $vHelper->getDateFormat();
                 <?php
                 } else if ($shipmentData['shipment']['scheme_type'] == 'vl') {
 
-                $vlAssayChoices = '<option value="">--Select--</option>';
-                foreach ($this->vlAssay as $id => $name) {
-                    $vlAssayChoices .= '<option value="' . $id . '">' . $name . '</option>';
-                }
+                    $vlAssayChoices = '<option value="">--Select--</option>';
+                    foreach ($this->vlAssay as $id => $name) {
+                        $vlAssayChoices .= '<option value="' . $id . '">' . $name . '</option>';
+                    }
 
-                $allVlRefMethods = array();
-                // foreach ($shipmentData['vlReferenceMethods'] as $vlRefMet) {
-                //     $allVlRefMethods[] = $vlRefMet['sample_id'];
-                // }
-                ?>
+                    $allVlRefMethods = array();
+                    // foreach ($shipmentData['vlReferenceMethods'] as $vlRefMet) {
+                    //     $allVlRefMethods[] = $vlRefMet['sample_id'];
+                    // }
+                    ?>
 
                     <table style="width: 850px;margin: 0 auto;" border="1"
                            class="table table-bordered table-striped clearfix" id="vlSampleTable">
                         <thead>
-                        <tr align="center">
-                            <!--<th style="width:25%;text-align: center;">Control/Sample</th>-->
-                            <th style="text-align: center;">Control ?</th>
-                            <th style="text-align: center;">Mandatory ?</th>
-                            <th style="width:25%;text-align: center;">Add/Remove Row</th>
-                        </tr>
+                            <tr align="center">
+                                <th style="width:25%;text-align: center;">Control/Sample</th>
+                                <th style="text-align: center;">Control ?</th>
+                                <th style="text-align: center;">Mandatory ?</th>
+                                <th style="width:25%;text-align: center;">Add/Remove Row</th>
+                            </tr>
                         </thead>
                         <tbody>
                         <?php
                         $counter = 1;
-                        //var_dump($shipmentData['vlReferenceMethods']);die;
                         foreach ($shipmentData['reference'] as $reference) {
-                            ?>
-
+                        ?>
 
                             <tr align="center">
                                 <td style="text-align: center">
                                     <input type="text" name="sampleName[]" class="isRequired input-sm form-control"
                                            value="<?php echo $reference['sample_label']; ?>"/>
-                                    <!--<input type="hidden" id ="control< ?php echo $count; ?>" name="controlId[]" value="< ?php echo $control['id'];?>" />-->
                                 </td>
-                                <td style="display:none;">
+                                <td>
                                     <select name="control[]" class="isRequired controlOrNot form-control input-sm"
                                             title="Please choose whether this sample is a control">
                                         <option value="">--Select--</option>
@@ -2271,17 +2223,17 @@ $dtFormat = $vHelper->getDateFormat();
                     <script type="text/javascript">
                         function addVlRow(obj) {
                             $(obj.parentNode.parentNode).after('<tr align="center"> \
-                                                                                                                    <th><input type="text" name="sampleName[]" value="" class="isRequired form-control input-sm" title="Please enter the Sample Name"  placeholder="Please enter the Sample Name" /></th> \
-                                                                                                                    <td><select name="control[]" class="isRequired controlOrNot form-control input-sm" title="Please choose whether this sample is a control"> \
-                                                                                                                                    <option value="">--Select--</option><option value="1">Yes</option><option value="0">No</option> \
-                                                                                                                            </select> \
-                                                                                                                    </td> \
-                                                                                                                    <td><select name="mandatory[]" class="isRequired form-control input-sm" title="Please choose whether this panel is mandatory"> \
-                                                                                                                                    <option value="">--Select--</option><option value="1">Yes</option><option value="0">No</option> \
-                                                                                                                            </select> \
-                                                                                                                    </td> \
-                                                                                                                    <td><a href="javascript:void(0);" onclick="addVlRow(this);" class="btn btn-xs btn-info"><i class="icon-plus"></i></a>&nbsp;&nbsp;<a  href="javascript:void(0);" onclick="removeRow(this)" class="btn btn-xs btn-danger"  title="Remove this row completely" alt="Remove this row completely"><i class="icon-minus"></i></a></td> \
-                                                                                                            </tr>');
+                                                                <th><input type="text" name="sampleName[]" value="" class="isRequired form-control input-sm" title="Please enter the Sample Name"  placeholder="Please enter the Sample Name" /></th> \
+                                                                <td><select name="control[]" class="isRequired controlOrNot form-control input-sm" title="Please choose whether this sample is a control"> \
+                                                                        <option value="">--Select--</option><option value="1">Yes</option><option value="0">No</option> \
+                                                                        </select> \
+                                                                </td> \
+                                                                <td><select name="mandatory[]" class="isRequired form-control input-sm" title="Please choose whether this panel is mandatory"> \
+                                                                        <option value="">--Select--</option><option value="1">Yes</option><option value="0">No</option> \
+                                                                    </select> \
+                                                                </td> \
+                                                                <td><a href="javascript:void(0);" onclick="addVlRow(this);" class="btn btn-xs btn-info"><i class="icon-plus"></i></a>&nbsp;&nbsp;<a  href="javascript:void(0);" onclick="removeRow(this)" class="btn btn-xs btn-danger"  title="Remove this row completely" alt="Remove this row completely"><i class="icon-minus"></i></a></td> \
+                                                            </tr>');
                         }
 
                         function removeRow(obj) {
@@ -2293,49 +2245,49 @@ $dtFormat = $vHelper->getDateFormat();
 
                         function addNewReferenceResultBlock(sampleId) {
                             $("#sampleReferenceBlockHolder").after('<div id="sampleReferenceResult' + sampleId + '" class="dialog">\
-                                                      <span onClick="hidedefModal()" class="closeModal"></span>\
-                                                      <div class="modal-header">\
-                                                            <h4 class="modal-title">Reference Results</h4>\
-                                                      </div>\
-                                                      <div class="modal-body">\
-                                                            <div class="row">\
-                                                              <div >\
-                                                                    <table style="width: 70%;margin: 0 auto;" class="table table-bordered table-striped clearfix">\
-                                                                            <thead>\
-                                                                                    <tr align="center">\
-                                                                                            <th style="width:50%;text-align: center;">VL Assay</th>\
-                                                                                            <th style="width:20%;text-align: center;">Viral Load (log<sub>10</sub> copies/ml)</th>\
-                                                                                            <th style="width:15%;text-align: center;"></th>\
-                                                                                    </tr>\
-                                                                            </thead>\
-                                                                            <tbody>\
-                                                                                    <tr>\
-                                                                                            <td><select class="form-control" name="vlRef[' + sampleId + '][assay][]"><?php echo $vlAssayChoices; ?></select></td>\
-                                                                                            <td><input type="text" name="vlRef[' + sampleId + '][value][]" class="form-control"/></td>\
-                                                                                            <td>\
-                                                                                                    <a href="javascript:void(0);" onclick="addNewVlRefRow(this,' + sampleId + ')" class="btn btn-primary btn-xs"><i class="icon-plus"></i></a>\
-                                                                                            </td>\
-                                                                                    </tr>\
-                                                                            </tbody>\
-                                                                    </table>\
-                                                              </div>\
-                                                            </div>\
-                                                      </div>\
-                                                      <div class="modal-footer">\
-                                                                    <button type="button" class="btn btn-primary" onclick="closeShipmentModal(\'sampleReferenceResult' + sampleId + '\')">OK</button>\
-                                                      </div>\
-                                                    </div>');
+                              <span onClick="hidedefModal()" class="closeModal"></span>\
+                              <div class="modal-header">\
+                                    <h4 class="modal-title">Reference Results</h4>\
+                              </div>\
+                              <div class="modal-body">\
+                                    <div class="row">\
+                                      <div >\
+                                            <table style="width: 70%;margin: 0 auto;" class="table table-bordered table-striped clearfix">\
+                                                    <thead>\
+                                                            <tr align="center">\
+                                                                    <th style="width:50%;text-align: center;">VL Assay</th>\
+                                                                    <th style="width:20%;text-align: center;">Viral Load (log<sub>10</sub> copies/ml)</th>\
+                                                                    <th style="width:15%;text-align: center;"></th>\
+                                                            </tr>\
+                                                    </thead>\
+                                                    <tbody>\
+                                                            <tr>\
+                                                                    <td><select class="form-control" name="vlRef[' + sampleId + '][assay][]"><?php echo $vlAssayChoices; ?></select></td>\
+                                                                    <td><input type="text" name="vlRef[' + sampleId + '][value][]" class="form-control"/></td>\
+                                                                    <td>\
+                                                                            <a href="javascript:void(0);" onclick="addNewVlRefRow(this,' + sampleId + ')" class="btn btn-primary btn-xs"><i class="icon-plus"></i></a>\
+                                                                    </td>\
+                                                            </tr>\
+                                                    </tbody>\
+                                            </table>\
+                                      </div>\
+                                    </div>\
+                              </div>\
+                              <div class="modal-footer">\
+                                            <button type="button" class="btn btn-primary" onclick="closeShipmentModal(\'sampleReferenceResult' + sampleId + '\')">OK</button>\
+                              </div>\
+                            </div>');
                         }
 
                         function addNewVlRefRow(obj, sampleId) {
                             $(obj.parentNode.parentNode).after('<tr>\
-                                                                                            <td><select class="form-control" name="vlRef[' + sampleId + '][assay][]"><?php echo $vlAssayChoices; ?></select></td>\
-                                                                                            <td><input type="text" name="vlRef[' + sampleId + '][value][]" class="form-control"/></td>\
-                                                                                            <td>\
-                                                                                                    <a href="javascript:void(0);" onclick="addNewVlRefRow(this,' + sampleId + ')" class="btn btn-primary btn-xs"><i class="icon-plus"></i></a>\
-                                                                                                    <a  href="javascript:void(0);" onclick="removeVlRefRow(this)" class="btn btn-xs btn-danger"  title="Remove this row completely" alt="Remove this row completely"><i class="icon-minus"></i></a> \
-                                                                                            </td>\
-                                                                                    </tr>');
+                                    <td><select class="form-control" name="vlRef[' + sampleId + '][assay][]"><?php echo $vlAssayChoices; ?></select></td>\
+                                    <td><input type="text" name="vlRef[' + sampleId + '][value][]" class="form-control"/></td>\
+                                    <td>\
+                                            <a href="javascript:void(0);" onclick="addNewVlRefRow(this,' + sampleId + ')" class="btn btn-primary btn-xs"><i class="icon-plus"></i></a>\
+                                            <a  href="javascript:void(0);" onclick="removeVlRefRow(this)" class="btn btn-xs btn-danger"  title="Remove this row completely" alt="Remove this row completely"><i class="icon-minus"></i></a> \
+                                    </td>\
+                            </tr>');
                             $(".datepicker").datepicker({dateFormat: '<?php echo $dtFormat; ?>'});
                         }
 
@@ -2359,7 +2311,6 @@ $dtFormat = $vHelper->getDateFormat();
                         }
 
                     </script>
-
 
                 <?php
                 } else if ($shipmentData['shipment']['scheme_type'] == 'tb') {

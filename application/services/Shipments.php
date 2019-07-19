@@ -1049,6 +1049,7 @@ class Application_Service_Shipments {
         $eia = '';
         $wb = '';
         $rhiv = '';
+        $possibleResults = "";
 
         $returnArray = array();
 
@@ -1082,8 +1083,7 @@ class Application_Service_Shipments {
                             ->join(array('ref' => 'reference_result_eid'), 'ref.shipment_id=s.shipment_id')
                             ->where("s.shipment_id = ?", $sid));
             $schemeService = new Application_Service_Schemes();
-            $possibleResults = "";
-            // $possibleResults = $schemeService->getPossibleResults('eid');
+            $possibleResults = $schemeService->getPossibleResults('eid');
         } else if ($shipment['scheme_type'] == 'vl') {
             $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
                             ->join(array('ref' => 'reference_result_vl'), 'ref.shipment_id=s.shipment_id')
@@ -1091,11 +1091,6 @@ class Application_Service_Shipments {
             $possibleResults = "";
 
             // $returnArray['vlReferenceMethods'] = $db->fetchAll($db->select()->from('reference_vl_methods')->where("shipment_id = ?", $sid));
-        } else if ($shipment['scheme_type'] == 'tb') {
-            // $reference = $db->fetchAll($db->select()->from(array('s' => 'shipment'))
-            //                 ->join(array('ref' => 'reference_result_tb'), 'ref.shipment_id=s.shipment_id')
-            //                 ->where("s.shipment_id = ?", $sid));
-            // $possibleResults = "";
         } else {
             return false;
         }
@@ -1108,8 +1103,6 @@ class Application_Service_Shipments {
     }
 
     public function updateShipment($params) {
-        //Zend_Debug::dump($params);die;
-
 
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $shipmentRow = $dbAdapter->fetchRow($dbAdapter->select()->from(array('s' => 'shipment'))->where('shipment_id = ' . $params['shipmentId']));
@@ -1136,8 +1129,6 @@ class Application_Service_Shipments {
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
                     'reference_result' => $params['possibleResults'][$i],
-                    'reference_hiv_ct_od' => $params['hivCtOd'][$i],
-                    'reference_ic_qs' => $params['icQs'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
