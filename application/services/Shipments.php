@@ -701,7 +701,6 @@ class Application_Service_Shipments {
 
     public function addShipment($params) {
 
-        //Zend_Debug::dump($params);die;
         $scheme = $params['schemeId'];
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $db = new Application_Model_DbTable_Shipments();
@@ -737,6 +736,7 @@ class Application_Service_Shipments {
                     'shipment_id' => $lastId,
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
+                    'reference_result' => $params['eidResult'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
@@ -744,48 +744,17 @@ class Application_Service_Shipments {
                 );
             }
         } else if ($params['schemeId'] == 'vl') {
-            //Zend_Debug::dump($params['vlRef']);die;
             for ($i = 0; $i < $size; $i++) {
                 $dbAdapter->insert('reference_result_vl', array(
                     'shipment_id' => $lastId,
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
-                    //'reference_result' => $params['vlResult'][$i],
+                    'reference_result' => $params['vlResult'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
                         )
                 );
-                if (isset($params['vlRef'][$i + 1]['assay'])) {
-                    $assaySize = count($params['vlRef'][$i + 1]['assay']);
-                    for ($e = 0; $e < $assaySize; $e++) {
-                        if (trim($params['vlRef'][$i + 1]['assay'][$e]) != "" && trim($params['vlRef'][$i + 1]['value'][$e]) != "") {
-                            $dbAdapter->insert('reference_vl_methods', array(
-                                'shipment_id' => $lastId,
-                                'sample_id' => ($i + 1),
-                                'assay' => $params['vlRef'][$i + 1]['assay'][$e],
-                                'value' => $params['vlRef'][$i + 1]['value'][$e]
-                                    )
-                            );
-                        }
-                    }
-                }
-                if (isset($params['vlRef'][$i + 1]['mean'])) {
-                    $assaySize = count($params['vlRef'][$i + 1]['mean']);
-                    for ($e = 0; $e < $assaySize; $e++) {
-                        if (trim($params['vlRef'][$i + 1]['mean'][$e]) != "" && trim($params['vlRef'][$i + 1]['deviation'][$e]) != "") {
-                            $dbAdapter->insert('reference_vl_calculation', array(
-                                'shipment_id' => $lastId,
-                                'sample_id' => ($i + 1),
-                                'vl_assay' => $params['vlRef'][$i + 1]['assay'][$e],
-                                'mean' => $params['vlRef'][$i + 1]['mean'][$e],
-                                'low_limit' => $params['vlRef'][$i + 1]['mean'][$e] - $params['vlRef'][$i + 1]['deviation'][$e],
-                                'high_limit' => $params['vlRef'][$i + 1]['mean'][$e] + $params['vlRef'][$i + 1]['deviation'][$e]
-                                    )
-                            );
-                        }
-                    }
-                }
             }
         } else if ($params['schemeId'] == 'dts') {
             for ($i = 0; $i < $size; $i++) {
@@ -1090,7 +1059,6 @@ class Application_Service_Shipments {
                             ->where("s.shipment_id = ?", $sid));
             $possibleResults = "";
 
-            // $returnArray['vlReferenceMethods'] = $db->fetchAll($db->select()->from('reference_vl_methods')->where("shipment_id = ?", $sid));
         } else {
             return false;
         }
@@ -1128,7 +1096,7 @@ class Application_Service_Shipments {
                     'shipment_id' => $params['shipmentId'],
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
-                    'reference_result' => $params['possibleResults'][$i],
+                    'reference_result' => $params['eidResult'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
@@ -1136,36 +1104,19 @@ class Application_Service_Shipments {
                 );
             }
         } else if ($scheme == 'vl') {
-            //var_dump($params['vlRef']);die;
             $dbAdapter->delete('reference_result_vl', 'shipment_id = ' . $params['shipmentId']);
-            $dbAdapter->delete('reference_vl_methods', 'shipment_id = ' . $params['shipmentId']);
             for ($i = 0; $i < $size; $i++) {
                 $dbAdapter->insert('reference_result_vl', array(
                     'shipment_id' => $params['shipmentId'],
                     'sample_id' => ($i + 1),
                     'sample_label' => $params['sampleName'][$i],
-                    //'reference_result' => $params['vlResult'][$i],
+                    'reference_result' => $params['vlResult'][$i],
                     'control' => $params['control'][$i],
                     'mandatory' => $params['mandatory'][$i],
                     'sample_score' => 1
                         )
                 );
 
-                if (isset($params['vlRef'][$i + 1]['assay'])) {
-                    $assaySize = count($params['vlRef'][$i + 1]['assay']);
-                    ;
-                    for ($e = 0; $e < $assaySize; $e++) {
-                        if (trim($params['vlRef'][$i + 1]['assay'][$e]) != "" && trim($params['vlRef'][$i + 1]['value'][$e]) != "") {
-                            $dbAdapter->insert('reference_vl_methods', array(
-                                'shipment_id' => $params['shipmentId'],
-                                'sample_id' => ($i + 1),
-                                'assay' => $params['vlRef'][$i + 1]['assay'][$e],
-                                'value' => $params['vlRef'][$i + 1]['value'][$e]
-                                    )
-                            );
-                        }
-                    }
-                }
             }
         } else if ($scheme == 'tb') {
             $dbAdapter->delete('reference_result_tb', 'shipment_id = ' . $params['shipmentId']);
