@@ -163,7 +163,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $finalize = '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="finalizeDistribution(\'' . base64_encode($aRow['distribution_id']) . '\')"><span>Finalize</span></a>';
 
             if ($this->getParticipantCount($aRow['distribution_id'], 2) > 0 && 
-                $this->getShipmentCount($aRow['distribution_id']) > 0  && $aRow['status'] == 'configured') {
+                $this->getShipmentCount($aRow['distribution_id']) > 0  && 
+                ($aRow['status'] == 'configured' || $aRow['status'] == 'pending')) {
 
                 $row[] = $edit . $viewParticipants . $shipNow;
 
@@ -567,7 +568,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
         $sQuery = $dbAdapter->select()->from(array('temp' => $sQuery))->where("not_finalized_count>0");
 
-        //die($sQuery);
         $rResult = $dbAdapter->fetchAll($sQuery);
 
         /* Data set length after filtering */
@@ -577,7 +577,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        //$sQuery = $dbAdapter->select()->from('distributions', new Zend_Db_Expr("COUNT('" . $sIndexColumn . "')"))->where("status='shipped'");
         $aResultTotal = $dbAdapter->fetchAll($sQuery);
         $iTotal = count($aResultTotal);
 
@@ -623,7 +622,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $participants = $survey->findDependentRowset('Application_Model_DbTable_ReadinessChecklistParticipant')->toArray();
 
         $count = 0;
-        if($status == -1){ 
+        if($status == -1){
             $count = count($participants);
         }else{
             foreach ($participants as $participant) {
