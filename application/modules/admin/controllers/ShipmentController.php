@@ -179,7 +179,6 @@ class Admin_ShipmentController extends Zend_Controller_Action {
     }
 
     public function editAction() {
-
         if ($this->getRequest()->isPost()) {
             $shipmentService = new Application_Service_Shipments();
             $params = $this->getRequest()->getPost();
@@ -195,19 +194,8 @@ class Admin_ShipmentController extends Zend_Controller_Action {
 
                 $schemeService = new Application_Service_Schemes();
 
-                // if ($response['shipment']['scheme_type'] == 'dts' || $response['shipment']['scheme_type'] == 'dbs') {
-                //     $this->view->wb = $schemeService->getDbsWb();
-                //     $this->view->eia = $schemeService->getDbsEia();
+                $this->view->vlAssay = $schemeService->getVlAssay();
 
-                //     $this->view->dtsPossibleResults = $schemeService->getPossibleResults('dts');
-                //     $this->view->allTestKits = $schemeService->getAllDtsTestKit();
-                // } else if ($response['shipment']['scheme_type'] == 'vl') {
-
-                    $this->view->vlAssay = $schemeService->getVlAssay();
-
-                // }
-
-        // oOps !! Nothing to edit....
                 if ($response == null || $response == "" || $response === false) {
                     $this->_redirect("/admin/shipment");
                 }
