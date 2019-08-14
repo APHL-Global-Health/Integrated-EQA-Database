@@ -53,7 +53,7 @@ $this->distributionDates = array_diff($this->distributionDates, array($ptEveDate
                                 foreach ($checklist['surveys'] as $survey) {
                                     echo "<option value='".$survey['id']."'";
                                     if($this->result['readiness_checklist_survey_id'] == $survey['id']) echo " selected ";
-                                    echo ">".$checklist['title']." - (".substr($survey['start_date'],0,10)." - ".substr($survey['end_date'],0,10).")</option>";
+                                    echo ">".$survey['name']." - (".substr($survey['start_date'],0,10)." - ".substr($survey['end_date'],0,10).")</option>";
                                 }
                             }
                         ?>

@@ -43,7 +43,7 @@
 
                             foreach ($this->readinessChecklists as $checklist) {
                                 foreach ($checklist['surveys'] as $survey) {
-                                    echo "<option value=".$survey['id'].">".$checklist['title']." - (".substr($survey['start_date'],0,10)." - ".substr($survey['end_date'],0,10).")</option>";
+                                    echo "<option value=".$survey['id'].">".$survey['name']." - (".substr($survey['start_date'],0,10)." - ".substr($survey['end_date'],0,10).")</option>";
                                 }
                             }
                         ?>
