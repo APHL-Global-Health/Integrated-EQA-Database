@@ -151,5 +151,13 @@ a .home-menu {
     .main-footer{
         display: none;
     }
+
+    .content .box {
+        border: 0;
+    }
+    .box-body #view-content {
+        border: 2px solid #000;
+        padding: 15px;
+    }
 }
 

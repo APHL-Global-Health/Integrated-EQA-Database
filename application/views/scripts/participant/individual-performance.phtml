@@ -19,6 +19,14 @@
                 <div id="view-content">
                     <div id=error></div>
 
+                    <div class="report-logo">
+                        <p><center><strong>MINISTRY OF HEALTH</strong></center></p>
+                        <p><center><img src="/images/nphl-logo-2.png"></center></p>
+                        <p><center>National HIV Reference Laboratory (NHRL)</center></p>
+                        <p><center>P.O Box 20750 - 00202 NAIROBI</center></p>
+                        <p><center>Telephone: 020-261096</center></p>
+                    </div>
+
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <tr>
                             <td>
@@ -89,6 +97,8 @@
                         </thead>
                         <tbody>
                             <?php
+                            $count = 0;
+                            $performance = 0;
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
@@ -96,6 +106,7 @@
                                 if ($sample['control'] == 1) {
                                     continue;
                                 }
+                                $count++;
                             ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
@@ -123,10 +134,11 @@
                                             echo number_format($upperLimit, 2);
                                         ?>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td>
                                         <?php 
                                             if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
                                                 echo "ACCEPTABLE";
+                                                $performance += 1;
                                             }else{
                                                 echo "UNACCEPTABLE";
                                             } 
@@ -152,65 +164,95 @@
                                     <?php echo $this->shipment['pt_support_comments']; ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="6"></td>
+                                <td>
+                                    <center><strong><?php echo $performance/$count*100; ?> %</strong></center>
+                                </td>
+                            </tr>
                         </tbody>
-                        <tfoot></tfoot>
+                        <tfoot>
+                        </tfoot>
                     </table>
                     <?php } ?>
                     <?php if($this->shipment['assay_id'] == 2) {?><!-- 2 == EID -->
                     <table class="table table-bordered table-striped" style="margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
-                                <th style="width:50%;">Control/Sample</th>
-                                <th>Target</th>
+                                <th style="width:40%;">Sample</th>
+                                <th>Results</th>
                                 <th>Interpretation</th>
                                 <th>Consensus</th>
+                                <?php if(isset($sample['reference_result'])) {?>
+                                <th>Reference</th>
+                                <?php } ?>
                                 <th>Score</th>
                             </tr>
                         </thead>
-                        <tfoot></tfoot>
+                        <tbody>
                         <?php
                             $count = 0;
+                            $performance = 0;
+                            $negativePositiveResult = ['Negative', 'Positive'];
+                            $colspan = 4;
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
                                 }
-                                $count++;
+
+                                if ($sample['control'] == 0) {
+                                    $count++;
+
+                                    if(isset($sample['reference_result'])){
+                                        if($sample['reference_result'] == $sample['target']){
+                                            $performance += 1;
+                                        }
+                                        $colspan = 5;
+                                    }else{
+                                        if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
+                                            $performance += 1;
+                                        }
+                                    }
                                 ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                                    <td style="text-align:center;">
-                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
-                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
+                                    <td>
+                                        <?php echo $sample['sample_label']; ?>
                                     </td>
-                                    <td style="text-align:center;">
-                                        <span>
+                                    <td>
+                                        <strong>
                                             <?php 
                                             if($sample['target']==0) echo 'Not Detected';
                                             if($sample['target']==1) echo 'Detected';
                                             ?>
-                                        </span>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <span>
-                                            <?php 
-                                            if($sample['interpretation']==0) echo 'Negative';
-                                            if($sample['interpretation']==1) echo 'Positive';
-                                            ?>
-                                        </span>
+                                        </strong>
                                     </td>
                                     <td>
                                         <?php 
-                                        if ($sample['control'] == 0) {
-                                            if(round($this->averagePerformance[$sample['sample_id']]) == 0)
-                                                echo "Negative";
-                                            if(round($this->averagePerformance[$sample['sample_id']]) == 1)
-                                                echo "Positive";
-                                        }
+                                            echo $negativePositiveResult[$sample['interpretation']];
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        if ($sample['control'] == 0) {
+                                        echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
+                                        ?>
+                                    </td>
+                                    <?php if(isset($sample['reference_result'])) {?>
+                                    <td>
+                                        <?php 
+                                        echo $negativePositiveResult[$sample['reference_result']];
+                                        ?>
+                                    </td>
+                                    <?php } ?>
+                                    <td>
+                                        <?php
+                                        if(isset($sample['reference_result'])){
+                                            if($sample['reference_result'] == $sample['target']){
+                                                echo "ACCEPTABLE";
+                                            }else{
+                                                echo "UNACCEPTABLE";
+                                            }
+                                        }else{
                                             if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
                                                 echo "ACCEPTABLE";
                                             }else{
@@ -221,7 +263,17 @@
                                     </td>
                                 </tr>
 
+                            <?php } ?>
                         <?php } ?>
+                            <tr>
+                                <td colspan="<?php echo $colspan; ?>"></td>
+                                <td>
+                                    <center><strong><?php echo $performance/$count*100; ?> %</strong></center>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
                     </table>
                     <?php } ?>
                 </div>
