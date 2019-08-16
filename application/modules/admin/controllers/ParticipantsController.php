@@ -195,7 +195,6 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->view->participantId = $pID;
         $this->view->eID = $eID;
         $this->view->platformID = $platformID;
-    
     }
 
     public function enterResponseAction(){

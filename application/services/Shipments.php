@@ -24,7 +24,6 @@ class Application_Service_Shipments {
                                 ->join(array('rr' => 'reference_result_vl'), 'vl_peer_mean.sampleId=rr.sample_id')
                                 ->join(array('sp' => 'shipment'), 'vl_peer_mean.shipmentId=sp.shipment_id')
                                 ->joinLeft(array('system_admin' => 'system_admin'), 'vl_peer_mean.system_id=system_admin.admin_id')
-//                                ->where("reference_vl_calculation.shipment_id=" . $sid)
                                 ->where("vl_peer_mean.shipmentId=rr.shipment_id")
                                 ->where("vl_peer_mean.shipmentId=" . $sid)
                                 ->where("vl_peer_mean.sampleId=" . $sampleId)
@@ -211,7 +210,6 @@ class Application_Service_Shipments {
             $enrolled = '';
             $delete = '';
             $announcementMail = '';
-            $manageEnroll = '';
 
             if ($aRow['distribution_status'] == 'finalized') {
                 $row[] = '<span class="btn btn-danger btn-xs disabled"><i class="icon-check"></i> Finalized</span>';
@@ -227,12 +225,9 @@ class Application_Service_Shipments {
                     $enrolled = '&nbsp;<a class="btn btn-primary btn-xs disabled" href="javascript:void(0);"><span><i class="icon-ambulance"></i> Shipped</span></a>';
                     $announcementMail = '&nbsp;<a class="btn btn-warning btn-xs" href="javascript:void(0);" onclick="mailShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-bullhorn"></i> New Shipment Mail</span></a>';
                 }
-                if ($aRow['status'] == 'shipped' || $aRow['status'] == 'evaluated') {
-                    $manageEnroll = '&nbsp;<a class="btn btn-info btn-xs" href="/admin/shipment/manage-enroll/sid/' . base64_encode($aRow['shipment_id']) . '/sctype/' . base64_encode($aRow['scheme_type']) . '"><span><i class="icon-gear"></i> Enrollment </span></a>';
-                }
             }
 
-            $row[] = $edit . $enrolled . $delete . $announcementMail . $manageEnroll;
+            $row[] = $edit . $enrolled . $delete . $announcementMail;
             $output['aaData'][] = $row;
         }
 
@@ -537,69 +532,6 @@ class Application_Service_Shipments {
         }
     }
 
-    public function updateTbResults($params) {
-
-        if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
-            return false;
-        }
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-
-        $db->beginTransaction();
-        try {
-            $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
-            $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            $attributes = array("sample_rehydration_date" => Pt_Commons_General::dateFormat($params['sampleRehydrationDate']),
-                "mtb_rif_kit_lot_no" => $params['mtbRifKitLotNo'],
-                "expiry_date" => $params['expiryDate']);
-            $attributes = json_encode($attributes);
-            $data = array(
-                "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
-                "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
-                "attributes" => $attributes,
-                //"shipment_test_report_date" => new Zend_Db_Expr('now()'),
-                "supervisor_approval" => $params['supervisorApproval'],
-                "participant_supervisor" => $params['participantSupervisor'],
-                "user_comment" => $params['userComments'],
-                "mode_id" => $params['modeOfReceipt'],
-                "updated_by_user" => $authNameSpace->dm_id,
-                "updated_on_user" => new Zend_Db_Expr('now()')
-            );
-
-            if (isset($params['testReceiptDate']) && trim($params['testReceiptDate']) != '') {
-                $data['shipment_test_report_date'] = Pt_Commons_General::dateFormat($params['testReceiptDate']);
-            } else {
-                $data['shipment_test_report_date'] = new Zend_Db_Expr('now()');
-            }
-
-            if (isset($authNameSpace->qc_access) && $authNameSpace->qc_access == 'yes') {
-                $data['qc_done'] = $params['qcDone'];
-                if (isset($data['qc_done']) && trim($data['qc_done']) == "yes") {
-                    $data['qc_date'] = Pt_Commons_General::dateFormat($params['qcDate']);
-                    $data['qc_done_by'] = trim($params['qcDoneBy']);
-                    $data['qc_created_on'] = new Zend_Db_Expr('now()');
-                } else {
-                    $data['qc_date'] = NULL;
-                    $data['qc_done_by'] = NULL;
-                    $data['qc_created_on'] = NULL;
-                }
-            }
-            $noOfRowsAffected = $shipmentParticipantDb->updateShipment($data, $params['smid'], $params['hdLastDate']);
-
-            $tbResponseDb = new Application_Model_DbTable_ResponseTb();
-            $tbResponseDb->updateResults($params);
-            $db->commit();
-        } catch (Exception $e) {
-            // If any of the queries failed and threw an exception,
-            // we want to roll back the whole transaction, reversing
-            // changes made in the transaction, even those that succeeded.
-            // Thus all changes are committed together, or none are.
-            $db->rollBack();
-            error_log($e->getMessage());
-            error_log($e->getTraceAsString());
-        }
-    }
-
     public function updateVlResults($params) {
 
         if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
@@ -815,8 +747,10 @@ class Application_Service_Shipments {
         $participantDb = new Application_Model_DbTable_Participants();
         return $participantDb->checkParticipantAccess($participantId);
     }
+
     public function sendEnrollingEmail(){
-           $shipmentDb = new Application_Model_DbTable_ShipmentParticipantMap();
+
+        $shipmentDb = new Application_Model_DbTable_ShipmentParticipantMap();
         return $shipmentDb->sendEnrollingEmail();
     }
 

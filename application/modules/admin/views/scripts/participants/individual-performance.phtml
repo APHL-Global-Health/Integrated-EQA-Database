@@ -164,12 +164,14 @@
                                 <th>Target</th>
                                 <th>Interpretation</th>
                                 <th>Consensus</th>
+                                <th title="Reference Result">Reference</th>
                                 <th>Score</th>
                             </tr>
                         </thead>
-                        <tfoot></tfoot>
+                        <tbody>
                         <?php
                             $count = 0;
+                            $negativePositiveResult = ['Negative', 'Positive'];
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
@@ -193,18 +195,21 @@
                                     <td style="text-align:center;">
                                         <span>
                                             <?php 
-                                            if($sample['interpretation']==0) echo 'Negative';
-                                            if($sample['interpretation']==1) echo 'Positive';
+                                            echo $negativePositiveResult[$sample['interpretation']];
                                             ?>
                                         </span>
                                     </td>
                                     <td>
                                         <?php 
                                         if ($sample['control'] == 0) {
-                                            if(round($this->averagePerformance[$sample['sample_id']]) == 0)
-                                                echo "Negative";
-                                            if(round($this->averagePerformance[$sample['sample_id']]) == 1)
-                                                echo "Positive";
+                                            echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($sample['control'] == 0) {
+                                            echo $negativePositiveResult[$sample['reference_result']];
                                         }
                                         ?>
                                     </td>
@@ -222,6 +227,8 @@
                                 </tr>
 
                         <?php } ?>
+                        </tbody>
+                        <tfoot></tfoot>
                     </table>
                     <?php } ?>
                 </div>
