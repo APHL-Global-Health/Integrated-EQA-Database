@@ -794,9 +794,13 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                 $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
                 $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
             }else{ // if past response date and not finalized
-                $row['action'] = '<a href="/admin/participants/enter-response/sid/' . $aRow['shipment_id'];
-                $row['action'] .= '/pid/' . $aRow['participant_id'] . '/pfid/' . $aRow['platform_id'];
-                $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-warning btn-xs" style="margin:3px;padding:10px;"> Add Response</a>';
+                if ($aRow['status'] == 'finalized') {
+                    $row['action'] = '';
+                }else{
+                    $row['action'] = '<a href="/admin/participants/enter-response/sid/' . $aRow['shipment_id'];
+                    $row['action'] .= '/pid/' . $aRow['participant_id'] . '/pfid/' . $aRow['platform_id'];
+                    $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-warning btn-xs" style="margin:3px;padding:10px;"> Add Response</a>';
+                }
             }
 
             $output['aaData'][] = $row;

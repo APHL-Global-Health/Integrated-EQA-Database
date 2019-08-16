@@ -216,10 +216,18 @@
                                     <td>
                                         <?php
                                         if ($sample['control'] == 0) {
-                                            if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
-                                                echo "ACCEPTABLE";
+                                            if (isset($sample['reference_result'])) {
+                                                if($sample['reference_result'] == $sample['target']){
+                                                    echo "ACCEPTABLE";
+                                                }else{
+                                                    echo "UNACCEPTABLE";
+                                                }
                                             }else{
-                                                echo "UNACCEPTABLE";
+                                                if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
+                                                    echo "ACCEPTABLE";
+                                                }else{
+                                                    echo "UNACCEPTABLE";
+                                                }
                                             }
                                         }
                                         ?>
