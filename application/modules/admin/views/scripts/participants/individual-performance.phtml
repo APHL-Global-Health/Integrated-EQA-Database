@@ -164,7 +164,9 @@
                                 <th>Target</th>
                                 <th>Interpretation</th>
                                 <th>Consensus</th>
+                                <?php if (isset($sample['reference_result'])) { ?>
                                 <th title="Reference Result">Reference</th>
+                                <?php } ?>
                                 <th>Score</th>
                             </tr>
                         </thead>
@@ -206,6 +208,7 @@
                                         }
                                         ?>
                                     </td>
+                                    <?php if (isset($sample['reference_result'])) { ?>
                                     <td>
                                         <?php 
                                         if ($sample['control'] == 0) {
@@ -213,6 +216,7 @@
                                         }
                                         ?>
                                     </td>
+                                    <?php } ?>
                                     <td>
                                         <?php
                                         if ($sample['control'] == 0) {
