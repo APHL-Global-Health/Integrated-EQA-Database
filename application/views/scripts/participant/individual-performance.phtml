@@ -98,6 +98,8 @@
                         <tbody>
                             <?php
                             $count = 0;
+                            $sampleCount = 0;
+                            $correctCount = 0;
                             $performance = 0;
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
@@ -107,6 +109,7 @@
                                     continue;
                                 }
                                 $count++;
+                                $sampleCount++;
                             ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
@@ -139,6 +142,7 @@
                                             if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
                                                 echo "ACCEPTABLE";
                                                 $performance += 1;
+                                                $correctCount++;
                                             }else{
                                                 echo "UNACCEPTABLE";
                                             } 
@@ -165,9 +169,20 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="6"></td>
-                                <td>
-                                    <center><strong><?php echo $performance/$count*100; ?> %</strong></center>
+                                <td colspan="5"></td>
+                                <td colspan="2">
+                                    <center>
+                                        <strong>
+                                            <?php
+                                            if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                                                echo "Satisfactory"; 
+                                            }else{
+                                                echo "<span style='color:red;'>Unsatisfactory</span>"; 
+                                            }
+                                            ?>
+                                            (<?php echo $performance/$count*100; ?> %)
+                                        </strong>
+                                    </center>
                                 </td>
                             </tr>
                         </tbody>
@@ -192,6 +207,8 @@
                         <tbody>
                         <?php
                             $count = 0;
+                            $sampleCount = 0;
+                            $correctCount = 0;
                             $performance = 0;
                             $negativePositiveResult = ['Negative', 'Positive'];
                             $colspan = 4;
@@ -202,6 +219,7 @@
 
                                 if ($sample['control'] == 0) {
                                     $count++;
+                                    $sampleCount++;
 
                                     if(isset($sample['reference_result'])){
                                         if($sample['reference_result'] == $sample['target']){
@@ -249,12 +267,14 @@
                                         if(isset($sample['reference_result'])){
                                             if($sample['reference_result'] == $sample['target']){
                                                 echo "ACCEPTABLE";
+                                                $correctCount++;
                                             }else{
                                                 echo "UNACCEPTABLE";
                                             }
                                         }else{
                                             if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
                                                 echo "ACCEPTABLE";
+                                                $correctCount++;
                                             }else{
                                                 echo "UNACCEPTABLE";
                                             }
@@ -268,7 +288,18 @@
                             <tr>
                                 <td colspan="<?php echo $colspan; ?>"></td>
                                 <td>
-                                    <center><strong><?php echo $performance/$count*100; ?> %</strong></center>
+                                    <center>
+                                        <strong>
+                                            <?php
+                                            if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                                                echo "Satisfactory"; 
+                                            }else{
+                                                echo "<span style='color:red;'>Unsatisfactory</span>"; 
+                                            }
+                                            ?>
+                                            (<?php echo $performance/$count*100; ?> %)
+                                        </strong>
+                                    </center>
                                 </td>
                             </tr>
                         </tbody>
