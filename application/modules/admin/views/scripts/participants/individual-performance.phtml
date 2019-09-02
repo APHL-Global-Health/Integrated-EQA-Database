@@ -89,6 +89,8 @@
                         </thead>
                         <tbody>
                             <?php
+                            $sampleCount = 0;
+                            $correctCount = 0;
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
@@ -96,6 +98,7 @@
                                 if ($sample['control'] == 1) {
                                     continue;
                                 }
+                                $sampleCount++;
                             ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
@@ -127,6 +130,7 @@
                                         <?php 
                                             if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
                                                 echo "ACCEPTABLE";
+                                                $correctCount++;
                                             }else{
                                                 echo "UNACCEPTABLE";
                                             } 
@@ -160,6 +164,8 @@
                     <table class="table table-bordered table-striped" style="margin:10px auto;">
                         <?php
                             $count = 0;
+                            $sampleCount = 0;
+                            $correctCount = 0;
                             $negativePositiveResult = ['Negative', 'Positive'];
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
@@ -209,6 +215,7 @@
                                         <?php 
                                         if ($sample['control'] == 0) {
                                             echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
+                                            $sampleCount++;
                                         }
                                         ?>
                                     </td>
@@ -227,12 +234,14 @@
                                             if (isset($sample['reference_result'])) {
                                                 if($sample['reference_result'] == $sample['target']){
                                                     echo "ACCEPTABLE";
+                                                    $correctCount++;
                                                 }else{
                                                     echo "UNACCEPTABLE";
                                                 }
                                             }else{
                                                 if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
                                                     echo "ACCEPTABLE";
+                                                    $correctCount++;
                                                 }else{
                                                     echo "UNACCEPTABLE";
                                                 }
@@ -248,6 +257,19 @@
                     </table>
                     <?php } ?>
                 </div>
+                <div style="float: right; font-size: 1.2em; padding: 5px 20px;"><strong>
+                    <?php
+                        if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                            echo "Satisfactory"; 
+                        }else{
+                            echo "<span style='color:red;'>Unsatisfactory</span>"; 
+                        }
+                    ?>
+                    </strong>
+                </div>
+                <br />
+                <br />
+                <br />
                 <div style="margin: 0px auto 0px auto; text-align: center; float: right;">
                     <a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:window.history.back()" >
                         Back

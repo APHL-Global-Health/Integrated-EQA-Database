@@ -653,6 +653,7 @@ class Application_Service_Shipments {
             'lastdate_response' => Pt_Commons_General::dateFormat($params['lastDate']),
             'created_on_admin' => new Zend_Db_Expr('now()'),
             'created_by_admin' => $authNameSpace->primary_email,
+            'pass_mark' => $params['passMark'],
             'testingInstructions' => $params['testingInstructions']
         );
         $lastId = $db->insert($data);
@@ -845,6 +846,7 @@ class Application_Service_Shipments {
             $dbAdapter->update('shipment', array('number_of_samples' => $size - $controlCount,
                 'number_of_controls' => $controlCount,
                 'shipment_code' => $params['shipmentCode'],
+                'pass_mark' => $params['passMark'],
                 'testingInstructions' => $params['testingInstructions'],
                 'lastdate_response' => Pt_Commons_General::dateFormat($params['lastDate'])), 'shipment_id = ' . $params['shipmentId']);
 
