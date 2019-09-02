@@ -23,9 +23,9 @@ $this->distributionDates = array_diff($this->distributionDates, array($ptEveDate
             <div class="form-group">
                 <label class="col-lg-3 control-label">PT Survey Date <span class="mandatory">*</span></label>
                 <?php 
-                    $disabled = "";
+                    $readonly = "";
                     if (strcmp($this->result['status'], "shipped") == 0 || strcmp($this->result['status'], "finalized") == 0) {
-                        $disabled = "disabled";
+                        $readonly = "readonly";
                     }
                 ?>
                 <div class="col-lg-6">
@@ -40,7 +40,7 @@ $this->distributionDates = array_diff($this->distributionDates, array($ptEveDate
                 <label class="col-lg-3 control-label">Readiness Checklist Survey<span class="mandatory">*</span></label>
 
                 <div class="col-lg-6">
-                    <select id="readiness_checklist_survey_id" name="readiness_checklist_survey_id" class="isRequired form-control"  <?php echo $disabled; ?>
+                    <select id="readiness_checklist_survey_id" name="readiness_checklist_survey_id" class="isRequired form-control"  <?php echo $readonly; ?>
                         title="Select the readiness checklist survey corresponding to this round.">
                         <?php
                             function orderItems($a, $b){

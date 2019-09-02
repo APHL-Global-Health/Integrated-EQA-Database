@@ -158,25 +158,29 @@
                     <?php } ?>
                     <?php if($this->shipment['assay_id'] == 2) {?><!-- 2 == EID -->
                     <table class="table table-bordered table-striped" style="margin:10px auto;">
-                        <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                            <tr align="center" class="" >
-                                <th style="width:50%;">Control/Sample</th>
-                                <th>Target</th>
-                                <th>Interpretation</th>
-                                <th>Consensus</th>
-                                <?php if (isset($sample['reference_result'])) { ?>
-                                <th title="Reference Result">Reference</th>
-                                <?php } ?>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
                         <?php
                             $count = 0;
                             $negativePositiveResult = ['Negative', 'Positive'];
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
+                                }
+                                if ($count == 0) {
+                                    ?>
+                                    <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
+                                        <tr align="center" class="" >
+                                            <th style="width:50%;">Control/Sample</th>
+                                            <th>Target</th>
+                                            <th>Interpretation</th>
+                                            <th>Consensus</th>
+                                            <?php if (isset($sample['reference_result'])) { ?>
+                                            <th title="Reference Result">Reference</th>
+                                            <?php } ?>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
                                 }
                                 $count++;
                                 ?>

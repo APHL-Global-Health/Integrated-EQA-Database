@@ -432,6 +432,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     public function updateDistribution($params)
     {
+        error_log(json_encode($params));
         $authNameSpace = new Zend_Session_Namespace('administrators');
         $data = array('distribution_code' => $params['distributionCode'],
             'distribution_date' => Pt_Commons_General::dateFormat($params['distributionDate']),
