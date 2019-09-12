@@ -22,9 +22,11 @@
                     <div class="report-logo">
                         <p><center><strong>MINISTRY OF HEALTH</strong></center></p>
                         <p><center><img src="/images/nphl-logo-2.png"></center></p>
-                        <p><center>National HIV Reference Laboratory (NHRL)</center></p>
+                        <p><center>National Public Health Laboratory (NPHL)</center></p>
                         <p><center>P.O Box 20750 - 00202 NAIROBI</center></p>
                         <p><center>Telephone: 020-261096</center></p>
+                        <p><h4><strong><center>Interlab EQA Programme</center></strong></h4></p>
+                        <p><h4><strong><center><?php echo $this->distribution['distribution_name']; ?></center></strong></h4></p>
                     </div>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
@@ -169,20 +171,19 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="5"></td>
-                                <td colspan="2">
-                                    <center>
-                                        <strong>
-                                            <?php
-                                            if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
-                                                echo "Satisfactory"; 
-                                            }else{
-                                                echo "<span style='color:red;'>Unsatisfactory</span>"; 
-                                            }
-                                            ?>
-                                            (<?php echo $performance/$count*100; ?> %)
-                                        </strong>
-                                    </center>
+                                <td colspan="7">
+                                    Thank you for participating in <?php echo $this->distribution['distribution_name']; ?>.<br>
+                                    Your overall score was
+                                    <strong>
+                                    <?php
+                                    if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                                        echo "Satisfactory"; 
+                                    }else{
+                                        echo "<span style='color:red;'>Unsatisfactory</span>"; 
+                                    }
+                                    ?>
+                                    (<?php echo $performance/$count*100; ?> %)
+                                    </strong>
                                 </td>
                             </tr>
                         </tbody>
@@ -286,20 +287,19 @@
                             <?php } ?>
                         <?php } ?>
                             <tr>
-                                <td colspan="<?php echo $colspan; ?>"></td>
-                                <td>
-                                    <center>
-                                        <strong>
-                                            <?php
-                                            if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
-                                                echo "Satisfactory"; 
-                                            }else{
-                                                echo "<span style='color:red;'>Unsatisfactory</span>"; 
-                                            }
-                                            ?>
-                                            (<?php echo $performance/$count*100; ?> %)
-                                        </strong>
-                                    </center>
+                                <td colspan="<?php echo $colspan + 1; ?>"></td>
+                                    Thank you for participating in <?php echo $this->distribution['distribution_name']; ?>.
+                                    Your overall score was
+                                    <strong>
+                                    <?php
+                                    if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                                        echo "Satisfactory"; 
+                                    }else{
+                                        echo "<span style='color:red;'>Unsatisfactory</span>"; 
+                                    }
+                                    ?>
+                                    (<?php echo $performance/$count*100; ?> %)
+                                    </strong>
                                 </td>
                             </tr>
                         </tbody>

@@ -287,6 +287,9 @@ class ParticipantController extends Zend_Controller_Action {
         $shipment['attributes'] = json_decode($shipment['attributes'],true);
         $this->view->shipment = $shipment;
 
+        $distributionService = new Application_Service_Distribution();
+        $this->view->distribution = $distributionService->getDistribution($shipment['distribution_id']);
+
         $platformService = new Application_Service_Platform();
         $this->view->platform = $platformService->getPlatform($platformID);
 
