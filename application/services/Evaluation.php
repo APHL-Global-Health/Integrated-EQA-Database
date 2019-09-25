@@ -172,7 +172,7 @@ class Application_Service_Evaluation {
         return $db->fetchAll($sql);
     }
     
-     public function getResponseCount($shipmentId,$distributionId) {
+    public function getResponseCount($shipmentId,$distributionId) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $sql = $db->select()->from(array('s' => 'shipment'),array(''))
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id',array(''))
@@ -525,7 +525,6 @@ class Application_Service_Evaluation {
                ->group('sp.map_id');
         
         $shipmentOverall = $db->fetchAll($sql);
-   //     Zend_Debug::dump($shipmentOverall);die;
 
         $noOfParticipants = count($shipmentOverall);
         $numScoredFull = 0;
@@ -770,7 +769,6 @@ class Application_Service_Evaluation {
     }
 
     public function getEvaluateReportsInPdf($shipmentId,$sLimit,$sOffset) {
-        //echo $shipmentId;die;
         $responseResult = "";
         $vlCalculation = "";
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -1457,7 +1455,6 @@ class Application_Service_Evaluation {
         return $dbAdapter->fetchRow($sQuery);
     }
 	
-	
     public function evaluateDtsViralLoad($shipmentResult,$shipmentId,$reEvaluate){
 		$counter = 0;
 		$maxScore = 0;
@@ -1624,8 +1621,6 @@ class Application_Service_Evaluation {
 		return $shipmentResult;
 	}
 	
-	
-	
 	public function evaluateEid($shipmentResult,$shipmentId){
 		
 		$counter = 0;
@@ -1747,8 +1742,6 @@ class Application_Service_Evaluation {
 			
 			return $shipmentResult;
 	}
-	
-	
 	
 	public function evaluateDtsHivSerology($shipmentResult,$shipmentId){
 

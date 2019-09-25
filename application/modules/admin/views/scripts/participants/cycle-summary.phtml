@@ -1,0 +1,116 @@
+<section class="content-header">
+    <h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
+        <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">Cycle Responses Summary</div>
+    </h4>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-body">
+            <?php if (isset($this->message)) : ?>
+                <div class="alert alert-dismissable alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <ul>
+                        <li><?php echo $this->message; ?></li>
+                    </ul>
+                </div>
+                  
+            <?php endif; ?>
+            <div class="form-inline">
+                <form method="POST" action="/admin/participants/cycle-summary">
+                <div class="form-group">
+                    <label class="form-label" style="margin-left: 20px;" for="pt_survey">PT Survey: </label>
+                    <select class="form-control" id="pt_survey" name="pt_survey">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        $selected = "";
+                        foreach ($this->surveys as $survey) {
+                            if($this->chosenSurvey == $survey->distribution_id) $selected = " selected";
+                            echo "<option value='{$survey->distribution_id}' $selected>{$survey->distribution_code}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Platform: </label>
+                    <select class="form-control" id="pt_platform" name="pt_platform">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        foreach ($this->platforms as $platform) {
+                            if($this->chosenPlatform == $platform->ID) $selected = " selected";
+                            echo "<option value='{$platform->ID}' $selected>{$platform->PlatformName}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Assay: </label>
+                    <select class="form-control" id="pt_assay" name="pt_assay">
+                        <?php
+                        foreach ($this->assays as $assay) {
+                            if($this->chosenAssay == $assay->id) $selected = " selected";
+                            echo "<option value='{$assay->id}' $selected>{$assay->name}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <button class="btn btn-primary" id="btn_participant_responses">Go</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+
+            <?php 
+            $survey = "";
+            $platform = "";
+            $newSurvey = $newPlatform = true;
+            foreach ($this->responses['aaData'] as $reply) { 
+                if(strcmp($survey, $reply['distribution_name']) != 0){
+                    if(strcmp($survey, "") != 0){
+                        echo "</tbody></table>";
+                    }
+                    echo "<h3>" . $reply['distribution_name'] . "</h3>";
+                    $newSurvey = true;
+                    $survey = $reply['distribution_name'];
+                }
+
+                if($newSurvey || strcmp($platform, $reply['platform_name']) != 0){
+                    $platform = $reply['platform_name'];
+                    if(!$newSurvey){
+                        echo "</tbody></table>";
+                    }
+                    echo "<br><h4>" . $reply['platform_name'] . "</h4>";
+                    $newPlatform = true;
+                
+                ?>
+
+                <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Lab</th>
+                            <th>Performance</th>
+                            <th>Score</th>
+                            <th>Failed Samples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <?php
+                }
+            
+                ?>
+                    <tr>
+                        <td><?php echo $reply['lab_code']; ?></td>
+                        <td><?php echo $reply['pass_fail']; ?> %</td>
+                        <td><?php echo $reply['score']; ?></td>
+                        <td><?php echo $reply['samples']; ?></td>
+                    </tr>
+            <?php
+                $newSurvey = $newPlatform = false;
+            }
+
+            if(count($this->responses['aaData']) == 0) { 
+                echo "<p>No data found!</p>";
+            }else{
+                echo "</tbody></table>";
+            }
+            ?>
+        </div>
+    </div>
+</section>

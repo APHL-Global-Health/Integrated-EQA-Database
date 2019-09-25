@@ -122,7 +122,7 @@ class Application_Model_DbTable_ReportUpload extends Zend_Db_Table_Abstract {
             'file_path_hash' => md5($params['file_path']),
             'access' => $params['access'],
             'created_by' => $authNameSpace->admin_id,
-            'created_at' => 'now()'
+            'created_at' => date('Y-m-d H:i:s')
         );
         $saved = $this->insert($data);
         return $saved;

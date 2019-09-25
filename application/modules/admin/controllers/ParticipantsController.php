@@ -166,6 +166,28 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         if ($this->_hasParam('pt'))$this->view->chosenParticipant = $this->_getParam('pt');
     }
 
+    public function cycleSummaryAction(){
+
+        $this->_helper->layout()->pageName = 'report';
+
+        $parameters = $this->_getAllParams();
+        $assayService = new Application_Service_VlAssay();
+        
+        $platformService = new Application_Service_Platform();
+        $this->view->platforms = $platformService->getPlatforms();
+
+        $distributionService = new Application_Service_Distribution();
+        $this->view->surveys = $distributionService->getDistributions();
+
+        $this->view->responses = $distributionService->getDistributionSummary($parameters);
+
+        $this->view->assays = $assayService->getAllVlAssays();
+
+        if ($this->_hasParam('pt_survey'))$this->view->chosenSurvey = $this->_getParam('pt_survey');
+        if ($this->_hasParam('pt_platform'))$this->view->chosenPlatform = $this->_getParam('pt_platform');
+        if ($this->_hasParam('pt_assay'))$this->view->chosenAssay = $this->_getParam('pt_assay');
+    }
+
     public function individualResponseAction(){
 
         $this->_helper->layout()->pageName = 'report';

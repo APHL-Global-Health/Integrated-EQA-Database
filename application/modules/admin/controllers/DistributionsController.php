@@ -31,6 +31,7 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         }
         return $emails;
     }
+
     public function getVlEidDataManagers(){
         $sysAdmin = new Application_Model_DbTable_Participants();
 
@@ -143,6 +144,25 @@ class Admin_DistributionsController extends Zend_Controller_Action {
         $distributionService = new Application_Service_Distribution();
         var_dump($distributionService->shipDistribution(1));
         exit;
+    }
+
+    public function cyclePerformanceSummaryAction(){
+
+        $this->_helper->layout()->pageName = 'report';
+
+        $parameters = $this->_getAllParams();
+        $participantService = new Application_Service_Participants();
+        
+        $this->view->responses = $participantService->getParticipantCycleResponses($parameters);
+
+        $platformService = new Application_Service_Platform();
+        $this->view->platforms = $platformService->getPlatforms();
+
+        $surveyService = new Application_Service_Distribution();
+        $this->view->surveys = $surveyService->getDistributions();
+
+        if ($this->_hasParam('d'))$this->view->chosenSurvey = $this->_getParam('d');
+        if ($this->_hasParam('pf'))$this->view->chosenPlatform = $this->_getParam('pf');
     }
 
 }
