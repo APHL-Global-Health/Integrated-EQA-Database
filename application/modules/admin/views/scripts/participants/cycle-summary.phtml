@@ -66,7 +66,7 @@
                     if(strcmp($survey, "") != 0){
                         echo "</tbody></table>";
                     }
-                    echo "<h3>" . $reply['distribution_name'] . "</h3>";
+                    echo "<h3>" . $reply['distribution_name'] . " - " . $reply['assay_name'] . "</h3>";
                     $newSurvey = true;
                     $survey = $reply['distribution_name'];
                 }
