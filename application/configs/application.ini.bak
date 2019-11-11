@@ -1,0 +1,48 @@
+[production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+includePaths.library = APPLICATION_PATH "/../library"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 1
+resources.view[] =
+resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts/"
+resources.view.helperPath.Pt_Helper_View = APPLICATION_PATH "/../library/Pt/Helper/View/"
+resources.view.encoding = "utf-8"
+
+autoloaderNamespaces[] = "Pt"
+
+resources.frontController.plugins.PreSetter = "Pt_Plugins_PreSetter"
+
+resources.db.adapter = PDO_MYSQL
+resources.db.params.host = localhost
+resources.db.params.username = "username"
+resources.db.params.password = "password"
+resources.db.params.dbname = ept_interlab_database
+resources.db.params.charset = "utf8"
+resources.db.params.driver_options.1002 = "SET NAMES utf8"
+
+resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
+
+email.host = smtp.gmail.com
+email.config.port = 587
+email.config.username = username@email.com
+email.config.password = "email_password"
+email.config.ssl = tls
+email.config.auth = login
+
+[staging : production]
+
+[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1
+
+domain = http://interlab/
+
