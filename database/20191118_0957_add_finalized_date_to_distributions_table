@@ -1,0 +1,2 @@
+ALTER TABLE `distributions` ADD COLUMN `finalized_at` datetime DEFAULT NULL;
+ALTER TABLE `distributions` ADD COLUMN `finalized_by` int DEFAULT NULL;
