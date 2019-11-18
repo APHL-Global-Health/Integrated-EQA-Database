@@ -26,7 +26,7 @@
                             </td>
                             <td><h4><strong>Lab Name</strong></h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
                             <td><h4><strong>Phone No</strong></h4> <?php echo ( $this->participant['phone'] ); ?></td>
-                            <td><h4><strong>Mobile No</strong></h4> <?php echo ( $this->participant['mobile'] ); ?></td>
+                            <td><h4><strong>Platform</strong></h4> <?php echo ( $this->platform['PlatformName'] ); ?></td>
                         </tr>
                     </table>
 
@@ -34,12 +34,12 @@
                         <tr class="dark">
                             <td style="width:30%;"><label>Shipment Date</label></td>
                             <td style="width:20%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
-                            <td style="width:30%;"><label>Result Due Date</label></td>
+                            <td style="width:30%;"><label>Result Submission Date</label></td>
                             <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
                         </tr>
 
                         <tr class ="light">
-                            <td><label>Test Receipt Date</label></td>
+                            <td><label>Specimen Receipt Date</label></td>
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
                             </td>
