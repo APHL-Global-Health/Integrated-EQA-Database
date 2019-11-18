@@ -7,7 +7,7 @@ $dirname = $path[count($path)-1];
 $options = getopt("d:");
 
 if ($handle = opendir($CWD)) {
-    if(strcmp($dirname,'database') == 0){
+    if(strcmp($dirname,'database') == 0 && isset($options['d'])){
 
 		while (false !== ($entry = readdir($handle))) {
 		    if(strcmp(substr($entry,0,2),"20") == 0){
