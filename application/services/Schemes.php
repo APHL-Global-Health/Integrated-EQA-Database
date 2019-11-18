@@ -360,9 +360,6 @@ class Application_Service_Schemes {
     }
 
     public function getStdDeviation($inputArray) {
-        // if (count($inputArray) < 2) {
-        //     return;
-        // }
 
         $avg = $this->getAverage($inputArray);
 
@@ -371,7 +368,10 @@ class Application_Service_Schemes {
             $sum += pow($value - $avg, 2);
         }
 
-        return sqrt((1 / (count($inputArray) - 1)) * $sum);
+        if((count($inputArray) - 1) != 0)
+            return sqrt((1 / (count($inputArray) - 1)) * $sum);
+        else
+            return;
     }
 
     public function getShipmentData($sId, $pId, $platformID = 1, $assayID = 1) {
