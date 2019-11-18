@@ -208,5 +208,10 @@ class Pt_Commons_General {
             return $newDate .= $dateArray[1] . "/" . $dateArray[0];
         }
     }
+
+    public static function log2File($message, $logFile="audit.log"){
+        return file_put_contents($logFile, $message, FILE_APPEND);
+    }
+
 }
 
