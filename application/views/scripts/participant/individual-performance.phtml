@@ -20,13 +20,23 @@
                     <div id=error></div>
 
                     <div class="report-logo">
-                        <p><center><strong>MINISTRY OF HEALTH</strong></center></p>
-                        <p><center><img src="/images/nphl-logo-2.png"></center></p>
-                        <p><center>National Public Health Laboratory (NPHL)</center></p>
-                        <p><center>P.O Box 20750 - 00202 NAIROBI</center></p>
-                        <p><center>Telephone: 020-261096</center></p>
-                        <p><h4><strong><center>Interlab EQA Programme</center></strong></h4></p>
-                        <p><h4><strong><center><?php echo $this->distribution['distribution_name']; ?></center></strong></h4></p>
+                        <p><center>
+                            <strong>MINISTRY OF HEALTH</strong><br>
+                            <img src="/images/nphl-logo-2.png">
+                        </center></p>
+                        <p><center>
+                            National Public Health Laboratory (NPHL)<br>
+                            P.O Box 20750 - 00202 NAIROBI<br>
+                            Telephone: 020-261096<br>
+                            <h4 style="font-weight: bold;">NPHL EQA Programme</h4>
+                            <h4 style="font-weight: bold;">
+                            <?php
+                                $schemeName = $this->distribution['distribution_name'];
+                                $scheme = ['1' => "VL", '2' => "EID"];
+                                echo substr($schemeName, 0, strlen($schemeName)-2).$scheme[$this->assayID]." Report";
+                            ?>
+                            </h4>
+                        </center></p>
                     </div>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
@@ -36,7 +46,7 @@
                             </td>
                             <td><h4><strong>Lab Name</strong></h4> <?php echo ( $this->participant['institute_name'] ); ?> </td>
                             <td><h4><strong>Phone No</strong></h4> <?php echo ( $this->participant['phone'] ); ?></td>
-                            <td><h4><strong>Mobile No</strong></h4> <?php echo ( $this->participant['mobile'] ); ?></td>
+                            <td><h4><strong>Platform</strong></h4> <?php echo ( $this->platform['PlatformName'] ); ?></td>
                         </tr>
                     </table>
 
@@ -44,12 +54,12 @@
                         <tr class="dark">
                             <td style="width:30%;"><label>Shipment Date</label></td>
                             <td style="width:20%;"><?php echo $this->dateFormat($this->shipment['shipment_date']); ?></td>
-                            <td style="width:30%;"><label>Result Due Date</label></td>
+                            <td style="width:30%;"><label>Result Submission Date</label></td>
                             <td><?php echo $this->dateFormat($this->shipment['lastdate_response']); ?> </td>
                         </tr>
 
                         <tr class ="light">
-                            <td><label>Test Receipt Date</label></td>
+                            <td><label>Specimen Receipt Date</label></td>
                             <td>
                                 <?php echo $this->dateFormat($this->shipment["shipment_receipt_date"]); ?>
                             </td>
@@ -288,6 +298,29 @@
                         ?>
                         (<?php echo $performance/$count*100; ?> %).
                         </strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td colspan="5">&nbsp;</td>
+                                <td style="border-bottom: 1px solid #000;width: 15%;vertical-align: bottom;" rowspan="2">
+                                    <img style="height:35px;" src="/images/approver.png" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:10%;">Approved By</td>
+                                <td style="border-bottom: 1px solid #000;width: 15%;">Thomas Gachuki</td>
+                                <td style="width:10%;text-align: right;">Date</td>
+                                <td style="border-bottom: 1px solid #000;width: 15%;">
+                                    <?php echo $this->distribution['finalized_at']; ?>
+                                </td>
+                                <td style="width: 10%;text-align: right;">Sign</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>For Head NPHL</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <div style="margin: 0px auto 0px auto; text-align: center; float: right;">

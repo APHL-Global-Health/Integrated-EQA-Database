@@ -296,6 +296,7 @@ class ParticipantController extends Zend_Controller_Action {
         $this->view->shipmentID = $shipmentID;
         $this->view->participantId = $participantID;
         $this->view->eID = $eID;
+        $this->view->assayID = $assayID;
         $this->view->platformID = $platformID;
     
     }

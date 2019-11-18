@@ -387,6 +387,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             'created_by' => $authNameSpace->admin_id,
             'created_on' => new Zend_Db_Expr('now()'));
 
+        Pt_Commons_General::log2File("Adding new distribution:".PHP_EOL.json_encode($data));
+
         //get participant emails
 
         $insertId = $this->insert($data);
@@ -433,6 +435,9 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             'readiness_checklist_survey_id' => $params['readiness_checklist_survey_id'],
             'updated_by' => $authNameSpace->admin_id,
             'updated_on' => new Zend_Db_Expr('now()'));
+
+        Pt_Commons_General::log2File("Updating distribution:".PHP_EOL.json_encode($data));
+
         return $this->update($data, "distribution_id=" . base64_decode($params['distributionId']));
     }
 
@@ -451,7 +456,20 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
     public function updateDistributionStatus($distributionId, $status)
     {
         if (isset($status) && $status != null && $status != "") {
-            return $this->update(array('status' => $status), "distribution_id=" . $distributionId);
+
+            $authNameSpace = new Zend_Session_Namespace('administrators');
+            $updateArray = array('status' => $status);
+            if(strcmp($status, "finalized") == 0){
+                $updateArray["finalized_at"] = new Zend_Db_Expr('now()');
+                $updateArray["finalized_by"] = $authNameSpace->admin_id;
+            }else{
+                $updateArray["updated_on"] = new Zend_Db_Expr('now()');
+                $updateArray["updated_by"] = $authNameSpace->admin_id;
+            }
+            
+            Pt_Commons_General::log2File("Updating distribution status:".PHP_EOL.json_encode($updateArray));
+
+            return $this->update($updateArray, "distribution_id=" . $distributionId);
         } else {
             return 0;
         }

@@ -154,10 +154,11 @@ a .home-menu {
 
     .content .box {
         border: 0;
+        padding: 0;
     }
     .box-body #view-content {
         border: 2px solid #000;
-        padding: 15px;
+        padding: 10px;
     }
 }
 
