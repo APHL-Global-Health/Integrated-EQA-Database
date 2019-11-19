@@ -116,13 +116,15 @@
                                     </td>
                                     <td style="text-align:center;">
                                         <?php 
-                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+				            //$lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - 0.3);
                                             echo number_format($lowerLimit, 2);
                                         ?>
                                     </td>
                                     <td style="text-align:center;">
                                         <?php 
-                                            $upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+					    //$upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+					    $upperLimit = ($this->averagePerformance[$sample['sample_id']] + 0.3);
                                             echo number_format($upperLimit, 2);
                                         ?>
                                     </td>

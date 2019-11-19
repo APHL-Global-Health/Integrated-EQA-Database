@@ -98,7 +98,7 @@
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
-                                <th style="width:35%;text-align: left;">Control/Sample</th>
+                                <th style="width:30%;text-align: left;">Control/Sample</th>
                                 <th>Results (log<sub>10</sub> copies/ml)</th>        
                                 <th>Mean Log</th>       
                                 <th>Log Diff</th>       
@@ -125,7 +125,7 @@
                             ?>
 
                                 <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                                    <td style="padding-left: 20px;">
+                                    <td>
                                         <?php echo $sample['sample_label']; ?>
                                     </td>
                                     <td style="text-align:center;">
@@ -139,13 +139,15 @@
                                     </td>
                                     <td style="text-align:center;">
                                         <?php 
-                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+				            //$lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
+                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - 0.3);
                                             echo number_format($lowerLimit, 2);
                                         ?>
                                     </td>
                                     <td style="text-align:center;">
                                         <?php 
-                                            $upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+					    //$upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
+					    $upperLimit = ($this->averagePerformance[$sample['sample_id']] + 0.3);
                                             echo number_format($upperLimit, 2);
                                         ?>
                                     </td>
@@ -189,7 +191,7 @@
                     <table class="table table-bordered table-striped" style="margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
-                                <th style="width:40%;">Sample</th>
+                                <th style="width:30%;">Sample</th>
                                 <th>Results</th>
                                 <th>Interpretation</th>
                                 <th>Consensus</th>
@@ -285,7 +287,8 @@
                         </tfoot>
                     </table>
                     <?php } ?>
-                    <div>
+		    <div>
+                        <br>
                         Thank you for participating in <?php echo $this->distribution['distribution_name']; ?>.
                         Your overall score was
                         <strong>
@@ -312,7 +315,7 @@
                                 <td style="border-bottom: 1px solid #000;width: 15%;">Thomas Gachuki</td>
                                 <td style="width:10%;text-align: right;">Date</td>
                                 <td style="border-bottom: 1px solid #000;width: 15%;">
-                                    <?php echo $this->distribution['finalized_at']; ?>
+                                    <?php echo strlen($this->distribution['finalized_at'])>10?substr($this->distribution['finalized_at'],0,10):''; ?>
                                 </td>
                                 <td style="width: 10%;text-align: right;">Sign</td>
                             </tr>
