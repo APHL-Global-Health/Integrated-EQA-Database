@@ -180,9 +180,10 @@
                                             <th style="width:50%;">Control/Sample</th>
                                             <th>Target</th>
                                             <th>Interpretation</th>
-                                            <th>Consensus</th>
                                             <?php if (isset($sample['reference_result'])) { ?>
-                                            <th title="Reference Result">Reference</th>
+                                                <th title="Reference Result">Reference</th>
+                                            <?php }else{ ?>
+                                                <th>Consensus</th>
                                             <?php } ?>
                                             <th>Score</th>
                                         </tr>
@@ -214,22 +215,19 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <?php 
+                                    <?php 
+                                    if (isset($sample['reference_result'])) {
+                                        if ($sample['control'] == 0) {
+                                            echo $negativePositiveResult[$sample['reference_result']];
+                                        }
+                                    }else{
                                         if ($sample['control'] == 0) {
                                             echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
                                             $sampleCount++;
                                         }
-                                        ?>
+                                    }
+                                    ?>
                                     </td>
-                                    <?php if (isset($sample['reference_result'])) { ?>
-                                    <td>
-                                        <?php 
-                                        if ($sample['control'] == 0) {
-                                            echo $negativePositiveResult[$sample['reference_result']];
-                                        }
-                                        ?>
-                                    </td>
-                                    <?php } ?>
                                     <td>
                                         <?php
                                         if ($sample['control'] == 0) {
