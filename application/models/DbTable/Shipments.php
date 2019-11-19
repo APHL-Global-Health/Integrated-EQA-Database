@@ -1155,6 +1155,24 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
                 ->where("rcp.status=2") //APPROVED
                 ->where("s.status='shipped' OR s.status='evaluated'");
 
+        if (isset($parameters['pt_survey'])) {
+            $ptSurvey = $parameters['pt_survey'];
+            if($ptSurvey > 0)
+                $sQuery = $sQuery->where("d.distribution_id = $ptSurvey");
+        }
+
+        if (isset($parameters['pt_platform'])) {
+            $ptPlatform = $parameters['pt_platform'];
+            if($ptPlatform > 0)
+                $sQuery = $sQuery->where("spm.platform_id = $ptPlatform");
+        }
+
+        if (isset($parameters['pt_assay'])) {
+            $ptAssay = $parameters['pt_assay'];
+            if($ptAssay > 0)
+                $sQuery = $sQuery->where("spm.assay_id = $ptAssay");
+        }
+
         if (isset($sWhere) && $sWhere != "") {
             $sQuery = $sQuery->where($sWhere);
         }

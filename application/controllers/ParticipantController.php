@@ -47,6 +47,16 @@ class ParticipantController extends Zend_Controller_Action {
         }
         $scheme = new Application_Service_Schemes();
         $this->view->schemes = $scheme->getAllSchemes();
+
+        $platformService = new Application_Service_Platform();
+        $this->view->platforms = $platformService->getPlatforms();
+
+        $surveyService = new Application_Service_Distribution();
+        $this->view->surveys = $surveyService->getDistributions();
+
+        if ($this->_hasParam('pt_survey'))$this->view->chosenSurvey = $this->_getParam('pt_survey');
+        if ($this->_hasParam('pt_platform'))$this->view->chosenPlatform = $this->_getParam('pt_platform');
+        if ($this->_hasParam('pt_assay'))$this->view->chosenAssay = $this->_getParam('pt_assay');
     }
 
     public function userInfoAction() {

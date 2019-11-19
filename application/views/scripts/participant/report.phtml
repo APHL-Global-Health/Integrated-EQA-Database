@@ -35,6 +35,48 @@
                 <button class="btn btn-success btn-sm" onclick="individualSchemes()"><span>Get Report</span></button>
             </div>
         </div>
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label class="form-label" style="margin-left: 20px;" for="pt_survey">Cycle: </label>
+                    <select class="form-control" id="pt_survey" name="pt_survey">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        $selected = "";
+                        foreach ($this->surveys as $survey) {
+                            if($this->chosenSurvey == $survey->distribution_id) $selected = " selected";
+                            echo "<option value='{$survey->distribution_id}' $selected>{$survey->distribution_name}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Platform: </label>
+                    <select class="form-control" id="pt_platform" name="pt_platform">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        foreach ($this->platforms as $platform) {
+                            if($this->chosenPlatform == $platform->ID) $selected = " selected";
+                            echo "<option value='{$platform->ID}' $selected>{$platform->PlatformName}</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label" style="margin-left: 20px;">Assay: </label>
+                    <select class="form-control" id="pt_assay" name="pt_assay">
+                        <option value="0"> -- All -- </option>
+                        <?php
+                        $assays = ["1" => "Viral Load", "2" => "Early Infant Diagnosis"];
+                        foreach ($assays as $assayKey => $assay) {
+                            if($this->chosenAssay == $assayKey) $selected = " selected";
+                            echo "<option value='$assayKey' $selected>$assay</option>";
+                            $selected = "";
+                        }
+                        ?>
+                    </select>
+                    <button class="btn btn-primary" id="btn_participant_responses">Go</button>
+                </div>
+            </div>
+        </div>
         <br><br>
         <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered" id="individualReportTable">
             <thead>
@@ -64,68 +106,119 @@
     var startDate = "";
     var endDate = "";
     var oTable = null;
-                $(document).ready(function () {
-                    $('#dateRange').daterangepicker({
-                        format: 'DD-MMM-YYYY',
-                        ranges: {
-                            'Last 60 Days': [moment().subtract('days', 59), moment()],
-                            'Last 90 Days': [moment().subtract('days', 89), moment()],
-                            'Last 180 Days': [moment().subtract('days', 179), moment()],
-                            'Last 12 Months': [moment().subtract('month', 12), moment()],
-                            'Last 18 Months': [moment().subtract('month', 18), moment()],
-                        }
-                    },
-                    function (start, end) {
-                        startDate = start.format('YYYY-MM-DD');
-                        endDate = end.format('YYYY-MM-DD');
-                    });
-                    
-                    oTable = $('#individualReportTable').dataTable({
-                        "oLanguage": {
-                            "sLengthMenu": "_MENU_ records per page"
-                        },
-                        //"paging": paging,
-                        "bJQueryUI": false,
-                        "bAutoWidth": false,
-                        "bInfo": true,
-                        "bScrollCollapse": true,
-                        "sPaginationType": "full_numbers",
-                        "bRetrieve": false,
-                        "bDestroy": true,
-                        "aoColumns": [
-                            {"sClass": ""},
-                            {"sClass": ""},
-                            {"sClass": ""},
-                            {"sClass": ""},
-                            {"sClass": ""},
-                            {"sClass": "center", "bSortable": false}
-                        ],
-                        "aaSorting": [[5, "desc"]],
-                        "bProcessing": true,
-                        "bServerSide": true,
-                        "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'report', 'format' => 'html')); ?>",
-                        "fnServerParams": function (aoData) {
-                            aoData.push({"name": "startDate", "value": startDate});
-                            aoData.push({"name": "endDate", "value": endDate});
-                        },
-                        "fnServerData": function (sSource, aoData, fnCallback) {
-                            $.ajax({
-                                "dataType": 'json',
-                                "type": "POST",
-                                "url": sSource,
-                                "data": aoData,
-                                "success": fnCallback
-                            });
-                        }
-                    });
-                });
 
-                function individualSchemes() {
-                    if (startDate == "" || endDate == "" ) {
-                        alert("Please pick date range and Scheme Type to proceed");
-                        return false;
-                    }
-                    oTable.fnDraw();
-                   
-                }
+    $(document).ready(function () {
+        $('#dateRange').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            ranges: {
+                'Last 60 Days': [moment().subtract('days', 59), moment()],
+                'Last 90 Days': [moment().subtract('days', 89), moment()],
+                'Last 180 Days': [moment().subtract('days', 179), moment()],
+                'Last 12 Months': [moment().subtract('month', 12), moment()],
+                'Last 18 Months': [moment().subtract('month', 18), moment()],
+            }
+        },
+        function (start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+        });
+        
+        oTable = $('#individualReportTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            //"paging": paging,
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "sPaginationType": "full_numbers",
+            "bRetrieve": false,
+            "bDestroy": true,
+            "aoColumns": [
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": "center", "bSortable": false}
+            ],
+            "aaSorting": [[5, "desc"]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'report', 'format' => 'html')); ?>",
+            "fnServerParams": function (aoData) {
+                aoData.push({"name": "startDate", "value": startDate});
+                aoData.push({"name": "endDate", "value": endDate});
+            },
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        });
+    });
+
+    $('#btn_participant_responses').click(function(){
+
+        newData = [];
+
+        dataURL = "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'report', 'format' => 'html')); ?>";
+
+        $('#individualReportTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            //"paging": paging,
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "sPaginationType": "full_numbers",
+            "bRetrieve": false,
+            "bDestroy": true,
+            "aoColumns": [
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": ""},
+                {"sClass": "center", "bSortable": false}
+            ],
+            "aaSorting": [[5, "desc"]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'report', 'format' => 'html')); ?>",
+            "fnServerParams": function (aoData) {
+                aoData.push({"name": "pt_survey", "value": $("#pt_survey").val()});
+                aoData.push({"name": "pt_platform", "value": $("#pt_platform").val()});
+                aoData.push({"name": "pt_assay", "value": $("#pt_assay").val()});
+            },
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }
+        }).fnDraw();
+
+
+    });
+
+
+    function individualSchemes() {
+        if (startDate == "" || endDate == "" ) {
+            alert("Please pick date range and Scheme Type to proceed");
+            return false;
+        }
+        oTable.fnDraw();
+       
+    }
 </script>
