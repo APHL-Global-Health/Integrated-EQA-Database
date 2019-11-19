@@ -194,9 +194,10 @@
                                 <th style="width:30%;">Sample</th>
                                 <th>Results</th>
                                 <th>Interpretation</th>
-                                <th>Consensus</th>
                                 <?php if(isset($sample['reference_result'])) {?>
                                 <th>Reference</th>
+                                <?php }else{ ?>
+                                <th>Consensus</th>
                                 <?php } ?>
                                 <th>Score</th>
                             </tr>
@@ -248,17 +249,14 @@
                                         ?>
                                     </td>
                                     <td>
-                                        <?php
-                                        echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
-                                        ?>
-                                    </td>
-                                    <?php if(isset($sample['reference_result'])) {?>
-                                    <td>
-                                        <?php 
+                                    <?php
+                                    if(isset($sample['reference_result'])) {
                                         echo $negativePositiveResult[$sample['reference_result']];
-                                        ?>
+                                    }else{
+                                        echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
+                                    }
+                                    ?>
                                     </td>
-                                    <?php } ?>
                                     <td>
                                         <?php
                                         if(isset($sample['reference_result'])){
