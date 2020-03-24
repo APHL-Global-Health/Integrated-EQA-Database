@@ -326,6 +326,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         $authNameSpace = new Zend_Session_Namespace('administrators');
 
         $data = array(
+            'unique_identifier' => $params['MflCode'], //Temporary place holder - is updated further below
             'MflCode' => $params['MflCode'],
             'institute_name' => $params['instituteName'],
             'department_name' => $params['departmentName'],
