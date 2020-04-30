@@ -61,6 +61,7 @@
             $survey = "";
             $platform = "";
             $newSurvey = $newPlatform = true;
+            $alertStyle = ["", "style='background-color:red;color:white;'"];
             foreach ($this->responses['aaData'] as $reply) { 
                 if(strcmp($survey, $reply['distribution_name']) != 0){
                     if(strcmp($survey, "") != 0){
@@ -109,6 +110,41 @@
                 echo "<p>No data found!</p>";
             }else{
                 echo "</tbody></table>";
+            }
+            echo "<hr>";
+            if(count($this->responses['rawResults']) > 0 && isset($this->chosenSurvey) && isset($this->chosenPlatform) && isset($this->chosenAssay) && $this->chosenSurvey > 0 && $this->chosenPlatform > 0){
+                $tableHead = '<table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped"><thead><tr><th>Sample</th>';
+                $tableBody = '<tbody>';
+                $tableRows = array();
+                $tableRowEnds = array();
+                $participant = 0;
+                $participants = array();
+                $sample = "";
+                $samples = array();
+                foreach ($this->responses['rawResults'] as $result) {
+                    $sample = $result["sample_label"];
+                    if (!in_array($sample, $samples)) {
+                        $samples[] = $sample;
+                        $tableRows[$sample] = "<td>".$result["sample_label"]."</td>";
+                        $lowerLimit = $result["consensus"] - $result["sdevp"];
+                        $upperLimit = $result["consensus"] + $result["sdevp"];
+                        $tableRowEnds[$sample] = "<td>".$result["consensus"]."</td><td>".$result["sdevp"]."</td><td>$lowerLimit</td><td>$upperLimit</td></tr>";
+                    }
+                    $participant = $result["participant_id"];
+                    if (!in_array($participant, $participants)) {
+                        $participants[] = $participant;
+                        $tableHead .= "<th title='".$result["institute_name"]."'>".$result["lab_code"]."</th>";
+                    }
+
+                    $choice = 0;
+                    if($result["reported_viral_load"] < ($result["consensus"] - $result["sdevp"]) || $result["reported_viral_load"] > ($result["consensus"] + $result["sdevp"])) $choice = 1;
+                    $tableRows[$sample] .= "<td ".$alertStyle[$choice].">".$result["reported_viral_load"]."</td>";
+                }
+                $tableHead .= "<th>Mean</th><th>S. Dev.</th><th>Lower Limit</th><th>Upper Limit</th></tr></thead>";
+                foreach ($samples as $sample) {
+                    $tableBody .= $tableRows[$sample] . $tableRowEnds[$sample];
+                }
+                echo $tableHead.$tableBody."</tbody></table>";
             }
             ?>
         </div>

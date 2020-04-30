@@ -690,7 +690,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                             "FROM reference_result_vl refvl ".
                             "INNER JOIN response_result_vl rrv ON refvl.sample_id = rrv.sample_id ".
                             "INNER JOIN shipment s ON refvl.shipment_id = s.shipment_id ".
-                            "INNER JOIN shipment_participant_map spm ON rrv.shipment_map_id = spm.map_id AND s.shipment_id = spm.shipment_id ".
+                            "INNER JOIN shipment_participant_map spm ON rrv.shipment_map_id = spm.map_id AND s.shipment_id = spm.shipment_id AND spm.is_pt_test_not_performed IS NULL ".
                             "INNER JOIN platforms pl ON spm.platform_id = pl.ID $wherePlatform ".
                             "WHERE refvl.control = 0 AND spm.assay_id = $assayID ".
                             "GROUP BY s.shipment_id, spm.platform_id, refvl.sample_id";
@@ -705,8 +705,9 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                             "WHERE refeid.control = 0 AND spm.assay_id = $assayID ".
                             "GROUP BY s.shipment_id, spm.platform_id, refeid.sample_id";
 
-        $responsesVLQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, ".
+        $responsesVLQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, p.institute_name, ".
                         "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, ".
+                        "rrv.reported_viral_load, round(results.consensus,2) consensus, round(results.sdevp,2) sdevp, ".
                         "IF(rrv.reported_viral_load >= results.consensus - results.sdevp AND ".
                             "rrv.reported_viral_load <= results.consensus + results.sdevp, 1, 0) AS pass ".
                         "FROM shipment_participant_map spm ".
@@ -715,7 +716,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                         "INNER JOIN participant p ON spm.participant_id = p.participant_id ".
                         "INNER JOIN ($consensusVLQuery) AS results ON spm.shipment_id = results.shipment_id ".
                             "AND spm.platform_id = results.platform_id AND spm.assay_id = $assayID ".
-                        "INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id AND results.sample_id = rrv.sample_id";
+                        "INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id AND results.sample_id = rrv.sample_id ".
+                        "WHERE spm.is_pt_test_not_performed IS NULL";
 
         $responsesEIDQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, ".
                         "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, ".
@@ -751,7 +753,8 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             "sEcho" => 1,
             "iTotalRecords" => count($rResult),
             "iTotalDisplayRecords" => count($rResult),
-            "aaData" => array()
+            "aaData" => array(),
+            "rawResults" => array()
         );
 
         $passMark = 80;
@@ -770,8 +773,10 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
             $output['aaData'][] = $row;
         }
 
-        return $output;
+        $rResult = $this->getAdapter()->fetchAll($responsesVLQuery);
+        $output['rawResults'] = $rResult;
 
+        return $output;
     }
 
 }
