@@ -160,7 +160,7 @@ class Application_Model_DbTable_ReadinessChecklist extends Zend_Db_Table_Abstrac
         echo json_encode($output);
     }
     
-    public function list() {
+    public function getList() {
 
         return $this->fetchAll($this->select())->toArray();
     }
