@@ -171,12 +171,18 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->_helper->layout()->pageName = 'report';
 
         $parameters = $this->_getAllParams();
+
+        $distributionService = new Application_Service_Distribution();
+
+        if (isset($parameters['pt_evaluate'])) {
+            $distributionService->evaluate($parameters);
+        }
+
         $assayService = new Application_Service_VlAssay();
         
         $platformService = new Application_Service_Platform();
         $this->view->platforms = $platformService->getPlatforms();
 
-        $distributionService = new Application_Service_Distribution();
         $this->view->surveys = $distributionService->getDistributions();
 
         $this->view->responses = $distributionService->getDistributionSummary($parameters);
@@ -296,28 +302,27 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $this->_helper->layout()->pageName = 'report';
   
         $parameters = $this->_getAllParams();
-        $shipmentID= $this->getRequest()->getParam('sid');
-        $participantID= $this->getRequest()->getParam('pid');
-        $eID =$this->getRequest()->getParam('eid');
+        $mapID= $this->getRequest()->getParam('mid');
         $platformID =$this->getRequest()->getParam('pfid');
         $assayID =$this->getRequest()->getParam('aid');
+
+        $shipmentParticipantMapDb = new Application_Model_DbTable_ShipmentParticipantMap();
+        $spm = $shipmentParticipantMapDb->fetchRow($shipmentParticipantMapDb->select()->from('shipment_participant_map')->where("map_id=$mapID"));
+        $participantID = $spm['participant_id'];
+        $shipmentID = $spm['shipment_id'];
 
         $participantService = new Application_Service_Participants();
         $this->view->participant = $participantService->getParticipantDetails($participantID);
 
         $schemeService = new Application_Service_Schemes();
-        $this->view->allSamples = $schemeService->getVlSamples($shipmentID, $participantID, $platformID, $assayID);
+        $this->view->allSamples = $schemeService->getSamples($mapID, $platformID, $assayID);
         
         $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID, $assayID);
 
         $sampleList = [];
         foreach ($allPlatformSamples as $platformSample) {
             $sampleList[] = $platformSample['sample_id'];
-            if ($assayID == 2) {
-                $sampleValues[$platformSample['sample_id']][] = $platformSample['target'];
-            }else{
-                $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
-            }
+            $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
         }
 
         $sampleList = array_unique($sampleList);
@@ -340,7 +345,6 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
 
         $this->view->shipmentID = $shipmentID;
         $this->view->participantId = $participantID;
-        $this->view->eID = $eID;
         $this->view->platformID = $platformID;
     
     }

@@ -25,7 +25,7 @@
                         $selected = "";
                         foreach ($this->surveys as $survey) {
                             if($this->chosenSurvey == $survey->distribution_id) $selected = " selected";
-                            echo "<option value='{$survey->distribution_id}' $selected>{$survey->distribution_code}</option>";
+                            echo "<option value='{$survey->distribution_id}' $selected>{$survey->distribution_name}</option>";
                             $selected = "";
                         }
                         ?>
@@ -61,7 +61,10 @@
             $survey = "";
             $platform = "";
             $newSurvey = $newPlatform = true;
-            $alertStyle = ["", "style='background-color:red;color:white;'"];
+            $alertStyle = ["", 
+                    "style='background-color:orange;color:white;'",
+                    "style='background-color:red;color:white;'"
+                ];
             foreach ($this->responses['aaData'] as $reply) { 
                 if(strcmp($survey, $reply['distribution_name']) != 0){
                     if(strcmp($survey, "") != 0){
@@ -113,6 +116,21 @@
             }
             echo "<hr>";
             if(count($this->responses['rawResults']) > 0 && isset($this->chosenSurvey) && isset($this->chosenPlatform) && isset($this->chosenAssay) && $this->chosenSurvey > 0 && $this->chosenPlatform > 0){
+
+            ?>
+                <div class="row">
+                    <div class="col-sm-10"><h5>Z-Score Analysis</h5></div>
+                    <div class="col-sm-2">
+                        <form method="POST" action="/admin/participants/cycle-summary">
+                            <input type="hidden" name="pt_survey" value="<?php echo $this->chosenSurvey; ?>">
+                            <input type="hidden" name="pt_platform" value="<?php echo $this->chosenPlatform; ?>">
+                            <input type="hidden" name="pt_assay" value="<?php echo $this->chosenAssay; ?>">
+                            <input type="hidden" name="pt_evaluate" value="true">
+                            <button class="btn btn-primary" style="float: right; margin-bottom: 5px;">Save Evaluation</button>
+                        </form>
+                    </div>
+                </div>
+            <?php
                 $tableHead = '<table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped"><thead><tr><th>Sample</th>';
                 $tableBody = '<tbody>';
                 $tableRows = array();
@@ -126,9 +144,7 @@
                     if (!in_array($sample, $samples)) {
                         $samples[] = $sample;
                         $tableRows[$sample] = "<td>".$result["sample_label"]."</td>";
-                        $lowerLimit = $result["consensus"] - $result["sdevp"];
-                        $upperLimit = $result["consensus"] + $result["sdevp"];
-                        $tableRowEnds[$sample] = "<td>".$result["consensus"]."</td><td>".$result["sdevp"]."</td><td>$lowerLimit</td><td>$upperLimit</td></tr>";
+                        $tableRowEnds[$sample] = "<td align='center'>".$result["reference_result"]."</td><td>".$result["consensus"]."</td><td>".$result["sdevp"]."</td></tr>";
                     }
                     $participant = $result["participant_id"];
                     if (!in_array($participant, $participants)) {
@@ -137,10 +153,11 @@
                     }
 
                     $choice = 0;
-                    if($result["reported_viral_load"] < ($result["consensus"] - $result["sdevp"]) || $result["reported_viral_load"] > ($result["consensus"] + $result["sdevp"])) $choice = 1;
+                    if($result["score"] == 0.8) $choice = 1;
+                    if($result["score"] == 0) $choice = 2;
                     $tableRows[$sample] .= "<td ".$alertStyle[$choice].">".$result["reported_viral_load"]."</td>";
                 }
-                $tableHead .= "<th>Mean</th><th>S. Dev.</th><th>Lower Limit</th><th>Upper Limit</th></tr></thead>";
+                $tableHead .= "<th>Ref. Value</th><th>Mean</th><th>S. Dev.</th></tr></thead>";
                 foreach ($samples as $sample) {
                     $tableBody .= $tableRows[$sample] . $tableRowEnds[$sample];
                 }

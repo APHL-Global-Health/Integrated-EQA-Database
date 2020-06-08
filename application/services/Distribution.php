@@ -171,4 +171,9 @@ class Application_Service_Distribution {
         return $distributionDb->getDistributionResponseSummary($parameters);
     }
 
+    public function evaluate($parameters)
+    {
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        return $distributionDb->evaluate($parameters);
+    }
 }

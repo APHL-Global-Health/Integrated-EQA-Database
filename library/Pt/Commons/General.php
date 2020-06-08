@@ -210,6 +210,8 @@ class Pt_Commons_General {
     }
 
     public static function log2File($message, $logFile="audit.log"){
+        $today = new DateTime(null, new DateTimeZone('Africa/Nairobi'));
+        $message = $today->format('Y-m-d H:i:s')." - $message\n";
         return file_put_contents($logFile, $message, FILE_APPEND);
     }
 

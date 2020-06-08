@@ -710,7 +710,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                         'shipment_status' => 's.status', 'shipment_id'))
                 ->join(array('spm' => 'shipment_participant_map'), 's.shipment_id=spm.shipment_id', 
                     array('response_date' => new Zend_Db_Expr("IFNULL(spm.updated_on_user,'')"), 'participant_id', 
-                        'platform_id', 'assay_id'))
+                        'platform_id', 'assay_id', 'report_generated', 'map_id'))
                 ->join(array('p' => 'participant'), 'spm.participant_id=p.participant_id', array('p.institute_name'))
                 ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
                 ->join(array('as' => 'assays'), 'spm.assay_id=as.id', array('assay_name' => 'as.name'))
@@ -777,7 +777,7 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         foreach ($rResult as $aRow) {
             $row = array();
 
-            $row['distribution_code'] = $aRow['distribution_code'];
+            $row['distribution_name'] = $aRow['distribution_name'];
             $row['institute_name'] = $aRow['institute_name'];
             $row['shipment_code'] = $aRow['shipment_code'];
             $row['platform_name'] = $aRow['platform_name'];
@@ -791,9 +791,12 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
                 $row['action'] = '<a href="/admin/participants/individual-response/sid/' . $aRow['shipment_id'];
                 $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
                 $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-info btn-xs" style="margin:3px;padding:10px;"> Response</a>';
-                $row['action'] .= '<a href="/admin/participants/individual-performance/sid/' . $aRow['shipment_id'];
-                $row['action'] .= '/pid/' . $aRow['participant_id'] . '/eid/19121190/pfid/' . $aRow['platform_id'];
-                $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
+                if(strcmp($aRow['report_generated'], "yes") == 0){
+                    $row['action'] .= '<a href="/admin/participants/individual-performance/mid/' . $aRow['map_id'] . '/pfid/' . $aRow['platform_id'];
+                    $row['action'] .= '/aid/' . $aRow['assay_id'] . '" class="btn btn-success btn-xs" style="margin:3px;padding:10px;"> Performance</a>';
+                }else{
+                    $row['action'] .= "<span class='badge badge-info' style='border-radius:3px;'> Not Evaluated </span>";
+                }
             }else{ // if past response date and not finalized
                 if ($aRow['status'] == 'finalized') {
                     $row['action'] = '';

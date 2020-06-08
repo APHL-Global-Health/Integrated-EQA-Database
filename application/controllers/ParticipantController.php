@@ -258,11 +258,14 @@ class ParticipantController extends Zend_Controller_Action {
         $this->_helper->layout()->pageName = 'view-reports';
   
         $parameters = $this->_getAllParams();
-        $shipmentID= $this->getRequest()->getParam('sid');
-        $participantID= $this->getRequest()->getParam('pid');
-        $eID =$this->getRequest()->getParam('eid');
+        $mapID= $this->getRequest()->getParam('mid');
         $platformID =$this->getRequest()->getParam('pfid');
         $assayID =$this->getRequest()->getParam('aid');
+
+        $shipmentParticipantMapDb = new Application_Model_DbTable_ShipmentParticipantMap();
+        $spm = $shipmentParticipantMapDb->fetchRow($shipmentParticipantMapDb->select()->from('shipment_participant_map')->where("map_id=$mapID"));
+        $participantID = $spm['participant_id'];
+        $shipmentID = $spm['shipment_id'];
 
         $participantService = new Application_Service_Participants();
         $this->view->participant = $participantService->getParticipantDetails($participantID);
@@ -270,27 +273,6 @@ class ParticipantController extends Zend_Controller_Action {
         $schemeService = new Application_Service_Schemes();
         $this->view->allSamples = $schemeService->getVlSamples($shipmentID, $participantID, $platformID, $assayID);
         
-        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID, $assayID);
-
-        $sampleList = [];
-        foreach ($allPlatformSamples as $platformSample) {
-            $sampleList[] = $platformSample['sample_id'];
-            if ($assayID == 2) {
-                $sampleValues[$platformSample['sample_id']][] = $platformSample['target'];
-            }else{
-                $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
-            }
-        }
-
-        $sampleList = array_unique($sampleList);
-
-        foreach ($sampleList as $sampleID) {
-            $averagePerformance[$sampleID] = $schemeService->getAverage($sampleValues[$sampleID]);
-            $standardDeviation[$sampleID] = $schemeService->getStdDeviation($sampleValues[$sampleID]);
-        }
-        $this->view->averagePerformance = $averagePerformance;
-        $this->view->standardDeviation = $standardDeviation;
-
         $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
         $shipment = $schemeService->getShipmentData($shipmentID, $participantID, $platformID, $assayID);
@@ -305,7 +287,6 @@ class ParticipantController extends Zend_Controller_Action {
 
         $this->view->shipmentID = $shipmentID;
         $this->view->participantId = $participantID;
-        $this->view->eID = $eID;
         $this->view->assayID = $assayID;
         $this->view->platformID = $platformID;
     

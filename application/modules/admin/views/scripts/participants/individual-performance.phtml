@@ -14,7 +14,6 @@
                 <input type="hidden" id ="smid" name="smid" value="<?php echo $this->shipment['map_id']; ?>" />
                 <input type="hidden" id ="shipmentId" name="shipmentId" value="<?php echo $this->shipmentID; ?>" />
                 <input type="hidden" id ="participantId" name="participantId" value="<?php echo $this->participantId; ?>" />
-                <input type="hidden" id ="evId" name="evId" value="<?php echo $this->eID; ?>" />
                 <input type="hidden" id ="platformID" name="platformID" value="<?php echo $this->platformID; ?>" />
                 <div id="view-content">
                     <div id=error></div>
@@ -48,7 +47,6 @@
                                 <?php echo $this->dateFormat($this->shipment["shipment_test_date"]); ?>
                             </td>       
                         </tr>
-                        <?php if($this->shipment['assay_id'] == 1) {?>
                         <tr>
 
                             <td><label>Specimen Volume used for testing</label></td> 
@@ -60,7 +58,6 @@
                                 <?php echo $this->shipment['attributes']['specimen_volume']; ?>
                             </td>
                         </tr>
-                        <?php } ?>
 
                         <tr class ="dark">
                             <td><label>Kit Lot Number</label></td>
@@ -74,17 +71,13 @@
                         </tr>
                     </table>
 
-                    <?php if($this->shipment['assay_id'] == 1) {?><!-- 1 == VL -->
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
                                 <th style="width:35%;text-align: left;">Control/Sample</th>
                                 <th>Results (log<sub>10</sub> copies/ml)</th>        
-                                <th>Mean Log</th>       
-                                <th>Log Diff</th>       
-                                <th>Lower Limit</th>       
-                                <th>Upper Limit</th>       
                                 <th>Scores</th>       
+                                <th>Performance</th>       
                             </tr>
                         </thead>
                         <tbody>
@@ -109,33 +102,13 @@
                                         <?php echo $sample['reported_viral_load']; ?>
                                     </td>
                                     <td style="text-align:center;">
-                                        <?php echo number_format($this->averagePerformance[$sample['sample_id']], 2); ?>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <?php echo number_format($sample['reported_viral_load'] - $this->averagePerformance[$sample['sample_id']], 2); ?>
+                                        <?php echo round($sample['calculated_score']*100); ?>%
                                     </td>
                                     <td style="text-align:center;">
                                         <?php 
-				            //$lowerLimit = ($this->averagePerformance[$sample['sample_id']] - $this->standardDeviation[$sample['sample_id']]);
-                                            $lowerLimit = ($this->averagePerformance[$sample['sample_id']] - 0.3);
-                                            echo number_format($lowerLimit, 2);
-                                        ?>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <?php 
-					    //$upperLimit = ($this->averagePerformance[$sample['sample_id']] + $this->standardDeviation[$sample['sample_id']]);
-					    $upperLimit = ($this->averagePerformance[$sample['sample_id']] + 0.3);
-                                            echo number_format($upperLimit, 2);
-                                        ?>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <?php 
-                                            if($sample['reported_viral_load'] >= $lowerLimit && $sample['reported_viral_load'] <= $upperLimit){
-                                                echo "ACCEPTABLE";
-                                                $correctCount++;
-                                            }else{
-                                                echo "UNACCEPTABLE";
-                                            } 
+                                            if($sample['calculated_score'] == 1)echo "ACCEPTABLE"; 
+                                            if($sample['calculated_score'] == 0.8)echo "QUESTIONABLE"; 
+                                            if($sample['calculated_score'] == 0)echo "UNACCEPTABLE"; 
                                         ?>
                                     </td>
                                 </tr>
@@ -161,108 +134,11 @@
                         </tbody>
                         <tfoot></tfoot>
                     </table>
-                    <?php } ?>
-                    <?php if($this->shipment['assay_id'] == 2) {?><!-- 2 == EID -->
-                    <table class="table table-bordered table-striped" style="margin:10px auto;">
-                        <?php
-                            $count = 0;
-                            $sampleCount = 0;
-                            $correctCount = 0;
-                            $negativePositiveResult = ['Negative', 'Positive'];
-                            foreach ($this->allSamples as $sample) {
-                                if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
-                                    $sample['mandatory'] = 0;
-                                }
-                                if ($count == 0) {
-                                    ?>
-                                    <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                                        <tr align="center" class="" >
-                                            <th style="width:50%;">Control/Sample</th>
-                                            <th>Target</th>
-                                            <th>Interpretation</th>
-                                            <th>Consensus</th>
-                                            <?php if (isset($sample['reference_result'])) { ?>
-                                            <th title="Reference Result">Reference</th>
-                                            <?php } ?>
-                                            <th>Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                }
-                                $count++;
-                                ?>
-
-                                <tr class="light vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
-                                    <td style="text-align:center;">
-                                        <?php echo $sample['sample_label']; ?> <?php echo ($sample['mandatory'] == 1) ? " <span class='mandatory vlResultMandatory'>*</span>" : "&nbsp;&nbsp;<span class='mandatory vlResultMandatory' style='visibility:hidden;'>*</span>"; ?>
-                                        <input type="hidden" id ="sample<?php echo $count; ?>" name="sampleId[]" value="<?php echo $sample['sample_id']; ?>" />
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <span>
-                                            <?php 
-                                            if($sample['target']==0) echo 'Not Detected';
-                                            if($sample['target']==1) echo 'Detected';
-                                            ?>
-                                        </span>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <span>
-                                            <?php 
-                                            // echo $negativePositiveResult[$sample['interpretation']]; TODO: Why is there no interpretation?
-                                            echo $negativePositiveResult[$sample['target']];
-                                            ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <?php 
-                                        if ($sample['control'] == 0) {
-                                            echo $negativePositiveResult[round($this->averagePerformance[$sample['sample_id']])];
-                                            $sampleCount++;
-                                        }
-                                        ?>
-                                    </td>
-                                    <?php if (isset($sample['reference_result'])) { ?>
-                                    <td>
-                                        <?php 
-                                        if ($sample['control'] == 0) {
-                                            echo $negativePositiveResult[$sample['reference_result']];
-                                        }
-                                        ?>
-                                    </td>
-                                    <?php } ?>
-                                    <td>
-                                        <?php
-                                        if ($sample['control'] == 0) {
-                                            if (isset($sample['reference_result'])) {
-                                                if($sample['reference_result'] == $sample['target']){
-                                                    echo "ACCEPTABLE";
-                                                    $correctCount++;
-                                                }else{
-                                                    echo "UNACCEPTABLE";
-                                                }
-                                            }else{
-                                                if(round($this->averagePerformance[$sample['sample_id']]) == $sample['target']){
-                                                    echo "ACCEPTABLE";
-                                                    $correctCount++;
-                                                }else{
-                                                    echo "UNACCEPTABLE";
-                                                }
-                                            }
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-
-                        <?php } ?>
-                        </tbody>
-                        <tfoot></tfoot>
-                    </table>
-                    <?php } ?>
                 </div>
                 <div style="float: right; font-size: 1.2em; padding: 5px 20px;"><strong>
                     <?php
-                        if($correctCount/$sampleCount*100 >= $this->shipment["pass_mark"]){
+                        echo round($this->shipment["shipment_score"])."% &nbsp;";
+                        if($this->shipment["final_result"] == 1){
                             echo "Satisfactory"; 
                         }else{
                             echo "<span style='color:red;'>Unsatisfactory</span>"; 

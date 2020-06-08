@@ -130,7 +130,8 @@ class Application_Service_Shipments {
          */
 
         $sQuery = $db->select()->from(array('s' => 'shipment'))
-                ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_code', 'distribution_date', 'readiness_checklist_survey_id', 'distribution_status' => 'status'))
+                ->join(array('d' => 'distributions'), 'd.distribution_id = s.distribution_id', array('distribution_name', 'distribution_date', 'readiness_checklist_survey_id', 'distribution_status' => 'status'))
+                ->joinLeft(array('p' => 'platforms'), 's.platform_id = p.ID', array('PlatformName'))
                 ->joinLeft(array('rcs' => 'readiness_checklist_surveys'), 'd.readiness_checklist_survey_id = rcs.id')
                 ->joinLeft(array('rcp' => 'readiness_checklist_participants'), 'rcs.id = rcp.readiness_checklist_survey_id && rcp.status = 2', array('total_participants' => new Zend_Db_Expr('count(participant_id)')))
                 ->join(array('sl' => 'schemes'), 'sl.scheme_id=s.scheme_type', array('SCHEME' => 'sl.scheme_name'))
@@ -199,8 +200,8 @@ class Application_Service_Shipments {
             }
 
             $row[] = $aRow['shipment_code'];
-            $row[] = $aRow['SCHEME'];
-            $row[] = '<a href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '">' . $aRow['distribution_code'] . '</a>';
+            $row[] = '<a href="/admin/distributions/edit/d8s5_8d/' . base64_encode($aRow['distribution_id']) . '">' . $aRow['distribution_name'] . '</a>';
+            $row[] = is_null($aRow['PlatformName'])?'All':$aRow['PlatformName'];
             $row[] = Pt_Commons_General::humanDateFormat($aRow['distribution_date']);
             $row[] = Pt_Commons_General::humanDateFormat($aRow['lastdate_response']);
             $row[] = $aRow['number_of_samples'];
@@ -218,6 +219,8 @@ class Application_Service_Shipments {
  
                 if ($aRow['status'] != 'finalized') {
                     $edit = '&nbsp;<a class="btn btn-primary btn-xs" href="/admin/shipment/edit/sid/' . base64_encode($aRow['shipment_id']) . '"><span><i class="icon-edit"></i> Edit</span></a>';
+                }
+                if ($aRow['status'] != 'finalized' && $aRow['status'] != 'shipped') {
                     $delete = '&nbsp;<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="removeShipment(\'' . base64_encode($aRow['shipment_id']) . '\')"><span><i class="icon-remove"></i> Delete</span></a>';
                 }
 
@@ -232,215 +235,6 @@ class Application_Service_Shipments {
         }
 
         echo json_encode($output);
-    }
-
-    public function updateEidResults($params) {
-        if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
-            return false;
-        }
-
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-
-        $db->beginTransaction();
-        try {
-            $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
-            $authNameSpace = new Zend_Session_Namespace('datamanagers');
-
-            if (!isset($params['modeOfReceipt']) || trim($params['modeOfReceipt']) == "") {
-                $params['modeOfReceipt'] = NULL;
-            }
-
-            $attributes = array(
-                "extraction_assay" => $params['extractionAssay'],
-                "detection_assay" => $params['detectionAssay'],
-                "extraction_assay_expiry_date" => Pt_Commons_General::dateFormat($params['assayExpirationDate']),
-                "detection_assay_expiry_date" => Pt_Commons_General::dateFormat($params['assayExpirationDate']),
-                "extraction_assay_lot_no" => $params['assayLotNumber'],
-                "detection_assay_lot_no" => $params['assayLotNumber'],
-                "uploaded_file" => $params['uploadedFilePath']);
-
-            $attributes = json_encode($attributes);
-
-            $data = array(
-                "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
-                "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
-                "attributes" => $attributes,
-                "supervisor_approval" => $params['supervisorApproval'],
-                "participant_supervisor" => $params['participantSupervisor'],
-                "user_comment" => $params['userComments'],
-                "mode_id" => $params['modeOfReceipt'],
-                "updated_by_user" => $authNameSpace->dm_id,
-                "updated_on_user" => new Zend_Db_Expr('now()')
-            );
-
-            if (isset($params['testReceiptDate']) && trim($params['testReceiptDate']) != '') {
-                $data['shipment_test_report_date'] = Pt_Commons_General::dateFormat($params['testReceiptDate']);
-            } else {
-                $data['shipment_test_report_date'] = new Zend_Db_Expr('now()');
-            }
-
-            if (isset($authNameSpace->qc_access) && $authNameSpace->qc_access == 'yes') {
-                $data['qc_done'] = $params['qcDone'];
-                if (isset($data['qc_done']) && trim($data['qc_done']) == "yes") {
-                    $data['qc_date'] = Pt_Commons_General::dateFormat($params['qcDate']);
-                    $data['qc_done_by'] = trim($params['qcDoneBy']);
-                    $data['qc_created_on'] = new Zend_Db_Expr('now()');
-                } else {
-                    $data['qc_date'] = NULL;
-                    $data['qc_done_by'] = NULL;
-                    $data['qc_created_on'] = NULL;
-                }
-            }
-            
-            if(isset($params['sample_conditions'])){
-                 $data['sample_conditions']=$params['sample_conditions'];
-            }
-            
-            $noOfRowsAffected = $shipmentParticipantDb->updateShipment($data, $params['smid'], $params['hdLastDate']);
-
-            $eidResponseDb = new Application_Model_DbTable_ResponseEid();
-            $eidResponseDb->updateResults($params);
-            $db->commit();
-        } catch (Exception $e) {
-            // If any of the queries failed and threw an exception,
-            // we want to roll back the whole transaction, reversing
-            // changes made in the transaction, even those that succeeded.
-            // Thus all changes are committed together, or none are.
-            $db->rollBack();
-            error_log($e->getMessage());
-            error_log($e->getTraceAsString());
-        }
-    }
-
-    public function updateDtsResults($params) {
-        if (!$this->isShipmentEditable($params['shipmentId'], $params['participantId'])) {
-            return false;
-        }
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-
-        $db->beginTransaction();
-        try {
-
-            $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
-            $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            $attributes["sample_rehydration_date"] = Pt_Commons_General::dateFormat($params['sampleRehydrationDate']);
-            $attributes["algorithm"] = $params['algorithm'];
-            $attributes = json_encode($attributes);
-
-
-            $data = array(
-                "shipment_receipt_date" => Pt_Commons_General::dateFormat($params['receiptDate']),
-                "shipment_test_date" => Pt_Commons_General::dateFormat($params['testDate']),
-                //"shipment_test_report_date" => new Zend_Db_Expr('now()'),
-                "attributes" => $attributes,
-                "supervisor_approval" => $params['supervisorApproval'],
-                "participant_supervisor" => $params['participantSupervisor'],
-                "user_comment" => $params['userComments'],
-                "updated_by_user" => $authNameSpace->dm_id,
-                "mode_id" => $params['modeOfReceipt'],
-                "updated_on_user" => new Zend_Db_Expr('now()')
-            );
-
-            if (isset($params['testReceiptDate']) && trim($params['testReceiptDate']) != '') {
-                $data['shipment_test_report_date'] = Pt_Commons_General::dateFormat($params['testReceiptDate']);
-            } else {
-                $data['shipment_test_report_date'] = new Zend_Db_Expr('now()');
-            }
-
-            if (isset($authNameSpace->qc_access) && $authNameSpace->qc_access == 'yes') {
-                $data['qc_done'] = $params['qcDone'];
-                if (isset($data['qc_done']) && trim($data['qc_done']) == "yes") {
-                    $data['qc_date'] = Pt_Commons_General::dateFormat($params['qcDate']);
-                    $data['qc_done_by'] = trim($params['qcDoneBy']);
-                    $data['qc_created_on'] = new Zend_Db_Expr('now()');
-                } else {
-                    $data['qc_date'] = NULL;
-                    $data['qc_done_by'] = NULL;
-                    $data['qc_created_on'] = NULL;
-                }
-            }
-            if (isset($params['customField1']) && trim($params['customField1']) != "") {
-                $data['custom_field_1'] = $params['customField1'];
-            }
-
-            if (isset($params['customField2']) && trim($params['customField2']) != "") {
-                $data['custom_field_2'] = $params['customField2'];
-            }
-
-            $noOfRowsAffected = $shipmentParticipantDb->updateShipment($data, $params['smid'], $params['hdLastDate']);
-
-            $dtsResponseDb = new Application_Model_DbTable_ResponseDts();
-            $dtsResponseDb->updateResults($params);
-            $db->commit();
-        } catch (Exception $e) {
-            // If any of the queries failed and threw an exception,
-            // we want to roll back the whole transaction, reversing
-            // changes made in the transaction, even those that succeeded.
-            // Thus all changes are committed together, or none are.
-            $db->rollBack();
-            error_log($e->getMessage());
-            error_log($e->getTraceAsString());
-        }
-    }
-
-    public function removeDtsResults($mapId) {
-        try {
-            $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
-            $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            $data = array(
-                "shipment_receipt_date" => '',
-                "shipment_test_date" => '',
-                "attributes" => '',
-                "shipment_test_report_date" => '',
-                "supervisor_approval" => '',
-                "participant_supervisor" => '',
-                "user_comment" => '',
-                "final_result" => '',
-                "updated_on_user" => new Zend_Db_Expr('now()'),
-                "updated_by_user" => $authNameSpace->dm_id,
-                "qc_date" => '',
-                "qc_done_by" => '',
-                "qc_created_on" => '',
-                "mode_id" => ''
-            );
-            $noOfRowsAffected = $shipmentParticipantDb->removeShipmentMapDetails($data, $mapId);
-
-            $dtsResponseDb = new Application_Model_DbTable_ResponseDts();
-            $dtsResponseDb->removeShipmentResults($mapId);
-        } catch (Exception $e) {
-            return($e->getMessage());
-            return "Unable to delete. Please try again later or contact system admin for help";
-        }
-    }
-
-    public function removeDtsEidResults($mapId) {
-        try {
-            $shipmentParticipantDb = new Application_Model_DbTable_ShipmentParticipantMap();
-            $authNameSpace = new Zend_Session_Namespace('datamanagers');
-            $data = array(
-                "shipment_receipt_date" => '',
-                "shipment_test_date" => '',
-                "attributes" => '',
-                "shipment_test_report_date" => '',
-                "supervisor_approval" => '',
-                "participant_supervisor" => '',
-                "user_comment" => '',
-                "final_result" => '',
-                "updated_on_user" => new Zend_Db_Expr('now()'),
-                "updated_by_user" => $authNameSpace->dm_id,
-                "qc_date" => '',
-                "qc_done_by" => '',
-                "qc_created_on" => '',
-                "mode_id" => ''
-            );
-            $noOfRowsAffected = $shipmentParticipantDb->removeShipmentMapDetails($data, $mapId);
-
-            $responseDb = new Application_Model_DbTable_ResponseEid();
-            $responseDb->delete("shipment_map_id=$mapId");
-        } catch (Exception $e) {
-            return($e->getMessage());
-            return "Unable to delete. Please try again later or contact system admin for help";
-        }
     }
 
     public function removeDtsVlResults($mapId) {

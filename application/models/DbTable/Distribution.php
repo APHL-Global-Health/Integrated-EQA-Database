@@ -663,6 +663,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     public function getDistributionResponseSummary($parameters) {
 
+        $authNameSpace = new Zend_Session_Namespace('administrators');
         $assayID = 1; //VL=1, EID=2
         $assay = "";
         $whereDistribution = "";
@@ -686,63 +687,34 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         }
 
         $consensusVLQuery = "SELECT s.shipment_id, spm.platform_id, refvl.sample_id, s.shipment_code, pl.PlatformName, ".
-                            "refvl.sample_label, AVG(rrv.reported_viral_load) consensus, stddev_pop(rrv.reported_viral_load) sdevp ".
-                            "FROM reference_result_vl refvl ".
-                            "INNER JOIN response_result_vl rrv ON refvl.sample_id = rrv.sample_id ".
-                            "INNER JOIN shipment s ON refvl.shipment_id = s.shipment_id ".
-                            "INNER JOIN shipment_participant_map spm ON rrv.shipment_map_id = spm.map_id AND s.shipment_id = spm.shipment_id AND spm.is_pt_test_not_performed IS NULL ".
-                            "INNER JOIN platforms pl ON spm.platform_id = pl.ID $wherePlatform ".
-                            "WHERE refvl.control = 0 AND spm.assay_id = $assayID ".
-                            "GROUP BY s.shipment_id, spm.platform_id, refvl.sample_id";
-
-        $resultEIDQuery = "SELECT s.shipment_id, spm.platform_id, refeid.sample_id, s.shipment_code, pl.PlatformName, refeid.sample_label, ".
-                            "refeid.reference_result, AVG(rre.interpretation) consensus, stddev_pop(rre.interpretation) sdevp ".
-                            "FROM reference_result_eid refeid ".
-                            "INNER JOIN response_result_eid rre ON refeid.sample_id = rre.sample_id ".
-                            "INNER JOIN shipment s ON refeid.shipment_id = s.shipment_id ".
-                            "INNER JOIN shipment_participant_map spm ON rre.shipment_map_id = spm.map_id AND s.shipment_id = spm.shipment_id ".
-                            "INNER JOIN platforms pl ON spm.platform_id = pl.ID $wherePlatform ".
-                            "WHERE refeid.control = 0 AND spm.assay_id = $assayID ".
-                            "GROUP BY s.shipment_id, spm.platform_id, refeid.sample_id";
+                "refvl.sample_label, ROUND(AVG(IF(ISNULL(refvl.reference_result) OR refvl.reference_result = '', rrv.reported_viral_load, refvl.reference_result)),1) reference_result, ROUND(AVG(rrv.reported_viral_load),1) consensus, ROUND(stddev_pop(rrv.reported_viral_load),1) sdevp ".
+                "FROM reference_result_vl refvl ".
+                "INNER JOIN shipment s ON refvl.shipment_id = s.shipment_id ".
+                "INNER JOIN shipment_participant_map spm ON s.shipment_id = spm.shipment_id AND spm.is_pt_test_not_performed IS NULL ".
+                "INNER JOIN response_result_vl rrv ON rrv.shipment_map_id = spm.map_id AND refvl.sample_id = rrv.sample_id ".
+                "INNER JOIN platforms pl ON spm.platform_id = pl.ID $wherePlatform ".
+                "WHERE refvl.control = 0 AND spm.assay_id = $assayID ".
+                "GROUP BY s.shipment_id, spm.platform_id, refvl.sample_id";
 
         $responsesVLQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, p.institute_name, ".
-                        "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, ".
-                        "rrv.reported_viral_load, round(results.consensus,2) consensus, round(results.sdevp,2) sdevp, ".
-                        "IF(rrv.reported_viral_load >= results.consensus - results.sdevp AND ".
-                            "rrv.reported_viral_load <= results.consensus + results.sdevp, 1, 0) AS pass ".
-                        "FROM shipment_participant_map spm ".
-                        "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
-                        "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
-                        "INNER JOIN participant p ON spm.participant_id = p.participant_id ".
-                        "INNER JOIN ($consensusVLQuery) AS results ON spm.shipment_id = results.shipment_id ".
-                            "AND spm.platform_id = results.platform_id AND spm.assay_id = $assayID ".
-                        "INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id AND results.sample_id = rrv.sample_id ".
-                        "WHERE spm.is_pt_test_not_performed IS NULL";
+                "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, results.reference_result, ".
+                "ROUND(rrv.reported_viral_load,1) reported_viral_load, results.consensus, results.sdevp, ".
+                "ROUND(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp, 1) zscore,".
+                "IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)) AS score ".
+                "FROM shipment_participant_map spm ".
+                "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
+                "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
+                "INNER JOIN participant p ON spm.participant_id = p.participant_id ".
+                "INNER JOIN ($consensusVLQuery) AS results ON spm.shipment_id = results.shipment_id ".
+                    "AND spm.platform_id = results.platform_id AND spm.assay_id = $assayID ".
+                "INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id AND results.sample_id = rrv.sample_id ".
+                "WHERE spm.is_pt_test_not_performed IS NULL";
 
-        $responsesEIDQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, ".
-                        "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, ".
-                        "IF(ISNULL(results.reference_result) OR TRIM(results.reference_result) = '', ".
-                            "IF(rre.interpretation >= results.consensus - results.sdevp AND ".
-                            "rre.interpretation <= results.consensus + results.sdevp, 1, 0),IF(rre.interpretation = results.reference_result,1,0)) AS pass ".
-                        "FROM shipment_participant_map spm ".
-                        "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
-                        "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
-                        "INNER JOIN participant p ON spm.participant_id = p.participant_id ".
-                        "INNER JOIN ($resultEIDQuery) AS results ON spm.shipment_id = results.shipment_id ".
-                            "AND spm.platform_id = results.platform_id AND spm.assay_id = $assayID ".
-                        "INNER JOIN response_result_eid rre ON spm.map_id = rre.shipment_map_id AND results.sample_id = rre.sample_id";
 
-        if ($assayID == 1) { //VL
-            $sQuery = "SELECT x.distribution_name, x.platform_name, x.lab_code, SUM(pass)/COUNT(*)*100 AS pass_fail, ".
-                        "GROUP_CONCAT(IF(pass=0,sample_label,NULL)) AS samples FROM".
-                        "($responsesVLQuery) AS x GROUP BY x.shipment_id, x.platform_id, x.participant_id";
-            $assay = "Viral Load";
-        }else if($assayID == 2){ //EID
-            $sQuery = "SELECT x.distribution_name, x.platform_name, x.lab_code, SUM(pass)/COUNT(*)*100 AS pass_fail, ".
-                        "GROUP_CONCAT(IF(pass=0,sample_label,NULL)) AS samples FROM".
-                        "($responsesEIDQuery) AS x GROUP BY x.shipment_id, x.platform_id, x.participant_id";
-            $assay = "Early Infant Diagnosis";
-        }
+        $sQuery = "SELECT x.distribution_name, x.platform_name, x.lab_code, SUM(score)/COUNT(*)*100 AS pass_fail, ".
+                    "GROUP_CONCAT(IF(score=0,sample_label,NULL)) AS samples FROM".
+                    "($responsesVLQuery) AS x GROUP BY x.shipment_id, x.platform_id, x.participant_id";
+        $assay = "Viral Load";
 
         $rResult = $this->getAdapter()->fetchAll($sQuery);
 
@@ -777,6 +749,95 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         $output['rawResults'] = $rResult;
 
         return $output;
+    }
+
+    public function evaluate($parameters) {
+
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+        $assayID = 1; //VL=1
+        $assay = "";
+        $whereDistribution = "";
+        $wherePlatform = "";
+
+        /*
+         * SQL queries
+         * Get data to display
+         */
+
+        if (isset($parameters['pt_survey']) && intval($parameters['pt_survey']) > 0) {
+            $whereDistribution = "AND d.distribution_id = ". $parameters['pt_survey'];
+        }
+
+        if (isset($parameters['pt_platform']) && intval($parameters['pt_platform']) > 0) {
+            $wherePlatform = "AND pl.ID = ". $parameters['pt_platform'];
+        }
+
+        if (isset($parameters['pt_assay']) && intval($parameters['pt_assay']) > 0) {
+            $assayID = intval($parameters['pt_assay']);
+        }
+
+        $consensusVLQuery = "SELECT s.shipment_id, spm.platform_id, refvl.sample_id, s.shipment_code, pl.PlatformName, ".
+                "refvl.sample_label, ROUND(AVG(IF(ISNULL(refvl.reference_result) OR refvl.reference_result = '', rrv.reported_viral_load, refvl.reference_result)),1) reference_result, ROUND(AVG(rrv.reported_viral_load),1) consensus, ROUND(stddev_pop(rrv.reported_viral_load),1) sdevp ".
+                "FROM reference_result_vl refvl ".
+                "INNER JOIN shipment s ON refvl.shipment_id = s.shipment_id ".
+                "INNER JOIN shipment_participant_map spm ON s.shipment_id = spm.shipment_id AND spm.is_pt_test_not_performed IS NULL ".
+                "INNER JOIN response_result_vl rrv ON rrv.shipment_map_id = spm.map_id AND refvl.sample_id = rrv.sample_id ".
+                "INNER JOIN platforms pl ON spm.platform_id = pl.ID $wherePlatform ".
+                "WHERE refvl.control = 0 AND spm.assay_id = $assayID ".
+                "GROUP BY s.shipment_id, spm.platform_id, refvl.sample_id";
+
+        $responsesVLQuery = "SELECT spm.map_id, results.sample_id, ".
+                "ROUND(rrv.reported_viral_load,1) reported_viral_load, results.consensus, results.sdevp, ".
+                "IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)) AS score ".
+                "FROM shipment_participant_map spm ".
+                "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
+                "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
+                "INNER JOIN participant p ON spm.participant_id = p.participant_id ".
+                "INNER JOIN ($consensusVLQuery) AS results ON spm.shipment_id = results.shipment_id ".
+                    "AND spm.platform_id = results.platform_id AND spm.assay_id = $assayID ".
+                "INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id AND results.sample_id = rrv.sample_id ".
+                "WHERE spm.is_pt_test_not_performed IS NULL";
+
+        $rResult = $this->getAdapter()->fetchAll($responsesVLQuery);
+        $responseResultVL = new Application_Model_DbTable_ResponseVl();
+        foreach ($rResult as $aRow) {
+            Pt_Commons_General::log2File(
+                "Evaluation performed by ".$authNameSpace->admin_id."\n".
+                json_encode(array("calculated_score" => $aRow['score']))." WHERE ".
+                json_encode(
+                    array("shipment_map_id" => $aRow['map_id'],
+                        "sample_id" => $aRow['sample_id']))
+            );
+
+            $responseResultVL->update(
+                array("calculated_score" => $aRow['score']),
+                "shipment_map_id = ".$aRow['map_id']." AND sample_id = ".$aRow['sample_id']
+            );
+        }
+
+
+        $sQuery = "SELECT x.map_id, ROUND(SUM(score)/COUNT(*)*100) AS pass_fail FROM".
+                    "($responsesVLQuery) AS x GROUP BY x.map_id";
+
+        $passMark = 80;
+
+        $shipmentPartipantMap = new Application_Model_DbTable_ShipmentParticipantMap();
+        $rResult = $this->getAdapter()->fetchAll($sQuery);
+        foreach ($rResult as $aRow) {
+            Pt_Commons_General::log2File(
+                "Evaluation result: ".
+                json_encode(
+                    array(
+                        "shipment_score" => $aRow['pass_fail'],
+                        "final_result" => ($aRow['pass_fail'] >= $passMark),
+                        "report_generated" => "yes"
+                    )).
+                " WHERE " . json_encode(array("map_id" => $aRow['map_id'])));
+
+            $shipmentPartipantMap->update(
+                array("shipment_score" => $aRow['pass_fail'], "final_result" => intval($aRow['pass_fail'] >= $passMark), "report_generated" => "yes"),
+                "map_id = ". $aRow['map_id']);
+        }
     }
 
 }

@@ -86,49 +86,47 @@ class Application_Service_Schemes {
         return $db->fetchAll($sql);
     }
 
-    public function getVlSamples($shipmentID, $participantID, $platformID = 1, $assayID = 1) {
+    public function getSamples($mapID, $platformID = 1, $assayID = 1) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
-        if ($assayID == 2) { //2 == EID
-            $sql = $db->select()->from(array('ref' => 'reference_result_eid'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_eid'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('interpretation', 'target', 'responseDate' => 'res.created_on'))
-                ->where('sp.shipment_id = ? ', $shipmentID)
-                ->where('sp.participant_id = ? ', $participantID)
-                ->where('sp.assay_id = ?', $assayID)
-                ->where('sp.platform_id = ? ', $platformID);
-        }else{ // 1 == VL
+        $sql = $db->select()->from(array('ref' => 'reference_result_vl'))
+            ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
+            ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+            ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'calculated_score', 'is_tnd', 'responseDate' => 'res.created_on'))
+            ->where('sp.map_id = ? ', $mapID)
+            ->where('sp.assay_id = ?', $assayID)
+            ->where('sp.platform_id = ? ', $platformID);
 
-            $sql = $db->select()->from(array('ref' => 'reference_result_vl'))
-                ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
-                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd', 'responseDate' => 'res.created_on'))
-                ->where('sp.shipment_id = ? ', $shipmentID)
-                ->where('sp.participant_id = ? ', $participantID)
-                ->where('sp.assay_id = ?', $assayID)
-                ->where('sp.platform_id = ? ', $platformID);
-        }
+        Pt_Commons_General::log2File($sql);
+
         return $db->fetchAll($sql);
     }
 
-    public function getAllVlPlatformResponses($shipmentID, $platformID = 1, $assayID = 1) {
+    public function getVlSamples($shipmentID, $participantID, $platformID = 1, $assayID = 1) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        if ($assayID == 2) { //2 == EID
-            $sql = $db->select()->from(array('ref' => 'reference_result_eid'), array('sample_id'))
-                ->join(array('sp' => 'shipment_participant_map'), 'ref.shipment_id=sp.shipment_id', array('participant_id'))
-                ->join(array('res' => 'response_result_eid'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('interpretation', 'target'))
-                ->where('sp.shipment_id = ? ', $shipmentID)
-                ->where('sp.assay_id = ?', $assayID)
-                ->where('sp.platform_id = ? ', $platformID);
-        }else{ // 1 == VL
-            $sql = $db->select()->from(array('ref' => 'reference_result_vl'), array('sample_id'))
-                ->join(array('sp' => 'shipment_participant_map'), 'ref.shipment_id=sp.shipment_id', array('participant_id'))
-                ->join(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd'))
-                ->where('sp.shipment_id = ? ', $shipmentID)
-                ->where('sp.assay_id = ?', $assayID)
-                ->where('sp.platform_id = ? ', $platformID);
-        }
+
+        $sql = $db->select()->from(array('ref' => 'reference_result_vl'))
+            ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
+            ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+            ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'calculated_score', 'is_tnd', 'responseDate' => 'res.created_on'))
+            ->where('sp.shipment_id = ? ', $shipmentID)
+            ->where('sp.participant_id = ? ', $participantID)
+            ->where('sp.assay_id = ?', $assayID)
+            ->where('sp.platform_id = ? ', $platformID);
+
+        return $db->fetchAll($sql);
+    }
+
+    public function getAllVlPlatformResponses($shipmentID, $platformID = 1, $assayID = 1)
+    {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $sql = $db->select()->from(array('ref' => 'reference_result_vl'), array('sample_id'))
+            ->join(array('sp' => 'shipment_participant_map'), 'ref.shipment_id=sp.shipment_id', array('participant_id'))
+            ->join(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'is_tnd', 'calculated_score'))
+            ->where('sp.shipment_id = ? ', $shipmentID)
+            ->where('sp.assay_id = ?', $assayID)
+            ->where('sp.platform_id = ? ', $platformID);
+
         return $db->fetchAll($sql);
     }
 

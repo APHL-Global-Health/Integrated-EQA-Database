@@ -21,25 +21,13 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
 
     public function getShipmentData($sId, $pId, $platformID = 1, $assayID = 1) {
 
-        if ($assayID == 2) { // 2 == EID
-
-            $sql = $this->getAdapter()->select()->from(array('s' => $this->_name))
-                    ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-                    ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                    ->where("s.shipment_id = ?", $sId)
-                    ->where("sp.participant_id = ?", $pId)
-                    ->where("sl.assay_id = ?", $assayID)
-                    ->where("sp.platform_id = ?", $platformID);
-        }else{ // 1 == VL
-
-            $sql = $this->getAdapter()->select()->from(array('s' => $this->_name))
-                    ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
-                    ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
-                    ->where("s.shipment_id = ?", $sId)
-                    ->where("sp.participant_id = ?", $pId)
-                    ->where("sl.assay_id = ?", $assayID)
-                    ->where("sp.platform_id = ?", $platformID);
-        }
+        $sql = $this->getAdapter()->select()->from(array('s' => $this->_name))
+                ->join(array('sl' => 'schemes'), 's.scheme_type=sl.scheme_id', array('scheme_name'))
+                ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
+                ->where("s.shipment_id = ?", $sId)
+                ->where("sp.participant_id = ?", $pId)
+                ->where("sl.assay_id = ?", $assayID)
+                ->where("sp.platform_id = ?", $platformID);
 
         $data =  $this->getAdapter()->fetchRow($sql);
         return $data;
