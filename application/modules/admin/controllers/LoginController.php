@@ -19,7 +19,12 @@ class Admin_LoginController extends Zend_Controller_Action {
             $adapter->setCredential(MD5($params['password']));
 
             $auth = Zend_Auth::getInstance();
-            $res = $auth->authenticate($adapter);
+
+            try {
+                $res = $auth->authenticate($adapter);
+            } catch (Exception $e) {
+                $this->logOutAction();
+            }
 
 
             if ($res->isValid()) {

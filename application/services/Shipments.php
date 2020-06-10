@@ -16,21 +16,6 @@ class Application_Service_Shipments {
         );
     }
 
-    public function getsamplemeans($sid, $sampleId) {
-        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        return $db->fetchAll(
-                        $db->select()
-                                ->from('vl_peer_mean')
-                                ->join(array('rr' => 'reference_result_vl'), 'vl_peer_mean.sampleId=rr.sample_id')
-                                ->join(array('sp' => 'shipment'), 'vl_peer_mean.shipmentId=sp.shipment_id')
-                                ->joinLeft(array('system_admin' => 'system_admin'), 'vl_peer_mean.system_id=system_admin.admin_id')
-                                ->where("vl_peer_mean.shipmentId=rr.shipment_id")
-                                ->where("vl_peer_mean.shipmentId=" . $sid)
-                                ->where("vl_peer_mean.sampleId=" . $sampleId)
-                                ->order('vl_peer_mean.sampleId ASC')
-        );
-    }
-
     public function getparticipatingLabs($sid) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         return $db->fetchAll(
@@ -493,8 +478,6 @@ class Application_Service_Shipments {
 
     public function shipItNow($params) {
         $db = new Application_Model_DbTable_ShipmentParticipantMap();
-        error_log("shipItNow: 999");
-        error_log(json_encode($params));
         return $db->shipItNow($params);
     }
 

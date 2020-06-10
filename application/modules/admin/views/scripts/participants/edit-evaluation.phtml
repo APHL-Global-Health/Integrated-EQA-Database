@@ -1,0 +1,79 @@
+<div class="well">
+    <fieldset>
+        <legend>Expert Evaluation</legend>
+        <form class="form-inline" name="evaluationForm" id="evaluationForm" method="post"
+              action="<?php echo $this->url(array('module' => 'admin', 'controller' => 'participants', 'action' => 'edit-evaluation')); ?>"
+              autocomplete="off">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Distribution Name </label>
+                </div>
+                <div class="col-sm-4">
+                    <span><?php echo $this->distribution['distribution_name']; ?></span>
+
+                    <input type="hidden" name="mid" value="<?php echo $this->mapID; ?>"/>
+                </div>
+                <div class="col-sm-2">
+                    <label>Shipment Code </label>
+                </div>
+                <div class="col-sm-4">
+                    <span><?php echo $this->shipment['shipment_code']; ?></span>
+               </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Platform </label>
+                </div>
+                <div class="col-sm-4">
+                    <span><?php echo $this->platform['PlatformName']; ?></span>
+                </div>
+                <div class="col-sm-2">
+                    <label>Participant </label>
+                </div>
+                <div class="col-sm-4">
+                    <span><?php echo $this->participant['institute_name']; ?></span>
+                </div>
+            </div>
+
+            <hr>
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr align="center">
+                            <th style="width:25%;text-align: center;">Sample</th>
+                            <th style="text-align: center;">Expert Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($this->samples as $sample) {
+                        ?>
+                            <tr align="center">
+                                <td style="text-align: center">
+                                    <?php echo $sample['sample_label']; ?>
+                                    <input type="hidden" name="samples[]" value="<?php echo $sample['sample_id']; ?>"/>
+                                </td>
+                                <td style="text-align: center">
+                                    <input type="number" name="expertScore_<?php echo $sample['sample_id']; ?>" 
+                                        class="input-sm form-control" step="1" max="100" min="0"
+                                        value="<?php echo round($sample['calculated_score']*100); ?>" />%
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                <br>
+            </div>
+
+            <div style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary btn-sm" type="submit" value="Update"/>
+                <a href="/admin/participants/cycle-summary/pt_survey/<?php echo $this->distribution['distribution_id']; ?>/pt_platform/<?php echo $this->platform['ID']; ?>" class="btn btn-primary btn-sm">Cancel</a>
+            </div>
+        </form>
+    </fieldset>
+</div>
+

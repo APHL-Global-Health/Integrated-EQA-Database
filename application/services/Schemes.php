@@ -86,16 +86,15 @@ class Application_Service_Schemes {
         return $db->fetchAll($sql);
     }
 
-    public function getSamples($mapID, $platformID = 1, $assayID = 1) {
+    public function getSamples($mapID) {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
 
         $sql = $db->select()->from(array('ref' => 'reference_result_vl'))
             ->join(array('s' => 'shipment'), 's.shipment_id=ref.shipment_id')
             ->join(array('sp' => 'shipment_participant_map'), 's.shipment_id=sp.shipment_id')
             ->joinLeft(array('res' => 'response_result_vl'), 'res.shipment_map_id = sp.map_id and res.sample_id = ref.sample_id', array('reported_viral_load', 'calculated_score', 'is_tnd', 'responseDate' => 'res.created_on'))
-            ->where('sp.map_id = ? ', $mapID)
-            ->where('sp.assay_id = ?', $assayID)
-            ->where('sp.platform_id = ? ', $platformID);
+            ->where('ref.control = 0 ')
+            ->where('sp.map_id = ? ', $mapID);
 
         Pt_Commons_General::log2File($sql);
 

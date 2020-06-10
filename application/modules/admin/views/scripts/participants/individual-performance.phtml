@@ -74,7 +74,7 @@
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
                         <thead class="vlResultSection" style="<?php echo (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : ''; ?>">
                             <tr align="center" class="" >
-                                <th style="width:35%;text-align: left;">Control/Sample</th>
+                                <th style="width:35%;text-align: left;">Sample</th>
                                 <th>Results (log<sub>10</sub> copies/ml)</th>        
                                 <th>Scores</th>       
                                 <th>Performance</th>       
@@ -87,9 +87,6 @@
                             foreach ($this->allSamples as $sample) {
                                 if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
                                     $sample['mandatory'] = 0;
-                                }
-                                if ($sample['control'] == 1) {
-                                    continue;
                                 }
                                 $sampleCount++;
                             ?>

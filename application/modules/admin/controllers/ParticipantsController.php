@@ -194,6 +194,49 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         if ($this->_hasParam('pt_assay'))$this->view->chosenAssay = $this->_getParam('pt_assay');
     }
 
+    public function editEvaluationAction(){
+
+        $this->_helper->layout()->pageName = 'report';
+
+        $mapID = $this->getRequest()->getParam('mid');
+
+        $spmDb = new Application_Model_DbTable_ShipmentParticipantMap();
+        $spm = $spmDb->fetchRow($spmDb->select()->from('shipment_participant_map')->where("map_id=$mapID"));
+
+        $participantID = $spm['participant_id'];
+        $shipmentID = $spm['shipment_id'];
+        $platformID = $spm['platform_id'];
+        $assayID = $spm['assay_id'];
+
+        $shipmentService = new Application_Service_Shipments();
+        $this->view->shipment = $shipmentService->getShipment($shipmentID);
+
+        $surveyID = $this->view->shipment['distribution_id'];
+
+        if($this->getRequest()->isPost()){
+            $data = $this->getRequest()->getPost();
+
+            $vlResponse = new Application_Model_DbTable_ResponseVl();
+            $vlResponse->updateEvaluation($data);
+            
+            $this->_redirect("/admin/participants/cycle-summary/pt_survey/$surveyID/pt_platform/$platformID/pt_assay/$assayID");
+        }else{
+
+            $participantService = new Application_Service_Participants();
+            $this->view->participant = $participantService->getParticipantDetails($participantID);
+
+            $distributionService = new Application_Service_Distribution();
+            $this->view->distribution = $distributionService->getDistribution($this->view->shipment['distribution_id']);
+
+            $platformService = new Application_Service_Platform();
+            $this->view->platform = $platformService->getPlatform($platformID);
+
+            $schemeService = new Application_Service_Schemes();
+            $this->view->samples = $schemeService->getSamples($mapID);
+            $this->view->mapID = $mapID;
+        }
+    }
+
     public function individualResponseAction(){
 
         $this->_helper->layout()->pageName = 'report';
@@ -303,37 +346,21 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
   
         $parameters = $this->_getAllParams();
         $mapID= $this->getRequest()->getParam('mid');
-        $platformID =$this->getRequest()->getParam('pfid');
-        $assayID =$this->getRequest()->getParam('aid');
 
         $shipmentParticipantMapDb = new Application_Model_DbTable_ShipmentParticipantMap();
         $spm = $shipmentParticipantMapDb->fetchRow($shipmentParticipantMapDb->select()->from('shipment_participant_map')->where("map_id=$mapID"));
+
         $participantID = $spm['participant_id'];
         $shipmentID = $spm['shipment_id'];
+        $assayID = $spm['assay_id'];
+        $platformID = $spm['platform_id'];
 
         $participantService = new Application_Service_Participants();
         $this->view->participant = $participantService->getParticipantDetails($participantID);
 
         $schemeService = new Application_Service_Schemes();
-        $this->view->allSamples = $schemeService->getSamples($mapID, $platformID, $assayID);
+        $this->view->allSamples = $schemeService->getSamples($mapID);
         
-        $allPlatformSamples = $schemeService->getAllVlPlatformResponses($shipmentID, $platformID, $assayID);
-
-        $sampleList = [];
-        foreach ($allPlatformSamples as $platformSample) {
-            $sampleList[] = $platformSample['sample_id'];
-            $sampleValues[$platformSample['sample_id']][] = $platformSample['reported_viral_load'];
-        }
-
-        $sampleList = array_unique($sampleList);
-
-        foreach ($sampleList as $sampleID) {
-            $averagePerformance[$sampleID] = $schemeService->getAverage($sampleValues[$sampleID]);
-            $standardDeviation[$sampleID] = $schemeService->getStdDeviation($sampleValues[$sampleID]);
-        }
-        $this->view->averagePerformance = $averagePerformance;
-        $this->view->standardDeviation = $standardDeviation;
-
         $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
 
         $shipment = $schemeService->getShipmentData($shipmentID, $participantID, $platformID, $assayID);

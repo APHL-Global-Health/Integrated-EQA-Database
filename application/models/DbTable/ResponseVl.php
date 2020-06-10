@@ -43,4 +43,30 @@ class Application_Model_DbTable_ResponseVl extends Zend_Db_Table_Abstract
 
         }
     }
+
+    public function updateEvaluation($params){
+        $authNameSpace = new Zend_Session_Namespace('administrators');
+
+        $sampleIds = $params['samples'];
+        $res = $this->fetchAll("shipment_map_id = ".$params['mid']);
+
+        Pt_Commons_General::log2File("Updating Evaluation (Expert) by USERID [".$authNameSpace->admin_id."]\nFROM: ".json_encode($res)."\nTO: ".json_encode($params));
+
+        $shipmentScore = 0;
+        foreach($sampleIds as $key => $sampleId){
+            $shipmentScore += intval($params['expertScore_'.$sampleId]);
+            $this->update(
+                array(
+                    'calculated_score'=>round(intval($params['expertScore_'.$sampleId])/100,1),
+                   ), 
+                "shipment_map_id = ".$params['mid'] . " AND sample_id = $sampleId"
+                );
+        }
+
+        Pt_Commons_General::log2File("Updating Evaluation (Expert) by USERID [".$authNameSpace->admin_id."]\n New Shipment Score = ".round($shipmentScore/count($sampleIds)));
+
+        $shipmentPartipantMap = new Application_Model_DbTable_ShipmentParticipantMap();
+        $shipmentPartipantMap->update(array('shipment_score' => round($shipmentScore/count($sampleIds))), "map_id = ".$params['mid']);
+
+    }
 }

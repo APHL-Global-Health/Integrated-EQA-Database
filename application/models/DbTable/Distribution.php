@@ -696,11 +696,12 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                 "WHERE refvl.control = 0 AND spm.assay_id = $assayID ".
                 "GROUP BY s.shipment_id, spm.platform_id, refvl.sample_id";
 
-        $responsesVLQuery = "SELECT spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, p.institute_name, ".
+        $responsesVLQuery = "SELECT spm.map_id, spm.shipment_id, spm.platform_id, spm.participant_id, p.MflCode AS lab_code, ".
+                "p.institute_name, spm.report_generated, spm.shipment_score, spm.final_result, ".
                 "d.distribution_name, results.PlatformName AS platform_name, results.sample_label, results.reference_result, ".
                 "ROUND(rrv.reported_viral_load,1) reported_viral_load, results.consensus, results.sdevp, ".
                 "ROUND(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp, 1) zscore,".
-                "IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)) AS score ".
+                "IF(results.sdevp > 0, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)), 1) AS score ".
                 "FROM shipment_participant_map spm ".
                 "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
                 "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
@@ -711,7 +712,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                 "WHERE spm.is_pt_test_not_performed IS NULL";
 
 
-        $sQuery = "SELECT x.distribution_name, x.platform_name, x.lab_code, SUM(score)/COUNT(*)*100 AS pass_fail, ".
+        $sQuery = "SELECT x.report_generated, x.shipment_score, x.final_result, x.map_id, x.distribution_name, x.platform_name, x.lab_code, SUM(score)/COUNT(*)*100 AS pass_fail, ".
                     "GROUP_CONCAT(IF(score=0,sample_label,NULL)) AS samples FROM".
                     "($responsesVLQuery) AS x GROUP BY x.shipment_id, x.platform_id, x.participant_id";
         $assay = "Viral Load";
@@ -734,6 +735,10 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
         foreach ($rResult as $aRow) {
             $row = array();
 
+            $row['evaluated'] = $aRow['report_generated'];
+            $row['map_id'] = $aRow['map_id'];
+            $row['shipment_score'] = $aRow['shipment_score'];
+            $row['final_result'] = $aRow['final_result'];
             $row['distribution_name'] = $aRow['distribution_name'];
             $row['platform_name'] = $aRow['platform_name'];
             $row['lab_code'] = $aRow['lab_code'];
@@ -788,7 +793,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
         $responsesVLQuery = "SELECT spm.map_id, results.sample_id, ".
                 "ROUND(rrv.reported_viral_load,1) reported_viral_load, results.consensus, results.sdevp, ".
-                "IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)) AS score ".
+                "IF(results.sdevp > 0, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result) /results.sdevp <= 2, 1, IF(ABS(ROUND(rrv.reported_viral_load,1) - results.reference_result)/results.sdevp <= 3,0.8,0)), 1) AS score ".
                 "FROM shipment_participant_map spm ".
                 "INNER JOIN shipment s ON spm.shipment_id = s.shipment_id ".
                 "INNER JOIN distributions d ON s.distribution_id = d.distribution_id $whereDistribution ".
@@ -814,7 +819,6 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
                 "shipment_map_id = ".$aRow['map_id']." AND sample_id = ".$aRow['sample_id']
             );
         }
-
 
         $sQuery = "SELECT x.map_id, ROUND(SUM(score)/COUNT(*)*100) AS pass_fail FROM".
                     "($responsesVLQuery) AS x GROUP BY x.map_id";
