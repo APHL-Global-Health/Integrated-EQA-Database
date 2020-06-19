@@ -20,23 +20,21 @@
                     <div id=error></div>
 
                     <div class="report-logo">
-                        <p><center>
-                            <strong>MINISTRY OF HEALTH</strong><br>
-                            <img src="/images/nphl-logo-2.png">
-                        </center></p>
-                        <p><center>
-                            National Public Health Laboratory (NPHL)<br>
-                            P.O Box 20750 - 00202 NAIROBI<br>
-                            Telephone: 020-261096<br>
-                            <h4 style="font-weight: bold;">NPHL EQA Programme</h4>
-                            <h4 style="font-weight: bold;">
+                        <p><center><strong>
+                            <img src="/images/country/moh-logo.png" width="120px"><br>
+                            MINISTRY OF HEALTH<br>
+                            <?php $scheme = ['1' => "VL", '2' => "EID"]; ?>
+                            NATIONAL PUBLIC HEALTH LABORATORY<br>
+                            KENYA EXTERNAL QUALITY ASSESSMENT SCHEME (KNEQAS)<br>
+                            HIV MOLECULAR - <?php echo $scheme[$this->assayID]; ?> PROFICIENCY TESTING<br>
+                            P.O Box 20750 - 00202 NAIROBI Email: nphlpt@nphl.go.ke Help Desk: helpdesk.nphl.go.ke<br>
+                            <span style="font-size: 1.5em;">
                             <?php
                                 $schemeName = $this->distribution['distribution_name'];
-                                $scheme = ['1' => "VL", '2' => "EID"];
                                 echo substr($schemeName, 0, strlen($schemeName)-2).$scheme[$this->assayID]." Report";
                             ?>
-                            </h4>
-                        </center></p>
+                            </span>
+                        </strong></center></p>
                     </div>
 
                     <table class="table table-bordered table-striped" style="width:100%;margin:10px auto;">
