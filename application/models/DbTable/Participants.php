@@ -480,8 +480,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
         }
         $sendTo = $params['pemail'];
 
-
-
         $common = new Application_Service_Common();
 
         $pMail = $params['pemail'];
@@ -500,7 +498,6 @@ class Application_Model_DbTable_Participants extends Zend_Db_Table_Abstract {
     }
 
     public function addParticipantForDataManager($params) {
-        //Zend_Debug::dump($params);die;
         $authNameSpace = new Zend_Session_Namespace('datamanagers');
 
         $data = array(
