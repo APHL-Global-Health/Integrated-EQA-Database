@@ -1,0 +1,178 @@
+<?php
+
+	require_once('tcpdf/tcpdf.php');
+
+	// create new PDF document
+	$pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+	// remove default header/footer
+	$pdf->setPrintHeader(false);
+	$pdf->setPrintFooter(false);
+	
+	// set default monospaced font
+	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+	// set margins
+	$pdf->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT, 10);
+	
+	// set auto page breaks
+	$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+	
+	// set image scale factor
+	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+	
+	// set some language-dependent strings (optional)
+	if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	    require_once(dirname(__FILE__).'/lang/eng.php');
+	    $pdf->setLanguageArray($l);
+	}
+
+	// ---------------------------------------------------------
+	
+	// set font
+	$pdf->SetFont('Helvetica', '', 11);
+	
+	// add a page
+	$pdf->AddPage();
+	
+    $html = '<div style="border:2px solid black;">';
+
+    $html .= '<table style="padding:5px;margin:10px;"><tr><td>';
+
+    $html .= '<div style="text-align:center;margin:5px;"><b>';
+	$html .= '<img src="/images/country/moh-logo.png" width="80px"><br>';
+	$html .= 'MINISTRY OF HEALTH<br>';
+	$html .= 'NATIONAL PUBLIC HEALTH LABORATORY<br>';
+	$html .= 'KENYA EXTERNAL QUALITY ASSESSMENT SCHEME (KNEQAS)<br>';
+	$html .= 'HIV MOLECULAR - VL PROFICIENCY TESTING<br></b>';
+	$html .= 'P.O Box 20750 - 00202 NAIROBI Email: nphlpt@nphl.go.ke Help Desk: helpdesk.nphl.go.ke<br>';
+	$html .= '</div><b>';
+	$html .= '<span style="font-size: 1.5em;display: inline-block;">';
+	$html .= "{$this->shipment['scheme_name']} - {$this->platform['PlatformName']}";
+	$html .= "Report</span></b>";
+
+    $html .= '</td></tr><tr><td>';
+
+	$html .= '<table style="width:100%;margin:10px auto;">';
+	$html .= '<tr><td><h4><b>Lab Code</b></h4>'.$this->participant['MflCode'].'</td>';
+	$html .= '<td><h4><b>Lab Name</b></h4>'.$this->participant['institute_name'].'</td>';
+	$html .= '<td><h4><b>Phone No</b></h4>'.$this->participant['phone'].'</td>';
+	$html .= '<td><h4><b>Platform</b></h4>'.$this->platform['PlatformName'].'</td>';
+	$html .= '</tr></table>';
+
+    $html .= '</td></tr><tr><td>';
+
+	$html .= '<table style="width:100%;margin:10px auto;">';
+	$html .= '<tr class="dark">';
+	$html .= '<td style="width:30%;"><b>Shipment Date</b></td>';
+	$html .= '<td style="width:20%;">'.$this->dateFormat($this->shipment['shipment_date']).'</td>';
+	$html .= '<td style="width:30%;"><b>Result Submission Date</b></td>';
+	$html .= '<td>'.$this->dateFormat($this->shipment['lastdate_response']).'</td>';
+	$html .= '</tr>';
+
+	$html .= '<tr class ="light">';
+	$html .= '<td><b>Specimen Receipt Date</b></td>';
+	$html .= '<td>'.$this->dateFormat($this->shipment["shipment_receipt_date"]).'</td>';
+	$html .= '<td><b>Testing Date</b></td> ';
+	$html .= '<td>'.$this->dateFormat($this->shipment["shipment_test_date"]).'</td>';
+	$html .= '</tr><tr>';
+
+	$html .= '<td><b>Specimen Volume used for testing</b></td> ';
+	$html .= '<td>'.$this->shipment['attributes']['specimen_volume'].'</td>';
+	$html .= '<td><b>Sample Volume Received</b></td>';
+	$html .= '<td>'.$this->shipment['attributes']['specimen_volume'].'</td>';
+	$html .= '</tr>';
+
+	$html .= '<tr class ="dark">';
+	$html .= '<td><b>Kit Lot Number</b></td>';
+	$html .= '<td>'.(isset($this->shipment['attributes']['assay_lot_number'])?$this->shipment['attributes']['assay_lot_number']:'').'</td>';
+	$html .= '<td><b>Kit Expiration Date </b></td>';
+	$html .= '<td>'.(isset($this->shipment['attributes']['assay_expiration_date'])?$this->dateFormat($this->shipment['attributes']['assay_expiration_date']):'').'</td>';
+	$html .= '</tr></table>';
+
+    $html .= '</td></tr><tr><td>';
+
+	$html .= '<table style="border: 1px solid #000;">';
+	$html .= '<thead style="'.((isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : '').'">';
+	$html .= '<tr>';
+	$html .= '<th style="border:1px solid #000;"><b>Sample</b></th>';
+	$html .= '<th style="border:1px solid #000;"><b>Results (log<sub>10</sub> copies/ml)</b></th>';
+	$html .= '<th style="border:1px solid #000;"><b>Reference Result</b></th>';
+	$html .= '<th style="border:1px solid #000;"><b>Z-Score</b></th>';
+	$html .= '<th style="border:1px solid #000;"><b>Score</b></th>';
+	$html .= '<th style="border:1px solid #000;"><b>Performance</b></th>';
+	$html .= '</tr>';
+	$html .= '</thead>';
+	$html .= '<tbody>';
+
+	foreach ($this->allSamples as $sample) {
+		if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+			$sample['mandatory'] = 0;
+		}
+
+		$html .= '<tr style="'.((isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') ? 'display:none;' : '').'">';
+		$html .= '<td style="border:1px solid black;padding-left: 20px;">'.$sample['sample_label'].'</td>';
+		$html .= '<td style="border:1px solid black;text-align:center;">'.$sample['reported_viral_load'].'</td>';
+		$html .= '<td style="border:1px solid black;text-align:center;">';
+		$html .= $this->performanceStats[$sample['sample_id']]['reference_result'];
+		$html .= '</td><td style="border:1px solid black;text-align:center;">';
+
+		$zscore = "N/A";
+		if($this->performanceStats[$sample['sample_id']]['sdev_rvl'] > 0){
+			$zscore = round(abs($sample['reported_viral_load']-$this->performanceStats[$sample['sample_id']]['reference_result'])/$this->performanceStats[$sample['sample_id']]['sdev_rvl'],1);
+		}
+
+		$html .= $zscore.'</td>';
+		$html .= '<td style="border:1px solid black;text-align:center;">';
+		$html .= round($sample['calculated_score']*100).'</td>';
+		$html .= '<td style="border:1px solid black;text-align:center;">';
+
+		if($sample['calculated_score'] == 1)$html .= "ACCEPTABLE"; 
+		if($sample['calculated_score'] == 0.8)$html .= "QUESTIONABLE"; 
+		if($sample['calculated_score'] == 0)$html .= "UNACCEPTABLE"; 
+
+		$html .= '</td></tr>';
+
+	}
+
+	if (isset($this->shipment['is_pt_test_not_performed']) && $this->shipment['is_pt_test_not_performed'] == 'yes') {
+		$html .= '<tr><td colspan="6">';
+		$html .= '<b>Reason for not testing</b> : ';
+		$html .= $this->shipment['vl_not_tested_reason'];
+		$html .= '</td></tr>';
+		$html .= '<tr><td colspan="6"><b>Your comments</b> : ';
+		$html .= $this->shipment['pt_test_not_performed_comments'].'</td></tr>';
+		$html .= '<tr><td colspan="6"><b>Do you need any support from the PT Provider ?</b> ';
+		$html .= $this->shipment['pt_support_comments'].'</td></tr>';
+	}
+	$html .= '</tbody></table>';
+
+    $html .= '</td></tr><tr><td align="right">';
+
+	$html .= '<b style="font-size: 1.2em;">';
+	$html .= round($this->shipment["shipment_score"])."% &nbsp;";
+	if($this->shipment["final_result"] == 1){
+		$html .= 'Satisfactory';
+	}else{
+		$html .= '<span style="color:red;">Unsatisfactory</span>';
+	}
+
+	$html .= '</b>';
+    $html .= '</td></tr><tr><td>';
+	$html .= '<u>Z-Score Performance Intepretation</u>';
+	$html .= '<ul>';
+	$html .= '<li> &lt; 2 - Satisfactory</li>';
+	$html .= '<li> &gt; 2 and &lt; 3 - Questionable</li>';
+	$html .= '<li> &gt; 3 - Unsatisfactory</li></ul>';
+
+    $html .= '</td></tr><tr><td>';
+    $html .= '<table><tr>';
+    $html .= '<td>MOH/F/NPHL/KNEQAS/HIV/VL/02</td>';
+    $html .= '<td align="center">Page 1 of 1</td>';
+    $html .= '<td></td></tr></table>';
+    $html .= '</td></tr></table></div>';
+
+	$pdf->writeHTML($html, true, false, true, false, '');
+	$pdf->Output('example-report.pdf', 'I');
+
+	exit;

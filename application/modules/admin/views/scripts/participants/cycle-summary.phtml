@@ -174,7 +174,7 @@
                     $choice = 0;
                     if($result["score"] == 0.8) $choice = 1;
                     if($result["score"] == 0) $choice = 2;
-                    $tableRows[$sample] .= "<td ".$alertStyle[$choice].">".$result["reported_viral_load"]."</td>";
+                    $tableRows[$sample] .= "<td ".$alertStyle[$choice].">".$result["reported_viral_load"]." (".$result["zscore"].")</td>";
                 }
                 $tableHead .= "<th>Ref. Value</th><th>Mean</th><th>S. Dev.</th></tr></thead>";
                 foreach ($samples as $sample) {

@@ -344,7 +344,6 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
 
         $this->_helper->layout()->pageName = 'report';
   
-        $parameters = $this->_getAllParams();
         $mapID= $this->getRequest()->getParam('mid');
 
         $shipmentParticipantMapDb = new Application_Model_DbTable_ShipmentParticipantMap();
@@ -370,6 +369,49 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $platformService = new Application_Service_Platform();
         $this->view->platform = $platformService->getPlatform($platformID);
 
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        $this->view->performanceStats = $distributionDb->getPerformanceStats($shipmentID);
+
+        $this->view->mid = $mapID;
+        $this->view->shipmentID = $shipmentID;
+        $this->view->participantId = $participantID;
+        $this->view->platformID = $platformID;
+    
+    }
+
+    public function individualPerformanceReportAction(){
+
+        $this->_helper->layout()->pageName = 'report';
+  
+        $mapID= $this->getRequest()->getParam('mid');
+
+        $shipmentParticipantMapDb = new Application_Model_DbTable_ShipmentParticipantMap();
+        $spm = $shipmentParticipantMapDb->fetchRow($shipmentParticipantMapDb->select()->from('shipment_participant_map')->where("map_id=$mapID"));
+
+        $participantID = $spm['participant_id'];
+        $shipmentID = $spm['shipment_id'];
+        $assayID = $spm['assay_id'];
+        $platformID = $spm['platform_id'];
+
+        $participantService = new Application_Service_Participants();
+        $this->view->participant = $participantService->getParticipantDetails($participantID);
+
+        $schemeService = new Application_Service_Schemes();
+        $this->view->allSamples = $schemeService->getSamples($mapID);
+        
+        $this->view->allNotTestedReason =$schemeService->getVlNotTestedReasons();
+
+        $shipment = $schemeService->getShipmentData($shipmentID, $participantID, $platformID, $assayID);
+        $shipment['attributes'] = json_decode($shipment['attributes'],true);
+        $this->view->shipment = $shipment;
+
+        $platformService = new Application_Service_Platform();
+        $this->view->platform = $platformService->getPlatform($platformID);
+
+        $distributionDb = new Application_Model_DbTable_Distribution();
+        $this->view->performanceStats = $distributionDb->getPerformanceStats($shipmentID);
+
+        $this->view->mid = $mapID;
         $this->view->shipmentID = $shipmentID;
         $this->view->participantId = $participantID;
         $this->view->platformID = $platformID;
