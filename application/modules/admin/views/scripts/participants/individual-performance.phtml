@@ -125,7 +125,7 @@
                                         if($this->performanceStats[$sample['sample_id']]['sdev_rvl'] > 0){
                                         $zscore = round(abs($sample['reported_viral_load']-$this->performanceStats[$sample['sample_id']]['reference_result'])/$this->performanceStats[$sample['sample_id']]['sdev_rvl'],1);
                                         }
-                                        echo $zscore;
+                                        echo number_format($zscore,1);
                                         ?>
                                     </td>
                                     <td style="text-align:center;">

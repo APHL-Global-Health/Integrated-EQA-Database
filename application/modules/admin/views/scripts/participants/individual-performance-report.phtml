@@ -119,7 +119,7 @@
 			$zscore = round(abs($sample['reported_viral_load']-$this->performanceStats[$sample['sample_id']]['reference_result'])/$this->performanceStats[$sample['sample_id']]['sdev_rvl'],1);
 		}
 
-		$html .= $zscore.'</td>';
+		$html .= number_format($zscore,1).'</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">';
 		$html .= round($sample['calculated_score']*100).'%</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">';
