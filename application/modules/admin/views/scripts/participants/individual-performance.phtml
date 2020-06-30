@@ -92,7 +92,7 @@
                             <tr align="center" class="" >
                                 <th style="width:35%;text-align: left;">Sample</th>
                                 <th>Results (log<sub>10</sub> copies/ml)</th>        
-                                <th>Reference Result</th>       
+                                <th style="display: none;">Reference Result</th>       
                                 <th>Z-Score</th>       
                                 <th>Score</th>       
                                 <th>Performance</th>       
@@ -116,7 +116,7 @@
                                     <td style="text-align:center;">
                                         <?php echo $sample['reported_viral_load']; ?>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td style="text-align:center; display: none;">
                                         <?php echo $this->performanceStats[$sample['sample_id']]['reference_result']; ?>
                                     </td>
                                     <td style="text-align:center;">
@@ -161,7 +161,7 @@
                         </tbody>
                         <tfoot></tfoot>
                     </table>
-                    <div style="float: right; font-size: 1.2em; padding: 5px 20px;">
+                    <div style="float: right; font-size: 1.2em; padding: 5px 20px; display: none;">
                         <strong>
                         <?php
                             echo round($this->shipment["shipment_score"])."% &nbsp;";

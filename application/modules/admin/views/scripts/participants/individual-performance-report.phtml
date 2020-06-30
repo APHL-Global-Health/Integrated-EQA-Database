@@ -16,7 +16,7 @@
 	$pdf->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT, 10);
 	
 	// set auto page breaks
-	$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+	$pdf->SetAutoPageBreak(FALSE, PDF_MARGIN_BOTTOM);
 	
 	// set image scale factor
 	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -97,7 +97,6 @@
 	$html .= '<tr>';
 	$html .= '<th style="border:1px solid #000;"><b>Sample</b></th>';
 	$html .= '<th style="border:1px solid #000;"><b>Results (log<sub>10</sub> copies/ml)</b></th>';
-	$html .= '<th style="border:1px solid #000;"><b>Reference Result</b></th>';
 	$html .= '<th style="border:1px solid #000;"><b>Z-Score</b></th>';
 	$html .= '<th style="border:1px solid #000;"><b>Score</b></th>';
 	$html .= '<th style="border:1px solid #000;"><b>Performance</b></th>';
@@ -114,8 +113,6 @@
 		$html .= '<td style="border:1px solid black;padding-left: 20px;">'.$sample['sample_label'].'</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">'.$sample['reported_viral_load'].'</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">';
-		$html .= $this->performanceStats[$sample['sample_id']]['reference_result'];
-		$html .= '</td><td style="border:1px solid black;text-align:center;">';
 
 		$zscore = "N/A";
 		if($this->performanceStats[$sample['sample_id']]['sdev_rvl'] > 0){
@@ -124,7 +121,7 @@
 
 		$html .= $zscore.'</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">';
-		$html .= round($sample['calculated_score']*100).'</td>';
+		$html .= round($sample['calculated_score']*100).'%</td>';
 		$html .= '<td style="border:1px solid black;text-align:center;">';
 
 		if($sample['calculated_score'] == 1)$html .= "ACCEPTABLE"; 
@@ -149,7 +146,7 @@
 
     $html .= '</td></tr><tr><td align="right">';
 
-	$html .= '<b style="font-size: 1.2em;">';
+	$html .= '<b style="font-size: 1.2em;color:#FFFFFF;">';
 	$html .= round($this->shipment["shipment_score"])."% &nbsp;";
 	if($this->shipment["final_result"] == 1){
 		$html .= 'Satisfactory';
