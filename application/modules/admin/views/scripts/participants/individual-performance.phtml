@@ -2,7 +2,7 @@
     <h4>
         <strong><?php echo "{$this->shipment['scheme_name']} - {$this->platform['PlatformName']}"; ?> Performance</strong>
         <div style="margin: 0px auto 0px auto; text-align: center; float: right;">
-            <a href="/admin/participants/individual-performance-report/mid/<?php echo $this->mid; ?>" class="btn btn-primary">Download</a>
+            <a href="/admin/participants/individual-performance-report/mid/<?php echo $this->mid; ?>" target="blank" class="btn btn-primary">Download</a>
             <a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:window.history.back()" >Back</a>
         </div>
  
@@ -203,4 +203,4 @@
                   });
 
     }
-</script>
+</script>   

@@ -39,7 +39,7 @@
 
     $html .= '<table style="padding:5px;margin:10px;"><tr><td>';
 
-    $html .= '<div style="text-align:center;margin:5px;"><b>';
+    $html .= '<div style="text-align:center;margin:5px;font-size:0.95em;"><b>';
 	$html .= '<img src="/images/country/moh-logo.png" width="80px"><br>';
 	$html .= 'MINISTRY OF HEALTH<br>';
 	$html .= 'NATIONAL PUBLIC HEALTH LABORATORY<br>';
@@ -47,17 +47,16 @@
 	$html .= 'HIV MOLECULAR - VL PROFICIENCY TESTING<br></b>';
 	$html .= 'P.O Box 20750 - 00202 NAIROBI Email: nphlpt@nphl.go.ke Help Desk: helpdesk.nphl.go.ke<br>';
 	$html .= '</div><b>';
-	$html .= '<span style="font-size: 1.5em;display: inline-block;">';
-	$html .= "{$this->shipment['scheme_name']} - {$this->platform['PlatformName']}";
-	$html .= "Report</span></b>";
+	$html .= '<span style="font-size: 1.3em;display: inline-block;">';
+	$html .= "{$this->distribution['distribution_name']} - {$this->shipment['scheme_name']} Proficiency Testing Report</span></b>";
 
     $html .= '</td></tr><tr><td>';
 
-	$html .= '<table style="width:100%;margin:10px auto;">';
-	$html .= '<tr><td><h4><b>Lab Code</b></h4>'.$this->participant['MflCode'].'</td>';
-	$html .= '<td><h4><b>Lab Name</b></h4>'.$this->participant['institute_name'].'</td>';
-	$html .= '<td><h4><b>Phone No</b></h4>'.$this->participant['phone'].'</td>';
-	$html .= '<td><h4><b>Platform</b></h4>'.$this->platform['PlatformName'].'</td>';
+	$html .= '<table style="width:100%;margin:15px auto;">';
+	$html .= '<tr><td colspan="2"><b>Lab Code</b>: '.$this->participant['MflCode'];
+	$html .= '&nbsp; &nbsp; &nbsp; <b>Lab Name</b>: '.$this->participant['institute_name'].'</td>';
+	$html .= '<td><b>Phone No</b>: '.$this->participant['phone'].'</td>';
+	$html .= '<td><b>Platform</b>: '.$this->platform['PlatformName'].'</td>';
 	$html .= '</tr></table>';
 
     $html .= '</td></tr><tr><td>';
@@ -144,32 +143,50 @@
 	}
 	$html .= '</tbody></table>';
 
-    $html .= '</td></tr><tr><td align="right">';
+	// Do not display participant aggregate score
+    $htmlx = '</td></tr><tr><td align="right">';
 
-	$html .= '<b style="font-size: 1.2em;color:#FFFFFF;">';
-	$html .= round($this->shipment["shipment_score"])."% &nbsp;";
+	$htmlx .= '<b style="font-size: 1.2em;">';
+	$htmlx .= round($this->shipment["shipment_score"])."% &nbsp;";
 	if($this->shipment["final_result"] == 1){
-		$html .= 'Satisfactory';
+		$htmlx .= 'Satisfactory';
 	}else{
-		$html .= '<span style="color:red;">Unsatisfactory</span>';
+		$htmlx .= '<span style="color:red;">Unsatisfactory</span>';
 	}
 
-	$html .= '</b>';
+	$htmlx .= '</b>';
     $html .= '</td></tr><tr><td>';
-	$html .= '<u>Z-Score Performance Intepretation</u>';
-	$html .= '<ul>';
-	$html .= '<li> &lt; 2 - Satisfactory</li>';
-	$html .= '<li> &gt; 2 and &lt; 3 - Questionable</li>';
-	$html .= '<li> &gt; 3 - Unsatisfactory</li></ul>';
+	$html .= '<u style="font-size:0.9em;">Z-Score Performance Intepretation</u>: ';
+	$html .= '<ul style="font-size:0.9em;"><li>&lt; 2 - Satisfactory</li>';
+	$html .= '<li>&gt; 2 and &lt; 3 - Questionable</li>';
+	$html .= '<li>&gt; 3 - Unsatisfactory</li></ul>';
 
+    $html .= '</td></tr><tr><td>';
+
+    if(isset($this->distribution['finalized_at']) && strlen($this->distribution['finalized_at'])>10){
+    $html .= '<table><tr>';
+    $html .= '<td colspan="5">&nbsp;</td>';
+    $html .= '<td style="border-bottom:1px solid #000;" rowspan="2" align="center"><img style="height:35px;" src="/images/approver.png" /></td></tr>';
+
+    $html .= '<tr><td align="right">Approved By &nbsp;</td>';
+    $html .= '<td style="border-bottom:1px solid #000;" align="center">Thomas Gachuki</td>';
+    $html .= '<td align="right">Date &nbsp;</td>';
+    $html .= '<td align="center" style="border-bottom:1px solid #000;">'.$this->dateFormat(substr($this->distribution['finalized_at'],0,10)).'</td>';
+    $html .= '<td align="right">Sign &nbsp;</td></tr>';
+    $html .= '<tr><td>&nbsp;</td><td align="center">For Head NPHL</td></tr></table>';
+	}
+
+    $html .= '</td></tr><tr><td> &nbsp;';
     $html .= '</td></tr><tr><td>';
     $html .= '<table><tr>';
     $html .= '<td>MOH/F/NPHL/KNEQAS/HIV/VL/02</td>';
     $html .= '<td align="center">Page 1 of 1</td>';
     $html .= '<td></td></tr></table>';
+
     $html .= '</td></tr></table></div>';
 
 	$pdf->writeHTML($html, true, false, true, false, '');
-	$pdf->Output('example-report.pdf', 'I');
+	$fileName = $this->mid."-".$this->shipmentID."-".$this->participantId.".pdf";
+	$pdf->Output($fileName, 'I');
 
 	exit;

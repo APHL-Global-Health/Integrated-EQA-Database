@@ -411,6 +411,8 @@ class Admin_ParticipantsController extends Zend_Controller_Action {
         $distributionDb = new Application_Model_DbTable_Distribution();
         $this->view->performanceStats = $distributionDb->getPerformanceStats($shipmentID);
 
+        $this->view->distribution = $distributionDb->getDistribution($shipment['distribution_id']);
+
         $this->view->mid = $mapID;
         $this->view->shipmentID = $shipmentID;
         $this->view->participantId = $participantID;
