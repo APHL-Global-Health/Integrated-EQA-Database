@@ -123,7 +123,7 @@
                                         <?php
                                         $zscore = "N/A";
                                         if($this->performanceStats[$sample['sample_id']]['sdev_rvl'] > 0){
-                                        $zscore = round(abs($sample['reported_viral_load']-$this->performanceStats[$sample['sample_id']]['reference_result'])/$this->performanceStats[$sample['sample_id']]['sdev_rvl'],1);
+                                        $zscore = round(abs(round($sample['reported_viral_load'],1)-$this->performanceStats[$sample['sample_id']]['reference_result'])/$this->performanceStats[$sample['sample_id']]['sdev_rvl'],1);
                                         }
                                         echo number_format($zscore,1);
                                         ?>

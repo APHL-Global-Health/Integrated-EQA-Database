@@ -663,7 +663,7 @@ class Application_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 
     public function getPerformanceStats($shipmentID){
         $output = [];
-        $query = "SELECT rrv.sample_id, ref.reference_result, COUNT(*) population, ROUND(AVG(rrv.reported_viral_load),1) average_rvl, ROUND(STDDEV_POP(rrv.reported_viral_load),1) sdev_rvl FROM shipment_participant_map spm INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id INNER JOIN reference_result_vl ref ON spm.shipment_id = ref.shipment_id AND rrv.sample_id = ref.sample_id WHERE spm.shipment_id = $shipmentID AND ref.control = 0 AND spm.is_pt_test_not_performed IS NULL GROUP BY rrv.sample_id";
+        $query = "SELECT rrv.sample_id, ref.reference_result, COUNT(*) population, AVG(ROUND(rrv.reported_viral_load,1)) average_rvl, ROUND(STDDEV_POP(rrv.reported_viral_load),1) sdev_rvl FROM shipment_participant_map spm INNER JOIN response_result_vl rrv ON spm.map_id = rrv.shipment_map_id INNER JOIN reference_result_vl ref ON spm.shipment_id = ref.shipment_id AND rrv.sample_id = ref.sample_id WHERE spm.shipment_id = $shipmentID AND ref.control = 0 AND spm.is_pt_test_not_performed IS NULL GROUP BY rrv.sample_id";
         $rResult = $this->getAdapter()->fetchAll($query);
 
         foreach ($rResult as $row) {
