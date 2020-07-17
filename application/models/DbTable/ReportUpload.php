@@ -144,9 +144,9 @@ class Application_Model_DbTable_ReportUpload extends Zend_Db_Table_Abstract {
         $admin = new Zend_Session_Namespace('administrators');
         $datamanager = new Zend_Session_Namespace('datamanagers');
 
+        // UPLOADED REPORTS USING SYSTEM WORKFLOW
         $query = $this->getAdapter()->select()->from(array('r' => 'report_uploads'))->where("r.file_path_hash = ? ", $file);
 
-        error_log($query);
         $rResult = $this->getAdapter()->fetchAll($query);
 
         $fileName = "";
@@ -169,7 +169,6 @@ class Application_Model_DbTable_ReportUpload extends Zend_Db_Table_Abstract {
             }
         }
 
-        error_log("File name: ".$fileName);
         if ($allowDownload) {
             if(file_exists($fileName)) {
                 header('Content-Description: File Transfer');
@@ -183,6 +182,36 @@ class Application_Model_DbTable_ReportUpload extends Zend_Db_Table_Abstract {
                 readfile($fileName);
             }
         }
+        else if (isset($datamanager->dm_id)) 
+        {
+            // MANUALY UPPLOADED REPORT WORKFLOW
+            $participantService = new Application_Service_Participants;
+
+            $query = $this->getAdapter()->select('MflCode')->from(array('p' => 'participant'))
+                    ->join(array('pmm' => 'participant_manager_map'), 'p.participant_id=pmm.participant_id')
+                    ->where("pmm.dm_id = ? ", $datamanager->dm_id);
+
+            $rResult = $this->getAdapter()->fetchAll($query);
+
+            foreach ($rResult as $participant) {
+                $reportFile = UPLOAD_PATH . DIRECTORY_SEPARATOR . "reports" . DIRECTORY_SEPARATOR . $participant['MflCode'] . DIRECTORY_SEPARATOR . $file . ".pdf";
+
+                if(file_exists($reportFile)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.basename($reportFile).'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($reportFile));
+                    flush();
+                    readfile($reportFile);
+                    exit;
+                }
+            }
+        }
+
+
         exit;
     }
 

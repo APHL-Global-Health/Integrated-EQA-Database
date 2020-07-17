@@ -1144,10 +1144,10 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
          */
         $sQuery = $this->getAdapter()->select()
                 ->from(array('spm' => 'shipment_participant_map'), array("spm.map_id", "spm.evaluation_status", "spm.participant_id", "RESPONSEDATE" => "DATE_FORMAT(spm.shipment_test_report_date,'%Y-%m-%d')", "spm.platform_id", "spm.assay_id"))
-                ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch'))
+                ->join(array('s' => 'shipment'), 'spm.shipment_id=s.shipment_id', array('s.scheme_type', 's.shipment_date', 's.shipment_code', 's.lastdate_response', 's.shipment_id', 's.status', 's.response_switch', 'file_name' => new Zend_Db_Expr('MD5(CONCAT(spm.participant_id, spm.platform_id, s.shipment_code))')))
                 ->join(array('sc' => 'schemes'), 'sc.scheme_id=s.scheme_type', array('scheme_name'))
                 ->join(array('d' => 'distributions'), 'd.distribution_id=s.distribution_id', array('distribution_status' => 'd.status'))
-                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name'))
+                ->join(array('p' => 'participant'), 'p.participant_id=spm.participant_id', array('p.unique_identifier', 'p.first_name', 'p.last_name', 'p.institute_name', 'p.MflCode'))
                 ->join(array('pmm' => 'participant_manager_map'), 'pmm.participant_id=p.participant_id')
                 ->join(array('rcp' => 'readiness_checklist_participants'), 'p.participant_id=rcp.participant_id AND d.readiness_checklist_survey_id=rcp.readiness_checklist_survey_id')
                 ->join(array('pf' => 'platforms'), 'spm.platform_id=pf.ID', array('platform_name' => 'pf.PlatformName'))
@@ -1239,7 +1239,15 @@ class Application_Model_DbTable_Shipments extends Zend_Db_Table_Abstract {
             
             if ($aRow['distribution_status'] == 'finalized') {
                 $buttonText = 'View';
-                $row[] = '<a href="/participant/individual-performance' . $getParams . '" class="btn btn-info" style="margin:3px 0;"> <i class="icon icon-list"></i>  ' . $buttonText . ' </a>';
+                $href = "/participant/individual-performance$getParams";
+                $reportFile = "/participant/report-download/file/" . $aRow['file_name'];
+                $actualFile = UPLOAD_PATH . DIRECTORY_SEPARATOR . "reports" . DIRECTORY_SEPARATOR . $aRow['MflCode'] . DIRECTORY_SEPARATOR . $aRow['file_name'] . ".pdf";
+
+                if(file_exists($actualFile)){
+                    $row[] = '<a href="'.$reportFile.'" class="btn btn-info" style="margin:3px 0;" target="_BLANK"> <i class="icon icon-list"></i>  ' . $buttonText . ' </a>';
+                }else{
+                    $row[] = '<a href="'.$href.'" class="btn btn-info" style="margin:3px 0;"> <i class="icon icon-list"></i>  ' . $buttonText . ' </a>';
+                }
             } else {
                 $row[] = '<h4><span class="label label-default">Not Available</span></h4>';
             }
